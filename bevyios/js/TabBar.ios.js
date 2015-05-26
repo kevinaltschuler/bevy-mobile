@@ -13,6 +13,28 @@ var {
   View,
 } = React;
 
+var Icon = require('FAKIconImage');
+var SMXTabBarIOS = require('SMXTabBarIOS');
+var SMXTabBarItemIOS = SMXTabBarIOS.Item;
+
+var styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    padding: 0,
+    marginTop: 0,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  tabContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  tabText: {
+    color: 'black',
+    margin: 50,
+  },
+});
+
 var TabBar = React.createClass({
 
   statics: {
@@ -22,72 +44,85 @@ var TabBar = React.createClass({
 
   getInitialState: function() {
     return {
-      selectedTab: 'redTab',
+      selectedTab: 'inBevy',
       notifCount: 0,
       presses: 0,
     };
   },
 
-  _renderContent: function(color: string, pageText: string) {
-    return (
-      <View style={[styles.tabContent, {backgroundColor: color}]}>
-        <Text style={styles.tabText}>{pageText}</Text>
-        <Text style={styles.tabText}>{this.state.presses} re-renders of the More tab</Text>
-      </View>
-    );
+  _renderContent: function() {
+    if(this.state.selectedTab === 'inBevy') {
+      return (
+        <View style={styles.tabContent}>
+        </View>
+      );
+    }
+    else if(this.state.selectedTab === 'notifications') {
+      return (
+        <View style={styles.tabContent}>
+        </View>
+      );
+    }
+    else if(this.state.selectedTab === 'menu') {
+      return (
+        <View style={styles.tabContent}>
+        </View>
+      );
+    }
   },
 
 
-  render: function() {
-    return (
-      <TabBarIOS>
-        <TabBarIOS.Item
-          title="Blue Tab"
-          selected={this.state.selectedTab === 'blueTab'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'blueTab',
-            });
-          }}>
-          {this._renderContent('#414A8C', 'Blue Tab')}
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          systemIcon="history"
-          badge={this.state.notifCount > 0 ? this.state.notifCount : undefined}
-          selected={this.state.selectedTab === 'redTab'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'redTab',
-              notifCount: this.state.notifCount + 1,
-            });
-          }}>
-          {this._renderContent('#783E33', 'Red Tab')}
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          systemIcon="more"
-          selected={this.state.selectedTab === 'greenTab'}
-          onPress={() => {
-            this.setState({
-              selectedTab: 'greenTab',
-              presses: this.state.presses + 1
-            });
-          }}>
-          {this._renderContent('#21551C', 'Green Tab')}
-        </TabBarIOS.Item>
-      </TabBarIOS>);
-    },
-
-});
-
-var styles = StyleSheet.create({
-  tabContent: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  tabText: {
-    color: 'white',
-    margin: 50,
-  },
+  render: function () {
+      return (
+        <View style={styles.mainContainer}>
+          <SMXTabBarIOS
+            selectedTab={this.state.selectedTab}
+            tintColor={'#c1d82f'}
+            barTintColor={'#000000'}
+            styles={styles.tabBar}>
+            <SMXTabBarItemIOS
+                name="inBevy"
+                iconName={'ion|ios-list-outline'}
+                title={''}
+                iconSize={32}
+                selected={this.state.selectedTab === 'inBevy'}
+                onPress={() => {
+                this.setState({
+                  selectedTab: 'inBevy',
+                });
+              }}>
+              {this._renderContent()}
+            </SMXTabBarItemIOS>
+            <SMXTabBarItemIOS
+                name="notifications"
+                iconName={'ion|ios-bell-outline'}
+                title={''}
+                iconSize={32}
+                selected={this.state.selectedTab === 'notifications'}
+                onPress={() => {
+                this.setState({
+                  selectedTab: 'notifications',
+                });
+              }}>
+              {this._renderContent()}
+            </SMXTabBarItemIOS>
+            <SMXTabBarItemIOS
+                name="menu"
+                iconName={'ion|ios-drag'}
+                title={''}
+                iconSize={32}
+                selected={this.state.selectedTab === 'menu'}
+                onPress={() => {
+                this.setState({
+                  selectedTab: 'menu',
+                });
+              }}>
+              {this._renderContent()}
+            </SMXTabBarItemIOS>
+          </SMXTabBarIOS>
+        </View>
+      );
+    }
 });
 
 module.exports = TabBar;

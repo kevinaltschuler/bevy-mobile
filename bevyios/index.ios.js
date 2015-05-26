@@ -13,12 +13,14 @@ var {
   View,
 } = React;
 
+var BevyNavigator = require('./js/BevyNavigator.ios.js');
 var TabBar = require('./js/TabBar.ios.js');
 
 var bevyios = React.createClass({
+
   render: function() {
     return (
-        <TabBar />
+          <BevyNavigator />
     );
   }
 });
@@ -29,16 +31,6 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 
