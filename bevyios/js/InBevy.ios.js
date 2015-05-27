@@ -18,6 +18,7 @@ var TabBar = require('./TabBar.ios.js');
 var Menu = require('./Menu.ios.js');
 var SideMenu = require('react-native-side-menu');
 var PostList = require('./PostList.ios.js');
+var Button = require('react-native-button');
 
 var styles = StyleSheet.create({
   container: {
@@ -37,7 +38,7 @@ var InBevy = React.createClass({
 
       return (
         <View style={styles.container}>
-          <SideMenu menu={menu}>
+          <SideMenu menu={menu} disableGestures={true}>
             <PostList/>
           </SideMenu>
           <TabBar/>

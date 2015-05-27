@@ -12,7 +12,10 @@ var {
   Text,
   View,
   NavigatorIOS,
+  ListView,
 } = React;
+
+var RListView = require('react-native-refreshable-listview');
 
 var TabBar = require('./TabBar.ios.js');
 var Menu = require('./Menu.ios.js');
@@ -25,19 +28,20 @@ var styles = StyleSheet.create({
 })
 
 var PostList = React.createClass({
+
+  getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      dataSource: ds.cloneWithRows(['row 1', 'row 2']),
+    };
+  },
+
   render: function() {
     return (
-      <View style={styles.postContainer}>
-        <Text style={styles.welcome}>
-          post
-        </Text>
-        <Text style={styles.instructions}>
-          post
-        </Text>
-        <Text style={styles.instructions}>
-          post
-        </Text>
-      </View>
+      <RListView 
+        style={styles.postContainer}
+        dataSource={this.state.dataSource}
+        renderRow={(rowData) => <Text>{rowData}</Text>}/>
     );
   }
 });

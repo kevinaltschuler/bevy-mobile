@@ -16,22 +16,23 @@ var {
 var BevyNavigator = require('./js/BevyNavigator.ios.js');
 var TabBar = require('./js/TabBar.ios.js');
 
+var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+    padding: 0,
+  },
+});
+
 var bevyios = React.createClass({
 
   render: function() {
     return (
+        <View style = {styles.container}>
           <BevyNavigator />
+        </View>
     );
   }
-});
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
 });
 
 AppRegistry.registerComponent('bevyios', () => bevyios);

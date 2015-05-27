@@ -19,7 +19,6 @@ var Menu = React.createClass({
   render: function() {
   return (
       <View>
-        <Text>Menu</Text>
         <Text onPress={this.about}>About</Text>
       </View>
     );

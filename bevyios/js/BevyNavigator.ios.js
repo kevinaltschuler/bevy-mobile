@@ -12,6 +12,8 @@ var {
   Text,
   View,
   NavigatorIOS,
+  TouchableHighlight,
+  Image,
 } = React;
 
 var InBevy = require('./InBevy.ios.js');
@@ -25,6 +27,14 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#111111',
+    padding: 0,
+  },
+  backButton: {
+    width: 10,
+    height: 17,
+    marginLeft: 10,
+    marginTop: 3,
+    marginRight: 10
   }
 })
 
@@ -33,35 +43,24 @@ var firstRoute = {
   component: InBevy
 }
 
-var ContentView = React.createClass({
-  render: function() {
+var LeftButton = React.createClass({
+  render: function () {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+Control+Z for dev menu
-        </Text>
-      </View>
-    );
+      <Image source={require('image!back_button')} style={styles.backButton} />
+      );
   }
 });
 
 var BevyNavigator = React.createClass({
-
   render: function () {
-      var menu = <Menu navigator={Router}/>;
-
       return (
+        <View style={styles.container}>
           <Router
+            backButtonComponent={LeftButton}
             style={styles.container}
             firstRoute = {firstRoute}
-            />
+          />
+        </View>
       );
     }
 });
