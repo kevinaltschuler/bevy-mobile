@@ -111,10 +111,6 @@ var LoginView = React.createClass({
     return ( 
       <View style={styles.loginContainer}>
 
-
-        
-        <Image source={backgroundImage} style={styles.loginBackground} />
-
         <View style={styles.loginRowLogo}>
           <Image
             style={styles.logo}
@@ -194,6 +190,7 @@ var LoginView = React.createClass({
             </Text>
           </TouchableHighlight>
         </View>
+      <Image source={backgroundImage} style={styles.loginBackground} />
       </View>);
   }
 
