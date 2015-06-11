@@ -86,8 +86,10 @@ var styles = StyleSheet.create({
   loginBackground: {
     flex: 1,
     resizeMode: 'cover',
+
     width: 500,
     height: 500,
+
   },
 
   logo: {
