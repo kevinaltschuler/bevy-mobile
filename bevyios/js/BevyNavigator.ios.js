@@ -27,7 +27,7 @@ var Menu = require('./Menu.ios.js');
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111111',
+    backgroundColor: '#ffffff',
     padding: 0,
   },
   backButton: {

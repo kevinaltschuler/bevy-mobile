@@ -10,9 +10,11 @@ var {
   StyleSheet,
   TextInput,
   TouchableHighlight,
-  Text
+  Text,
+  Image
 } = React;
 var Button = require('react-native-button');
+var backgroundImage = require('image!backgroundImage');
 
 
 var styles = StyleSheet.create({
@@ -20,7 +22,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     padding: 10,
     justifyContent: 'center',
-    backgroundColor: '#edeeee'
+    backgroundColor: '#edeeee',
   },
   loginRow: {
     flexDirection: 'row',
@@ -48,6 +50,12 @@ var styles = StyleSheet.create({
   loginButtonText: {
     textAlign: 'center',
     color: 'white',
+  },
+
+  // background CSS
+  loginBackground: {
+    flex: 1,
+    resizeMode: 'cover',
   }
 })
 
@@ -56,6 +64,10 @@ var LoginView = React.createClass({
   render: function() {
     return ( 
       <View style={styles.loginContainer}>
+
+        
+        <Image source={backgroundImage} style={styles.loginBackground} />
+
         <View style={styles.loginRow}>
         </View>
         <View style={styles.loginRow}>

@@ -27,7 +27,7 @@ var styles = StyleSheet.create({
     padding: 0,
   },
   menuContainer: {
-    backgroundColor: '#aaaaaa',
+    backgroundColor: '#111111',
   }
 })
 
