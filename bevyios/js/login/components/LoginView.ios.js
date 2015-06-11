@@ -14,7 +14,7 @@ var {
   Image
 } = React;
 
-var backgroundImage = require('image!backgroundImage');
+var backgroundImage = require('image!loginBackground');
 
 var RegisterView = require('./RegisterView.ios.js');
 
@@ -86,6 +86,9 @@ var styles = StyleSheet.create({
   loginBackground: {
     flex: 1,
     resizeMode: 'cover',
+    width: 500,
+    height: 500,
+  },
 
   logo: {
     width: 50,
