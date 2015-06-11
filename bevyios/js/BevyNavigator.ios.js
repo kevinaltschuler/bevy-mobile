@@ -20,6 +20,7 @@ var InBevy = require('./InBevy.ios.js');
 var SideMenu = require('react-native-side-menu');
 var Router = require('react-native-router');
 var Button = require('react-native-button');
+var Login = require('./login/components/LoginView.ios.js');
 
 var Menu = require('./Menu.ios.js');
 
@@ -39,8 +40,8 @@ var styles = StyleSheet.create({
 })
 
 var firstRoute = {
-  name: 'Frontpage',
-  component: InBevy
+  name: 'Login',
+  component: Login
 }
 
 var LeftButton = React.createClass({

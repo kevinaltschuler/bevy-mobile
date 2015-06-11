@@ -99,6 +99,13 @@
 			remoteGlobalIDString = 2F5A3EB81ACDBF8000439386;
 			remoteInfo = ReactNativeIcons;
 		};
+		0AC07E6F1B2A0CAE005F4ADD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0AC07E5F1B2A0CAC005F4ADD /* RNStatusBarSize.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BB0DB4A31AE891EC002306E6;
+			remoteInfo = RNStatusBarSize;
+		};
 		139105C01AF99BAD00B5F7CC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */;
@@ -163,6 +170,7 @@
 		0A8A0FAF1B13B6D60048F5D7 /* foundation-icons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "foundation-icons.ttf"; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/foundation-icons.ttf"; sourceTree = "<group>"; };
 		0A8A0FB01B13B6D60048F5D7 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ionicons.ttf; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/ionicons.ttf"; sourceTree = "<group>"; };
 		0A8A0FB11B13B6D60048F5D7 /* zocial-regular-webfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "zocial-regular-webfont.ttf"; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/zocial-regular-webfont.ttf"; sourceTree = "<group>"; };
+		0AC07E5F1B2A0CAC005F4ADD /* RNStatusBarSize.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNStatusBarSize.xcodeproj; path = "node_modules/react-native-status-bar-size/RNStatusBarSize.xcodeproj"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* bevyios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bevyios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,6 +288,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		0AC07E601B2A0CAC005F4ADD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0AC07E701B2A0CAE005F4ADD /* libRNStatusBarSize.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +345,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0AC07E5F1B2A0CAC005F4ADD /* RNStatusBarSize.xcodeproj */,
 				0A8A0F8D1B139F520048F5D7 /* ReactNativeIcons.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -502,6 +519,10 @@
 					ProductGroup = 0A8A0F8E1B139F520048F5D7 /* Products */;
 					ProjectRef = 0A8A0F8D1B139F520048F5D7 /* ReactNativeIcons.xcodeproj */;
 				},
+				{
+					ProductGroup = 0AC07E601B2A0CAC005F4ADD /* Products */;
+					ProjectRef = 0AC07E5F1B2A0CAC005F4ADD /* RNStatusBarSize.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -559,6 +580,13 @@
 			fileType = archive.ar;
 			path = libReactNativeIcons.a;
 			remoteRef = 0A8A0F9C1B139F530048F5D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0AC07E701B2A0CAE005F4ADD /* libRNStatusBarSize.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNStatusBarSize.a;
+			remoteRef = 0AC07E6F1B2A0CAE005F4ADD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		139105C11AF99BAD00B5F7CC /* libRCTSettings.a */ = {
