@@ -25,7 +25,6 @@ var styles = StyleSheet.create({
   loginConatiner: {
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: '#edeeee',
   },
   loginRow: {
     flexDirection: 'row',
@@ -80,14 +79,11 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-
-
   // background CSS
   loginBackground: {
-    flex: 1,
-    resizeMode: 'cover',
+    position: 'absolute',
+    top: 0, bottom: 0, left: 0, right: 0
   },
-
   logo: {
     width: 50,
     height: 50,
@@ -106,88 +102,89 @@ var LoginView = React.createClass({
   render: function() {
     return ( 
       <View style={styles.loginContainer}>
+        <Image source={backgroundImage} style={styles.loginBackground}>
 
-        <Image source={backgroundImage} style={styles.loginBackground} />
-
-        <View style={styles.loginRowLogo}>
-          <Image
-            style={styles.logo}
-            source={bevylogo}
-          />
-        </View>
+          <View style={styles.loginRowLogo}>
+            <Image
+              style={styles.logo}
+              source={bevylogo}
+            />
+          </View>
 
 
-        <View style={styles.loginRow}>
-          <Text style={styles.loginTitle}>
-            Welcome
-          </Text>
-        </View>
-
-        <View style={styles.loginRowText}>
-          <Text style={styles.loginSubTitle}>
-            bevy is waiting for you
-          </Text>
-        </View>
-
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            placeholder='email'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            password={true}
-            placeholder='•••••••'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButton}
-            activeOpacity={80}
-            underlayColor="#28A467">
-            <Text style={styles.loginButtonText}>
-              login
+          <View style={styles.loginRow}>
+            <Text style={styles.loginTitle}>
+              Welcome
             </Text>
-          </TouchableHighlight>
-        </View>
+          </View>
 
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButtonGoogle}
-            activeOpacity={80}
-            underlayColor="#28A467">
-            <Text style={styles.loginButtonText}>
-              login with google
-            </Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            activeOpacity={80}>
+          <View style={styles.loginRowText}>
             <Text style={styles.loginSubTitle}>
-              password
+              bevy is waiting for you
             </Text>
-          </TouchableHighlight>
-          <Text>
-            &nbsp; | &nbsp;
-          </Text>
-          <TouchableHighlight 
-            activeOpacity={80}
-            onPress={this.nextPage}>
-            <Text style={styles.loginSubTitle}>
-              register
+          </View>
+
+          <View style={styles.loginRow}>
+            <TextInput
+              autoCorrect={false}
+              placeholder='email'
+              style={styles.loginInput}
+              onChangeText={(text) => this.setState({input: text})}
+            />
+          </View>
+
+          <View style={styles.loginRow}>
+            <TextInput
+              autoCorrect={false}
+              password={true}
+              placeholder='•••••••'
+              style={styles.loginInput}
+              onChangeText={(text) => this.setState({input: text})}
+            />
+          </View>
+
+          <View style={styles.loginRow}>
+            <TouchableHighlight 
+              style={styles.loginButton}
+              activeOpacity={80}
+              underlayColor="#28A467">
+              <Text style={styles.loginButtonText}>
+                login
+              </Text>
+            </TouchableHighlight>
+          </View>
+
+          <View style={styles.loginRow}>
+            <TouchableHighlight 
+              style={styles.loginButtonGoogle}
+              activeOpacity={80}
+              underlayColor="#28A467">
+              <Text style={styles.loginButtonText}>
+                login with google
+              </Text>
+            </TouchableHighlight>
+          </View>
+
+          <View style={styles.loginRow}>
+            <TouchableHighlight 
+              activeOpacity={80}>
+              <Text style={styles.loginSubTitle}>
+                password
+              </Text>
+            </TouchableHighlight>
+            <Text>
+              &nbsp; | &nbsp;
             </Text>
-          </TouchableHighlight>
-        </View>
+            <TouchableHighlight 
+              activeOpacity={80}
+              onPress={this.nextPage}>
+              <Text style={styles.loginSubTitle}>
+                register
+              </Text>
+            </TouchableHighlight>
+          </View>
+
+        </Image>
         
       </View>);
   }
