@@ -14,18 +14,11 @@ var {
   Image
 } = React;
 
-var backgroundImage = require('image!backgroundImage');
-
-var RegisterView = require('./RegisterView.ios.js');
-
-var Button = require('react-native-button');
-var bevylogo = require('image!bevylogo');
-
 var styles = StyleSheet.create({
   loginConatiner: {
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: '#edeeee',
+    backgroundColor: '#edeeee'
   },
   loginRow: {
     flexDirection: 'row',
@@ -80,53 +73,21 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-
-
-  // background CSS
-  loginBackground: {
-    flex: 1,
-    resizeMode: 'cover',
-
   logo: {
     width: 50,
     height: 50,
   }
 })
 
-var LoginView = React.createClass({
-
-  nextPage: function() {
-    this.props.toRoute({
-      name: "Register",
-      component: RegisterView
-    });
-  },
+var RegisterView = React.createClass({
 
   render: function() {
     return ( 
       <View style={styles.loginContainer}>
 
-
-        
-        <Image source={backgroundImage} style={styles.loginBackground} />
-
-        <View style={styles.loginRowLogo}>
-          <Image
-            style={styles.logo}
-            source={bevylogo}
-          />
-        </View>
-
-
         <View style={styles.loginRow}>
           <Text style={styles.loginTitle}>
-            Welcome
-          </Text>
-        </View>
-
-        <View style={styles.loginRowText}>
-          <Text style={styles.loginSubTitle}>
-            bevy is waiting for you
+            Register
           </Text>
         </View>
 
@@ -155,43 +116,14 @@ var LoginView = React.createClass({
             activeOpacity={80}
             underlayColor="#28A467">
             <Text style={styles.loginButtonText}>
-              login
+              Register
             </Text>
           </TouchableHighlight>
         </View>
 
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButtonGoogle}
-            activeOpacity={80}
-            underlayColor="#28A467">
-            <Text style={styles.loginButtonText}>
-              login with google
-            </Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            activeOpacity={80}>
-            <Text style={styles.loginSubTitle}>
-              password
-            </Text>
-          </TouchableHighlight>
-          <Text>
-            &nbsp; | &nbsp;
-          </Text>
-          <TouchableHighlight 
-            activeOpacity={80}
-            onPress={this.nextPage}>
-            <Text style={styles.loginSubTitle}>
-              register
-            </Text>
-          </TouchableHighlight>
-        </View>
       </View>);
   }
 
 });
 
-module.exports = LoginView;
+module.exports = RegisterView;
