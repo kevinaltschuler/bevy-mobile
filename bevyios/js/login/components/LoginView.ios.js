@@ -62,7 +62,6 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     paddingLeft: 16,
-    textAlign: 'center',
     backgroundColor: 'rgba(0,0,0,0)',
     color: 'white'
   },
@@ -73,6 +72,7 @@ var styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: "white",
     borderWidth: 1,
+    backgroundColor: 'white'
   },
   loginButtonGoogle: {
     alignSelf: 'center',
@@ -83,13 +83,17 @@ var styles = StyleSheet.create({
   },
   loginButtonText: {
     textAlign: 'center',
+    color: 'black',
+  },
+  loginButtonTextGoogle: {
+    textAlign: 'center',
     color: 'white',
   },
   loginBackground: {
   },
   backgroundWrapper: {
     position: 'absolute',
-    top: 0,
+    top: -100,
 
   },
   logo: {
@@ -100,7 +104,7 @@ var styles = StyleSheet.create({
 
 var LoginView = React.createClass({
 
-  nextPage: function() {
+  toRegister: function() {
     this.props.toRoute({
       name: "Register",
       component: RegisterView
@@ -168,10 +172,10 @@ var LoginView = React.createClass({
 
           <View style={styles.loginRow}>
             <TouchableHighlight 
-              style={styles.loginButton}
+              style={styles.loginButtonGoogle}
               activeOpacity={80}
               underlayColor="#28A467">
-              <Text style={styles.loginButtonText}>
+              <Text style={styles.loginButtonTextGoogle}>
                 login with google
               </Text>
             </TouchableHighlight>
@@ -189,7 +193,7 @@ var LoginView = React.createClass({
             </Text>
             <TouchableHighlight 
               activeOpacity={80}
-              onPress={this.nextPage}>
+              onPress={this.toRegister}>
               <Text style={styles.loginSubTitle}>
                 register
               </Text>

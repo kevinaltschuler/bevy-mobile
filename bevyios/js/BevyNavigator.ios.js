@@ -27,7 +27,7 @@ var Menu = require('./Menu.ios.js');
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(0,0,0,0)',
     padding: 0,
   },
   backButton: {
@@ -40,7 +40,7 @@ var styles = StyleSheet.create({
 })
 
 var firstRoute = {
-  name: 'Login',
+  name: '',
   component: Login
 }
 
@@ -58,7 +58,7 @@ var BevyNavigator = React.createClass({
         <View style={styles.container}>
           <Router
             backButtonComponent={LeftButton}
-            style={styles.container}
+            headerStyle={styles.container}
             firstRoute = {firstRoute}
           />
         </View>
