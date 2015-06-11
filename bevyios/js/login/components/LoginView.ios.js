@@ -15,11 +15,11 @@ var {
 } = React;
 
 var backgroundImage = require('image!loginBackground');
+var bevy_logo_trans = require('image!bevy_logo_trans');
 
 var RegisterView = require('./RegisterView.ios.js');
 
 var Button = require('react-native-button');
-var bevylogo = require('image!bevylogo');
 
 var styles = StyleSheet.create({
   loginConatiner: {
@@ -121,7 +121,7 @@ var LoginView = React.createClass({
           <View style={styles.loginRowLogo}>
             <Image
               style={styles.logo}
-              source={bevylogo}
+              source={bevy_logo_trans}
             />
           </View>
 
