@@ -1,7 +1,9 @@
 /**
- * LoginView.js
- * kevin made this
- */
+*    ForgotPass.js
+*    description: the forgotten password page on IOS
+*    by Ben 
+*/
+
 'use strict';
 
 // get modules
@@ -19,10 +21,11 @@ var {
 
 var styles = StyleSheet.create({
   loginConatiner: {
-    backgroundColor: 'rgba(0,0,0,0)',
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   loginRow: {
-    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
     padding: 6,
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0)'
@@ -98,20 +101,27 @@ var styles = StyleSheet.create({
   }
 })
 
-var RegisterView = React.createClass({
+var ForgotPass = React.createClass({
 
   render: function() {
     return ( 
       <View style={styles.loginContainer}>
-        
+
         <View style={styles.backgroundWrapper}>
             <Image source={backgroundImage} style={styles.loginBackground}/>
         </View>
+
         <View style={styles.loginRow}>
           <Text style={styles.loginTitle}>
-            Register
+            Forgot your password?
           </Text>
         </View>
+
+        <View style={styles.loginRowText}>
+            <Text style={styles.loginSubTitle}>
+              Enter your email and we will send you instructions
+            </Text>
+          </View>
 
         <View style={styles.loginRow}>
           <TextInput
@@ -124,23 +134,12 @@ var RegisterView = React.createClass({
         </View>
 
         <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            password={true}
-            placeholder='•••••••'
-            placeholderTextColor='white'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
           <TouchableHighlight 
             style={styles.loginButton}
             activeOpacity={80}
             underlayColor="#28A467">
             <Text style={styles.loginButtonText}>
-              Register
+              send
             </Text>
           </TouchableHighlight>
         </View>
@@ -150,4 +149,4 @@ var RegisterView = React.createClass({
 
 });
 
-module.exports = RegisterView;
+module.exports = ForgotPass;
