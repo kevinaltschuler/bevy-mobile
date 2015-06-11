@@ -25,7 +25,7 @@ var styles = StyleSheet.create({
   loginConatiner: {
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: '#edeeee',
+    backgroundColor: '#FFFFFF'
   },
   loginRow: {
     flexDirection: 'row',
@@ -80,18 +80,11 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-
-
   // background CSS
   loginBackground: {
-    flex: 1,
-    resizeMode: 'cover',
-
-    width: 500,
-    height: 500,
-
+    position: 'relative',
+    top: 0, bottom: 0, left: 0, right: 0
   },
-
   logo: {
     width: 50,
     height: 50,
@@ -108,9 +101,10 @@ var LoginView = React.createClass({
   },
 
   render: function() {
-    return ( 
+    return (
+    <Image source={backgroundImage} style={styles.loginBackground} >
       <View style={styles.loginContainer}>
-
+        
         <View style={styles.loginRowLogo}>
           <Image
             style={styles.logo}
@@ -171,27 +165,9 @@ var LoginView = React.createClass({
             </Text>
           </TouchableHighlight>
         </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            activeOpacity={80}>
-            <Text style={styles.loginSubTitle}>
-              password
-            </Text>
-          </TouchableHighlight>
-          <Text>
-            &nbsp; | &nbsp;
-          </Text>
-          <TouchableHighlight 
-            activeOpacity={80}
-            onPress={this.nextPage}>
-            <Text style={styles.loginSubTitle}>
-              register
-            </Text>
-          </TouchableHighlight>
-        </View>
-      <Image source={backgroundImage} style={styles.loginBackground} />
-      </View>);
+      </View>
+      </Image>);
+   
   }
 
 });
