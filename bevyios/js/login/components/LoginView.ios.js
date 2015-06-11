@@ -17,6 +17,7 @@ var {
 var backgroundImage = require('image!loginBackground');
 
 var RegisterView = require('./RegisterView.ios.js');
+var ForgotPass = require('./ForgotPass.ios.js');
 
 var Button = require('react-native-button');
 var bevylogo = require('image!bevylogo');
@@ -106,8 +107,15 @@ var LoginView = React.createClass({
 
   toRegister: function() {
     this.props.toRoute({
-      name: "Register",
+      name: "",
       component: RegisterView
+    });
+  },
+
+  toForgotPass: function() {
+    this.props.toRoute({
+      name: "",
+      component: ForgotPass
     });
   },
 
@@ -183,9 +191,10 @@ var LoginView = React.createClass({
 
           <View style={styles.loginRow}>
             <TouchableHighlight 
-              activeOpacity={80}>
+              activeOpacity={80}
+              onPress={this.toForgotPass}>
               <Text style={styles.loginSubTitle}>
-                password
+                forgot your password?
               </Text>
             </TouchableHighlight>
             <Text style={styles.loginSubTitle}>
