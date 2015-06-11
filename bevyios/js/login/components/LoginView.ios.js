@@ -23,50 +23,56 @@ var bevylogo = require('image!bevylogo');
 
 var styles = StyleSheet.create({
   loginConatiner: {
-    flexDirection: 'column',
-    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   loginRow: {
     flexDirection: 'row',
     padding: 6,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   loginRowLogo: {
     flexDirection: 'row',
     paddingTop: 80,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   loginRowText: {
     flexDirection: 'row',
     paddingTop: 0,
     paddingBottom: 10,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   loginTitle: {
     textAlign: 'center',
-    fontSize: 30
+    fontSize: 30,
+    color: 'white'
   },
   loginSubTitle: {
     textAlign: 'center',
-    fontSize: 12
+    fontSize: 12,
+    color: 'white'
   },
   loginInput: {
     alignSelf: 'center',
     height: 40,
     width: 200,
-    borderColor: "gray",
+    borderColor: "white",
     borderWidth: 1,
     borderRadius: 20,
     paddingLeft: 16,
     textAlign: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
+    color: 'white'
   },
   loginButton: {
     alignSelf: 'center',
-    backgroundColor: '#2cb673',
     padding: 10,
     width: 200,
     borderRadius: 20,
+    borderColor: "white",
+    borderWidth: 1,
   },
   loginButtonGoogle: {
     alignSelf: 'center',
@@ -79,10 +85,12 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  // background CSS
   loginBackground: {
+  },
+  backgroundWrapper: {
     position: 'absolute',
-    top: 0, bottom: 0, left: 0, right: 0
+    top: 0,
+
   },
   logo: {
     width: 50,
@@ -101,8 +109,10 @@ var LoginView = React.createClass({
 
   render: function() {
     return ( 
-      <View style={styles.loginContainer}>
-        <Image source={backgroundImage} style={styles.loginBackground}>
+        <View style={styles.loginContainer}>
+          <View style={styles.backgroundWrapper}>
+            <Image source={backgroundImage} style={styles.loginBackground}/>
+          </View>
 
           <View style={styles.loginRowLogo}>
             <Image
@@ -130,6 +140,7 @@ var LoginView = React.createClass({
               placeholder='email'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({input: text})}
+              placeholderTextColor='white'
             />
           </View>
 
@@ -140,6 +151,7 @@ var LoginView = React.createClass({
               placeholder='•••••••'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({input: text})}
+              placeholderTextColor='white'
             />
           </View>
 
@@ -156,7 +168,7 @@ var LoginView = React.createClass({
 
           <View style={styles.loginRow}>
             <TouchableHighlight 
-              style={styles.loginButtonGoogle}
+              style={styles.loginButton}
               activeOpacity={80}
               underlayColor="#28A467">
               <Text style={styles.loginButtonText}>
@@ -172,7 +184,7 @@ var LoginView = React.createClass({
                 password
               </Text>
             </TouchableHighlight>
-            <Text>
+            <Text style={styles.loginSubTitle}>
               &nbsp; | &nbsp;
             </Text>
             <TouchableHighlight 
@@ -184,9 +196,7 @@ var LoginView = React.createClass({
             </TouchableHighlight>
           </View>
 
-        </Image>
-        
-      </View>);
+        </View>);
   }
 
 });
