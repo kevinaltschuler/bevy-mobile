@@ -18,8 +18,9 @@ var {
 } = React;
 
 var styles = StyleSheet.create({
-  loginConatiner: {
+  loginContainer: {
     backgroundColor: 'rgba(0,0,0,0)',
+    marginTop: 120
   },
   loginRow: {
     flexDirection: 'row',
@@ -66,8 +67,6 @@ var styles = StyleSheet.create({
     padding: 10,
     width: 200,
     borderRadius: 20,
-    borderColor: "white",
-    borderWidth: 1,
     backgroundColor: 'white'
   },
   loginButtonGoogle: {
@@ -102,49 +101,58 @@ var RegisterView = React.createClass({
 
   render: function() {
     return ( 
-      <View style={styles.loginContainer}>
-        
+      <View>
         <View style={styles.backgroundWrapper}>
             <Image source={backgroundImage} style={styles.loginBackground}/>
         </View>
-        <View style={styles.loginRow}>
-          <Text style={styles.loginTitle}>
-            Register
-          </Text>
-        </View>
 
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            placeholder='email'
-            placeholderTextColor='white'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
+        <View style={styles.loginContainer}>
 
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            password={true}
-            placeholder='•••••••'
-            placeholderTextColor='white'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButton}
-            activeOpacity={80}
-            underlayColor="#28A467">
-            <Text style={styles.loginButtonText}>
+          <View style={styles.loginRow}>
+            <Text style={styles.loginTitle}>
               Register
             </Text>
-          </TouchableHighlight>
-        </View>
+          </View>
 
+          <View style={styles.loginRow}>
+            <TouchableHighlight
+              style={styles.imageButton}
+            />
+          </View>
+
+          <View style={styles.loginRow}>
+            <TextInput
+              autoCorrect={false}
+              placeholder='email'
+              placeholderTextColor='#D0DCAD'
+              style={styles.loginInput}
+              onChangeText={(text) => this.setState({input: text})}
+            />
+          </View>
+
+          <View style={styles.loginRow}>
+            <TextInput
+              autoCorrect={false}
+              password={true}
+              placeholder='•••••••'
+              placeholderTextColor='#D0DCAD'
+              style={styles.loginInput}
+              onChangeText={(text) => this.setState({input: text})}
+            />
+          </View>
+
+          <View style={styles.loginRow}>
+            <TouchableHighlight 
+              style={styles.loginButton}
+              activeOpacity={80}
+              underlayColor="#edeeee">
+              <Text style={styles.loginButtonText}>
+                Register
+              </Text>
+            </TouchableHighlight>
+          </View>
+
+        </View>
       </View>);
   }
 

@@ -69,8 +69,6 @@ var styles = StyleSheet.create({
     padding: 10,
     width: 200,
     borderRadius: 20,
-    borderColor: "white",
-    borderWidth: 1,
     backgroundColor: 'white'
   },
   loginButtonGoogle: {
@@ -137,7 +135,7 @@ var ForgotPass = React.createClass({
           <TouchableHighlight 
             style={styles.loginButton}
             activeOpacity={80}
-            underlayColor="#28A467">
+            underlayColor="#edeeee">
             <Text style={styles.loginButtonText}>
               send
             </Text>

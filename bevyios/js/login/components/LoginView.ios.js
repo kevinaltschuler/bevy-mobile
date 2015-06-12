@@ -23,18 +23,20 @@ var ForgotPass = require('./ForgotPass.ios.js');
 var Button = require('react-native-button');
 
 var styles = StyleSheet.create({
-  loginConatiner: {
+  loginContainer: {
     backgroundColor: 'rgba(0,0,0,0)',
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    marginTop: 80
   },
   loginRow: {
     flexDirection: 'row',
     padding: 6,
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   loginRowLogo: {
     flexDirection: 'row',
-    paddingTop: 80,
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0)',
   },
@@ -71,8 +73,6 @@ var styles = StyleSheet.create({
     padding: 10,
     width: 200,
     borderRadius: 20,
-    borderColor: "white",
-    borderWidth: 1,
     backgroundColor: 'white'
   },
   loginButtonGoogle: {
@@ -120,11 +120,12 @@ var LoginView = React.createClass({
   },
 
   render: function() {
-    return ( 
-        <View style={styles.loginContainer}>
+    return ( <View>
+
           <View style={styles.backgroundWrapper}>
             <Image source={backgroundImage} style={styles.loginBackground}/>
           </View>
+        <View style={styles.loginContainer}>
 
           <View style={styles.loginRowLogo}>
             <Image
@@ -152,7 +153,7 @@ var LoginView = React.createClass({
               placeholder='email'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({input: text})}
-              placeholderTextColor='white'
+              placeholderTextColor='#D0DCAD'
             />
           </View>
 
@@ -163,7 +164,7 @@ var LoginView = React.createClass({
               placeholder='•••••••'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({input: text})}
-              placeholderTextColor='white'
+              placeholderTextColor='#D0DCAD'
             />
           </View>
 
@@ -171,7 +172,7 @@ var LoginView = React.createClass({
             <TouchableHighlight 
               style={styles.loginButton}
               activeOpacity={80}
-              underlayColor="#28A467">
+              underlayColor="#edeeee">
               <Text style={styles.loginButtonText}>
                 login
               </Text>
@@ -182,7 +183,7 @@ var LoginView = React.createClass({
             <TouchableHighlight 
               style={styles.loginButtonGoogle}
               activeOpacity={80}
-              underlayColor="#28A467">
+              underlayColor="#CB442E">
               <Text style={styles.loginButtonTextGoogle}>
                 login with google
               </Text>
@@ -194,7 +195,7 @@ var LoginView = React.createClass({
               activeOpacity={80}
               onPress={this.toForgotPass}>
               <Text style={styles.loginSubTitle}>
-                forgot your password?
+                lost password
               </Text>
             </TouchableHighlight>
             <Text style={styles.loginSubTitle}>
@@ -209,6 +210,7 @@ var LoginView = React.createClass({
             </TouchableHighlight>
           </View>
 
+        </View>
         </View>);
   }
 
