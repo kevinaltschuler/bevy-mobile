@@ -9,6 +9,8 @@
 // get modules
 var React = require('react-native');
 var backgroundImage = require('image!loginBackground');
+var _ = require('underscore');
+var api = require('./../../utils/api.js')
 
 var {
   View,
@@ -46,7 +48,8 @@ var styles = StyleSheet.create({
   loginTitle: {
     textAlign: 'center',
     fontSize: 30,
-    color: 'white'
+    color: 'white', 
+    paddingTop: 130
   },
   loginSubTitle: {
     textAlign: 'center',
@@ -101,6 +104,26 @@ var styles = StyleSheet.create({
 
 var ForgotPass = React.createClass({
 
+  getInitialState: function() {
+    return {
+      subTitle: 'we can help with that',
+      email: ''
+    };
+  },
+
+  handleSubmit: function() {
+    api.forgotPass(this.state.email)
+    .then((res) => {
+      if (res.object == 'error') {
+        this.setState({ subTitle: res.message });
+      }
+      else {
+        this.setState({ subTitle: 'email sent!' });
+      }
+      
+    });
+  },
+
   render: function() {
     return ( 
       <View style={styles.loginContainer}>
@@ -111,13 +134,13 @@ var ForgotPass = React.createClass({
 
         <View style={styles.loginRow}>
           <Text style={styles.loginTitle}>
-            Forgot your password?
+            Lost Password?
           </Text>
         </View>
 
         <View style={styles.loginRowText}>
             <Text style={styles.loginSubTitle}>
-              Enter your email and we will send you instructions
+              {this.state.subTitle}
             </Text>
           </View>
 
@@ -125,9 +148,9 @@ var ForgotPass = React.createClass({
           <TextInput
             autoCorrect={false}
             placeholder='email'
-            placeholderTextColor='white'
+            placeholderTextColor='rgba(255,255,255,.6)'
             style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
+            onChangeText={(text) => this.setState({email: text})}
           />
         </View>
 
@@ -135,7 +158,8 @@ var ForgotPass = React.createClass({
           <TouchableHighlight 
             style={styles.loginButton}
             activeOpacity={80}
-            underlayColor="#edeeee">
+            underlayColor="#edeeee"
+            onPress={this.handleSubmit}>
             <Text style={styles.loginButtonText}>
               send
             </Text>
