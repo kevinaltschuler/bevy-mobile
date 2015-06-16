@@ -23,7 +23,6 @@ var Button = require('react-native-button');
 var _ = require('underscore');
 var api = require('./../../utils/api.js')
 
-
 var styles = StyleSheet.create({
   loginContainer: {
     backgroundColor: 'rgba(0,0,0,0)',
