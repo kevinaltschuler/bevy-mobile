@@ -19,6 +19,8 @@ var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotPass = require('./ForgotPass.ios.js');
+var PostView = require('./../../PostView/PostView.ios.js');
+
 var Button = require('react-native-button');
 var _ = require('underscore');
 var api = require('./../../utils/api.js')
@@ -142,8 +144,10 @@ var LoginView = React.createClass({
           this.setState({
             user:res
           });
-
+         
+         // go to posts
          this.toPostView();
+         
         } else {
             this.setState({error: res.message});
         }
