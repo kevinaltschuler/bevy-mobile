@@ -22,6 +22,7 @@ var ForgotPass = require('./ForgotPass.ios.js');
 
 var Button = require('react-native-button');
 
+
 var styles = StyleSheet.create({
   loginContainer: {
     backgroundColor: 'rgba(0,0,0,0)',
