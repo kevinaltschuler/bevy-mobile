@@ -14,13 +14,14 @@ var {
   Image
 } = React;
 
+// modules
 var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
-
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotPass = require('./ForgotPass.ios.js');
-
 var Button = require('react-native-button');
+var _ = require('underscore');
+var api = require('./../../utils/api.js')
 
 var styles = StyleSheet.create({
   loginContainer: {
@@ -104,6 +105,13 @@ var styles = StyleSheet.create({
 })
 
 var LoginView = React.createClass({
+  getInitialState: function(){
+    return {
+      email: '',
+      pass: '',
+      error: ''
+    };
+  },
 
   toRegister: function() {
     this.props.toRoute({
@@ -117,6 +125,33 @@ var LoginView = React.createClass({
       name: "",
       component: ForgotPass
     });
+  },
+
+  toPostView: function() {
+    this.props.toRoute({
+      name: "",
+      component: PostView
+    });
+  },
+
+
+  handleSubmit: function() {
+      api.auth(this.state.email,this.state.pass)
+      .then((res) => {
+        if(res.object == undefined) {
+          this.setState({
+            user:res
+          });
+
+         this.toPostView();
+        } else {
+            this.setState({error: res.message});
+        }
+        
+      });
+
+      //console.log(this.state.user);
+
   },
 
   render: function() {
@@ -137,13 +172,13 @@ var LoginView = React.createClass({
 
           <View style={styles.loginRow}>
             <Text style={styles.loginTitle}>
-              Welcome
+              Bevy
             </Text>
           </View>
 
           <View style={styles.loginRowText}>
             <Text style={styles.loginSubTitle}>
-              bevy is waiting for you
+              {this.state.error}
             </Text>
           </View>
 
@@ -152,7 +187,7 @@ var LoginView = React.createClass({
               autoCorrect={false}
               placeholder='email'
               style={styles.loginInput}
-              onChangeText={(text) => this.setState({input: text})}
+              onChangeText={(text) => this.setState({email: text})}
               placeholderTextColor='#D0DCAD'
             />
           </View>
@@ -163,7 +198,7 @@ var LoginView = React.createClass({
               password={true}
               placeholder='•••••••'
               style={styles.loginInput}
-              onChangeText={(text) => this.setState({input: text})}
+              onChangeText={(text) => this.setState({pass: text})}
               placeholderTextColor='#D0DCAD'
             />
           </View>
@@ -172,7 +207,8 @@ var LoginView = React.createClass({
             <TouchableHighlight 
               style={styles.loginButton}
               activeOpacity={80}
-              underlayColor="#edeeee">
+              underlayColor="#edeeee"
+              onPress={this.handleSubmit}>
               <Text style={styles.loginButtonText}>
                 login
               </Text>
