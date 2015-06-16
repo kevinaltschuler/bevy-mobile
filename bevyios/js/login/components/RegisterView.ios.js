@@ -20,19 +20,13 @@ var {
 var styles = StyleSheet.create({
   loginContainer: {
     backgroundColor: 'rgba(0,0,0,0)',
-    marginTop: 120
+    marginTop: 130
   },
   loginRow: {
     flexDirection: 'row',
     padding: 6,
     justifyContent: 'center',
     backgroundColor: 'rgba(0,0,0,0)'
-  },
-  loginRowLogo: {
-    flexDirection: 'row',
-    paddingTop: 80,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)',
   },
   loginRowText: {
     flexDirection: 'row',
@@ -48,7 +42,7 @@ var styles = StyleSheet.create({
   },
   loginSubTitle: {
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 10,
     color: 'white'
   },
   loginInput: {
@@ -69,32 +63,23 @@ var styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'white'
   },
-  loginButtonGoogle: {
-    alignSelf: 'center',
-    backgroundColor: '#df4a32',
-    padding: 10,
-    width: 200,
-    borderRadius: 20,
-  },
   loginButtonText: {
     textAlign: 'center',
     color: 'black',
   },
-  loginButtonTextGoogle: {
-    textAlign: 'center',
-    color: 'white',
-  },
-  loginBackground: {
-  },
   backgroundWrapper: {
     position: 'absolute',
     top: -100,
-
   },
-  logo: {
-    width: 50,
-    height: 50,
+  imageButton: {
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 30,
+    padding: 10
   }
+
 })
 
 var RegisterView = React.createClass({
@@ -107,7 +92,6 @@ var RegisterView = React.createClass({
         </View>
 
         <View style={styles.loginContainer}>
-
           <View style={styles.loginRow}>
             <Text style={styles.loginTitle}>
               Register
@@ -117,14 +101,19 @@ var RegisterView = React.createClass({
           <View style={styles.loginRow}>
             <TouchableHighlight
               style={styles.imageButton}
-            />
+              underlayColor='rgba(0,0,0,0)'
+            >
+              <Text style={styles.loginSubTitle}>
+                your picture here
+              </Text>
+            </TouchableHighlight>
           </View>
 
           <View style={styles.loginRow}>
             <TextInput
               autoCorrect={false}
               placeholder='email'
-              placeholderTextColor='#D0DCAD'
+              placeholderTextColor='rgba(255,255,255,.6)'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({input: text})}
             />
@@ -135,7 +124,7 @@ var RegisterView = React.createClass({
               autoCorrect={false}
               password={true}
               placeholder='•••••••'
-              placeholderTextColor='#D0DCAD'
+              placeholderTextColor='rgba(255,255,255,.6)'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({input: text})}
             />
@@ -151,8 +140,8 @@ var RegisterView = React.createClass({
               </Text>
             </TouchableHighlight>
           </View>
-
         </View>
+
       </View>);
   }
 

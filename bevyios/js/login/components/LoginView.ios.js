@@ -136,7 +136,7 @@ var LoginView = React.createClass({
 
 
   handleSubmit: function() {
-      api.auth(this.state.email,this.state.pass)
+      api.auth(this.state.email, this.state.pass)
       .then((res) => {
         if(res.object == undefined) {
           this.setState({
@@ -188,7 +188,7 @@ var LoginView = React.createClass({
               placeholder='email'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({email: text})}
-              placeholderTextColor='#D0DCAD'
+              placeholderTextColor='rgba(255,255,255,.6)'
             />
           </View>
 
@@ -199,7 +199,7 @@ var LoginView = React.createClass({
               placeholder='•••••••'
               style={styles.loginInput}
               onChangeText={(text) => this.setState({pass: text})}
-              placeholderTextColor='#D0DCAD'
+              placeholderTextColor='rgba(255,255,255,.6)'
             />
           </View>
 
@@ -228,18 +228,24 @@ var LoginView = React.createClass({
 
           <View style={styles.loginRow}>
             <TouchableHighlight 
-              activeOpacity={80}
-              onPress={this.toForgotPass}>
+              activeOpacity={20}
+              onPress={this.toForgotPass}
+              underlayColor='rgba(0,0,0,0)'
+            >
               <Text style={styles.loginSubTitle}>
                 lost password
               </Text>
             </TouchableHighlight>
+
             <Text style={styles.loginSubTitle}>
               &nbsp; | &nbsp;
             </Text>
+
             <TouchableHighlight 
               activeOpacity={80}
-              onPress={this.toRegister}>
+              onPress={this.toRegister}
+              underlayColor='rgba(0,0,0,0)'
+            >
               <Text style={styles.loginSubTitle}>
                 register
               </Text>
