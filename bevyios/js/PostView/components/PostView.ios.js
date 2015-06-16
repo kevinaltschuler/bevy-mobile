@@ -14,10 +14,10 @@ var {
   NavigatorIOS,
 } = React;
 
-var TabBar = require('./../TabBar.ios.js');
-var Menu = require('./../Menu.ios.js');
+var TabBar = require('./../../TabBar.ios.js');
+var Menu = require('./../../Menu.ios.js');
 var SideMenu = require('react-native-side-menu');
-var PostList = require('./../PostList.ios.js');
+var PostList = require('./../../PostList.ios.js');
 var Button = require('react-native-button');
 
 var styles = StyleSheet.create({
