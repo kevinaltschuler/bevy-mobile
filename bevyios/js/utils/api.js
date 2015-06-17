@@ -33,8 +33,26 @@ var api = {
           })
         })
         .then((res) => res.json());
+    },
+
+    register: function(email, pass, picture){
+      return fetch(('api.joinbevy.com/users'),
+        {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+                  email: email,
+                  password: pass
+                  
+          })
+        })
+        .then((res) => res.json());
+
     }
 
 }
-
 module.exports = api;
+
