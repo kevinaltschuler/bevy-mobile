@@ -1,6 +1,6 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * the bevy ios app
+ * made by kevin for the SUB-OHM ARMY 
  */
 'use strict';
 
@@ -11,10 +11,10 @@ var {
   TabBarIOS,
   Text,
   View,
+  Navigator
 } = React;
 
-var BevyNavigator = require('./js/BevyNavigator.ios.js');
-var TabBar = require('./js/TabBar.ios.js');
+var MainView = require('./js/MainView.ios.js');
 
 var styles = StyleSheet.create({
   container: {
@@ -28,9 +28,15 @@ var bevyios = React.createClass({
 
   render: function() {
     return (
-        <View style = {styles.container}>
-          <BevyNavigator />
-        </View>
+        <Navigator
+          initialRoute={{name: 'loginNavigator', index: 0}}
+          renderScene={(route, navigator) => 
+            <MainView 
+              route={route}
+              navigator={navigator}
+            />
+          }
+        />
     );
   }
 });

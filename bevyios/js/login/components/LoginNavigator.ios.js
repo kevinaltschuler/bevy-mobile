@@ -16,13 +16,43 @@ var {
   Image,
 } = React;
 
-var InBevy = require('./InBevy.ios.js');
-var SideMenu = require('react-native-side-menu');
 var Router = require('react-native-router');
-var Button = require('react-native-button');
-var Login = require('./login/components/LoginView.ios.js');
+var LoginView = require('./LoginView.ios.js');
 
-var Menu = require('./Menu.ios.js');
+var LeftButton = React.createClass({
+  render: function () {
+    return (
+      <Image source={require('image!back_button')} style={styles.backButton} />
+      );
+  }
+});
+
+var LoginNavigator = React.createClass({
+
+  toPostView: function() {
+    this.props.navigator.push({name: 'loginScene', index: 1});
+  },
+
+  render: function () {
+
+    var firstRoute = {
+      name: '',
+      component: LoginView
+    }
+
+      return (
+        <View style={styles.container}>
+          <Router
+            backButtonComponent={LeftButton}
+            headerStyle={styles.container}
+            firstRoute = {firstRoute}
+            navigator={this.props.navigator}
+          />
+        </View>
+      );
+    }
+});
+
 
 var styles = StyleSheet.create({
   container: {
@@ -37,33 +67,7 @@ var styles = StyleSheet.create({
     marginTop: 3,
     marginRight: 10
   }
-})
-
-var firstRoute = {
-  name: '',
-  component: Login
-}
-
-var LeftButton = React.createClass({
-  render: function () {
-    return (
-      <Image source={require('image!back_button')} style={styles.backButton} />
-      );
-  }
 });
 
-var BevyNavigator = React.createClass({
-  render: function () {
-      return (
-        <View style={styles.container}>
-          <Router
-            backButtonComponent={LeftButton}
-            headerStyle={styles.container}
-            firstRoute = {firstRoute}
-          />
-        </View>
-      );
-    }
-});
 
-module.exports = BevyNavigator;
+module.exports = LoginNavigator;

@@ -15,14 +15,14 @@ var {
   ListView,
 } = React;
 
-getInitialState: function() {
-  var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-  return {
-    dataSource: ds.cloneWithRows(['balls', 'row 2']),
-  };
-},
-
 var BevyList = React.createClass({
+  getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+      dataSource: ds.cloneWithRows(['balls', 'row 2']),
+    };
+  },
+  
   render: function() {
     return (
       <ListView
