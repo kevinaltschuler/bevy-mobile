@@ -56,16 +56,14 @@ var LoginView = React.createClass({
             user:res
           });
          
-         // go to posts
-         //this.toPostView();
-         
+         // this data is passed @ loginnavigator.ios.js
+         // pushes a new route to the main navigator in index.ios.js 
+        this.props.data.push({name: 'postNavigator', index: 1});
         } else {
             this.setState({error: res.message});
         }
         
       });
-
-      //console.log(this.state.user);
 
   },
 

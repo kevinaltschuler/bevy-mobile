@@ -19,6 +19,8 @@ var SideMenu = require('react-native-side-menu');
 var PostList = require('./PostList.ios.js');
 var Button = require('react-native-button');
 var BevyList= require('./../../BevyList/components/BevyList.ios.js');
+var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
+var Router = require('react-native-router');
 
 var LeftButton = React.createClass({
   render: function () {
@@ -34,16 +36,21 @@ var PostNavigator = React.createClass({
       
     var firstRoute = {
       name: 'FrontPage',
-      component: PostList
+      component: PostList,
+      leftCorner: BevyListButton,
     }
 
+    var bevyList = <BevyList />
+
     return (
-      <Router
-        backButtonComponent={LeftButton}
-        headerStyle={styles.container}
-        firstRoute = {firstRoute}
-        navigator={this.props.navigator}
-      />
+      <SideMenu menu={bevyList}>
+        <Router
+          backButtonComponent={LeftButton}
+          headerStyle={styles.container}
+          firstRoute = {firstRoute}
+          navigator={this.props.navigator}
+        />
+      </SideMenu>
     );
   }
 });

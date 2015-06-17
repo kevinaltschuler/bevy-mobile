@@ -28,13 +28,14 @@ var styles = StyleSheet.create({
 var MainView = React.createClass({
 
   render: function() {
+
     switch(this.props.route.name) {
       case 'loginNavigator':
-        return <LoginNavigator />;
+        return <LoginNavigator navigator={this.props.navigator} />;
       break;
 
       case 'postNavigator':
-        return <PostNavigator />;
+        return <PostNavigator navigator={this.props.navigator} />;
       break;
     }
   }

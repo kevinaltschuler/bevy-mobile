@@ -29,15 +29,12 @@ var LeftButton = React.createClass({
 
 var LoginNavigator = React.createClass({
 
-  toPostView: function() {
-    this.props.navigator.push({name: 'loginScene', index: 1});
-  },
-
   render: function () {
 
     var firstRoute = {
       name: '',
-      component: LoginView
+      component: LoginView,
+      data: this.props.navigator
     }
 
       return (
@@ -45,8 +42,7 @@ var LoginNavigator = React.createClass({
           <Router
             backButtonComponent={LeftButton}
             headerStyle={styles.container}
-            firstRoute = {firstRoute}
-            navigator={this.props.navigator}
+            firstRoute={firstRoute}
           />
         </View>
       );
