@@ -24,6 +24,7 @@ var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js'
 var Button = require('react-native-button');
 var _ = require('underscore');
 var api = require('./../../utils/api.js')
+var constants = require('./../../utils/constants.js');
 
 var LoginView = React.createClass({
   getInitialState: function(){
@@ -55,10 +56,18 @@ var LoginView = React.createClass({
           this.setState({
             user:res
           });
+
+        api.storeUser(res);
          
          // this data is passed @ loginnavigator.ios.js
          // pushes a new route to the main navigator in index.ios.js 
-        this.props.data.push({name: 'postNavigator', index: 1});
+        this.props.data.push({name: 'MainTabBar', index: 1});
+
+        this.setState({
+          email: '',
+          pass: '',
+          error: ''
+        });
         } else {
             this.setState({error: res.message});
         }
@@ -70,9 +79,11 @@ var LoginView = React.createClass({
   render: function() {
     return ( <View>
 
-          <View style={styles.backgroundWrapper}>
-            <Image source={backgroundImage} style={styles.loginBackground}/>
-          </View>
+        
+        <View style={styles.backgroundWrapper}>
+          <View style={styles.background}/>
+        </View>
+        
         <View style={styles.loginContainer}>
 
           <View style={styles.loginRowLogo}>
@@ -242,7 +253,11 @@ var styles = StyleSheet.create({
   backgroundWrapper: {
     position: 'absolute',
     top: -100,
-
+  },
+  background: {
+    backgroundColor: '#2CB673',
+    width: 500,
+    height: 1000
   },
   logo: {
     width: 50,

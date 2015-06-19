@@ -17,78 +17,13 @@ var {
   Image
 } = React;
 
-var styles = StyleSheet.create({
-  loginContainer: {
-    backgroundColor: 'rgba(0,0,0,0)',
-    marginTop: 130
-  },
-  loginRow: {
-    flexDirection: 'row',
-    padding: 6,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  loginRowText: {
-    flexDirection: 'row',
-    paddingTop: 0,
-    paddingBottom: 10,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)',
-  },
-  loginTitle: {
-    textAlign: 'center',
-    fontSize: 30,
-    color: 'white'
-  },
-  loginSubTitle: {
-    textAlign: 'center',
-    fontSize: 10,
-    color: 'white'
-  },
-  loginInput: {
-    alignSelf: 'center',
-    height: 40,
-    width: 200,
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingLeft: 16,
-    backgroundColor: 'rgba(0,0,0,0)',
-    color: 'white'
-  },
-  loginButton: {
-    alignSelf: 'center',
-    padding: 10,
-    width: 200,
-    borderRadius: 20,
-    backgroundColor: 'white'
-  },
-  loginButtonText: {
-    textAlign: 'center',
-    color: 'black',
-  },
-  backgroundWrapper: {
-    position: 'absolute',
-    top: -100,
-  },
-  imageButton: {
-    width: 60,
-    height: 60,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 30,
-    padding: 10
-  }
-
-})
-
 var RegisterView = React.createClass({
 
   render: function() {
     return ( 
       <View>
         <View style={styles.backgroundWrapper}>
-            <Image source={backgroundImage} style={styles.loginBackground}/>
+          <View style={styles.background}/>
         </View>
 
         <View style={styles.loginContainer}>
@@ -143,6 +78,76 @@ var RegisterView = React.createClass({
         </View>
 
       </View>);
+  }
+
+});
+
+var styles = StyleSheet.create({
+  loginContainer: {
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginTop: 130
+  },
+  loginRow: {
+    flexDirection: 'row',
+    padding: 6,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
+  loginRowText: {
+    flexDirection: 'row',
+    paddingTop: 0,
+    paddingBottom: 10,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)',
+  },
+  loginTitle: {
+    textAlign: 'center',
+    fontSize: 30,
+    color: 'white'
+  },
+  loginSubTitle: {
+    textAlign: 'center',
+    fontSize: 10,
+    color: 'white'
+  },
+  loginInput: {
+    alignSelf: 'center',
+    height: 40,
+    width: 200,
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingLeft: 16,
+    backgroundColor: 'rgba(0,0,0,0)',
+    color: 'white'
+  },
+  loginButton: {
+    alignSelf: 'center',
+    padding: 10,
+    width: 200,
+    borderRadius: 20,
+    backgroundColor: 'white'
+  },
+  loginButtonText: {
+    textAlign: 'center',
+    color: 'black',
+  },
+  backgroundWrapper: {
+    position: 'absolute',
+    top: -100,
+  },
+  background: {
+    backgroundColor: '#2CB673',
+    width: 500,
+    height: 1000
+  },
+  imageButton: {
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 30,
+    padding: 10
   }
 
 });

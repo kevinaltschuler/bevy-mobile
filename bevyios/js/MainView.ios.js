@@ -15,7 +15,7 @@ var {
 } = React;
 
 var LoginNavigator = require('./login/components/LoginNavigator.ios.js');
-var PostNavigator = require('./PostView/components/PostNavigator.ios.js');
+var MainTabBar = require('./MainTabBar.ios.js');
 
 var styles = StyleSheet.create({
   container: {
@@ -30,12 +30,12 @@ var MainView = React.createClass({
   render: function() {
 
     switch(this.props.route.name) {
-      case 'loginNavigator':
+      case 'LoginNavigator':
         return <LoginNavigator navigator={this.props.navigator} />;
       break;
 
-      case 'postNavigator':
-        return <PostNavigator navigator={this.props.navigator} />;
+      case 'MainTabBar':
+        return <MainTabBar navigator={this.props.navigator} />;
       break;
     }
   }

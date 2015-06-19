@@ -4,16 +4,92 @@
 		"selected_items":
 		[
 			[
+				"padd",
+				"paddingTop"
+			],
+			[
+				"flex",
+				"flex-start"
+			],
+			[
+				"main",
+				"mainRow"
+			],
+			[
+				"profile",
+				"profileDeetzColumn"
+			],
+			[
+				"user",
+				"user"
+			],
+			[
+				"noti",
+				"notificationItem"
+			],
+			[
+				"selec",
+				"selectedTab"
+			],
+			[
+				"notif",
+				"notificationIcon"
+			],
+			[
+				"chat",
+				"chatIcon"
+			],
+			[
+				"Profile",
+				"ProfileView"
+			],
+			[
+				"Notificat",
+				"NotificationView"
+			],
+			[
+				"Chat",
+				"ChatView"
+			],
+			[
+				"Noti",
+				"NotificationNavigator"
+			],
+			[
+				"Main",
+				"MainTabBar"
+			],
+			[
+				"Bevy",
+				"BevyView"
+			],
+			[
+				"login",
+				"loginScene"
+			],
+			[
+				"Login",
+				"LoginView"
+			],
+			[
+				"PostView",
+				"PostViewNav"
+			],
+			[
+				"forgot",
+				"ForgotPass"
+			],
+			[
 				"border",
-				"borderWidth"
+				"borderRadius"
+			],
+			[
+				"image",
+				"imageButton"
 			],
 			[
 				"Regis",
 				"Register"
-			],
-			[
-				"login",
-				"loginButton"
 			],
 			[
 				"back",
@@ -64,10 +140,34 @@
 	"buffers":
 	[
 		{
+			"file": "bevyios/js/MainTabBar.ios.js",
+			"settings":
+			{
+				"buffer_size": 5000,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bevyios/js/ProfileView/components/ProfileView.ios.js",
+			"settings":
+			{
+				"buffer_size": 2938,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "bevyios/js/login/components/LoginView.ios.js",
 			"settings":
 			{
-				"buffer_size": 5747,
+				"buffer_size": 5988,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bevyios/js/ProfileView/components/ProfileNavigator.ios.js",
+			"settings":
+			{
+				"buffer_size": 1126,
 				"line_ending": "Unix"
 			}
 		}
@@ -79,16 +179,20 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "package",
+		"height": 227.0,
+		"last_filter": "js",
 		"selected_items":
 		[
+			[
+				"js",
+				"Set Syntax: JavaScript"
+			],
 			[
 				"package",
 				"Package Control: Install Package"
 			]
 		],
-		"width": 467.0
+		"width": 449.0
 	},
 	"console":
 	{
@@ -109,20 +213,57 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/kevin/git/Bevy-xcode"
+		"/Users/kevin/git/Bevy-xcode",
+		"/Users/kevin/git/Bevy-xcode/bevyios",
+		"/Users/kevin/git/Bevy-xcode/bevyios/bevyios.xcodeproj",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyView",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyView/components",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/login",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/login/components",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/ProfileView",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/ProfileView/components",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/utils",
+		"/Users/kevin/git/Bevy-xcode/bevyios/node_modules"
 	],
 	"file_history":
 	[
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/utils/api.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/utils/constants.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/index.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/login/components/LoginView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/ChatView/components/ChatView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyView/components/BevyNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/ChatView/components/ChatNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/NotificationView/components/NotificationView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/ProfileView/components/ProfileView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/ProfileView/components/ProfileNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/MainTabBar.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/NotificationView/components/NotificationNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/MainView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/PostList/components/PostList.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyView/components/MainTabBar.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyView/components/BevyView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/PostView/components/PostList.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/PostView/components/PostNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/TabBar.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/login/components/LoginNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/LoginNavigator.ios.js",
 		"/Users/kevin/git/Bevy-xcode/bevyios/js/PostList.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/PostView/components/PostView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyList/components/BevyListButton.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyNavigator.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/BevyList/components/BevyList.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/login/components/ForgotPass.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/login/components/RegisterView.ios.js",
+		"/Users/kevin/git/Bevy-xcode/bevyios/js/PostView/PostView.ios.js",
 		"/Users/kevin/git/Bevy-xcode/bevyios/js/InBevy.ios.js",
 		"/Users/kevin/git/Bevy-xcode/bevyios/js/Menu.ios.js",
-		"/Users/kevin/Downloads/bvy logo.png",
-		"/Users/kevin/git/Bevy-xcode/bevyios/js/login/components/LoginView.ios.js",
-		"/Users/kevin/git/Bevy-xcode/bevyios/js/TabBar.ios.js"
+		"/Users/kevin/Downloads/bvy logo.png"
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 46.0
 	},
 	"find_in_files":
 	{
@@ -136,6 +277,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"({\n",
 			"1",
 			"20xx"
 		],
@@ -155,24 +297,54 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "bevyios/js/login/components/LoginView.ios.js",
+					"file": "bevyios/js/MainTabBar.ios.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5747,
+						"buffer_size": 5000,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5141,
-								5141
+								1580,
+								1580
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSX/JSX-real.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 425.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "bevyios/js/ProfileView/components/ProfileView.ios.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2938,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2382,
+								2355
 							]
 						],
 						"settings":
@@ -182,10 +354,70 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1589.0,
+						"translation.y": 925.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "bevyios/js/login/components/LoginView.ios.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5988,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1616,
+								1616
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSX/JSX-real.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2813.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "bevyios/js/ProfileView/components/ProfileNavigator.ios.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1126,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								507,
+								507
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSX/JSX-real.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 47.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

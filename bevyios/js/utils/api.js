@@ -1,9 +1,9 @@
 var urlPath = 'http://joinbevy.com/';
+var constants = require('./constants.js');
 
 var api = {
     
     auth: function(email, pass) { // for logging in
-	   //console.log(email, pass);
       return fetch('http://joinbevy.com/login',
         {
           method: 'post',
@@ -18,6 +18,10 @@ var api = {
         })
         // on fetch
         .then((res) =>  res.json());
+    },
+
+    storeUser: function(user) {
+      constants.setUser(user);
     },
 
     forgotPass: function(email) {

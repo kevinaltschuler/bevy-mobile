@@ -29,7 +29,7 @@ var bevyios = React.createClass({
   render: function() {
     return (
         <Navigator
-          initialRoute={{name: 'postNavigator', index: 0}}
+          initialRoute={{name: 'LoginNavigator', index: 0}}
           renderScene={(route, navigator) => 
             <MainView 
               route={route}

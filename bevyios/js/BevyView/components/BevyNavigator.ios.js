@@ -14,13 +14,11 @@ var {
   NavigatorIOS,
 } = React;
 
-var TabBar = require('./../../TabBar.ios.js');
 var SideMenu = require('react-native-side-menu');
-var PostList = require('./PostList.ios.js');
-var Button = require('react-native-button');
 var BevyList= require('./../../BevyList/components/BevyList.ios.js');
 var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var Router = require('react-native-router');
+var PostList = require('./../../PostList/components/PostList.ios.js');
 
 var LeftButton = React.createClass({
   render: function () {
@@ -30,7 +28,7 @@ var LeftButton = React.createClass({
   }
 });
 
-var PostNavigator = React.createClass({
+var BevyNavigator = React.createClass({
 
   render: function () {
       
@@ -68,4 +66,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = PostNavigator;
+module.exports = BevyNavigator;

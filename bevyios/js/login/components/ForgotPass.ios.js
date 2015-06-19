@@ -21,6 +21,75 @@ var {
   Image
 } = React;
 
+var ForgotPass = React.createClass({
+
+  getInitialState: function() {
+    return {
+      subTitle: 'we can help with that',
+      email: ''
+    };
+  },
+
+  handleSubmit: function() {
+    api.forgotPass(this.state.email)
+    .then((res) => {
+      if (res.object == 'error') {
+        this.setState({ subTitle: res.message });
+      }
+      else {
+        this.setState({ subTitle: 'email sent!' });
+      }
+      
+    });
+  },
+
+  render: function() {
+    return ( 
+      <View style={styles.loginContainer}>
+
+        <View style={styles.backgroundWrapper}>
+          <View style={styles.background}/>
+        </View>
+
+        <View style={styles.loginRow}>
+          <Text style={styles.loginTitle}>
+            Lost Password?
+          </Text>
+        </View>
+
+        <View style={styles.loginRowText}>
+            <Text style={styles.loginSubTitle}>
+              {this.state.subTitle}
+            </Text>
+          </View>
+
+        <View style={styles.loginRow}>
+          <TextInput
+            autoCorrect={false}
+            placeholder='email'
+            placeholderTextColor='rgba(255,255,255,.6)'
+            style={styles.loginInput}
+            onChangeText={(text) => this.setState({email: text})}
+          />
+        </View>
+
+        <View style={styles.loginRow}>
+          <TouchableHighlight 
+            style={styles.loginButton}
+            activeOpacity={80}
+            underlayColor="#edeeee"
+            onPress={this.handleSubmit}>
+            <Text style={styles.loginButtonText}>
+              send
+            </Text>
+          </TouchableHighlight>
+        </View>
+
+      </View>);
+  }
+
+});
+
 var styles = StyleSheet.create({
   loginConatiner: {
     backgroundColor: 'rgba(0,0,0,0)'
@@ -89,86 +158,19 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  loginBackground: {
-  },
   backgroundWrapper: {
     position: 'absolute',
     top: -100,
-
+  },
+  background: {
+    backgroundColor: '#2CB673',
+    width: 500,
+    height: 1000
   },
   logo: {
     width: 50,
     height: 50,
   }
-})
-
-var ForgotPass = React.createClass({
-
-  getInitialState: function() {
-    return {
-      subTitle: 'we can help with that',
-      email: ''
-    };
-  },
-
-  handleSubmit: function() {
-    api.forgotPass(this.state.email)
-    .then((res) => {
-      if (res.object == 'error') {
-        this.setState({ subTitle: res.message });
-      }
-      else {
-        this.setState({ subTitle: 'email sent!' });
-      }
-      
-    });
-  },
-
-  render: function() {
-    return ( 
-      <View style={styles.loginContainer}>
-
-        <View style={styles.backgroundWrapper}>
-            <Image source={backgroundImage} style={styles.loginBackground}/>
-        </View>
-
-        <View style={styles.loginRow}>
-          <Text style={styles.loginTitle}>
-            Lost Password?
-          </Text>
-        </View>
-
-        <View style={styles.loginRowText}>
-            <Text style={styles.loginSubTitle}>
-              {this.state.subTitle}
-            </Text>
-          </View>
-
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            placeholder='email'
-            placeholderTextColor='rgba(255,255,255,.6)'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({email: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButton}
-            activeOpacity={80}
-            underlayColor="#edeeee"
-            onPress={this.handleSubmit}>
-            <Text style={styles.loginButtonText}>
-              send
-            </Text>
-          </TouchableHighlight>
-        </View>
-
-      </View>);
-  }
-
 });
 
 module.exports = ForgotPass;
