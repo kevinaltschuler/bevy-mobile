@@ -32,7 +32,8 @@ var ProfileNavagator = React.createClass({
       
     var firstRoute = {
       name: 'My Profile',
-      component: ProfileView
+      component: ProfileView,
+      data: this.props.navigator
     }
 
     return (

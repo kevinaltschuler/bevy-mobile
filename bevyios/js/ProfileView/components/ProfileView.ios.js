@@ -15,13 +15,26 @@ var {
   Image,
   NavigatorIOS,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  CameraRoll
 } = React;
 
 var constants = require('./../../utils/constants.js');
 var Icon = require('FAKIconImage');
 
 var ChatView = React.createClass({
+
+  handleLogout: function() {
+    this.props.data.push({name: 'LoginNavigator', index: 0});
+  },
+
+  handleUpload: function(){
+
+  },
+
+  handleUploadError: function(){
+
+  },
 
   render: function () {
 
@@ -40,6 +53,7 @@ var ChatView = React.createClass({
                       <TouchableOpacity 
                         activeOpacity={.8}
                         style={styles.cameraTouchable}
+                        onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
                       >
                         <Icon
                           name='ion|ios-camera-outline'
@@ -72,6 +86,7 @@ var ChatView = React.createClass({
                     activeOpacity={.8}
                     underlayColor='rgba(0,0,0,.1)'
                     style={styles.logoutButton}
+                    onPress={this.handleLogout}
                   >
                     <Text style={styles.buttonDetails}>
                       &nbsp;&nbsp;&nbsp;&nbsp;Logout&nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,7 +189,6 @@ var styles = StyleSheet.create({
     fontSize: 12
   },
   bottom: {
-    backgroundColor: 'white',
     flex: 1
   },
 })

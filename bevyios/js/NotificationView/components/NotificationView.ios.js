@@ -12,25 +12,29 @@ var {
   TabBarIOS,
   Text,
   View,
-  NavigatorIOS,
+  ScrollView
 } = React;
+
+var NotificationItem = require('./NotificationItem.ios.js')
 
 var NotificationView = React.createClass({
 
   render: function () {
 
     return (
-        <Text style={styles.container}>
-          Notifs WHATS GUCCI
-        </Text>
+        <ScrollView style={styles.container}>
+          <NotificationItem />
+          <NotificationItem />
+          <NotificationItem />
+          <NotificationItem />
+          <NotificationItem />
+        </ScrollView>
     );
   }
 });
 
 var styles = StyleSheet.create({
   container: {
-    backgroundColor: '#aaaaaa',
-    paddingTop: 10
   }
 })
 

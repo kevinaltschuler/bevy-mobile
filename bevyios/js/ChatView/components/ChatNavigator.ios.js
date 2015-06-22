@@ -12,7 +12,7 @@ var {
   Text,
   View,
   NavigatorIOS,
-  ScrollView
+  ScrollView,
 } = React;
 
 var SideMenu = require('react-native-side-menu');
@@ -33,7 +33,7 @@ var ChatNavigator = React.createClass({
   render: function () {
       
     var firstRoute = {
-      name: 'Conversations',
+      name: 'Chat',
       component: ChatView
     }
 

@@ -11,6 +11,7 @@ var {
   TabBarIOS,
   Text,
   View,
+  CameraRoll
 } = React;
 
 var Icon = require('FAKIconImage');
@@ -62,7 +63,7 @@ var MainTabBar = React.createClass({
     else if(this.state.selectedTab === 'ProfileNavigator') {
       return (
         <View style={styles.tabContent}>
-          <ProfileNavigator />
+          <ProfileNavigator navigator={this.props.navigator} />
         </View>
       );
     }

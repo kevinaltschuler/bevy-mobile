@@ -6,24 +6,32 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
-  NavigatorIOS,
-  ListView,
+  ScrollView
 } = React;
 
-var SideMenu = require('react-native-side-menu');
+var Post = require('./Post.ios.js');
 
 var PostList = React.createClass({
 
   render: function() {
+
+    var posts = '';
+
     return (
-      <Text style={styles.postContainer} >
-        post list
-      </Text>
+      <ScrollView style={styles.postContainer}>
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        <Post />
+        
+      </ScrollView>
     );
   },
 });
@@ -31,8 +39,7 @@ var PostList = React.createClass({
 
 var styles = StyleSheet.create({
   postContainer: {
-    backgroundColor: '#aaaaaa',
-    paddingTop: 10
+    flexDirection: 'column'
   }
 })
 
