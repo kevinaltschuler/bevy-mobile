@@ -17,38 +17,20 @@ var {
 
 var SideMenu = require('react-native-side-menu');
 var BevyList= require('./../../BevyList/components/BevyList.ios.js');
-var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
-var Router = require('react-native-router');
-var PostList = require('./../../PostList/components/PostList.ios.js');
-
-var LeftButton = React.createClass({
-  render: function () {
-    return (
-      <Image source={require('image!back_button')} style={styles.backButton} />
-      );
-  }
-});
+var BevyRouter = require('./BevyRouter.ios.js');
 
 var BevyNavigator = React.createClass({
 
   render: function () {
-      
-    var firstRoute = {
-      name: 'FrontPage',
-      component: PostList,
-      leftCorner: BevyListButton,
-    }
 
     var bevyList = <BevyList />
 
     return (
-      <SideMenu menu={bevyList}>
-        <Router
-          backButtonComponent={LeftButton}
-          headerStyle={styles.container}
-          firstRoute = {firstRoute}
-          navigator={this.props.navigator}
-        />
+      <SideMenu 
+        menu={bevyList}
+        disableGestures={true}
+      >
+        <BevyRouter />
       </SideMenu>
     );
   }

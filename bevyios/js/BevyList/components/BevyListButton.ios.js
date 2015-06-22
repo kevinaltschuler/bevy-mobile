@@ -29,7 +29,7 @@ var styles = StyleSheet.create({
 var BevyListButton = React.createClass({
 
   onPress: function() {
-    this.props.menuActions.close();
+    this.props.customAction();
   },
 
   render: function() {
