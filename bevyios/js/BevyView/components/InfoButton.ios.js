@@ -30,7 +30,7 @@ var SearchBar = React.createClass({
 var InfoButton = React.createClass({
 
   onPress: function() {
-    
+    this.props.goToInfo();
   },
 
   render: function() {

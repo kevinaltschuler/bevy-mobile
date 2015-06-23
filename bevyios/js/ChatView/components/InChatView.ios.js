@@ -1,7 +1,7 @@
 /**
- * ChatView.js
+ * InChatView.js
  * kevin made this 
- * SMASH 4 SUCKS 
+ * dank nanr shake 
  */
 'use strict';
 
@@ -15,28 +15,25 @@ var {
   NavigatorIOS,
   SegmentedControlIOS,
   ScrollView,
+  TextInput,
   Image
 } = React;
 
-var ChatItem = require('./ChatItem.ios.js');
 
-var ChatView = React.createClass({
+var InChatView = React.createClass({
 
   render: function () {
 
     return (
       <View style={styles.container} >
-        <SegmentedControlIOS
-          values={['Conversations', 'Contacts']}
-          tintColor='#2CB673'
-          style={styles.segControl}
-        />
         <ScrollView style={styles.scrollContainer}>
-          <ChatItem toRoute={this.props.toRoute}/>
-          <ChatItem/>
-          <ChatItem/>
-          <ChatItem/>
+          <Text>
+            yo
+          </Text>
         </ScrollView>
+        <TextInput
+          style={styles.textInput}
+        />
       </View>
     );
   }
@@ -49,13 +46,22 @@ var styles = StyleSheet.create({
     paddingRight: 8,
     flexDirection: 'column',
     flex: 1,
-  },
-  segControl: {
-    backgroundColor: 'white'
+    justifyContent: 'space-between',
+    paddingBottom: 50
   },
   scrollContainer: {
-
-  }
+    height: 100,
+    backgroundColor: 'rgba(0,0,0,.3)'
+  },
+  textInput: {
+    height: 40,
+    width: 360,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    paddingLeft: 16,
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    color: 'black'
+  },
 })
 
-module.exports = ChatView;
+module.exports = InChatView;

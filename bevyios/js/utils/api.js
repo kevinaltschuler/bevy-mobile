@@ -58,11 +58,17 @@ var api = {
     },
 
     getBevies: function(user) {
-      return fetch(('api.joinbevy.com/users/' + user._id + '/bevies'),
+
+      var url = 'api.joinbevy.com/users/' + user._id + '/bevies';
+
+      fetch((url),
       {
         method: 'get'
       })
-      .then((res) => res.json());
+      .then((res) => console.log(res))
+      .then((data) => console.log(data))
+      .catch((error) => console.log('error', error))
+      .done();
     }
 
 }

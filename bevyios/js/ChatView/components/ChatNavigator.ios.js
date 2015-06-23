@@ -13,6 +13,7 @@ var {
   View,
   NavigatorIOS,
   ScrollView,
+  Image
 } = React;
 
 var SideMenu = require('react-native-side-menu');

@@ -18,13 +18,23 @@ var {
   TouchableHighlight
 } = React;
 
+var InChatView = require('./InChatView.ios.js');
+
 var ChatItem = React.createClass({
+
+  goToInChat: function() {
+    this.props.toRoute({
+      name: "InConversation",
+      component: InChatView
+    })
+  },
 
   render: function () {
 
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
+        onPress={this.goToInChat}
       >
         <View style={styles.container} >
             <View style={styles.titleRow}>

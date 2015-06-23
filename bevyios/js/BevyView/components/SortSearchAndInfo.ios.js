@@ -6,6 +6,7 @@ var SearchButton = require('./SearchButton.ios.js');
 var InfoButton = require('./InfoButton.ios.js');
 
 var SearchPage = require('./SearchPage.ios.js');
+var BevyInfoView = require('./BevyInfoView.ios.js');
 
 
 var {
@@ -33,12 +34,18 @@ var SearchAndCompose = React.createClass({
       rightCorner: InfoButton
     })
   },
+  goToInfo: function() {
+    this.props.toRoute({
+      name: "Bevy Info",
+      component: BevyInfoView,
+    })
+  },
 
   render: function() {
     return (
       <View style={styles.iconContainer}>
         <SearchButton goToSearch={this.goToSearch} />
-        <InfoButton />
+        <InfoButton goToInfo={this.goToInfo}/>
       </View>
     )
   }

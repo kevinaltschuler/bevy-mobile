@@ -1,5 +1,5 @@
 /**
- * ChatView.js
+ * ProfileView.ios.js
  * kevin made this 
  * except plup hes cool
  */
@@ -22,7 +22,7 @@ var {
 var constants = require('./../../utils/constants.js');
 var Icon = require('FAKIconImage');
 
-var ChatView = React.createClass({
+var ProfileView = React.createClass({
 
   handleLogout: function() {
     this.props.data.push({name: 'LoginNavigator', index: 0});
@@ -193,4 +193,4 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = ChatView;
+module.exports = ProfileView;

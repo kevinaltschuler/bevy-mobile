@@ -22,14 +22,16 @@ var _ = require('underscore');
 
 var BevyList = React.createClass({
   buildBevyList: function() {
-    return api.getBevies(constants.getUser())
-    .then((res) => (res));
+    var user = constants.getUser();
+
+    return api.getBevies(user)
+    .then((res) => res);
   },
 
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var bevyArray = [];
-    bevyArray = this.buildBevyList();
+    bevyArray = [{name: 'bevy 1'}, {name: 'bevy2'}];
     return {
       dataSource: ds.cloneWithRows(bevyArray),
     };
