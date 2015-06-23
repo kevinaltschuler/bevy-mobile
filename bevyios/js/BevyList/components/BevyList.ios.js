@@ -13,13 +13,25 @@ var {
   View,
   NavigatorIOS,
   ListView,
+  TouchableHighlight
 } = React;
 
+var api = require('./../../utils/api.js');
+var constants = require('./../../utils/constants.js');
+var _ = require('underscore');
+
 var BevyList = React.createClass({
+  buildBevyList: function() {
+    return api.getBevies(constants.getUser())
+    .then((res) => (res));
+  },
+
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var bevyArray = [];
+    bevyArray = this.buildBevyList();
     return {
-      dataSource: ds.cloneWithRows(['balls', 'row 2']),
+      dataSource: ds.cloneWithRows(bevyArray),
     };
   },
   
@@ -35,11 +47,11 @@ var BevyList = React.createClass({
           dataSource={this.state.dataSource}
           style={styles.listContainer}
           renderRow={(rowData) => (
-            <View style={styles.rowContainer} >
+            <TouchableHighlight style={styles.rowContainer} >
               <Text style={styles.whiteText}>
-                {rowData}
+                {rowData.name}
               </Text>
-            </View>)}
+            </TouchableHighlight>)}
         />
       </View>
     );
@@ -52,7 +64,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     width: 250,
-    paddingTop: 50,
+    paddingTop: 35,
     backgroundColor: 'rgba(29,30,26,1)',
   },
   title: {

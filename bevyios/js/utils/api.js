@@ -55,6 +55,14 @@ var api = {
         })
         .then((res) => res.json());
 
+    },
+
+    getBevies: function(user) {
+      return fetch(('api.joinbevy.com/users/' + user._id + '/bevies'),
+      {
+        method: 'get'
+      })
+      .then((res) => res.json());
     }
 
 }

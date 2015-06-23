@@ -39,7 +39,7 @@ var BevyListButton = React.createClass({
         onPress={this.onPress}
       >
         <Icon
-          name='ion|ios-list-outline'
+          name='ion|ios-drag'
           size={30}
           color='white'
           style={styles.bevyListButton}

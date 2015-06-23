@@ -13,12 +13,14 @@ var {
   Text,
   View,
   NavigatorIOS,
+  Image
 } = React;
 
 var SideMenu = require('react-native-side-menu');
 var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var Router = require('react-native-router');
 var PostList = require('./../../PostList/components/PostList.ios.js');
+var SortSearchAndInfo = require('./SortSearchAndInfo.ios.js');
 
 var LeftButton = React.createClass({
   render: function () {
@@ -45,6 +47,7 @@ var BevyRouter = React.createClass({
           firstRoute = {firstRoute}
           navigator={this.props.navigator}
           customAction={this.props.menuActions.toggle}
+          rightCorner={SortSearchAndInfo}
         />
     );
   }

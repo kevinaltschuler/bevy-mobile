@@ -23,7 +23,7 @@ var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js'
 
 var Button = require('react-native-button');
 var _ = require('underscore');
-var api = require('./../../utils/api.js')
+var api = require('./../../utils/api.js');
 var constants = require('./../../utils/constants.js');
 
 var LoginView = React.createClass({
