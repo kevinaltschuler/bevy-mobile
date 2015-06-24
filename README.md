@@ -19,7 +19,6 @@ bevy for iphone, using <a href='https://facebook.github.io/react-native/'>React 
 3. in the shell, naviagte to (your git folder)/bevy-xcode/bevyios/
 4. ```npm install```
 5. open xcode
-6. `npm install react-native-icons@latest --save`
 7. In XCode, in the project navigator right click `Libraries` ➜ `Add Files to [your project's name]`
 8. Go to `node_modules` ➜ `react-native-icons`➜ `ios` and add `ReactNativeIcons.xcodeproj` 
 9. Add `libReactNativeIcons.a` (from 'Products' under ReactNativeIcons.xcodeproj) to your project's `Build Phases` ➜ `Link Binary With Libraries` phase
