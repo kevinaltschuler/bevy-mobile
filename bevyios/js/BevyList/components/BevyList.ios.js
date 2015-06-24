@@ -17,27 +17,39 @@ var {
 } = React;
 
 var api = require('./../../utils/api.js');
-var constants = require('./../../utils/constants.js');
+var constants = require('./../../constants.js');
 var _ = require('underscore');
 
 var BevyList = React.createClass({
   buildBevyList: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var user = constants.getUser();
 
-    return api.getBevies(user)
-    .then((res) => res);
+    api.getBevies(user)
+    .then((res) => {
+      this.setState({
+        dataSource: ds.cloneWithRows(res)
+      });
+    });
   },
 
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     var bevyArray = [];
-    bevyArray = [{name: 'bevy 1'}, {name: 'bevy2'}];
+
     return {
       dataSource: ds.cloneWithRows(bevyArray),
     };
   },
+
+  changeBevy: function() {
+
+  },
   
   render: function() {
+    this.buildBevyList();
+
     return (
       <View style={styles.container}>
         <View style={styles.title}>
@@ -49,7 +61,10 @@ var BevyList = React.createClass({
           dataSource={this.state.dataSource}
           style={styles.listContainer}
           renderRow={(rowData) => (
-            <TouchableHighlight style={styles.rowContainer} >
+            <TouchableHighlight 
+              style={styles.rowContainer}
+              onPress={this.changeBevy(rowData)} 
+            >
               <Text style={styles.whiteText}>
                 {rowData.name}
               </Text>

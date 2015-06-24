@@ -19,18 +19,19 @@ var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotPass = require('./ForgotPass.ios.js');
-var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js')
+var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
+var AppActions = require('./../../app/AppActions');
 
 var Button = require('react-native-button');
 var _ = require('underscore');
 var api = require('./../../utils/api.js');
-var constants = require('./../../utils/constants.js');
+var constants = require('./../../constants.js');
 
 var LoginView = React.createClass({
   getInitialState: function(){
     return {
-      email: '',
-      pass: '',
+      email: 'a@b.c',
+      pass: 'a',
       error: ''
     };
   },
@@ -50,6 +51,7 @@ var LoginView = React.createClass({
   },
 
   handleSubmit: function() {
+
       api.auth(this.state.email, this.state.pass)
       .then((res) => {
         if(res.object == undefined) {
@@ -58,6 +60,8 @@ var LoginView = React.createClass({
           });
 
         api.storeUser(res);
+
+        AppActions.load();
 
          // this data is passed @ loginnavigator.ios.js
          // pushes a new route to the main navigator in index.ios.js 

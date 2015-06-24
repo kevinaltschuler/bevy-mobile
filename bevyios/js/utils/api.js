@@ -1,5 +1,5 @@
 var urlPath = 'http://joinbevy.com/';
-var constants = require('./constants.js');
+var constants = require('./../constants.js');
 
 var api = {
     
@@ -17,7 +17,7 @@ var api = {
           })
         })
         // on fetch
-        .then((res) =>  res.json());
+        .then((res) =>  (res.json()));
     },
 
     storeUser: function(user) {
@@ -40,7 +40,7 @@ var api = {
     },
 
     register: function(email, pass, picture){
-      return fetch(('api.joinbevy.com/users'),
+      return fetch(('http://api.joinbevy.com/users'),
         {
           method: 'post',
           headers: {
@@ -59,11 +59,32 @@ var api = {
 
     getBevies: function(user) {
 
-      var url = 'api.joinbevy.com/users/' + user._id + '/bevies';
+      var url = 'http://api.joinbevy.com/users/' + user._id + '/bevies';
+
+      return fetch((url),
+      {
+        method: 'get',
+        headers: {
+          'Accept': 'application/json, text/javascript'
+        },
+      })
+      .then((res) => res.json());
+    },
+
+    getNotifications: function(user) {
+
+      var url = 'http://api.joinbevy.com/users/' + user._id + '/notifications';
 
       fetch((url),
       {
-        method: 'get'
+        method: 'get',
+        headers: {
+          'Accept': 'application/json, text/javascript',
+          'Accept-Encoding': 'gzip, deflate, sdch',
+          'Cache-Control': 'max-age=0',
+          'Connection': 'keep-alive',
+          'DNT': '1'
+        },
       })
       .then((res) => console.log(res))
       .then((data) => console.log(data))

@@ -14,7 +14,7 @@ var {
   Navigator
 } = React;
 
-var LoginNavigator = require('./login/components/LoginNavigator.ios.js');
+var LoginNavigator = require('./../../login/components/LoginNavigator.ios.js');
 var MainTabBar = require('./MainTabBar.ios.js');
 
 var styles = StyleSheet.create({

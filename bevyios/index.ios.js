@@ -14,7 +14,7 @@ var {
   Navigator
 } = React;
 
-var MainView = require('./js/MainView.ios.js');
+var MainView = require('./js/app/components/MainView.ios.js');
 
 var styles = StyleSheet.create({
   container: {
@@ -24,7 +24,54 @@ var styles = StyleSheet.create({
   },
 });
 
+var Backbone = require('backbone');
+Backbone.sync = function(method, model, options) {
+
+  switch(method) {
+    case 'create':
+      method = 'POST';
+      break;
+    case 'read':
+    default:
+      method = 'GET';
+      break;
+    case 'update':
+      method = 'PATCH';
+      break;
+    case 'delete':
+      method = 'DELETE';
+      break;
+  }
+
+  console.log(model.url);
+
+  return fetch(model.url, {
+    method: method,
+    headers: {
+      'Accept': 'application/json'
+    },
+  })
+  .then(res => {
+    var response = JSON.parse(res._bodyText);
+
+    console.log('model', model);
+    console.log('response', response);
+    console.log('options', options);
+
+    options.success && options.success(model, response, options);
+  });
+}
+
+var BevyStore = require('./js/BevyView/BevyStore');
+
 var bevyios = React.createClass({
+
+  getInitialState: function() {
+
+
+
+    return {};
+  },
 
   render: function() {
     return (

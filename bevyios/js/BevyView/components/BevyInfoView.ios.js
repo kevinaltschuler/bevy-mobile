@@ -18,7 +18,7 @@ var {
   CameraRoll
 } = React;
 
-var constants = require('./../../utils/constants.js');
+var constants = require('./../../constants.js');
 var Icon = require('FAKIconImage');
 
 var BevyInfoView = React.createClass({

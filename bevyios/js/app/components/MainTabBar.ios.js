@@ -17,10 +17,10 @@ var {
 var Icon = require('FAKIconImage');
 var SMXTabBarIOS = require('SMXTabBarIOS');
 var SMXTabBarItemIOS = SMXTabBarIOS.Item;
-var BevyNavigator = require('./BevyView/components/BevyNavigator.ios.js');
-var ChatNavigator = require('./ChatView/components/ChatNavigator.ios.js');
-var NotificationNavigator = require('./NotificationView/components/NotificationNavigator.ios.js');
-var ProfileNavigator = require('./ProfileView/components/ProfileNavigator.ios.js');
+var BevyNavigator = require('./../../BevyView/components/BevyNavigator.ios.js');
+var ChatNavigator = require('./../../ChatView/components/ChatNavigator.ios.js');
+var NotificationNavigator = require('./../../NotificationView/components/NotificationNavigator.ios.js');
+var ProfileNavigator = require('./../../ProfileView/components/ProfileNavigator.ios.js');
 
 var MainTabBar = React.createClass({
 
