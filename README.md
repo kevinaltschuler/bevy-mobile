@@ -2,6 +2,8 @@
 
 SO NASTY THAT ITS SOMEWHAT OF A TRAVESTY
 
+bevy for iphone, using <a href='https://facebook.github.io/react-native/'>React Native</a>
+
 # Installation #
 
 ### Requirements ###
