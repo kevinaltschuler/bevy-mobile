@@ -29,6 +29,10 @@ var LeftButton = React.createClass({
 
 var LoginNavigator = React.createClass({
 
+  propTypes: {
+    navigator: React.PropTypes.object
+  },
+
   render: function () {
 
     var firstRoute = {
@@ -37,16 +41,16 @@ var LoginNavigator = React.createClass({
       data: this.props.navigator
     }
 
-      return (
-        <View style={styles.container}>
-          <Router
-            backButtonComponent={LeftButton}
-            headerStyle={styles.container}
-            firstRoute={firstRoute}
-          />
-        </View>
-      );
-    }
+    return (
+      <View style={styles.container}>
+        <Router
+          backButtonComponent={LeftButton}
+          headerStyle={styles.container}
+          firstRoute={firstRoute}
+        />
+      </View>
+    );
+  }
 });
 
 

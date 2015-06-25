@@ -21,9 +21,17 @@ var BevyRouter = require('./BevyRouter.ios.js');
 
 var BevyNavigator = React.createClass({
 
+  propTypes: {
+    allBevies: React.PropTypes.array
+  },
+
   render: function () {
 
-    var bevyList = <BevyList />
+    var bevyList = (
+      <BevyList 
+        allBevies={ this.props.allBevies }
+      />
+    );
 
     return (
       <SideMenu 

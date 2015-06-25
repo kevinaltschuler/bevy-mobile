@@ -27,6 +27,17 @@ var styles = StyleSheet.create({
 
 var MainView = React.createClass({
 
+  propTypes: {
+    route: React.PropTypes.object,
+    navigator: React.PropTypes.object
+  },
+
+  getInitialState: function() {
+    return {
+      route: {}
+    };
+  },
+
   render: function() {
 
     switch(this.props.route.name) {
@@ -35,7 +46,7 @@ var MainView = React.createClass({
       break;
 
       case 'MainTabBar':
-        return <MainTabBar navigator={this.props.navigator} />;
+        return <MainTabBar { ...this.props } />;
       break;
     }
   }

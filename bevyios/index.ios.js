@@ -16,6 +16,11 @@ var {
 
 var MainView = require('./js/app/components/MainView.ios.js');
 
+var Backbone = require('backbone');
+var _ = require('underscore');
+
+var emitter = _.extend({}, Backbone.Events);
+
 var styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -25,7 +30,7 @@ var styles = StyleSheet.create({
 });
 
 var Backbone = require('backbone');
-Backbone.sync = function(method, model, options) {
+/*Backbone.sync = function(method, model, options) {
 
   switch(method) {
     case 'create':
@@ -60,17 +65,33 @@ Backbone.sync = function(method, model, options) {
 
     options.success && options.success(model, response, options);
   });
-}
+}*/
+
+var constants = require('./js/constants');
+var BEVY = constants.BEVY;
 
 var BevyStore = require('./js/BevyView/BevyStore');
 
 var bevyios = React.createClass({
 
   getInitialState: function() {
+    return {
+      allBevies: BevyStore.getAll()
+    };
+  },
 
+  componentDidMount: function() {
+    BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+  },
 
+  componentWillUnmount: function() {
+    BevyStore.off(BEVY.CHANGE_ALL, this._onBevyChange);
+  },
 
-    return {};
+  _onBevyChange: function() {
+    this.setState({
+      allBevies: BevyStore.getAll()
+    });
   },
 
   render: function() {
@@ -81,6 +102,7 @@ var bevyios = React.createClass({
             <MainView 
               route={route}
               navigator={navigator}
+              { ...this.state }
             />
           }
         />

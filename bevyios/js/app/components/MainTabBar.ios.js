@@ -42,7 +42,7 @@ var MainTabBar = React.createClass({
     if(this.state.selectedTab === 'BevyNavigator') {
       return (
         <View>
-          <BevyNavigator />
+          <BevyNavigator { ...this.props } />
         </View>
       );
     }

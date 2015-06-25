@@ -11,6 +11,7 @@ var {
   TextInput,
   TouchableHighlight,
   Text,
+  Navigator,
   Image
 } = React;
 
@@ -28,6 +29,11 @@ var api = require('./../../utils/api.js');
 var constants = require('./../../constants.js');
 
 var LoginView = React.createClass({
+
+  propTypes: {
+    data: React.PropTypes.object
+  },
+
   getInitialState: function(){
     return {
       email: 'a@b.c',
@@ -51,33 +57,33 @@ var LoginView = React.createClass({
   },
 
   handleSubmit: function() {
-
-      api.auth(this.state.email, this.state.pass)
-      .then((res) => {
-        if(res.object == undefined) {
-          this.setState({
-            user:res
-          });
+    api.auth(this.state.email, this.state.pass)
+    .then((res) => {
+      if(res.object == undefined) {
+        this.setState({
+          user:res
+        });
 
         api.storeUser(res);
 
         AppActions.load();
 
-         // this data is passed @ loginnavigator.ios.js
-         // pushes a new route to the main navigator in index.ios.js 
+        console.log(this.props.data);
+        // this data is passed @ loginnavigator.ios.js
+        // pushes a new route to the main navigator in index.ios.js 
         this.props.data.push({name: 'MainTabBar', index: 1});
+        //Navigator.getContext(this).push({ name: 'MainTabBar', index: 1 })
 
         this.setState({
           email: '',
           pass: '',
           error: ''
         });
-        } else {
-            this.setState({error: res.message});
-        }
-        
-      });
 
+      } else {
+        this.setState({error: res.message});
+      }
+    });
   },
 
   render: function() {

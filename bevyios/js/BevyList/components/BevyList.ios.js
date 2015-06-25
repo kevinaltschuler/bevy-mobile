@@ -1,6 +1,7 @@
 /**
- * BevyBar.js
+ * BevyList.js
  * kevin made this
+ * the yung sauce villain
  */
 'use strict';
 
@@ -18,29 +19,28 @@ var {
 
 var api = require('./../../utils/api.js');
 var constants = require('./../../constants.js');
+var BEVY = constants.BEVY;
 var _ = require('underscore');
 
 var BevyList = React.createClass({
-  buildBevyList: function() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var user = constants.getUser();
 
-    api.getBevies(user)
-    .then((res) => {
-      this.setState({
-        dataSource: ds.cloneWithRows(res)
-      });
-    });
+  propTypes: {
+    allBevies: React.PropTypes.array
   },
 
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-    var bevyArray = [];
-
     return {
-      dataSource: ds.cloneWithRows(bevyArray),
+      dataSource: ds.cloneWithRows([])
     };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.setState({
+      dataSource: ds.cloneWithRows(nextProps.allBevies)
+    });
   },
 
   changeBevy: function() {
@@ -48,8 +48,6 @@ var BevyList = React.createClass({
   },
   
   render: function() {
-    this.buildBevyList();
-
     return (
       <View style={styles.container}>
         <View style={styles.title}>
