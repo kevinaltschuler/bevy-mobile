@@ -30,7 +30,7 @@ var styles = StyleSheet.create({
 });
 
 var Backbone = require('backbone');
-/*Backbone.sync = function(method, model, options) {
+Backbone.sync = function(method, model, options) {
 
   switch(method) {
     case 'create':
@@ -63,9 +63,9 @@ var Backbone = require('backbone');
     console.log('response', response);
     console.log('options', options);
 
-    options.success && options.success(model, response, options);
+    options.success(response, options);
   });
-}*/
+}
 
 var constants = require('./js/constants');
 var BEVY = constants.BEVY;
@@ -76,7 +76,8 @@ var bevyios = React.createClass({
 
   getInitialState: function() {
     return {
-      allBevies: BevyStore.getAll()
+      allBevies: BevyStore.getAll(),
+      activeBevy: BevyStore.getActive()
     };
   },
 
@@ -90,7 +91,8 @@ var bevyios = React.createClass({
 
   _onBevyChange: function() {
     this.setState({
-      allBevies: BevyStore.getAll()
+      allBevies: BevyStore.getAll(),
+      activeBevy: BevyStore.getActive()
     });
   },
 

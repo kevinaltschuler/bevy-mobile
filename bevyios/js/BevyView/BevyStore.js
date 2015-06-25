@@ -44,6 +44,8 @@ _.extend(BevyStore, {
 
 	bevies: new Bevies,
 
+	active: -1, // id of the active bevy. by default set it to the frontpage
+
 	// handle calls from the dispatcher
 	// these are created from BevyActions.js
 	handleDispatch: function(payload) {
@@ -55,25 +57,19 @@ _.extend(BevyStore, {
 
 				this.bevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
 
-        return fetch(this.bevies.url, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json'
-          },
-        })
-        .then(res => {
-          res = JSON.parse(res._bodyText);
-          this.bevies.reset(res);
-          
-          this.bevies.unshift({
-            _id: '-1',
-            name: 'Frontpage'
-          });
+				this.bevies.fetch({
+					reset: true,
+					success: function(bevies, response, options) {
+						console.log('in store', bevies, response, options);
 
-          console.log('fetched', this.bevies.toJSON());
+						this.bevies.unshift({
+	            _id: '-1',
+	            name: 'Frontpage'
+	          });
 
-          this.trigger(BEVY.CHANGE_ALL);
-        });
+						this.trigger(BEVY.CHANGE_ALL);
+					}.bind(this)
+				});
 
 				break;
 
@@ -269,7 +265,9 @@ _.extend(BevyStore, {
 				break;
 
 			case BEVY.SWITCH:
-				//this.trigger(BEVY.CHANGE_ALL);
+				
+
+				this.trigger(BEVY.CHANGE_ALL);
 				break;
 
 			case BEVY.INVITE:
@@ -396,14 +394,14 @@ _.extend(BevyStore, {
 		return this.bevies.toJSON();
 	},
 
-	/*getActive: function() {
-		var bevy = this.bevies.get(router.bevy_id || -1);
+	getActive: function() {
+		var bevy = this.bevies.get(this.active || -1);
 		return (bevy)
 		? bevy.toJSON()
 		: {};
 	},
 
-	getBevy: function(bevy_id) {
+	/*getBevy: function(bevy_id) {
 		var bevy = this.bevies.get(bevy_id);
 		return (bevy)
 		? bevy.toJSON()

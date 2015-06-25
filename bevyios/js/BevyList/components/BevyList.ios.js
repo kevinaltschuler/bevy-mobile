@@ -25,7 +25,8 @@ var _ = require('underscore');
 var BevyList = React.createClass({
 
   propTypes: {
-    allBevies: React.PropTypes.array
+    allBevies: React.PropTypes.array,
+    activeBevy: React.PropTypes.object
   },
 
   getInitialState: function() {

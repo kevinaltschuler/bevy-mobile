@@ -18,6 +18,8 @@ var PostList = React.createClass({
 
   render: function() {
 
+    console.log('post list props', this.props);
+
     var posts = '';
 
     return (

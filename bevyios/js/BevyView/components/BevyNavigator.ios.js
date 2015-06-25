@@ -30,6 +30,7 @@ var BevyNavigator = React.createClass({
     var bevyList = (
       <BevyList 
         allBevies={ this.props.allBevies }
+        activeBevy={ this.props.activeBevy }
       />
     );
 
@@ -38,7 +39,10 @@ var BevyNavigator = React.createClass({
         menu={bevyList}
         disableGestures={true}
       >
-        <BevyRouter />
+        <BevyRouter 
+          allBevies={ this.props.allBevies }
+          activeBevy={ this.props.activeBevy }
+        />
       </SideMenu>
     );
   }

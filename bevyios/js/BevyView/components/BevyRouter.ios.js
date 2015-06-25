@@ -32,23 +32,43 @@ var LeftButton = React.createClass({
 
 var BevyRouter = React.createClass({
 
+  propTypes: {
+    allBevies: React.PropTypes.array,
+    activeBevy: React.PropTypes.object
+  },
+
+  getInitialState: function() {
+    return {
+      activeName: 'Not in a bevy'
+    }
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this.setState({
+      activeName: nextProps.activeBevy.name || 'Not in a bevy'
+    });
+  },
+
   render: function () {
 
     var firstRoute = {
-      name: 'FrontPage',
+      name: this.state.activeName,
       component: PostList,
-      leftCorner: BevyListButton
-    }
+      leftCorner: BevyListButton,
+      data: { crud: this.state.activeName }
+    };
+
+    console.log(firstRoute);
 
     return (
-        <Router
-          backButtonComponent={LeftButton}
-          headerStyle={styles.container}
-          firstRoute = {firstRoute}
-          navigator={this.props.navigator}
-          customAction={this.props.menuActions.toggle}
-          rightCorner={SortSearchAndInfo}
-        />
+      <Router
+        backButtonComponent={LeftButton}
+        headerStyle={styles.container}
+        firstRoute={ firstRoute }
+        navigator={this.props.navigator}
+        customAction={this.props.menuActions.toggle}
+        rightCorner={SortSearchAndInfo}
+      />
     );
   }
 });

@@ -25,7 +25,6 @@ var SearchBar = React.createClass({
 
 
 var SearchAndCompose = React.createClass({
-
   goToSearch: function() {
     this.props.toRoute({
       name: "Search",
@@ -42,6 +41,7 @@ var SearchAndCompose = React.createClass({
   },
 
   render: function() {
+
     return (
       <View style={styles.iconContainer}>
         <SearchButton goToSearch={this.goToSearch} />
