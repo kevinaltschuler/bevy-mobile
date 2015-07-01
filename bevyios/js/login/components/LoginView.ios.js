@@ -12,7 +12,9 @@ var {
   TouchableHighlight,
   Text,
   Navigator,
-  Image
+  Image,
+  LinkingIOS,
+  AsyncStorage
 } = React;
 
 // modules
@@ -86,6 +88,147 @@ var LoginView = React.createClass({
     });
   },
 
+  // when the google login button is pressed
+  onGoogleLogin: function() {
+
+    // see if we've logged in before
+    AsyncStorage.getItem('google_token')
+      .then((token) => {
+        if(token) {
+          // yes we have, and we have the token
+          // we can skip doing the oauth2 grant request
+
+          // fetch the google plus profile data
+          console.log(token);
+          fetch(
+            'https://www.googleapis.com/plus/v1/people/me' + 
+            '?access_token=' + token, {
+          })
+          .then((res) => {
+            // now we have the google id
+            // query our api
+            var response = JSON.parse(res._bodyText);
+            console.log(response);
+            var google_id = response.id;
+
+            fetch(constants.apiurl + '/users/google/' + google_id)
+            .then(($res) => {
+
+              var user = JSON.parse($res._bodyText);
+              this.setState({
+                user: user
+              });
+
+              api.storeUser(user);
+
+              AppActions.load();
+
+              console.log(this.props.data);
+              // this data is passed @ loginnavigator.ios.js
+              // pushes a new route to the main navigator in index.ios.js 
+              this.props.data.push({name: 'MainTabBar', index: 1});
+
+              this.setState({
+                email: '',
+                pass: '',
+                error: ''
+              });
+
+            });
+          });
+        } else {
+          // no one has logged in before or has consciously signed out
+          // do oauth via the browser, and listen for the callback
+
+          LinkingIOS.addEventListener('url', this.handleGoogleURL);
+
+          console.log(constants.google_redirect_uri);
+
+          LinkingIOS.openURL([
+            'https://accounts.google.com/o/oauth2/auth',
+            '?response_type=code',
+            '&client_id=' + constants.google_client_id,
+            '&redirect_uri=' + constants.google_redirect_uri,
+            '&scope=email%20profile'
+          ].join(''));
+        }
+      }); 
+  },
+
+  handleGoogleURL: function(event) {
+    // when the browser gets back to us
+    // it should only send an access code that we use to get the oauth token
+
+    LinkingIOS.removeEventListener('url', this.handleGoogleURL);
+
+    var url = event.url;
+    var code = url.slice(38); // jenky query parser
+    console.log(url, code);
+
+    var body = [
+      'code=' + code + '&',
+      'client_id=' + constants.google_client_id +'&',
+      'client_secret=' + constants.google_client_secret + '&',
+      'redirect_uri=' + constants.google_redirect_uri + '&',
+      'grant_type=authorization_code'
+    ].join('');
+    console.log(body);
+    
+    // get the token
+    fetch('https://www.googleapis.com/oauth2/v3/token', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: body
+    }).then((res) => {
+      console.log(res);
+      var response = JSON.parse(res._bodyText);
+      var access_token = response.access_token;
+
+      // save this token so we dont have to go through that again
+      // unless we have to
+      AsyncStorage.setItem('google_token', access_token);
+
+      // get the google plus user, so we can get its id
+      fetch(
+        'https://www.googleapis.com/plus/v1/people/me' + 
+        '?access_token=' + access_token, {
+      })
+      .then(($res) => {
+        var $response = JSON.parse($res._bodyText);
+        var google_id = $response.id;
+
+        // finally we can query our own api
+        fetch(constants.apiurl + '/users/google/' + google_id)
+          .then(($user) => {
+
+            var user = JSON.parse($user._bodyText);
+            this.setState({
+              user: user
+            });
+
+            api.storeUser(user);
+
+            AppActions.load();
+
+            console.log(this.props.data);
+            // this data is passed @ loginnavigator.ios.js
+            // pushes a new route to the main navigator in index.ios.js 
+            this.props.data.push({name: 'MainTabBar', index: 1});
+
+            this.setState({
+              email: '',
+              pass: '',
+              error: ''
+            });
+
+          });
+      });
+    });
+  },
+
   render: function() {
     return ( <View>
 
@@ -153,7 +296,8 @@ var LoginView = React.createClass({
             <TouchableHighlight 
               style={styles.loginButtonGoogle}
               activeOpacity={80}
-              underlayColor="#CB442E">
+              underlayColor="#CB442E"
+              onPress={ this.onGoogleLogin }>
               <Text style={styles.loginButtonTextGoogle}>
                 login with google
               </Text>

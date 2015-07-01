@@ -25,6 +25,11 @@ exports.protocol = protocol;
 exports.api_subdomain = api_subdomain;
 exports.api_version = api_version;
 
+exports.google_client_id = '540892787949-0e61br4320fg4l2its3gr9csssrn07aj.apps.googleusercontent.com';
+exports.google_client_secret = 'LuNykxTlzbeH8pa6f77WXroG';
+exports.google_redirect_uri = 'com.joinbevy.ios:/oauth2callback';
+//exports.google_redirect_uri = 'com.googleusercontent.apps.540892787949-0e61br4320fg4l2its3gr9csssrn07aj:/oauth2callback';
+
 exports.APP = {
 	LOAD: 'app_load'
 };
