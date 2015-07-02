@@ -19,8 +19,6 @@ var MainView = require('./js/app/components/MainView.ios.js');
 var Backbone = require('backbone');
 var _ = require('underscore');
 
-var emitter = _.extend({}, Backbone.Events);
-
 var styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -48,9 +46,11 @@ Backbone.sync = function(method, model, options) {
       break;
   }
 
-  console.log(model.url);
+  //console.log(model.url);
+  var url = model.url;
+  if(typeof url === 'function') url = url();
 
-  return fetch(model.url, {
+  return fetch(url, {
     method: method,
     headers: {
       'Accept': 'application/json'
@@ -59,9 +59,9 @@ Backbone.sync = function(method, model, options) {
   .then(res => {
     var response = JSON.parse(res._bodyText);
 
-    console.log('model', model);
-    console.log('response', response);
-    console.log('options', options);
+    //console.log('model', model);
+    //console.log('response', response);
+    //console.log('options', options);
 
     options.success(response, options);
   });
@@ -69,30 +69,42 @@ Backbone.sync = function(method, model, options) {
 
 var constants = require('./js/constants');
 var BEVY = constants.BEVY;
+var CHAT = constants.CHAT;
 
 var BevyStore = require('./js/BevyView/BevyStore');
+var ChatStore = require('./js/ChatView/ChatStore');
 
 var bevyios = React.createClass({
 
   getInitialState: function() {
     return {
       allBevies: BevyStore.getAll(),
-      activeBevy: BevyStore.getActive()
+      activeBevy: BevyStore.getActive(),
+      allThreads: ChatStore.getAll()
     };
   },
 
   componentDidMount: function() {
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+    ChatStore.on(CHAT.CHANGE_ALL, this._onChatChange);
   },
 
   componentWillUnmount: function() {
     BevyStore.off(BEVY.CHANGE_ALL, this._onBevyChange);
+    ChatStore.off(CHAT.CHANGE_ALL, this._onChatChange);
   },
 
   _onBevyChange: function() {
     this.setState({
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive()
+    });
+  },
+
+  _onChatChange: function() {
+    console.log(ChatStore.getAll());
+    this.setState({
+      allThreads: ChatStore.getAll()
     });
   },
 
