@@ -54,6 +54,8 @@ var ThreadItem = React.createClass({
   },
 
   getThreadInfo: function(thread) {
+    var user = constants.getUser();
+
     var threadName = 'Default Thread Name';
     var threadImage = constants.siteurl + '/img/logo_100.png';
     if(thread.bevy) {
