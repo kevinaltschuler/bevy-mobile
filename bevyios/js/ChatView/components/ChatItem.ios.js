@@ -23,10 +23,10 @@ var InChatView = require('./InChatView.ios.js');
 var ChatItem = React.createClass({
 
   goToInChat: function() {
-    this.props.toRoute({
+    /*this.props.toRoute({
       name: "InConversation",
       component: InChatView
-    })
+    })*/
   },
 
   render: function () {

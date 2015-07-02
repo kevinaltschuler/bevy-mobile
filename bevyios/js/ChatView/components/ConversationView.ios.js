@@ -20,19 +20,25 @@ var {
 
 var ChatItem = require('./ChatItem.ios.js');
 
-var ChatView = React.createClass({
+var ConversationView = React.createClass({
+
+  propTypes: {
+    route: React.PropTypes.object,
+    navigator: React.PropTypes.object
+  },
 
   render: function () {
 
     return (
       <View style={styles.container} >
         <SegmentedControlIOS
-          values={['Conversations', 'Contacts']}
+          values={ ['Conversations', 'Contacts'] }
+          selectedIndex={ 0 }
           tintColor='#2CB673'
           style={styles.segControl}
         />
         <ScrollView style={styles.scrollContainer}>
-          <ChatItem toRoute={this.props.toRoute}/>
+          <ChatItem/>
           <ChatItem/>
           <ChatItem/>
           <ChatItem/>
@@ -58,4 +64,4 @@ var styles = StyleSheet.create({
   }
 })
 
-module.exports = ChatView;
+module.exports = ConversationView;
