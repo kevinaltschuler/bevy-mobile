@@ -28,6 +28,8 @@ var ProfileView = React.createClass({
   handleLogout: function() {
     // remove google token
     AsyncStorage.removeItem('google_id');
+    // remove user
+    AsyncStorage.removeItem('user');
 
     this.props.data.push({name: 'LoginNavigator', index: 0});
   },

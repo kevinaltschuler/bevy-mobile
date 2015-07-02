@@ -73,7 +73,7 @@ var LoginView = React.createClass({
         //console.log(this.props.data);
         // this data is passed @ loginnavigator.ios.js
         // pushes a new route to the main navigator in index.ios.js 
-        this.props.data.push({name: 'MainTabBar', index: 1});
+        this.props.data.push({name: 'MainTabBar', index: 2});
         //Navigator.getContext(this).push({ name: 'MainTabBar', index: 1 })
 
         this.setState({
@@ -116,7 +116,7 @@ var LoginView = React.createClass({
             //console.log(this.props.data);
             // this data is passed @ loginnavigator.ios.js
             // pushes a new route to the main navigator in index.ios.js 
-            this.props.data.push({name: 'MainTabBar', index: 1});
+            this.props.data.push({name: 'MainTabBar', index: 2});
 
             this.setState({
               email: '',
@@ -204,7 +204,7 @@ var LoginView = React.createClass({
             //console.log(this.props.data);
             // this data is passed @ loginnavigator.ios.js
             // pushes a new route to the main navigator in index.ios.js 
-            this.props.data.push({name: 'MainTabBar', index: 1});
+            this.props.data.push({name: 'MainTabBar', index: 2});
 
             this.setState({
               email: '',
@@ -218,8 +218,8 @@ var LoginView = React.createClass({
   },
 
   render: function() {
-    return ( <View>
-
+    return ( 
+      <View>
         
         <View style={styles.backgroundWrapper}>
           <View style={styles.background}/>
@@ -319,7 +319,8 @@ var LoginView = React.createClass({
           </View>
 
         </View>
-        </View>);
+      </View>
+    );
   }
 
 });
