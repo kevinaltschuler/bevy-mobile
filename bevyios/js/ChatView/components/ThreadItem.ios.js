@@ -35,6 +35,25 @@ var ThreadItem = React.createClass({
   getInitialState: function() {
 
     var thread = this.props.thread;
+    var threadInfo = this.getThreadInfo(thread);
+    return {
+      threadName: threadInfo.threadName,
+      threadImage: threadInfo.threadImage
+    };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+
+    var thread = nextProps.thread;
+    var threadInfo = this.getThreadInfo(thread);
+
+    this.setState({
+      threadName: threadInfo.threadName,
+      threadImage: threadInfo.threadImage
+    });
+  },
+
+  getThreadInfo: function(thread) {
     var threadName = 'Default Thread Name';
     var threadImage = constants.siteurl + '/img/logo_100.png';
     if(thread.bevy) {
@@ -52,28 +71,6 @@ var ThreadItem = React.createClass({
       threadName: threadName,
       threadImage: threadImage
     };
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-
-    var thread = nextProps.thread;
-    var threadName = 'Default Thread Name';
-    var threadImage = constants.siteurl + '/img/logo_100.png';
-    if(thread.bevy) {
-      threadName = thread.bevy.name;
-      threadImage = thread.bevy.image_url || constants.siteurl + '/img/logo_100.png';
-    } else if( thread.members.length > 1 ) {
-      var otherUser = _.find(thread.members, function(member) {
-        return member.user._id != user._id;
-      });
-      threadName = otherUser.user.displayName;
-      threadImage = otherUser.user.image_url || constants.siteurl + '/img/user-profile-icon.png';
-    }
-
-    this.setState({
-      threadName: threadName,
-      threadImage: threadImage
-    });
   },
 
   goToInChat: function() {
