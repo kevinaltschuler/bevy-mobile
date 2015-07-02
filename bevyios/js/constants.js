@@ -31,63 +31,68 @@ exports.google_redirect_uri = 'com.joinbevy.ios:/oauth2callback';
 //exports.google_redirect_uri = 'com.googleusercontent.apps.540892787949-0e61br4320fg4l2its3gr9csssrn07aj:/oauth2callback';
 
 exports.APP = {
-	LOAD: 'app_load'
+  LOAD: 'app_load'
 };
 
 exports.POST = {
-	CREATE: 'post_create',
-	DESTROY: 'post_destroy',
-	UPVOTE: 'post_upvote',
-	DOWNVOTE: 'post_downvote',
-	SORT: 'post_sort',
+  CREATE: 'post_create',
+  DESTROY: 'post_destroy',
+  UPVOTE: 'post_upvote',
+  DOWNVOTE: 'post_downvote',
+  SORT: 'post_sort',
 
-	FETCH: 'post_fetch',
+  FETCH: 'post_fetch',
 
-	CHANGE_ALL: 'post_change_all',
-	CHANGE_ONE: 'post_change_one'
+  CHANGE_ALL: 'post_change_all',
+  CHANGE_ONE: 'post_change_one'
 };
 
 exports.COMMENT = {
-	CREATE: 'comment_create',
-	DESTROY: 'comment_destroy',
-	VOTE: 'comment_vote'
+  CREATE: 'comment_create',
+  DESTROY: 'comment_destroy',
+  VOTE: 'comment_vote'
 }
 
 exports.BEVY = {
-	CREATE: 'bevy_create',
-	DESTROY: 'bevy_destroy',
-	UPDATE: 'bevy_update',
-	SET_NOTIFICATION_LEVEL: 'bevy_set_notification_level',
-	LEAVE: 'bevy_leave',
-	SWITCH: 'bevy_switch',
-	INVITE: 'bevy_invite',
-	ADD_USER: 'bevy_add_user',
+  CREATE: 'bevy_create',
+  DESTROY: 'bevy_destroy',
+  UPDATE: 'bevy_update',
+  SET_NOTIFICATION_LEVEL: 'bevy_set_notification_level',
+  LEAVE: 'bevy_leave',
+  SWITCH: 'bevy_switch',
+  INVITE: 'bevy_invite',
+  ADD_USER: 'bevy_add_user',
 
-	FETCH: 'bevy_fetch',
+  FETCH: 'bevy_fetch',
 
-	CHANGE_ALL: 'bevy_change_all',
-	CHANGE_ONE: 'bevy_change_one'
+  CHANGE_ALL: 'bevy_change_all',
+  CHANGE_ONE: 'bevy_change_one'
+};
+
+exports.CHAT = {
+  THREAD_OPEN: 'chat_thread_open',
+  CHANGE_ALL: 'chat_change_all'
 };
 
 exports.user = {
-	CREATE: 'user_create',
-	DESTROY: 'user_destroy',
-	UPDATE: 'user_update',
-	SWITCH: 'user_switch',
+  CREATE: 'user_create',
+  DESTROY: 'user_destroy',
+  UPDATE: 'user_update',
+  SWITCH: 'user_switch',
 
-	CHANGE_ALL: 'user_change_all'
+  CHANGE_ALL: 'user_change_all'
 };
 
 exports.NOTIFICATION = {
-	  DISMISS: 'notification_dismiss',
+    DISMISS: 'notification_dismiss',
 
-	  CHANGE_ALL: 'notification_change_all'
+    CHANGE_ALL: 'notification_change_all'
 };
 
 exports.setUser = function(tempUser) {
-	user = tempUser;
+  user = tempUser;
 };
 
 exports.getUser = function() {
-	return user;
+  return user;
 };
