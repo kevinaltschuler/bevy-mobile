@@ -29,7 +29,17 @@ _.extend(ChatStore, {
           reset: true,
           success: function(collection, response, options) {
             console.log('fetched threads');
-            this.trigger(CHAT.CHANGE_ALL);
+            this.threads.forEach(function(thread) {
+              thread.messages.fetch({
+                reset: true,
+                success: function(collection, response, options) {
+                  console.log('fetched messages');
+                  thread.messages.sort();
+                  console.log(thread.toJSON());
+                  this.trigger(CHAT.CHANGE_ALL);
+                }.bind(this)
+              });
+            }.bind(this));
           }.bind(this)
         });
 
@@ -39,6 +49,12 @@ _.extend(ChatStore, {
 
   getAll: function() {
     return this.threads.toJSON();
+  },
+
+  getMessages: function(thread_id) {
+    var thread = this.threads.get(thread_id);
+    if(thread == undefined) return [];
+    else return thread.messages.toJSON();
   }
 });
 

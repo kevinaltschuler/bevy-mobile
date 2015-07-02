@@ -20,6 +20,7 @@ var {
   Image
 } = React;
 
+var ChatStore = require('./../ChatStore');
 
 var InChatView = React.createClass({
 
@@ -29,19 +30,33 @@ var InChatView = React.createClass({
     allThreads: React.PropTypes.array
   },
 
+  getInitialState: function() {
+
+    var activeThread = _.findWhere(this.props.allThreads, { 
+      _id: this.props.chatRoute.activeThread 
+    });
+
+    return {
+      activeThread: activeThread,
+      messages: ChatStore.getMessages(activeThread._id)
+    };
+  },
+
   render: function () {
 
     var allThreads = this.props.allThreads;
-    var activeThread = _.findWhere(allThreads, { _id: this.props.chatRoute.activeThread });
 
-    console.log(activeThread);
+    var messages = [];
+    this.state.messages.forEach(function(message) {
+      messages.push(
+        <Text key={ message._id }>{ message.body }</Text>
+      );
+    });
 
     return (
       <View style={styles.container} >
         <ScrollView style={styles.scrollContainer}>
-          <Text>
-            { this.props.chatRoute.activeThread }
-          </Text>
+          { messages }
         </ScrollView>
         <TextInput
           style={styles.textInput}
