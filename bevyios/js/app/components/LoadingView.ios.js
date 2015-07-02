@@ -13,6 +13,8 @@ var bevy_logo_trans = require('image!bevy_logo_trans');
 var api = require('./../../utils/api.js');
 var constants = require('./../../constants.js');
 
+var AppActions = require('./../AppActions');
+
 var styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -70,6 +72,7 @@ var LoadingView = React.createClass({
     .then((user) => {
       if(user) {
         constants.setUser(JSON.parse(user));
+        AppActions.load();
         this.props.navigator.push({ name: 'MainTabBar', index: 2});
       } else {
         console.log('going to login screen...');
