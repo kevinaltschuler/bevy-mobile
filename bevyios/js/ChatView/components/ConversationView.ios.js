@@ -7,27 +7,33 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
-  NavigatorIOS,
   SegmentedControlIOS,
   ScrollView,
   Image
 } = React;
 
-var ChatItem = require('./ChatItem.ios.js');
+var ThreadItem = require('./ThreadItem.ios.js');
 
 var ConversationView = React.createClass({
 
   propTypes: {
     route: React.PropTypes.object,
-    navigator: React.PropTypes.object
+    navigator: React.PropTypes.object,
+    allThreads: React.PropTypes.array
   },
 
   render: function () {
+
+    var threads = [];
+    var allThreads = this.props.allThreads || [];
+    allThreads.forEach(function(thread) {
+      threads.push(
+        <ThreadItem key={ thread._id } thread={ thread } route={ this.props.route } navigator={ this.props.navigator }/>
+      );
+    }.bind(this));
 
     return (
       <View style={styles.container} >
@@ -38,10 +44,7 @@ var ConversationView = React.createClass({
           style={styles.segControl}
         />
         <ScrollView style={styles.scrollContainer}>
-          <ChatItem/>
-          <ChatItem/>
-          <ChatItem/>
-          <ChatItem/>
+          { threads }
         </ScrollView>
       </View>
     );
@@ -60,7 +63,7 @@ var styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   scrollContainer: {
-
+    //paddingTop: 30
   }
 })
 

@@ -25,7 +25,7 @@ var LeftButton = React.createClass({
   render: function () {
     return (
       <Image source={require('image!back_button')} style={styles.backButton} />
-      );
+    );
   }
 });
 
