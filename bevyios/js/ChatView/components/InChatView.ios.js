@@ -6,6 +6,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   AppRegistry,
   StyleSheet,
@@ -22,13 +23,24 @@ var {
 
 var InChatView = React.createClass({
 
+  propTypes: {
+    chatRoute: React.PropTypes.object,
+    chatNavigator: React.PropTypes.object,
+    allThreads: React.PropTypes.array
+  },
+
   render: function () {
+
+    var allThreads = this.props.allThreads;
+    var activeThread = _.findWhere(allThreads, { _id: this.props.chatRoute.activeThread });
+
+    console.log(activeThread);
 
     return (
       <View style={styles.container} >
         <ScrollView style={styles.scrollContainer}>
           <Text>
-            yo
+            { this.props.chatRoute.activeThread }
           </Text>
         </ScrollView>
         <TextInput

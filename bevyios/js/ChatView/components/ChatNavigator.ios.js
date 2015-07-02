@@ -11,7 +11,8 @@ var {
   View,
   Navigator,
   ScrollView,
-  Image
+  Image,
+  TouchableHighlight
 } = React;
 
 var SideMenu = require('react-native-side-menu');
@@ -21,47 +22,51 @@ var Router = require('react-native-router');
 var ConversationView = require('./ConversationView.ios.js');
 var InChatView = require('./InChatView.ios.js');
 
-var LeftButton = React.createClass({
-  render: function () {
-    return (
-      <Image source={require('image!back_button')} style={styles.backButton} />
-    );
-  }
-});
-
 var Navbar = React.createClass({
 
+  propTypes: {
+    chatRoute: React.PropTypes.object,
+    chatNavigator: React.PropTypes.object
+  },
+
+  goBack: function() {
+    this.props.chatNavigator.push({
+      name: 'ConversationView',
+      index: 0
+    });
+  },
+
   render: function() {
+
+    var backButton = <Text />;
+    if(this.props.chatRoute.name != 'ConversationView')
+      backButton = (
+        <TouchableHighlight
+          underlayColor='rgba(0,0,0,.1)'
+          onPress={this.goBack} 
+          style={ styles.backButtonContainer } >
+          <Image source={require('image!back_button')} style={styles.backButton} />
+        </TouchableHighlight>
+      );
+
+    var navbarText = 'Chat';
+    if(this.props.chatRoute.threadName)
+      navbarText = this.props.chatRoute.threadName;
+
     return (
       <View style={ styles.navbar }>
-        <Text style={ styles.navbarText }>Chat</Text>
+        { backButton }
+        <Text style={ styles.navbarText }>{ navbarText }</Text>
       </View>
     );
   }
 });
 
 var ChatNavigator = React.createClass({
-
-  render: function () {
-      
-    /*var firstRoute = {
-      name: 'Chat',
-      component: ChatView
-    }*/
-
-    //var bevyList = <BevyList />
-
-    /*return (
-        <Router
-          backButtonComponent={LeftButton}
-          headerStyle={styles.headerStyle}
-          firstRoute = {firstRoute}
-          navigator={this.props.navigator}
-        />
-    );*/
+  render: function() {
     return (
       <Navigator
-        initialRoute={{ name: 'ChatView', index: 0 }}
+        initialRoute={{ name: 'ConversationView', index: 0 }}
         renderScene={(route, navigator) => 
           <ChatView
             chatRoute={ route }
@@ -84,11 +89,11 @@ var ChatView = React.createClass({
   render: function() {
     var view;
     switch(this.props.chatRoute.name) {
-      case 'ChatView':
+      case 'ConversationView':
         view = (
-            <ConversationView 
-              { ...this.props }
-            />
+          <ConversationView 
+            { ...this.props }
+          />
         );
         break;
       case 'InChatView':
@@ -102,7 +107,10 @@ var ChatView = React.createClass({
 
     return (
       <View>
-        <Navbar />
+        <Navbar 
+          chatRoute={ this.props.chatRoute }
+          chatNavigator={ this.props.chatNavigator }
+        />
         { view }
       </View>
     );
@@ -119,19 +127,24 @@ var styles = StyleSheet.create({
     backgroundColor: '#2CB673',
     flex: 1
   },
+  navbar: {
+    backgroundColor: '#2CB673',
+    flex: 1,
+    flexDirection: 'row',
+    height: 64,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  backButtonContainer: {
+    alignSelf: 'flex-start'
+  },
   backButton: {
     width: 10,
     height: 17,
     marginLeft: 10,
-    marginTop: 3,
-    marginRight: 10
-  },
-  navbar: {
-    backgroundColor: '#2CB673',
-    flex: 1,
-    height: 64,
-    justifyContent: 'flex-end',
-    paddingBottom: 13
+    marginTop: 20,
+    marginRight: 10,
+    paddingTop: 20
   },
   navbarText: {
     color: '#fff',

@@ -27,23 +27,14 @@ var user = constants.getUser();
 var ThreadItem = React.createClass({
 
   propTypes: {
-    route: React.PropTypes.object,
-    navigator: React.PropTypes.object,
+    chatRoute: React.PropTypes.object,
+    chatNavigator: React.PropTypes.object,
     thread: React.PropTypes.object
   },
 
-  goToInChat: function() {
-    /*this.props.toRoute({
-      name: "InConversation",
-      component: InChatView
-    })*/
-  },
-
-  render: function () {
+  getInitialState: function() {
 
     var thread = this.props.thread;
-    console.log(thread);
-
     var threadName = 'Default Thread Name';
     var threadImage = constants.siteurl + '/img/logo_100.png';
     if(thread.bevy) {
@@ -56,6 +47,52 @@ var ThreadItem = React.createClass({
       threadName = otherUser.user.displayName;
       threadImage = otherUser.user.image_url || constants.siteurl + '/img/user-profile-icon.png';
     }
+
+    return {
+      threadName: threadName,
+      threadImage: threadImage
+    };
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+
+    var thread = nextProps.thread;
+    var threadName = 'Default Thread Name';
+    var threadImage = constants.siteurl + '/img/logo_100.png';
+    if(thread.bevy) {
+      threadName = thread.bevy.name;
+      threadImage = thread.bevy.image_url || constants.siteurl + '/img/logo_100.png';
+    } else if( thread.members.length > 1 ) {
+      var otherUser = _.find(thread.members, function(member) {
+        return member.user._id != user._id;
+      });
+      threadName = otherUser.user.displayName;
+      threadImage = otherUser.user.image_url || constants.siteurl + '/img/user-profile-icon.png';
+    }
+
+    this.setState({
+      threadName: threadName,
+      threadImage: threadImage
+    });
+  },
+
+  goToInChat: function() {
+    this.props.chatNavigator.push({
+      name: 'InChatView',
+      index: 1,
+      activeThread: this.props.thread._id,
+      threadName: this.state.threadName,
+      threadImage: this.state.threadImage
+    });
+  },
+
+  render: function () {
+
+    var thread = this.props.thread;
+    //console.log(thread);
+
+    var threadName = this.state.threadName;
+    var threadImage = this.state.threadImage;
 
     return (
       <TouchableHighlight
