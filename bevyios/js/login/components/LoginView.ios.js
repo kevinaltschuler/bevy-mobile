@@ -92,49 +92,38 @@ var LoginView = React.createClass({
   onGoogleLogin: function() {
 
     // see if we've logged in before
-    AsyncStorage.getItem('google_token')
-      .then((token) => {
-        if(token) {
+    AsyncStorage.getItem('google_id')
+      .then((google_id) => {
+        if(google_id) {
           // yes we have, and we have the token
           // we can skip doing the oauth2 grant request
 
           // fetch the google plus profile data
-          console.log(token);
-          fetch(
-            'https://www.googleapis.com/plus/v1/people/me' + 
-            '?access_token=' + token, {
-          })
-          .then((res) => {
-            // now we have the google id
-            // query our api
-            var response = JSON.parse(res._bodyText);
-            console.log(response);
-            var google_id = response.id;
+          console.log(google_id);
 
-            fetch(constants.apiurl + '/users/google/' + google_id)
-            .then(($res) => {
+          fetch(constants.apiurl + '/users/google/' + google_id)
+          .then(($res) => {
 
-              var user = JSON.parse($res._bodyText);
-              this.setState({
-                user: user
-              });
-
-              api.storeUser(user);
-
-              AppActions.load();
-
-              console.log(this.props.data);
-              // this data is passed @ loginnavigator.ios.js
-              // pushes a new route to the main navigator in index.ios.js 
-              this.props.data.push({name: 'MainTabBar', index: 1});
-
-              this.setState({
-                email: '',
-                pass: '',
-                error: ''
-              });
-
+            var user = JSON.parse($res._bodyText);
+            this.setState({
+              user: user
             });
+
+            api.storeUser(user);
+
+            AppActions.load();
+
+            console.log(this.props.data);
+            // this data is passed @ loginnavigator.ios.js
+            // pushes a new route to the main navigator in index.ios.js 
+            this.props.data.push({name: 'MainTabBar', index: 1});
+
+            this.setState({
+              email: '',
+              pass: '',
+              error: ''
+            });
+
           });
         } else {
           // no one has logged in before or has consciously signed out
@@ -183,13 +172,8 @@ var LoginView = React.createClass({
       },
       body: body
     }).then((res) => {
-      console.log(res);
       var response = JSON.parse(res._bodyText);
       var access_token = response.access_token;
-
-      // save this token so we dont have to go through that again
-      // unless we have to
-      AsyncStorage.setItem('google_token', access_token);
 
       // get the google plus user, so we can get its id
       fetch(
@@ -199,6 +183,10 @@ var LoginView = React.createClass({
       .then(($res) => {
         var $response = JSON.parse($res._bodyText);
         var google_id = $response.id;
+
+        // save this token so we dont have to go through that again
+        // unless we have to
+        AsyncStorage.setItem('google_id', google_id);
 
         // finally we can query our own api
         fetch(constants.apiurl + '/users/google/' + google_id)
