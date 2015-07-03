@@ -44,6 +44,28 @@ _.extend(ChatStore, {
         });
 
         break;
+
+      case CHAT.FETCH_MORE:
+        var thread_id = payload.thread_id;
+        var thread = this.threads.get(thread_id);
+
+        if(thread == undefined) break;
+
+        var message_count = thread.messages.length;
+        var temp_url = thread.messages.url;
+        thread.messages.url += ('?skip=' + message_count);
+
+        thread.messages.fetch({
+          remove: false,
+          success: function(collection, response, options) {
+            thread.messages.sort();
+            this.trigger(CHAT.CHANGE_ONE + thread_id);
+          }.bind(this)
+        });
+        // reset url
+        thread.messages.url = temp_url;
+
+        break;
     }
 	},
 

@@ -20,6 +20,10 @@ var {
 } = React;
 
 var ChatStore = require('./../ChatStore');
+var ChatActions = require('./../ChatActions');
+
+var constants = require('./../../constants');
+var CHAT = constants.CHAT;
 
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var MessageItem = require('./MessageItem.ios.js');
@@ -48,16 +52,35 @@ var InChatView = React.createClass({
     };
   },
 
+  componentDidMount: function() {
+    ChatStore.on(CHAT.CHANGE_ONE + this.state.activeThread._id, this._onChatChange);
+  },
+
+  componentWillUnmount: function() {
+    ChatStore.off(CHAT.CHANGE_ONE + this.state.activeThread._id, this._onChatChange);
+  },
+
+  _onChatChange: function() {
+    var messages = ChatStore.getMessages(this.state.activeThread._id);
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    this.setState({
+      isRefreshing: false,
+      messages: messages,
+      dataSource: ds.cloneWithRows(messages)
+    });
+  },
+
   handleScroll: function(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
     //console.log(scrollY);
     if(this.isTouching) {
-      if(!this.state.isRefreshing) {
-        console.log('refreshing');
-        this.setState({
-          isRefreshing: true
-        });
-        this.onRefresh();
+      if(scrollY < -40) {
+        if(!this.state.isRefreshing) {
+          this.setState({
+            isRefreshing: true
+          });
+          this.onRefresh();
+        }
       }
     }
   },
@@ -71,12 +94,7 @@ var InChatView = React.createClass({
   },
 
   onRefresh: function() {
-    setTimeout(function() {
-      this.setState({
-        isRefreshing: false
-      });
-      console.log('stopped refreshing');
-    }.bind(this), 3000)
+    ChatActions.fetchMore(this.state.activeThread._id);
   },
 
   renderHeader: function() {
@@ -105,6 +123,7 @@ var InChatView = React.createClass({
           onScroll={ this.handleScroll }
           onResponderGrant={ this.handleResponderGrant }
           onResponderRelease={ this.handleResponderRelease }
+          decelerationRate={ 0.9 }
           dataSource={ this.state.dataSource }
           renderRow={ (message) => (
             <MessageItem key={ message._id } message={ message } />

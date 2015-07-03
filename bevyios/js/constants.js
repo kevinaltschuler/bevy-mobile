@@ -71,7 +71,9 @@ exports.BEVY = {
 
 exports.CHAT = {
   THREAD_OPEN: 'chat_thread_open',
-  CHANGE_ALL: 'chat_change_all'
+  FETCH_MORE: 'chat_fetch_more',
+  CHANGE_ALL: 'chat_change_all',
+  CHANGE_ONE: 'chat_change_one:'
 };
 
 exports.user = {
