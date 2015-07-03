@@ -8,19 +8,19 @@
 var React = require('react-native');
 var _ = require('underscore');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
-  NavigatorIOS,
   SegmentedControlIOS,
   ScrollView,
+  ListView,
   TextInput,
   Image
 } = React;
 
 var ChatStore = require('./../ChatStore');
+
+var MessageItem = require('./MessageItem.ios.js');
 
 var InChatView = React.createClass({
 
@@ -35,10 +35,13 @@ var InChatView = React.createClass({
     var activeThread = _.findWhere(this.props.allThreads, { 
       _id: this.props.chatRoute.activeThread 
     });
+    var messages = ChatStore.getMessages(activeThread._id);
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     return {
       activeThread: activeThread,
-      messages: ChatStore.getMessages(activeThread._id)
+      messages: messages,
+      dataSource: ds.cloneWithRows(messages)
     };
   },
 
@@ -49,15 +52,19 @@ var InChatView = React.createClass({
     var messages = [];
     this.state.messages.forEach(function(message) {
       messages.push(
-        <Text key={ message._id }>{ message.body }</Text>
+        <MessageItem key={ message._id } message={ message } />
       );
     });
 
     return (
       <View style={styles.container} >
-        <ScrollView style={styles.scrollContainer}>
-          { messages }
-        </ScrollView>
+        <ListView
+          style={ styles.scrollContainer }
+          dataSource={ this.state.dataSource }
+          renderRow={ (message) => (
+            <MessageItem key={ message._id } message={ message } />
+          )}
+        />
         <TextInput
           style={styles.textInput}
         />
@@ -68,25 +75,25 @@ var InChatView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    paddingTop: 8,
-    paddingLeft: 8,
-    paddingRight: 8,
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'space-between',
-    paddingBottom: 50
+    justifyContent: 'flex-start',
   },
   scrollContainer: {
-    height: 100,
-    backgroundColor: 'rgba(0,0,0,.3)'
+    flex: 1,
+    flexDirection: 'column',
+    height: 515,
+    backgroundColor: '#eee',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   textInput: {
     height: 40,
-    width: 360,
+    flex: 1,
     borderColor: "#ccc",
     borderWidth: 1,
     paddingLeft: 16,
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: '#fff',
     color: 'black'
   },
 })

@@ -64,6 +64,9 @@ var styles = StyleSheet.create({
   },
   scrollContainer: {
     //paddingTop: 30
+    flex: 1,
+    flexDirection: 'column',
+    height: 300
   }
 })
 
