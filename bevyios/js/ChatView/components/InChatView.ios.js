@@ -15,11 +15,13 @@ var {
   ScrollView,
   ListView,
   TextInput,
-  Image
+  Image,
+  createElement
 } = React;
 
 var ChatStore = require('./../ChatStore');
 
+var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var MessageItem = require('./MessageItem.ios.js');
 
 var InChatView = React.createClass({
@@ -39,10 +41,50 @@ var InChatView = React.createClass({
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     return {
+      isRefreshing: false,
       activeThread: activeThread,
       messages: messages,
       dataSource: ds.cloneWithRows(messages)
     };
+  },
+
+  handleScroll: function(e) {
+    var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
+    //console.log(scrollY);
+    if(this.isTouching) {
+      if(!this.state.isRefreshing) {
+        console.log('refreshing');
+        this.setState({
+          isRefreshing: true
+        });
+        this.onRefresh();
+      }
+    }
+  },
+
+  handleResponderGrant: function() {
+    this.isTouching = true;
+  },
+
+  handleResponderRelease: function() {
+    this.isTouching = false;
+  },
+
+  onRefresh: function() {
+    setTimeout(function() {
+      this.setState({
+        isRefreshing: false
+      });
+      console.log('stopped refreshing');
+    }.bind(this), 3000)
+  },
+
+  renderHeader: function() {
+    var refreshingIndicator = createElement(RefreshingIndicator, { description: 'Loading...' });
+    if(this.state.isRefreshing)
+      return refreshingIndicator;
+    else
+      return null;
   },
 
   render: function () {
@@ -60,10 +102,14 @@ var InChatView = React.createClass({
       <View style={styles.container} >
         <ListView
           style={ styles.scrollContainer }
+          onScroll={ this.handleScroll }
+          onResponderGrant={ this.handleResponderGrant }
+          onResponderRelease={ this.handleResponderRelease }
           dataSource={ this.state.dataSource }
           renderRow={ (message) => (
             <MessageItem key={ message._id } message={ message } />
           )}
+          renderHeader={ this.renderHeader }
         />
         <TextInput
           style={styles.textInput}
