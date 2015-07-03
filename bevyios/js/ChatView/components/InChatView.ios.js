@@ -142,19 +142,18 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
+    marginBottom: 50,
   },
   scrollContainer: {
     flex: 1,
     flexDirection: 'column',
-    height: 515,
     backgroundColor: '#eee',
     paddingLeft: 10,
     paddingRight: 10,
   },
   textInput: {
     height: 40,
-    flex: 1,
     borderColor: "#ccc",
     borderWidth: 1,
     paddingLeft: 16,

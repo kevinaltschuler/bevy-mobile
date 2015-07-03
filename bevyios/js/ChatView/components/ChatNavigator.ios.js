@@ -106,7 +106,7 @@ var ChatView = React.createClass({
     }
 
     return (
-      <View>
+      <View style={{ flex: 1}}>
         <Navbar 
           chatRoute={ this.props.chatRoute }
           chatNavigator={ this.props.chatNavigator }
@@ -129,7 +129,6 @@ var styles = StyleSheet.create({
   },
   navbar: {
     backgroundColor: '#2CB673',
-    flex: 1,
     flexDirection: 'row',
     height: 64,
     justifyContent: 'center',
