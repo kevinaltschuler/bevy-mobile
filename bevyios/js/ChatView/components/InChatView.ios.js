@@ -112,6 +112,12 @@ var InChatView = React.createClass({
     ChatActions.fetchMore(this.state.activeThread._id);
   },
 
+  onSubmitEditing: function(ev) {
+    var text = ev.nativeEvent.text;
+    var user = constants.getUser();
+    ChatActions.postMessage(this.state.activeThread._id, user, text);
+  },
+
   renderHeader: function() {
     var refreshingIndicator = createElement(RefreshingIndicator, { description: 'Loading...' });
     if(this.state.isRefreshing)
@@ -156,6 +162,8 @@ var InChatView = React.createClass({
           style={styles.textInput}
           placeholder={ 'Chat' }
           returnKeyType={ 'send' }
+          onSubmitEditing={ this.onSubmitEditing }
+          clearButtonMode={ 'while-editing' }
         />
       </View>
     );

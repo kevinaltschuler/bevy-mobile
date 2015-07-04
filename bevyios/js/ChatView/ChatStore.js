@@ -66,6 +66,31 @@ _.extend(ChatStore, {
         thread.messages.url = temp_url;
 
         break;
+
+      case CHAT.POST_MESSAGE:
+        var thread_id = payload.thread_id;
+        var author = payload.author;
+        var body = payload.body;
+
+        var thread = this.threads.get(thread_id);
+
+        if(thread == undefined) break;
+
+        var message = thread.messages.add({
+          thread: thread_id,
+          author: author._id,
+          body: body
+        });
+        message.save(null, {
+          success: function(model, response, options) {
+            message.set('_id', model.get('_id'));
+            message.set('author', model.get('author'));
+            message.set('created', model.get('created'));
+            this.trigger(CHAT.CHANGE_ONE + thread_id);
+          }.bind(this)
+        });
+
+        break;
     }
 	},
 

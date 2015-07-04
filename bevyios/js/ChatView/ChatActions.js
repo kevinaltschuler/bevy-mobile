@@ -9,6 +9,14 @@ var ChatActions = {
     dispatch(CHAT.FETCH_MORE, {
       thread_id: thread_id
     });
+  },
+
+  postMessage: function(thread_id, author, body) {
+    dispatch(CHAT.POST_MESSAGE, {
+      thread_id: thread_id,
+      author: author,
+      body: body
+    });
   }
 };
 
