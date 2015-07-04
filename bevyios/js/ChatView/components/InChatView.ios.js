@@ -19,6 +19,9 @@ var {
   createElement
 } = React;
 
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
+
 var ChatStore = require('./../ChatStore');
 var ChatActions = require('./../ChatActions');
 
@@ -46,6 +49,7 @@ var InChatView = React.createClass({
 
     return {
       isRefreshing: false,
+      keyboardSpace: 0,
       activeThread: activeThread,
       messages: messages,
       dataSource: ds.cloneWithRows(messages)
@@ -54,6 +58,17 @@ var InChatView = React.createClass({
 
   componentDidMount: function() {
     ChatStore.on(CHAT.CHANGE_ONE + this.state.activeThread._id, this._onChatChange);
+
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({
+        keyboardSpace: frames.end.height
+      });
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({
+        keyboardSpace: 0
+      });
+    });
   },
 
   componentWillUnmount: function() {
@@ -116,8 +131,15 @@ var InChatView = React.createClass({
       );
     });
 
+    var containerStyle = {
+      flexDirection: 'column',
+      flex: 1,
+      justifyContent: 'flex-end',
+      marginBottom: (this.state.keyboardSpace == 0) ? 50 : this.state.keyboardSpace,
+    };
+
     return (
-      <View style={styles.container} >
+      <View style={ containerStyle } >
         <ListView
           style={ styles.scrollContainer }
           onScroll={ this.handleScroll }
@@ -132,6 +154,8 @@ var InChatView = React.createClass({
         />
         <TextInput
           style={styles.textInput}
+          placeholder={ 'Chat' }
+          returnKeyType={ 'send' }
         />
       </View>
     );
@@ -139,12 +163,6 @@ var InChatView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginBottom: 50,
-  },
   scrollContainer: {
     flex: 1,
     flexDirection: 'column',
