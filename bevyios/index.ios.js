@@ -30,21 +30,14 @@ var styles = StyleSheet.create({
 var Backbone = require('backbone');
 Backbone.sync = function(method, model, options) {
 
-  switch(method) {
-    case 'create':
-      method = 'POST';
-      break;
-    case 'read':
-    default:
-      method = 'GET';
-      break;
-    case 'update':
-      method = 'PATCH';
-      break;
-    case 'delete':
-      method = 'DELETE';
-      break;
-  }
+  var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'patch':  'PATCH',
+    'delete': 'DELETE',
+    'read':   'GET'
+  };
+  method = methodMap[method];
 
   //console.log(model.url);
   var url = model.url;
