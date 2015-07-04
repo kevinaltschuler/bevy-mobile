@@ -50,6 +50,7 @@ var InChatView = React.createClass({
     return {
       isRefreshing: false,
       keyboardSpace: 0,
+      messageValue: '',
       activeThread: activeThread,
       messages: messages,
       dataSource: ds.cloneWithRows(messages)
@@ -112,10 +113,20 @@ var InChatView = React.createClass({
     ChatActions.fetchMore(this.state.activeThread._id);
   },
 
+  onChange: function(ev) {
+    var text = ev.nativeEvent.text;
+    this.setState({
+      messageValue: text
+    });
+  },
+
   onSubmitEditing: function(ev) {
     var text = ev.nativeEvent.text;
     var user = constants.getUser();
     ChatActions.postMessage(this.state.activeThread._id, user, text);
+    this.setState({
+      messageValue: ''
+    });
   },
 
   renderHeader: function() {
@@ -161,7 +172,9 @@ var InChatView = React.createClass({
         <TextInput
           style={styles.textInput}
           placeholder={ 'Chat' }
+          value={ this.state.messageValue }
           returnKeyType={ 'send' }
+          onChange={ this.onChange }
           onSubmitEditing={ this.onSubmitEditing }
           clearButtonMode={ 'while-editing' }
         />
