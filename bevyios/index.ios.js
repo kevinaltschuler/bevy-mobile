@@ -30,6 +30,23 @@ var styles = StyleSheet.create({
 var Backbone = require('backbone');
 Backbone.sync = function(method, model, options) {
 
+  var headers = {
+    'Accept': 'application/json'
+  };
+  var body = '';
+
+  var url = model.url;
+  if (!options.url) {
+    url = _.result(model, 'url');
+  } else {
+    url = options.url;
+  }
+
+  if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+    headers['Content-Type'] = 'application/json';
+    body = JSON.stringify(options.attrs || model.toJSON(options));
+  }
+
   var methodMap = {
     'create': 'POST',
     'update': 'PUT',
@@ -39,15 +56,10 @@ Backbone.sync = function(method, model, options) {
   };
   method = methodMap[method];
 
-  //console.log(model.url);
-  var url = model.url;
-  if(typeof url === 'function') url = url();
-
   return fetch(url, {
     method: method,
-    headers: {
-      'Accept': 'application/json'
-    },
+    headers: headers,
+    body: body
   })
   .then(res => {
     var response = JSON.parse(res._bodyText);
