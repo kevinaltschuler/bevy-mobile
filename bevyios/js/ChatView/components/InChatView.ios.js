@@ -60,7 +60,7 @@ var InChatView = React.createClass({
   componentDidMount: function() {
     ChatStore.on(CHAT.CHANGE_ONE + this.state.activeThread._id, this._onChatChange);
 
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
       this.setState({
         keyboardSpace: frames.end.height
       });
