@@ -17,6 +17,9 @@ var {
 var Icon = require('FAKIconImage');
 
 var Post = React.createClass({
+	propTypes: {
+		title: React.PropTypes.string
+	},
 
 	render: function() {
 		return (
@@ -35,9 +38,7 @@ var Post = React.createClass({
 				
 				<View style={styles.body}>
 					<Text style={styles.bodyText}>
-						aaaaaaaaaaa a a a a aa a 
-						a a aaaaaaaasasasasasasaasa
-						asasasasasasaasasasasasasas asasasasasasas
+						{this.props.title}
 					</Text>
 					<View style={styles.bodyImages}>
 					</View>

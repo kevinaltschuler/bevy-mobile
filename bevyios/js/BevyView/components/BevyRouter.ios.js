@@ -13,13 +13,16 @@ var {
   Text,
   View,
   NavigatorIOS,
-  Image
+  Image,
+  Navigator
 } = React;
 
 var SideMenu = require('react-native-side-menu');
 var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var Router = require('react-native-router');
 var PostList = require('./../../PostList/components/PostList.ios.js');
+var BevyList= require('./../../BevyList/components/BevyList.ios.js');
+var constants = require('./../../constants.js');
 var SortSearchAndInfo = require('./SortSearchAndInfo.ios.js');
 
 var LeftButton = React.createClass({
@@ -34,7 +37,8 @@ var BevyRouter = React.createClass({
 
   propTypes: {
     allBevies: React.PropTypes.array,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    firstRoute: React.PropTypes.object,
   },
 
   getInitialState: function() {
@@ -51,24 +55,21 @@ var BevyRouter = React.createClass({
 
   render: function () {
 
-    var firstRoute = {
-      name: this.state.activeName,
-      component: PostList,
-      leftCorner: BevyListButton,
-      data: { crud: this.state.activeName }
-    };
 
-    console.log(firstRoute);
+    var activeBevy = this.props.activeBevy;
+
+    //console.log('route: ', this.props.firstRoute);
 
     return (
-      <Router
-        backButtonComponent={LeftButton}
-        headerStyle={styles.container}
-        firstRoute={ firstRoute }
-        navigator={this.props.navigator}
-        customAction={this.props.menuActions.toggle}
-        rightCorner={SortSearchAndInfo}
-      />
+        <View style={styles.container} >
+          <Router
+            backButtonComponent={LeftButton}
+            headerStyle={styles.container}
+            firstRoute={this.props.firstRoute}
+            customAction={this.props.menuActions.toggle}
+            rightCorner={SortSearchAndInfo}
+          />
+        </View>
     );
   }
 });
@@ -76,6 +77,8 @@ var BevyRouter = React.createClass({
 var styles = StyleSheet.create({
   container: {
     backgroundColor: '#2CB673',
+    flex: 1,
+    padding: 0
   },
   backButton: {
     width: 10,

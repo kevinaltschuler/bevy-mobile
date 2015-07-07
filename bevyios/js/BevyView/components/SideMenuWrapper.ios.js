@@ -1,7 +1,7 @@
 /**
- * BevyNavigator.js
+ * SideMenuWrapper.ios.js
  * kevin made this
- * yo that party was tight
+ * kirs has weird biceps
  */
 
 'use strict';
@@ -21,42 +21,44 @@ var BevyList= require('./../../BevyList/components/BevyList.ios.js');
 var BevyRouter = require('./BevyRouter.ios.js');
 var PostList = require('./../../PostList/components/PostList.ios.js');
 var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
-var SideMenuWrapper = require('./SideMenuWrapper.ios.js');
+var constants = require('./../../constants');
 
 var BevyNavigator = React.createClass({
 
   propTypes: {
+    navigator: React.PropTypes.object,
+    firstRoute: React.PropTypes.object,
     allBevies: React.PropTypes.array,
-    activeBevy: React.PropTypes.object,
-    posts: React.PropTypes.array
+    activeBevy: React.PropTypes.object
   },
 
   render: function () {
 
-    console.log('nav props', this.props.posts);
+    var bevyList = (
+      <BevyList 
+        allBevies={ this.props.allBevies }
+        activeBevy={ this.props.activeBevy }
+        posts= { this.props.posts }
+      />
+    );
+    
+    constants.setBevyNavigator(this.props.navigator);
 
     return (
-          <Navigator
-            style={styles.container}
-            initialRoute={{
-                name: 'FrontPage', 
-                index: 0, 
-                component: PostList,
-                leftCorner: BevyListButton,
-                data: {
-                  posts: this.props.posts
-                }
-              }}
-            renderScene={(route, navigator) =>
-              <SideMenuWrapper
-                firstRoute={route}
-                navigator={navigator}
+
+          <View style={styles.container} >
+            <SideMenu 
+              menu={bevyList}
+              disableGestures={true}
+            >
+              <BevyRouter 
+                firstRoute={this.props.firstRoute}
+                navigator={this.props.navigator}
                 allBevies={ this.props.allBevies }
                 activeBevy={ this.props.activeBevy }
-                posts={ this.props.posts }
               />
-            }
-          />
+            </SideMenu>
+          </View>
     );
   }
 });
@@ -64,10 +66,6 @@ var BevyNavigator = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 0,
-    backgroundColor: 'black',
-    width: 600,
-    height: 1000
   },
   backButton: {
     width: 10,

@@ -59,9 +59,9 @@ Backbone.sync = function(method, model, options) {
   .then(res => {
     var response = JSON.parse(res._bodyText);
 
-    console.log('model', model);
-    console.log('response', response);
-    console.log('options', options);
+    //console.log('model', model);
+    //console.log('response', response);
+    //console.log('options', options);
 
     options.success(response, options);
   });
@@ -69,24 +69,29 @@ Backbone.sync = function(method, model, options) {
 
 var constants = require('./js/constants');
 var BEVY = constants.BEVY;
+var POST = constants.POST;
 
 var BevyStore = require('./js/BevyView/BevyStore');
+var PostStore = require('./js/PostList/PostStore');
 
 var bevyios = React.createClass({
 
   getInitialState: function() {
     return {
       allBevies: BevyStore.getAll(),
-      activeBevy: BevyStore.getActive()
+      activeBevy: BevyStore.getActive(),
+      posts: PostStore.getAll()
     };
   },
 
   componentDidMount: function() {
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+    PostStore.on(POST.CHANGE_ALL, this._onPostChange);
   },
 
   componentWillUnmount: function() {
     BevyStore.off(BEVY.CHANGE_ALL, this._onBevyChange);
+    PostStore.off(POST.CHANGE_ALL, this._onPostChange);
   },
 
   _onBevyChange: function() {
@@ -96,7 +101,14 @@ var bevyios = React.createClass({
     });
   },
 
+  _onPostChange: function() {
+    this.setState({
+      posts: PostStore.getAll()
+    });
+  },
+
   render: function() {
+
     return (
         <Navigator
           initialRoute={{name: 'LoginNavigator', index: 0}}

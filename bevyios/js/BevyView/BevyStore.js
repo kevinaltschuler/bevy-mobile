@@ -60,12 +60,12 @@ _.extend(BevyStore, {
 				this.bevies.fetch({
 					reset: true,
 					success: function(bevies, response, options) {
-						console.log('in store', bevies, response, options);
+						//console.log('in store', bevies, response, options);
 
 						this.bevies.unshift({
-	            _id: '-1',
-	            name: 'Frontpage'
-	          });
+				            _id: '-1',
+				            name: 'Frontpage'
+				          });
 
 						this.trigger(BEVY.CHANGE_ALL);
 					}.bind(this)
@@ -266,8 +266,12 @@ _.extend(BevyStore, {
 
 			case BEVY.SWITCH:
 				
+				var bevy_id = payload.bevy_id;
+
+				this.active = bevy_id;
 
 				this.trigger(BEVY.CHANGE_ALL);
+
 				break;
 
 			case BEVY.INVITE:

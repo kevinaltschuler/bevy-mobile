@@ -10,6 +10,7 @@
 'use strict';
 
 var user = {};
+var bevyNavigator = {};
 var slashes = '//';
 
 var api_subdomain = 'api';
@@ -86,3 +87,11 @@ exports.setUser = function(tempUser) {
 exports.getUser = function() {
 	return user;
 };
+
+exports.setBevyNavigator = function(navigator) {
+	bevyNavigator = navigator;
+};
+
+exports.getBevyNavigator = function() {
+	return bevyNavigator;
+}

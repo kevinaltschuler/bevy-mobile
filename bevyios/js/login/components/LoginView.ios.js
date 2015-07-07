@@ -68,7 +68,7 @@ var LoginView = React.createClass({
 
         AppActions.load();
 
-        console.log(this.props.data);
+        //console.log(this.props.data);
         // this data is passed @ loginnavigator.ios.js
         // pushes a new route to the main navigator in index.ios.js 
         this.props.data.push({name: 'MainTabBar', index: 1});

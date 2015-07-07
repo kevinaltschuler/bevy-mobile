@@ -18,7 +18,10 @@ var {
 } = React;
 
 var api = require('./../../utils/api.js');
+var PostList = require('./../../PostList/components/PostList.ios.js');
+var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var constants = require('./../../constants.js');
+var BevyActions = require('./../../BevyView/BevyActions');
 var BEVY = constants.BEVY;
 var _ = require('underscore');
 
@@ -29,26 +32,23 @@ var BevyList = React.createClass({
     activeBevy: React.PropTypes.object
   },
 
-  getInitialState: function() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
-    return {
-      dataSource: ds.cloneWithRows([])
-    };
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.setState({
-      dataSource: ds.cloneWithRows(nextProps.allBevies)
+  changeBevy: function(rowData) {
+    constants.getBevyNavigator().push({
+      name: rowData.name, 
+      index: 1, 
+      component: PostList,
+      leftCorner: BevyListButton,
+      data: {activeBevy: this.props.activeBevy}
     });
-  },
-
-  changeBevy: function() {
-
   },
   
   render: function() {
+
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var dataSource = ds.cloneWithRows(this.props.allBevies);
+
+    var crud = 'crud';
+
     return (
       <View style={styles.container}>
         <View style={styles.title}>
@@ -57,12 +57,25 @@ var BevyList = React.createClass({
           </Text>
         </View>
         <ListView
-          dataSource={this.state.dataSource}
+          dataSource={dataSource}
           style={styles.listContainer}
           renderRow={(rowData) => (
             <TouchableHighlight 
               style={styles.rowContainer}
-              onPress={this.changeBevy(rowData)} 
+              onPress={(crud) => {
+
+              BevyActions.switchBevy(rowData._id);
+
+              constants.getBevyNavigator().push({
+                name: rowData.name, 
+                index: 1, 
+                component: PostList,
+                leftCorner: BevyListButton,
+                data: {
+                  posts: this.props.posts
+                }
+              });
+            }}
             >
               <Text style={styles.whiteText}>
                 {rowData.name}
