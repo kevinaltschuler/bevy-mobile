@@ -1,3 +1,8 @@
+var React = require('react-native');
+var {
+  AsyncStorage
+} = React;
+
 var urlPath = 'http://joinbevy.com/';
 var constants = require('./../constants.js');
 
@@ -21,6 +26,7 @@ var api = {
     },
 
     storeUser: function(user) {
+      AsyncStorage.setItem('user', JSON.stringify(user));
       constants.setUser(user);
     },
 

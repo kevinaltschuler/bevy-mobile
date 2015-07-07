@@ -49,7 +49,7 @@ var MainTabBar = React.createClass({
     else if(this.state.selectedTab === 'ChatNavigator') {
       return (
         <View style={styles.tabContent}>
-          <ChatNavigator />
+          <ChatNavigator { ...this.props } />
         </View>
       );
     }

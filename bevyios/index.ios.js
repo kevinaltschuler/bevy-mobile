@@ -19,8 +19,6 @@ var MainView = require('./js/app/components/MainView.ios.js');
 var Backbone = require('backbone');
 var _ = require('underscore');
 
-var emitter = _.extend({}, Backbone.Events);
-
 var styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -32,29 +30,36 @@ var styles = StyleSheet.create({
 var Backbone = require('backbone');
 Backbone.sync = function(method, model, options) {
 
-  switch(method) {
-    case 'create':
-      method = 'POST';
-      break;
-    case 'read':
-    default:
-      method = 'GET';
-      break;
-    case 'update':
-      method = 'PATCH';
-      break;
-    case 'delete':
-      method = 'DELETE';
-      break;
+  var headers = {
+    'Accept': 'application/json'
+  };
+  var body = '';
+
+  var url = model.url;
+  if (!options.url) {
+    url = _.result(model, 'url');
+  } else {
+    url = options.url;
   }
 
-  console.log(model.url);
+  if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+    headers['Content-Type'] = 'application/json';
+    body = JSON.stringify(options.attrs || model.toJSON(options));
+  }
 
-  return fetch(model.url, {
+  var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'patch':  'PATCH',
+    'delete': 'DELETE',
+    'read':   'GET'
+  };
+  method = methodMap[method];
+
+  return fetch(url, {
     method: method,
-    headers: {
-      'Accept': 'application/json'
-    },
+    headers: headers,
+    body: body
   })
   .then(res => {
     var response = JSON.parse(res._bodyText);
@@ -73,6 +78,8 @@ var POST = constants.POST;
 
 var BevyStore = require('./js/BevyView/BevyStore');
 var PostStore = require('./js/PostList/PostStore');
+var CHAT = constants.CHAT;
+var ChatStore = require('./js/ChatView/ChatStore');
 
 var bevyios = React.createClass({
 
@@ -81,17 +88,20 @@ var bevyios = React.createClass({
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
       posts: PostStore.getAll()
+      allThreads: ChatStore.getAll()
     };
   },
 
   componentDidMount: function() {
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     PostStore.on(POST.CHANGE_ALL, this._onPostChange);
+    ChatStore.on(CHAT.CHANGE_ALL, this._onChatChange);
   },
 
   componentWillUnmount: function() {
     BevyStore.off(BEVY.CHANGE_ALL, this._onBevyChange);
     PostStore.off(POST.CHANGE_ALL, this._onPostChange);
+    ChatStore.off(CHAT.CHANGE_ALL, this._onChatChange);
   },
 
   _onBevyChange: function() {
@@ -106,12 +116,18 @@ var bevyios = React.createClass({
       posts: PostStore.getAll()
     });
   },
+  _onChatChange: function() {
+    console.log(ChatStore.getAll());
+    this.setState({
+      allThreads: ChatStore.getAll()
+    });
+  },
 
   render: function() {
 
     return (
         <Navigator
-          initialRoute={{name: 'LoginNavigator', index: 0}}
+          initialRoute={{name: 'LoadingView', index: 0}}
           renderScene={(route, navigator) => 
             <MainView 
               route={route}

@@ -42,20 +42,20 @@ var BevyStore = _.extend({}, Backbone.Events);
 // now add some custom functions
 _.extend(BevyStore, {
 
-	bevies: new Bevies,
+  bevies: new Bevies,
 
-	active: -1, // id of the active bevy. by default set it to the frontpage
+  active: -1, // id of the active bevy. by default set it to the frontpage
 
-	// handle calls from the dispatcher
-	// these are created from BevyActions.js
-	handleDispatch: function(payload) {
-		switch(payload.actionType) {
+  // handle calls from the dispatcher
+  // these are created from BevyActions.js
+  handleDispatch: function(payload) {
+    switch(payload.actionType) {
 
-			case APP.LOAD:
+      case APP.LOAD:
 
-				console.log('fetching...');
+        console.log('fetching...');
 
-				this.bevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
+        this.bevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
 
 				this.bevies.fetch({
 					reset: true,
@@ -67,11 +67,11 @@ _.extend(BevyStore, {
 				            name: 'Frontpage'
 				          });
 
-						this.trigger(BEVY.CHANGE_ALL);
-					}.bind(this)
-				});
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
 
-				break;
+        break;
 
 			case BEVY.CREATE:
 				/*var name = payload.name;
