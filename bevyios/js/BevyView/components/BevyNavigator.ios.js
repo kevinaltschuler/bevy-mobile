@@ -124,9 +124,6 @@ var BevyNavigator = React.createClass({
   },
 
   render: function () {
-
-    console.log('bevy nav props', this.props);
-
     return (
       <Navigator
         initialRoute={{ name: 'PostList', index: 0 }}

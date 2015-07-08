@@ -117,7 +117,6 @@ var bevyios = React.createClass({
     });
   },
   _onChatChange: function() {
-    console.log(ChatStore.getAll());
     this.setState({
       allThreads: ChatStore.getAll()
     });
