@@ -158,7 +158,10 @@ _.extend(PostStore, {
 
         var bevy_id = payload.bevy_id;
 
-        this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts'
+        if(bevy_id == -1)
+          this.posts.url = constants.apiurl + '/users/' + constants.getUser()._id + '/posts';
+        else
+          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
 
         this.posts.fetch({
           reset: true,

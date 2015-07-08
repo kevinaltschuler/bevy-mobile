@@ -18,12 +18,5 @@ var constants = require('./../constants');
 
 // backbone collection
 module.exports = Backbone.Collection.extend({
-	model: Post,
-
-	_meta: {
-		sort: {
-			by: 'top',
-			direction: 'asc'
-		}
-	}
+	model: Post
 });
