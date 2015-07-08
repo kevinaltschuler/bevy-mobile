@@ -57,9 +57,7 @@ _.extend(PostStore, {
 						this.trigger(POST.CHANGE_ALL);
 					}.bind(this)
 				});
-
-
-
+				
 				break;
 
 			case POST.CREATE:

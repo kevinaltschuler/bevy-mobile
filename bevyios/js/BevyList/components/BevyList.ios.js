@@ -6,40 +6,32 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
-  NavigatorIOS,
   ListView,
   TouchableHighlight
 } = React;
 
 var api = require('./../../utils/api.js');
 var PostList = require('./../../PostList/components/PostList.ios.js');
-var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var constants = require('./../../constants.js');
 var BevyActions = require('./../../BevyView/BevyActions');
 var BEVY = constants.BEVY;
-var _ = require('underscore');
+
 
 var BevyList = React.createClass({
 
   propTypes: {
     allBevies: React.PropTypes.array,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    menuActions: React.PropTypes.object
   },
 
   changeBevy: function(rowData) {
-    constants.getBevyNavigator().push({
-      name: rowData.name, 
-      index: 1, 
-      component: PostList,
-      leftCorner: BevyListButton,
-      data: {activeBevy: this.props.activeBevy}
-    });
+
   },
   
   render: function() {
@@ -66,15 +58,7 @@ var BevyList = React.createClass({
 
               BevyActions.switchBevy(rowData._id);
 
-              constants.getBevyNavigator().push({
-                name: rowData.name, 
-                index: 1, 
-                component: PostList,
-                leftCorner: BevyListButton,
-                data: {
-                  posts: this.props.posts
-                }
-              });
+              this.props.menuActions.close();
             }}
             >
               <Text style={styles.whiteText}>

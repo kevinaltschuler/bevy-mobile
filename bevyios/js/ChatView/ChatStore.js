@@ -35,7 +35,7 @@ _.extend(ChatStore, {
                 success: function(collection, response, options) {
                   console.log('fetched messages');
                   thread.messages.sort();
-                  console.log(thread.toJSON());
+                  //console.log(thread.toJSON());
                   this.trigger(CHAT.CHANGE_ALL);
                 }.bind(this)
               });

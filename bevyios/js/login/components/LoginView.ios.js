@@ -22,7 +22,6 @@ var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotPass = require('./ForgotPass.ios.js');
-var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var AppActions = require('./../../app/AppActions');
 
 var Button = require('react-native-button');

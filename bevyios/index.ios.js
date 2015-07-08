@@ -87,7 +87,7 @@ var bevyios = React.createClass({
     return {
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
-      posts: PostStore.getAll(),
+      allPosts: PostStore.getAll(),
       allThreads: ChatStore.getAll()
     };
   },
@@ -113,7 +113,7 @@ var bevyios = React.createClass({
 
   _onPostChange: function() {
     this.setState({
-      posts: PostStore.getAll()
+      allPosts: PostStore.getAll()
     });
   },
   _onChatChange: function() {

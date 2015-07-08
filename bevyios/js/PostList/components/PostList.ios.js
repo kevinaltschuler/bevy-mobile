@@ -1,5 +1,5 @@
 /**
- * BevyBar.js
+ * PostList.ios.js
  * kevin made this
  */
 'use strict';
@@ -15,27 +15,25 @@ var {
 
 var Post = require('./Post.ios.js');
 var constants = require('./../../constants.js');
-var BevyListButton = require('./../../BevyList/components/BevyListButton.ios.js');
 var PostStore = require('./../PostStore');
 
 var PostList = React.createClass({
 
-
   propTypes: {
-    data: React.PropTypes.object
+    posts: React.PropTypes.array
   },
 
   componentWillReceiveProps: function(nextProps) {
-    console.log('next props', nextProps.data);
+    //console.log('next props', nextProps.data);
   },
 
   render: function() {
 
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var activeBevyPosts = (this.props.data) ? this.props.data : [];
-    var dataSource = ds.cloneWithRows(activeBevyPosts);
+    var posts = this.props.posts
+    var dataSource = ds.cloneWithRows(posts);
 
-    console.log('postlist data', this.props.data);
+    console.log('postlist data', this.props.posts);
 
     return (
       <View style={styles.postContainer}>
@@ -43,14 +41,14 @@ var PostList = React.createClass({
           dataSource={dataSource}
           style={styles.postContainer}
           renderRow={(rowData) =>(
-              <Post 
-                title={rowData.title}
-              />
+            <Post 
+              title={rowData.title}
+            />
           )}
         />
       </View>
     );
-  },
+  }
 });
 
 

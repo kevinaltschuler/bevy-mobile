@@ -168,7 +168,6 @@ var styles = StyleSheet.create({
   right: {
     height: 64,
     width: 32,
-
   }
 });
 
