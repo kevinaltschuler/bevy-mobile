@@ -33,8 +33,6 @@ var PostList = React.createClass({
     var posts = this.props.posts
     var dataSource = ds.cloneWithRows(posts);
 
-    console.log('postlist data', this.props.posts);
-
     return (
       <View style={styles.postContainer}>
         <ListView 
@@ -42,7 +40,7 @@ var PostList = React.createClass({
           style={styles.postContainer}
           renderRow={(rowData) =>(
             <Post 
-              title={rowData.title}
+              post={ rowData }
             />
           )}
         />
