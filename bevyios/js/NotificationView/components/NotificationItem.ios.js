@@ -27,35 +27,37 @@ var NotificationItem = React.createClass({
   render: function () {
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
-        style={styles.notificationCard} 
-      >
-        <View style={styles.row}>
-          <Image style={styles.titleImage}/>
-          <View style={styles.rightRow}>
-	          <View style={styles.titleTextColumn}>
-	            <Text style={styles.titleText}>
-	              post to bevyName by User
-	            </Text>
-	            <Text style={styles.subTitleText}>
-	              Details
-	            </Text>
-	          </View>
-	          <TouchableOpacity 
-	            activeOpacity={.8}
-	            style={styles.actionTouchable}
-	          >
-	            <Icon
-	              name='ion|ios-close-empty'
-	              size={30}
-	              color='#757d83'
-	              style={styles.dismissIcon}
-	            />
-	          </TouchableOpacity>
-	      </View>
-        </View>
-      </TouchableHighlight>
+      <View style={ styles.notificationCard }>
+        <TouchableHighlight
+          underlayColor='rgba(0,0,0,.1)'
+          style={styles.left} 
+        >
+          <View style={styles.row}>
+            <Image style={styles.titleImage}/>
+            <View style={styles.rightRow}>
+  	          <View style={styles.titleTextColumn}>
+  	            <Text style={styles.titleText}>
+  	              post to bevyName by User
+  	            </Text>
+  	            <Text style={styles.subTitleText}>
+  	              Details
+  	            </Text>
+  	          </View>
+  	        </View>
+          </View>
+        </TouchableHighlight>
+
+        <TouchableHighlight 
+          underlayColor='rgba(0,0,0,.1)'
+          style={styles.right}
+        >
+          <View style={styles.textWrapper}>
+            <Text>
+              Join
+            </Text>
+          </View>
+        </TouchableHighlight>
+      </View>
     );
   }
 });
@@ -63,17 +65,11 @@ var NotificationItem = React.createClass({
 var styles = StyleSheet.create({
    notificationCard: {
 		flex: 1,
-		flexDirection: 'column',
-	    marginLeft: 10,
-	    marginRight: 10,
-	    marginBottom: 8,
-	    padding: 10,
+		flexDirection: 'row',
 		backgroundColor: 'white',
-		borderRadius: 2,
-		shadowColor: 'black',
-		shadowRadius: 1,
-		shadowOpacity: .3,
-		shadowOffset:  {width: 0, height: 0}
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    height: 58
   },
   row: {
     flexDirection: 'row'
@@ -102,9 +98,18 @@ var styles = StyleSheet.create({
     fontSize: 10,
     color: '#282929'
   },
-  dismissIcon: {
-  	width: 20,
-  	height: 20
+  left: {
+    padding: 10,
+    flex: 3
+  },
+  right: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
+  },
+  textWrapper: {
+    width: 30,
   }
 })
 

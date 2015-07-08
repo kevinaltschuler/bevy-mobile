@@ -87,7 +87,7 @@ var bevyios = React.createClass({
     return {
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
-      posts: PostStore.getAll()
+      posts: PostStore.getAll(),
       allThreads: ChatStore.getAll()
     };
   },

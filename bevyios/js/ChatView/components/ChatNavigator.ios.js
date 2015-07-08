@@ -55,8 +55,14 @@ var Navbar = React.createClass({
 
     return (
       <View style={ styles.navbar }>
-        { backButton }
-        <Text style={ styles.navbarText }>{ navbarText }</Text>
+        <View style={ styles.left }>
+          { backButton }
+        </View>
+        <View style={ styles.center }>
+          <Text style={ styles.navbarText }>{ navbarText }</Text>
+        </View>
+        <View style={ styles.right }>
+        </View>
       </View>
     );
   }
@@ -131,25 +137,38 @@ var styles = StyleSheet.create({
     backgroundColor: '#2CB673',
     flexDirection: 'row',
     height: 64,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   backButtonContainer: {
-    alignSelf: 'flex-start'
   },
   backButton: {
-    width: 10,
-    height: 17,
-    marginLeft: 10,
-    marginTop: 20,
-    marginRight: 10,
-    paddingTop: 20
+    width: 12,
+    height: 19,
   },
   navbarText: {
     color: '#fff',
     textAlign: 'center',
     fontSize: 17,
     fontWeight: '500'
+  },
+  left: {
+    height: 32,
+    width: 32,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  center: {
+    height: 32,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center'
+  },
+  right: {
+    height: 64,
+    width: 32,
+
   }
 });
 

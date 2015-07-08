@@ -38,7 +38,8 @@ var NotificationView = React.createClass({
     },
     "__v": 0,
     "id": "557612ea4708964217f97c11"
-    }];
+    },
+    {}];
 
     return {
       dataSource: ds.cloneWithRows(bevyArray),
