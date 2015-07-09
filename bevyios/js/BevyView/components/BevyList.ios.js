@@ -18,12 +18,11 @@ var {
 var api = require('./../../utils/api.js');
 var PostList = require('./../../PostList/components/PostList.ios.js');
 var constants = require('./../../constants.js');
-var BevyActions = require('./../../BevyView/BevyActions');
+var BevyActions = require('./../BevyActions');
 var BEVY = constants.BEVY;
 
 
 var BevyList = React.createClass({
-
   propTypes: {
     allBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
@@ -69,7 +68,6 @@ var BevyList = React.createClass({
       </View>
     );
   }
-
 });
 
 var styles = StyleSheet.create({

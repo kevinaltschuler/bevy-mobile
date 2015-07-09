@@ -16,8 +16,6 @@ var {
 } = React;
 
 var SideMenu = require('react-native-side-menu');
-var BevyList= require('./../../BevyList/components/BevyList.ios.js');
-var Router = require('react-native-router');
 
 var ConversationView = require('./ConversationView.ios.js');
 var InChatView = require('./InChatView.ios.js');
