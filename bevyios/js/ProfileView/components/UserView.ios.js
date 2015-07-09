@@ -23,7 +23,7 @@ var {
 var constants = require('./../../constants.js');
 var Icon = require('FAKIconImage');
 
-var ProfileView = React.createClass({
+var UserView = React.createClass({
 
   handleLogout: function() {
     // remove google token
@@ -48,64 +48,63 @@ var ProfileView = React.createClass({
 
     return (
       <View style={styles.container}>
-            <View style={styles.mainColumn}>
-
-              <View style={styles.top}>
-                  <View style={styles.picButton}>
-                    <Image 
-                      style={styles.profileImage}
-                      source={{uri: profileUrl}}
-                    >
-                      <TouchableOpacity 
-                        activeOpacity={.8}
-                        style={styles.cameraTouchable}
-                        onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
-                      >
-                        <Icon
-                          name='ion|ios-camera-outline'
-                          size={40}
-                          color='white'
-                          style={styles.cameraIcon}
-                        />
-                      </TouchableOpacity>
-                    </Image>
-                  </View>
-                <View style={styles.profileDeetzColumn}>
-                  <Text style={styles.displayName}>
-                    {constants.getUser().displayName}
-                  </Text>
-                  <Text style={styles.details}>
-                    123 points
-                  </Text>
-                </View>
-                <View style={styles.actionRow}>
-                  <TouchableHighlight
-                    activeOpacity={.8}
-                    underlayColor='rgba(0,0,0,.1)'
-                    style={styles.deleteButton}
-                  >
-                    <Text style={styles.buttonDetails}>
-                      Delete Account
-                    </Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight
-                    activeOpacity={.8}
-                    underlayColor='rgba(0,0,0,.1)'
-                    style={styles.logoutButton}
-                    onPress={this.handleLogout}
-                  >
-                    <Text style={styles.buttonDetails}>
-                      &nbsp;&nbsp;&nbsp;&nbsp;Logout&nbsp;&nbsp;&nbsp;&nbsp;
-                    </Text>
-                  </TouchableHighlight>
-                </View>
-              </View>
-
-              <View style={styles.bottom}>
-
-              </View>
-
+        <View style={styles.mainColumn}>
+          <View style={styles.top}>
+            <View style={styles.picButton}>
+              <Image 
+                style={styles.profileImage}
+                source={{uri: profileUrl}}
+              >
+                <TouchableOpacity 
+                  activeOpacity={.8}
+                  style={styles.cameraTouchable}
+                  onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
+                >
+                  <Icon
+                    name='ion|ios-camera-outline'
+                    size={40}
+                    color='white'
+                    style={styles.cameraIcon}
+                  />
+                </TouchableOpacity>
+              </Image>
             </View>
+            <View style={styles.profileDeetzColumn}>
+              <Text style={styles.displayName}>
+                {constants.getUser().displayName}
+              </Text>
+              <Text style={styles.details}>
+                123 points
+              </Text>
+            </View>
+            <View style={styles.actionRow}>
+              <TouchableHighlight
+                activeOpacity={.8}
+                underlayColor='rgba(0,0,0,.1)'
+                style={styles.deleteButton}
+              >
+                <Text style={styles.buttonDetails}>
+                  Delete Account
+                </Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                activeOpacity={.8}
+                underlayColor='rgba(0,0,0,.1)'
+                style={styles.logoutButton}
+                onPress={this.handleLogout}
+              >
+                <Text style={styles.buttonDetails}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;Logout&nbsp;&nbsp;&nbsp;&nbsp;
+                </Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+
+          <View style={styles.bottom}>
+
+          </View>
+
+        </View>
       </View>
     );
   },
@@ -199,4 +198,4 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = ProfileView;
+module.exports = UserView;
