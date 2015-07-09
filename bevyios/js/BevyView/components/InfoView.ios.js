@@ -8,7 +8,6 @@
 var React = require('react-native');
 
 var {
-  AppRegistry,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -22,6 +21,11 @@ var constants = require('./../../constants.js');
 var Icon = require('FAKIconImage');
 
 var InfoView = React.createClass({
+
+  propTypes: {
+    bevy: React.PropTypes.object
+  },
+
   handleUpload: function(){
 
   },
@@ -32,45 +36,44 @@ var InfoView = React.createClass({
 
   render: function () {
 
+    var bevy = this.props.bevy;
+
     return (
       <View style={styles.container}>
-
-            <View style={styles.infoRow} >
-              <View style={styles.picButton}>
-                <Image 
-                  style={styles.profileImage}
-                >
-                  <TouchableOpacity 
-                    activeOpacity={.8}
-                    style={styles.cameraTouchable}
-                    onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
-                  >
-                    <Icon
-                      name='ion|ios-camera-outline'
-                      size={40}
-                      color='white'
-                      style={styles.cameraIcon}
-                    />
-                  </TouchableOpacity>
-                </Image>
-              </View>
-              <View style={styles.profileDeetzColumn}>
-                <Text style={styles.displayName}>
-                  Bevy Name
-                </Text>
-                <Text style={styles.details}>
-                  Bevy Description
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.actionRow}>
-            </View>
-
+        <View style={styles.infoRow} >
+          <View style={styles.picButton}>
+            <Image 
+              style={styles.profileImage}
+              source={{ uri: bevy.image_url }}
+            >
+              <TouchableOpacity 
+                activeOpacity={.8}
+                style={styles.cameraTouchable}
+                onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
+              >
+                <Icon
+                  name='ion|ios-camera-outline'
+                  size={40}
+                  color='white'
+                  style={styles.cameraIcon}
+                />
+              </TouchableOpacity>
+            </Image>
+          </View>
+          <View style={styles.profileDeetzColumn}>
+            <Text style={styles.displayName}>
+              { bevy.name }
+            </Text>
+            <Text style={styles.details}>
+              { bevy.description }
+            </Text>
+          </View>
+        </View>
+        <View style={styles.actionRow}>
+        </View>
       </View>
     );
-  },
-
+  }
 });
 
 var styles = StyleSheet.create({

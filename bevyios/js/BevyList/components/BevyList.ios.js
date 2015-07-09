@@ -81,14 +81,11 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(29,30,26,1)',
   },
   title: {
-    flex: 1,
     flexDirection: 'column',
     alignItems: 'center'
   },
   listContainer: {
-    flex: 1,
-    paddingTop: 10,
-    height: 800
+    flex: 1
   },
   rowContainer: {
     padding: 10,

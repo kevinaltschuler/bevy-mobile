@@ -112,7 +112,7 @@ var BevyView = React.createClass({
       case 'InfoView':
         view = (
           <InfoView
-
+            bevy={ this.props.activeBevy }
           />
         );
         break;

@@ -53,7 +53,8 @@ var PostList = React.createClass({
 var styles = StyleSheet.create({
   postContainer: {
     flexDirection: 'column',
-    flex: 1
+    flex: 1,
+    backgroundColor: '#fff'
   },
   button: {
     width: 100,
