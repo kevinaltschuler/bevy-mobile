@@ -104,13 +104,6 @@ var styles = StyleSheet.create({
   container: {
     backgroundColor: '#2CB673'
   },
-  backButton: {
-    width: 10,
-    height: 17,
-    marginLeft: 10,
-    marginTop: 3,
-    marginRight: 10
-  },
   navbar: {
     backgroundColor: '#2CB673',
     flexDirection: 'row',

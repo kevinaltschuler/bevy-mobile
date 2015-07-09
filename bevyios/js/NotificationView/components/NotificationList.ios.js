@@ -1,5 +1,5 @@
 /**
- * NotificationView.js
+ * NotificationList.js
  * kevin made this 
  * albert sucks eggs 
  */
@@ -18,7 +18,7 @@ var {
 var NotificationItem = require('./NotificationItem.ios.js');
 var constants = require('./../../constants.js');
 
-var NotificationView = React.createClass({
+var NotificationList = React.createClass({
 
   getInitialState: function() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -63,4 +63,4 @@ var styles = StyleSheet.create({
   }
 })
 
-module.exports = NotificationView;
+module.exports = NotificationList;
