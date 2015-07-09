@@ -21,7 +21,7 @@ var {
 var constants = require('./../../constants.js');
 var Icon = require('FAKIconImage');
 
-var BevyInfoView = React.createClass({
+var InfoView = React.createClass({
   handleUpload: function(){
 
   },
@@ -136,4 +136,4 @@ var styles = StyleSheet.create({
   },
 })
 
-module.exports = BevyInfoView;
+module.exports = InfoView;

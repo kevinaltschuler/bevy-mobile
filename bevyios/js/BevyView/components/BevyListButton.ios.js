@@ -1,21 +1,18 @@
-/*SearchButton.ios.js
-* made by @altschulerkevin
-*/
 'use strict';
 
 var React = require('react-native');
 var {
-  StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  StyleSheet
 } = React;
 
 var Icon = require('FAKIconImage');
 
-var SearchButton = React.createClass({
+var BevyListButton = React.createClass({
 
   propTypes: {
     onPress: React.PropTypes.func
-  },  
+  },
 
   onPress: function() {
     this.props.onPress();
@@ -28,14 +25,14 @@ var SearchButton = React.createClass({
         onPress={this.onPress}
       >
         <Icon
-          name='ion|ios-search'
+          name='ion|ios-drag'
           size={30}
           color='white'
           style={styles.bevyListButton}
         />
       </TouchableHighlight>
     );
-  },
+  }
 });
 
 var styles = StyleSheet.create({
@@ -43,16 +40,7 @@ var styles = StyleSheet.create({
     paddingLeft: 45,
     width: 30,
     height: 30
-  },
-  input: {
-    backgroundColor: 'rgba(0,0,0,.2)',
-    width: 220,
-    height: 32,
-    marginTop: 6,
-    paddingLeft: 10,
-    color: 'white',
-    borderRadius: 4
   }
 });
 
-module.exports = SearchButton;
+module.exports = BevyListButton;

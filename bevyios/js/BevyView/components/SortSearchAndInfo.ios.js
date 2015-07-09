@@ -8,7 +8,6 @@ var InfoButton = require('./InfoButton.ios.js');
 var SearchPage = require('./SearchPage.ios.js');
 var BevyInfoView = require('./BevyInfoView.ios.js');
 
-
 var {
   StyleSheet,
   View,
@@ -16,13 +15,12 @@ var {
 } = React;
 
 var SearchBar = React.createClass({
-  render() {
+  render: function() {
     return (
       <TextInput style={styles.input} placeholder="Search Bevy" />
     )
   }
 });
-
 
 var SearchAndCompose = React.createClass({
   goToSearch: function() {
@@ -41,13 +39,12 @@ var SearchAndCompose = React.createClass({
   },
 
   render: function() {
-
     return (
       <View style={styles.iconContainer}>
         <SearchButton goToSearch={this.goToSearch} />
         <InfoButton goToInfo={this.goToInfo}/>
       </View>
-    )
+    );
   }
 });
 
@@ -71,6 +68,5 @@ var styles = StyleSheet.create({
     borderRadius: 4
   }
 }); 
-
 
 module.exports = SearchAndCompose;

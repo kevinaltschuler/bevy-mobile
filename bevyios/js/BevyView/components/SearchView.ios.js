@@ -11,7 +11,7 @@ var {
   Image
 } = React;
 
-var SearchPage = React.createClass({
+var SearchView = React.createClass({
   render() {
     return (
       <View style={styles.container}>
@@ -29,4 +29,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = SearchPage;
+module.exports = SearchView;

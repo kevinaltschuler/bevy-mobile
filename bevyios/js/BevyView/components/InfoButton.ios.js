@@ -5,36 +5,24 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
-  Text,
-  View,
-  NavigatorIOS,
-  TouchableHighlight,
-  Image,
-  TextInput
+  TouchableHighlight
 } = React;
 
 var Icon = require('FAKIconImage');
-var SearchPage = require('./SearchPage.ios.js');
-
-var SearchBar = React.createClass({
-  render() {
-    return (
-      <TextInput style={styles.input} placeholder="Search Bevy" />
-    )
-  }
-});
 
 var InfoButton = React.createClass({
 
+  propTypes: {
+    onPress: React.PropTypes.func
+  },
+
   onPress: function() {
-    this.props.goToInfo();
+    this.props.onPress();
   },
 
   render: function() {
-  return (
+    return (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
         onPress={this.onPress}
@@ -45,10 +33,9 @@ var InfoButton = React.createClass({
           color='white'
           style={styles.bevyListButton}
         />
-    </TouchableHighlight>
+      </TouchableHighlight>
     );
   },
-
 });
 
 var styles = StyleSheet.create({
@@ -66,8 +53,6 @@ var styles = StyleSheet.create({
     color: 'white',
     borderRadius: 4
   }
-
 });
-
 
 module.exports = InfoButton;

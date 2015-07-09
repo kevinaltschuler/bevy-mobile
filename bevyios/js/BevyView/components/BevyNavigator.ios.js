@@ -18,8 +18,13 @@ var {
 var SideMenu = require('react-native-side-menu');
 var BevyList= require('./../../BevyList/components/BevyList.ios.js');
 var PostList = require('./../../PostList/components/PostList.ios.js');
+var InfoView = require('./InfoView.ios.js');
+var SearchView = require('./SearchView.ios.js');
 
-var Icon = require('FAKIconImage');
+var BevyListButton = require('./BevyListButton.ios.js');
+var BackButton = require('./../../shared/components/BackButton.ios.js');
+var SearchButton = require('./SearchButton.ios.js');
+var InfoButton = require('./InfoButton.ios.js');
 
 var Navbar = React.createClass({ 
   propTypes: {
@@ -33,35 +38,60 @@ var Navbar = React.createClass({
     this.props.menuActions.toggle();
   },
 
+  onBack: function() {
+    this.props.bevyNavigator.push({
+      name: 'PostList',
+      index: 1
+    });
+  },
+
+  onInfo: function() {
+    this.props.bevyNavigator.push({
+      name: 'InfoView',
+      index: 1
+    });
+  },
+
+  onSearch: function() {
+    this.props.bevyNavigator.push({
+      name: 'SearchView',
+      index: 1
+    });
+  },
+
   render: function() {
 
     var navbarText = 'Default';
     if(this.props.activeBevy)
       navbarText = this.props.activeBevy.name;
 
-    var bevyListButton = (
-      <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0)'}
-        onPress={this.toggleList}
-      >
-        <Icon
-          name='ion|ios-drag'
-          size={30}
-          color='white'
-          style={styles.bevyListButton}
-        />
-      </TouchableHighlight>
+    var leftButton = (this.props.bevyRoute.name == 'PostList')
+    ? (
+      <BevyListButton
+        onPress={ this.toggleList }
+      />
+    )
+    : (
+      <BackButton
+        onPress={ this.onBack }
+      />
     );
 
     return (
       <View style={ styles.navbar }>
         <View style={ styles.left }>
-          { bevyListButton }
+          { leftButton }
         </View>
         <View style={ styles.center }>
           <Text style={ styles.navbarText }>{ navbarText }</Text>
         </View>
         <View style={ styles.right }>
+          <SearchButton 
+            onPress={ this.onSearch }
+          />
+          <InfoButton 
+            onPress={ this.onInfo }
+          />
         </View>
       </View>
     );
@@ -79,6 +109,20 @@ var BevyView = React.createClass({
   render: function() {
     var view;
     switch(this.props.bevyRoute.name) {
+      case 'InfoView':
+        view = (
+          <InfoView
+
+          />
+        );
+        break;
+      case 'SearchView':
+        view = (
+          <SearchView
+
+          />
+        );
+        break;
       case 'PostList':
       default:
         view = (
@@ -157,12 +201,6 @@ var styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center'
   },
-  backButtonContainer: {
-  },
-  backButton: {
-    width: 12,
-    height: 19,
-  },
   navbarText: {
     color: '#fff',
     textAlign: 'center',
@@ -183,14 +221,12 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   right: {
-    height: 64,
-    width: 32,
-  },
-  bevyListButton: {
-    paddingLeft: 45,
-    width: 30,
-    height: 30
-  },
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    height: 32,
+    width: 64,
+  }
 });
 
 module.exports = BevyNavigator;

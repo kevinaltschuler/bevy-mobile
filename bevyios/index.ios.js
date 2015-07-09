@@ -8,7 +8,7 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
-  TabBarIOS,
+  StatusBarIOS,
   Text,
   View,
   Navigator
@@ -140,3 +140,5 @@ var bevyios = React.createClass({
 });
 
 AppRegistry.registerComponent('bevyios', () => bevyios);
+
+StatusBarIOS.setStyle('light-content', true);
