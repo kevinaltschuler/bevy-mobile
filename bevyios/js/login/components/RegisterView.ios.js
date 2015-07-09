@@ -21,71 +21,66 @@ var RegisterView = React.createClass({
 
   render: function() {
     return ( 
-      <View>
-        <View style={styles.backgroundWrapper}>
-          <View style={styles.background}/>
+      <View style={styles.loginContainer}>
+        <View style={styles.loginRow}>
+          <Text style={styles.loginTitle}>
+            Register
+          </Text>
         </View>
 
-        <View style={styles.loginContainer}>
-          <View style={styles.loginRow}>
-            <Text style={styles.loginTitle}>
+        <View style={styles.loginRow}>
+          <TouchableHighlight
+            style={styles.imageButton}
+            underlayColor='rgba(0,0,0,0)'
+          >
+            <Text style={styles.loginSubTitle}>
+              your picture here
+            </Text>
+          </TouchableHighlight>
+        </View>
+
+        <View style={styles.loginRow}>
+          <TextInput
+            autoCorrect={false}
+            placeholder='email'
+            placeholderTextColor='rgba(255,255,255,.6)'
+            style={styles.loginInput}
+            onChangeText={(text) => this.setState({input: text})}
+          />
+        </View>
+
+        <View style={styles.loginRow}>
+          <TextInput
+            autoCorrect={false}
+            password={true}
+            placeholder='•••••••'
+            placeholderTextColor='rgba(255,255,255,.6)'
+            style={styles.loginInput}
+            onChangeText={(text) => this.setState({input: text})}
+          />
+        </View>
+
+        <View style={styles.loginRow}>
+          <TouchableHighlight 
+            style={styles.loginButton}
+            activeOpacity={80}
+            underlayColor="#edeeee">
+            <Text style={styles.loginButtonText}>
               Register
             </Text>
-          </View>
-
-          <View style={styles.loginRow}>
-            <TouchableHighlight
-              style={styles.imageButton}
-              underlayColor='rgba(0,0,0,0)'
-            >
-              <Text style={styles.loginSubTitle}>
-                your picture here
-              </Text>
-            </TouchableHighlight>
-          </View>
-
-          <View style={styles.loginRow}>
-            <TextInput
-              autoCorrect={false}
-              placeholder='email'
-              placeholderTextColor='rgba(255,255,255,.6)'
-              style={styles.loginInput}
-              onChangeText={(text) => this.setState({input: text})}
-            />
-          </View>
-
-          <View style={styles.loginRow}>
-            <TextInput
-              autoCorrect={false}
-              password={true}
-              placeholder='•••••••'
-              placeholderTextColor='rgba(255,255,255,.6)'
-              style={styles.loginInput}
-              onChangeText={(text) => this.setState({input: text})}
-            />
-          </View>
-
-          <View style={styles.loginRow}>
-            <TouchableHighlight 
-              style={styles.loginButton}
-              activeOpacity={80}
-              underlayColor="#edeeee">
-              <Text style={styles.loginButtonText}>
-                Register
-              </Text>
-            </TouchableHighlight>
-          </View>
+          </TouchableHighlight>
         </View>
-
-      </View>);
+      </View>
+    );
   }
 
 });
 
 var styles = StyleSheet.create({
   loginContainer: {
-    backgroundColor: 'rgba(0,0,0,0)',
-    marginTop: 130
+    paddingTop: 130,
+    flex: 1,
+    backgroundColor: '#2CB673'
   },
   loginRow: {
     flexDirection: 'row',
@@ -131,15 +126,6 @@ var styles = StyleSheet.create({
   loginButtonText: {
     textAlign: 'center',
     color: 'black',
-  },
-  backgroundWrapper: {
-    position: 'absolute',
-    top: -100,
-  },
-  background: {
-    backgroundColor: '#2CB673',
-    width: 500,
-    height: 1000
   },
   imageButton: {
     width: 60,

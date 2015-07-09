@@ -65,7 +65,7 @@ var ProfileView = React.createClass({
       default:
         view = (
           <UserView
-
+            { ...this.props }
           />
         );
         break;
@@ -87,6 +87,7 @@ var ProfileNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
+        navigator={ this.props.navigator }
         initialRoute={{ name: 'UserView', index: 0 }}
         renderScene={(route, navigator) => 
           <ProfileView

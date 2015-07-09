@@ -56,14 +56,14 @@ var MainTabBar = React.createClass({
     else if(this.state.selectedTab === 'NotificationNavigator') {
       return (
         <View style={styles.tabContent}>
-          <NotificationNavigator />
+          <NotificationNavigator { ...this.props } />
         </View>
       );
     }
     else if(this.state.selectedTab === 'ProfileNavigator') {
       return (
         <View style={styles.tabContent}>
-          <ProfileNavigator navigator={this.props.navigator} />
+          <ProfileNavigator { ...this.props } />
         </View>
       );
     }

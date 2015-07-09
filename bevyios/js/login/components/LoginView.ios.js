@@ -20,8 +20,6 @@ var {
 // modules
 var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
-var RegisterView = require('./RegisterView.ios.js');
-var ForgotPass = require('./ForgotPass.ios.js');
 var AppActions = require('./../../app/AppActions');
 
 var Button = require('react-native-button');
@@ -32,7 +30,8 @@ var constants = require('./../../constants.js');
 var LoginView = React.createClass({
 
   propTypes: {
-    data: React.PropTypes.object
+    navigator: React.PropTypes.object,
+    loginNavigator: React.PropTypes.object
   },
 
   getInitialState: function(){
@@ -44,16 +43,16 @@ var LoginView = React.createClass({
   },
 
   toRegister: function() {
-    this.props.toRoute({
-      name: "",
-      component: RegisterView
+    this.props.loginNavigator.push({
+      name: 'RegisterView',
+      index: 1
     });
   },
 
   toForgotPass: function() {
-    this.props.toRoute({
-      name: "",
-      component: ForgotPass
+    this.props.loginNavigator.push({
+      name: 'ForgotView',
+      index: 2
     });
   },
 
@@ -69,11 +68,9 @@ var LoginView = React.createClass({
 
         AppActions.load();
 
-        //console.log(this.props.data);
         // this data is passed @ loginnavigator.ios.js
         // pushes a new route to the main navigator in index.ios.js 
-        this.props.data.push({name: 'MainTabBar', index: 2});
-        //Navigator.getContext(this).push({ name: 'MainTabBar', index: 1 })
+        this.props.navigator.push({name: 'MainTabBar', index: 2});
 
         this.setState({
           email: '',
@@ -112,10 +109,9 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            //console.log(this.props.data);
             // this data is passed @ loginnavigator.ios.js
             // pushes a new route to the main navigator in index.ios.js 
-            this.props.data.push({name: 'MainTabBar', index: 2});
+            this.props.navigator.push({name: 'MainTabBar', index: 2});
 
             this.setState({
               email: '',
@@ -200,10 +196,9 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            //console.log(this.props.data);
             // this data is passed @ loginnavigator.ios.js
             // pushes a new route to the main navigator in index.ios.js 
-            this.props.data.push({name: 'MainTabBar', index: 2});
+            this.props.navigator.push({name: 'MainTabBar', index: 2});
 
             this.setState({
               email: '',
@@ -218,12 +213,7 @@ var LoginView = React.createClass({
 
   render: function() {
     return ( 
-      <View>
-        
-        <View style={styles.backgroundWrapper}>
-          <View style={styles.background}/>
-        </View>
-        
+      <View style={ styles.container }>  
         <View style={styles.loginContainer}>
 
           <View style={styles.loginRowLogo}>
@@ -325,6 +315,10 @@ var LoginView = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#2CB673'
+  },
   loginContainer: {
     backgroundColor: 'rgba(0,0,0,0)',
     flexDirection: 'column',
@@ -391,15 +385,6 @@ var styles = StyleSheet.create({
   loginButtonTextGoogle: {
     textAlign: 'center',
     color: 'white',
-  },
-  backgroundWrapper: {
-    position: 'absolute',
-    top: -100,
-  },
-  background: {
-    backgroundColor: '#2CB673',
-    width: 500,
-    height: 1000
   },
   logo: {
     width: 50,

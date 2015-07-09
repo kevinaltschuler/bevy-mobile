@@ -1,5 +1,5 @@
 /**
-*    ForgotPass.js
+*    ForgotView.js
 *    description: the forgotten password page on IOS
 *    by Ben 
 */
@@ -8,7 +8,6 @@
 
 // get modules
 var React = require('react-native');
-var backgroundImage = require('image!loginBackground');
 var _ = require('underscore');
 var api = require('./../../utils/api.js')
 
@@ -21,7 +20,7 @@ var {
   Image
 } = React;
 
-var ForgotPass = React.createClass({
+var ForgotView = React.createClass({
 
   getInitialState: function() {
     return {
@@ -46,11 +45,6 @@ var ForgotPass = React.createClass({
   render: function() {
     return ( 
       <View style={styles.loginContainer}>
-
-        <View style={styles.backgroundWrapper}>
-          <View style={styles.background}/>
-        </View>
-
         <View style={styles.loginRow}>
           <Text style={styles.loginTitle}>
             Lost Password?
@@ -84,35 +78,32 @@ var ForgotPass = React.createClass({
             </Text>
           </TouchableHighlight>
         </View>
-
-      </View>);
+      </View>
+    );
   }
-
 });
 
 var styles = StyleSheet.create({
-  loginConatiner: {
-    backgroundColor: 'rgba(0,0,0,0)'
+  loginContainer: {
+    backgroundColor: '#2CB673',
+    flex: 1
   },
   loginRow: {
     flex: 1,
     alignItems: 'center',
     padding: 6,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
+    justifyContent: 'center'
   },
   loginRowLogo: {
     flexDirection: 'row',
     paddingTop: 80,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)',
+    justifyContent: 'center'
   },
   loginRowText: {
     flexDirection: 'row',
     paddingTop: 0,
     paddingBottom: 10,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)',
+    justifyContent: 'center'
   },
   loginTitle: {
     textAlign: 'center',
@@ -133,7 +124,6 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 20,
     paddingLeft: 16,
-    backgroundColor: 'rgba(0,0,0,0)',
     color: 'white'
   },
   loginButton: {
@@ -158,19 +148,10 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: 'white',
   },
-  backgroundWrapper: {
-    position: 'absolute',
-    top: -100,
-  },
-  background: {
-    backgroundColor: '#2CB673',
-    width: 500,
-    height: 1000
-  },
   logo: {
     width: 50,
     height: 50,
   }
 });
 
-module.exports = ForgotPass;
+module.exports = ForgotView;

@@ -24,6 +24,9 @@ var constants = require('./../../constants.js');
 var Icon = require('FAKIconImage');
 
 var UserView = React.createClass({
+  propTypes: {
+    navigator: React.PropTypes.object
+  },
 
   handleLogout: function() {
     // remove google token
@@ -31,7 +34,7 @@ var UserView = React.createClass({
     // remove user
     AsyncStorage.removeItem('user');
 
-    this.props.data.push({name: 'LoginNavigator', index: 0});
+    this.props.navigator.push({ name: 'LoginNavigator', index: 0 });
   },
 
   handleUpload: function(){

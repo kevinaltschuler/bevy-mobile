@@ -14,14 +14,7 @@ var {
 } = React;
 
 var NotificationList = require('./NotificationList.ios.js');
-
-var LeftButton = React.createClass({
-  render: function () {
-    return (
-      <Image source={require('image!back_button')} style={styles.backButton} />
-    );
-  }
-});
+var BackButton = require('./../../shared/components/BackButton.ios.js');
 
 var Navbar = React.createClass({
   propTypes: {
