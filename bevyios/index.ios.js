@@ -84,6 +84,9 @@ var ChatStore = require('./js/ChatView/ChatStore');
 var bevyios = React.createClass({
 
   getInitialState: function() {
+
+    StatusBarIOS.setStyle(1);
+      
     return {
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
@@ -141,4 +144,3 @@ var bevyios = React.createClass({
 
 AppRegistry.registerComponent('bevyios', () => bevyios);
 
-StatusBarIOS.setStyle(1);
