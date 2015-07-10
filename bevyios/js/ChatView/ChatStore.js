@@ -29,6 +29,7 @@ _.extend(ChatStore, {
           reset: true,
           success: function(collection, response, options) {
             console.log('fetched threads');
+            this.trigger(APP.LOAD_PROGRESS, 0.1);
             this.threads.forEach(function(thread) {
               thread.messages.fetch({
                 reset: true,
@@ -36,6 +37,7 @@ _.extend(ChatStore, {
                   console.log('fetched messages');
                   thread.messages.sort();
                   //console.log(thread.toJSON());
+                  this.trigger(APP.LOAD_PROGRESS, (0.1 / this.threads.length));
                   this.trigger(CHAT.CHANGE_ALL);
                 }.bind(this)
               });

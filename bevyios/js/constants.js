@@ -32,7 +32,9 @@ exports.google_redirect_uri = 'com.joinbevy.ios:/oauth2callback';
 //exports.google_redirect_uri = 'com.googleusercontent.apps.540892787949-0e61br4320fg4l2its3gr9csssrn07aj:/oauth2callback';
 
 exports.APP = {
-  LOAD: 'app_load'
+  LOAD: 'app_load',
+
+  LOAD_PROGRESS: 'app_load_progress'
 };
 
 exports.POST = {

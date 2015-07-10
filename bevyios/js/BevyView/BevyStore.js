@@ -67,6 +67,7 @@ _.extend(BevyStore, {
               name: 'Frontpage'
             });
 
+            this.trigger(APP.LOAD_PROGRESS, 0.1);
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });

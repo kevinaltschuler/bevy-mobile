@@ -74,7 +74,6 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    width: 250,
     paddingTop: 35,
     backgroundColor: 'rgba(29,30,26,1)',
   },

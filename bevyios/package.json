@@ -13,6 +13,7 @@
     "react-native-button": "^1.2.0",
     "react-native-icons": "0.0.7",
     "react-native-keyboardevents": "^0.4.4",
+    "react-native-progress-bar": "^0.1.0",
     "react-native-refreshable-listview": "^1.2.0",
     "react-native-side-menu": "^0.9",
     "react-native-status-bar-size": "^0.1.0",

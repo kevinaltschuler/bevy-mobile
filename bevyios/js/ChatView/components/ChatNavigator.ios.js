@@ -124,8 +124,7 @@ var ChatView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 64,
-    width: 500
+    paddingTop: 64
   },
   headerStyle: {
     backgroundColor: '#2CB673',
@@ -145,6 +144,7 @@ var styles = StyleSheet.create({
     height: 19,
   },
   navbarText: {
+    flex: 1,
     color: '#fff',
     textAlign: 'center',
     fontSize: 17,
@@ -152,20 +152,21 @@ var styles = StyleSheet.create({
   },
   left: {
     height: 32,
-    width: 32,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   center: {
     height: 32,
+    flex: 2,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center'
   },
   right: {
-    height: 64,
-    width: 32,
+    flex: 1,
+    height: 64
   }
 });
 

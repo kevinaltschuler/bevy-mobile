@@ -187,8 +187,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 64,
-    backgroundColor: 'black',
-    width: 600
+    backgroundColor: 'black'
   },
   headerStyle: {
     backgroundColor: '#2CB673',
