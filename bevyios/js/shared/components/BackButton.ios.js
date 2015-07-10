@@ -35,6 +35,9 @@ var BackButton = React.createClass({
 
 var styles = StyleSheet.create({
   backButtonContainer: {
+    flex: 1,
+    height: 32,
+    width: 32
   },
   backButton: {
     width: 12,

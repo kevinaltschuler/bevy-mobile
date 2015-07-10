@@ -199,6 +199,9 @@ var styles = StyleSheet.create({
   navbar: {
     backgroundColor: '#2CB673',
     flexDirection: 'row',
+    paddingTop: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
     height: 64,
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -210,24 +213,25 @@ var styles = StyleSheet.create({
     fontWeight: '500'
   },
   left: {
+    flex: 1,
     height: 32,
-    width: 32,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'flex-start'
   },
   center: {
+    flex: 2,
     height: 32,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center'
   },
   right: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
-    height: 32,
-    width: 64,
+    justifyContent: 'flex-end',
+    height: 32
   }
 });
 
