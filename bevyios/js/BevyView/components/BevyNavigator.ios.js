@@ -7,6 +7,7 @@
 'use strict';
 
 var React = require('react-native');
+var window = require('Dimensions').get('window');
 var {
   StyleSheet,
   Text,
@@ -145,7 +146,9 @@ var BevyView = React.createClass({
       <View style={{ flex: 1 }}>
         <SideMenu 
           menu={bevyList}
-          disableGestures={true}
+          disableGestures={ true }
+          touchToClose={ true }
+          openMenuOffset={ 300 }
         >
           <Navbar 
             bevyRoute={ this.props.bevyRoute }
