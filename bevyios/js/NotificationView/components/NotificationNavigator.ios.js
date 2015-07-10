@@ -51,7 +51,7 @@ var NotificationView = React.createClass({
       default:
         view = (
           <NotificationList
-
+            { ...this.props }
           />
         );
         break;

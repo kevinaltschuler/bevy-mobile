@@ -55,7 +55,7 @@ _.extend(PostStore, {
         this.posts.fetch({
           reset: true,
           success: function(posts, response, options) {
-            this.trigger(APP.LOAD_PROGRESS, 0.6);
+            this.trigger(APP.LOAD_PROGRESS, 0.5);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });

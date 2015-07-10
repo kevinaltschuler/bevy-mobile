@@ -20,6 +20,7 @@ var AppActions = require('./../AppActions');
 var BevyStore = require('./../../BevyView/BevyStore');
 var ChatStore = require('./../../ChatView/ChatStore');
 var PostStore = require('./../../PostList/PostStore');
+var NotificationStore = require('./../../NotificationView/NotificationStore');
 
 var LoadingView = React.createClass({
 
@@ -56,12 +57,14 @@ var LoadingView = React.createClass({
     BevyStore.on(APP.LOAD_PROGRESS, this._handleProgress);
     ChatStore.on(APP.LOAD_PROGRESS, this._handleProgress);
     PostStore.on(APP.LOAD_PROGRESS, this._handleProgress);
+    NotificationStore.on(APP.LOAD_PROGRESS, this._handleProgress);
   },
 
   componentWillUnmount: function() {
     BevyStore.off(APP.LOAD_PROGRESS, this._handleProgress);
     ChatStore.off(APP.LOAD_PROGRESS, this._handleProgress);
     PostStore.off(APP.LOAD_PROGRESS, this._handleProgress);
+    NotificationStore.off(APP.LOAD_PROGRESS, this._handleProgress);
   },
 
   _handleProgress: function(progress, message) {
