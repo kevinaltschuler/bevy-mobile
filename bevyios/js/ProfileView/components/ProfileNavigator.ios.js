@@ -113,6 +113,7 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   },
   navbarText: {
+    flex: 1,
     color: '#fff',
     textAlign: 'center',
     fontSize: 17,

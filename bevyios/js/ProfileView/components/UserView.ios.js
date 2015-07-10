@@ -7,13 +7,10 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
   Image,
-  NavigatorIOS,
   TouchableHighlight,
   TouchableOpacity,
   CameraRoll,
@@ -37,7 +34,16 @@ var UserView = React.createClass({
     this.props.navigator.push({ name: 'LoginNavigator', index: 0 });
   },
 
-  handleUpload: function(){
+  onProfileChange: function() {
+    console.log('get photos');
+    CameraRoll.getPhotos({
+      first: 0,
+      groupTypes: 'SavedPhotos',
+      assetType: 'Photos'
+    }, this.handleUpload, this.handleUploadError);
+  },
+
+  handleUpload: function() {
 
   },
 
@@ -61,7 +67,7 @@ var UserView = React.createClass({
                 <TouchableOpacity 
                   activeOpacity={.8}
                   style={styles.cameraTouchable}
-                  onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
+                  onPress={ this.onProfileChange }
                 >
                   <Icon
                     name='ion|ios-camera-outline'
