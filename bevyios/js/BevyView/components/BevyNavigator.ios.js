@@ -67,16 +67,16 @@ var Navbar = React.createClass({
       navbarText = this.props.activeBevy.name;
 
     var leftButton = (this.props.bevyRoute.name == 'PostList')
-    ? (
-      <BevyListButton
-        onPress={ this.toggleList }
-      />
-    )
-    : (
-      <BackButton
-        onPress={ this.onBack }
-      />
-    );
+    ? <BevyListButton onPress={ this.toggleList } />
+    : <BackButton onPress={ this.onBack } />;
+
+    var infoButton = (this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
+    ? <View />
+    : <InfoButton onPress={ this.onInfo } />;
+
+    var searchButton = (this.props.bevyRoute.name == 'SearchView')
+    ? <View />
+    : <SearchButton onPress={ this.onSearch } />;
 
     return (
       <View style={ styles.navbar }>
@@ -87,12 +87,8 @@ var Navbar = React.createClass({
           <Text style={ styles.navbarText }>{ navbarText }</Text>
         </View>
         <View style={ styles.right }>
-          <SearchButton 
-            onPress={ this.onSearch }
-          />
-          <InfoButton 
-            onPress={ this.onInfo }
-          />
+          { searchButton }
+          { infoButton }
         </View>
       </View>
     );

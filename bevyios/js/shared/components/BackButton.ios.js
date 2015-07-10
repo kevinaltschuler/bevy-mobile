@@ -40,8 +40,8 @@ var styles = StyleSheet.create({
     width: 32
   },
   backButton: {
-    width: 12,
-    height: 19,
+    width: 20,
+    height: 32,
   }
 });
 
