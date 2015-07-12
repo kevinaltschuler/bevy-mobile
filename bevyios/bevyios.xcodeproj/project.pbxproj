@@ -699,6 +699,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				0A8A0FB21B13B6D60048F5D7 /* FAKFoundationIcons.h in Resources */,
 				0A8A0FB31B13B6D60048F5D7 /* FAKFoundationIcons.m in Resources */,
 				0A8A0FB41B13B6D60048F5D7 /* FAKIcon.h in Resources */,
@@ -715,7 +716,6 @@
 				0A8A0FA51B13A0920048F5D7 /* FontAwesome.otf in Resources */,
 				0A8A0FA61B13A0920048F5D7 /* FontAwesomeKit.h in Resources */,
 				008F07F31AC5B25A0029DE68 /* main.jsbundle in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

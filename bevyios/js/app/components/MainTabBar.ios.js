@@ -10,13 +10,21 @@ var {
   StyleSheet,
   TabBarIOS,
   Text,
+  Image,
   View,
   CameraRoll
 } = React;
 
+var ios_person = require('image!ios-person');
+var ios_person_outline = require('image!ios-person-outline');
+var ios_bell = require('image!ios-bell');
+var ios_bell_outline = require('image!ios-bell-outline');
+var ios_chatbubble = require('image!ios-chatbubble');
+var ios_chatbubble_outline = require('image!ios-chatbubble-outline');
+var ios_list = require('image!ios-list');
+var ios_list_outline = require('image!ios-list-outline');
+
 var Icon = require('FAKIconImage');
-var SMXTabBarIOS = require('SMXTabBarIOS');
-var SMXTabBarItemIOS = SMXTabBarIOS.Item;
 var BevyNavigator = require('./../../BevyView/components/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../ChatView/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../NotificationView/components/NotificationNavigator.ios.js');
@@ -24,154 +32,103 @@ var ProfileNavigator = require('./../../ProfileView/components/ProfileNavigator.
 
 var MainTabBar = React.createClass({
 
-  statics: {
-    title: '<TabBarIOS>',
-    description: 'Tab-based navigation.'
-  },
-
   getInitialState: function() {
     return {
-      selectedTab: 'BevyNavigator',
-      notifCount: 0,
-      presses: 0,
+      selectedTab: 'BevyNavigator'
     };
   },
 
   _renderContent: function() {
 
-    if(this.state.selectedTab === 'BevyNavigator') {
-      return (
-        <View style={styles.tabContent}>
-          <BevyNavigator { ...this.props } />
-        </View>
-      );
-    }
-    else if(this.state.selectedTab === 'ChatNavigator') {
-      return (
-        <View style={styles.tabContent}>
-          <ChatNavigator { ...this.props } />
-        </View>
-      );
-    }
-    else if(this.state.selectedTab === 'NotificationNavigator') {
-      return (
-        <View style={styles.tabContent}>
-          <NotificationNavigator { ...this.props } />
-        </View>
-      );
-    }
-    else if(this.state.selectedTab === 'ProfileNavigator') {
-      return (
-        <View style={styles.tabContent}>
-          <ProfileNavigator { ...this.props } />
-        </View>
-      );
+    switch(this.state.selectedTab) {
+      case 'BevyNavigator':
+        return (
+          <View style={styles.tabContent}>
+            <BevyNavigator { ...this.props } />
+          </View>
+        );
+        break;
+      case 'ChatNavigator':
+        return (
+          <View style={styles.tabContent}>
+            <ChatNavigator { ...this.props } />
+          </View>
+        );
+        break;
+      case 'NotificationNavigator':
+        return (
+          <View style={styles.tabContent}>
+            <NotificationNavigator { ...this.props } />
+          </View>
+        );
+        break;
+      case 'ProfileNavigator':
+        return (
+          <View style={styles.tabContent}>
+            <ProfileNavigator { ...this.props } />
+          </View>
+        );
+        break;
     }
   },
 
-
   render: function () {
-      var bevyIcon;
-      var chatIcon;
-      var notificationIcon;
-      var personIcon;
-
-      if(this.state.selectedTab == 'BevyNavigator') {
-        bevyIcon = 'ion|ios-list';
-      } else {
-        bevyIcon = 'ion|ios-list-outline';
-      }
-      if(this.state.selectedTab == 'ChatNavigator') {
-        chatIcon = 'ion|ios-chatbubble';
-      } else {
-        chatIcon = 'ion|ios-chatbubble-outline';
-      }
-      if(this.state.selectedTab == 'NotificationNavigator') {
-        notificationIcon = 'ion|ios-bell';
-      } else {
-        notificationIcon = 'ion|ios-bell-outline';
-      }
-      if(this.state.selectedTab == 'ProfileNavigator') {
-        personIcon = 'ion|ios-person';
-      } else {
-        personIcon = 'ion|ios-person-outline';
-      }
-
-
-      var bevyItem = (
-          <SMXTabBarItemIOS
-              name="BevyNavigator"
-              iconName={bevyIcon}
-              title={''}
-              iconSize={32}
-              selected={this.state.selectedTab === 'BevyNavigator'}
-              onPress={() => {
-              this.setState({
-                selectedTab: 'BevyNavigator',
-              });
-            }}>
-            {this._renderContent()}
-          </SMXTabBarItemIOS>
-        );
-      var chatItem = (
-          <SMXTabBarItemIOS
-              name="ChatNavigator"
-              iconName={chatIcon}
-              title={''}
-              iconSize={32}
-              selected={this.state.selectedTab === 'ChatNavigator'}
-              onPress={() => {
-              this.setState({
-                selectedTab: 'ChatNavigator',
-              });
-            }}>
-            {this._renderContent()}
-          </SMXTabBarItemIOS>
-        );
-      var notificationItem = (
-          <SMXTabBarItemIOS
-              name="NotificationNavigator"
-              iconName={notificationIcon}
-              title={''}
-              iconSize={32}
-              selected={this.state.selectedTab === 'NotificationNavigator'}
-              onPress={() => {
-              this.setState({
-                selectedTab: 'NotificationNavigator',
-              });
-            }}>
-            {this._renderContent()}
-          </SMXTabBarItemIOS>
-        );
-      var profileItem = (
-            <SMXTabBarItemIOS
-                name="ProfileNavigator"
-                iconName={personIcon}
-                title={''}
-                iconSize={32}
-                selected={this.state.selectedTab === 'ProfileNavigator'}
-                onPress={() => {
-                this.setState({
-                  selectedTab: 'ProfileNavigator',
-                });
-              }}>
-              {this._renderContent()}
-            </SMXTabBarItemIOS>
-        );
-
       return (
         <View style={styles.mainContainer}>
-          <SMXTabBarIOS
-            selectedTab={this.state.selectedTab}
-            tintColor={'black'}
-            barTintColor={'white'}
-            styles={styles.tabBar}
-          >
-            {bevyItem}
-            {chatItem}
-            {notificationItem}
-            {profileItem}
-          </SMXTabBarIOS>
+          <TabBarIOS tintColor={ 'black' } barTintColor={ 'white' } style={ styles.tabBar }>
+            <TabBarIOS.Item
+              icon={ ios_list_outline }
+              selectedIcon={ ios_list }
+              selected={ this.state.selectedTab === 'BevyNavigator' }
+              style={ styles.tabIcon }
+              onPress={() => {
+                this.setState({
+                  selectedTab: 'BevyNavigator'
+                });
+              }}
+            >
+              { this._renderContent() }
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+              icon={ ios_chatbubble_outline }
+              selectedIcon={ ios_chatbubble }
+              selected={ this.state.selectedTab === 'ChatNavigator' }
+              style={ styles.tabIcon }
+              onPress={() => {
+                this.setState({
+                  selectedTab: 'ChatNavigator'
+                });
+              }}
+            >
+              { this._renderContent() }
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+              icon={ ios_bell_outline }
+              selectedIcon={ ios_bell }
+              selected={ this.state.selectedTab === 'NotificationNavigator' }
+              style={ styles.tabIcon }
+              onPress={() => {
+                this.setState({
+                  selectedTab: 'NotificationNavigator'
+                });
+              }}
+            >
+              { this._renderContent() }
+            </TabBarIOS.Item>
+            <TabBarIOS.Item
+              icon={ ios_person_outline }
+              selectedIcon={ ios_person }
+              selected={ this.state.selectedTab === 'ProfileNavigator' }
+              style={ styles.tabIcon }
+              onPress={() => {
+                this.setState({
+                  selectedTab: 'ProfileNavigator'
+                });
+              }}
+            >
+              { this._renderContent() }
+            </TabBarIOS.Item>
+          </TabBarIOS>
         </View>
       );
     }
@@ -188,9 +145,15 @@ var styles = StyleSheet.create({
   tabContent: {
     flex: 1,
   },
+  tabBar: {
+    flex: 1
+  },
+  tabIcon: {
+    flex: 1
+  },
   tabText: {
     color: 'black',
-    margin: 50,
+    margin: 50
   },
 });
 
