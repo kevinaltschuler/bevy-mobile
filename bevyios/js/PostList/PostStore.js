@@ -31,6 +31,8 @@ var APP = constants.APP;
 var PostActions = require('./PostActions');
 var BevyStore = require('./../BevyView/BevyStore');
 
+var tagRegex = /#\w+/g;
+
 
 // inherit event class first
 // VERY IMPORTANT, as the PostContainer view binds functions
@@ -63,43 +65,64 @@ _.extend(PostStore, {
         break;
 
       case POST.CREATE:
-        /*var name = payload.name;
-        var description = payload.description;
-        var image_url = payload.image_url;
+        // collect payload vars
+        var title = payload.title;
+        var images = payload.images;
+        var author = payload.author;
+        var bevy = payload.bevy;
+        var active_member = payload.active_member;
 
-        var user = window.bootstrap.user;
-
-        var members = [];
-
-        // add yerself
-        members.push({
-          email: user.email,
-          user: (_.isEmpty(user)) ? null : user._id,
-          role: 'admin'
+        var tags = title.match(tagRegex);
+        tags = _.map(tags, function(tag) {
+          return tag.slice(1, tag.length); // remove the hashtag
         });
 
-        var newBevy = this.bevies.add({
-          name: name,
-          description: description,
-          members: members,
-          image_url: image_url
-        });
+        var newPost = {
+          title: title,
+          tags: tags,
+          comments: [],
+          images: images,
+          author: author._id,
+          bevy: bevy._id,
+          created: Date.now()
+        };
+        var newPost = this.posts.add(newPost);
+        var tempBevy = newPost.get('bevy');
+        newPost.set('bevy', bevy._id);
 
-        newBevy.save(null, {
-          success: function(model, response, options) {
+        // save to server
+        newPost.save(null, {
+          success: function(post, response, options) {
             // success
-            newBevy.set('_id', model.id);
-            newBevy.set('members', model.get('members'));
+            newPost.set('_id', post.id);
+            newPost.set('images', post.get('images'));
+            newPost.set('links', post.get('links'));
+            newPost.set('author', author);
+            newPost.set('bevy', tempBevy);
+            newPost.set('commentCount', 0);
 
-            // switch to bevy
-            router.navigate('/b/' + model.id, { trigger: true });
+            this.posts.sort();
 
-            // update posts
-            BevyActions.switchBevy();
-
-            this.trigger(BEVY.CHANGE_ALL);
+            this.trigger(POST.CHANGE_ALL);
+            this.trigger(POST.POSTED_POST);
           }.bind(this)
-        });*/
+        });
+
+        break;
+
+      case POST.UPVOTE:
+        var post_id = payload.post_id;
+        var voter = payload.voter;
+
+        this.vote(post_id, voter, 1);
+
+        break;
+
+      case POST.DOWNVOTE:
+        var post_id = payload.post_id;
+        var voter = payload.voter;
+
+        this.vote(post_id, voter, -1);
 
         break;
 
@@ -173,6 +196,46 @@ _.extend(PostStore, {
 
         break;
     }
+  },
+
+  vote: function(post_id, voter, value) {
+    var MAX_VOTES = 5;
+    var post = this.posts.get(post_id);
+    var votes = post.get('votes');
+
+    if(_.isEmpty(votes)) {
+      // create new voter
+      votes.push({
+        voter: voter._id,
+        score: value
+      });
+    } else {
+      var vote = _.findWhere(votes, { voter: voter._id });
+      if(vote == undefined) {
+        // voter not found, create new voter
+        votes.push({
+          voter: voter._id,
+          score: value
+        });
+      } else {
+        // check if they've exceeded their max votes
+        if(Math.abs(vote.score + value) > MAX_VOTES)
+          return;
+        // add score to existing voter
+        vote.score += value;
+      }
+    }
+    //post.set('votes', votes);
+    // save to server
+    post.save({
+      votes: votes
+    }, {
+      patch: true,
+      success: function(post, response, options) {
+        // sort posts
+        this.posts.sort();
+      }.bind(this)
+    });
   },
 
   sortByTop: function(post) {
