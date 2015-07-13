@@ -137,7 +137,6 @@ var MainTabBar = React.createClass({
 var styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    padding: 0,
     marginTop: 0,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -146,7 +145,10 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   tabBar: {
-    flex: 1
+    flex: 1,
+    paddingTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   tabIcon: {
     flex: 1
