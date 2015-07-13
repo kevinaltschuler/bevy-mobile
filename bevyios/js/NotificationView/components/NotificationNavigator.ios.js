@@ -10,16 +10,25 @@ var {
   StyleSheet,
   Text,
   View,
+  TouchableHighlight,
   Navigator
 } = React;
 
 var NotificationList = require('./NotificationList.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 
+var Icon = require('FAKIconImage');
+
+var NotificationActions = require('./../NotificationActions');
+
 var Navbar = React.createClass({
   propTypes: {
     notificationRoute: React.PropTypes.object,
     notificationNavigator: React.PropTypes.object
+  },
+
+  dismissAll: function() {
+    NotificationActions.dismissAll();
   },
 
   render: function() {
@@ -32,6 +41,17 @@ var Navbar = React.createClass({
           <Text style={ styles.navbarText }>Notifications</Text>
         </View>
         <View style={ styles.right }>
+          <TouchableHighlight
+            underlayColor={'rgba(0,0,0,0)'}
+            onPress={ this.dismissAll }
+          >
+            <Icon
+              name='ion|ios-minus'
+              size={30}
+              color='white'
+              style={styles.dismissAllButton}
+            />
+          </TouchableHighlight>
         </View>
       </View>
     );
@@ -93,6 +113,9 @@ var styles = StyleSheet.create({
   navbar: {
     backgroundColor: '#2CB673',
     flexDirection: 'row',
+    paddingTop: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
     height: 64,
     justifyContent: 'space-between',
     alignItems: 'center'
@@ -104,22 +127,30 @@ var styles = StyleSheet.create({
     fontWeight: '500'
   },
   left: {
+    flex: 1,
     height: 32,
-    width: 32,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'flex-start'
   },
   center: {
+    flex: 2,
     height: 32,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center'
   },
   right: {
-    height: 64,
-    width: 32,
-  }
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    height: 32
+  },
+  dismissAllButton: {
+    width: 30,
+    height: 30
+  },
 });
 
 module.exports = NotificationNavigator;
