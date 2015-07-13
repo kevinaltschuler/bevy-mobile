@@ -18,10 +18,17 @@ var {
 
 var Icon = require('FAKIconImage');
 
+var NotificationActions = require('./../NotificationActions');
+
 var NotificationItem = React.createClass({
 
   propTypes: {
     notification: React.PropTypes.object
+  },
+
+  dismiss: function() {
+    console.log('dismiss');
+    NotificationActions.dismiss(this.props.notification._id);
   },
 
   render: function () {
@@ -270,6 +277,7 @@ var NotificationItem = React.createClass({
         <TouchableHighlight 
           underlayColor='rgba(0,0,0,.1)'
           style={styles.dismiss}
+          onPress={ this.dismiss }
         >
           <View style={styles.textWrapper}>
             <Text>
@@ -342,8 +350,7 @@ var styles = StyleSheet.create({
     width: 120
   },
   textWrapper: {
-    width: 60,
-    textAlign: 'center'
+    width: 60
   }
 })
 

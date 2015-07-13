@@ -91,6 +91,7 @@ exports.user = {
 
 exports.NOTIFICATION = {
     DISMISS: 'notification_dismiss',
+    DISMISS_ALL: 'notification_dismiss_all',
 
     CHANGE_ALL: 'notification_change_all'
 };

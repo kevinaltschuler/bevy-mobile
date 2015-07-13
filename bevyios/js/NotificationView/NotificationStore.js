@@ -32,6 +32,26 @@ _.extend(NotificationStore, {
         });
 
         break;
+
+      case NOTIFICATION.DISMISS:
+        var id = payload.id;
+
+        var notification = this.notifications.get(id);
+        if(notification == undefined) break;
+
+        notification.destroy();
+        this.trigger(NOTIFICATION.CHANGE_ALL);
+
+        break;
+
+      case NOTIFICATION.DISMISS_ALL:
+
+        this.notifications.forEach(function(notification) {
+          notification.destroy();
+        });
+        this.trigger(NOTIFICATION.CHANGE_ALL);
+
+        break;
     }
   },
 
