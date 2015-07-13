@@ -72,10 +72,11 @@ var LoadingView = React.createClass({
       progress: this.state.progress + progress,
       progressText: message || this.state.progressText
     });
-    if(this.state.progress >= 1) {
+    console.log('progress:', this.state.progress * 100);
+    if(this.state.progress >= 0.99) {
       setTimeout(function() {
         this.props.navigator.push({ name: 'MainTabBar', index: 2});
-      }.bind(this), 1000);
+      }.bind(this), 750);
     }
   },
 

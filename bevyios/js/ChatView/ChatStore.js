@@ -23,18 +23,14 @@ _.extend(ChatStore, {
 		switch(payload.actionType) {
       case APP.LOAD:
 
-        console.log('fetching threads...', this.threads.url());
-
         this.threads.fetch({
           reset: true,
           success: function(collection, response, options) {
-            console.log('fetched threads');
             this.trigger(APP.LOAD_PROGRESS, 0.1);
             this.threads.forEach(function(thread) {
               thread.messages.fetch({
                 reset: true,
                 success: function(collection, response, options) {
-                  console.log('fetched messages');
                   thread.messages.sort();
                   //console.log(thread.toJSON());
                   this.trigger(APP.LOAD_PROGRESS, (0.1 / this.threads.length));
@@ -104,6 +100,16 @@ _.extend(ChatStore, {
     var thread = this.threads.get(thread_id);
     if(thread == undefined) return [];
     else return thread.messages.toJSON();
+  },
+
+  addMessage: function(message) {
+    console.log('adding message...');
+    var thread = this.threads.get(message.thread);
+    if(thread == undefined) return;
+    thread.messages.add(message);
+    thread.messages.sort();
+    //this.trigger(CHAT.CHANGE_ALL);
+    this.trigger(CHAT.CHANGE_ONE + thread.id);
   }
 });
 

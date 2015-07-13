@@ -9,6 +9,8 @@ var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 var APP = constants.APP;
 
+var ChatStore = require('./../ChatView/ChatStore');
+
 var Notifications = require('./NotificationCollection');
 
 var NotificationStore = _.extend({}, Backbone.Events);
@@ -30,6 +32,90 @@ _.extend(NotificationStore, {
             this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
         });
+
+        /*--- LONG POLL  --*/
+
+        var MAX_WAITING_TIME = 15000;// in ms
+
+        var getJSON = function (params) {
+          console.log('start long poll');
+
+          var wrappedPromise = {};
+          var promise = new Promise(function (resolve, reject) {
+            wrappedPromise.resolve = resolve;
+            wrappedPromise.reject = reject;
+          });
+          wrappedPromise.then = promise.then.bind(promise);
+          wrappedPromise.catch = promise.catch.bind(promise);
+          wrappedPromise.promise = promise;// e.g. if you want to provide somewhere only promise, without .resolve/.reject/.catch methods
+
+          fetch(params.url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+          .then(function(response) {
+            wrappedPromise.resolve(response);
+          }, function(error) {
+            wrappedPromise.reject(error);
+          })
+          .catch(function(error) {
+            wrappedPromise.catch(error);
+          });
+
+          var timeoutId = setTimeout(function () {
+            console.log('timeout');
+            // reject on timeout
+            wrappedPromise.reject(new Error('Load timeout for resource: ' + params.url)); 
+          }, MAX_WAITING_TIME);
+
+          return wrappedPromise.promise
+            .then(function(response) {
+              clearTimeout(timeoutId);
+              return response;
+            })
+            .then(function(response) {
+              if (response.status === 200 || response.status === 0) {
+                return Promise.resolve(response)
+              } else {
+                return Promise.reject(new Error(response.statusText))
+              }
+            })
+            .then(function(response) {
+              return response.json();
+            });
+        };
+
+        (function poll() {
+          getJSON({
+            url: constants.apiurl + '/users/' + constants.getUser()._id + '/notifications/poll'
+          }).then(function(response) {
+            // on success
+            poll();
+            //console.log('JSON parsed successfully!');
+            //console.log(data);
+
+            // play audio/vibrate phone
+            switch(response.type) {
+              case 'message':
+                ChatStore.addMessage(response.data);
+                break;
+              case 'notification':
+                this.notifications.add(response.data);
+                this.trigger(NOTIFICATION.CHANGE_ALL);
+                break;
+              default:
+                break;
+            }
+
+          }.bind(this), function(error) {
+            // on reject
+            poll();
+            //console.error('An error occured!');
+            //console.error(error.message ? error.message : error);
+          });
+        })();
 
         break;
 
@@ -59,6 +145,8 @@ _.extend(NotificationStore, {
     return this.notifications.toJSON();
   }
 });
+
+
 
 var dispatchToken = Dispatcher.register(NotificationStore.handleDispatch.bind(NotificationStore));
 NotificationStore.dispatchToken = dispatchToken;

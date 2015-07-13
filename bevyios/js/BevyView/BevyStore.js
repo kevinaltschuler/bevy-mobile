@@ -52,9 +52,6 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-
-        console.log('fetching...');
-
         this.bevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
 
         this.bevies.fetch({
