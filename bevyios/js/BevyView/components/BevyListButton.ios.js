@@ -25,7 +25,7 @@ var BevyListButton = React.createClass({
         onPress={this.onPress}
       >
         <Icon
-          name='ion|ios-drag'
+          name='ion|navicon'
           size={30}
           color='white'
           style={styles.bevyListButton}
