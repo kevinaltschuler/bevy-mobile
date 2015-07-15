@@ -77,12 +77,13 @@ var InChatView = React.createClass({
   },
 
   _onChatChange: function() {
+    console.log(this.refs.messageList);
+    this.refs.messageList.scrollProperties.offsetY = 0;
     var messages = ChatStore.getMessages(this.state.activeThread._id);
-    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     this.setState({
       isRefreshing: false,
       messages: messages,
-      dataSource: ds.cloneWithRows(messages)
+      dataSource: this.state.dataSource.cloneWithRows(messages)
     });
   },
 
@@ -158,6 +159,7 @@ var InChatView = React.createClass({
     return (
       <View style={ containerStyle } >
         <ListView
+          ref='messageList'
           style={ styles.scrollContainer }
           onScroll={ this.handleScroll }
           onResponderGrant={ this.handleResponderGrant }
