@@ -22,7 +22,6 @@ var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
 var AppActions = require('./../../app/AppActions');
 
-var Button = require('react-native-button');
 var _ = require('underscore');
 var api = require('./../../utils/api.js');
 var constants = require('./../../constants.js');
