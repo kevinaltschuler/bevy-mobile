@@ -16,6 +16,11 @@ var AppActions = {
     dispatch(APP.LOAD, {
 
     });
+  },
+  unload: function() {
+    dispatch(APP.UNlOAD, {
+      
+    });
   }
 
   /*progress: function(progress, message) {

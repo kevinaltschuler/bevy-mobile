@@ -35,9 +35,9 @@ _.extend(NotificationStore, {
 
         /*--- LONG POLL  --*/
 
-        var MAX_WAITING_TIME = 15000;// in ms
+        this.MAX_WAITING_TIME = 15000;// in ms
 
-        var getJSON = function (params) {
+        var getJSON = function(params) {
           console.log('start long poll');
 
           var wrappedPromise = {};
@@ -64,17 +64,17 @@ _.extend(NotificationStore, {
             wrappedPromise.catch(error);
           });
 
-          var timeoutId = setTimeout(function () {
+          this.timeoutId = setTimeout(function () {
             console.log('timeout');
             // reject on timeout
             wrappedPromise.reject(new Error('Load timeout for resource: ' + params.url)); 
-          }, MAX_WAITING_TIME);
+          }, this.MAX_WAITING_TIME);
 
           return wrappedPromise.promise
             .then(function(response) {
-              clearTimeout(timeoutId);
+              clearTimeout(this.timeoutId);
               return response;
-            })
+            }.bind(this))
             .then(function(response) {
               if (response.status === 200 || response.status === 0) {
                 return Promise.resolve(response)
@@ -85,7 +85,7 @@ _.extend(NotificationStore, {
             .then(function(response) {
               return response.json();
             });
-        };
+        }.bind(this);
 
         (function poll() {
           getJSON({
@@ -117,6 +117,10 @@ _.extend(NotificationStore, {
           });
         })();
 
+        break;
+
+      case APP.UNLOAD:
+        //clearTimeout(this.timeoutId);
         break;
 
       case NOTIFICATION.DISMISS:

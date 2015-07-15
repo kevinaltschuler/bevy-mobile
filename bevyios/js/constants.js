@@ -33,6 +33,7 @@ exports.google_redirect_uri = 'com.joinbevy.ios:/oauth2callback';
 
 exports.APP = {
   LOAD: 'app_load',
+  UNLOAD: 'app_unload',
 
   LOAD_PROGRESS: 'app_load_progress'
 };

@@ -83,6 +83,8 @@ var PostStore = require('./js/PostList/PostStore');
 var ChatStore = require('./js/ChatView/ChatStore');
 var NotificationStore = require('./js/NotificationView/NotificationStore');
 
+var AppActions = require('./js/app/AppActions');
+
 var bevyios = React.createClass({
 
   getInitialState: function() {
@@ -110,6 +112,8 @@ var bevyios = React.createClass({
     PostStore.off(POST.CHANGE_ALL, this._onPostChange);
     ChatStore.off(CHAT.CHANGE_ALL, this._onChatChange);
     NotificationStore.off(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
+
+    AppActions.unload();
   },
 
   _onBevyChange: function() {
