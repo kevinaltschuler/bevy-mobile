@@ -11,7 +11,8 @@ var {
   StatusBarIOS,
   Text,
   View,
-  Navigator
+  Navigator,
+  AsyncStorage
 } = React;
 
 var MainView = require('./js/app/components/MainView.ios.js');
@@ -89,9 +90,27 @@ var bevyios = React.createClass({
 
   getInitialState: function() {
 
+    console.log('loading...');
+    AsyncStorage.getItem('user')
+    .then((user) => {
+      if(user) {
+        constants.setUser(JSON.parse(user));
+        AppActions.load();
+        this.setState({
+          route: { name: 'MainTabBar', index: 2}
+        });
+      } else {
+        console.log('going to login screen...');
+        this.setState({
+          route: { name: 'LoginNavigator', index: 1}
+        });
+      }
+    });
+
     StatusBarIOS.setStyle(1);
       
     return {
+      route: { name: 'LoadingView', index: 0},
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
       allPosts: PostStore.getAll(),
@@ -142,7 +161,7 @@ var bevyios = React.createClass({
 
     return (
         <Navigator
-          initialRoute={{name: 'LoadingView', index: 0}}
+          initialRoute={ this.state.route }
           renderScene={(route, navigator) => 
             <MainView 
               route={route}
