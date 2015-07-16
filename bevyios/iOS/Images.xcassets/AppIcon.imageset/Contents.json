@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "bevylogo-2.png"
+      "filename" : "google sized-1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "bevylogo-1.png"
+      "filename" : "google sized.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "bevylogo.png"
+      "filename" : "google sized-2.png"
     }
   ],
   "info" : {
