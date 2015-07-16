@@ -119,6 +119,7 @@ var BevyView = React.createClass({
         view = (
           <PostList
             posts={ this.props.allPosts }
+            bevy={ this.props.activeBevy }
           />
         );
         break;

@@ -58,10 +58,29 @@ _.extend(PostStore, {
           reset: true,
           success: function(posts, response, options) {
             //this.trigger(APP.LOAD_PROGRESS, 0.5);
+            this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
         
+        break;
+
+      case POST.FETCH:
+        var bevy = payload.bevy;
+
+        if(bevy._id == -1) {
+          this.posts.url = constants.apiurl + '/users/' + constants.getUser()._id + '/posts';
+        } else {
+          this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
+        }
+        this.posts.fetch({
+          reset: true,
+          success: function(posts, response, options) {
+            this.trigger(POST.LOADED);
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+
         break;
 
       case POST.CREATE:
