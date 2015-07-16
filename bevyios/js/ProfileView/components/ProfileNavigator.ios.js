@@ -6,6 +6,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -15,6 +16,8 @@ var {
 
 var UserView = require('./UserView.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
+
+var routes = require('./../../routes');
 
 var Navbar = React.createClass({
   propTypes: {
@@ -88,7 +91,8 @@ var ProfileNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.navigator }
-        initialRoute={{ name: 'UserView', index: 0 }}
+        initialRoute={ routes.PROFILE.USER }
+        initialRouteStack={ _.toArray(routes.PROFILE) }
         renderScene={(route, navigator) => 
           <ProfileView
             profileRoute={ route }

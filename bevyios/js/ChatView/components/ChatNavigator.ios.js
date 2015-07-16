@@ -5,6 +5,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -20,6 +21,8 @@ var SideMenu = require('react-native-side-menu');
 var ConversationView = require('./ConversationView.ios.js');
 var InChatView = require('./InChatView.ios.js');
 
+var routes = require('./../../routes');
+
 var Navbar = React.createClass({
 
   propTypes: {
@@ -28,10 +31,7 @@ var Navbar = React.createClass({
   },
 
   goBack: function() {
-    this.props.chatNavigator.push({
-      name: 'ConversationView',
-      index: 0
-    });
+    this.props.chatNavigator.jumpTo(routes.CHAT.CONVERSATIONVIEW);
   },
 
   render: function() {
@@ -70,7 +70,9 @@ var ChatNavigator = React.createClass({
   render: function() {
     return (
       <Navigator
-        initialRoute={{ name: 'ConversationView', index: 0 }}
+        navigator={ this.props.navigator }
+        initialRoute={ routes.CHAT.CONVERSATIONVIEW }
+        initialRouteStack={ _.toArray(routes.CHAT) }
         renderScene={(route, navigator) => 
           <ChatView
             chatRoute={ route }

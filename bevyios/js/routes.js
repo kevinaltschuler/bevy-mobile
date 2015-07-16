@@ -17,6 +17,19 @@ var routes = {
     POSTLIST: { name: 'PostList', index: 0 },
     INFO: { name: 'InfoView', index: 1 },
     SEARCH: { name: 'SearchView', index: 2 }
+  },
+  
+  CHAT: {
+    CONVERSATIONVIEW: { name: 'ConversationView', index: 0 },
+    INCHAT: { name: 'InChatView', index: 1 }
+  },
+
+  PROFILE: {
+    USER: { name: 'UserView', index: 0 }
+  },
+
+  NOTIFICATION: {
+    LIST: { name: 'NotificationList', index: 0 }
   }
 };
 

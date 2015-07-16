@@ -6,6 +6,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -14,13 +15,14 @@ var {
   Navigator
 } = React;
 
-var NotificationList = require('./NotificationList.ios.js');
-var BackButton = require('./../../shared/components/BackButton.ios.js');
-
 var {
   Icon
 } = require('react-native-icons');
 
+var NotificationList = require('./NotificationList.ios.js');
+var BackButton = require('./../../shared/components/BackButton.ios.js');
+
+var routes = require('./../../routes');
 var NotificationActions = require('./../NotificationActions');
 
 var Navbar = React.createClass({
@@ -95,7 +97,9 @@ var NotificationNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
-        initialRoute={{ name: 'NotificationList', index: 0 }}
+        navigator={ this.props.navigator }
+        initialRoute={ routes.NOTIFICATION.LIST }
+        initialRouteStack={ _.toArray(routes.NOTIFICATION) }
         renderScene={(route, navigator) => 
           <NotificationView
             notificationRoute={ route }

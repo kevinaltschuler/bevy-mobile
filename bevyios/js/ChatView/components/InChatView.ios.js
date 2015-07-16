@@ -44,14 +44,15 @@ var InChatView = React.createClass({
     var activeThread = _.findWhere(this.props.allThreads, { 
       _id: this.props.chatRoute.activeThread 
     });
-    var messages = ChatStore.getMessages(activeThread._id);
+    var messages = [];
+    if(activeThread) messages = ChatStore.getMessages(activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     return {
       isRefreshing: false,
       keyboardSpace: 0,
       messageValue: '',
-      activeThread: activeThread,
+      activeThread: activeThread || {},
       messages: messages,
       dataSource: ds.cloneWithRows(messages)
     };

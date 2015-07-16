@@ -22,6 +22,7 @@ var {
 var InChatView = require('./InChatView.ios.js');
 
 var constants = require('./../../constants');
+var routes = require('./../../routes');
 var user = constants.getUser();
 
 var ThreadItem = React.createClass({
