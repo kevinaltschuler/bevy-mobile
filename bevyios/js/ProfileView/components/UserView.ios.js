@@ -13,21 +13,26 @@ var {
   Image,
   TouchableHighlight,
   TouchableOpacity,
-  CameraRoll,
   AsyncStorage
 } = React;
-
 var {
   Icon
 } = require('react-native-icons');
-
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var ReadImageData = require('NativeModules').ReadImageData;
 
+var FileActions = require('./../../File/FileActions');
 var constants = require('./../../constants.js');
 
 var UserView = React.createClass({
   propTypes: {
     navigator: React.PropTypes.object
+  },
+
+  getInitialState: function() {
+    return {
+      profileImageSource: { uri: constants.getUser().image_url }
+    };
   },
 
   handleLogout: function() {
@@ -40,47 +45,38 @@ var UserView = React.createClass({
   },
 
   onProfileChange: function() {
-    console.log('get photos');
-    /*CameraRoll.getPhotos({
-      first: 0,
-      groupTypes: 'SavedPhotos',
-      assetType: 'Photos'
-    }, this.handleUpload, this.handleUploadError);*/
     // Customize by sending any or all of the following keys:
     UIImagePickerManager.showImagePicker({
-        'title': 'Select Avatar',
+        'title': 'Select Profile Picture',
         'cancelButtonTitle': 'Cancel',
         'takePhotoButtonTitle': 'Take Photo...',
         'chooseFromLibraryButtonTitle': 'Choose from Library...'
       }, (type, response) => {
 
       if (type !== 'cancel') {
-        var source;
-        if (type === 'data') { // New photo taken -  response is the 64 bit encoded image data string
-          source = {uri: 'data:image/jpeg;base64,' + response, isStatic: true};
-        } else { // Selected from library - response is the URI to the local file asset
-          source = {uri: response};
+        var source = {};
+        if (type === 'data') { 
+          // New photo taken -  response is the 64 bit encoded image data string
+          response = 'data:image/jpeg;base64,' + response;
+          FileActions.upload(response);
+          source.isStatic = true;
+        } else { 
+          // Selected from library - response is the URI to the local file asset
+          ReadImageData.readImage(response, (data) => {
+            data = 'data:image/jpeg;base64,' + data;
+            FileActions.upload(data, response);
+          });
         }
+        source.uri = response;
 
-        //this.setState({avatarSource:source});
-        console.log(source);
+        this.setState({ profileImageSource: source });
       } else {
         console.log('Cancel');
       }
     });
   },
 
-  handleUpload: function() {
-
-  },
-
-  handleUploadError: function(){
-
-  },
-
   render: function () {
-
-    var profileUrl = constants.getUser().image_url;
 
     return (
       <View style={styles.container}>
@@ -89,7 +85,7 @@ var UserView = React.createClass({
             <View style={styles.picButton}>
               <Image 
                 style={styles.profileImage}
-                source={{uri: profileUrl}}
+                source={ this.state.profileImageSource }
               >
                 <TouchableOpacity 
                   activeOpacity={.8}

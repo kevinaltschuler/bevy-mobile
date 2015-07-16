@@ -90,6 +90,12 @@ exports.user = {
   CHANGE_ALL: 'user_change_all'
 };
 
+exports.FILE = {
+  'UPLOAD': 'file_upload',
+  'UPLOAD_COMPLETE': 'file_upload_complete',
+  'UPLOAD_ERROR': 'file_upload_error'
+}
+
 exports.NOTIFICATION = {
     DISMISS: 'notification_dismiss',
     DISMISS_ALL: 'notification_dismiss_all',
