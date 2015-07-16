@@ -5,10 +5,15 @@ var {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  AsyncStorage
 } = React;
 
 var bevy_logo_trans = require('image!bevy_logo_trans');
+
+var constants = require('./../../constants');
+var routes = require('./../../routes');
+var AppActions = require('./../AppActions');
 
 var LoadingView = React.createClass({
 
@@ -18,6 +23,21 @@ var LoadingView = React.createClass({
   },
 
   getInitialState: function() {
+
+    console.log('loading...');
+    AsyncStorage.getItem('user')
+    .then((user) => {
+      if(user) {
+        setTimeout(() => {
+          constants.setUser(JSON.parse(user));
+          AppActions.load();
+          this.props.navigator.jumpTo(routes.MAIN.TABBAR);
+        }, 1000);
+      } else {
+        console.log('going to login screen...');
+        this.props.navigator.jumpTo(routes.MAIN.LOGIN);
+      }
+    });
 
     return { };
   },

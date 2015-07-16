@@ -46,7 +46,7 @@ var MainView = React.createClass({
         break;
 
       case 'LoginNavigator':
-        return <LoginNavigator navigator={this.props.navigator} />;
+        return <LoginNavigator { ...this.props } />;
         break;
 
       case 'MainTabBar':

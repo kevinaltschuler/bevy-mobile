@@ -74,6 +74,7 @@ Backbone.sync = function(method, model, options) {
 }
 
 var constants = require('./js/constants');
+var routes = require('./js/routes');
 var BEVY = constants.BEVY;
 var POST = constants.POST;
 var CHAT = constants.CHAT;
@@ -91,27 +92,10 @@ var bevyios = React.createClass({
 
   getInitialState: function() {
 
-    console.log('loading...');
-    AsyncStorage.getItem('user')
-    .then((user) => {
-      if(user) {
-        constants.setUser(JSON.parse(user));
-        AppActions.load();
-        this.setState({
-          route: { name: 'MainTabBar', index: 2}
-        });
-      } else {
-        console.log('going to login screen...');
-        this.setState({
-          route: { name: 'LoginNavigator', index: 1}
-        });
-      }
-    });
-
     StatusBarIOS.setStyle(1);
       
     return {
-      route: { name: 'LoadingView', index: 0},
+      //route: { name: 'LoadingView', index: 0},
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
       allPosts: PostStore.getAll(),
@@ -160,9 +144,15 @@ var bevyios = React.createClass({
 
   render: function() {
 
+    var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
+    // disable gestures
+    sceneConfig.gestures = null;
+
     return (
         <Navigator
-          initialRoute={ this.state.route }
+          configureScene={() => sceneConfig }
+          initialRoute={ routes.MAIN.LOADING }
+          initialRouteStack={ _.toArray(routes.MAIN) }
           renderScene={(route, navigator) => 
             <MainView 
               route={route}
