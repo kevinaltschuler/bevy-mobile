@@ -11,6 +11,12 @@ var routes = {
     LOGIN: { name: 'LoginView', index: 0 },
     FORGOT: { name: 'ForgotView', index: 1 },
     REGISTER: { name: 'RegisterView', index: 2 }
+  },
+
+  BEVY: {
+    POSTLIST: { name: 'PostList', index: 0 },
+    INFO: { name: 'InfoView', index: 1 },
+    SEARCH: { name: 'SearchView', index: 2 }
   }
 };
 

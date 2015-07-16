@@ -7,6 +7,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var window = require('Dimensions').get('window');
 var {
   StyleSheet,
@@ -27,6 +28,8 @@ var BackButton = require('./../../shared/components/BackButton.ios.js');
 var SearchButton = require('./SearchButton.ios.js');
 var InfoButton = require('./InfoButton.ios.js');
 
+var routes = require('./../../routes');
+
 var Navbar = React.createClass({ 
   propTypes: {
     bevyRoute: React.PropTypes.object,
@@ -40,24 +43,15 @@ var Navbar = React.createClass({
   },
 
   onBack: function() {
-    this.props.bevyNavigator.push({
-      name: 'PostList',
-      index: 1
-    });
+    this.props.bevyNavigator.jumpTo(routes.BEVY.POSTLIST);
   },
 
   onInfo: function() {
-    this.props.bevyNavigator.push({
-      name: 'InfoView',
-      index: 1
-    });
+    this.props.bevyNavigator.jumpTo(routes.BEVY.INFO);
   },
 
   onSearch: function() {
-    this.props.bevyNavigator.push({
-      name: 'SearchView',
-      index: 1
-    });
+    this.props.bevyNavigator.jumpTo(routes.BEVY.SEARCH);
   },
 
   render: function() {
@@ -169,7 +163,9 @@ var BevyNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
-        initialRoute={{ name: 'PostList', index: 0 }}
+        navigator={ this.props.navigator }
+        initialRoute={ routes.BEVY.POSTLIST }
+        initialRouteStack={ _.toArray(routes.BEVY) }
         renderScene={(route, navigator) => 
           <BevyView
             bevyRoute={ route }
