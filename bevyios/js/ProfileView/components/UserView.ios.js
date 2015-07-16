@@ -17,10 +17,13 @@ var {
   AsyncStorage
 } = React;
 
-var constants = require('./../../constants.js');
 var {
   Icon
 } = require('react-native-icons');
+
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+
+var constants = require('./../../constants.js');
 
 var UserView = React.createClass({
   propTypes: {
@@ -38,11 +41,33 @@ var UserView = React.createClass({
 
   onProfileChange: function() {
     console.log('get photos');
-    CameraRoll.getPhotos({
+    /*CameraRoll.getPhotos({
       first: 0,
       groupTypes: 'SavedPhotos',
       assetType: 'Photos'
-    }, this.handleUpload, this.handleUploadError);
+    }, this.handleUpload, this.handleUploadError);*/
+    // Customize by sending any or all of the following keys:
+    UIImagePickerManager.showImagePicker({
+        'title': 'Select Avatar',
+        'cancelButtonTitle': 'Cancel',
+        'takePhotoButtonTitle': 'Take Photo...',
+        'chooseFromLibraryButtonTitle': 'Choose from Library...'
+      }, (type, response) => {
+
+      if (type !== 'cancel') {
+        var source;
+        if (type === 'data') { // New photo taken -  response is the 64 bit encoded image data string
+          source = {uri: 'data:image/jpeg;base64,' + response, isStatic: true};
+        } else { // Selected from library - response is the URI to the local file asset
+          source = {uri: response};
+        }
+
+        //this.setState({avatarSource:source});
+        console.log(source);
+      } else {
+        console.log('Cancel');
+      }
+    });
   },
 
   handleUpload: function() {

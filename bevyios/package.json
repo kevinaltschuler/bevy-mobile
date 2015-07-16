@@ -11,6 +11,7 @@
     "flux": "^2.0.3",
     "react-native": "0.7.1",
     "react-native-icons": "0.2.0",
+    "react-native-image-picker": "^0.2.1",
     "react-native-keyboardevents": "^0.4.4",
     "react-native-side-menu": "^0.9",
     "underscore": "^1.8.3",
