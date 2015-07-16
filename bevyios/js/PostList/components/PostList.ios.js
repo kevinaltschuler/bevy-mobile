@@ -23,21 +23,26 @@ var PostList = React.createClass({
     posts: React.PropTypes.array
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  getInitialState() {
+    return {
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.posts)
+    };
   },
 
-  render: function() {
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.posts)
+    });
+  },
 
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var posts = this.props.posts
-    var dataSource = ds.cloneWithRows(posts);
+  render() {
 
     return (
-      <View style={styles.postContainer}>
+      <View style={ styles.postContainer }>
         <ListView 
-          dataSource={dataSource}
-          style={styles.postContainer}
-          renderRow={(rowData) =>(
+          dataSource={ this.state.dataSource }
+          style={ styles.postContainer }
+          renderRow={(rowData) => (
             <Post 
               post={ rowData }
             />
