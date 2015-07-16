@@ -23,8 +23,9 @@ var bevy_logo_trans = require('image!bevy_logo_trans');
 var AppActions = require('./../../app/AppActions');
 
 var _ = require('underscore');
-var api = require('./../../utils/api.js');
-var constants = require('./../../constants.js');
+var api = require('./../../utils/api');
+var constants = require('./../../constants');
+var routes = require('./../../routes');
 
 var LoginView = React.createClass({
 
@@ -42,17 +43,11 @@ var LoginView = React.createClass({
   },
 
   toRegister: function() {
-    this.props.loginNavigator.push({
-      name: 'RegisterView',
-      index: 1
-    });
+    this.props.loginNavigator.jumpTo(routes.LOGIN.REGISTER);
   },
 
   toForgotPass: function() {
-    this.props.loginNavigator.push({
-      name: 'ForgotView',
-      index: 2
-    });
+    this.props.loginNavigator.jumpTo(routes.LOGIN.FORGOT);
   },
 
   handleSubmit: function() {
@@ -67,9 +62,7 @@ var LoginView = React.createClass({
 
         AppActions.load();
 
-        // this data is passed @ loginnavigator.ios.js
-        // pushes a new route to the main navigator in index.ios.js 
-        this.props.navigator.push({name: 'MainTabBar', index: 2});
+        this.props.navigator.jumpTo(routes.MAIN.TABBAR);
 
         this.setState({
           email: '',
@@ -108,9 +101,7 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            // this data is passed @ loginnavigator.ios.js
-            // pushes a new route to the main navigator in index.ios.js 
-            this.props.navigator.push({name: 'MainTabBar', index: 2});
+            this.props.navigator.jumpTo(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',
@@ -195,9 +186,7 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            // this data is passed @ loginnavigator.ios.js
-            // pushes a new route to the main navigator in index.ios.js 
-            this.props.navigator.push({name: 'MainTabBar', index: 2});
+            this.props.navigator.jumpTo(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',

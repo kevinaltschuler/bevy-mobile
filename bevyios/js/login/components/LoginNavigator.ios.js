@@ -5,6 +5,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -18,6 +19,8 @@ var ForgotView = require('./ForgotView.ios.js');
 
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 
+var routes = require('./../../routes');
+
 var Navbar = React.createClass({
   propTypes: {
     loginRoute: React.PropTypes.object,
@@ -25,10 +28,7 @@ var Navbar = React.createClass({
   },
 
   goBack: function() {
-    this.props.loginNavigator.push({
-      name: 'LoginView',
-      index: 0
-    });
+    this.props.loginNavigator.jumpTo(routes.LOGIN.LOGIN);
   },
 
   render: function() {
@@ -106,7 +106,8 @@ var LoginNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.navigator }
-        initialRoute={{ name: 'LoginView', index: 0 }}
+        initialRoute={routes.LOGIN.LOGIN}
+        initialRouteStack={ _.toArray(routes.LOGIN) }
         renderScene={(route, navigator) => 
           <MainView
             loginRoute={ route }

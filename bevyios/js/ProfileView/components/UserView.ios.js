@@ -22,7 +22,8 @@ var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var ReadImageData = require('NativeModules').ReadImageData;
 
 var FileActions = require('./../../File/FileActions');
-var constants = require('./../../constants.js');
+var constants = require('./../../constants');
+var routes = require('./../../routes');
 
 var UserView = React.createClass({
   propTypes: {
@@ -41,7 +42,7 @@ var UserView = React.createClass({
     // remove user
     AsyncStorage.removeItem('user');
 
-    this.props.navigator.push({ name: 'LoginNavigator', index: 0 });
+    this.props.navigator.jumpTo(routes.LOGIN.LOGIN);
   },
 
   onProfileChange: function() {
