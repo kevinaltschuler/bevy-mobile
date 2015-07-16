@@ -18,7 +18,9 @@ var {
 } = React;
 
 var constants = require('./../../constants.js');
-var Icon = require('FAKIconImage');
+var {
+  Icon
+} = require('react-native-icons');
 
 var UserView = React.createClass({
   propTypes: {

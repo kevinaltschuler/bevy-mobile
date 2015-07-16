@@ -17,7 +17,9 @@ var {
 var NotificationList = require('./NotificationList.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 
-var Icon = require('FAKIconImage');
+var {
+  Icon
+} = require('react-native-icons');
 
 var NotificationActions = require('./../NotificationActions');
 

@@ -6,7 +6,9 @@ var {
   StyleSheet
 } = React;
 
-var Icon = require('FAKIconImage');
+var {
+  Icon
+} = require('react-native-icons');
 
 var BevyListButton = React.createClass({
 

@@ -24,7 +24,10 @@ var ios_chatbubble_outline = require('image!ios-chatbubble-outline');
 var ios_list = require('image!ios-list');
 var ios_list_outline = require('image!ios-list-outline');
 
-var Icon = require('FAKIconImage');
+var {
+  Icon
+} = require('react-native-icons');
+
 var BevyNavigator = require('./../../BevyView/components/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../ChatView/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../NotificationView/components/NotificationNavigator.ios.js');

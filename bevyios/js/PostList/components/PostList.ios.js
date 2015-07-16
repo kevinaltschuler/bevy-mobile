@@ -24,7 +24,6 @@ var PostList = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    //console.log('next props', nextProps.data);
   },
 
   render: function() {

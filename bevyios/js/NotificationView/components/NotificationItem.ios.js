@@ -16,7 +16,9 @@ var {
   TouchableOpacity
 } = React;
 
-var Icon = require('FAKIconImage');
+var {
+  Icon
+} = require('react-native-icons');
 
 var NotificationActions = require('./../NotificationActions');
 

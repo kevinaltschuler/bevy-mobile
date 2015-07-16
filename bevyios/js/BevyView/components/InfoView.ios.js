@@ -17,8 +17,11 @@ var {
   CameraRoll
 } = React;
 
+var {
+  Icon
+} = require('react-native-icons');
+
 var constants = require('./../../constants.js');
-var Icon = require('FAKIconImage');
 
 var InfoView = React.createClass({
 

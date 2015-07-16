@@ -14,7 +14,9 @@ var {
   TouchableOpacity
 } = React;
 
-var Icon = require('FAKIconImage');
+var {
+  Icon
+} = require('react-native-icons');
 
 var timeAgo = require('./../../shared/helpers/timeAgo');
 
