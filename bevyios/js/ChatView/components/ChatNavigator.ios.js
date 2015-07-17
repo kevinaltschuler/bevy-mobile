@@ -25,49 +25,6 @@ var BackButton = require('./../../shared/components/BackButton.ios.js');
 
 var routes = require('./../../routes');
 
-/*var Navbar = React.createClass({
-
-  propTypes: {
-    chatRoute: React.PropTypes.object,
-    chatNavigator: React.PropTypes.object
-  },
-
-  goBack: function() {
-    this.props.chatNavigator.jumpTo(routes.CHAT.CONVERSATIONVIEW);
-  },
-
-  render: function() {
-
-    var backButton = <Text />;
-    if(this.props.chatRoute.name != 'ConversationView')
-      backButton = (
-        <TouchableHighlight
-          underlayColor='rgba(0,0,0,.1)'
-          onPress={this.goBack} 
-          style={ styles.backButtonContainer } >
-          <Image source={require('image!back_button')} style={styles.backButton} />
-        </TouchableHighlight>
-      );
-
-    var navbarText = 'Chat';
-    if(this.props.chatRoute.threadName)
-      navbarText = this.props.chatRoute.threadName;
-
-    return (
-      <View style={ styles.navbar }>
-        <View style={ styles.left }>
-          { backButton }
-        </View>
-        <View style={ styles.center }>
-          <Text style={ styles.navbarText }>{ navbarText }</Text>
-        </View>
-        <View style={ styles.right }>
-        </View>
-      </View>
-    );
-  }
-});*/
-
 var ChatNavigator = React.createClass({
   render: function() {
     return (
