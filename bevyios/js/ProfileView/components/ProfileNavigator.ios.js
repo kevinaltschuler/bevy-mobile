@@ -46,9 +46,9 @@ var ProfileView = React.createClass({
           profileRoute={ this.props.profileRoute }
           profileNavigator={ this.props.profileNavigator }
           center='Profile'
-          view={ view }
           { ...this.props }
         />
+        { view }
       </View>
     );
   }

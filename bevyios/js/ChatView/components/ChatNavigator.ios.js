@@ -87,9 +87,9 @@ var ChatView = React.createClass({
           chatNavigator={ this.props.chatNavigator }
           left={ backButton }
           center={ navbarText }
-          view={ view }
           { ...this.props }
         />
+        { view }
       </View>
     );
   }

@@ -68,9 +68,9 @@ var NotificationView = React.createClass({
           notificationNavigator={ this.props.notificationNavigator }
           center='Notifications'
           right={ clearAllButton }
-          view={ view }
           { ...this.props }
         />
+        { view }
       </View>
     );
   }

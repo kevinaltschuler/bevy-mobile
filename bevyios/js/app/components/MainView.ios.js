@@ -8,13 +8,13 @@ var React = require('react-native');
 var {
   StyleSheet,
   Text,
-  View,
-  Navigator
+  View
 } = React;
 
 var LoadingView = require('./LoadingView.ios.js');
 var LoginNavigator = require('./../../login/components/LoginNavigator.ios.js');
 var MainTabBar = require('./MainTabBar.ios.js');
+var SearchBar = require('./../../shared/components/SearchBar.ios.js');
 
 var styles = StyleSheet.create({
   container: {
@@ -50,10 +50,21 @@ var MainView = React.createClass({
         break;
 
       case 'MainTabBar':
-        return <MainTabBar { ...this.props } />;
+        return (
+          <View>
+            <SearchBar 
+              view={ <MainTabBar { ...this.props } /> }
+              { ...this.props }
+            />
+          </View>
+        );
         break;
     }
   }
+});
+
+var styles = StyleSheet.create({
+
 });
 
 //module.ESPORTS LOL

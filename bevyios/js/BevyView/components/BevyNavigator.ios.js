@@ -88,9 +88,9 @@ var BevyView = React.createClass({
           left={ backButton }
           center={ this.props.activeBevy.name }
           right={ infoButton }
-          view={ view }
           { ...this.props }
         />
+        { view }
       </View>
     );
   }
