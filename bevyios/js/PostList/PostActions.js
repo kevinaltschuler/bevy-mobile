@@ -20,7 +20,7 @@ var POST = require('./../constants').POST;
 
 var PostActions = {
 
-	fetch: function(bevy) {
+	fetch(bevy) {
 		dispatch(POST.FETCH, {
 			bevy: (bevy == undefined) ? null : bevy
 		});
@@ -34,7 +34,7 @@ var PostActions = {
 	 * @param  {string} author
 	 * @param  {string} bevy
 	 */
-	create: function(title, images, author, bevy, active_member) {
+	create(title, images, author, bevy, active_member) {
 		dispatch(POST.CREATE, {
 			title: (title == undefined) ? 'untitled' : title,
 			images: (images == undefined) ? null : images,
@@ -44,13 +44,13 @@ var PostActions = {
 		});
 	},
 
-	destroy: function(post_id) {
+	destroy(post_id) {
 		dispatch(POST.DESTROY, {
 			post_id: (post_id == undefined) ? '0' : post_id
 		});
 	},
 
-	update: function(post_id, postTitle) {
+	update(post_id, postTitle) {
 		dispatch(POST.UPDATE, {
 			post_id: (post_id == undefined) ? '0' : post_id,
 			postTitle: (postTitle == undefined) ? '' : postTitle
@@ -62,7 +62,7 @@ var PostActions = {
 	 * @param  {string} post_id
 	 * @param  {string} voter
 	 */
-	upvote: function(post_id, voter) {
+	upvote(post_id, voter) {
 		dispatch(POST.UPVOTE, {
 			post_id: (post_id == undefined) ? '' : post_id,
 			voter: (voter == undefined) ? '' : voter
@@ -74,7 +74,7 @@ var PostActions = {
 	 * @param  {string} post_id
 	 * @param  {string} voter
 	 */
-	downvote: function(post_id, voter) {
+	downvote(post_id, voter) {
 		dispatch(POST.DOWNVOTE, {
 			post_id: (post_id == undefined) ? '' : post_id,
 			voter: (voter == undefined) ? '' : voter
@@ -86,26 +86,26 @@ var PostActions = {
 	 * @param  {string} by        the sorting method ('top', 'new')
 	 * @param  {string} direction either 'asc' or 'desc'
 	 */
-	sort: function(by, direction) {
+	sort(by, direction) {
 		dispatch(POST.SORT, {
 			by: (by == undefined) ? 'new' : by,
 			direction: (direction == undefined) ? 'asc' : direction
 		});
 	},
 
-	pin: function(post_id) {
+	pin(post_id) {
 		dispatch(POST.PIN, {
 			post_id: (post_id == undefined) ? '' : post_id
 		});
 	},
 
-	mute: function(post_id) {
+	mute(post_id) {
 		dispatch(POST.MUTE, {
 			post_id: (post_id == undefined) ? '' : post_id
 		});
 	},
 
-	cancel: function() {
+	cancel() {
 		dispatch(POST.CANCEL, {});
 	}
 };

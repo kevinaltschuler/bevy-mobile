@@ -90,7 +90,7 @@ var AppActions = require('./js/app/AppActions');
 
 var bevyios = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
 
     StatusBarIOS.setStyle(1);
       
@@ -104,14 +104,14 @@ var bevyios = React.createClass({
     };
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     PostStore.on(POST.CHANGE_ALL, this._onPostChange);
     ChatStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     BevyStore.off(BEVY.CHANGE_ALL, this._onBevyChange);
     PostStore.off(POST.CHANGE_ALL, this._onPostChange);
     ChatStore.off(CHAT.CHANGE_ALL, this._onChatChange);
@@ -120,29 +120,29 @@ var bevyios = React.createClass({
     AppActions.unload();
   },
 
-  _onBevyChange: function() {
+  _onBevyChange() {
     this.setState({
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive()
     });
   },
-  _onPostChange: function() {
+  _onPostChange() {
     this.setState({
       allPosts: PostStore.getAll()
     });
   },
-  _onChatChange: function() {
+  _onChatChange() {
     this.setState({
       allThreads: ChatStore.getAll()
     });
   },
-  _onNotificationChange: function() {
+  _onNotificationChange() {
     this.setState({
       allNotifications: NotificationStore.getAll()
     });
   },
 
-  render: function() {
+  render() {
 
     var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
     // disable gestures
