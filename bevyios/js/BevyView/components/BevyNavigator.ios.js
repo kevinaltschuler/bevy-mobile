@@ -190,43 +190,6 @@ var styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: '#2CB673',
     flex: 1
-  },
-  navbar: {
-    backgroundColor: '#2CB673',
-    flexDirection: 'row',
-    paddingTop: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
-    height: 64,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  navbarText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: '500'
-  },
-  left: {
-    flex: 1,
-    height: 32,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-start'
-  },
-  center: {
-    flex: 2,
-    height: 32,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center'
-  },
-  right: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    height: 32
   }
 });
 

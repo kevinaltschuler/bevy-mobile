@@ -122,10 +122,11 @@ var ThreadItem = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    marginLeft: 5,
+    backgroundColor: '#fff',
+    paddingLeft: 10,
+    paddingRight: 10,
     paddingTop: 15,
     paddingBottom: 15,
-    marginRight: 8,
     flexDirection: 'column',
     borderColor: '#ccc',
   },

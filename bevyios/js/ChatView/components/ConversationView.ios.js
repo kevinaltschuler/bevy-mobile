@@ -53,20 +53,17 @@ var ConversationView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    paddingTop: 8,
-    paddingLeft: 8,
-    paddingRight: 8,
+    backgroundColor: '#ddd',
     flexDirection: 'column',
     flex: 1,
   },
   segControl: {
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    borderRadius: 0
   },
   scrollContainer: {
-    //paddingTop: 30
     flex: 1,
-    flexDirection: 'column',
-    height: 300
+    flexDirection: 'column'
   }
 })
 

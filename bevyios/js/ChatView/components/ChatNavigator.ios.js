@@ -20,10 +20,12 @@ var SideMenu = require('react-native-side-menu');
 
 var ConversationView = require('./ConversationView.ios.js');
 var InChatView = require('./InChatView.ios.js');
+var Navbar = require('./../../shared/components/Navbar.ios.js');
+var BackButton = require('./../../shared/components/BackButton.ios.js');
 
 var routes = require('./../../routes');
 
-var Navbar = React.createClass({
+/*var Navbar = React.createClass({
 
   propTypes: {
     chatRoute: React.PropTypes.object,
@@ -64,7 +66,7 @@ var Navbar = React.createClass({
       </View>
     );
   }
-});
+});*/
 
 var ChatNavigator = React.createClass({
   render: function() {
@@ -111,13 +113,26 @@ var ChatView = React.createClass({
         break;
     }
 
+    var navbarText = 'Chat';
+    if(this.props.chatRoute.threadName)
+      navbarText = this.props.chatRoute.threadName;
+
+    var backButton = (this.props.chatRoute.name == 'ConversationView')
+    ? <View />
+    : <BackButton onPress={() => {
+      this.props.chatNavigator.jumpTo(routes.CHAT.CONVERSATIONVIEW);
+    }} />;
+
     return (
       <View style={{ flex: 1}}>
         <Navbar 
           chatRoute={ this.props.chatRoute }
           chatNavigator={ this.props.chatNavigator }
+          left={ backButton }
+          center={ navbarText }
+          view={ view }
+          { ...this.props }
         />
-        { view }
       </View>
     );
   }
@@ -131,44 +146,6 @@ var styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: '#2CB673',
     flex: 1
-  },
-  navbar: {
-    backgroundColor: '#2CB673',
-    flexDirection: 'row',
-    height: 64,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  backButtonContainer: {
-  },
-  backButton: {
-    width: 12,
-    height: 19,
-  },
-  navbarText: {
-    flex: 1,
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: '500'
-  },
-  left: {
-    height: 32,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center'
-  },
-  center: {
-    height: 32,
-    flex: 2,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center'
-  },
-  right: {
-    flex: 1,
-    height: 64
   }
 });
 
