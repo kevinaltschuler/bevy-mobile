@@ -16,43 +16,9 @@ var {
 
 var UserView = require('./UserView.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
+var Navbar = require('./../../shared/components/Navbar.ios.js');
 
 var routes = require('./../../routes');
-
-var Navbar = React.createClass({
-  propTypes: {
-    profileRoute: React.PropTypes.object,
-    profileNavigator: React.PropTypes.object
-  },
-
-  goBack: function() {
-
-  },
-
-  render: function() {
-
-    var backButton = (
-      <BackButton
-        onPress={ this.goBack }
-      />
-    );
-
-    var navbarText = 'Profile';
-
-    return (
-      <View style={ styles.navbar }>
-        <View style={ styles.left }>
-          {/* backButton */}
-        </View>
-        <View style={ styles.center }>
-          <Text style={ styles.navbarText }>{ navbarText }</Text>
-        </View>
-        <View style={ styles.right }>
-        </View>
-      </View>
-    );
-  }
-});
 
 var ProfileView = React.createClass({
   propTypes: {
@@ -79,8 +45,10 @@ var ProfileView = React.createClass({
         <Navbar 
           profileRoute={ this.props.profileRoute }
           profileNavigator={ this.props.profileNavigator }
+          center='Profile'
+          view={ view }
+          { ...this.props }
         />
-        { view }
       </View>
     );
   }

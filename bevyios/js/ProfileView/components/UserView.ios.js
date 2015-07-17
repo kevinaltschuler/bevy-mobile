@@ -166,6 +166,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   top: {
+    paddingTop: 20,
     flexDirection: 'column',
     alignItems: 'center',
     backgroundColor: '#2CB673',
@@ -227,7 +228,8 @@ var styles = StyleSheet.create({
     fontSize: 12
   },
   bottom: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#ddd'
   },
 })
 
