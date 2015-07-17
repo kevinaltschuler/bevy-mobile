@@ -51,18 +51,18 @@ var BevyList = React.createClass({
         <ListView
           dataSource={dataSource}
           style={styles.listContainer}
-          renderRow={(rowData) => (
+          renderRow={(bevy) => (
             <TouchableHighlight 
               style={styles.rowContainer}
               onPress={(crud) => {
 
-              BevyActions.switchBevy(rowData._id);
+              BevyActions.switchBevy(bevy._id);
 
               this.props.menuActions.close();
             }}
             >
               <Text style={styles.whiteText}>
-                {rowData.name}
+                {bevy.name}
               </Text>
             </TouchableHighlight>)}
         />
@@ -76,7 +76,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingTop: 35,
-    width: 300,
+    width: (window.width / 2),
     height: window.height,
     backgroundColor: 'rgba(29,30,26,1)',
   },

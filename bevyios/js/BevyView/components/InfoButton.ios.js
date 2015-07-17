@@ -32,7 +32,7 @@ var InfoButton = React.createClass({
         <Icon
           name='ion|ios-information-outline'
           size={30}
-          color='white'
+          color='#666'
           style={styles.bevyListButton}
         />
       </TouchableHighlight>

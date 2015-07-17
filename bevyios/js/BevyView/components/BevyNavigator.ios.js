@@ -23,14 +23,16 @@ var PostList = require('./../../PostList/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SearchView = require('./SearchView.ios.js');
 
-var BevyListButton = require('./BevyListButton.ios.js');
+//var BevyListButton = require('./BevyListButton.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 var SearchButton = require('./SearchButton.ios.js');
 var InfoButton = require('./InfoButton.ios.js');
 
 var routes = require('./../../routes');
 
-var Navbar = React.createClass({ 
+var Navbar = require('./../../shared/components/Navbar.ios.js');
+
+/*var Navbar = React.createClass({ 
   propTypes: {
     bevyRoute: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
@@ -87,7 +89,7 @@ var Navbar = React.createClass({
       </View>
     );
   }
-});
+});*/
 
 var BevyView = React.createClass({
   propTypes: {
@@ -125,29 +127,22 @@ var BevyView = React.createClass({
         break;
     }
 
-    var bevyList = (
-      <BevyList 
-        allBevies={ this.props.allBevies }
-        activeBevy={ this.props.activeBevy }
-        allPosts={ this.props.allPosts }
-      />
-    );
+    var infoButton = (this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
+    ? <View />
+    : <InfoButton onPress={() => {
+      this.props.bevyNavigator.jumpTo(routes.BEVY.INFO)
+    }} />;
 
     return (
       <View style={{ flex: 1 }}>
-        <SideMenu 
-          menu={bevyList}
-          disableGestures={ true }
-          touchToClose={ true }
-          openMenuOffset={ 300 }
-        >
-          <Navbar 
-            bevyRoute={ this.props.bevyRoute }
-            bevyNavigator={ this.props.bevyNavigator }
-            { ...this.props }
-          />
-          { view }
-        </SideMenu>
+        <Navbar
+          bevyRoute={ this.props.bevyRoute }
+          bevyNavigator={ this.props.bevyNavigator }
+          center={ this.props.activeBevy.name }
+          right={ infoButton }
+          view={ view }
+          { ...this.props }
+        />
       </View>
     );
   }

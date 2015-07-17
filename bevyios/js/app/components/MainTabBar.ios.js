@@ -35,13 +35,13 @@ var ProfileNavigator = require('./../../ProfileView/components/ProfileNavigator.
 
 var MainTabBar = React.createClass({
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       selectedTab: 'BevyNavigator'
     };
   },
 
-  _renderContent: function() {
+  _renderContent() {
 
     switch(this.state.selectedTab) {
       case 'BevyNavigator':
@@ -75,7 +75,7 @@ var MainTabBar = React.createClass({
     }
   },
 
-  render: function () {
+  render() {
       return (
         <View style={styles.mainContainer}>
           <TabBarIOS tintColor={ 'black' } barTintColor={ 'white' } style={ styles.tabBar }>

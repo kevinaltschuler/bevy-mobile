@@ -117,7 +117,7 @@ var styles = StyleSheet.create({
   postContainer: {
     flexDirection: 'column',
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#ddd'
   },
   button: {
     width: 100,
