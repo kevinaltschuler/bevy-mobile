@@ -21,46 +21,10 @@ var {
 
 var NotificationList = require('./NotificationList.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
+var Navbar = require('./../../shared/components/Navbar.ios.js');
 
 var routes = require('./../../routes');
 var NotificationActions = require('./../NotificationActions');
-
-var Navbar = React.createClass({
-  propTypes: {
-    notificationRoute: React.PropTypes.object,
-    notificationNavigator: React.PropTypes.object
-  },
-
-  dismissAll: function() {
-    NotificationActions.dismissAll();
-  },
-
-  render: function() {
-    return (
-      <View style={ styles.navbar }>
-        <View style={ styles.left }>
-          {/* backButton */}
-        </View>
-        <View style={ styles.center }>
-          <Text style={ styles.navbarText }>Notifications</Text>
-        </View>
-        <View style={ styles.right }>
-          <TouchableHighlight
-            underlayColor={'rgba(0,0,0,0)'}
-            onPress={ this.dismissAll }
-          >
-            <Icon
-              name='ion|ios-minus'
-              size={30}
-              color='white'
-              style={styles.dismissAllButton}
-            />
-          </TouchableHighlight>
-        </View>
-      </View>
-    );
-  }
-});
 
 var NotificationView = React.createClass({
   propTypes: {
@@ -81,13 +45,32 @@ var NotificationView = React.createClass({
         break;
     }
 
+    var clearAllButton = (
+      <TouchableHighlight
+        underlayColor={'rgba(0,0,0,0)'}
+        onPress={() => {
+          NotificationActions.dismissAll();
+        }}
+      >
+        <Icon
+          name='ion|ios-minus'
+          size={30}
+          color='#666'
+          style={styles.dismissAllButton}
+        />
+      </TouchableHighlight>
+    );
+
     return (
       <View style={{ flex: 1 }}>
         <Navbar 
           notificationRoute={ this.props.notificationRoute }
           notificationNavigator={ this.props.notificationNavigator }
+          center='Notifications'
+          right={ clearAllButton }
+          view={ view }
+          { ...this.props }
         />
-        { view }
       </View>
     );
   }

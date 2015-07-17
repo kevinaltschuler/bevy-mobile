@@ -38,20 +38,24 @@ var NotificationList = React.createClass({
     var dataSource = ds.cloneWithRows(this.props.allNotifications);
 
     return (
-      <ListView
-        dataSource={dataSource}
-        renderRow={(notification) => 
-          <NotificationItem 
-            notification={ notification }
-          />
-        }
-      />
+      <View style={ styles.container }>
+        <ListView
+          dataSource={dataSource}
+          renderRow={(notification) => 
+            <NotificationItem 
+              notification={ notification }
+            />
+          }
+        />
+      </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#ddd'
   }
 })
 
