@@ -133,11 +133,18 @@ var BevyView = React.createClass({
       this.props.bevyNavigator.jumpTo(routes.BEVY.INFO)
     }} />;
 
+    var backButton = (this.props.bevyRoute.name == 'PostList')
+    ? <View />
+    : <BackButton onPress={() => {
+      this.props.bevyNavigator.jumpTo(routes.BEVY.POSTLIST)
+    }} />;
+
     return (
       <View style={{ flex: 1 }}>
         <Navbar
           bevyRoute={ this.props.bevyRoute }
           bevyNavigator={ this.props.bevyNavigator }
+          left={ backButton }
           center={ this.props.activeBevy.name }
           right={ infoButton }
           view={ view }

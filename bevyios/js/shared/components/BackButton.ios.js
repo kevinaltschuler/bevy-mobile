@@ -4,8 +4,10 @@ var React = require('react-native');
 var {
   StyleSheet,
   TouchableHighlight,
-  Image
 } = React;
+var {
+  Icon
+} = require('react-native-icons');
 
 var BackButton = React.createClass({
 
@@ -20,13 +22,15 @@ var BackButton = React.createClass({
   render: function() {
     return (
       <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
+        underlayColor={'rgba(0,0,0,0)'}
         onPress={ this.onPress } 
         style={ styles.backButtonContainer } 
       >
-        <Image 
-          source={require('image!back_button')} 
-          style={styles.backButton} 
+        <Icon
+          name='ion|chevron-left'
+          size={ 30 }
+          color='#666'
+          style={ styles.backButton }
         />
       </TouchableHighlight>
     );
@@ -35,13 +39,11 @@ var BackButton = React.createClass({
 
 var styles = StyleSheet.create({
   backButtonContainer: {
-    flex: 1,
-    height: 32,
-    width: 32
+    flex: 1
   },
   backButton: {
-    width: 20,
-    height: 32,
+    width: 30,
+    height: 30,
   }
 });
 

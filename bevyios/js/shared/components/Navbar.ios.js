@@ -111,7 +111,6 @@ var Navbar = React.createClass({
   },
 
   render() {
-    console.log(this.props.right);
     return (
       <View style={ styles.navbar }>
         <View style={{
