@@ -40,12 +40,7 @@ var SearchBar = React.createClass({
   },
 
   onSearchBlur() {
-    if(this.state.activeRoute.name === routes.SEARCH.IN.name) {
-      this.props.navigator.jumpTo(routes.SEARCH.OUT);
-      this.setState({
-        activeRoute: routes.SEARCH.OUT
-      });
-    }
+
   },
 
   onSearchFocus() {
@@ -62,14 +57,16 @@ var SearchBar = React.createClass({
   },
 
   render() {
-    console.log(this.state.activeRoute);
-
     var leftButton = (this.state.activeRoute.name === routes.SEARCH.IN.name)
     ? (
       <BackButton 
         color='#fff'
         onPress={() => {
+          this.refs.search.blur();
           this.props.navigator.jumpTo(routes.SEARCH.OUT);
+          this.setState({
+            activeRoute: routes.SEARCH.OUT
+          });
         }}
       />
     )
@@ -97,6 +94,7 @@ var SearchBar = React.createClass({
                 style={ styles.searchIcon }
               />
               <TextInput 
+                ref='search'
                 style={ styles.searchInput }
                 autoCapitalize='none'
                 autoCorrect='none'
