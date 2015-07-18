@@ -3,12 +3,9 @@
 var React = require('react-native');
 
 var {
-  AppRegistry,
   StyleSheet,
   Text,
-  TouchableHighlight,
-  View,
-  Image
+  View
 } = React;
 
 var SearchView = React.createClass({

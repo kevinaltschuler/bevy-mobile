@@ -29,7 +29,7 @@ var ChatNavigator = React.createClass({
   render: function() {
     return (
       <Navigator
-        navigator={ this.props.navigator }
+        navigator={ this.props.mainNavigator }
         initialRoute={ routes.CHAT.CONVERSATIONVIEW }
         initialRouteStack={ _.toArray(routes.CHAT) }
         renderScene={(route, navigator) => 

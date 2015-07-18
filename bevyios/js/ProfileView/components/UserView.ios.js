@@ -42,7 +42,7 @@ var UserView = React.createClass({
     // remove user
     AsyncStorage.removeItem('user');
 
-    this.props.navigator.jumpTo(routes.LOGIN.LOGIN);
+    this.props.mainNavigator.jumpTo(routes.LOGIN.LOGIN);
   },
 
   onProfileChange: function() {

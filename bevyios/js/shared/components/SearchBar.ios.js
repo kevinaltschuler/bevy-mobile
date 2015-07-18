@@ -5,27 +5,56 @@ var {
   View,
   Text,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  Navigator
 } = React;
 var {
   Icon
 } = require('react-native-icons');
 
 var window = require('Dimensions').get('window');
+var _ = require('underscore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
+var routes = require('./../../routes');
 
 var BevyList = require('./../../BevyView/components/BevyList.ios.js');
 var BevyListButton = require('./BevyListButton.ios.js');
+var BackButton = require('./BackButton.ios.js');
 var SideMenu = require('react-native-side-menu');
+var MainTabBar = require('./../../app/components/MainTabBar.ios.js');
+var SearchView = require('./../../app/components/SearchView.ios.js');
 
 var SearchBar = React.createClass({
 
   propTypes: {
+    searchRoute: React.PropTypes.object,
+    searchNavigator: React.PropTypes.object,
     menuActions: React.PropTypes.object // for side menu
   },
 
-  onSearchFocus() {
+  getInitialState() {
+    var activeRoute = this.props.navState.routeStack[this.props.navState.presentedIndex];
+    return {
+      activeRoute: activeRoute
+    }
+  },
 
+  onSearchBlur() {
+    if(this.state.activeRoute.name === routes.SEARCH.IN.name) {
+      this.props.navigator.jumpTo(routes.SEARCH.OUT);
+      this.setState({
+        activeRoute: routes.SEARCH.OUT
+      });
+    }
+  },
+
+  onSearchFocus() {
+    if(this.state.activeRoute.name === routes.SEARCH.OUT.name) {
+      this.props.navigator.jumpTo(routes.SEARCH.IN);
+      this.setState({
+        activeRoute: routes.SEARCH.IN
+      });
+    }
   },
 
   onSearch() {
@@ -33,6 +62,25 @@ var SearchBar = React.createClass({
   },
 
   render() {
+    console.log(this.state.activeRoute);
+
+    var leftButton = (this.state.activeRoute.name === routes.SEARCH.IN.name)
+    ? (
+      <BackButton 
+        color='#fff'
+        onPress={() => {
+          this.props.navigator.jumpTo(routes.SEARCH.OUT);
+        }}
+      />
+    )
+    : (
+      <BevyListButton 
+        onPress={() => {
+          this.props.menuActions.toggle();
+        }}
+      />
+    );
+
     return (
       <View style={ styles.navbar }>
         <View style={{
@@ -40,11 +88,7 @@ var SearchBar = React.createClass({
         }}/>
         <View style={ styles.navbarTop }>
           <View style={ styles.left }>
-            <BevyListButton 
-              onPress={() => {
-                this.props.menuActions.toggle();
-              }}
-            />
+            { leftButton }
             <View style={ styles.searchInputWrapper }>
               <Icon 
                 name='ion|ios-search'
@@ -58,6 +102,7 @@ var SearchBar = React.createClass({
                 autoCorrect='none'
                 clearButtonMode='while-editing'
                 enablesReturnKeyAutomatically={ true }
+                onBlur={ this.onSearchBlur }
                 onFocus={ this.onSearchFocus }
                 onChange={ this.onSearch }
                 onSubmitEditing={ this.onSearch }
@@ -74,21 +119,53 @@ var SearchBar = React.createClass({
   }
 });
 
-var SearchBarWrapper = React.createClass({
 
+var SearchNavigator = React.createClass({
   propTypes: {
-    view: React.PropTypes.node
+    menuActions: React.PropTypes.object // side menu actions
   },
 
-  getDefaultProps() {
-    return {
-      view: <View />
-    };
-  },
+  render() {
+    return (
+      <Navigator
+        navigator={ this.props.mainNavigator }
+        navigationBar={ 
+          <SearchBar
+            { ...this.props } 
+          /> 
+        }
+        initialRouteStack={ _.toArray(routes.SEARCH) }
+        initialRoute={ routes.SEARCH.OUT } // start out of search view
+        renderScene={(route, navigator) => {
+          var view;
+          switch(route.name) {
+            case 'in':
+              return (
+                <SearchView 
+                  searchRoute={ route }
+                  searchNavigator={ navigator }
+                  { ...this.props }
+                />
+              );
+              break;
+            case 'out':
+            default:
+              return (
+                <MainTabBar 
+                  searchRoute={ route }
+                  searchNavigator={ navigator }
+                  { ...this.props } 
+                />
+              );
+              break;  
+          }
+        }}
+      />
+    );
+  }
+});
 
-  _renderView() {
-    return this.props.view;
-  },
+var SearchBarWrapper = React.createClass({
 
   render() {
 
@@ -107,8 +184,9 @@ var SearchBarWrapper = React.createClass({
         touchToClose={ true }
         openMenuOffset={ window.width / 2 }
       >
-        <SearchBar { ...this.props } />
-        { this._renderView() }
+        <SearchNavigator
+          { ...this.props }
+        />
       </SideMenu>
     );
   }
@@ -117,7 +195,11 @@ var SearchBarWrapper = React.createClass({
 var styles = StyleSheet.create({
   navbar: {
     backgroundColor: '#2CB673',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: window.width
   },
   navbarTop: {
     height: 48,

@@ -21,7 +21,6 @@ var SideMenu = require('react-native-side-menu');
 var BevyList= require('./BevyList.ios.js');
 var PostList = require('./../../PostList/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
-var SearchView = require('./SearchView.ios.js');
 
 //var BevyListButton = require('./BevyListButton.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
@@ -47,13 +46,6 @@ var BevyView = React.createClass({
         view = (
           <InfoView
             bevy={ this.props.activeBevy }
-          />
-        );
-        break;
-      case 'SearchView':
-        view = (
-          <SearchView
-
           />
         );
         break;
@@ -107,7 +99,7 @@ var BevyNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
-        navigator={ this.props.navigator }
+        navigator={ this.props.mainNavigator }
         initialRoute={ routes.BEVY.POSTLIST }
         initialRouteStack={ _.toArray(routes.BEVY) }
         renderScene={(route, navigator) => 

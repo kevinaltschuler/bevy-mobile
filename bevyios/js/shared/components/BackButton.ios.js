@@ -12,7 +12,14 @@ var {
 var BackButton = React.createClass({
 
   propTypes: {
-    onPress: React.PropTypes.func
+    onPress: React.PropTypes.func,
+    color: React.PropTypes.string
+  },
+
+  getDefaultProps() {
+    return {
+      color: '#666'
+    };
   },
 
   onPress: function() {
@@ -29,7 +36,7 @@ var BackButton = React.createClass({
         <Icon
           name='ion|chevron-left'
           size={ 30 }
-          color='#666'
+          color={ this.props.color }
           style={ styles.backButton }
         />
       </TouchableHighlight>
@@ -39,7 +46,6 @@ var BackButton = React.createClass({
 
 var styles = StyleSheet.create({
   backButtonContainer: {
-    flex: 1
   },
   backButton: {
     width: 30,

@@ -27,8 +27,8 @@ var styles = StyleSheet.create({
 var MainView = React.createClass({
 
   propTypes: {
-    route: React.PropTypes.object,
-    navigator: React.PropTypes.object
+    mainRoute: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -39,7 +39,7 @@ var MainView = React.createClass({
 
   render: function() {
 
-    switch(this.props.route.name) {
+    switch(this.props.mainRoute.name) {
 
       case 'LoadingView':
       return <LoadingView { ...this.props } />;
@@ -52,10 +52,7 @@ var MainView = React.createClass({
       case 'MainTabBar':
         return (
           <View>
-            <SearchBar 
-              view={ <MainTabBar { ...this.props } /> }
-              { ...this.props }
-            />
+            <SearchBar { ...this.props } />
           </View>
         );
         break;

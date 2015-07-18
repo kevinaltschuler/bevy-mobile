@@ -7,6 +7,11 @@ var routes = {
     TABBAR: { name: 'MainTabBar', index: 2 }
   },
 
+  SEARCH: {
+    IN: { name: 'in', index: 0 }, // searching
+    OUT: { name: 'out', index: 1 } // not searching
+  },
+
   LOGIN: {
     LOGIN: { name: 'LoginView', index: 0 },
     FORGOT: { name: 'ForgotView', index: 1 },
@@ -15,8 +20,7 @@ var routes = {
 
   BEVY: {
     POSTLIST: { name: 'PostList', index: 0 },
-    INFO: { name: 'InfoView', index: 1 },
-    SEARCH: { name: 'SearchView', index: 2 }
+    INFO: { name: 'InfoView', index: 1 }
   },
   
   CHAT: {

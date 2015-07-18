@@ -80,7 +80,7 @@ var NotificationNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
-        navigator={ this.props.navigator }
+        navigator={ this.props.mainNavigator }
         initialRoute={ routes.NOTIFICATION.LIST }
         initialRouteStack={ _.toArray(routes.NOTIFICATION) }
         renderScene={(route, navigator) => 

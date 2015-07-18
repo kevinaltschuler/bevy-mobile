@@ -105,7 +105,7 @@ var LoginNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
-        navigator={ this.props.navigator }
+        navigator={ this.props.mainNavigator }
         initialRoute={routes.LOGIN.LOGIN}
         initialRouteStack={ _.toArray(routes.LOGIN) }
         renderScene={(route, navigator) => 

@@ -59,7 +59,11 @@ var Navbar = React.createClass({
 
   render() {
     return (
-      <View style={ styles.navbar }>
+      <View style={{
+        backgroundColor: '#2CB673',
+        flexDirection: 'column',
+        paddingTop: 48 + StatusBarSizeIOS.currentHeight
+      }}>
         <View style={ styles.navbarBottom }>
           <View style={ styles.left }>
             { this._renderLeft() }
@@ -78,8 +82,7 @@ var Navbar = React.createClass({
 
 var styles = StyleSheet.create({
   navbar: {
-    backgroundColor: '#2CB673',
-    flexDirection: 'column'
+    
   },
   navbarBottom: {
     backgroundColor: '#fff',

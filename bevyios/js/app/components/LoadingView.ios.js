@@ -31,11 +31,11 @@ var LoadingView = React.createClass({
         setTimeout(() => {
           constants.setUser(JSON.parse(user));
           AppActions.load();
-          this.props.navigator.jumpTo(routes.MAIN.TABBAR);
+          this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
         }, 1000);
       } else {
         console.log('going to login screen...');
-        this.props.navigator.jumpTo(routes.MAIN.LOGIN);
+        this.props.mainNavigator.jumpTo(routes.MAIN.LOGIN);
       }
     });
 

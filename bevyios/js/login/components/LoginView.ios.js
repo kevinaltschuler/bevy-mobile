@@ -62,7 +62,7 @@ var LoginView = React.createClass({
 
         AppActions.load();
 
-        this.props.navigator.jumpTo(routes.MAIN.TABBAR);
+        this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
 
         this.setState({
           email: '',
@@ -101,7 +101,7 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            this.props.navigator.jumpTo(routes.MAIN.TABBAR);
+            this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',
@@ -186,7 +186,7 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            this.props.navigator.jumpTo(routes.MAIN.TABBAR);
+            this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',
