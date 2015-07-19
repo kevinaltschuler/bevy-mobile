@@ -124,7 +124,7 @@ var BevyNavigator = React.createClass({
   render: function () {
     return (
       <Navigator
-        navigator={ this.props.mainNavigator }
+        navigator={ this.props.searchNavigator }
         initialRoute={ routes.BEVY.POSTLIST }
         initialRouteStack={ _.toArray(routes.BEVY) }
         renderScene={(route, navigator) => 

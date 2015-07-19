@@ -6,26 +6,14 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   Image,
-  View,
-  CameraRoll
+  View
 } = React;
-
-var ios_person = require('image!ios-person');
-var ios_person_outline = require('image!ios-person-outline');
-var ios_bell = require('image!ios-bell');
-var ios_bell_outline = require('image!ios-bell-outline');
-var ios_chatbubble = require('image!ios-chatbubble');
-var ios_chatbubble_outline = require('image!ios-chatbubble-outline');
-var ios_list = require('image!ios-list');
-var ios_list_outline = require('image!ios-list-outline');
-
 var {
-  Icon
+  Icon,
+  TabBarIOS
 } = require('react-native-icons');
 
 var BevyNavigator = require('./../../BevyView/components/BevyNavigator.ios.js');
@@ -80,7 +68,7 @@ var MainTabBar = React.createClass({
         <View style={styles.mainContainer}>
           <TabBarIOS tintColor={ 'black' } barTintColor={ 'white' } style={ styles.tabBar }>
             <TabBarIOS.Item
-              icon={ ios_list_outline }
+              iconName={ 'ion|ios-list-outline' }
               selectedIcon={ ios_list }
               selected={ this.state.selectedTab === 'BevyNavigator' }
               style={ styles.tabIcon }
@@ -93,7 +81,7 @@ var MainTabBar = React.createClass({
               { this._renderContent() }
             </TabBarIOS.Item>
             <TabBarIOS.Item
-              icon={ ios_chatbubble_outline }
+              iconName={ 'ion|ios-chatbubble-outline' }
               selectedIcon={ ios_chatbubble }
               selected={ this.state.selectedTab === 'ChatNavigator' }
               style={ styles.tabIcon }
@@ -106,7 +94,7 @@ var MainTabBar = React.createClass({
               { this._renderContent() }
             </TabBarIOS.Item>
             <TabBarIOS.Item
-              icon={ ios_bell_outline }
+              iconName={ 'ion|ios-bell-outline' }
               selectedIcon={ ios_bell }
               selected={ this.state.selectedTab === 'NotificationNavigator' }
               style={ styles.tabIcon }
@@ -119,7 +107,7 @@ var MainTabBar = React.createClass({
               { this._renderContent() }
             </TabBarIOS.Item>
             <TabBarIOS.Item
-              icon={ ios_person_outline }
+              iconName={ 'ion|ios-person-outline' }
               selectedIcon={ ios_person }
               selected={ this.state.selectedTab === 'ProfileNavigator' }
               style={ styles.tabIcon }
@@ -141,25 +129,17 @@ var styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     marginTop: 0,
-    flexDirection: 'column',
-    justifyContent: 'center',
+    flexDirection: 'column'
   },
   tabContent: {
-    flex: 1,
+    flex: 1
   },
   tabBar: {
-    flex: 1,
-    paddingTop: 15,
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1
   },
   tabIcon: {
     flex: 1
-  },
-  tabText: {
-    color: 'black',
-    margin: 50
-  },
+  }
 });
 
 module.exports = MainTabBar;
