@@ -31,6 +31,11 @@ var routes = require('./../../routes');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 
+// get icons
+var {
+  Icon
+} = require('react-native-icons');
+
 var BevyView = React.createClass({
   propTypes: {
     bevyRoute: React.PropTypes.object,
@@ -59,12 +64,32 @@ var BevyView = React.createClass({
         );
         break;
     }
+    
+    var sortMenu = (
+      <TouchableHighlight
+        underlayColor={'rgba(0,0,0,0)'}
+      >
+        <Icon
+          name='ion|ios-minus'
+          size={30}
+          color='#666'
+          style={styles.sortMenu}
+        />
+      </TouchableHighlight>
+    );
 
     var infoButton = (this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
     ? <View />
     : <InfoButton onPress={() => {
       this.props.bevyNavigator.jumpTo(routes.BEVY.INFO)
     }} />;
+
+    var sortAndInfo = (
+      <View>
+        { sortMenu }
+        { infoButton }
+      </View>
+    );
 
     var backButton = (this.props.bevyRoute.name == 'PostList')
     ? <View />
@@ -79,7 +104,7 @@ var BevyView = React.createClass({
           bevyNavigator={ this.props.bevyNavigator }
           left={ backButton }
           center={ this.props.activeBevy.name }
-          right={ infoButton }
+          right={ sortAndInfo }
           { ...this.props }
         />
         { view }
@@ -123,6 +148,10 @@ var styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: '#2CB673',
     flex: 1
+  },
+  sortMenu: {
+    width: 30,
+    height: 30
   }
 });
 
