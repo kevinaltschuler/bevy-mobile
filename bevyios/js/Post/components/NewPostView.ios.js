@@ -26,17 +26,35 @@ var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 
+var PostActions = require('./../PostActions');
+
 var NewPostView = React.createClass({
 
   getInitialState() {
+    var selected;
+    if(this.props.activeBevy._id != -1) {
+      // if not frontpage, select active bevy
+      selected = this.props.activeBevy;
+    } else {
+      // else, get the first non-frontpage bevy
+      selected = this.props.allBevies[1];
+    }
     return {
-      postToBevy: this.props.activeBevy
+      selected: selected
     };
   },
 
   componentWillReceiveProps(nextProps) {
+    var selected;
+    if(nextProps.activeBevy._id != -1) {
+      // if not frontpage, select active bevy
+      selected = nextProps.activeBevy;
+    } else {
+      // else, get the first non-frontpage bevy
+      selected = nextProps.allBevies[1];
+    }
     this.setState({
-      postToBevy: nextProps.activeBevy
+      selected: selected
     });
   },
 
@@ -53,11 +71,11 @@ var NewPostView = React.createClass({
                 <BevyPickerView
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
-                  selected={ this.state.postToBevy }
+                  selected={ this.state.selected }
                   onSwitchBevy={(bevy) => {
                     navigator.jumpTo(routes.NEWPOST.INPUT);
                     this.setState({
-                      postToBevy: bevy
+                      selected: bevy
                     });
                   }}
                   { ...this.props }
@@ -70,7 +88,7 @@ var NewPostView = React.createClass({
                 <InputView
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
-                  selected={ this.state.postToBevy }
+                  selected={ this.state.selected }
                   { ...this.props }
                 />
               );
@@ -90,7 +108,8 @@ var InputView = React.createClass({
 
   getInitialState() {
     return {
-      keyboardSpace: 0
+      keyboardSpace: 0,
+      title: ''
     };
   },
 
@@ -105,10 +124,6 @@ var InputView = React.createClass({
         keyboardSpace: 0
       });
     });
-  },
-
-  onChangeText() {
-
   },
 
   render() {
@@ -157,7 +172,16 @@ var InputView = React.createClass({
             <TouchableHighlight
               underlayColor={'rgba(0,0,0,0)'}
               onPress={() => {
-
+                if(this.state.title.length <= 0) return; // dont post if text is empty
+                PostActions.create( // send action
+                  this.state.title,
+                  null,
+                  constants.getUser(),
+                  this.props.selected
+                );
+                this.refs.input.setNativeProps({ text: '' }); // clear text
+                this.refs.input.blur(); // unfocus text field
+                this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR); // navigate back to main tab bar
               }}
               style={ styles.navButtonRight }>
               <Text style={ styles.navButtonTextRight }>
@@ -193,7 +217,11 @@ var InputView = React.createClass({
             <TextInput 
               ref='input'
               multiline={ true }
-              onChangeText={ this.onChangeText }
+              onChange={(ev) => {
+                this.setState({
+                  title: ev.nativeEvent.text
+                });
+              }}
               placeholder='Drop a Line'
               style={ styles.textInput }
             />
@@ -308,6 +336,7 @@ var BevyPickerView = React.createClass({
           style={ styles.bevyPickerList }
           renderRow={(bevy) => {
             var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
+            if(bevy._id == -1) return <View />; // disallow posting to frontpage
             return (
               <TouchableHighlight
                 underlayColor='rgba(0,0,0,0)'

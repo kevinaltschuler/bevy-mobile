@@ -89,25 +89,19 @@ _.extend(PostStore, {
         var images = payload.images;
         var author = payload.author;
         var bevy = payload.bevy;
-        var active_member = payload.active_member;
 
-        var tags = title.match(tagRegex);
-        tags = _.map(tags, function(tag) {
-          return tag.slice(1, tag.length); // remove the hashtag
-        });
+        console.log(payload);
 
-        var newPost = {
+        var newPost = this.posts.add({
           title: title,
-          tags: tags,
           comments: [],
           images: images,
           author: author._id,
           bevy: bevy._id,
           created: Date.now()
-        };
-        var newPost = this.posts.add(newPost);
-        var tempBevy = newPost.get('bevy');
-        newPost.set('bevy', bevy._id);
+        });
+
+        newPost.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
 
         // save to server
         newPost.save(null, {

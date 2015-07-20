@@ -40,7 +40,6 @@ var PostActions = {
 			images: (images == undefined) ? null : images,
 			author: (author == undefined) ? null : author, // grab the current, logged in user?
 			bevy: (bevy == undefined) ? null : bevy, // grab the current, active bevy
-			active_member: (active_member == undefined) ? {} : active_member
 		});
 	},
 
