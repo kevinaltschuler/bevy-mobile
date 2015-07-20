@@ -31,13 +31,11 @@ var RefreshingIndicator = React.createClass({
 
   render: function() {
     return (
-      <View style={[ styles.container, styles.wrapper ]}>
-        <View style={[ styles.container, styles.loading, styles.content ]}>
-          <Text style={ styles.description }>
-            { this.props.description }
-          </Text>
-          { this.renderActivityIndicator(styles.activityIndicator) }
-        </View>
+      <View style={ styles.container }>
+        <Text style={ styles.description }>
+          { this.props.description }
+        </Text>
+        { this.renderActivityIndicator(styles.activityIndicator) }
       </View>
     );
   }
@@ -47,13 +45,14 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 10
   },
   wrapper: {
     height: 40
   },
-  content: {
-    height: 40
+  description: {
+    marginBottom: 5
   }
 });
 
