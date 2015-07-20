@@ -137,6 +137,7 @@ var InputView = React.createClass({
             <TouchableHighlight
               underlayColor={'rgba(0,0,0,0)'}
               onPress={() => {
+                this.refs.input.blur();
                 this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
               }}
               style={ styles.navButtonLeft }>
@@ -405,15 +406,16 @@ var styles = StyleSheet.create({
     fontSize: 15
   },
   contentBar: {
-    flex: 1,
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,
-    height: 36,
-    alignItems: 'center'
+    height: 48,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#eee'
   },
   contentBarItem: {
-    height: 36,
+    height: 30,
     paddingLeft: 15,
     paddingRight: 15,
     alignItems: 'center'
