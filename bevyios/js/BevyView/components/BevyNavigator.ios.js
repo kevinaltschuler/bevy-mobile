@@ -19,7 +19,7 @@ var {
 
 var SideMenu = require('react-native-side-menu');
 var BevyList= require('./BevyList.ios.js');
-var PostList = require('./../../PostList/components/PostList.ios.js');
+var PostList = require('./../../Post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 
 //var BevyListButton = require('./BevyListButton.ios.js');
@@ -58,8 +58,7 @@ var BevyView = React.createClass({
       default:
         view = (
           <PostList
-            posts={ this.props.allPosts }
-            bevy={ this.props.activeBevy }
+            { ...this.props }
           />
         );
         break;

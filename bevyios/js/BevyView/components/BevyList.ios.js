@@ -17,7 +17,7 @@ var {
 } = React;
 
 var api = require('./../../utils/api.js');
-var PostList = require('./../../PostList/components/PostList.ios.js');
+var PostList = require('./../../Post/components/PostList.ios.js');
 var constants = require('./../../constants.js');
 var BevyActions = require('./../BevyActions');
 var BEVY = constants.BEVY;

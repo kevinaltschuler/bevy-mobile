@@ -20,17 +20,18 @@ var PostActions = require('./../PostActions');
 
 var Post = require('./Post.ios.js');
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
+var NewPostCard = require('./NewPostCard.ios.js');
 
 var PostList = React.createClass({
 
   propTypes: {
-    posts: React.PropTypes.array,
-    bevy: React.PropTypes.object
+    allPosts: React.PropTypes.array,
+    activeBevy: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.posts),
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allPosts),
       isRefreshing: true
     };
   },
@@ -45,7 +46,7 @@ var PostList = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.posts)
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
     });
   },
 
@@ -79,17 +80,30 @@ var PostList = React.createClass({
   },
 
   onRefresh() {
-    PostActions.fetch(this.props.bevy);
+    PostActions.fetch(this.props.activeBevy);
+  },
+
+  onNewPost() {
+    
   },
 
   _renderHeader() {
+    var indicator;
     if(this.state.isRefreshing) {
-      return (
+      indicator = (
         <RefreshingIndicator description='Loading Posts...'/>
       );
     } else {
-      return <View />
+      indicator = <View />
     }
+    return (
+      <View style={ styles.postListHeader }>
+        { indicator }
+        <NewPostCard 
+          onPress={ this.onNewPost }
+        />
+      </View>
+    );
   },
 
   render() {
@@ -118,6 +132,10 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#ddd'
+  },
+  postListHeader: {
+    flex: 1,
+    flexDirection: 'column'
   },
   button: {
     width: 100,

@@ -81,7 +81,7 @@ var CHAT = constants.CHAT;
 var NOTIFICATION = constants.NOTIFICATION;
 
 var BevyStore = require('./js/BevyView/BevyStore');
-var PostStore = require('./js/PostList/PostStore');
+var PostStore = require('./js/Post/PostStore');
 var ChatStore = require('./js/ChatView/ChatStore');
 var FileStore = require('./js/File/FileStore');
 var NotificationStore = require('./js/NotificationView/NotificationStore');
