@@ -68,6 +68,7 @@ var MainTabBar = React.createClass({
         <View style={styles.mainContainer}>
           <TabBarIOS tintColor={ 'black' } barTintColor={ 'white' } style={ styles.tabBar }>
             <TabBarIOS.Item
+              title='Posts'
               iconName={ 'ion|ios-list-outline' }
               selected={ this.state.selectedTab === 'BevyNavigator' }
               style={ styles.tabIcon }
@@ -80,6 +81,7 @@ var MainTabBar = React.createClass({
               { this._renderContent() }
             </TabBarIOS.Item>
             <TabBarIOS.Item
+              title='Chat'
               iconName={ 'ion|ios-chatbubble-outline' }
               selected={ this.state.selectedTab === 'ChatNavigator' }
               style={ styles.tabIcon }
@@ -92,6 +94,7 @@ var MainTabBar = React.createClass({
               { this._renderContent() }
             </TabBarIOS.Item>
             <TabBarIOS.Item
+              title='Notifications'
               iconName={ 'ion|ios-bell-outline' }
               selected={ this.state.selectedTab === 'NotificationNavigator' }
               style={ styles.tabIcon }
@@ -104,6 +107,7 @@ var MainTabBar = React.createClass({
               { this._renderContent() }
             </TabBarIOS.Item>
             <TabBarIOS.Item
+              title='Profile'
               iconName={ 'ion|ios-person-outline' }
               selected={ this.state.selectedTab === 'ProfileNavigator' }
               style={ styles.tabIcon }
