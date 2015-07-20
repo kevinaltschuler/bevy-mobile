@@ -25,9 +25,31 @@ var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var Navbar = React.createClass({
   propTypes: {
+    styleParent: React.PropTypes.object,
+    styleBottom: React.PropTypes.object,
     center: React.PropTypes.node,
     left: React.PropTypes.node,
     right: React.PropTypes.node
+  },
+
+  getDefaultProps() {
+    return {
+      styleParent: {
+        backgroundColor: '#2CB673',
+        flexDirection: 'column',
+        paddingTop: 48
+      },
+      styleBottom: {
+        backgroundColor: '#fff',
+        height: 48,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+      },
+      center: 'Default',
+      left: <View />,
+      right: <View />
+    };
   },
 
   getInitialState() {
@@ -59,12 +81,11 @@ var Navbar = React.createClass({
 
   render() {
     return (
-      <View style={{
-        backgroundColor: '#2CB673',
-        flexDirection: 'column',
-        paddingTop: 48 + StatusBarSizeIOS.currentHeight
-      }}>
-        <View style={ styles.navbarBottom }>
+      <View style={ this.props.styleParent }>
+        <View style={{
+          height: StatusBarSizeIOS.currentHeight
+        }}/>
+        <View style={ this.props.styleBottom }>
           <View style={ styles.left }>
             { this._renderLeft() }
           </View>
@@ -81,16 +102,6 @@ var Navbar = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  navbar: {
-    
-  },
-  navbarBottom: {
-    backgroundColor: '#fff',
-    height: 48,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
   navbarText: {
     color: '#666',
     textAlign: 'center',

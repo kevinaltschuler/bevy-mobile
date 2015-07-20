@@ -57,7 +57,7 @@ _.extend(BevyStore, {
         this.bevies.fetch({
           reset: true,
           success: function(bevies, response, options) {
-            //console.log('in store', bevies, response, options);
+            console.log('got bevies', bevies.toJSON());
 
             this.bevies.unshift({
               _id: '-1',

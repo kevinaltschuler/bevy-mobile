@@ -19,7 +19,7 @@ var {
 
 var SideMenu = require('react-native-side-menu');
 var BevyList= require('./BevyList.ios.js');
-var PostList = require('./../../Post/components/PostList.ios.js');
+var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 
 //var BevyListButton = require('./BevyListButton.ios.js');
@@ -64,7 +64,7 @@ var BevyView = React.createClass({
         break;
     }
     
-    var sortMenu = (
+    /*var sortMenu = (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
       >
@@ -75,7 +75,7 @@ var BevyView = React.createClass({
           style={styles.sortMenu}
         />
       </TouchableHighlight>
-    );
+    );*/
 
     var infoButton = (this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
     ? <View />
@@ -83,12 +83,12 @@ var BevyView = React.createClass({
       this.props.bevyNavigator.jumpTo(routes.BEVY.INFO)
     }} />;
 
-    var sortAndInfo = (
+    /*var sortAndInfo = (
       <View>
         { sortMenu }
         { infoButton }
       </View>
-    );
+    );*/
 
     var backButton = (this.props.bevyRoute.name == 'PostList')
     ? <View />
@@ -103,7 +103,7 @@ var BevyView = React.createClass({
           bevyNavigator={ this.props.bevyNavigator }
           left={ backButton }
           center={ this.props.activeBevy.name }
-          right={ sortAndInfo }
+          right={ infoButton }
           { ...this.props }
         />
         { view }

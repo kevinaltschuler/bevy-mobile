@@ -7,26 +7,14 @@
 var React = require('react-native');
 var {
   AppRegistry,
-  StyleSheet,
   StatusBarIOS,
-  Text,
-  View,
-  Navigator,
-  AsyncStorage
+  Navigator
 } = React;
 
 var MainView = require('./js/app/components/MainView.ios.js');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-    padding: 0,
-  },
-});
 
 var Backbone = require('backbone');
 Backbone.sync = function(method, model, options) {
@@ -81,7 +69,7 @@ var CHAT = constants.CHAT;
 var NOTIFICATION = constants.NOTIFICATION;
 
 var BevyStore = require('./js/BevyView/BevyStore');
-var PostStore = require('./js/Post/PostStore');
+var PostStore = require('./js/post/PostStore');
 var ChatStore = require('./js/ChatView/ChatStore');
 var FileStore = require('./js/File/FileStore');
 var NotificationStore = require('./js/NotificationView/NotificationStore');
@@ -95,7 +83,6 @@ var bevyios = React.createClass({
     StatusBarIOS.setStyle(1);
       
     return {
-      //route: { name: 'LoadingView', index: 0},
       allBevies: BevyStore.getAll(),
       activeBevy: BevyStore.getActive(),
       allPosts: PostStore.getAll(),

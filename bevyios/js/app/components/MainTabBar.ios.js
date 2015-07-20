@@ -9,7 +9,8 @@ var {
   StyleSheet,
   Text,
   Image,
-  View
+  View,
+  StatusBarIOS
 } = React;
 var {
   Icon,
@@ -64,65 +65,65 @@ var MainTabBar = React.createClass({
   },
 
   render() {
-      return (
-        <View style={styles.mainContainer}>
-          <TabBarIOS tintColor={ 'black' } barTintColor={ 'white' } style={ styles.tabBar }>
-            <TabBarIOS.Item
-              title='Posts'
-              iconName={ 'ion|ios-list-outline' }
-              selected={ this.state.selectedTab === 'BevyNavigator' }
-              style={ styles.tabIcon }
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'BevyNavigator'
-                });
-              }}
-            >
-              { this._renderContent() }
-            </TabBarIOS.Item>
-            <TabBarIOS.Item
-              title='Chat'
-              iconName={ 'ion|ios-chatbubble-outline' }
-              selected={ this.state.selectedTab === 'ChatNavigator' }
-              style={ styles.tabIcon }
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'ChatNavigator'
-                });
-              }}
-            >
-              { this._renderContent() }
-            </TabBarIOS.Item>
-            <TabBarIOS.Item
-              title='Notifications'
-              iconName={ 'ion|ios-bell-outline' }
-              selected={ this.state.selectedTab === 'NotificationNavigator' }
-              style={ styles.tabIcon }
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'NotificationNavigator'
-                });
-              }}
-            >
-              { this._renderContent() }
-            </TabBarIOS.Item>
-            <TabBarIOS.Item
-              title='Profile'
-              iconName={ 'ion|ios-person-outline' }
-              selected={ this.state.selectedTab === 'ProfileNavigator' }
-              style={ styles.tabIcon }
-              onPress={() => {
-                this.setState({
-                  selectedTab: 'ProfileNavigator'
-                });
-              }}
-            >
-              { this._renderContent() }
-            </TabBarIOS.Item>
-          </TabBarIOS>
-        </View>
-      );
-    }
+    return (
+      <View style={styles.mainContainer}>
+        <TabBarIOS tintColor={ 'black' } barTintColor={ 'white' } style={ styles.tabBar }>
+          <TabBarIOS.Item
+            title='Posts'
+            iconName={ 'ion|ios-list-outline' }
+            selected={ this.state.selectedTab === 'BevyNavigator' }
+            style={ styles.tabIcon }
+            onPress={() => {
+              this.setState({
+                selectedTab: 'BevyNavigator'
+              });
+            }}
+          >
+            { this._renderContent() }
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            title='Chat'
+            iconName={ 'ion|ios-chatbubble-outline' }
+            selected={ this.state.selectedTab === 'ChatNavigator' }
+            style={ styles.tabIcon }
+            onPress={() => {
+              this.setState({
+                selectedTab: 'ChatNavigator'
+              });
+            }}
+          >
+            { this._renderContent() }
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            title='Notifications'
+            iconName={ 'ion|ios-bell-outline' }
+            selected={ this.state.selectedTab === 'NotificationNavigator' }
+            style={ styles.tabIcon }
+            onPress={() => {
+              this.setState({
+                selectedTab: 'NotificationNavigator'
+              });
+            }}
+          >
+            { this._renderContent() }
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            title='Profile'
+            iconName={ 'ion|ios-person-outline' }
+            selected={ this.state.selectedTab === 'ProfileNavigator' }
+            style={ styles.tabIcon }
+            onPress={() => {
+              this.setState({
+                selectedTab: 'ProfileNavigator'
+              });
+            }}
+          >
+            { this._renderContent() }
+          </TabBarIOS.Item>
+        </TabBarIOS>
+      </View>
+    );
+  }
 });
 
 var styles = StyleSheet.create({

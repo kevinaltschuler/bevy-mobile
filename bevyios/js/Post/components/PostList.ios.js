@@ -13,7 +13,8 @@ var {
   TouchableHighlight
 } = React;
 
-var constants = require('./../../constants.js');
+var constants = require('./../../constants');
+var routes = require('./../../routes');
 var POST = constants.POST;
 var PostStore = require('./../PostStore');
 var PostActions = require('./../PostActions');
@@ -84,7 +85,7 @@ var PostList = React.createClass({
   },
 
   onNewPost() {
-    
+    this.props.mainNavigator.jumpTo(routes.MAIN.NEWPOST);
   },
 
   _renderHeader() {

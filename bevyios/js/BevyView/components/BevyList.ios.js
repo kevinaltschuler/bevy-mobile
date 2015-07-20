@@ -17,7 +17,7 @@ var {
 } = React;
 
 var api = require('./../../utils/api.js');
-var PostList = require('./../../Post/components/PostList.ios.js');
+var PostList = require('./../../post/components/PostList.ios.js');
 var constants = require('./../../constants.js');
 var BevyActions = require('./../BevyActions');
 var BEVY = constants.BEVY;
@@ -30,17 +30,23 @@ var BevyList = React.createClass({
     menuActions: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allBevies)
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.allBevies)
+    });
+  },
+
   changeBevy: function(rowData) {
 
   },
   
   render: function() {
-
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataSource = ds.cloneWithRows(this.props.allBevies);
-
-    var crud = 'crud';
-
     return (
       <View style={styles.container}>
         <View style={styles.title}>
@@ -49,17 +55,15 @@ var BevyList = React.createClass({
           </Text>
         </View>
         <ListView
-          dataSource={dataSource}
+          dataSource={ this.state.dataSource }
           style={styles.listContainer}
           renderRow={(bevy) => (
             <TouchableHighlight 
               style={styles.rowContainer}
-              onPress={(crud) => {
-
-              BevyActions.switchBevy(bevy._id);
-
-              this.props.menuActions.close();
-            }}
+              onPress={() => {
+                BevyActions.switchBevy(bevy._id);
+                this.props.menuActions.close();
+              }}
             >
               <Text style={styles.whiteText}>
                 {bevy.name}

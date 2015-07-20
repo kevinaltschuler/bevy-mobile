@@ -15,6 +15,9 @@ var LoadingView = require('./LoadingView.ios.js');
 var LoginNavigator = require('./../../login/components/LoginNavigator.ios.js');
 var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../shared/components/SearchBar.ios.js');
+var NewPostView = require('./../../post/components/NewPostView.ios.js');
+
+var routes = require('./../../routes');
 
 var styles = StyleSheet.create({
   container: {
@@ -41,20 +44,21 @@ var MainView = React.createClass({
 
     switch(this.props.mainRoute.name) {
 
-      case 'LoadingView':
-      return <LoadingView { ...this.props } />;
+      case routes.MAIN.LOADING.name:
+        return <LoadingView { ...this.props } />;
         break;
 
-      case 'LoginNavigator':
+      case routes.MAIN.LOGIN.name:
         return <LoginNavigator { ...this.props } />;
         break;
 
-      case 'MainTabBar':
-        return (
-          <View>
-            <SearchBar { ...this.props } />
-          </View>
-        );
+      case routes.MAIN.NEWPOST.name:
+        return <NewPostView { ...this.props } />;
+        break;
+
+      case routes.MAIN.TABBAR.name:
+      default:
+        return <SearchBar { ...this.props } />
         break;
     }
   }

@@ -4,7 +4,13 @@ var routes = {
   MAIN: {
     LOADING: { name: 'LoadingView', index: 0 },
     LOGIN: { name: 'LoginNavigator', index: 1 },
-    TABBAR: { name: 'MainTabBar', index: 2 }
+    TABBAR: { name: 'MainTabBar', index: 2 },
+    NEWPOST: {name: 'NewPost', index: 3 }
+  },
+
+  NEWPOST: {
+    INPUT: { name: 'input', index: 0 },
+    BEVYPICKER: { name: 'bevypicker', index: 1 }
   },
 
   SEARCH: {
