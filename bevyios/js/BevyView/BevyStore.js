@@ -18,8 +18,20 @@ var _ = require('underscore');
 
 var Dispatcher = require('./../shared/dispatcher');
 
-var Bevy = require('./BevyModel');
-var Bevies = require('./BevyCollection');
+//var Bevy = require('./BevyModel');
+//var Bevies = require('./BevyCollection');
+
+var Bevy = Backbone.Model.extend({
+  initialize() {
+    this.bevies = new Bevies;
+  },
+  idAttribute: '_id'
+});
+
+// backbone collection
+var Bevies = Backbone.Collection.extend({
+  model: Bevy
+});
 
 var constants = require('./../constants');
 var BEVY = constants.BEVY;

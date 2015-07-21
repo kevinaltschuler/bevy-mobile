@@ -11,11 +11,14 @@
 // imports
 var Backbone = require('backbone');
 
+var Bevies = require('./BevyCollection');
 var constants = require('./../constants');
 
 // backbone model
 var BevyModel = Backbone.Model.extend({
-
+  initialize() {
+    this.bevies = new Bevies;
+  },
   idAttribute: '_id'
 });
 
