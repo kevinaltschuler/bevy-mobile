@@ -56,9 +56,11 @@ var BevyList = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
+
         <View style={{
           height: StatusBarSizeIOS.currentHeight
         }} />
+
         <Accordion
           ref='activeBevy'
           onPress={() => {
@@ -107,9 +109,30 @@ var BevyList = React.createClass({
                   </TouchableHighlight>
                 );
               }.bind(this)) }
+
+              <TouchableHighlight
+                style={ styles.bevyAddItem }
+                onPress={() => {
+
+                }}
+              >
+                <View style={ styles.bevyAdd }>
+                  <Text style={ styles.bevyItemText }>
+                    Create new Bevy
+                  </Text>
+                  <Icon
+                    name='ion|plus-round'
+                    size={20}
+                    color='#fff'
+                    style={ styles.bevyAddIcon }
+                  />
+                </View>
+              </TouchableHighlight>
             </View>
           }
         />
+
+
         <View style={ styles.subBevies }>
           <Text style={ styles.subBeviesTitle }>
             Subbevies
@@ -128,6 +151,8 @@ var BevyList = React.createClass({
             />
           </TouchableHighlight>
         </View>
+
+
         <ListView
           dataSource={ this.state.subBevies }
           style={ styles.bevyList }
@@ -184,9 +209,29 @@ var styles = StyleSheet.create({
     borderTopColor: '#333'
   },
   bevyItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 10
   },
+  bevyAddItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#333'
+  },
+  bevyAdd: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  bevyAddIcon: {
+    alignSelf: 'flex-end', 
+    width: 20, 
+    height: 20
+  },
   bevyItemText: {
+    flex: 1,
     color: '#fff'
   },
 
@@ -196,9 +241,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 10,
     borderTopWidth: 1,
-    borderTopColor: '#333',
-    borderBottomWidth: 1,
-    borderBottomColor: '#333'
+    borderTopColor: '#333'
   },
   subBeviesTitle: {
     flex: 1,
