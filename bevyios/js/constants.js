@@ -31,6 +31,13 @@ exports.google_client_secret = 'LuNykxTlzbeH8pa6f77WXroG';
 exports.google_redirect_uri = 'com.joinbevy.ios:/oauth2callback';
 //exports.google_redirect_uri = 'com.googleusercontent.apps.540892787949-0e61br4320fg4l2its3gr9csssrn07aj:/oauth2callback';
 
+var window = require('Dimensions').get('window');
+exports.width = window.width
+exports.height = window.height
+
+exports.sideMenuWidth = ((window.width * (2/3)) >= 300) ? 300 : (window.width * (2/3));
+
+
 exports.APP = {
   LOAD: 'app_load',
   UNLOAD: 'app_unload',

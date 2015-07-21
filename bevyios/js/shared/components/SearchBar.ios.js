@@ -16,6 +16,7 @@ var window = require('Dimensions').get('window');
 var _ = require('underscore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var routes = require('./../../routes');
+var constants = require('./../../constants');
 
 var BevyList = require('./../../BevyView/components/BevyList.ios.js');
 var BevyListButton = require('./BevyListButton.ios.js');
@@ -180,7 +181,7 @@ var SearchBarWrapper = React.createClass({
         ref='menu'
         disableGestures={ true }
         touchToClose={ true }
-        openMenuOffset={ window.width / 2 }
+        openMenuOffset={ constants.sideMenuWidth }
       >
         <SearchNavigator
           { ...this.props }

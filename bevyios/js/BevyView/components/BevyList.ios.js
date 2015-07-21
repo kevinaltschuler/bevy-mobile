@@ -16,12 +16,11 @@ var {
   TouchableHighlight
 } = React;
 
-var api = require('./../../utils/api.js');
 var PostList = require('./../../post/components/PostList.ios.js');
+
 var constants = require('./../../constants.js');
 var BevyActions = require('./../BevyActions');
 var BEVY = constants.BEVY;
-
 
 var BevyList = React.createClass({
   propTypes: {
@@ -80,7 +79,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingTop: 35,
-    width: (window.width / 2),
+    width: constants.sideMenuWidth,
     height: window.height,
     backgroundColor: 'rgba(29,30,26,1)',
   },
