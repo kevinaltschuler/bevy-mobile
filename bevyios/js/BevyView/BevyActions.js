@@ -21,6 +21,10 @@ var BevyActions = {
     });
   },
 
+  fetchPublic: function() {
+    dispatch(BEVY.FETCH_PUBLIC, {});
+  },
+
   create: function(name, description, image_url, members) {
     dispatch(BEVY.CREATE, {
       name: (name == undefined) ? '' : name,

@@ -17,6 +17,8 @@ var _ = require('underscore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var routes = require('./../../routes');
 var constants = require('./../../constants');
+var BevyStore = require('./../../BevyView/BevyStore');
+var BEVY = constants.BEVY;
 
 var BevyList = require('./../../BevyView/components/BevyList.ios.js');
 var BevyListButton = require('./BevyListButton.ios.js');
@@ -37,7 +39,22 @@ var SearchBar = React.createClass({
     var activeRoute = this.props.navState.routeStack[this.props.navState.presentedIndex];
     return {
       activeRoute: activeRoute
-    }
+    };
+  },
+
+  componentDidMount() {
+    BevyStore.on(BEVY.SWITCHED, () => {
+      // switched bevies
+      // force rerender so the left button can update
+      this.setState({
+        activeRoute: routes.SEARCH.OUT
+      })
+      this.forceUpdate();
+    });
+  },
+
+  componentWillUnmount() {
+    BevyStore.off(BEVY.SWITCHED);
   },
 
   onSearchBlur() {
@@ -170,7 +187,7 @@ var SearchBarWrapper = React.createClass({
 
     var bevyList = (
       <BevyList 
-        allBevies={ this.props.allBevies }
+        myBevies={ this.props.myBevies }
         activeBevy={ this.props.activeBevy }
       />
     );

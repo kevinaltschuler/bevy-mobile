@@ -42,7 +42,8 @@ var BevyStore = _.extend({}, Backbone.Events);
 // now add some custom functions
 _.extend(BevyStore, {
 
-  bevies: new Bevies,
+  myBevies: new Bevies,
+  publicBevies: new Bevies,
 
   active: -1, // id of the active bevy. by default set it to the frontpage
 
@@ -52,19 +53,39 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-        this.bevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
+        this.myBevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
 
-        this.bevies.fetch({
+        this.myBevies.fetch({
           reset: true,
           success: function(bevies, response, options) {
             console.log('got bevies', bevies.toJSON());
-
-            this.bevies.unshift({
+            this.myBevies.unshift({
               _id: '-1',
               name: 'Frontpage'
             });
 
             //this.trigger(APP.LOAD_PROGRESS, 0.1);
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+
+        this.publicBevies.url = constants.apiurl + '/bevies';
+        this.publicBevies.fetch({
+          success: function(bevies, response, options) {
+            console.log('got public bevies', bevies.toJSON());
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+
+        break;
+
+      case BEVY.FETCH_PUBLIC:
+        // get list of public bevies
+
+        this.publicBevies.url = constants.apiurl + '/bevies';
+        this.publicBevies.fetch({
+          success: function(bevies, response, options) {
+            console.log('got public bevies', bevies.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });
@@ -269,6 +290,7 @@ _.extend(BevyStore, {
         this.active = bevy_id;
 
         this.trigger(BEVY.CHANGE_ALL);
+        this.trigger(BEVY.SWITCHED);
 
         break;
 
@@ -392,22 +414,42 @@ _.extend(BevyStore, {
     }
   },
 
-  getAll: function() {
-    return this.bevies.toJSON();
+  getMyBevies: function() {
+    return this.myBevies.toJSON();
+  },
+
+  getPublicBevies: function() {
+    return this.publicBevies.toJSON();
   },
 
   getActive: function() {
-    var bevy = this.bevies.get(this.active || -1);
-    return (bevy)
-    ? bevy.toJSON()
-    : {};
+    // try to get from myBevies first
+    var bevy = this.myBevies.get(this.active || -1);
+    if(bevy == undefined) {
+      // now try to get from publicBevies
+      bevy = this.publicBevies.get(this.active);
+    }
+    if(bevy == undefined) {
+      // if still not found, return empty object
+      return {};
+    } else {
+      return bevy.toJSON();
+    }
   },
 
   getBevy: function(bevy_id) {
-    var bevy = this.bevies.get(bevy_id);
-    return (bevy)
-    ? bevy.toJSON()
-    : {};
+    // try to get from myBevies first
+    var bevy = this.myBevies.get(bevy_id);
+    if(bevy == undefined) {
+      // now try to get from publicBevies
+      bevy = this.publicBevies.get(bevy_id);
+    }
+    if(bevy == undefined) {
+      // if still not found, return empty object
+      return {};
+    } else {
+      return bevy.toJSON();
+    }
   }
   /*
   getActiveMember: function() {

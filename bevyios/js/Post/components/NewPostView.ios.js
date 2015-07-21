@@ -37,7 +37,7 @@ var NewPostView = React.createClass({
       selected = this.props.activeBevy;
     } else {
       // else, get the first non-frontpage bevy
-      selected = this.props.allBevies[1];
+      selected = this.props.myBevies[1];
     }
     return {
       selected: selected
@@ -51,7 +51,7 @@ var NewPostView = React.createClass({
       selected = nextProps.activeBevy;
     } else {
       // else, get the first non-frontpage bevy
-      selected = nextProps.allBevies[1];
+      selected = nextProps.myBevies[1];
     }
     this.setState({
       selected: selected
@@ -270,14 +270,14 @@ var BevyPickerView = React.createClass({
   },
 
   getInitialState() {
-    var bevies = this.props.allBevies;
+    var bevies = this.props.myBevies;
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(bevies)
     };
   },
 
   componentWillReceiveProps(nextProps) {
-    var bevies = nextProps.allBevies;
+    var bevies = nextProps.myBevies;
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(bevies)
     });

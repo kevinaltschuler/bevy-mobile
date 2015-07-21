@@ -24,20 +24,20 @@ var BEVY = constants.BEVY;
 
 var BevyList = React.createClass({
   propTypes: {
-    allBevies: React.PropTypes.array,
+    myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
     menuActions: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allBevies)
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.myBevies)
     };
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.allBevies)
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.myBevies)
     });
   },
 

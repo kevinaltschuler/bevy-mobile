@@ -76,9 +76,11 @@ exports.BEVY = {
   ADD_USER: 'bevy_add_user',
 
   FETCH: 'bevy_fetch',
+  FETCH_PUBLIC: 'bevy_fetch_public',
 
   CHANGE_ALL: 'bevy_change_all',
-  CHANGE_ONE: 'bevy_change_one'
+  CHANGE_ONE: 'bevy_change_one',
+  SWITCHED: 'bevy_switched'
 };
 
 exports.CHAT = {

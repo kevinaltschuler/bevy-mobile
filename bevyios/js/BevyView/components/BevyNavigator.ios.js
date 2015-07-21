@@ -115,7 +115,7 @@ var BevyView = React.createClass({
 var BevyNavigator = React.createClass({
 
   propTypes: {
-    allBevies: React.PropTypes.array,
+    myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
     allPosts: React.PropTypes.array
   },

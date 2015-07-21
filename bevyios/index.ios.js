@@ -68,6 +68,13 @@ var POST = constants.POST;
 var CHAT = constants.CHAT;
 var NOTIFICATION = constants.NOTIFICATION;
 
+var change_all_events = [
+  POST.CHANGE_ALL,
+  BEVY.CHANGE_ALL,
+  NOTIFICATION.CHANGE_ALL,
+  CHAT.CHANGE_ALL
+].join(' ');
+
 var BevyStore = require('./js/BevyView/BevyStore');
 var PostStore = require('./js/post/PostStore');
 var ChatStore = require('./js/ChatView/ChatStore');
@@ -82,51 +89,82 @@ var bevyios = React.createClass({
 
     StatusBarIOS.setStyle(1);
       
+    return _.extend({},
+      this.getBevyState(),
+      this.getPostState(),
+      this.getChatState(),
+      this.getNotificationState()
+    );
+  },
+
+  getBevyState() {
     return {
-      allBevies: BevyStore.getAll(),
+      myBevies: BevyStore.getMyBevies(),
       activeBevy: BevyStore.getActive(),
-      allPosts: PostStore.getAll(),
-      allThreads: ChatStore.getAll(),
+      publicBevies: BevyStore.getPublicBevies()
+    };
+  },
+
+  getPostState() {
+    return {
+      allPosts: PostStore.getAll()
+    };
+  },
+
+  getChatState() {
+    return {
+      allThreads: ChatStore.getAll()
+    };
+  },
+
+  getNotificationState() {
+    return {
       allNotifications: NotificationStore.getAll()
     };
   },
 
   componentDidMount() {
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+    BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
+    BevyStore.on(CHAT.CHANGE_ALL, this._onChatChange);
+    BevyStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
+
+    PostStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     PostStore.on(POST.CHANGE_ALL, this._onPostChange);
+    PostStore.on(CHAT.CHANGE_ALL, this._onChatChange);
+    PostStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
+
+    ChatStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+    ChatStore.on(POST.CHANGE_ALL, this._onPostChange);
     ChatStore.on(CHAT.CHANGE_ALL, this._onChatChange);
+    ChatStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
+
+    NotificationStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+    NotificationStore.on(POST.CHANGE_ALL, this._onPostChange);
+    NotificationStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
   },
 
   componentWillUnmount() {
-    BevyStore.off(BEVY.CHANGE_ALL, this._onBevyChange);
-    PostStore.off(POST.CHANGE_ALL, this._onPostChange);
-    ChatStore.off(CHAT.CHANGE_ALL, this._onChatChange);
-    NotificationStore.off(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
+    BevyStore.off(change_all_events);
+    PostStore.off(change_all_events);
+    ChatStore.off(change_all_events);
+    NotificationStore.off(change_all_events);
 
     AppActions.unload();
   },
 
   _onBevyChange() {
-    this.setState({
-      allBevies: BevyStore.getAll(),
-      activeBevy: BevyStore.getActive()
-    });
+    this.setState(_.extend(this.state, this.getBevyState()));
   },
   _onPostChange() {
-    this.setState({
-      allPosts: PostStore.getAll()
-    });
+    this.setState(_.extend(this.state, this.getPostState()));
   },
   _onChatChange() {
-    this.setState({
-      allThreads: ChatStore.getAll()
-    });
+    this.setState(_.extend(this.state, this.getChatState()));
   },
   _onNotificationChange() {
-    this.setState({
-      allNotifications: NotificationStore.getAll()
-    });
+    this.setState(_.extend(this.state, this.getNotificationState()));
   },
 
   render() {
