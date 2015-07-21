@@ -41,10 +41,16 @@ var Navbar = React.createClass({
       },
       styleBottom: {
         backgroundColor: '#fff',
-        height: 48,
+        height: 40,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        shadowColor: 'black',
+        shadowOpacity: 0.5,
+        shadowRadius: 1,
+        shadowOffset: { width: 0, height: 0 },
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd'
       },
       center: 'Default',
       left: <View />,
