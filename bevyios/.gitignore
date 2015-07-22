@@ -1,6 +1,6 @@
 # OSX
 #
-.DS_Store
+*.DS_Store
 
 # Xcode
 #
@@ -27,4 +27,6 @@ project.xcworkspace
 node_modules/
 npm-debug.log
 
-iOS/AppDelegate.m
+/iOS/AppDelegate.m
+/iOS/main.jsbundle
+*.jsbundle
