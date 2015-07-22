@@ -192,13 +192,19 @@ _.extend(PostStore, {
         break;
 
       case BEVY.SWITCH:
+        Dispatcher.waitFor([BevyStore.dispatchToken]);
+        var super_id = BevyStore.activeSuper;
+        var sub_id = BevyStore.activeSub;
 
-        var bevy_id = payload.bevy_id;
-
-        if(bevy_id == -1)
+        if(super_id == -1)
           this.posts.url = constants.apiurl + '/users/' + constants.getUser()._id + '/posts';
-        else
-          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
+        else if (sub_id == -1) {
+          this.posts.url = constants.apiurl + '/bevies/' + super_id + '/posts';
+        } else {
+          this.posts.url = constants.apiurl + '/bevies/' + sub_id + '/posts';
+        }
+
+        console.log(this.posts.url);
 
         this.posts.fetch({
           reset: true,

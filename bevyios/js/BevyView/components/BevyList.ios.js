@@ -35,17 +35,29 @@ var BevyList = React.createClass({
   },
 
   getInitialState() {
+
+    // get parent bevies
+    var bevies = _.filter(this.props.myBevies, function(bevy) {
+      return bevy.parent == null;
+    });
+
     return {
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.myBevies),
+      bevies: bevies,
       subBevies: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows([]),
       activeBevyHeaderOpen: false
     };
   },
 
   componentWillReceiveProps(nextProps) {
+
+    // get parent bevies
+    var bevies = _.filter(nextProps.myBevies, function(bevy) {
+      return bevy.parent == null;
+    });
+
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.myBevies),
-      subBevies: this.state.dataSource.cloneWithRows([])
+      bevies: bevies,
+      subBevies: this.state.subBevies.cloneWithRows([])
     });
   },
 
@@ -85,9 +97,9 @@ var BevyList = React.createClass({
           }
           content={
             <View style={ styles.bevyList }>
-              { _.map(this.props.myBevies, function(bevy) {
+              { _.map(this.state.bevies, function(bevy) {
                 // dont render active bevy
-                if(bevy._id == this.props.activeBevy._id) return <View />;
+                if(bevy._id == this.props.activeBevy._id) return null;
 
                 return (
                   <TouchableHighlight 

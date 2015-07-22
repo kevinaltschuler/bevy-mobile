@@ -57,7 +57,9 @@ _.extend(BevyStore, {
   myBevies: new Bevies,
   publicBevies: new Bevies,
 
-  active: -1, // id of the active bevy. by default set it to the frontpage
+  activeSub: -1, // id of active subbevy
+  activeSuper: -1, // id of active superbevy
+  subBevies: new Bevies, // sub bevies of the active bevy
 
   // handle calls from the dispatcher
   // these are created from BevyActions.js
@@ -101,6 +103,35 @@ _.extend(BevyStore, {
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });
+
+        break;
+
+      case BEVY.SWITCH:
+        var bevy_id = payload.bevy_id;
+
+        // look for it in my bevies
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) {
+          // not found. try looking in the public bevy list
+          bevy = this.publicBevies.get(bevy_id);
+          if(bevy == undefined) {
+            // not found in public bevies
+            break;
+          }
+        }
+
+        if(bevy.get('parent') == null) {
+          // is a superbevy
+          this.activeSuper = bevy.get('_id');
+          this.activeSub = -1;
+        } else {
+          // is a subbevy
+          this.activeSuper = bevy.get('parent');
+          this.activeSub = bevy.get('_id');
+        }
+
+        this.trigger(BEVY.CHANGE_ALL);
+        this.trigger(BEVY.SWITCHED);
 
         break;
 
@@ -295,16 +326,7 @@ _.extend(BevyStore, {
 
         break;
 
-      case BEVY.SWITCH:
-        
-        var bevy_id = payload.bevy_id;
-
-        this.active = bevy_id;
-
-        this.trigger(BEVY.CHANGE_ALL);
-        this.trigger(BEVY.SWITCHED);
-
-        break;
+      
 
       case BEVY.INVITE:
         /*var bevy = payload.bevy;
@@ -435,18 +457,17 @@ _.extend(BevyStore, {
   },
 
   getActive: function() {
-    // try to get from myBevies first
-    var bevy = this.myBevies.get(this.active || -1);
-    if(bevy == undefined) {
-      // now try to get from publicBevies
-      bevy = this.publicBevies.get(this.active);
-    }
-    if(bevy == undefined) {
-      // if still not found, return empty object
-      return {};
+    var bevy;
+    if(this.activeSub == -1) {
+      // get a superbevy
+      bevy = this.myBevies.get(this.activeSuper) || this.publicBevies.get(this.activeSuper);
     } else {
-      return bevy.toJSON();
+      // get a subbevy
+      bevy = this.subBevies.get(this.activeSub);
     }
+    //console.log(bevy);
+    if(bevy == undefined) return {};
+    else return bevy.toJSON();
   },
 
   getBevy: function(bevy_id) {
