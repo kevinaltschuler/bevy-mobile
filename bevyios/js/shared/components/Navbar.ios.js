@@ -18,7 +18,7 @@ var {
 
 var SideMenu = require('react-native-side-menu');
 var BevyListButton = require('./BevyListButton.ios.js');
-var BevyList = require('./../../BevyView/components/BevyList.ios.js');
+var BevyList = require('./../../bevy/components/BevyList.ios.js');
 
 var window = require('Dimensions').get('window');
 var StatusBarSizeIOS = require('react-native-status-bar-size');

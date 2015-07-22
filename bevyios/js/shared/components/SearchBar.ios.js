@@ -17,10 +17,10 @@ var _ = require('underscore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var routes = require('./../../routes');
 var constants = require('./../../constants');
-var BevyStore = require('./../../BevyView/BevyStore');
+var BevyStore = require('./../../bevy/BevyStore');
 var BEVY = constants.BEVY;
 
-var BevyList = require('./../../BevyView/components/BevyList.ios.js');
+var BevyList = require('./../../bevy/components/BevyList.ios.js');
 var BevyListButton = require('./BevyListButton.ios.js');
 var BackButton = require('./BackButton.ios.js');
 var SideMenu = require('react-native-side-menu');

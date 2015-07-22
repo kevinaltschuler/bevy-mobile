@@ -75,7 +75,7 @@ var change_all_events = [
   CHAT.CHANGE_ALL
 ].join(' ');
 
-var BevyStore = require('./js/BevyView/BevyStore');
+var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');
 var ChatStore = require('./js/ChatView/ChatStore');
 var FileStore = require('./js/File/FileStore');

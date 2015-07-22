@@ -17,7 +17,7 @@ var {
   TabBarIOS
 } = require('react-native-icons');
 
-var BevyNavigator = require('./../../BevyView/components/BevyNavigator.ios.js');
+var BevyNavigator = require('./../../bevy/components/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../ChatView/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../NotificationView/components/NotificationNavigator.ios.js');
 var ProfileNavigator = require('./../../ProfileView/components/ProfileNavigator.ios.js');

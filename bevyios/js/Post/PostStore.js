@@ -29,7 +29,7 @@ var CHAT = constants.CHAT;
 var APP = constants.APP;
 
 var PostActions = require('./PostActions');
-var BevyStore = require('./../BevyView/BevyStore');
+var BevyStore = require('./../bevy/BevyStore');
 
 var tagRegex = /#\w+/g;
 

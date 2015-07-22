@@ -16,7 +16,7 @@ var _ = require('underscore');
 
 var constants = require('./../constants');
 
-var BevyStore = require('./../BevyView/BevyStore');
+var BevyStore = require('./../bevy/BevyStore');
 
 // backbone model
 var Post = Backbone.Model.extend({

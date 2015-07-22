@@ -13,7 +13,7 @@ var {
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
-var BevyActions = require('./../../BevyView/BevyActions');
+var BevyActions = require('./../../bevy/BevyActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var SearchView = React.createClass({
