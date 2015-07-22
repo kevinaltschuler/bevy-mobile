@@ -9,7 +9,7 @@ var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 var APP = constants.APP;
 
-var ChatStore = require('./../ChatView/ChatStore');
+var ChatStore = require('./../chat/ChatStore');
 
 var Notifications = require('./NotificationCollection');
 

@@ -77,9 +77,9 @@ var change_all_events = [
 
 var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');
-var ChatStore = require('./js/ChatView/ChatStore');
+var ChatStore = require('./js/chat/ChatStore');
 var FileStore = require('./js/File/FileStore');
-var NotificationStore = require('./js/NotificationView/NotificationStore');
+var NotificationStore = require('./js/notification/NotificationStore');
 
 var AppActions = require('./js/app/AppActions');
 
