@@ -30,7 +30,10 @@ var BEVY = constants.BEVY;
 var BevyList = React.createClass({
   propTypes: {
     myBevies: React.PropTypes.array,
+    subBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
+    activeSuper: React.PropTypes.object,
+    activeSub: React.PropTypes.object,
     menuActions: React.PropTypes.object
   },
 
@@ -43,7 +46,6 @@ var BevyList = React.createClass({
 
     return {
       bevies: bevies,
-      subBevies: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows([]),
       activeBevyHeaderOpen: false
     };
   },
@@ -56,8 +58,7 @@ var BevyList = React.createClass({
     });
 
     this.setState({
-      bevies: bevies,
-      subBevies: this.state.subBevies.cloneWithRows([])
+      bevies: bevies
     });
   },
 
@@ -84,7 +85,7 @@ var BevyList = React.createClass({
           header={
             <View style={ styles.activeBevy }>
               <Text style={ styles.activeBevyText }>
-                { this.props.activeBevy.name }
+                { this.props.activeSuper.name }
               </Text>
               {/* TODO: @kevin CSS animate this chevron? */}
               <Icon
@@ -164,24 +165,28 @@ var BevyList = React.createClass({
           </TouchableHighlight>
         </View>
 
+        <View style={ styles.bevyList }>
+          { _.map(this.props.subBevies, function(subBevy) {
+            var active = (subBevy._id == this.props.activeSub._id);
+            var bevyItemStyles = [styles.bevyItem];
+            if(active) bevyItemStyles.push(styles.bevyItemActive);
+            return (
+              <TouchableHighlight 
+                style={bevyItemStyles}
+                onPress={() => {
+                  BevyActions.switchBevy(subBevy._id);
+                  // close the side menu
+                  this.props.menuActions.close();
+                }}
+              >
+                <Text style={styles.bevyItemText}>
+                  { subBevy.name }
+                </Text>
+              </TouchableHighlight>
+            );
+          }.bind(this)) }
+        </View>
 
-        <ListView
-          dataSource={ this.state.subBevies }
-          style={ styles.bevyList }
-          renderRow={(bevy) => (
-            <TouchableHighlight 
-              style={styles.rowContainer}
-              onPress={() => {
-                BevyActions.switchBevy(bevy._id);
-                this.props.menuActions.close();
-              }}
-            >
-              <Text style={styles.whiteText}>
-                { bevy.name }
-              </Text>
-            </TouchableHighlight>
-          )}
-        />
       </View>
     );
   }
@@ -224,6 +229,9 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10
+  },
+  bevyItemActive: {
+    backgroundColor: '#444'
   },
   bevyAddItem: {
     flexDirection: 'row',

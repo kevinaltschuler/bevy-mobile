@@ -100,7 +100,10 @@ var bevyios = React.createClass({
   getBevyState() {
     return {
       myBevies: BevyStore.getMyBevies(),
+      subBevies: BevyStore.getSubBevies(),
       activeBevy: BevyStore.getActive(),
+      activeSuper: BevyStore.getActiveSuper(),
+      activeSub: BevyStore.getActiveSub(),
       publicBevies: BevyStore.getPublicBevies()
     };
   },

@@ -187,8 +187,7 @@ var SearchBarWrapper = React.createClass({
 
     var bevyList = (
       <BevyList 
-        myBevies={ this.props.myBevies }
-        activeBevy={ this.props.activeBevy }
+        { ...this.props }
       />
     );
 

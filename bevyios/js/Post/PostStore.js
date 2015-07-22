@@ -204,8 +204,6 @@ _.extend(PostStore, {
           this.posts.url = constants.apiurl + '/bevies/' + sub_id + '/posts';
         }
 
-        console.log(this.posts.url);
-
         this.posts.fetch({
           reset: true,
           success: function(posts, response, options) {
