@@ -23,7 +23,8 @@ var PostList = require('./../../post/components/PostList.ios.js');
 var Accordion = require('react-native-accordion');
 
 var StatusBarSizeIOS = require('react-native-status-bar-size');
-var constants = require('./../../constants.js');
+var constants = require('./../../constants');
+var routes = require('./../../routes');
 var BevyActions = require('./../BevyActions');
 var BEVY = constants.BEVY;
 
@@ -80,7 +81,7 @@ var BevyList = React.createClass({
         <TouchableHighlight
           style={ styles.subBeviesAdd }
           onPress={() => {
-
+            this.props.mainNavigator.jumpTo(routes.MAIN.NEWBEVY);
           }}
         >
           <Icon
@@ -122,7 +123,8 @@ var BevyList = React.createClass({
           var bevyItemStyles = [styles.bevyItem];
           if(active) bevyItemStyles.push(styles.bevyItemActive);
           return (
-            <TouchableHighlight 
+            <TouchableHighlight
+              key={ 'bevylist:' + subBevy._id }
               style={bevyItemStyles}
               onPress={() => {
                 BevyActions.switchBevy(subBevy._id);
@@ -178,6 +180,7 @@ var BevyList = React.createClass({
 
                 return (
                   <TouchableHighlight 
+                    key={ 'bevylist:' + bevy._id }
                     style={styles.bevyItem}
                     onPress={() => {
                       BevyActions.switchBevy(bevy._id);
