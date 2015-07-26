@@ -6,6 +6,7 @@
  'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -31,6 +32,37 @@ var Post = React.createClass({
       sum += vote.score;
     });
     return sum;
+  },
+
+  _renderPostImage() {
+    if(_.isEmpty(this.props.post.images)) {
+      return <View />;
+    }
+    var imageCount = this.props.post.images.length;
+    var imageCountText = (imageCount > 1) 
+    ? (
+      <Text style={ styles.postImageCountText }>
+        + { imageCount - 1 } more
+      </Text>
+    )
+    : null;
+
+    return (
+      <TouchableHighlight
+        underlayColor='rgba(0,0,0,0.1)'
+        onPress={() => {
+          
+        }}
+      >
+        <Image
+          style={ styles.postImage }
+          source={{ uri: this.props.post.images[0] }}
+          resizeMode='cover'
+        >
+          { imageCountText }
+        </Image>
+      </TouchableHighlight>
+    );
   },
 
   render: function() {
@@ -60,6 +92,8 @@ var Post = React.createClass({
           <View style={styles.bodyImages}>
           </View>
         </View>
+
+        { this._renderPostImage() }
 
         <View style={styles.postActionsRow}>
           <TouchableHighlight 
@@ -150,6 +184,7 @@ var styles = StyleSheet.create({
     fontSize: 10,
     color: '#282929'
   },
+
   body: {
     flexDirection: 'column',
     marginTop: 10,
@@ -158,8 +193,22 @@ var styles = StyleSheet.create({
     paddingRight: 8
   },
   bodyText: {
-    fontSize: 10,
+    fontSize: 13,
     color: '#282929'
+  },
+
+  postImage: {
+    height: 75,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end'
+  },
+  postImageCountText: {
+    marginTop: 5,
+    marginRight: 10,
+    backgroundColor: 'rgba(0,0,0,0)',
+    color: '#eee',
+    fontSize: 17
   },
 
   postActionsRow: {
