@@ -63,7 +63,7 @@ var SearchBar = React.createClass({
 
   onSearchFocus() {
     if(this.state.activeRoute.name === routes.SEARCH.OUT.name) {
-      this.props.navigator.jumpTo(routes.SEARCH.IN);
+      this.props.navigator.push(routes.SEARCH.IN);
       this.setState({
         activeRoute: routes.SEARCH.IN
       });
@@ -81,7 +81,7 @@ var SearchBar = React.createClass({
         color='#fff'
         onPress={() => {
           this.refs.search.blur();
-          this.props.navigator.jumpTo(routes.SEARCH.OUT);
+          this.props.navigator.pop();
           this.setState({
             activeRoute: routes.SEARCH.OUT
           });
@@ -150,7 +150,9 @@ var SearchNavigator = React.createClass({
             { ...this.props } 
           /> 
         }
-        initialRouteStack={ _.toArray(routes.SEARCH) }
+        initialRouteStack={[
+          routes.SEARCH.OUT
+        ]}
         initialRoute={ routes.SEARCH.OUT } // start out of search view
         renderScene={(route, navigator) => {
           var view;

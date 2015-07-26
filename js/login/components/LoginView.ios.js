@@ -43,11 +43,11 @@ var LoginView = React.createClass({
   },
 
   toRegister: function() {
-    this.props.loginNavigator.jumpTo(routes.LOGIN.REGISTER);
+    this.props.loginNavigator.push(routes.LOGIN.REGISTER);
   },
 
   toForgotPass: function() {
-    this.props.loginNavigator.jumpTo(routes.LOGIN.FORGOT);
+    this.props.loginNavigator.push(routes.LOGIN.FORGOT);
   },
 
   handleSubmit: function() {
@@ -62,7 +62,7 @@ var LoginView = React.createClass({
 
         AppActions.load();
 
-        this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+        this.props.mainNavigator.popToRoute(routes.MAIN.TABBAR);
 
         this.setState({
           email: '',
@@ -101,7 +101,7 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+            this.props.mainNavigator.popToRoute(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',
@@ -186,7 +186,7 @@ var LoginView = React.createClass({
 
             AppActions.load();
 
-            this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+            this.props.mainNavigator.popToRoute(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',

@@ -28,7 +28,7 @@ var Navbar = React.createClass({
   },
 
   goBack: function() {
-    this.props.loginNavigator.jumpTo(routes.LOGIN.LOGIN);
+    this.props.loginNavigator.pop();
   },
 
   render: function() {
@@ -107,7 +107,9 @@ var LoginNavigator = React.createClass({
       <Navigator
         navigator={ this.props.mainNavigator }
         initialRoute={routes.LOGIN.LOGIN}
-        initialRouteStack={ _.toArray(routes.LOGIN) }
+        initialRouteStack={[
+          routes.LOGIN.LOGIN
+        ]}
         renderScene={(route, navigator) => 
           <MainView
             loginRoute={ route }

@@ -62,7 +62,9 @@ var NewPostView = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRouteStack={ _.toArray(routes.NEWPOST) }
+        initialRouteStack={[
+          routes.NEWPOST.INPUT
+        ]}
         initialRoute={ routes.NEWPOST.INPUT }
         renderScene={(route, navigator) => {
           switch(route.name) {
@@ -153,7 +155,7 @@ var InputView = React.createClass({
               underlayColor={'rgba(0,0,0,0)'}
               onPress={() => {
                 this.refs.input.blur();
-                this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+                this.props.mainNavigator.pop();
               }}
               style={ styles.navButtonLeft }>
               <Text style={ styles.navButtonTextLeft }>
@@ -181,7 +183,7 @@ var InputView = React.createClass({
                 );
                 this.refs.input.setNativeProps({ text: '' }); // clear text
                 this.refs.input.blur(); // unfocus text field
-                this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR); // navigate back to main tab bar
+                this.props.mainNavigator.pop(); // navigate back to main tab bar
               }}
               style={ styles.navButtonRight }>
               <Text style={ styles.navButtonTextRight }>
@@ -197,7 +199,7 @@ var InputView = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
-                this.props.newPostNavigator.jumpTo(routes.NEWPOST.BEVYPICKER);
+                this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER);
               }}
               style={ styles.toBevyPicker }
             >
@@ -303,7 +305,7 @@ var BevyPickerView = React.createClass({
               <TouchableHighlight
                 underlayColor={'rgba(0,0,0,0)'}
                 onPress={() => {
-                  this.props.newPostNavigator.jumpTo(routes.NEWPOST.INPUT);
+                  this.props.newPostNavigator.pop();
                 }}
                 style={ styles.navButtonLeft }>
                 <Text style={ styles.navButtonTextLeft }>
@@ -322,7 +324,7 @@ var BevyPickerView = React.createClass({
               <TouchableHighlight
                 underlayColor={'rgba(0,0,0,0)'}
                 onPress={() => {
-                  this.props.newPostNavigator.jumpTo(routes.NEWPOST.INPUT);
+                  this.props.newPostNavigator.pop();
                 }}
                 style={ styles.navButtonRight }>
                 <Text style={ styles.navButtonTextRight }>

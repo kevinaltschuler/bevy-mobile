@@ -38,7 +38,6 @@ var ForgotView = React.createClass({
       else {
         this.setState({ subTitle: 'email sent!' });
       }
-      
     });
   },
 

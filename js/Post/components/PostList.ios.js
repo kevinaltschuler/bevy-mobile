@@ -84,10 +84,6 @@ var PostList = React.createClass({
     PostActions.fetch(this.props.activeBevy);
   },
 
-  onNewPost() {
-    this.props.mainNavigator.jumpTo(routes.MAIN.NEWPOST);
-  },
-
   _renderHeader() {
     var indicator;
     if(this.state.isRefreshing) {
@@ -101,7 +97,9 @@ var PostList = React.createClass({
       <View style={ styles.postListHeader }>
         { indicator }
         <NewPostCard 
-          onPress={ this.onNewPost }
+          onPress={() => {
+            this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+          }}
         />
       </View>
     );

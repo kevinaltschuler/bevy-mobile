@@ -42,7 +42,7 @@ var CreateBevyView = React.createClass({
       // switch bevies
       BevyActions.switchBevy(bevy._id);
       // navigate back
-      this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+      this.props.mainNavigator.pop();
 
       this.setState({
         creating: false
@@ -143,7 +143,8 @@ var CreateBevyView = React.createClass({
                 // blur all text inputs
                 this.refs.bevyName.blur();
                 this.refs.description.blur();
-                this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+                //this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+                this.props.mainNavigator.pop();
               }}
               style={ styles.navButtonLeft }>
               <Text style={ styles.navButtonTextLeft }>
