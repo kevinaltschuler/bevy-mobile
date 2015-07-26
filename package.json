@@ -10,6 +10,7 @@
     "backbone": "^1.2.1",
     "flux": "^2.0.3",
     "react-native": "^0.8.0",
+    "react-native-accordion": "^0.2.1",
     "react-native-icons": "0.2.0",
     "react-native-image-picker": "^0.2.1",
     "react-native-keyboardevents": "^0.4.4",
