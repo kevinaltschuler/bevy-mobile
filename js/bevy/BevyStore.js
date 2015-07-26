@@ -162,7 +162,7 @@ _.extend(BevyStore, {
 
         var user = constants.getUser();
 
-        var newBevy = this.bevies.add({
+        var newBevy = this.myBevies.add({
           name: name,
           description: description,
           image_url: image_url,
@@ -170,14 +170,14 @@ _.extend(BevyStore, {
           admins: [ user._id ]
         });
 
+        console.log(newBevy.toJSON());
+
         newBevy.save(null, {
           success: function(model, response, options) {
             // success
             newBevy.set('_id', model.id);
 
-            // switch to new bevy
-
-            
+            this.trigger(BEVY.CREATED, newBevy.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });

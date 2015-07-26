@@ -153,7 +153,7 @@ var BevyList = React.createClass({
         <Accordion
           ref='activeBevy'
           onPress={() => {
-            console.log('pressed');
+            //console.log('pressed');
             this.setState({
               activeBevyHeaderOpen: !this.state.activeBevyHeaderOpen
             });

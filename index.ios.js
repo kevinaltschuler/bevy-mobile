@@ -45,6 +45,8 @@ Backbone.sync = function(method, model, options) {
   };
   method = methodMap[method];
 
+  console.log(url, method);
+
   return fetch(url, {
     method: method,
     headers: headers,

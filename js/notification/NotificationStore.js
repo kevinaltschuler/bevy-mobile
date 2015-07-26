@@ -38,7 +38,7 @@ _.extend(NotificationStore, {
         this.MAX_WAITING_TIME = 15000;// in ms
 
         var getJSON = function(params) {
-          console.log('start long poll');
+          //console.log('start long poll');
 
           var wrappedPromise = {};
           var promise = new Promise(function (resolve, reject) {
@@ -65,7 +65,7 @@ _.extend(NotificationStore, {
           });
 
           this.timeoutId = setTimeout(function () {
-            console.log('timeout');
+            //console.log('timeout');
             // reject on timeout
             wrappedPromise.reject(new Error('Load timeout for resource: ' + params.url)); 
           }, this.MAX_WAITING_TIME);
@@ -94,7 +94,7 @@ _.extend(NotificationStore, {
             // on success
             poll();
             //console.log('JSON parsed successfully!');
-            //console.log(data);
+            console.log(data);
 
             // play audio/vibrate phone
             switch(response.type) {

@@ -16,19 +16,54 @@ var {
 
 var routes = require('./../../routes');
 var constants = require('./../../constants');
+var BEVY = constants.BEVY;
 var BevyActions = require('./../BevyActions');
+var BevyStore = require('./../BevyStore');
 var FileActions = require('./../../File/FileActions');
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var ReadImageData = require('NativeModules').ReadImageData;
 var Navbar = require('./../../shared/components/Navbar.ios.js');
+var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 
 var CreateBevyView = React.createClass({
 
   getInitialState() {
     return {
-      bevyImage: ''
+      bevyImage: '',
+      name: '',
+      description: '',
+      creating: false
     };
+  },
+
+  componentDidMount() {
+    BevyStore.on(BEVY.CREATED, (bevy) => {
+      // switch bevies
+      BevyActions.switchBevy(bevy._id);
+      // navigate back
+      this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
+
+      this.setState({
+        creating: false
+      });
+    });
+  },
+
+  componentWillUnmount() {
+     BevyStore.off(BEVY.CREATED);
+  },
+
+  _renderLoadingView() {
+    if(this.state.creating) {
+      return (
+        <View style={ styles.loadingView }>
+          <RefreshingIndicator description='Creating Bevy...'/>
+        </View>
+      );
+    } else {
+      return <View />
+    }
   },
 
   _renderBevyImageButton() {
@@ -86,6 +121,7 @@ var CreateBevyView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
+
         <Navbar 
           styleParent={{
             backgroundColor: '#2CB673',
@@ -126,7 +162,22 @@ var CreateBevyView = React.createClass({
             <TouchableHighlight
               underlayColor={'rgba(0,0,0,0)'}
               onPress={() => {
+                if(_.isEmpty(this.state.name)) return;
+
                 // call action
+                BevyActions.create(
+                  this.state.name, // bevy name
+                  this.state.description, // bevy description
+                  constants.siteurl + '/img/logo_100.png', // bevy image
+                  null // bevy parent
+                );
+
+                // blur all text inputs
+                this.refs.bevyName.blur();
+                this.refs.description.blur();
+                this.setState({
+                  creating: true
+                });
               }}
               style={ styles.navButtonRight }>
               <Text style={ styles.navButtonTextRight }>
@@ -139,14 +190,18 @@ var CreateBevyView = React.createClass({
 
         <View style={ styles.body }>
 
+          { this._renderLoadingView() }
+
           <View style={ styles.top }>
             { this._renderBevyImageButton() }
             <View style={ styles.bevyNameInputWrapper }>
               <TextInput
                 style={ styles.bevyNameInput }
                 ref='bevyName'
-                onChange={() => {
-
+                onChange={(ev) => {
+                  this.setState({
+                    name: ev.nativeEvent.text
+                  });
                 }}
                 placeholder='Bevy Name'
               />
@@ -157,8 +212,10 @@ var CreateBevyView = React.createClass({
             <TextInput
               style={ styles.descriptionInput }
               ref='description'
-              onChange={() => {
-
+              onChange={(ev) => {
+                this.setState({
+                  description: ev.nativeEvent.text
+                });
               }}
               placeholder='Description'
               multiline={ true }
@@ -177,6 +234,13 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column'
+  },
+  loadingView: {
+    marginTop: 20,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   navButtonLeft: {

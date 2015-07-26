@@ -80,7 +80,8 @@ exports.BEVY = {
 
   CHANGE_ALL: 'bevy_change_all',
   CHANGE_ONE: 'bevy_change_one',
-  SWITCHED: 'bevy_switched'
+  SWITCHED: 'bevy_switched',
+  CREATED: 'bevy_created'
 };
 
 exports.CHAT = {
