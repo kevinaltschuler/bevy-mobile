@@ -26,7 +26,7 @@ var constants = require('./../../constants.js');
 var InfoView = React.createClass({
 
   propTypes: {
-    bevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object
   },
 
   handleUpload: function(){
@@ -38,16 +38,13 @@ var InfoView = React.createClass({
   },
 
   render: function () {
-
-    var bevy = this.props.bevy;
-
     return (
       <View style={styles.container}>
         <View style={styles.infoRow} >
           <View style={styles.picButton}>
             <Image 
               style={styles.profileImage}
-              source={{ uri: bevy.image_url }}
+              source={{ uri: this.props.activeBevy.image_url }}
             >
               <TouchableOpacity 
                 activeOpacity={.8}
@@ -65,10 +62,10 @@ var InfoView = React.createClass({
           </View>
           <View style={styles.profileDeetzColumn}>
             <Text style={styles.displayName}>
-              { bevy.name }
+              { this.props.activeBevy.name }
             </Text>
             <Text style={styles.details}>
-              { bevy.description }
+              { this.props.activeBevy.description }
             </Text>
           </View>
         </View>
@@ -85,7 +82,7 @@ var styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     flex: 1,
-    backgroundColor: '#2CB673',
+    backgroundColor: '#eee',
     padding: 10
   },
   row: {
@@ -110,13 +107,11 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   picButton: {
-    width: 110,
-    height: 110,
-    borderRadius: 54,
+    width: 102,
+    height: 102,
+    borderRadius: 51,
     borderWidth: 1,
-    borderColor: 'white',
-    paddingTop: 4,
-    paddingLeft: 4
+    borderColor: '#666',
   },
   cameraTouchable: {
     backgroundColor: 'rgba(0,0,0,0)'
@@ -128,17 +123,15 @@ var styles = StyleSheet.create({
   },
   profileDeetzColumn: {
     marginTop: 10,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     marginLeft: 20
   },
   displayName: {
     fontSize: 24,
-    color: 'white',
-    textAlign: 'center'
+    textAlign: 'left'
   },
   details: {
-    color: 'white',
-    textAlign: 'center'
+    textAlign: 'left'
   },
 })
 

@@ -50,7 +50,7 @@ var BevyView = React.createClass({
       case 'InfoView':
         view = (
           <InfoView
-            bevy={ this.props.activeBevy }
+            { ...this.props }
           />
         );
         break;
@@ -64,36 +64,49 @@ var BevyView = React.createClass({
         break;
     }
     
-    /*var sortMenu = (
+    var sortButton = (this.props.bevyRoute.name == 'PostList')
+    ? (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
+        onPress={() => {
+
+        }}
       >
         <Icon
-          name='ion|ios-minus'
-          size={30}
+          name='fontawesome|sort-amount-desc'
+          size={20}
           color='#666'
-          style={styles.sortMenu}
+          style={{
+            width: 20,
+            height: 20
+          }}
         />
       </TouchableHighlight>
-    );*/
+    )
+    : <View />;
 
     var infoButton = (this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
     ? <View />
     : <InfoButton onPress={() => {
-      this.props.bevyNavigator.jumpTo(routes.BEVY.INFO)
+      this.props.bevyNavigator.push(routes.BEVY.INFO)
     }} />;
 
-    /*var sortAndInfo = (
-      <View>
-        { sortMenu }
+    var right = (
+      <View style={{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-end'
+      }}>
+        { sortButton }
         { infoButton }
       </View>
-    );*/
+    );
 
     var backButton = (this.props.bevyRoute.name == 'PostList')
     ? <View />
     : <BackButton onPress={() => {
-      this.props.bevyNavigator.jumpTo(routes.BEVY.POSTLIST)
+      this.props.bevyNavigator.pop();
     }} />;
 
     return (
@@ -103,7 +116,7 @@ var BevyView = React.createClass({
           bevyNavigator={ this.props.bevyNavigator }
           left={ backButton }
           center={ this.props.activeBevy.name }
-          right={ infoButton }
+          right={ right }
           { ...this.props }
         />
         { view }
@@ -125,7 +138,9 @@ var BevyNavigator = React.createClass({
       <Navigator
         navigator={ this.props.searchNavigator }
         initialRoute={ routes.BEVY.POSTLIST }
-        initialRouteStack={ _.toArray(routes.BEVY) }
+        initialRouteStack={[
+          routes.BEVY.POSTLIST
+        ]}
         renderScene={(route, navigator) => 
           <BevyView
             bevyRoute={ route }
