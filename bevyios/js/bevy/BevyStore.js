@@ -155,43 +155,32 @@ _.extend(BevyStore, {
         break;
 
       case BEVY.CREATE:
-        /*var name = payload.name;
+        var name = payload.name;
         var description = payload.description;
         var image_url = payload.image_url;
+        var parent = payload.parent;
 
-        var user = window.bootstrap.user;
-
-        var members = [];
-
-        // add yerself
-        members.push({
-          email: user.email,
-          user: (_.isEmpty(user)) ? null : user._id,
-          role: 'admin'
-        });
+        var user = constants.getUser();
 
         var newBevy = this.bevies.add({
           name: name,
           description: description,
-          members: members,
-          image_url: image_url
+          image_url: image_url,
+          parent: parent,
+          admins: [ user._id ]
         });
 
         newBevy.save(null, {
           success: function(model, response, options) {
             // success
             newBevy.set('_id', model.id);
-            newBevy.set('members', model.get('members'));
 
-            // switch to bevy
-            router.navigate('/b/' + model.id, { trigger: true });
+            // switch to new bevy
 
-            // update posts
-            BevyActions.switchBevy();
-
+            
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
-        });*/
+        });
 
         break;
 

@@ -16,6 +16,7 @@ var LoginNavigator = require('./../../login/components/LoginNavigator.ios.js');
 var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../shared/components/SearchBar.ios.js');
 var NewPostView = require('./../../post/components/NewPostView.ios.js');
+var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 
 var routes = require('./../../routes');
 
@@ -54,6 +55,18 @@ var MainView = React.createClass({
 
       case routes.MAIN.NEWPOST.name:
         return <NewPostView { ...this.props } />;
+        break;
+
+      case routes.MAIN.NEWBEVY.name:
+        return <CreateBevyView { ...this.props } />;
+        break;
+
+      case routes.MAIN.NEWSUBBEVY.name:
+        return (
+          <CreateBevyView            
+            { ...this.props } 
+          />
+        );
         break;
 
       case routes.MAIN.TABBAR.name:

@@ -5,7 +5,9 @@ var routes = {
     LOADING: { name: 'LoadingView', index: 0 },
     LOGIN: { name: 'LoginNavigator', index: 1 },
     TABBAR: { name: 'MainTabBar', index: 2 },
-    NEWPOST: {name: 'NewPost', index: 3 }
+    NEWPOST: { name: 'NewPost', index: 3 },
+    NEWBEVY: { name: 'NewBevy', index: 4 },
+    NEWSUBBEVY: { name: 'NewSubBevy', index: 5 }
   },
 
   NEWPOST: {

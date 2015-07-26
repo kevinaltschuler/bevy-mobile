@@ -81,7 +81,7 @@ var BevyList = React.createClass({
         <TouchableHighlight
           style={ styles.subBeviesAdd }
           onPress={() => {
-            this.props.mainNavigator.jumpTo(routes.MAIN.NEWBEVY);
+            this.props.mainNavigator.jumpTo(routes.MAIN.NEWSUBBEVY);
           }}
         >
           <Icon
@@ -203,7 +203,7 @@ var BevyList = React.createClass({
               <TouchableHighlight
                 style={ styles.bevyAddItem }
                 onPress={() => {
-
+                  this.props.mainNavigator.jumpTo(routes.MAIN.NEWBEVY);
                 }}
               >
                 <View style={ styles.bevyAdd }>
