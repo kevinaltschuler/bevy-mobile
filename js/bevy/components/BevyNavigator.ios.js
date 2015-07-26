@@ -85,7 +85,7 @@ var BevyView = React.createClass({
     )
     : <View />;
 
-    var infoButton = (this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
+    var infoButton = (_.isEmpty(this.props.activeBevy) || this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
     ? <View />
     : <InfoButton onPress={() => {
       this.props.bevyNavigator.push(routes.BEVY.INFO)
@@ -115,7 +115,7 @@ var BevyView = React.createClass({
           bevyRoute={ this.props.bevyRoute }
           bevyNavigator={ this.props.bevyNavigator }
           left={ backButton }
-          center={ this.props.activeBevy.name }
+          center={ this.props.activeBevy.name || 'Frontpage' }
           right={ right }
           { ...this.props }
         />
