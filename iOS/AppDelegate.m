@@ -38,7 +38,10 @@
    */
 
   //jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
+  // ALBERTS HOUSE
   jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.19:8081/index.ios.bundle"];
+  // KEVINS HOUSE
+  //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.17:8081/index.ios.bundle"];
 
   /**
    * OPTION 2
