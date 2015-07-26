@@ -63,8 +63,9 @@ var MainView = React.createClass({
 
       case routes.MAIN.NEWSUBBEVY.name:
         return (
-          <CreateBevyView            
-            { ...this.props } 
+          <CreateBevyView
+            subBevy={ true }
+            { ...this.props }
           />
         );
         break;

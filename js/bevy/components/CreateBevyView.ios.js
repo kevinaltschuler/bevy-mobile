@@ -28,6 +28,17 @@ var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator
 
 var CreateBevyView = React.createClass({
 
+  propTypes: {
+    activeBevy: React.PropTypes.object,
+    subBevy: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      subBevy: false
+    };
+  },
+
   getInitialState() {
     return {
       bevyImage: '',
@@ -62,7 +73,24 @@ var CreateBevyView = React.createClass({
         </View>
       );
     } else {
-      return <View />
+      return <View />;
+    }
+  },
+
+  _renderSubBevyHeader() {
+    if(this.props.subBevy) {
+      return (
+        <View style={ styles.subBevyHeader }>
+          <Text style={ styles.subBevyFor }>
+            New Subbevy For
+          </Text>
+          <Text style={ styles.subBevyName }>
+            { this.props.activeBevy.name }
+          </Text>
+        </View>
+      );
+    } else {
+      return <View />;
     }
   },
 
@@ -155,7 +183,7 @@ var CreateBevyView = React.createClass({
           center={
             <View style={ styles.navTitle }>
               <Text style={ styles.navTitleText }>
-                New Bevy
+                { (this.props.subBevy) ? 'New Subbevy' : 'New Bevy' }
               </Text>
             </View>
           }
@@ -170,7 +198,7 @@ var CreateBevyView = React.createClass({
                   this.state.name, // bevy name
                   this.state.description, // bevy description
                   constants.siteurl + '/img/logo_100.png', // bevy image
-                  null // bevy parent
+                  (this.props.subBevy) ? this.props.activeBevy._id : null // bevy parent
                 );
 
                 // blur all text inputs
@@ -192,6 +220,8 @@ var CreateBevyView = React.createClass({
         <View style={ styles.body }>
 
           { this._renderLoadingView() }
+
+          { this._renderSubBevyHeader() }
 
           <View style={ styles.top }>
             { this._renderBevyImageButton() }
@@ -242,6 +272,27 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+
+  subBevyHeader: {
+    backgroundColor: '#eee',
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 15,
+    paddingRight: 15
+  },
+  subBevyFor: {
+    marginRight: 10,
+    fontSize: 17,
+    textAlign: 'left'
+  },
+  subBevyName: {
+    flex: 1,
+    textAlign: 'left',
+    color: '#2CB673',
+    fontWeight: 'bold',
+    fontSize: 17
   },
 
   navButtonLeft: {
