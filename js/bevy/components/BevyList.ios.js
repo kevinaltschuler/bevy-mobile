@@ -102,7 +102,7 @@ var BevyList = React.createClass({
     }
 
     return (
-      <View style={ styles.bevyList }>
+      <View style={ styles.subBevyList }>
 
         {/* Home Button */}
         <TouchableHighlight 
@@ -245,7 +245,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderTopWidth: 1,
-    borderTopColor: '#333'
+    borderTopColor: '#333',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333'
   },
   activeBevyText: {
     flex: 1,
@@ -259,9 +261,7 @@ var styles = StyleSheet.create({
   },
 
   bevyList: {
-    flex: 1,
-    borderTopWidth: 1,
-    borderTopColor: '#333'
+    flex: 1
   },
   bevyItem: {
     flexDirection: 'row',
@@ -298,8 +298,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#333'
+    borderBottomWidth: 1,
+    borderBottomColor: '#333'
   },
   subBeviesTitle: {
     flex: 1,
@@ -317,6 +317,10 @@ var styles = StyleSheet.create({
   subBeviesAddIcon: {
     width: 25,
     height: 25
+  },
+  subBevyList: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#333'
   },
 
   title: {
