@@ -5,6 +5,7 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -93,14 +94,19 @@ var PostList = React.createClass({
     } else {
       indicator = <View />
     }
+    var newPostCard = (_.isEmpty(this.props.activeBevy) || _.isEmpty(this.props.allPosts))
+    ? <View />
+    : (
+      <NewPostCard 
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+        }}
+      />
+    );
     return (
       <View style={ styles.postListHeader }>
         { indicator }
-        <NewPostCard 
-          onPress={() => {
-            this.props.mainNavigator.push(routes.MAIN.NEWPOST);
-          }}
-        />
+        { newPostCard }
       </View>
     );
   },
