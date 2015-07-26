@@ -62,7 +62,7 @@ var PostList = React.createClass({
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
     //console.log(scrollY);
     if(this.isTouching) {
-      if(scrollY < -40) {
+      if(scrollY < -60) {
         if(!this.state.isRefreshing) {
           this.setState({
             isRefreshing: true

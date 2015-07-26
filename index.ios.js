@@ -183,9 +183,7 @@ var bevyios = React.createClass({
           configureScene={() => sceneConfig }
           initialRoute={ routes.MAIN.LOADING }
           initialRouteStack={[
-            routes.MAIN.LOADING,
-            routes.MAIN.LOGIN,
-            routes.MAIN.TABBAR
+            routes.MAIN.LOADING
           ]}
           renderScene={(route, navigator) => 
             <MainView 
