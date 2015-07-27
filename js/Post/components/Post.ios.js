@@ -42,6 +42,17 @@ var Post = React.createClass({
     return sum;
   },
 
+  _renderPostTitle() {
+    if(_.isEmpty(this.props.post.title)) return null;
+    return (
+      <View style={styles.body}>
+        <Text style={styles.bodyText}>
+          { this.props.post.title }
+        </Text>
+      </View>
+    );
+  },
+
   _renderImageOverlay() {
     if(this.props.post.images.length <= 0) return null;
     return (
@@ -105,13 +116,7 @@ var Post = React.createClass({
           </View>
         </View>
         
-        <View style={styles.body}>
-          <Text style={styles.bodyText}>
-            { post.title }
-          </Text>
-          <View style={styles.bodyImages}>
-          </View>
-        </View>
+        { this._renderPostTitle() }
 
         { this._renderImageOverlay() }
 
@@ -185,7 +190,8 @@ var styles = StyleSheet.create({
   titleRow: {
     flexDirection: 'row',
     paddingLeft: 8,
-    paddingRight: 8
+    paddingRight: 8,
+    marginBottom: 10
   },
   titleImage: {
     width: 40,
@@ -209,7 +215,6 @@ var styles = StyleSheet.create({
 
   body: {
     flexDirection: 'column',
-    marginTop: 10,
     marginBottom: 15,
     paddingLeft: 8,
     paddingRight: 8

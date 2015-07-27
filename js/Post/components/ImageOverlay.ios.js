@@ -34,7 +34,7 @@ var ImageOverlay = React.createClass({
   },
 
   render() {
-    console.log(this.props.images[this.state.imageIndex]);
+    if(!this.state.isVisible) return null;
     return (
       <Modal
         forceToFront={ true }
