@@ -140,13 +140,16 @@ _.extend(PostStore, {
             voter: user._id,
             score: 1
           });
+          post.set('voted', true);
         } else {
           if(vote.score <= 0) {
             // vote found but net score is 0. add one
             vote.score = 1;
+            post.set('voted', true);
           } else {
             // user is un-voting. subtract one
             vote.score = 0;
+            post.set('voted', false);
           }
         }
         post.save({
@@ -154,9 +157,8 @@ _.extend(PostStore, {
         }, {
           patch: true,
           success: function(post, response, options) {
-            console.log('vote success');
             // sort posts
-            this.posts.sort();
+            //this.posts.sort();
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });

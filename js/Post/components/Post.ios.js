@@ -31,8 +31,15 @@ var Post = React.createClass({
 
   getInitialState() {
     return {
-      overlayVisible: false
+      overlayVisible: false,
+      voted: this.props.post.voted
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    //this.setState({
+    //  voted: nextProps.post.voted
+    //});
   },
 
   countVotes: function() {
@@ -99,6 +106,7 @@ var Post = React.createClass({
 
   render: function() {
     var post = this.props.post || {};
+    console.log(this.state.voted);
 
     return (
       <View style={styles.postCard}>
@@ -129,6 +137,9 @@ var Post = React.createClass({
             style={[ styles.actionTouchable, { flex: 2 } ]}
             onPress={() => {
               PostActions.vote(post._id);
+              this.setState({
+                voted: !this.state.voted
+              });
             }}
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>
@@ -136,7 +147,7 @@ var Post = React.createClass({
                 { this.countVotes() }
               </Text>
               <Icon
-                name={ (post.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
+                name={ (this.state.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
                 size={20}
                 color='#757d83'
                 style={styles.actionIcon}
