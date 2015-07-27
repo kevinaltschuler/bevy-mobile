@@ -21,12 +21,23 @@ var ImageOverlay = require('./ImageOverlay.ios.js');
 var Modal = require('react-native-modal');
 
 var constants = require('./../../constants');
+var routes = require('./../../routes');
 var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostActions = require('./../PostActions');
 
 var Post = React.createClass({
   propTypes: {
+    mainRoute: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
+    inCommentView: React.PropTypes.bool,
     post: React.PropTypes.object
+  },
+
+  getDefaultProps() {
+    return {
+      inCommentView: false,
+      post: {}
+    };
   },
 
   getInitialState() {
@@ -105,7 +116,7 @@ var Post = React.createClass({
   },
 
   render: function() {
-    var post = this.props.post || {};
+    var post = this.props.post;
 
     return (
       <View style={styles.postCard}>
@@ -156,6 +167,15 @@ var Post = React.createClass({
           <TouchableHighlight 
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
+            onPress={() => {
+              // go to comment view
+              // return if we're already in comment view
+              if(this.props.inCommentView) return;
+
+              var commentRoute = routes.MAIN.COMMENT;
+              commentRoute.postID = this.props.post._id;
+              this.props.mainNavigator.push(commentRoute);
+            }}
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>
               <Text style={ styles.commentCountText }>
@@ -188,7 +208,6 @@ var Post = React.createClass({
 
 var styles = StyleSheet.create({
   postCard: {
-    flex: 1,
     flexDirection: 'column',
     marginTop: 10,
     marginLeft: 10,
@@ -230,8 +249,8 @@ var styles = StyleSheet.create({
   body: {
     flexDirection: 'column',
     marginBottom: 15,
-    paddingLeft: 8,
-    paddingRight: 8
+    paddingLeft: 15,
+    paddingRight: 15
   },
   bodyText: {
     fontSize: 13,

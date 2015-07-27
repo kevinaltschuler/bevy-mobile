@@ -7,7 +7,8 @@ var routes = {
     TABBAR: { name: 'MainTabBar', index: 2 },
     NEWPOST: { name: 'NewPost', index: 3 },
     NEWBEVY: { name: 'NewBevy', index: 4 },
-    NEWSUBBEVY: { name: 'NewSubBevy', index: 5 }
+    NEWSUBBEVY: { name: 'NewSubBevy', index: 5 },
+    COMMENT: { name: 'Comment', index: 6 }
   },
 
   NEWPOST: {

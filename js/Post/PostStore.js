@@ -46,7 +46,7 @@ _.extend(PostStore, {
 
   // handle calls from the dispatcher
   // these are created from BevyActions.js
-  handleDispatch: function(payload) {
+  handleDispatch(payload) {
     switch(payload.actionType) {
 
       case APP.LOAD:
@@ -241,20 +241,26 @@ _.extend(PostStore, {
     }
   },
 
-  sortByTop: function(post) {
+  sortByTop(post) {
     var score = post.countVotes();
     if(post.get('pinned') && router.bevy_id != -1) score = 9000;
     return -score;
   },
 
-  sortByNew: function(post) {
+  sortByNew(post) {
     var date = Date.parse(post.get('created'));
     if(post.get('pinned') && router.bevy_id != -1) date = new Date('2035', '1', '1');
     return -date;
   },
 
-  getAll: function() {
+  getAll() {
     return this.posts.toJSON();
+  },
+
+  getPost(post_id) {
+    var post = this.posts.get(post_id);
+    if(post == undefined) return {};
+    else return post.toJSON();
   }
 });
 

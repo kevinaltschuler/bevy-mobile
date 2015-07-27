@@ -122,7 +122,12 @@ var PostList = React.createClass({
           onResponderRelease={ this.handleResponderRelease }
           style={ styles.postContainer }
           renderRow={(post) => (
-            <Post key={ 'postlist:' + post._id } post={ post } />
+            <Post 
+              key={ 'postlist:' + post._id } 
+              post={ post } 
+              mainRoute={ this.props.mainRoute }
+              mainNavigator={ this.props.mainNavigator }
+            />
           )}
           renderHeader={ this._renderHeader }
         />
