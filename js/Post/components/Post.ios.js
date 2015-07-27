@@ -128,7 +128,7 @@ var Post = React.createClass({
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
             onPress={() => {
-
+              PostActions.vote(post._id);
             }}
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>

@@ -44,6 +44,15 @@ var Post = Backbone.Model.extend({
     }
   },
 
+  sync(method, model, options) {
+    if(method == 'patch' || method == 'update') {
+      var bevy_id = model.get('bevy');
+      model.url = constants.apiurl + '/bevies/' + bevy_id + '/posts/' + model.id;
+    }
+
+    Backbone.Model.prototype.sync.apply(this, arguments);
+  },
+
   countVotes() {
     var sum = 0;
     this.get('votes').forEach(function(vote) {

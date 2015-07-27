@@ -123,19 +123,43 @@ _.extend(PostStore, {
 
         break;
 
-      case POST.UPVOTE:
+      case POST.VOTE:
         var post_id = payload.post_id;
-        var voter = payload.voter;
+        var post = this.posts.get(post_id);
+        var user = constants.getUser();
+        if(post == undefined) break;
 
-        this.vote(post_id, voter, 1);
+        // cant vote if user is not part of the bevy (DONT DO THIS YET ACTUALLY)
+        //if(!_.contains(user.bevies, post.get('bevy'))) break;
 
-        break;
-
-      case POST.DOWNVOTE:
-        var post_id = payload.post_id;
-        var voter = payload.voter;
-
-        this.vote(post_id, voter, -1);
+        var votes = post.get('votes');
+        var vote = _.findWhere(votes, { voter: user._id });
+        if(vote == undefined) {
+          // vote not found. create one
+          votes.push({
+            voter: user._id,
+            score: 1
+          });
+        } else {
+          if(vote.score <= 0) {
+            // vote found but net score is 0. add one
+            vote.score = 1;
+          } else {
+            // user is un-voting. subtract one
+            vote.score = 0;
+          }
+        }
+        post.save({
+          votes: votes
+        }, {
+          patch: true,
+          success: function(post, response, options) {
+            console.log('vote success');
+            // sort posts
+            this.posts.sort();
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
 
         break;
 
@@ -215,7 +239,7 @@ _.extend(PostStore, {
     }
   },
 
-  vote: function(post_id, voter, value) {
+  /*vote: function(post_id, voter, value) {
     var MAX_VOTES = 5;
     var post = this.posts.get(post_id);
     var votes = post.get('votes');
@@ -253,7 +277,7 @@ _.extend(PostStore, {
         this.posts.sort();
       }.bind(this)
     });
-  },
+  },*/
 
   sortByTop: function(post) {
     var score = post.countVotes();
