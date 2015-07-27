@@ -241,46 +241,6 @@ _.extend(PostStore, {
     }
   },
 
-  /*vote: function(post_id, voter, value) {
-    var MAX_VOTES = 5;
-    var post = this.posts.get(post_id);
-    var votes = post.get('votes');
-
-    if(_.isEmpty(votes)) {
-      // create new voter
-      votes.push({
-        voter: voter._id,
-        score: value
-      });
-    } else {
-      var vote = _.findWhere(votes, { voter: voter._id });
-      if(vote == undefined) {
-        // voter not found, create new voter
-        votes.push({
-          voter: voter._id,
-          score: value
-        });
-      } else {
-        // check if they've exceeded their max votes
-        if(Math.abs(vote.score + value) > MAX_VOTES)
-          return;
-        // add score to existing voter
-        vote.score += value;
-      }
-    }
-    //post.set('votes', votes);
-    // save to server
-    post.save({
-      votes: votes
-    }, {
-      patch: true,
-      success: function(post, response, options) {
-        // sort posts
-        this.posts.sort();
-      }.bind(this)
-    });
-  },*/
-
   sortByTop: function(post) {
     var score = post.countVotes();
     if(post.get('pinned') && router.bevy_id != -1) score = 9000;

@@ -195,6 +195,7 @@ var SearchBarWrapper = React.createClass({
 
     return (
       <SideMenu 
+        animation='easeInOut'
         menu={bevyList}
         ref='menu'
         disableGestures={ true }
@@ -231,7 +232,6 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
-    marginLeft: 20,
     marginRight: 20,
   },
   searchIcon: {
@@ -247,9 +247,8 @@ var styles = StyleSheet.create({
   },
   left: {
     flex: 1,
-    paddingLeft: 20,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     justifyContent: 'flex-start'
   }
 });

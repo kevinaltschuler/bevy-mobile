@@ -106,7 +106,6 @@ var Post = React.createClass({
 
   render: function() {
     var post = this.props.post || {};
-    console.log(this.state.voted);
 
     return (
       <View style={styles.postCard}>
