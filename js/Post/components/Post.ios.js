@@ -22,6 +22,7 @@ var Modal = require('react-native-modal');
 
 var constants = require('./../../constants');
 var timeAgo = require('./../../shared/helpers/timeAgo');
+var PostActions = require('./../PostActions');
 
 var Post = React.createClass({
   propTypes: {
@@ -126,13 +127,16 @@ var Post = React.createClass({
           <TouchableHighlight 
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
+            onPress={() => {
+
+            }}
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>
               <Text style={ styles.pointCountText }>
                 { this.countVotes() }
               </Text>
               <Icon
-                name='fontawesome|thumbs-o-up'
+                name={ (post.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
                 size={20}
                 color='#757d83'
                 style={styles.actionIcon}

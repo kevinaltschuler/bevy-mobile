@@ -27,13 +27,24 @@ var Post = Backbone.Model.extend({
     author: null,
     bevy: null,
     votes: [],
+    voted: false,
     created: new Date(),
     updated: new Date()
   },
 
   idAttribute: '_id',
 
-  countVotes: function() {
+  initialize() {
+    var user = constants.getUser();
+    var vote = _.findWhere(this.get('votes'), { voter: user._id });
+    if(vote == undefined) this.set('voted', false);
+    else {
+      if(vote.score <= 0) this.set('voted', false);
+      else this.set('voted', true);
+    }
+  },
+
+  countVotes() {
     var sum = 0;
     this.get('votes').forEach(function(vote) {
       sum += vote.score;
