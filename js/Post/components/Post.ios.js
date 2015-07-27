@@ -14,16 +14,24 @@ var {
   Image,
   TouchableHighlight
 } = React;
-
 var {
   Icon
 } = require('react-native-icons');
+var ImageOverlay = require('./ImageOverlay.ios.js');
+var Modal = require('react-native-modal');
 
+var constants = require('./../../constants');
 var timeAgo = require('./../../shared/helpers/timeAgo');
 
 var Post = React.createClass({
   propTypes: {
     post: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      overlayVisible: false
+    };
   },
 
   countVotes: function() {
@@ -32,6 +40,16 @@ var Post = React.createClass({
       sum += vote.score;
     });
     return sum;
+  },
+
+  _renderImageOverlay() {
+    if(this.props.post.images.length <= 0) return null;
+    return (
+      <ImageOverlay 
+        images={ this.props.post.images }
+        isVisible={ this.state.overlayVisible } 
+      />
+    );
   },
 
   _renderPostImage() {
@@ -51,7 +69,9 @@ var Post = React.createClass({
       <TouchableHighlight
         underlayColor='rgba(0,0,0,0.1)'
         onPress={() => {
-          
+          this.setState({
+            overlayVisible: true
+          });
         }}
       >
         <Image
@@ -92,6 +112,8 @@ var Post = React.createClass({
           <View style={styles.bodyImages}>
           </View>
         </View>
+
+        { this._renderImageOverlay() }
 
         { this._renderPostImage() }
 
