@@ -115,6 +115,7 @@ var ImageOverlay = React.createClass({
         <Text> </Text>
       </Modal>
     );
+    // empty text ^^^ to stop some obscure context bug in native ios.
   }
 });
 
