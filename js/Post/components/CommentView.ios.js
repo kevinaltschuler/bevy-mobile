@@ -26,6 +26,14 @@ var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostStore = require('./../PostStore');
 var CommentActions = require('./../CommentActions');
 
+var colorMap = [
+  '#97FF80',
+  '#52C0FF',
+  '#9A5DE8',
+  '#FF5757',
+  '#E8A341'
+];
+
 var CommentItem = React.createClass({
   propTypes: {
     comment: React.PropTypes.object,
@@ -62,8 +70,10 @@ var CommentItem = React.createClass({
           }}
           header={
             <View style={[ styles.commentItem, { 
-              paddingLeft: this.props.comment.depth * 10,
-              backgroundColor: (this.state.selected) ? '#eee' : '#fff'
+              //marginLeft: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth - 1) * 3,
+              backgroundColor: (this.state.selected) ? '#eee' : '#fff',
+              borderLeftColor: (this.props.comment.depth == 0) ? 'transparent' : colorMap[(this.props.comment.depth - 1) % colorMap.length],
+              borderLeftWidth: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth) * 5
             }]}>
               <View style={ styles.commentItemTop }>
                 <Text style={ styles.commentItemAuthor }>
