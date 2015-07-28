@@ -298,6 +298,18 @@ var CommentView = React.createClass({
     );
   },
 
+  _renderNoCommentsText() {
+    if(this.state.comments.length <= 0) {
+      return (
+        <Text style={ styles.noCommentsText }>
+          No Comments Yet!
+        </Text>
+      );
+    } else {
+      return null;
+    }
+  },
+
   _renderReplyBar() {
 
     var replyInfo = (_.isEmpty(this.state.replyToComment))
@@ -414,6 +426,7 @@ var CommentView = React.createClass({
               comments={ this.state.comments }
               onReply={ this.onReply }
             />
+            { this._renderNoCommentsText() }
           </View>
         </ScrollView>
 
@@ -517,6 +530,10 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+
+  noCommentsText: {
+    textAlign: 'center'
   },
 
   reply: {
