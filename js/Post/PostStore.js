@@ -27,6 +27,7 @@ var POST = constants.POST;
 var CONTACT = constants.CONTACT;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
+var COMMENT = constants.COMMENT;
 
 var PostActions = require('./PostActions');
 var BevyStore = require('./../bevy/BevyStore');
@@ -237,6 +238,45 @@ _.extend(PostStore, {
           }.bind(this)
         });
 
+        break;
+
+      case COMMENT.CREATE:
+        var body = payload.body;
+        var author_id = payload.author_id;
+        var post_id = payload.post_id;
+        var parent_id = payload.parent_id;
+
+        fetch(constants.apiurl + '/comments', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            body: body,
+            author: author_id,
+            postId: post_id,
+            parentId: parent_id
+          })
+        })
+        .then((res) => {
+          var response = JSON.parse(res._bodyText);
+
+          // add comment to posts collection
+          /*var post = this.posts.get(post_id);
+          var comments = post.get('comments');
+          comments.push({
+            _id: response._id,
+            body: body,
+            author: constants.getUser(),
+            postId: post.toJSON(),
+            parentId: parent_id,
+            created: response.created,
+            updated: response.updated,
+            comments: []
+          });
+          this.trigger(POST.CHANGE_ALL); // custom event for this later?*/
+        });
         break;
     }
   },
