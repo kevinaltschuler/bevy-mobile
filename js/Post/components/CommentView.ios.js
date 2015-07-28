@@ -5,8 +5,10 @@ var {
   ScrollView,
   View,
   Text,
+  TextInput,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 var {
   Icon
@@ -14,15 +16,25 @@ var {
 
 var Post = require('./Post.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
+var Accordion = require('react-native-accordion');
 
 var _ = require('underscore');
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var constants = require('./../../constants');
 var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostStore = require('./../PostStore');
 
 var CommentItem = React.createClass({
   propTypes: {
-    comment: React.PropTypes.object
+    comment: React.PropTypes.object,
+    onReply: React.PropTypes.func
+  },
+
+  getInitialState() {
+    return {
+      selected: false
+    };
   },
 
   _renderCommentList() {
@@ -30,6 +42,7 @@ var CommentItem = React.createClass({
     return (
       <CommentList
         comments={ this.props.comment.comments }
+        onReply={ this.props.onReply }
       />
     );
   },
@@ -37,29 +50,89 @@ var CommentItem = React.createClass({
   render() {
     return (
       <View>
-        <TouchableHighlight
-          style={{ paddingLeft: this.props.comment.depth * 10 }}
+        <Accordion
+          ref='accordion'
           underlayColor='rgba(0,0,0,0.1)'
+          animationDuration={ 200 }
           onPress={() => {
-
+            this.setState({
+              selected: !this.state.selected
+            });
           }}
-        >
-          <View style={[ styles.commentItem ]}>
-            <View style={ styles.commentItemTop }>
-              <Text style={ styles.commentItemAuthor }>
-                { this.props.comment.author.displayName }
-              </Text>
-              <Text style={ styles.commentItemDetails }>
-                { timeAgo(Date.parse(this.props.comment.created)) }
-              </Text>
+          header={
+            <View style={[ styles.commentItem, { 
+              paddingLeft: this.props.comment.depth * 10,
+              backgroundColor: (this.state.selected) ? '#eee' : '#fff'
+            }]}>
+              <View style={ styles.commentItemTop }>
+                <Text style={ styles.commentItemAuthor }>
+                  { this.props.comment.author.displayName }
+                </Text>
+                <Text style={ styles.commentItemDetails }>
+                  { timeAgo(Date.parse(this.props.comment.created)) }
+                </Text>
+              </View>
+              <View style={ styles.commentItemBody }>
+                <Text style={ styles.commentItemBodyText }>
+                  { this.props.comment.body.trim() }
+                </Text>
+              </View>
             </View>
-            <View style={ styles.commentItemBody }>
-              <Text style={ styles.commentItemBodyText }>
-                { this.props.comment.body.trim() }
-              </Text>
+          }
+          content={
+            <View style={ styles.commentItemActions }>
+              <TouchableHighlight
+                underlayColor='rgba(0,0,0,0.1)'
+                onPress={() => {
+                  // bubble this comment up
+                  this.props.onReply(this.props.comment);
+                  // close the accordion
+                  this.refs.accordion.close();
+                  // unselect self
+                  this.setState({
+                    selected: false
+                  });
+                }}
+                style={ styles.commentItemAction }
+              >
+                <Icon
+                  name='ion|ios-undo'
+                  size={ 20 }
+                  color='#fff'
+                  style={{ width: 20, height: 20 }}
+                />
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor='rgba(0,0,0,0.1)'
+                onPress={() => {
+
+                }}
+                style={ styles.commentItemAction }
+              >
+                <Icon
+                  name='ion|ios-person'
+                  size={ 20 }
+                  color='#fff'
+                  style={{ width: 20, height: 20 }}
+                />
+              </TouchableHighlight>
+              <TouchableHighlight
+                underlayColor='rgba(0,0,0,0.1)'
+                onPress={() => {
+
+                }}
+                style={ styles.commentItemAction }
+              >
+                <Icon
+                  name='ion|ios-more'
+                  size={ 20 }
+                  color='#fff'
+                  style={{ width: 20, height: 20 }}
+                />
+              </TouchableHighlight>
             </View>
-          </View>
-        </TouchableHighlight>
+          }
+        />
         <View style={ styles.commentItemComments }>
           { this._renderCommentList() }
         </View>
@@ -70,7 +143,8 @@ var CommentItem = React.createClass({
 
 var CommentList = React.createClass({
   propTypes: {
-    comments: React.PropTypes.array
+    comments: React.PropTypes.array,
+    onReply: React.PropTypes.func
   },
 
   getDefaultProps() {
@@ -85,6 +159,7 @@ var CommentList = React.createClass({
             <CommentItem
               key={ 'comment:' + comment._id }
               comment={ comment }
+              onReply={ this.props.onReply }
             />
           );
         }.bind(this)) }
@@ -101,7 +176,8 @@ var CommentView = React.createClass({
 
   getDefaultProps() {
     return {
-      postID: '-1'
+      postID: '-1',
+      keyboardSpace: 0
     };
   },
 
@@ -111,8 +187,43 @@ var CommentView = React.createClass({
     console.log(comments.length);
     return {
       post: post,
-      comments: comments
+      comments: comments,
+      replyToComment: {}
     };
+  },
+
+  componentDidMount() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
+      this.setState({
+        keyboardSpace: frames.end.height
+      });
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({
+        keyboardSpace: 0
+      });
+    });
+  },
+  
+  componentWillUnmount() {
+
+  },
+
+  onChange() {
+
+  },
+
+  onSubmitEditing() {
+
+  },
+
+  onReply(comment) {
+    // rerender with this comment reply active
+    this.setState({
+      replyToComment: comment
+    });
+    // focus the text field
+    this.refs.reply.focus();
   },
 
   nestComments(comments, parentId, depth) {
@@ -146,6 +257,62 @@ var CommentView = React.createClass({
         inCommentView={ true }
         post={ this.state.post }
       />
+    );
+  },
+
+  _renderReplyBar() {
+
+    var replyInfo = (_.isEmpty(this.state.replyToComment))
+    ? null
+    : (
+      <View style={ styles.replyInfo }>
+        <Text style={ styles.replyingTo }>
+          Replying to...
+        </Text>
+        <Text style={ styles.replyAuthor }>
+          { this.state.replyToComment.author.displayName }:
+        </Text>
+        <Text style={ styles.replyBody }>
+          { this.state.replyToComment.body.trim() }
+        </Text>
+      </View>
+    );
+
+    return (
+      <View style={[ styles.reply, {
+        marginBottom: this.state.keyboardSpace
+      }]}>
+        { replyInfo }
+        <View style={ styles.replyBar }>
+          <TextInput
+            ref='reply'
+            placeholder='Reply'
+            returnKeyType='send'
+            clearButtonMode='while-editing'
+            onChange={ this.onChange }
+            onSubmitEditing={ this.onSubmitEditing }
+            onBlur={() => {
+              // cancel the comment reply if unfocused
+              if(!_.isEmpty(this.state.replyToComment)) {
+                this.setState({
+                  replyToComment: {}
+                });
+              }
+            }}
+            style={ styles.replyInput }
+          />
+          <TouchableOpacity
+            onPress={() => {
+
+            }}
+            style={ styles.replyButton }
+          >
+            <Text style={ styles.replyButtonText }>
+              Post
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   },
 
@@ -198,9 +365,12 @@ var CommentView = React.createClass({
           <View style={ styles.commentsCard }>
             <CommentList
               comments={ this.state.comments }
+              onReply={ this.onReply }
             />
           </View>
         </ScrollView>
+
+        { this._renderReplyBar() }
 
       </View>
     );
@@ -242,8 +412,7 @@ var styles = StyleSheet.create({
 
   scrollView: {
     flex: 1,
-    flexDirection: 'column',
-    marginBottom: 15
+    flexDirection: 'column'
   },
   commentsCard: {
     flexDirection: 'column',
@@ -274,7 +443,7 @@ var styles = StyleSheet.create({
   commentItemAuthor: {
     fontSize: 12,
     fontWeight: 'bold',
-    marginRight: 10
+    marginRight: 5
   },
   commentItemDetails: {
     fontSize: 12
@@ -287,6 +456,81 @@ var styles = StyleSheet.create({
   },
   commentItemComments: {
 
+  },
+
+  commentItemActions: {
+    flexDirection: 'row',
+    height: 36,
+    backgroundColor: '#2CB673',
+    alignItems: 'center',
+  },
+  commentItemAction: {
+    height: 36,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  reply: {
+    flexDirection: 'column',
+    borderTopColor: "#ccc",
+    borderTopWidth: 1
+  },
+  replyInfo: {
+    height: 32,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#2CB673',
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  replyingTo: {
+    fontSize: 12,
+    color: '#fff',
+    marginRight: 5
+  },
+  replyAuthor: {
+    fontSize: 12,
+    color: '#fff',
+    fontWeight: 'bold',
+    marginRight: 5
+  },
+  replyBody: {
+    fontSize: 12,
+    color: '#fff'
+  },
+  replyBar: {
+    backgroundColor: '#fff',
+    height: 46,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 10
+  },
+  replyInput: {
+    flex: 3,
+    color: '#333',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    height: 38,
+    marginTop: 4,
+    paddingLeft: 16,
+    paddingRight: 16
+  },
+  replyButton: {
+    flex: 1,
+    paddingTop: 10,
+    paddingBottom: 10
+  },
+  replyButtonText: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    fontSize: 17,
+    color: '#2CB673',
+    fontWeight: 'bold'
   }
 });
 
