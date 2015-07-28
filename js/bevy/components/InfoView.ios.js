@@ -60,6 +60,7 @@ var InfoView = React.createClass({
               </TouchableOpacity>
             </Image>
           </View>
+
           <View style={styles.profileDeetzColumn}>
             <Text style={styles.displayName}>
               { this.props.activeBevy.name }
@@ -68,9 +69,12 @@ var InfoView = React.createClass({
               { this.props.activeBevy.description }
             </Text>
           </View>
+
         </View>
+
         <View style={styles.actionRow}>
         </View>
+
       </View>
     );
   }
@@ -89,27 +93,34 @@ var styles = StyleSheet.create({
     flexDirection: 'row'
   },
   infoRow: {
+    backgroundColor: '#fff',
     flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 2,
+    shadowColor: 'black',
+    shadowRadius: 1,
+    shadowOpacity: .3,
+    shadowOffset:  {width: 0, height: 0}
   },
   actionRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    width: 300,
     marginTop: 20,
     marginBottom: 10
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center'
   },
   picButton: {
-    width: 102,
-    height: 102,
-    borderRadius: 51,
+    width: 66,
+    height: 66,
+    borderRadius: 33,
     borderWidth: 1,
     borderColor: '#666',
   },
@@ -122,15 +133,17 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0)'
   },
   profileDeetzColumn: {
-    marginTop: 10,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    marginLeft: 20
+    marginLeft: 15
   },
   displayName: {
     fontSize: 24,
     textAlign: 'left'
   },
   details: {
+    fontSize: 17,
     textAlign: 'left'
   },
 })
