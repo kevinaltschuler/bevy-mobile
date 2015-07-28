@@ -32,6 +32,7 @@ var NewPostCard = React.createClass({
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
         onPress={this.onPress}
+        style={ styles.touchContainer }
       >
         <View style={ styles.container }>
           <Image 
@@ -50,15 +51,21 @@ var NewPostCard = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  touchContainer: {
+    shadowColor: 'black',
+    shadowRadius: 1,
+    shadowOpacity: .3,
+    shadowOffset:  {width: 0, height: 0}
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    marginTop: -10,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 10,
     padding: 10,
     borderRadius: 3
   },
