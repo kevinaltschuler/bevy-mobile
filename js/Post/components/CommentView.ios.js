@@ -24,6 +24,7 @@ var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var constants = require('./../../constants');
 var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostStore = require('./../PostStore');
+var CommentActions = require('./../CommentActions');
 
 var CommentItem = React.createClass({
   propTypes: {
@@ -184,11 +185,11 @@ var CommentView = React.createClass({
   getInitialState() {
     var post = PostStore.getPost(this.props.postID);
     var comments = this.nestComments(post.comments);
-    console.log(comments.length);
     return {
       post: post,
       comments: comments,
-      replyToComment: {}
+      replyToComment: {},
+      replyText: ''
     };
   },
 
@@ -209,14 +210,6 @@ var CommentView = React.createClass({
 
   },
 
-  onChange() {
-
-  },
-
-  onSubmitEditing() {
-
-  },
-
   onReply(comment) {
     // rerender with this comment reply active
     this.setState({
@@ -224,6 +217,51 @@ var CommentView = React.createClass({
     });
     // focus the text field
     this.refs.reply.focus();
+  },
+
+  postReply() {
+    var text = this.state.replyText;
+    // dont post empty reply
+    if(_.isEmpty(text)) {
+      this.setState({
+        replyText: ''
+      });
+      return;
+    };
+    var user = constants.getUser();
+
+    // call action
+    CommentActions.create(
+      text, // body
+      user._id, // author id
+      this.state.post._id, // post id
+      (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id // parent id
+    );
+
+    // optimistic update
+    var comment = {
+      _id: Date.now(), // temp id
+      author: user,
+      body: text,
+      postId: this.state.post,
+      parentId: (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id,
+      created: (new Date()).toString(),
+      comments: []
+    };
+    var comments = this.state.post.comments;
+    comments.push(comment);
+    comments = this.nestComments(comments);
+    this.setState({
+      replyText: '', // clear comment field
+      comments: comments
+    });
+
+    // blur reply input
+    // buffer delay it so it blurs only when the set state clears up
+    setTimeout(
+      () => this.refs.reply.blur(), // this also clears the replyToComment state field
+      100 
+    );
   },
 
   nestComments(comments, parentId, depth) {
@@ -289,13 +327,22 @@ var CommentView = React.createClass({
             placeholder='Reply'
             returnKeyType='send'
             clearButtonMode='while-editing'
-            onChange={ this.onChange }
-            onSubmitEditing={ this.onSubmitEditing }
+            value={ this.state.replyText }
+            onChangeText={(text) => {
+              this.setState({
+                replyText: text
+              });
+            }}
+            onSubmitEditing={(ev) => {
+              // post comment
+              this.postReply();
+            }}
             onBlur={() => {
               // cancel the comment reply if unfocused
               if(!_.isEmpty(this.state.replyToComment)) {
                 this.setState({
-                  replyToComment: {}
+                  replyToComment: {},
+                  replyText: this.state.replyText // set again because of set state lag
                 });
               }
             }}
@@ -303,7 +350,7 @@ var CommentView = React.createClass({
           />
           <TouchableOpacity
             onPress={() => {
-
+              this.postReply();
             }}
             style={ styles.replyButton }
           >
