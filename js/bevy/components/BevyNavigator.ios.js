@@ -7,8 +7,6 @@
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
-var window = require('Dimensions').get('window');
 var {
   StyleSheet,
   Text,
@@ -17,19 +15,16 @@ var {
   TouchableHighlight,
 } = React;
 
-var SideMenu = require('react-native-side-menu');
-var BevyList= require('./BevyList.ios.js');
+var BackButton = require('./../../shared/components/BackButton.ios.js');
+var InfoButton = require('./InfoButton.ios.js');
+var Navbar = require('./../../shared/components/Navbar.ios.js');
 var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
+var SettingsView = require('./BevySettingsView.ios.js');
 
-//var BevyListButton = require('./BevyListButton.ios.js');
-var BackButton = require('./../../shared/components/BackButton.ios.js');
-var SearchButton = require('./SearchButton.ios.js');
-var InfoButton = require('./InfoButton.ios.js');
-
+var _ = require('underscore');
+var window = require('Dimensions').get('window');
 var routes = require('./../../routes');
-
-var Navbar = require('./../../shared/components/Navbar.ios.js');
 
 // get icons
 var {
@@ -47,14 +42,22 @@ var BevyView = React.createClass({
   render: function() {
     var view;
     switch(this.props.bevyRoute.name) {
-      case 'InfoView':
+      case routes.BEVY.INFO.name:
         view = (
           <InfoView
             { ...this.props }
           />
         );
         break;
-      case 'PostList':
+      case routes.BEVY.SETTINGS.name:
+        view = (
+          <SettingsView
+            setting={ this.props.bevyRoute.setting }
+            { ...this.props }
+          />
+        );
+        break;
+      case routes.BEVY.POSTLIST.name:
       default:
         view = (
           <PostList
@@ -88,7 +91,10 @@ var BevyView = React.createClass({
     )
     : <View />;
 
-    var infoButton = (_.isEmpty(this.props.activeBevy) || this.props.activeBevy.name == 'Frontpage' || this.props.bevyRoute.name == 'InfoView')
+    var infoButton = (_.isEmpty(this.props.activeBevy) 
+      || this.props.activeBevy.name == 'Frontpage' 
+      || this.props.bevyRoute.name == routes.BEVY.INFO.name 
+      || this.props.bevyRoute.name == routes.BEVY.SETTINGS.name )
     ? <View />
     : <InfoButton onPress={() => {
       this.props.bevyNavigator.push(routes.BEVY.INFO)
@@ -111,6 +117,17 @@ var BevyView = React.createClass({
     : <BackButton onPress={() => {
       this.props.bevyNavigator.pop();
     }} />;
+    
+    var center = this.props.activeBevy.name || 'Frontpage';
+    if(this.props.bevyRoute.setting) {
+      switch(this.props.bevyRoute.setting) {
+        case 'posts_expire_in':
+          center = 'Posts Expire In...';
+          break;
+        default:
+          break;
+      }
+    }
 
     return (
       <View style={{ flex: 1 }}>
@@ -118,7 +135,7 @@ var BevyView = React.createClass({
           bevyRoute={ this.props.bevyRoute }
           bevyNavigator={ this.props.bevyNavigator }
           left={ backButton }
-          center={ this.props.activeBevy.name || 'Frontpage' }
+          center={ center }
           right={ right }
           { ...this.props }
         />

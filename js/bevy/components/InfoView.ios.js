@@ -22,20 +22,25 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../constants.js');
+var routes = require('./../../routes.js');
 
 var InfoView = React.createClass({
 
   propTypes: {
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    bevyRoute: React.PropTypes.object,
+    bevyNavigator: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      subscribed: false
+      subscribed: false,
+      public: true
     };
   },
 
   _renderAdminSettings() {
+    // only render these for admins
     var user = constants.getUser();
     var bevy = this.props.activeBevy;
     if(!_.contains(bevy.admins, user._id)) return null;
@@ -51,7 +56,9 @@ var InfoView = React.createClass({
             borderTopColor: '#ddd'
           }]}
           onPress={() => {
-
+            var settingsRoute = routes.BEVY.SETTINGS;
+            settingsRoute.setting = 'posts_expire_in';
+            this.props.bevyNavigator.push(settingsRoute);
           }}
         >
           <View style={ styles.settingContainer }>
@@ -63,6 +70,17 @@ var InfoView = React.createClass({
             </Text>
           </View>
         </TouchableHighlight>
+        <View style={[ styles.switchContainer ]}>
+            <Text style={ styles.switchDescription }>Public</Text>
+            <SwitchIOS
+              value={ this.state.public }
+              onValueChange={(value) => {
+                this.setState({
+                  public: value
+                });
+              }}
+            />
+          </View>
       </View>
     );
   },

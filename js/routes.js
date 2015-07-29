@@ -29,7 +29,8 @@ var routes = {
 
   BEVY: {
     POSTLIST: { name: 'PostList', index: 0 },
-    INFO: { name: 'InfoView', index: 1 }
+    INFO: { name: 'InfoView', index: 1 },
+    SETTINGS: { name: 'BevySettings', index: 2 }
   },
   
   CHAT: {
