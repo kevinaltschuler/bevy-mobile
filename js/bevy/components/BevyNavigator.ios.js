@@ -71,6 +71,9 @@ var BevyView = React.createClass({
         onPress={() => {
 
         }}
+        style={{
+          marginRight: 5
+        }}
       >
         <Icon
           name='fontawesome|sort-amount-desc'

@@ -26,12 +26,12 @@ var InfoButton = React.createClass({
   render: function() {
     return (
       <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0)'}
+        underlayColor={'rgba(0,0,0,0.1)'}
         onPress={this.onPress}
       >
         <Icon
-          name='ion|ios-information-outline'
-          size={30}
+          name='ion|ios-information-empty'
+          size={35}
           color='#666'
           style={styles.bevyListButton}
         />
@@ -42,18 +42,8 @@ var InfoButton = React.createClass({
 
 var styles = StyleSheet.create({
   bevyListButton: {
-    paddingLeft: 45,
-    width: 30,
-    height: 30
-  },
-  input: {
-    backgroundColor: 'rgba(0,0,0,.2)',
-    width: 220,
-    height: 32,
-    marginTop: 6,
-    paddingLeft: 10,
-    color: 'white',
-    borderRadius: 4
+    width: 35,
+    height: 35
   }
 });
 
