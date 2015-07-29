@@ -6,21 +6,21 @@
 'use strict';
 
 var React = require('react-native');
-
 var {
   StyleSheet,
   Text,
   TouchableHighlight,
+  ScrollView,
   View,
   Image,
+  SwitchIOS,
   TouchableOpacity,
-  CameraRoll
 } = React;
-
 var {
   Icon
 } = require('react-native-icons');
 
+var _ = require('underscore');
 var constants = require('./../../constants.js');
 
 var InfoView = React.createClass({
@@ -29,17 +29,48 @@ var InfoView = React.createClass({
     activeBevy: React.PropTypes.object
   },
 
-  handleUpload: function(){
-
+  getInitialState() {
+    return {
+      subscribed: false
+    };
   },
 
-  handleUploadError: function(){
+  _renderAdminSettings() {
+    var user = constants.getUser();
+    var bevy = this.props.activeBevy;
+    if(!_.contains(bevy.admins, user._id)) return null;
+    return (
+      <View style={[ styles.actionRow, {
+        marginTop: 15
+      }]}>
+        <Text style={ styles.settingsTitle }>Admin Settings</Text>
+        <TouchableHighlight 
+          underlayColor='rgba(0,0,0,0.1)'
+          style={[ styles.switchContainer, {
+            borderTopWidth: 1,
+            borderTopColor: '#ddd'
+          }]}
+          onPress={() => {
 
+          }}
+        >
+          <View style={ styles.settingContainer }>
+            <Text style={ styles.settingDescription }>
+              Posts Expire In
+            </Text>
+            <Text style={ styles.settingValue }>
+              { bevy.settings.posts_expire_in } Days
+            </Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
   },
 
-  render: function () {
+  render() {
     return (
       <View style={styles.container}>
+
         <View style={styles.infoRow} >
           <View style={styles.picButton}>
             <Image 
@@ -49,7 +80,9 @@ var InfoView = React.createClass({
               <TouchableOpacity 
                 activeOpacity={.8}
                 style={styles.cameraTouchable}
-                onPress={CameraRoll.getPhotos(null,this.handleUpload,this.handleUploadError)}
+                onPress={() => {
+
+                }}
               >
                 <Icon
                   name='ion|ios-camera-outline'
@@ -65,15 +98,48 @@ var InfoView = React.createClass({
             <Text style={styles.displayName}>
               { this.props.activeBevy.name }
             </Text>
-            <Text style={styles.details}>
+            <Text style={styles.description}>
               { this.props.activeBevy.description }
             </Text>
+            <View style={ styles.details }>
+              <Icon
+                name='ion|earth'
+                size={ 15 }
+                color='#888'
+                style={{ width: 15, height: 15 }}
+              />
+              <Text style={ styles.detailText }> Public  </Text>
+              <Icon
+                name='ion|ios-people'
+                size={ 15 }
+                color='#888'
+                style={{ width: 15, height: 15 }}
+              />
+              <Text style={ styles.detailText }> 18 Subscribers</Text>
+            </View>
+          </View>
+        </View>
+
+        <ScrollView style={styles.actionRow}>
+          {/* disable this if admin? */}
+          <View style={[ styles.switchContainer, {
+            marginTop: -10,
+            borderTopWidth: 1,
+            borderTopColor: '#ddd'
+          }]}>
+            <Text style={ styles.switchDescription }>Subscribed</Text>
+            <SwitchIOS
+              value={ this.state.subscribed }
+              onValueChange={(value) => {
+                this.setState({
+                  subscribed: value
+                });
+              }}
+            />
           </View>
 
-        </View>
-
-        <View style={styles.actionRow}>
-        </View>
+          { this._renderAdminSettings() }
+        </ScrollView>
 
       </View>
     );
@@ -86,8 +152,7 @@ var styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     flex: 1,
-    backgroundColor: '#eee',
-    padding: 10
+    backgroundColor: '#eee'
   },
   row: {
     flexDirection: 'row'
@@ -97,17 +162,12 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
+    margin: 10,
     borderRadius: 2,
     shadowColor: 'black',
     shadowRadius: 1,
     shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
-  },
-  actionRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 20,
-    marginBottom: 10
+    shadowOffset:  { width: 0, height: 0 }
   },
   profileImage: {
     width: 64,
@@ -140,12 +200,71 @@ var styles = StyleSheet.create({
   },
   displayName: {
     fontSize: 24,
-    textAlign: 'left'
+    textAlign: 'left',
+    color: '#222'
+  },
+  description: {
+    fontSize: 15,
+    textAlign: 'left',
+    color: '#666'
   },
   details: {
-    fontSize: 17,
-    textAlign: 'left'
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5
   },
+  detailText: {
+    color: '#888',
+    fontSize: 14
+  },
+
+  actionRow: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+  },
+  settingContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 6,
+    paddingBottom: 6
+  },
+  settingsTitle: {
+    color: '#888',
+    fontSize: 15,
+    marginLeft: 10,
+    marginBottom: 5
+  },
+  settingDescription: {
+    flex: 1,
+    fontSize: 17,
+    color: '#222'
+  },
+  settingValue: {
+    alignSelf: 'flex-end',
+    fontSize: 17,
+    color: '#888'
+  },
+  switchContainer: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd'
+  },
+  switchDescription: {
+    flex: 1,
+    fontSize: 17,
+    color: '#222'
+  },
+  switch: {
+
+  }
 })
 
 module.exports = InfoView;
