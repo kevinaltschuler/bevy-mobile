@@ -27,12 +27,13 @@ var routes = require('./../../routes');
 
 var UserView = React.createClass({
   propTypes: {
-    navigator: React.PropTypes.object
+    navigator: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState: function() {
     return {
-      profileImageSource: { uri: constants.getUser().image_url }
+      profileImageSource: { uri: this.props.user.image_url }
     };
   },
 
@@ -104,7 +105,7 @@ var UserView = React.createClass({
             </View>
             <View style={styles.profileDeetzColumn}>
               <Text style={styles.displayName}>
-                {constants.getUser().displayName}
+                {this.props.user.displayName}
               </Text>
               <Text style={styles.details}>
                 123 points

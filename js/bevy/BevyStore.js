@@ -9,13 +9,8 @@
 
 'use strict';
 
-// imports
 var Backbone = require('backbone');
-//var $ = require('jquery');
 var _ = require('underscore');
-
-//var router = require('./../router');
-
 var Dispatcher = require('./../shared/dispatcher');
 
 //var Bevy = require('./BevyModel');
@@ -41,10 +36,7 @@ var CHAT = constants.CHAT;
 var APP = constants.APP;
 
 var BevyActions = require('./BevyActions');
-
-//var ChatStore = require('./../chat/ChatStore');
-
-//var user = window.bootstrap.user;
+var UserStore = require('./../profile/UserStore')
 
 // inherit event class first
 // VERY IMPORTANT, as the PostContainer view binds functions
@@ -67,12 +59,12 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-        this.myBevies.url = constants.apiurl + '/users/' + constants.getUser()._id + '/bevies';
+        this.myBevies.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/bevies';
 
         this.myBevies.fetch({
           reset: true,
           success: function(bevies, response, options) {
-            console.log('got bevies', bevies.toJSON());
+            //console.log('got bevies', bevies.toJSON());
             this.myBevies.unshift({
               _id: '-1',
               name: 'Frontpage'
@@ -86,7 +78,7 @@ _.extend(BevyStore, {
         this.publicBevies.url = constants.apiurl + '/bevies';
         this.publicBevies.fetch({
           success: function(bevies, response, options) {
-            console.log('got public bevies', bevies.toJSON());
+            //console.log('got public bevies', bevies.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });
@@ -160,7 +152,7 @@ _.extend(BevyStore, {
         var image_url = payload.image_url;
         var parent = payload.parent;
 
-        var user = constants.getUser();
+        var user = UserStore.getUser();
 
         var newBevy = this.myBevies.add({
           name: name,
@@ -509,26 +501,6 @@ _.extend(BevyStore, {
       return bevy.toJSON();
     }
   }
-  /*
-  getActiveMember: function() {
-    var bevy = this.getActive();
-    if(_.isEmpty(bevy)) return {};
-    var members = bevy.members;
-    var member = _.find(members, function(m) {
-      if(!m.user) return false;
-      return m.user._id == user._id;
-    });
-    return (member == undefined)
-    ? {}
-    : member;
-  },
-
-  getMembers: function() {
-    var bevy = this.getActive();
-    if(_.isEmpty(bevy)) return [];
-    var members = bevy.members;
-    return members;
-  }*/
 });
 
 var dispatchToken = Dispatcher.register(BevyStore.handleDispatch.bind(BevyStore));

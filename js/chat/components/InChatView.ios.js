@@ -36,7 +36,8 @@ var InChatView = React.createClass({
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
-    allThreads: React.PropTypes.array
+    allThreads: React.PropTypes.array,
+    user: React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -124,7 +125,7 @@ var InChatView = React.createClass({
 
   onSubmitEditing: function(ev) {
     var text = ev.nativeEvent.text;
-    var user = constants.getUser();
+    var user = this.props.user;
     ChatActions.postMessage(this.state.activeThread._id, user, text);
     this.setState({
       messageValue: ''
@@ -168,7 +169,7 @@ var InChatView = React.createClass({
           decelerationRate={ 0.9 }
           dataSource={ this.state.dataSource }
           renderRow={ (message) => (
-            <MessageItem key={ message._id } message={ message } />
+            <MessageItem key={ message._id } message={ message } user={ this.props.user }/>
           )}
           renderHeader={ this.renderHeader }
         />

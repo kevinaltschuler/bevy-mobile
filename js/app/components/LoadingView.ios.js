@@ -14,6 +14,7 @@ var bevy_logo_trans = require('image!bevy_logo_trans');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 var AppActions = require('./../AppActions');
+var UserStore = require('./../../profile/UserStore');
 
 var LoadingView = React.createClass({
 
@@ -29,7 +30,7 @@ var LoadingView = React.createClass({
     .then((user) => {
       if(user) {
         setTimeout(() => {
-          constants.setUser(JSON.parse(user));
+          UserStore.setUser(JSON.parse(user));
           AppActions.load();
           this.props.mainNavigator.replace(routes.MAIN.TABBAR);
         }, 1000);

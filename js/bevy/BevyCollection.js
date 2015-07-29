@@ -14,8 +14,9 @@ var _ = require('underscore');
 
 var Bevy = require('./BevyModel');
 var constants = require('./../constants');
+var UserStore = require('./../profile/UserStore');
 
-var user = constants.getUser();
+var user = UserStore.getUser();
 
 // backbone collection
 module.exports = Backbone.Collection.extend({

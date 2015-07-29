@@ -28,7 +28,8 @@ var PostList = React.createClass({
 
   propTypes: {
     allPosts: React.PropTypes.array,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -101,6 +102,7 @@ var PostList = React.createClass({
         onPress={() => {
           this.props.mainNavigator.push(routes.MAIN.NEWPOST);
         }}
+        user={ this.props.user }
       />
     );
     return (

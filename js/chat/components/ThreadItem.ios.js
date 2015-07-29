@@ -23,14 +23,14 @@ var InChatView = require('./InChatView.ios.js');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
-var user = constants.getUser();
 
 var ThreadItem = React.createClass({
 
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
-    thread: React.PropTypes.object
+    thread: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -55,7 +55,7 @@ var ThreadItem = React.createClass({
   },
 
   getThreadInfo: function(thread) {
-    var user = constants.getUser();
+    var user = this.props.user;
 
     var threadName = 'Default Thread Name';
     var threadImage = constants.siteurl + '/img/logo_100.png';

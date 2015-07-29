@@ -17,6 +17,7 @@ var _ = require('underscore');
 var constants = require('./../constants');
 
 var BevyStore = require('./../bevy/BevyStore');
+var UserStore = require('./../profile/UserStore');
 
 // backbone model
 var Post = Backbone.Model.extend({
@@ -35,7 +36,7 @@ var Post = Backbone.Model.extend({
   idAttribute: '_id',
 
   initialize() {
-    var user = constants.getUser();
+    var user = UserStore.getUser();
     var vote = _.findWhere(this.get('votes'), { voter: user._id });
     if(vote == undefined) this.set('voted', false);
     else {

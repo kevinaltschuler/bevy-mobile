@@ -30,6 +30,12 @@ var PostActions = require('./../PostActions');
 
 var NewPostView = React.createClass({
 
+  propTypes: {
+    activeBevy: React.PropTypes.object,
+    myBevies: React.PropTypes.array,
+    user: React.PropTypes.object
+  },
+
   getInitialState() {
     var selected;
     if(this.props.activeBevy._id != -1) {
@@ -105,7 +111,8 @@ var NewPostView = React.createClass({
 var InputView = React.createClass({
 
   propTypes: {
-    selected: React.PropTypes.object
+    selected: React.PropTypes.object, 
+    user: React.PropTypes.user
   },
 
   getInitialState() {
@@ -129,7 +136,7 @@ var InputView = React.createClass({
   },
 
   render() {
-    var user = constants.getUser();
+    var user = this.props.user;
     var containerStyle = {
       flex: 1,
       flexDirection: 'column',
@@ -178,7 +185,7 @@ var InputView = React.createClass({
                 PostActions.create( // send action
                   this.state.title,
                   null,
-                  constants.getUser(),
+                  this.props.user,
                   this.props.selected
                 );
                 this.refs.input.setNativeProps({ text: '' }); // clear text

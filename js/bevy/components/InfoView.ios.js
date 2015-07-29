@@ -29,7 +29,8 @@ var InfoView = React.createClass({
   propTypes: {
     activeBevy: React.PropTypes.object,
     bevyRoute: React.PropTypes.object,
-    bevyNavigator: React.PropTypes.object
+    bevyNavigator: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -41,7 +42,7 @@ var InfoView = React.createClass({
 
   _renderAdminSettings() {
     // only render these for admins
-    var user = constants.getUser();
+    var user = this.props.user;
     var bevy = this.props.activeBevy;
     if(!_.contains(bevy.admins, user._id)) return null;
     return (

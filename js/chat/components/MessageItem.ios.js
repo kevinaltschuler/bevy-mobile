@@ -14,13 +14,14 @@ var constants = require('./../../constants');
 var MessageItem = React.createClass({
 
   propTypes: {
-    message: React.PropTypes.object
+    message: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   render: function() {
     var message = this.props.message;
     var author = message.author;
-    var user = constants.getUser();
+    var user = this.props.user;
 
     var createDate = new Date(message.created);
     var dateOptions = {

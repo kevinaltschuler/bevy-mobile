@@ -91,13 +91,14 @@ exports.CHAT = {
   CHANGE_ONE: 'chat_change_one:'
 };
 
-exports.user = {
+exports.USER = {
   CREATE: 'user_create',
   DESTROY: 'user_destroy',
   UPDATE: 'user_update',
   SWITCH: 'user_switch',
 
-  CHANGE_ALL: 'user_change_all'
+  CHANGE_ALL: 'user_change_all',
+  LOADED: 'user_loaded'
 };
 
 exports.FILE = {

@@ -31,6 +31,7 @@ var COMMENT = constants.COMMENT;
 
 var PostActions = require('./PostActions');
 var BevyStore = require('./../bevy/BevyStore');
+var UserStore = require('./../profile/UserStore');
 
 var tagRegex = /#\w+/g;
 
@@ -52,7 +53,7 @@ _.extend(PostStore, {
 
       case APP.LOAD:
 
-        this.posts.url = constants.apiurl + '/users/' + constants.getUser()._id + '/posts';
+        this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
         this.posts.comparator = this.sortByTop;
 
         this.posts.fetch({
@@ -70,7 +71,7 @@ _.extend(PostStore, {
         var bevy = payload.bevy;
 
         if(bevy._id == -1) {
-          this.posts.url = constants.apiurl + '/users/' + constants.getUser()._id + '/posts';
+          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
         } else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
         }
@@ -127,7 +128,7 @@ _.extend(PostStore, {
       case POST.VOTE:
         var post_id = payload.post_id;
         var post = this.posts.get(post_id);
-        var user = constants.getUser();
+        var user = UserStore.getUser();
         if(post == undefined) break;
 
         // cant vote if user is not part of the bevy (DONT DO THIS YET ACTUALLY)
@@ -224,7 +225,7 @@ _.extend(PostStore, {
         var sub_id = BevyStore.activeSub;
 
         if(super_id == -1)
-          this.posts.url = constants.apiurl + '/users/' + constants.getUser()._id + '/posts';
+          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
         else if (sub_id == -1) {
           this.posts.url = constants.apiurl + '/bevies/' + super_id + '/posts';
         } else {
@@ -268,7 +269,7 @@ _.extend(PostStore, {
           comments.push({
             _id: response._id,
             body: body,
-            author: constants.getUser(),
+            author: UserStore.getUser(),
             postId: post.toJSON(),
             parentId: parent_id,
             created: response.created,

@@ -10,6 +10,7 @@ var NOTIFICATION = constants.NOTIFICATION;
 var APP = constants.APP;
 
 var ChatStore = require('./../chat/ChatStore');
+var UserStore = require('./../profile/UserStore');
 
 var Notifications = require('./NotificationCollection');
 
@@ -23,7 +24,7 @@ _.extend(NotificationStore, {
     switch(payload.actionType) {
       case APP.LOAD:
 
-        this.notifications.url = constants.apiurl + '/users/' + constants.getUser()._id + '/notifications';
+        this.notifications.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/notifications';
 
         this.notifications.fetch({
           reset: true,
@@ -89,7 +90,7 @@ _.extend(NotificationStore, {
 
         (function poll() {
           getJSON({
-            url: constants.apiurl + '/users/' + constants.getUser()._id + '/notifications/poll'
+            url: constants.apiurl + '/users/' + UserStore.getUser()._id + '/notifications/poll'
           }).then(function(response) {
             // on success
             poll();

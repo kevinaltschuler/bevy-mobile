@@ -69,6 +69,7 @@ var BEVY = constants.BEVY;
 var POST = constants.POST;
 var CHAT = constants.CHAT;
 var NOTIFICATION = constants.NOTIFICATION;
+var USER = constants.USER;
 
 var change_all_events = [
   POST.CHANGE_ALL,
@@ -82,6 +83,7 @@ var PostStore = require('./js/post/PostStore');
 var ChatStore = require('./js/chat/ChatStore');
 var FileStore = require('./js/File/FileStore');
 var NotificationStore = require('./js/notification/NotificationStore');
+var UserStore = require('./js/profile/UserStore');
 
 var AppActions = require('./js/app/AppActions');
 
@@ -95,7 +97,8 @@ var bevyios = React.createClass({
       this.getBevyState(),
       this.getPostState(),
       this.getChatState(),
-      this.getNotificationState()
+      this.getNotificationState(),
+      this.getUserState()
     );
   },
 
@@ -128,6 +131,12 @@ var bevyios = React.createClass({
     };
   },
 
+  getUserState() {
+    return {
+      user: UserStore.getUser()
+    };
+  },
+
   componentDidMount() {
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
@@ -148,6 +157,8 @@ var bevyios = React.createClass({
     NotificationStore.on(POST.CHANGE_ALL, this._onPostChange);
     NotificationStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
+
+    UserStore.on(USER.LOADED, this._onUserChange);
   },
 
   componentWillUnmount() {
@@ -155,6 +166,8 @@ var bevyios = React.createClass({
     PostStore.off(change_all_events);
     ChatStore.off(change_all_events);
     NotificationStore.off(change_all_events);
+
+    UserStore.off(USER.LOADED)
 
     AppActions.unload();
   },
@@ -170,6 +183,9 @@ var bevyios = React.createClass({
   },
   _onNotificationChange() {
     this.setState(_.extend(this.state, this.getNotificationState()));
+  },
+  _onUserChange() {
+    this.setState(_.extend(this.state, this.getUserState()));
   },
 
   render() {

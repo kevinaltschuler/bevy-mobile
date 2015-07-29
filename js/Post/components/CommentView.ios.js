@@ -37,7 +37,8 @@ var colorMap = [
 var CommentItem = React.createClass({
   propTypes: {
     comment: React.PropTypes.object,
-    onReply: React.PropTypes.func
+    onReply: React.PropTypes.func,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -155,7 +156,8 @@ var CommentItem = React.createClass({
 var CommentList = React.createClass({
   propTypes: {
     comments: React.PropTypes.array,
-    onReply: React.PropTypes.func
+    onReply: React.PropTypes.func,
+    user: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -182,7 +184,8 @@ var CommentList = React.createClass({
 var CommentView = React.createClass({
 
   propTypes: {
-    postID: React.PropTypes.string
+    postID: React.PropTypes.string,
+    user: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -238,7 +241,7 @@ var CommentView = React.createClass({
       });
       return;
     };
-    var user = constants.getUser();
+    var user = this.props.user;
 
     // call action
     CommentActions.create(

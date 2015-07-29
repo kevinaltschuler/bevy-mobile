@@ -22,7 +22,8 @@ var ConversationView = React.createClass({
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
-    allThreads: React.PropTypes.array
+    allThreads: React.PropTypes.array,
+    user: React.PropTypes.object
   },
 
   render: function () {
@@ -31,7 +32,7 @@ var ConversationView = React.createClass({
     var allThreads = this.props.allThreads || [];
     allThreads.forEach(function(thread) {
       threads.push(
-        <ThreadItem key={ thread._id } thread={ thread } chatRoute={ this.props.chatRoute } chatNavigator={ this.props.chatNavigator }/>
+        <ThreadItem key={ thread._id } thread={ thread } chatRoute={ this.props.chatRoute } chatNavigator={ this.props.chatNavigator } user={ this.props.user }/>
       );
     }.bind(this));
 

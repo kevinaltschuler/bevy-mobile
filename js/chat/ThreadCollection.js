@@ -6,12 +6,13 @@ var _ = require('underscore');
 
 var Thread = require('./ThreadModel');
 var constants = require('./../constants');
+var UserStore = require('./../profile/UserStore');
 
 // backbone collection
 var ThreadCollection = Backbone.Collection.extend({
   model: Thread,
   url: function() {
-    var user = constants.getUser();
+    var user = UserStore.getUser();
     return constants.apiurl + '/users/' + user._id + '/threads';
   }
 });

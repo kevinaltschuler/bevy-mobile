@@ -17,7 +17,8 @@ var constants = require('./../../constants');
 var NewPostCard = React.createClass({
 
   propTypes: {
-    onPress: React.PropTypes.func.isRequired
+    onPress: React.PropTypes.func.isRequired,
+    user: React.PropTypes.object
   },
 
   onPress() {
@@ -26,7 +27,7 @@ var NewPostCard = React.createClass({
 
   render() {
 
-    var user = constants.getUser();
+    var user = this.props.user;
 
     return (
       <TouchableHighlight
