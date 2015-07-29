@@ -94,7 +94,7 @@ var PostList = React.createClass({
     } else {
       indicator = <View />
     }
-    var newPostCard = (_.isEmpty(this.props.activeBevy) || _.isEmpty(this.props.allPosts))
+    var newPostCard = (_.isEmpty(this.props.activeBevy) || (this.state.isRefreshing && _.isEmpty(this.props.allPosts)))
     ? <View />
     : (
       <NewPostCard 
