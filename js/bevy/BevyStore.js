@@ -500,6 +500,10 @@ _.extend(BevyStore, {
     } else {
       return bevy.toJSON();
     }
+  },
+
+  addBevy(bevy) {
+    this.myBevies.add(bevy);
   }
 });
 

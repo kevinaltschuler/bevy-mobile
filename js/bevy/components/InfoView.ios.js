@@ -23,6 +23,7 @@ var {
 var _ = require('underscore');
 var constants = require('./../../constants.js');
 var routes = require('./../../routes.js');
+var BevyActions = require('./../BevyActions');
 
 var InfoView = React.createClass({
 
@@ -34,8 +35,10 @@ var InfoView = React.createClass({
   },
 
   getInitialState() {
+    var user = this.props.user;
+    console.log(user.bevies, this.props.activeBevy._id);
     return {
-      subscribed: false,
+      subscribed: _.findWhere(user.bevies, { _id: this.props.activeBevy._id }) != undefined,
       public: true
     };
   },
@@ -153,6 +156,11 @@ var InfoView = React.createClass({
                 this.setState({
                   subscribed: value
                 });
+                if(value) {
+                  BevyActions.subscribe(this.props.activeBevy._id);
+                } else {
+                  BevyActions.unsubscribe(this.props.activeBevy._id);
+                }
               }}
             />
           </View>

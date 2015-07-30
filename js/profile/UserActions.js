@@ -1,0 +1,15 @@
+'use strict';
+
+var dispatch = require('./../shared/helpers/dispatch');
+var constants = require('./../constants');
+var USER = constants.USER;
+
+var UserActions = {
+  update() {
+    dispatch(USER.UPDATE, {
+
+    });
+  }
+};
+
+module.exports = UserActions;

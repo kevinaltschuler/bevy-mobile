@@ -73,6 +73,8 @@ exports.BEVY = {
   SWITCH: 'bevy_switch',
   INVITE: 'bevy_invite',
   ADD_USER: 'bevy_add_user',
+  SUBSCRIBE: 'bevy_subscribe',
+  UNSUBSCRIBE: 'bevy_unsubscribe',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
@@ -92,10 +94,7 @@ exports.CHAT = {
 };
 
 exports.USER = {
-  CREATE: 'user_create',
-  DESTROY: 'user_destroy',
   UPDATE: 'user_update',
-  SWITCH: 'user_switch',
 
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded'
@@ -112,14 +111,6 @@ exports.NOTIFICATION = {
     DISMISS_ALL: 'notification_dismiss_all',
 
     CHANGE_ALL: 'notification_change_all'
-};
-
-exports.setUser = function(tempUser) {
-  user = tempUser;
-};
-
-exports.getUser = function() {
-  return user;
 };
 
 exports.setBevyNavigator = function(navigator) {

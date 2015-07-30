@@ -15,17 +15,17 @@ var BEVY = require('./../constants').BEVY;
 
 var BevyActions = {
 
-  fetch: function(user) {
+  fetch(user) {
     dispatch(BEVY.FETCH, {
       user: (user == undefined) ? {} : user
     });
   },
 
-  fetchPublic: function() {
+  fetchPublic() {
     dispatch(BEVY.FETCH_PUBLIC, {});
   },
 
-  create: function(name, description, image_url, parent) {
+  create(name, description, image_url, parent) {
     dispatch(BEVY.CREATE, {
       name: (name == undefined) ? '' : name,
       description: (description == undefined) ? '' : description,
@@ -34,13 +34,13 @@ var BevyActions = {
     });
   },
 
-  destroy: function(id) {
+  destroy(id) {
     dispatch(BEVY.DESTROY, {
       id: (id == undefined) ? '0' : id
     });
   },
 
-  update: function(bevy_id, name, description, image_url, settings) {
+  update(bevy_id, name, description, image_url, settings) {
     dispatch(BEVY.UPDATE, {
       bevy_id: (bevy_id == undefined) ? '' : bevy_id,
       name: (name == undefined) ? null : name,
@@ -50,60 +50,15 @@ var BevyActions = {
     });
   },
 
-  editMember: function(bevy_id, user_id, displayName, notificationLevel, role, image_url) {
-    dispatch(BEVY.EDIT_MEMBER, {
-      bevy_id: (bevy_id == undefined) ? '' : bevy_id,
-      user_id: (user_id == undefined) ? '' : user_id,
-      displayName: (displayName == undefined) ? '' : displayName,
-      notificationLevel: (notificationLevel == undefined) ? 'all' : notificationLevel,
-      role: (role == undefined) ? 'user' : role,
-      image_url: (image_url == undefined) ? '' : image_url
-    });
+  subscribe(bevy_id) {
+    dispatch(BEVY.SUBSCRIBE, {
+      bevy_id: bevy_id
+    })
   },
 
-  leave: function(bevy_id) {
-    dispatch(BEVY.LEAVE, {
-      bevy_id: (bevy_id == undefined) ? '' : bevy_id
-    });
-  },
-
-  removeUser: function(bevy_id, email, user_id) {
-    dispatch(BEVY.REMOVE_USER, {
-      bevy_id: (bevy_id == undefined) ? '' : bevy_id,
-      email: (email == undefined) ? '' : email,
-      user_id: (user_id == undefined) ? '' : user_id
-    });
-  },
-
-  invite: function(bevy, user, members, member_name) {
-    dispatch(BEVY.INVITE, {
-      bevy: (bevy == undefined) ? {} : bevy,
-      user: (user == undefined) ? {} : user,
-      members: (members == undefined) ? [] : members,
-      member_name: (member_name == undefined) ? null : member_name
-    });
-  },
-
-  addUser: function(bevy_id, user_id, email) {
-    dispatch(BEVY.ADD_USER, {
-      bevy_id: (bevy_id == undefined) ? '' : bevy_id,
-      user_id: (user_id == undefined) ? '' : user_id,
-      email: (email == undefined) ? '' : email
-    });
-  },
-
-  join: function(bevy_id, user, email) {
-    dispatch(BEVY.JOIN, {
-      bevy_id: (bevy_id == undefined) ? '0' : bevy_id,
-      user: (user == undefined) ? {} : user,
-      email: (email == undefined) ? '' : email
-    });
-  },
-
-  requestJoin: function(bevy_id, user) {
-    dispatch(BEVY.REQUEST_JOIN, {
-      bevy: (bevy_id == undefined) ? {} : bevy_id,
-      user: (user == undefined) ? {} : user
+  unsubscribe(bevy_id) {
+    dispatch(BEVY.UNSUBSCRIBE, {
+      bevy_id: bevy_id
     });
   },
 
@@ -111,7 +66,7 @@ var BevyActions = {
    * switch bevies and update posts accordingly
    * @param  {int} id  id of bevy being switched to
    */
-  switchBevy: function(bevy_id) {
+  switchBevy(bevy_id) {
     dispatch(BEVY.SWITCH, {
       bevy_id: (bevy_id == undefined) ? null : bevy_id
     });
