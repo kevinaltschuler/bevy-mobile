@@ -43,6 +43,35 @@ var InfoView = React.createClass({
     };
   },
 
+  _renderSubSwitch() {
+    var user = this.props.user;
+    var bevy = this.props.activeBevy;
+    // dont render this if you're an admin
+    if(_.contains(bevy.admins, user._id)) return null;
+    return (
+      <View style={[ styles.switchContainer, {
+        marginTop: -10,
+        borderTopWidth: 1,
+        borderTopColor: '#ddd'
+      }]}>
+        <Text style={ styles.switchDescription }>Subscribed</Text>
+        <SwitchIOS
+          value={ this.state.subscribed }
+          onValueChange={(value) => {
+            this.setState({
+              subscribed: value
+            });
+            if(value) {
+              BevyActions.subscribe(this.props.activeBevy._id);
+            } else {
+              BevyActions.unsubscribe(this.props.activeBevy._id);
+            }
+          }}
+        />
+      </View>
+    );
+  },
+
   _renderAdminSettings() {
     // only render these for admins
     var user = this.props.user;
@@ -143,27 +172,8 @@ var InfoView = React.createClass({
         </View>
 
         <ScrollView style={styles.actionRow}>
-          {/* disable this if admin? */}
-          <View style={[ styles.switchContainer, {
-            marginTop: -10,
-            borderTopWidth: 1,
-            borderTopColor: '#ddd'
-          }]}>
-            <Text style={ styles.switchDescription }>Subscribed</Text>
-            <SwitchIOS
-              value={ this.state.subscribed }
-              onValueChange={(value) => {
-                this.setState({
-                  subscribed: value
-                });
-                if(value) {
-                  BevyActions.subscribe(this.props.activeBevy._id);
-                } else {
-                  BevyActions.unsubscribe(this.props.activeBevy._id);
-                }
-              }}
-            />
-          </View>
+          { this._renderSubSwitch() }
+          
 
           { this._renderAdminSettings() }
         </ScrollView>
