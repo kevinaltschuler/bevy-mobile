@@ -132,6 +132,10 @@ var BevyList = React.createClass({
       <TouchableHighlight
         style={ styles.bevyAddItem }
         onPress={() => {
+          if(!this.props.loggedIn) {
+            this.props.authModalActions.open('Log In To Create A Bevy');
+            return;
+          }
           this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
         }}
       >

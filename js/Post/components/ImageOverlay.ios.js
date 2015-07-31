@@ -40,6 +40,9 @@ var ImageOverlay = React.createClass({
     return (
       <Modal
         forceToFront={ true }
+        backdropType="blur"
+        backdropBlur="dark"
+        isVisible={ this.state.isVisible }
         customCloseButton={
           <View style={ styles.topBar }>
             <TouchableHighlight
@@ -97,9 +100,6 @@ var ImageOverlay = React.createClass({
             </TouchableHighlight>
           </View>
         }
-        backdropType="blur"
-        backdropBlur="dark"
-        isVisible={ this.state.isVisible }
         onPressBackdrop={() => {
           console.log('backdrop pressed');
           this.setState({
@@ -142,7 +142,7 @@ var styles = StyleSheet.create({
   },
   modal: {
     marginTop: 48,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   topBar: {

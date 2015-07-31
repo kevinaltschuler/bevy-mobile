@@ -6,6 +6,7 @@
 
 var React = require('react-native');
 var {
+  View,
   AppRegistry,
   StatusBarIOS,
   Navigator,
@@ -13,6 +14,7 @@ var {
 } = React;
 
 var MainView = require('./js/app/components/MainView.ios.js');
+var LoginModal = require('./js/login/components/LoginModal.ios.js');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -87,13 +89,16 @@ var UserStore = require('./js/profile/UserStore');
 
 var AppActions = require('./js/app/AppActions');
 
-var bevyios = React.createClass({
+var App = React.createClass({
 
   getInitialState() {
 
     StatusBarIOS.setStyle(1);
       
-    return _.extend({},
+    return _.extend({
+      authModalOpen: false,
+      authModalMessage: ''
+    },
       this.getBevyState(),
       this.getPostState(),
       this.getChatState(),
@@ -203,13 +208,42 @@ var bevyios = React.createClass({
     this.setState(_.extend(this.state, this.getUserState()));
   },
 
+  openAuthModal(message) {
+    this.setState({
+      authModalOpen: true,
+      authModalMessage: (message == undefined) ? 'Please Log In To Continue' : message
+    });
+  },
+  closeAuthModal() {
+    this.setState({
+      authModalOpen: false
+    });
+  },
+  toggleAuthModal() {
+    this.setState({
+      authModalOpen: !this.state.authModalOpen
+    });
+  },
+
   render() {
 
     var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
     // disable gestures
     sceneConfig.gestures = null;
 
+    var authModalActions = {
+      open: this.openAuthModal,
+      close: this.closeAuthModal,
+      toggle: this.toggleAuthModal
+    };
+
     return (
+      <View style={{ flex: 1 }}>
+        {/* auth modal */}
+        <LoginModal
+          isOpen={ this.state.authModalOpen }
+          message={ this.state.authModalMessage }
+        />
         <Navigator
           configureScene={() => sceneConfig }
           initialRoute={ routes.MAIN.TABBAR }
@@ -218,15 +252,18 @@ var bevyios = React.createClass({
           ]}
           renderScene={(route, navigator) => 
             <MainView 
-              mainRoute={route}
-              mainNavigator={navigator}
+              mainRoute={ route }
+              mainNavigator={ navigator }
+              authModalActions={ authModalActions }
               { ...this.state }
             />
           }
         />
+      </View>
     );
   }
 });
 
-AppRegistry.registerComponent('bevyios', () => bevyios);
+
+AppRegistry.registerComponent('bevyios', () => App);
 
