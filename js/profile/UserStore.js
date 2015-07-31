@@ -7,6 +7,7 @@ var constants = require('./../constants');
 var USER = constants.USER;
 var BEVY = constants.BEVY;
 var APP = constants.APP;
+var AppActions = require('./../app/AppActions');
 
 var {
   AsyncStorage
@@ -19,15 +20,17 @@ var User = Backbone.Model.extend({
 var UserStore = _.extend({}, Backbone.Events);
 _.extend(UserStore, {
 
+  loggedIn: false, // simple flag to see if user is logged in or not
   user: new User,
 
   handleDispatch(payload) {
     switch(payload.actionType) {
       case APP.LOAD:
         // fetch user from server if its been updated?
+        if(!this.loggedIn) break;
         this.user.fetch({
           success: function(model, response, options) {
-            console.log('user fetched', response);
+            console.log('user fetched from server');
             // update local storage user
             AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
 
@@ -87,6 +90,7 @@ _.extend(UserStore, {
   setUser(user) {
     this.user = new User(user);
     this.user.url = constants.apiurl + '/users/' + this.user.id;
+    this.loggedIn = true;
     //console.log(this.user.toJSON());
     this.trigger(USER.LOADED)
   },

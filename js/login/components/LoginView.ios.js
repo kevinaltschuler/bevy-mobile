@@ -20,12 +20,13 @@ var {
 // modules
 var backgroundImage = require('image!loginBackground');
 var bevy_logo_trans = require('image!bevy_logo_trans');
-var AppActions = require('./../../app/AppActions');
 
 var _ = require('underscore');
 var api = require('./../../utils/api');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
+var AppActions = require('./../../app/AppActions');
+var UserStore = require('./../../profile/UserStore');
 
 var LoginView = React.createClass({
 
@@ -51,18 +52,29 @@ var LoginView = React.createClass({
   },
 
   handleSubmit: function() {
-    api.auth(this.state.email, this.state.pass)
+    fetch('http://joinbevy.com/login',
+    {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.pass
+      })
+    })
+    // on fetch
+    .then((res) => (res.json()))
     .then((res) => {
       if(res.object == undefined) {
         this.setState({
           user:res
         });
 
-        api.storeUser(res);
-
         AppActions.load();
 
-        this.props.mainNavigator.popToRoute(routes.MAIN.TABBAR);
+        this.props.mainNavigator.replace(routes.MAIN.TABBAR);
 
         this.setState({
           email: '',
@@ -97,11 +109,9 @@ var LoginView = React.createClass({
               user: user
             });
 
-            api.storeUser(user);
-
             AppActions.load();
 
-            this.props.mainNavigator.popToRoute(routes.MAIN.TABBAR);
+            this.props.mainNavigator.replace(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',
@@ -182,18 +192,15 @@ var LoginView = React.createClass({
               user: user
             });
 
-            api.storeUser(user);
-
             AppActions.load();
 
-            this.props.mainNavigator.popToRoute(routes.MAIN.TABBAR);
+            this.props.mainNavigator.replace(routes.MAIN.TABBAR);
 
             this.setState({
               email: '',
               pass: '',
               error: ''
             });
-
           });
       });
     });

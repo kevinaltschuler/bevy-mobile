@@ -112,7 +112,7 @@ var InputView = React.createClass({
 
   propTypes: {
     selected: React.PropTypes.object, 
-    user: React.PropTypes.user
+    user: React.PropTypes.object
   },
 
   getInitialState() {

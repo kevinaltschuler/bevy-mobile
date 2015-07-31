@@ -32,39 +32,122 @@ var BevyList = React.createClass({
   propTypes: {
     myBevies: React.PropTypes.array,
     subBevies: React.PropTypes.array,
-    activeBevy: React.PropTypes.object,
     activeSuper: React.PropTypes.object,
     activeSub: React.PropTypes.object,
-    menuActions: React.PropTypes.object
+    menuActions: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
-
-    // get parent bevies
-    var bevies = _.filter(this.props.myBevies, function(bevy) {
-      return bevy.parent == null;
-    });
-
     return {
-      bevies: bevies,
       activeBevyHeaderOpen: false
     };
   },
 
   componentWillReceiveProps(nextProps) {
-
-    // get parent bevies
-    var bevies = _.filter(nextProps.myBevies, function(bevy) {
-      return bevy.parent == null;
-    });
-
-    this.setState({
-      bevies: bevies
-    });
+    if(!nextProps.loggedIn) {
+      //this.refs.activeBevy.open();
+      //this.setState({
+      //  activeBevyHeaderOpen: true
+      //});
+    }
   },
 
   changeBevy: function(rowData) {
 
+  },
+
+  _renderPublicHeader() {
+    if(this.props.loggedIn) return null;
+    return (
+      <Text style={ styles.publicHeader }>Public Bevies</Text>
+    );
+  },
+
+  _renderBevyBar() {
+    return (
+      <View style={ styles.activeBevy }>
+        <Text style={ styles.activeBevyText }>
+          { this.props.activeSuper.name }
+        </Text>
+        {/* TODO: @kevin CSS animate this chevron? */}
+        <Icon
+          name={(this.state.activeBevyHeaderOpen) ? 'ion|chevron-down' : 'ion|chevron-right'}
+          size={ 25 }
+          color='#fff'
+          style={ styles.activeBevyChevron }
+        />
+      </View>
+    );
+  },
+
+  _renderBevyList() {
+    var bevies = (this.props.loggedIn)
+    ? _.filter(this.props.myBevies, function(bevy) { return bevy.parent == null })
+    : this.props.publicBevies;
+
+    if(!this.props.loggedIn) {
+      bevies.unshift({
+        _id: '-1',
+        name: 'Frontpage'
+      });
+    }
+
+    return (
+      <View style={ styles.bevyList }>
+        { _.map(bevies, function(bevy) {
+          // dont render active bevy
+          if(bevy._id == this.props.activeSuper._id) return null;
+
+          return (
+            <TouchableHighlight 
+              key={ 'bevylist:' + bevy._id }
+              style={styles.bevyItem}
+              onPress={() => {
+                BevyActions.switchBevy(bevy._id);
+                // close the accordion
+                this.refs.activeBevy.close();
+                this.setState({
+                  activeBevyHeaderOpen: false
+                });
+                // close the side menu
+                this.props.menuActions.close();
+              }}
+            >
+              <Text style={styles.bevyItemText}>
+                { bevy.name }
+              </Text>
+            </TouchableHighlight>
+          );
+        }.bind(this)) }
+
+        { this._renderNewBevyButton() }
+      </View>
+    );
+  },
+
+  _renderNewBevyButton() {
+    //if(!this.props.loggedIn) return null;
+    return (
+      <TouchableHighlight
+        style={ styles.bevyAddItem }
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+        }}
+      >
+        <View style={ styles.bevyAdd }>
+          <Text style={ styles.bevyItemText }>
+            Create new Bevy
+          </Text>
+          <Icon
+            name='ion|plus-round'
+            size={20}
+            color='#fff'
+            style={ styles.bevyAddIcon }
+          />
+        </View>
+      </TouchableHighlight>
+    );
   },
 
   _renderSubBevyBar() {
@@ -124,7 +207,7 @@ var BevyList = React.createClass({
           if(active) bevyItemStyles.push(styles.bevyItemActive);
           return (
             <TouchableHighlight
-              key={ 'bevylist:' + subBevy._id }
+              key={ 'subbevylist:' + subBevy._id }
               style={bevyItemStyles}
               onPress={() => {
                 BevyActions.switchBevy(subBevy._id);
@@ -150,6 +233,8 @@ var BevyList = React.createClass({
           height: StatusBarSizeIOS.currentHeight
         }} />
 
+        { this._renderPublicHeader() }
+
         <Accordion
           ref='activeBevy'
           onPress={() => {
@@ -158,68 +243,8 @@ var BevyList = React.createClass({
               activeBevyHeaderOpen: !this.state.activeBevyHeaderOpen
             });
           }}
-          header={
-            <View style={ styles.activeBevy }>
-              <Text style={ styles.activeBevyText }>
-                { this.props.activeSuper.name }
-              </Text>
-              {/* TODO: @kevin CSS animate this chevron? */}
-              <Icon
-                name={(this.state.activeBevyHeaderOpen) ? 'ion|chevron-down' : 'ion|chevron-right'}
-                size={ 25 }
-                color='#fff'
-                style={ styles.activeBevyChevron }
-              />
-            </View>
-          }
-          content={
-            <View style={ styles.bevyList }>
-              { _.map(this.state.bevies, function(bevy) {
-                // dont render active bevy
-                if(bevy._id == this.props.activeBevy._id) return null;
-
-                return (
-                  <TouchableHighlight 
-                    key={ 'bevylist:' + bevy._id }
-                    style={styles.bevyItem}
-                    onPress={() => {
-                      BevyActions.switchBevy(bevy._id);
-                      // close the accordion
-                      this.refs.activeBevy.close();
-                      this.setState({
-                        activeBevyHeaderOpen: false
-                      });
-                      // close the side menu
-                      this.props.menuActions.close();
-                    }}
-                  >
-                    <Text style={styles.bevyItemText}>
-                      { bevy.name }
-                    </Text>
-                  </TouchableHighlight>
-                );
-              }.bind(this)) }
-
-              <TouchableHighlight
-                style={ styles.bevyAddItem }
-                onPress={() => {
-                  this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-                }}
-              >
-                <View style={ styles.bevyAdd }>
-                  <Text style={ styles.bevyItemText }>
-                    Create new Bevy
-                  </Text>
-                  <Icon
-                    name='ion|plus-round'
-                    size={20}
-                    color='#fff'
-                    style={ styles.bevyAddIcon }
-                  />
-                </View>
-              </TouchableHighlight>
-            </View>
-          }
+          header={ this._renderBevyBar() }
+          content={ this._renderBevyList() }
         />
 
         { this._renderSubBevyBar() }
@@ -239,6 +264,15 @@ var styles = StyleSheet.create({
     height: window.height,
     backgroundColor: 'rgba(29,30,26,1)',
   },
+
+  publicHeader: {
+    fontSize: 15,
+    color: '#fff',
+    paddingLeft: 10,
+    marginBottom: 10,
+    marginTop: 5
+  },
+
   activeBevy: {
     height: 40,
     flexDirection: 'row',

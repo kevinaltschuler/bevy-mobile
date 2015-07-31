@@ -146,9 +146,7 @@ var SearchNavigator = React.createClass({
       <Navigator
         navigator={ this.props.mainNavigator }
         navigationBar={ 
-          <SearchBar
-            { ...this.props } 
-          /> 
+          <SearchBar { ...this.props }/> 
         }
         initialRouteStack={[
           routes.SEARCH.OUT
@@ -184,27 +182,15 @@ var SearchNavigator = React.createClass({
 });
 
 var SearchBarWrapper = React.createClass({
-
   render() {
-
-    var bevyList = (
-      <BevyList 
-        { ...this.props }
-      />
-    );
-
     return (
-      <SideMenu 
-        animation='easeInOut'
-        menu={bevyList}
+      <SideMenu
+        menu={<BevyList { ...this.props }/>}
         ref='menu'
-        disableGestures={ true }
         touchToClose={ true }
         openMenuOffset={ constants.sideMenuWidth }
       >
-        <SearchNavigator
-          { ...this.props }
-        />
+        <SearchNavigator { ...this.props }/>
       </SideMenu>
     );
   }

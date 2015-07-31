@@ -59,34 +59,29 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-        this.myBevies.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/bevies';
+        var user = UserStore.getUser();
+        if(user._id != undefined) {
+          this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
+          this.myBevies.fetch({
+            reset: true,
+            success: function(bevies, response, options) {
+              //console.log('got bevies', bevies.toJSON());
+              this.myBevies.unshift({
+                _id: '-1',
+                name: 'Frontpage'
+              });
 
-        this.myBevies.fetch({
-          reset: true,
-          success: function(bevies, response, options) {
-            //console.log('got bevies', bevies.toJSON());
-            this.myBevies.unshift({
-              _id: '-1',
-              name: 'Frontpage'
-            });
-
-            //this.trigger(APP.LOAD_PROGRESS, 0.1);
-            this.trigger(BEVY.CHANGE_ALL);
-          }.bind(this)
-        });
-
-        this.publicBevies.url = constants.apiurl + '/bevies';
-        this.publicBevies.fetch({
-          success: function(bevies, response, options) {
-            //console.log('got public bevies', bevies.toJSON());
-            this.trigger(BEVY.CHANGE_ALL);
-          }.bind(this)
-        });
-
-        break;
-
-      case BEVY.FETCH_PUBLIC:
-        // get list of public bevies
+              //this.trigger(APP.LOAD_PROGRESS, 0.1);
+              this.trigger(BEVY.CHANGE_ALL);
+            }.bind(this)
+          });
+        } else {
+          // still push the frontpage bevy to non logged in users
+          this.myBevies.unshift({
+            _id: '-1',
+            name: 'Frontpage'
+          });
+        }
 
         this.publicBevies.url = constants.apiurl + '/bevies';
         this.publicBevies.fetch({
@@ -97,6 +92,19 @@ _.extend(BevyStore, {
         });
 
         break;
+
+      /*case BEVY.FETCH_PUBLIC:
+        // get list of public bevies
+
+        this.publicBevies.url = constants.apiurl + '/bevies';
+        this.publicBevies.fetch({
+          success: function(bevies, response, options) {
+            console.log('got public bevies', bevies.toJSON());
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+
+        break;*/
 
       case BEVY.SWITCH:
         var bevy_id = payload.bevy_id;

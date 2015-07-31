@@ -8,7 +8,8 @@ var React = require('react-native');
 var {
   AppRegistry,
   StatusBarIOS,
-  Navigator
+  Navigator,
+  AsyncStorage
 } = React;
 
 var MainView = require('./js/app/components/MainView.ios.js');
@@ -16,7 +17,6 @@ var MainView = require('./js/app/components/MainView.ios.js');
 var Backbone = require('backbone');
 var _ = require('underscore');
 
-var Backbone = require('backbone');
 Backbone.sync = function(method, model, options) {
 
   var headers = {
@@ -133,7 +133,8 @@ var bevyios = React.createClass({
 
   getUserState() {
     return {
-      user: UserStore.getUser()
+      user: UserStore.getUser(),
+      loggedIn: UserStore.loggedIn
     };
   },
 
@@ -159,6 +160,20 @@ var bevyios = React.createClass({
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
 
     UserStore.on(USER.LOADED, this._onUserChange);
+
+    // first things first try to load the user
+    console.log('loading...');
+    AsyncStorage.getItem('user')
+    .then((user) => {
+      if(user) {
+        console.log('user fetched');
+        UserStore.setUser(JSON.parse(user));
+        AppActions.load();
+      } else {
+        console.log('going to login screen...');
+        AppActions.load();
+      }
+    });
   },
 
   componentWillUnmount() {
@@ -197,9 +212,9 @@ var bevyios = React.createClass({
     return (
         <Navigator
           configureScene={() => sceneConfig }
-          initialRoute={ routes.MAIN.LOADING }
+          initialRoute={ routes.MAIN.TABBAR }
           initialRouteStack={[
-            routes.MAIN.LOADING
+            routes.MAIN.TABBAR
           ]}
           renderScene={(route, navigator) => 
             <MainView 

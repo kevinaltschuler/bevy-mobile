@@ -27,7 +27,7 @@ var routes = require('./../../routes');
 
 var UserView = React.createClass({
   propTypes: {
-    navigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object
   },
 
@@ -43,7 +43,7 @@ var UserView = React.createClass({
     // remove user
     AsyncStorage.removeItem('user');
 
-    this.props.mainNavigator.jumpTo(routes.LOGIN.LOGIN);
+    this.props.mainNavigator.push(routes.MAIN.LOGIN);
   },
 
   onProfileChange: function() {
