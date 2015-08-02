@@ -29,7 +29,9 @@ var PostList = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
+    authModalActions: React.PropTypes.object
   },
 
   getInitialState() {
@@ -99,10 +101,10 @@ var PostList = React.createClass({
     ? <View />
     : (
       <NewPostCard 
-        onPress={() => {
-          this.props.mainNavigator.push(routes.MAIN.NEWPOST);
-        }}
         user={ this.props.user }
+        loggedIn={ this.props.loggedIn }
+        mainNavigator={ this.props.mainNavigator }
+        authModalActions={ this.props.authModalActions }
       />
     );
     return (

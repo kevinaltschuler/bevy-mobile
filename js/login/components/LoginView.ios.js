@@ -154,7 +154,7 @@ var LoginView = React.createClass({
 
   render() {
     return (
-      <View ref='Container' style={ styles.container }>
+      <View style={ styles.container }>
         <Text style={ styles.logInTitle }>{ this.props.message }</Text>
         { this._renderError() }
         <View style={{

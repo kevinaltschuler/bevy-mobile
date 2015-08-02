@@ -13,31 +13,37 @@ var {
 } = require('react-native-icons');
 
 var constants = require('./../../constants');
+var routes = require('./../../routes');
 
 var NewPostCard = React.createClass({
 
   propTypes: {
-    onPress: React.PropTypes.func.isRequired,
-    user: React.PropTypes.object
-  },
-
-  onPress() {
-    this.props.onPress();
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
+    mainNavigator: React.PropTypes.object,
+    authModalActions: React.PropTypes.object
   },
 
   render() {
 
-    var user = this.props.user;
+    var image_url = (this.props.loggedIn)
+    ? this.props.user.image_url
+    : constants.siteurl + '/img/user-profile-icon.png';
 
     return (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
-        onPress={this.onPress}
+        onPress={() => {
+          if(this.props.loggedIn)
+            this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+          else
+            this.props.authModalActions.open('Log In To Post');
+        }}
         style={ styles.touchContainer }
       >
         <View style={ styles.container }>
           <Image 
-            source={{ uri: user.image_url }}
+            source={{ uri: image_url }}
             style={ styles.image }
           />
           <View style={ styles.textContainer }>

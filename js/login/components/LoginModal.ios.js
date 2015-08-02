@@ -47,9 +47,7 @@ var LoginModal = React.createClass({
 
   close() {
     console.log('close modal');
-    this.setState({
-      isOpen: false
-    });
+    this.props.authModalActions.close();
   },
 
   render() {
@@ -65,11 +63,7 @@ var LoginModal = React.createClass({
           <TouchableHighlight
             underlayColor='rgba(255,255,255,0.1)'
             style={ styles.closeButton }
-            onPress={() => {
-              this.setState({
-                isOpen: false
-              });
-            }}
+            onPress={ this.close }
           >
             <View style={ styles.closeButtonContainer }>
               <Text style={ styles.closeButtonText }>Close</Text>
