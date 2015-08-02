@@ -37,8 +37,21 @@ _.extend(UserStore, {
             this.trigger(USER.LOADED);
           }.bind(this)
         });
+        break;
+
+      case USER.LOGOUT:
+        // remove google token
+        AsyncStorage.removeItem('google_id');
+        // remove user
+        AsyncStorage.removeItem('user');
+
+        this.user = new User;
+        this.loggedIn = false;
+
+        this.trigger(USER.LOADED);
 
         break;
+
       case BEVY.SUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevies = this.user.get('bevies');

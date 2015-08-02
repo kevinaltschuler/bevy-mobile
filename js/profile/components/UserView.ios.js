@@ -21,14 +21,16 @@ var {
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var ReadImageData = require('NativeModules').ReadImageData;
 
-var FileActions = require('./../../File/FileActions');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
+var UserActions = require('./../UserActions');
+var FileActions = require('./../../File/FileActions');
 
 var UserView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    tabBarActions: React.PropTypes.object
   },
 
   getInitialState: function() {
@@ -38,12 +40,8 @@ var UserView = React.createClass({
   },
 
   handleLogout: function() {
-    // remove google token
-    AsyncStorage.removeItem('google_id');
-    // remove user
-    AsyncStorage.removeItem('user');
-
-    this.props.mainNavigator.push(routes.MAIN.LOGIN);
+    UserActions.logOut();
+    this.props.tabBarActions.switchTab('Posts');
   },
 
   onProfileChange: function() {

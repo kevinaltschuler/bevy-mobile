@@ -19,57 +19,73 @@ var {
 
 var RegisterView = React.createClass({
 
+  propTypes: {
+    message: React.PropTypes.string,
+    loginNavigator: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      email: '',
+      pass: ''
+    };
+  },
+
   render: function() {
     return ( 
-      <View style={styles.loginContainer}>
-        <View style={styles.loginRow}>
-          <Text style={styles.loginTitle}>
-            Register
+      <View style={styles.container}>
+        <Text style={styles.registerTitle}>
+          Create An Account
+        </Text>
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#ddd'
+        }} />
+        <TextInput
+          autoCorrect={ false }
+          autoCapitalize='none'
+          placeholder='Email Address'
+          placeholderTextColor='#aaa'
+          style={ styles.registerInput }
+          onChangeText={(text) => this.setState({ email: text })}
+        />
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#ddd'
+        }} />
+        <TextInput
+          autoCorrect={ false }
+          autoCapitalize='none'
+          password={ true }
+          placeholder='•••••••'
+          placeholderTextColor='#aaa'
+          style={ styles.registerInput }
+          onChangeText={(text) => this.setState({ pass: text })}
+        />
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#ddd',
+          marginBottom: 15
+        }} />
+        <TouchableHighlight 
+          style={ styles.registerButton }
+          underlayColor="#eee">
+          <Text style={ styles.registerButtonText }>
+            Create
           </Text>
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight
-            style={styles.imageButton}
-            underlayColor='rgba(0,0,0,0)'
-          >
-            <Text style={styles.loginSubTitle}>
-              your picture here
-            </Text>
-          </TouchableHighlight>
-        </View>
-
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            placeholder='email'
-            placeholderTextColor='rgba(255,255,255,.6)'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            password={true}
-            placeholder='•••••••'
-            placeholderTextColor='rgba(255,255,255,.6)'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({input: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButton}
-            activeOpacity={80}
-            underlayColor="#edeeee">
-            <Text style={styles.loginButtonText}>
-              Register
-            </Text>
-          </TouchableHighlight>
-        </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor='#eee'
+          style={ styles.textButton }
+          onPress={() => {
+            this.props.loginNavigator.change('login');
+          }}
+        >
+          <Text style={ styles.textButtonText }>Back To Login</Text>
+        </TouchableHighlight>
       </View>
     );
   }
@@ -77,65 +93,52 @@ var RegisterView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  loginContainer: {
-    paddingTop: 130,
+  container: {
     flex: 1,
-    backgroundColor: '#2CB673'
+    width: 250,
+    backgroundColor: '#fff',
+    flexDirection: 'column',
+    borderRadius: 5,
+    paddingTop: 15,
+    paddingBottom: 5
   },
-  loginRow: {
-    flexDirection: 'row',
-    padding: 6,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  loginRowText: {
-    flexDirection: 'row',
-    paddingTop: 0,
-    paddingBottom: 10,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)',
-  },
-  loginTitle: {
+  registerTitle: {
     textAlign: 'center',
-    fontSize: 30,
-    color: 'white'
+    fontSize: 17,
+    color: '#666',
+    marginBottom: 10
   },
-  loginSubTitle: {
-    textAlign: 'center',
-    fontSize: 10,
-    color: 'white'
-  },
-  loginInput: {
-    alignSelf: 'center',
+  registerInput: {
+    flex: 1,
     height: 40,
-    width: 200,
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 20,
     paddingLeft: 16,
-    backgroundColor: 'rgba(0,0,0,0)',
-    color: 'white'
+    color: '#000'
   },
-  loginButton: {
-    alignSelf: 'center',
+  registerButton: {
+    flex: 1,
     padding: 10,
-    width: 200,
-    borderRadius: 20,
-    backgroundColor: 'white'
+    backgroundColor: '#2CB673',
+    marginBottom: 10
   },
-  loginButtonText: {
+  registerButtonText: {
+    flex: 1,
+    fontSize: 17,
     textAlign: 'center',
-    color: 'black',
+    color: '#fff'
   },
-  imageButton: {
-    width: 60,
-    height: 60,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 30,
-    padding: 10
+  textButton: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingTop: 5,
+    paddingBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textButtonText: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#666'
   }
-
 });
 
 module.exports = RegisterView;

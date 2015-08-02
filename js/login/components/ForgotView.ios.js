@@ -9,7 +9,6 @@
 // get modules
 var React = require('react-native');
 var _ = require('underscore');
-var api = require('./../../utils/api.js')
 
 var {
   View,
@@ -17,10 +16,14 @@ var {
   TextInput,
   TouchableHighlight,
   Text,
-  Image
 } = React;
 
 var ForgotView = React.createClass({
+
+  propTypes: {
+    message: React.PropTypes.string,
+    loginNavigator: React.PropTypes.object
+  },
 
   getInitialState: function() {
     return {
@@ -30,126 +33,110 @@ var ForgotView = React.createClass({
   },
 
   handleSubmit: function() {
-    api.forgotPass(this.state.email)
-    .then((res) => {
-      if (res.object == 'error') {
-        this.setState({ subTitle: res.message });
-      }
-      else {
-        this.setState({ subTitle: 'email sent!' });
-      }
-    });
+    
   },
 
   render: function() {
     return ( 
-      <View style={styles.loginContainer}>
-        <View style={styles.loginRow}>
-          <Text style={styles.loginTitle}>
-            Lost Password?
+      <View style={styles.container}>
+        <Text style={styles.loginTitle}>
+          Lost Password?
+        </Text>
+        <Text style={styles.loginSubTitle}>
+          { this.state.subTitle }
+        </Text>
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#ddd'
+        }} />
+        <TextInput
+          autoCorrect={false}
+          autoCapitalize='none'
+          placeholder='Email Address'
+          placeholderTextColor='#aaa'
+          style={ styles.loginInput }
+          onChangeText={(text) => this.setState({email: text})}
+        />
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#ddd',
+          marginBottom: 15
+        }} />
+        <TouchableHighlight 
+          style={ styles.loginButton }
+          underlayColor="#eee"
+          onPress={ this.handleSubmit }>
+          <Text style={ styles.loginButtonText }>
+            Send
           </Text>
-        </View>
-
-        <View style={styles.loginRowText}>
-            <Text style={styles.loginSubTitle}>
-              {this.state.subTitle}
-            </Text>
-          </View>
-
-        <View style={styles.loginRow}>
-          <TextInput
-            autoCorrect={false}
-            placeholder='email'
-            placeholderTextColor='rgba(255,255,255,.6)'
-            style={styles.loginInput}
-            onChangeText={(text) => this.setState({email: text})}
-          />
-        </View>
-
-        <View style={styles.loginRow}>
-          <TouchableHighlight 
-            style={styles.loginButton}
-            activeOpacity={80}
-            underlayColor="#edeeee"
-            onPress={this.handleSubmit}>
-            <Text style={styles.loginButtonText}>
-              send
-            </Text>
-          </TouchableHighlight>
-        </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor='#eee'
+          style={ styles.textButton }
+          onPress={() => {
+            this.props.loginNavigator.change('login');
+          }}
+        >
+          <Text style={ styles.textButtonText }>Back To Login</Text>
+        </TouchableHighlight>
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  loginContainer: {
-    backgroundColor: '#2CB673',
-    flex: 1
-  },
-  loginRow: {
+  container: {
     flex: 1,
-    alignItems: 'center',
-    padding: 6,
-    justifyContent: 'center'
-  },
-  loginRowLogo: {
-    flexDirection: 'row',
-    paddingTop: 80,
-    justifyContent: 'center'
-  },
-  loginRowText: {
-    flexDirection: 'row',
-    paddingTop: 0,
-    paddingBottom: 10,
-    justifyContent: 'center'
+    width: 250,
+    backgroundColor: '#fff',
+    flexDirection: 'column',
+    borderRadius: 5,
+    paddingTop: 15,
+    paddingBottom: 5
   },
   loginTitle: {
     textAlign: 'center',
-    fontSize: 30,
-    color: 'white', 
-    paddingTop: 130
+    fontSize: 17,
+    color: '#666'
   },
   loginSubTitle: {
     textAlign: 'center',
-    fontSize: 12,
-    color: 'white'
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 10
   },
   loginInput: {
-    alignSelf: 'center',
+    flex: 1,
     height: 40,
-    width: 200,
-    borderColor: "white",
-    borderWidth: 1,
-    borderRadius: 20,
     paddingLeft: 16,
-    color: 'white'
+    color: '#000'
   },
   loginButton: {
-    alignSelf: 'center',
+    flex: 1,
     padding: 10,
-    width: 200,
-    borderRadius: 20,
-    backgroundColor: 'white'
-  },
-  loginButtonGoogle: {
-    alignSelf: 'center',
-    backgroundColor: '#df4a32',
-    padding: 10,
-    width: 200,
-    borderRadius: 20,
+    backgroundColor: '#2CB673',
+    marginBottom: 10
   },
   loginButtonText: {
+    flex: 1,
+    fontSize: 17,
     textAlign: 'center',
-    color: 'black',
+    color: '#fff'
   },
-  loginButtonTextGoogle: {
+  textButton: {
+    flex: 1,
+    flexDirection: 'row',
+    paddingTop: 5,
+    paddingBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textButtonText: {
     textAlign: 'center',
-    color: 'white',
-  },
-  logo: {
-    width: 50,
-    height: 50,
+    fontSize: 14,
+    color: '#666'
   }
 });
 

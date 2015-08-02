@@ -22,42 +22,59 @@ var ChatNavigator = require('./../../chat/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../notification/components/NotificationNavigator.ios.js');
 var ProfileNavigator = require('./../../profile/components/ProfileNavigator.ios.js');
 
+var tabs = {
+  Posts: 'BevyNavigator',
+  Chat: 'ChatNavigator',
+  Notifications: 'NotificationNavigator',
+  Profile: 'ProfileNavigator'
+};
+
 var MainTabBar = React.createClass({
 
   getInitialState() {
     return {
-      selectedTab: 'BevyNavigator'
+      selectedTab: tabs.Posts
     };
+  },
+
+  switchTab(tabName) {
+    this.setState({
+      selectedTab: tabs[tabName]
+    });
   },
 
   _renderContent() {
 
+    var tabBarActions = {
+      switchTab: this.switchTab
+    };
+
     switch(this.state.selectedTab) {
-      case 'BevyNavigator':
+      case tabs.Posts:
         return (
           <View style={styles.tabContent}>
-            <BevyNavigator { ...this.props } />
+            <BevyNavigator { ...this.props } tabBarActions={ tabBarActions }/>
           </View>
         );
         break;
-      case 'ChatNavigator':
+      case tabs.Chat:
         return (
           <View style={styles.tabContent}>
-            <ChatNavigator { ...this.props } />
+            <ChatNavigator { ...this.props } tabBarActions={ tabBarActions }/>
           </View>
         );
         break;
-      case 'NotificationNavigator':
+      case tabs.Notifications:
         return (
           <View style={styles.tabContent}>
-            <NotificationNavigator { ...this.props } />
+            <NotificationNavigator { ...this.props } tabBarActions={ tabBarActions }/>
           </View>
         );
         break;
-      case 'ProfileNavigator':
+      case tabs.Profile:
         return (
           <View style={styles.tabContent}>
-            <ProfileNavigator { ...this.props } />
+            <ProfileNavigator { ...this.props } tabBarActions={ tabBarActions }/>
           </View>
         );
         break;
@@ -71,11 +88,11 @@ var MainTabBar = React.createClass({
           <TabBarIOS.Item
             title='Posts'
             iconName={ 'ion|ios-list-outline' }
-            selected={ this.state.selectedTab === 'BevyNavigator' }
+            selected={ this.state.selectedTab === tabs.Posts }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
-                selectedTab: 'BevyNavigator'
+                selectedTab: tabs.Posts
               });
             }}
           >
@@ -84,11 +101,11 @@ var MainTabBar = React.createClass({
           <TabBarIOS.Item
             title='Chat'
             iconName={ 'ion|ios-chatbubble-outline' }
-            selected={ this.state.selectedTab === 'ChatNavigator' }
+            selected={ this.state.selectedTab === tabs.Chat }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
-                selectedTab: 'ChatNavigator'
+                selectedTab: tabs.Chat
               });
             }}
           >
@@ -97,11 +114,11 @@ var MainTabBar = React.createClass({
           <TabBarIOS.Item
             title='Notifications'
             iconName={ 'ion|ios-bell-outline' }
-            selected={ this.state.selectedTab === 'NotificationNavigator' }
+            selected={ this.state.selectedTab === tabs.Notifications }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
-                selectedTab: 'NotificationNavigator'
+                selectedTab: tabs.Notifications
               });
             }}
           >
@@ -110,11 +127,11 @@ var MainTabBar = React.createClass({
           <TabBarIOS.Item
             title='Profile'
             iconName={ 'ion|ios-person-outline' }
-            selected={ this.state.selectedTab === 'ProfileNavigator' }
+            selected={ this.state.selectedTab === tabs.Profile }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
-                selectedTab: 'ProfileNavigator'
+                selectedTab: tabs.Profile
               });
             }}
           >

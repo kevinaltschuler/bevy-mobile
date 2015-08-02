@@ -1,11 +1,11 @@
 /**
- * BevyBar.js
- * kevin made this
+ * LoginNavigator.ios.js
+ * not using native navigator because of height/layout issues
+ * so no fancy animations here
  */
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -17,147 +17,43 @@ var LoginView = require('./LoginView.ios.js');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotView = require('./ForgotView.ios.js');
 
-var BackButton = require('./../../shared/components/BackButton.ios.js');
-
+var constants = require('./../../constants');
 var routes = require('./../../routes');
 
-var Navbar = React.createClass({
-  propTypes: {
-    loginRoute: React.PropTypes.object,
-    loginNavigator: React.PropTypes.object
+var LoginNavigator = React.createClass({
+
+  getInitialState() {
+    return {
+      currentRoute: 'login'
+    };
   },
 
-  goBack: function() {
-    this.props.loginNavigator.pop();
+  changeRoute(route) {
+    this.setState({
+      currentRoute: route
+    });
   },
 
-  render: function() {
+  render: function () {
 
-    var backButton = (this.props.loginRoute.name == 'LoginView')
-    ? (<View />)
-    : (
-      <BackButton
-        onPress={ this.goBack }
-      />
-    );
+    var navigator = {
+      change: this.changeRoute
+    };
 
-    return (
-      <View style={ styles.navbar }>
-        <View style={ styles.left }>
-          { backButton }
-        </View>
-        <View style={ styles.center }>
-          <Text style={ styles.navbarText }></Text>
-        </View>
-        <View style={ styles.right }>
-        </View>
-      </View>
-    );
-  }
-});
-
-var MainView = React.createClass({
-  propTypes: {
-    loginRoute: React.PropTypes.object,
-    loginNavigator: React.PropTypes.object
-  },
-
-  render: function() {
-    var view;
-    switch(this.props.loginRoute.name) {
-      case 'RegisterView':
-        view = (
-          <RegisterView
-            { ...this.props }
-          />
-        );
+    switch(this.state.currentRoute) {
+      case 'register':
+        return <RegisterView { ...this.props } loginNavigator={ navigator }/>;
         break;
-      case 'ForgotView':
-        view = (
-          <ForgotView
-            { ...this.props }
-          />
-        );
+      case 'forgot':
+        return <ForgotView { ...this.props } loginNavigator={ navigator }/>;
         break;
-      case 'LoginView':
+      case 'login':
       default:
-        view = (
-          <LoginView
-            { ...this.props }
-          />
-        ); 
+        return <LoginView { ...this.props } loginNavigator={ navigator }/>;
         break;
     }
-
-    return (
-      <View style={{ flex: 1 }}>
-        <Navbar
-          loginRoute={ this.props.loginRoute }
-          loginNavigator={ this.props.loginNavigator }
-        />
-        { view }
-      </View>
-    );
   }
 });
 
-var LoginNavigator = React.createClass({
-  render: function () {
-    return (
-      <Navigator
-        navigator={ this.props.mainNavigator }
-        initialRoute={routes.LOGIN.LOGIN}
-        initialRouteStack={[
-          routes.LOGIN.LOGIN
-        ]}
-        renderScene={(route, navigator) => 
-          <MainView
-            loginRoute={ route }
-            loginNavigator={ navigator }
-            { ...this.props }
-          />
-        }
-      />
-    );
-  }
-});
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0)',
-    padding: 0,
-  },
-  navbar: {
-    backgroundColor: '#2CB673',
-    flexDirection: 'row',
-    height: 64,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  navbarText: {
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: '500'
-  },
-  left: {
-    height: 32,
-    width: 32,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
-  center: {
-    height: 32,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center'
-  },
-  right: {
-    height: 64,
-    width: 32,
-  }
-});
 
 module.exports = LoginNavigator;

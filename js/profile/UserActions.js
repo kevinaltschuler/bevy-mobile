@@ -9,6 +9,10 @@ var UserActions = {
     dispatch(USER.UPDATE, {
 
     });
+  },
+
+  logOut() {
+    dispatch(USER.LOGOUT, {}); 
   }
 };
 
