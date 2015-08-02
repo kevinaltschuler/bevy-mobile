@@ -22,6 +22,10 @@ var routes = require('./../../routes');
 
 var LoginNavigator = React.createClass({
 
+  propTypes: {
+    authModalActions: React.PropTypes.object
+  },
+
   getInitialState() {
     return {
       currentRoute: 'login'
@@ -42,14 +46,26 @@ var LoginNavigator = React.createClass({
 
     switch(this.state.currentRoute) {
       case 'register':
-        return <RegisterView { ...this.props } loginNavigator={ navigator }/>;
+        return <RegisterView 
+          { ...this.props } 
+          loginNavigator={ navigator } 
+          authModalActions={ this.props.authModalActions }
+        />;
         break;
       case 'forgot':
-        return <ForgotView { ...this.props } loginNavigator={ navigator }/>;
+        return <ForgotView 
+          { ...this.props } 
+          loginNavigator={ navigator }
+          authModalActions={ this.props.authModalActions }
+        />;
         break;
       case 'login':
       default:
-        return <LoginView { ...this.props } loginNavigator={ navigator }/>;
+        return <LoginView 
+          { ...this.props } 
+          loginNavigator={ navigator }
+          authModalActions={ this.props.authModalActions }
+        />;
         break;
     }
   }

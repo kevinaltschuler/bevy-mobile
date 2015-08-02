@@ -243,6 +243,7 @@ var App = React.createClass({
         <LoginModal
           isOpen={ this.state.authModalOpen }
           message={ this.state.authModalMessage }
+          authModalActions={ authModalActions }
         />
         <Navigator
           configureScene={() => sceneConfig }

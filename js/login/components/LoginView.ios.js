@@ -21,6 +21,7 @@ var LoginView = React.createClass({
 
   propTypes: {
     loginNavigator: React.PropTypes.object,
+    authModalActions: React.PropTypes.object,
     message: React.PropTypes.string
   },
 
@@ -89,12 +90,13 @@ var LoginView = React.createClass({
     LinkingIOS.removeEventListener('url', this.handleGoogleURL);
     var url = event.url;
     var code = url.slice(38); // jenky query parser
+    console.log('got access code', code);
     var body = [
-      'code=' + code + '&',
-      'client_id=' + constants.google_client_id +'&',
-      'client_secret=' + constants.google_client_secret + '&',
-      'redirect_uri=' + constants.google_redirect_uri + '&',
-      'grant_type=authorization_code'
+      'code=' + code,
+      '&client_id=' + constants.google_client_id,
+      '&client_secret=' + constants.google_client_secret,
+      '&redirect_uri=' + constants.google_redirect_uri,
+      '&grant_type=authorization_code'
     ].join('');
     // get the token
     fetch('https://www.googleapis.com/oauth2/v3/token', {
@@ -107,6 +109,7 @@ var LoginView = React.createClass({
     }).then((res) => {
       var response = JSON.parse(res._bodyText);
       var access_token = response.access_token;
+      console.log('got access token', access_token);
       // get the google plus user, so we can get its id
       fetch(
         'https://www.googleapis.com/plus/v1/people/me' + 
@@ -135,12 +138,11 @@ var LoginView = React.createClass({
     AppActions.load();
 
     this.setState({
-      isOpen: false,
-      message: '',
       email: '',
       pass: '',
       error: ''
     });
+    this.props.authModalActions.close();
   },
 
   _renderError() {

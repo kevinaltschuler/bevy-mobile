@@ -27,7 +27,8 @@ var LoginModal = React.createClass({
 
   propTypes: {
     isOpen: React.PropTypes.bool,
-    message: React.PropTypes.string
+    message: React.PropTypes.string,
+    authModalActions: React.PropTypes.object
   },
 
   getInitialState() {
@@ -44,7 +45,15 @@ var LoginModal = React.createClass({
     });
   },
 
+  close() {
+    console.log('close modal');
+    this.setState({
+      isOpen: false
+    });
+  },
+
   render() {
+
     return (
       <Modal
         forceToFront={ true }
@@ -79,13 +88,9 @@ var LoginModal = React.createClass({
           //  isOpen: false
           //});
         }}
-        onClose={() => {
-          this.setState({
-            isOpen: false
-          });
-        }}
+        onClose={ this.close }
       >
-        <LoginNavigator ref='navigator' { ...this.state } />
+        <LoginNavigator authModalActions={ this.props.authModalActions } { ...this.state } />
       </Modal>
     );
   }
