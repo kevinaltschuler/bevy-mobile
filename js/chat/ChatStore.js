@@ -13,6 +13,7 @@ var UserStore = require('./../profile/UserStore');
 var user = UserStore.getUser();
 var APP = constants.APP;
 var CHAT = constants.CHAT;
+var BEVY = constants.BEVY;
 
 var ChatStore = _.extend({}, Backbone.Events);
 
@@ -27,14 +28,12 @@ _.extend(ChatStore, {
         this.threads.fetch({
           reset: true,
           success: function(collection, response, options) {
-            //this.trigger(APP.LOAD_PROGRESS, 0.1);
+            console.log('threads fetched', this.threads.toJSON());
             this.threads.forEach(function(thread) {
               thread.messages.fetch({
                 reset: true,
                 success: function(collection, response, options) {
                   thread.messages.sort();
-                  //console.log(thread.toJSON());
-                  //this.trigger(APP.LOAD_PROGRESS, (0.1 / this.threads.length));
                   this.trigger(CHAT.CHANGE_ALL);
                 }.bind(this)
               });

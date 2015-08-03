@@ -8,11 +8,8 @@
 var React = require('react-native');
 var {
   StyleSheet,
-  Text,
   View,
-  SegmentedControlIOS,
-  ScrollView,
-  Image
+  ScrollView
 } = React;
 
 var ThreadItem = require('./ThreadItem.ios.js');
@@ -38,12 +35,6 @@ var ConversationView = React.createClass({
 
     return (
       <View style={styles.container} >
-        <SegmentedControlIOS
-          values={ ['Conversations', 'Contacts'] }
-          selectedIndex={ 0 }
-          tintColor='#2CB673'
-          style={styles.segControl}
-        />
         <ScrollView style={styles.scrollContainer}>
           { threads }
         </ScrollView>
@@ -57,10 +48,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#ddd',
     flexDirection: 'column',
     flex: 1,
-  },
-  segControl: {
-    backgroundColor: 'white',
-    borderRadius: 0
   },
   scrollContainer: {
     flex: 1,
