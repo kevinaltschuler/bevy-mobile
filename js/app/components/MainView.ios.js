@@ -11,7 +11,6 @@ var {
   View
 } = React;
 
-var LoadingView = require('./LoadingView.ios.js');
 var LoginNavigator = require('./../../login/components/LoginNavigator.ios.js');
 var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../shared/components/SearchBar.ios.js');
@@ -45,10 +44,6 @@ var MainView = React.createClass({
   render: function() {
 
     switch(this.props.mainRoute.name) {
-
-      case routes.MAIN.LOADING.name:
-        return <LoadingView { ...this.props } />;
-        break;
 
       case routes.MAIN.LOGIN.name:
         return <LoginNavigator { ...this.props } />;
