@@ -8,15 +8,17 @@
 
 // get modules
 var React = require('react-native');
-var _ = require('underscore');
-
 var {
   View,
   StyleSheet,
   TextInput,
   TouchableHighlight,
   Text,
+  AlertIOS
 } = React;
+
+var _ = require('underscore');
+var constants = require('./../../constants');
 
 var ForgotView = React.createClass({
 
@@ -33,7 +35,32 @@ var ForgotView = React.createClass({
   },
 
   handleSubmit: function() {
-    
+    fetch(constants.siteurl + '/forgot', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: this.state.email
+      })
+    })
+    .then((res) => (res.json()))
+    .then((res) => {
+      if(res.object == undefined) {
+        // success
+        AlertIOS.alert('Forgot Password', 'Email Sent! Please check your email and go to the link provided to reset your password.');
+        // clear text field
+        this.setState({
+          email: ''
+        });
+      } else {
+        // error
+        this.setState({
+          subTitle: res.message
+        });
+      }
+    })
   },
 
   render: function() {
@@ -54,8 +81,10 @@ var ForgotView = React.createClass({
           autoCorrect={false}
           autoCapitalize='none'
           placeholder='Email Address'
+          keyboardType='email-address'
           placeholderTextColor='#aaa'
           style={ styles.loginInput }
+          value={ this.state.email }
           onChangeText={(text) => this.setState({email: text})}
         />
         <View style={{
@@ -66,7 +95,7 @@ var ForgotView = React.createClass({
         }} />
         <TouchableHighlight 
           style={ styles.loginButton }
-          underlayColor="#eee"
+          underlayColor='rgba(44,182,105,0.8)'
           onPress={ this.handleSubmit }>
           <Text style={ styles.loginButtonText }>
             Send

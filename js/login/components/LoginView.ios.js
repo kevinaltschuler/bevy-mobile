@@ -166,6 +166,7 @@ var LoginView = React.createClass({
           autoCorrect={ false }
           autoCapitalize='none'
           placeholder='Email Address'
+          keyboardType='email-address'
           style={ styles.loginInput }
           onChangeText={ (text) => this.setState({ email: text }) }
           placeholderTextColor='#aaa'
