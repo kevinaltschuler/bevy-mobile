@@ -31,7 +31,9 @@ var InfoView = React.createClass({
     activeBevy: React.PropTypes.object,
     bevyRoute: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
+    authModalActions: React.PropTypes.object
   },
 
   getInitialState() {
@@ -58,6 +60,10 @@ var InfoView = React.createClass({
         <SwitchIOS
           value={ this.state.subscribed }
           onValueChange={(value) => {
+            if(!this.props.loggedIn) {
+              this.props.authModalActions.open('Please Log In To Subscribe');
+              return;
+            }
             this.setState({
               subscribed: value
             });
