@@ -38,11 +38,32 @@ var InfoView = React.createClass({
 
   getInitialState() {
     var user = this.props.user;
-    console.log(user.bevies, this.props.activeBevy._id);
+    //console.log(user.bevies, this.props.activeBevy._id);
     return {
       subscribed: _.findWhere(user.bevies, { _id: this.props.activeBevy._id }) != undefined,
       public: true
     };
+  },
+
+  _renderImageButton() {
+    // dont render this if you're not an admin
+    if(!_.contains(this.props.activeBevy.admins, this.props.user._id)) return <View />;
+    return (
+      <TouchableOpacity 
+        activeOpacity={ .8 }
+        style={ styles.cameraTouchable }
+        onPress={() => {
+
+        }}
+      >
+        <Icon
+          name='ion|ios-camera-outline'
+          size={40}
+          color='white'
+          style={styles.cameraIcon}
+        />
+      </TouchableOpacity>
+    );
   },
 
   _renderSubSwitch() {
@@ -134,20 +155,7 @@ var InfoView = React.createClass({
               style={styles.profileImage}
               source={{ uri: this.props.activeBevy.image_url }}
             >
-              <TouchableOpacity 
-                activeOpacity={.8}
-                style={styles.cameraTouchable}
-                onPress={() => {
-
-                }}
-              >
-                <Icon
-                  name='ion|ios-camera-outline'
-                  size={40}
-                  color='white'
-                  style={styles.cameraIcon}
-                />
-              </TouchableOpacity>
+              { this._renderImageButton() }
             </Image>
           </View>
 
