@@ -21,9 +21,11 @@ var ImageOverlay = require('./ImageOverlay.ios.js');
 var Modal = require('react-native-modal');
 
 var constants = require('./../../constants');
+var POST = constants.POST;
 var routes = require('./../../routes');
 var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostActions = require('./../PostActions');
+var PostStore = require('./../PostStore');
 
 var Post = React.createClass({
   propTypes: {
@@ -42,51 +44,64 @@ var Post = React.createClass({
 
   getInitialState() {
     return {
+      post: this.props.post,
       overlayVisible: false,
       voted: this.props.post.voted
     };
   },
 
+  componentDidMount() {
+    PostStore.on(POST.CHANGE_ONE + this.props.post._id, () => {
+      this.setState({
+        post: PostStore.getPost(this.props.post._id)
+      });
+    });
+  },
+
+  componentWillUnmount() {
+    PostStore.off(POST.CHANGE_ONE + this.props.post._id);
+  },
+
   componentWillReceiveProps(nextProps) {
-    //this.setState({
-    //  voted: nextProps.post.voted
-    //});
+    this.setState({
+      post: nextProps.post
+    });
   },
 
   countVotes: function() {
     var sum = 0;
-    this.props.post.votes.forEach(function(vote) {
+    this.state.post.votes.forEach(function(vote) {
       sum += vote.score;
     });
     return sum;
   },
 
   _renderPostTitle() {
-    if(_.isEmpty(this.props.post.title)) return null;
+    if(_.isEmpty(this.state.post.title)) return null;
     return (
       <View style={styles.body}>
         <Text style={styles.bodyText}>
-          { this.props.post.title }
+          { this.state.post.title }
         </Text>
       </View>
     );
   },
 
   _renderImageOverlay() {
-    if(this.props.post.images.length <= 0) return null;
+    if(this.state.post.images.length <= 0) return null;
     return (
       <ImageOverlay 
-        images={ this.props.post.images }
+        images={ this.state.post.images }
         isVisible={ this.state.overlayVisible } 
       />
     );
   },
 
   _renderPostImage() {
-    if(_.isEmpty(this.props.post.images)) {
+    if(_.isEmpty(this.state.post.images)) {
       return <View />;
     }
-    var imageCount = this.props.post.images.length;
+    var imageCount = this.state.post.images.length;
     var imageCountText = (imageCount > 1) 
     ? (
       <Text style={ styles.postImageCountText }>
@@ -106,7 +121,7 @@ var Post = React.createClass({
       >
         <Image
           style={ styles.postImage }
-          source={{ uri: this.props.post.images[0] }}
+          source={{ uri: this.state.post.images[0] }}
           resizeMode='cover'
         >
           { imageCountText }
@@ -116,7 +131,7 @@ var Post = React.createClass({
   },
 
   render: function() {
-    var post = this.props.post;
+    var post = this.state.post;
 
     return (
       <View style={styles.postCard}>
@@ -173,7 +188,7 @@ var Post = React.createClass({
               if(this.props.inCommentView) return;
 
               var commentRoute = routes.MAIN.COMMENT;
-              commentRoute.postID = this.props.post._id;
+              commentRoute.postID = this.state.post._id;
               this.props.mainNavigator.push(commentRoute);
             }}
           >

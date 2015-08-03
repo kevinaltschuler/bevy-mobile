@@ -161,7 +161,7 @@ _.extend(PostStore, {
           success: function(post, response, options) {
             // sort posts
             //this.posts.sort();
-            this.trigger(POST.CHANGE_ALL);
+            this.trigger(POST.CHANGE_ONE + post_id);
           }.bind(this)
         });
 
@@ -274,6 +274,7 @@ _.extend(PostStore, {
             comments: []
           });
           this.trigger(POST.CHANGE_ALL); // custom event for this later?*/
+          this.trigger(POST.CHANGE_ONE + post_id);
         });
         break;
     }
