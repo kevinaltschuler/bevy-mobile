@@ -25,12 +25,11 @@ var BevyActions = {
     dispatch(BEVY.FETCH_PUBLIC, {});
   },
 
-  create(name, description, image_url, parent) {
+  create(name, description, image_url) {
     dispatch(BEVY.CREATE, {
       name: (name == undefined) ? '' : name,
       description: (description == undefined) ? '' : description,
-      image_url: (image_url == undefined) ? '' : image_url,
-      parent: (parent == undefined) ? null : parent
+      image_url: (image_url == undefined) ? '' : image_url
     });
   },
 

@@ -57,15 +57,6 @@ var MainView = React.createClass({
         return <CreateBevyView { ...this.props } />;
         break;
 
-      case routes.MAIN.NEWSUBBEVY.name:
-        return (
-          <CreateBevyView
-            subBevy={ true }
-            { ...this.props }
-          />
-        );
-        break;
-
       case routes.MAIN.COMMENT.name:
         return (
           <CommentView 

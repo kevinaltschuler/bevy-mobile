@@ -49,8 +49,7 @@ _.extend(BevyStore, {
   myBevies: new Bevies,
   publicBevies: new Bevies,
 
-  activeSub: -1, // id of active subbevy
-  activeSuper: -1, // id of active superbevy
+  active: -1, // id of active bevy
   subBevies: new Bevies, // sub bevies of the active bevy
 
   // handle calls from the dispatcher
@@ -125,29 +124,8 @@ _.extend(BevyStore, {
           }
         }
 
-        if(bevy.get('parent') == null) {
-          // is a superbevy
-          this.activeSuper = bevy.get('_id');
-          this.activeSub = -1;
-
-          // fetch subbevies, only if not frontpage
-          if(this.activeSuper != -1) {
-            this.subBevies.url = constants.apiurl + '/bevies/' + this.activeSuper + '/subbevies';
-            this.subBevies.fetch({
-              reset: true,
-              success: function(subbevies, response, options) {
-                this.trigger(BEVY.CHANGE_ALL);
-              }.bind(this)
-            });
-          } else {
-            // frontpage - reset subbevies
-            this.subBevies.reset();
-          }
-        } else {
-          // is a subbevy
-          this.activeSuper = bevy.get('parent');
-          this.activeSub = bevy.get('_id');
-        }
+        // set active field
+        this.active = bevy.get('_id');
 
         this.trigger(BEVY.CHANGE_ALL);
         this.trigger(BEVY.SWITCHED);
@@ -158,7 +136,6 @@ _.extend(BevyStore, {
         var name = payload.name;
         var description = payload.description;
         var image_url = payload.image_url;
-        var parent = payload.parent;
 
         var user = UserStore.getUser();
 
@@ -166,7 +143,6 @@ _.extend(BevyStore, {
           name: name,
           description: description,
           image_url: image_url,
-          parent: parent,
           admins: [ user._id ]
         });
 
@@ -481,33 +457,9 @@ _.extend(BevyStore, {
     return this.publicBevies.toJSON();
   },
 
-  getSubBevies() {
-    console.log(this.subBevies.length);
-    return this.subBevies.toJSON();
-  },
-
   getActive() {
-    var bevy;
-    if(this.activeSub == -1) {
-      // get a superbevy
-      bevy = this.myBevies.get(this.activeSuper) || this.publicBevies.get(this.activeSuper);
-    } else {
-      // get a subbevy
-      bevy = this.subBevies.get(this.activeSub);
-    }
+    var bevy = this.myBevies.get(this.active) || this.publicBevies.get(this.active);
     //console.log(bevy);
-    if(bevy == undefined) return {};
-    else return bevy.toJSON();
-  },
-
-  getActiveSuper() {
-    var bevy = this.myBevies.get(this.activeSuper) || this.publicBevies.get(this.activeSuper);
-    if(bevy == undefined) return {};
-    else return bevy.toJSON();
-  },
-
-  getActiveSub() {
-    var bevy = this.subBevies.get(this.activeSub);
     if(bevy == undefined) return {};
     else return bevy.toJSON();
   },

@@ -31,9 +31,7 @@ var BEVY = constants.BEVY;
 var BevyList = React.createClass({
   propTypes: {
     myBevies: React.PropTypes.array,
-    subBevies: React.PropTypes.array,
-    activeSuper: React.PropTypes.object,
-    activeSub: React.PropTypes.object,
+    activeBevy: React.PropTypes.object,
     menuActions: React.PropTypes.object,
     loggedIn: React.PropTypes.bool
   },
@@ -68,7 +66,7 @@ var BevyList = React.createClass({
     return (
       <View style={ styles.activeBevy }>
         <Text style={ styles.activeBevyText }>
-          { this.props.activeSuper.name }
+          { this.props.activeBevy.name }
         </Text>
         {/* TODO: @kevin CSS animate this chevron? */}
         <Icon
@@ -97,7 +95,7 @@ var BevyList = React.createClass({
       <View style={ styles.bevyList }>
         { _.map(bevies, function(bevy) {
           // dont render active bevy
-          if(bevy._id == this.props.activeSuper._id) return null;
+          if(bevy._id == this.props.activeBevy._id) return null;
 
           return (
             <TouchableHighlight 
@@ -154,80 +152,6 @@ var BevyList = React.createClass({
     );
   },
 
-  _renderSubBevyBar() {
-    if(this.props.activeSuper._id == -1) {
-      // dont render subbevybar for the frontpage
-      return <View />;
-    } 
-
-    return (
-      <View style={ styles.subBevies }>
-        <Text style={ styles.subBeviesTitle }>
-          Subbevies
-        </Text>
-        <TouchableHighlight
-          style={ styles.subBeviesAdd }
-          onPress={() => {
-            this.props.mainNavigator.push(routes.MAIN.NEWSUBBEVY);
-          }}
-        >
-          <Icon
-            name='ion|plus-round'
-            size={25}
-            color='#fff'
-            style={ styles.subBeviesAddIcon }
-          />
-        </TouchableHighlight>
-      </View>
-    );
-  },
-
-  _renderSubBevyList() {
-    if(this.props.activeSuper._id == -1) {
-      // dont render subbevies for the frontpage
-      return <View />;
-    }
-
-    return (
-      <View style={ styles.subBevyList }>
-
-        {/* Home Button */}
-        <TouchableHighlight 
-          style={[styles.bevyItem, (_.isEmpty(this.props.activeSub)) ? styles.bevyItemActive : {}]}
-          onPress={() => {
-            BevyActions.switchBevy(this.props.activeSuper._id);
-            // close the side menu
-            this.props.menuActions.close();
-          }}
-        >
-          <Text style={styles.bevyItemText}>
-            Home
-          </Text>
-        </TouchableHighlight>
-
-        { _.map(this.props.subBevies, function(subBevy) {
-          var active = (subBevy._id == this.props.activeSub._id);
-          var bevyItemStyles = [styles.bevyItem];
-          if(active) bevyItemStyles.push(styles.bevyItemActive);
-          return (
-            <TouchableHighlight
-              key={ 'subbevylist:' + subBevy._id }
-              style={bevyItemStyles}
-              onPress={() => {
-                BevyActions.switchBevy(subBevy._id);
-                // close the side menu
-                this.props.menuActions.close();
-              }}
-            >
-              <Text style={styles.bevyItemText}>
-                { subBevy.name }
-              </Text>
-            </TouchableHighlight>
-          );
-        }.bind(this)) }
-      </View>
-    );
-  },
   
   render: function() {
     return (
@@ -250,9 +174,6 @@ var BevyList = React.createClass({
           header={ this._renderBevyBar() }
           content={ this._renderBevyList() }
         />
-
-        { this._renderSubBevyBar() }
-        { this._renderSubBevyList() }
 
       </View>
     );

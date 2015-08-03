@@ -221,15 +221,12 @@ _.extend(PostStore, {
 
       case BEVY.SWITCH:
         Dispatcher.waitFor([BevyStore.dispatchToken]);
-        var super_id = BevyStore.activeSuper;
-        var sub_id = BevyStore.activeSub;
+        var bevy_id = BevyStore.active;
 
-        if(super_id == -1)
+        if(bevy_id == -1)
           this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
-        else if (sub_id == -1) {
-          this.posts.url = constants.apiurl + '/bevies/' + super_id + '/posts';
-        } else {
-          this.posts.url = constants.apiurl + '/bevies/' + sub_id + '/posts';
+        else {
+          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         }
 
         this.posts.fetch({

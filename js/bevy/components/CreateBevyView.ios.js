@@ -29,8 +29,7 @@ var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator
 var CreateBevyView = React.createClass({
 
   propTypes: {
-    activeBevy: React.PropTypes.object,
-    subBevy: React.PropTypes.bool
+    activeBevy: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -70,23 +69,6 @@ var CreateBevyView = React.createClass({
       return (
         <View style={ styles.loadingView }>
           <RefreshingIndicator description='Creating Bevy...'/>
-        </View>
-      );
-    } else {
-      return <View />;
-    }
-  },
-
-  _renderSubBevyHeader() {
-    if(this.props.subBevy) {
-      return (
-        <View style={ styles.subBevyHeader }>
-          <Text style={ styles.subBevyFor }>
-            New Subbevy For
-          </Text>
-          <Text style={ styles.subBevyName }>
-            { this.props.activeBevy.name }
-          </Text>
         </View>
       );
     } else {
@@ -198,7 +180,6 @@ var CreateBevyView = React.createClass({
                   this.state.name, // bevy name
                   this.state.description, // bevy description
                   constants.siteurl + '/img/logo_100.png', // bevy image
-                  (this.props.subBevy) ? this.props.activeBevy._id : null // bevy parent
                 );
 
                 // blur all text inputs
@@ -220,8 +201,6 @@ var CreateBevyView = React.createClass({
         <View style={ styles.body }>
 
           { this._renderLoadingView() }
-
-          { this._renderSubBevyHeader() }
 
           <View style={ styles.top }>
             { this._renderBevyImageButton() }
@@ -252,10 +231,7 @@ var CreateBevyView = React.createClass({
               multiline={ true }
             />
           </View>
-
         </View>
-
-
       </View>
     );
   }
