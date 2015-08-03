@@ -2,7 +2,7 @@
 
 var React = require('react-native');
 var {
-  TouchableHighlight,
+  TouchableOpacity,
   StyleSheet
 } = React;
 var {
@@ -21,9 +21,9 @@ var BevyListButton = React.createClass({
 
   render: function() {
     return (
-      <TouchableHighlight
+      <TouchableOpacity
         onPress={this.onPress}
-        underlayColor='rgba(0,0,0,0.2)'
+        activeOpacity={ 0.5 }
         style={ styles.buttonContainer }
       >
         <Icon
@@ -32,7 +32,7 @@ var BevyListButton = React.createClass({
           color='white'
           style={styles.bevyListButton}
         />
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });
@@ -41,9 +41,7 @@ var styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
-    paddingLeft: 20,
-    paddingRight: 20
+    height: 48
   },
   bevyListButton: {
     width: 30,

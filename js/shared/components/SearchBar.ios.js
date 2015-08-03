@@ -219,6 +219,7 @@ var styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
     marginRight: 20,
+    marginLeft: 20
   },
   searchIcon: {
     width: 25,
@@ -235,7 +236,8 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    paddingLeft: 20
   }
 });
 

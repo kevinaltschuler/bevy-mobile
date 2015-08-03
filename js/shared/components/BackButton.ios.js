@@ -3,7 +3,7 @@
 var React = require('react-native');
 var {
   StyleSheet,
-  TouchableHighlight,
+  TouchableOpacity
 } = React;
 var {
   Icon
@@ -28,8 +28,8 @@ var BackButton = React.createClass({
 
   render: function() {
     return (
-      <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0)'}
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.onPress } 
         style={ styles.backButtonContainer } 
       >
@@ -39,17 +39,22 @@ var BackButton = React.createClass({
           color={ this.props.color }
           style={ styles.backButton }
         />
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });
 
 var styles = StyleSheet.create({
   backButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 48
   },
   backButton: {
+    paddingLeft: 15,
+    paddingRight: 15,
     width: 30,
-    height: 30,
+    height: 30
   }
 });
 
