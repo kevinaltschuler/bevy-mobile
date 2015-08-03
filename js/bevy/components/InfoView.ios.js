@@ -61,7 +61,7 @@ var InfoView = React.createClass({
           value={ this.state.subscribed }
           onValueChange={(value) => {
             if(!this.props.loggedIn) {
-              this.props.authModalActions.open('Please Log In To Subscribe');
+              this.props.authModalActions.open('Log In To Subscribe');
               return;
             }
             this.setState({
