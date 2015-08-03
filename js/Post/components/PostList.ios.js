@@ -37,7 +37,7 @@ var PostList = React.createClass({
   getInitialState() {
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allPosts),
-      isRefreshing: true
+      isRefreshing: this.props.loggedIn // only fetch posts automatically if logged in
     };
   },
 
