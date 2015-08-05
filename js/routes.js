@@ -2,7 +2,6 @@
 
 var routes = {
   MAIN: {
-    LOGIN: { name: 'LoginNavigator' },
     TABBAR: { name: 'MainTabBar' },
     NEWPOST: { name: 'NewPost' },
     NEWBEVY: { name: 'NewBevy' },
