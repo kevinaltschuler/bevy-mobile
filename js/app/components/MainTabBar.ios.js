@@ -20,7 +20,6 @@ var {
 var BevyNavigator = require('./../../bevy/components/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../chat/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../notification/components/NotificationNavigator.ios.js');
-var ProfileNavigator = require('./../../profile/components/ProfileNavigator.ios.js');
 
 var tabs = {
   Posts: 'BevyNavigator',
@@ -71,13 +70,6 @@ var MainTabBar = React.createClass({
           </View>
         );
         break;
-      case tabs.Profile:
-        return (
-          <View style={styles.tabContent}>
-            <ProfileNavigator { ...this.props } tabBarActions={ tabBarActions }/>
-          </View>
-        );
-        break;
     }
   },
 
@@ -119,19 +111,6 @@ var MainTabBar = React.createClass({
             onPress={() => {
               this.setState({
                 selectedTab: tabs.Notifications
-              });
-            }}
-          >
-            { this._renderContent() }
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
-            title='Profile'
-            iconName={ 'ion|ios-person-outline' }
-            selected={ this.state.selectedTab === tabs.Profile }
-            style={ styles.tabIcon }
-            onPress={() => {
-              this.setState({
-                selectedTab: tabs.Profile
               });
             }}
           >
