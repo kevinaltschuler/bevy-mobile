@@ -117,20 +117,6 @@ var CommentItem = React.createClass({
                   style={{ width: 20, height: 20 }}
                 />
               </TouchableHighlight>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
-                onPress={() => {
-
-                }}
-                style={ styles.commentItemAction }
-              >
-                <Icon
-                  name='ion|ios-more'
-                  size={ 20 }
-                  color='#fff'
-                  style={{ width: 20, height: 20 }}
-                />
-              </TouchableHighlight>
             </View>
           }
         />
