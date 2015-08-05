@@ -160,27 +160,14 @@ var BevyList = React.createClass({
             });
           }}
           header={
-            <View style={{
-              flexDirection: 'row',
-              padding: 10,
-              borderBottomWidth: 1,
-              borderBottomColor: '#333'
-            }}>
+            <View style={ styles.profileHeader }>
               <Image 
                 source={{ uri: this.props.user.image_url }}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: 15,
-                  marginRight: 10
-                }}
+                style={ styles.profileImage }
               />
-              <View style={{
-                flex: 1,
-                flexDirection: 'column'
-              }}>
-                <Text style={{ color: '#fff', fontSize: 15 }}>{ this.props.user.displayName }</Text>
-                <Text style={{ color: '#eee', fontSize: 12 }}>{ this.props.user.email }</Text>
+              <View style={ styles.profileDetails }>
+                <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
+                <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
               </View>
               <Icon
                 name={(this.state.profileAccordionOpen) ? 'ion|ios-arrow-down' : 'ion|ios-arrow-right'}
@@ -194,23 +181,15 @@ var BevyList = React.createClass({
             </View>
           }
           content={
-            <View style={{
-              flexDirection: 'column'
-            }}>
+            <View style={ styles.profileActions }>
               <TouchableHighlight
                 underlayColor='#333'
-                style={{
-                  backgroundColor: '#222',
-                  flex: 1,
-                  padding: 10,
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#333'
-                }}
+                style={ styles.profileAction }
                 onPress={() => {
 
                 }}
               >
-                <Text style={{ color: '#fff', fontSize: 15 }}>Sign Out</Text>
+                <Text style={ styles.profileActionText }>Sign Out</Text>
               </TouchableHighlight>
             </View>
           }
@@ -241,6 +220,45 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     marginBottom: 10,
     marginTop: 10
+  },
+
+  profileHeader: {
+    flexDirection: 'row',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333'
+  },
+  profileImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 10
+  },
+  profileDetails: {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  profileName: {
+    color: '#fff', 
+    fontSize: 15
+  },
+  profileEmail: {
+    color: '#eee', 
+    fontSize: 12
+  },
+  profileActions: {
+    flexDirection: 'column'
+  },
+  profileAction: {
+    backgroundColor: '#222',
+    flex: 1,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333'
+  },
+  profileActionText: {
+    color: '#fff', 
+    fontSize: 15
   },
 
   bevyList: {
