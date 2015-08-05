@@ -85,7 +85,7 @@ _.extend(BevyStore, {
         this.publicBevies.url = constants.apiurl + '/bevies';
         this.publicBevies.fetch({
           success: function(bevies, response, options) {
-            console.log('got public bevies', bevies.toJSON());
+            //console.log('got public bevies', bevies.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });

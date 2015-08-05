@@ -30,7 +30,7 @@ _.extend(UserStore, {
         if(!this.loggedIn) break;
         this.user.fetch({
           success: function(model, response, options) {
-            console.log('user fetched from server');
+            //console.log('user fetched from server');
             // update local storage user
             AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
 

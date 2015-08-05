@@ -12,6 +12,7 @@ var {
   StyleSheet,
   Text,
   View,
+  Image,
   ListView,
   TouchableHighlight
 } = React;
@@ -33,21 +34,18 @@ var BevyList = React.createClass({
     myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
     menuActions: React.PropTypes.object,
+    user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
     return {
-      activeBevyHeaderOpen: false
+      profileAccordionOpen: false
     };
   },
 
   componentWillReceiveProps(nextProps) {
     if(!nextProps.loggedIn) {
-      //this.refs.activeBevy.open();
-      //this.setState({
-      //  activeBevyHeaderOpen: true
-      //});
     }
   },
 
@@ -56,9 +54,10 @@ var BevyList = React.createClass({
   },
 
   _renderPublicHeader() {
-    if(this.props.loggedIn) return null;
     return (
-      <Text style={ styles.publicHeader }>Public Bevies</Text>
+      <Text style={ styles.publicHeader }>
+        { (this.props.loggedIn) ? 'My Bevies' : 'Public Bevies' }
+      </Text>
     );
   },
 
@@ -68,13 +67,6 @@ var BevyList = React.createClass({
         <Text style={ styles.activeBevyText }>
           { this.props.activeBevy.name }
         </Text>
-        {/* TODO: @kevin CSS animate this chevron? */}
-        <Icon
-          name={(this.state.activeBevyHeaderOpen) ? 'ion|chevron-down' : 'ion|chevron-right'}
-          size={ 25 }
-          color='#fff'
-          style={ styles.activeBevyChevron }
-        />
       </View>
     );
   },
@@ -94,25 +86,20 @@ var BevyList = React.createClass({
     return (
       <View style={ styles.bevyList }>
         { _.map(bevies, function(bevy) {
-          // dont render active bevy
-          if(bevy._id == this.props.activeBevy._id) return null;
+          var active = (bevy._id == this.props.activeBevy._id);
 
           return (
             <TouchableHighlight 
               key={ 'bevylist:' + bevy._id }
-              style={styles.bevyItem}
+              style={ (active) ? styles.bevyItemActive : styles.bevyItem }
               onPress={() => {
+                if(active) return;
                 BevyActions.switchBevy(bevy._id);
-                // close the accordion
-                this.refs.activeBevy.close();
-                this.setState({
-                  activeBevyHeaderOpen: false
-                });
                 // close the side menu
-                this.props.menuActions.close();
+                //this.props.menuActions.close();
               }}
             >
-              <Text style={styles.bevyItemText}>
+              <Text style={ (active) ? styles.bevyItemActiveText : styles.bevyItemText }>
                 { bevy.name }
               </Text>
             </TouchableHighlight>
@@ -145,7 +132,11 @@ var BevyList = React.createClass({
             name='ion|plus-round'
             size={20}
             color='#fff'
-            style={ styles.bevyAddIcon }
+            style={{
+              alignSelf: 'flex-end', 
+              width: 20, 
+              height: 20
+            }}
           />
         </View>
       </TouchableHighlight>
@@ -161,19 +152,73 @@ var BevyList = React.createClass({
           height: StatusBarSizeIOS.currentHeight
         }} />
 
-        { this._renderPublicHeader() }
-
         <Accordion
-          ref='activeBevy'
+          underlayColor='#333'
           onPress={() => {
-            //console.log('pressed');
             this.setState({
-              activeBevyHeaderOpen: !this.state.activeBevyHeaderOpen
+              profileAccordionOpen: !this.state.profileAccordionOpen
             });
           }}
-          header={ this._renderBevyBar() }
-          content={ this._renderBevyList() }
+          header={
+            <View style={{
+              flexDirection: 'row',
+              padding: 10,
+              borderBottomWidth: 1,
+              borderBottomColor: '#333'
+            }}>
+              <Image 
+                source={{ uri: this.props.user.image_url }}
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 15,
+                  marginRight: 10
+                }}
+              />
+              <View style={{
+                flex: 1,
+                flexDirection: 'column'
+              }}>
+                <Text style={{ color: '#fff', fontSize: 15 }}>{ this.props.user.displayName }</Text>
+                <Text style={{ color: '#eee', fontSize: 12 }}>{ this.props.user.email }</Text>
+              </View>
+              <Icon
+                name={(this.state.profileAccordionOpen) ? 'ion|ios-arrow-down' : 'ion|ios-arrow-right'}
+                color='#fff'
+                size={ 30 }
+                style={{
+                  width: 30,
+                  height: 30
+                }}
+              />
+            </View>
+          }
+          content={
+            <View style={{
+              flexDirection: 'column'
+            }}>
+              <TouchableHighlight
+                underlayColor='#333'
+                style={{
+                  backgroundColor: '#222',
+                  flex: 1,
+                  padding: 10,
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#333'
+                }}
+                onPress={() => {
+
+                }}
+              >
+                <Text style={{ color: '#fff', fontSize: 15 }}>Sign Out</Text>
+              </TouchableHighlight>
+            </View>
+          }
         />
+
+        { this._renderPublicHeader() }
+
+        { this._renderBevyList() }
 
       </View>
     );
@@ -187,36 +232,15 @@ var styles = StyleSheet.create({
     paddingTop: 3,
     width: constants.sideMenuWidth,
     height: window.height,
-    backgroundColor: 'rgba(29,30,26,1)',
+    backgroundColor: '#111',
   },
 
   publicHeader: {
     fontSize: 15,
-    color: '#fff',
+    color: '#999',
     paddingLeft: 10,
     marginBottom: 10,
-    marginTop: 5
-  },
-
-  activeBevy: {
-    height: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-    borderBottomWidth: 1,
-    borderBottomColor: '#333'
-  },
-  activeBevyText: {
-    flex: 1,
-    textAlign: 'left',
-    fontSize: 17,
-    color: '#fff'
-  },
-  activeBevyChevron: {
-    width: 25,
-    height: 25
+    marginTop: 10
   },
 
   bevyList: {
@@ -228,8 +252,24 @@ var styles = StyleSheet.create({
     padding: 10
   },
   bevyItemActive: {
-    backgroundColor: '#444'
+    backgroundColor: '#222',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10
   },
+  bevyItemText: {
+    flex: 1,
+    color: '#ddd',
+    fontSize: 15
+  },
+  bevyItemActiveText: {
+    flex: 1,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    fontSize: 15,
+    color: '#fff'
+  },
+
   bevyAddItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -241,59 +281,6 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
-  },
-  bevyAddIcon: {
-    alignSelf: 'flex-end', 
-    width: 20, 
-    height: 20
-  },
-  bevyItemText: {
-    flex: 1,
-    color: '#fff'
-  },
-
-  subBevies: {
-    height: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333'
-  },
-  subBeviesTitle: {
-    flex: 1,
-    textAlign: 'left',
-    fontSize: 17,
-    color: '#fff'
-  },
-  subBeviesAdd: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 38,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  subBeviesAddIcon: {
-    width: 25,
-    height: 25
-  },
-  subBevyList: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#333'
-  },
-
-  title: {
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  listContainer: {
-    flex: 1
-  },
-  rowContainer: {
-    padding: 10,
-  },
-  whiteText: {
-    color: 'white'
   }
 });
 

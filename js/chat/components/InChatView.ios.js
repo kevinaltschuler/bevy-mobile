@@ -79,8 +79,6 @@ var InChatView = React.createClass({
   },
 
   _onChatChange: function() {
-    console.log(this.refs.messageList);
-    this.refs.messageList.scrollProperties.offsetY = 0;
     var messages = ChatStore.getMessages(this.state.activeThread._id);
     this.setState({
       isRefreshing: false,
