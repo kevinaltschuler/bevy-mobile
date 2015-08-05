@@ -27,6 +27,7 @@ var StatusBarSizeIOS = require('react-native-status-bar-size');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 var BevyActions = require('./../BevyActions');
+var UserActions = require('./../../user/UserActions');
 var BEVY = constants.BEVY;
 
 var BevyList = React.createClass({
@@ -53,21 +54,73 @@ var BevyList = React.createClass({
 
   },
 
+  _renderProfileHeader() {
+    if(!this.props.loggedIn) {
+      return (
+        <View style={ styles.profileActions }>
+          <TouchableHighlight
+            underlayColor='#333'
+            style={ styles.profileAction }
+            onPress={() => {
+              this.props.authModalActions.open('Log In');
+            }}
+          >
+            <Text style={ styles.profileActionText }>Log In</Text>
+          </TouchableHighlight>
+        </View>
+      );
+    }
+    return (
+      <Accordion
+        underlayColor='#333'
+        onPress={() => {
+          this.setState({
+            profileAccordionOpen: !this.state.profileAccordionOpen
+          });
+        }}
+        header={
+          <View style={ styles.profileHeader }>
+            <Image 
+              source={{ uri: this.props.user.image_url }}
+              style={ styles.profileImage }
+            />
+            <View style={ styles.profileDetails }>
+              <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
+              <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
+            </View>
+            <Icon
+              name={ (this.state.profileAccordionOpen) ? 'ion|ios-arrow-down' : 'ion|ios-arrow-right' }
+              color='#fff'
+              size={ 30 }
+              style={{
+                width: 30,
+                height: 30
+              }}
+            />
+          </View>
+        }
+        content={
+          <View style={ styles.profileActions }>
+            <TouchableHighlight
+              underlayColor='#333'
+              style={ styles.profileAction }
+              onPress={() => {
+                UserActions.logOut();
+              }}
+            >
+              <Text style={ styles.profileActionText }>Sign Out</Text>
+            </TouchableHighlight>
+          </View>
+        }
+      />
+    );
+  },
+
   _renderPublicHeader() {
     return (
       <Text style={ styles.publicHeader }>
         { (this.props.loggedIn) ? 'My Bevies' : 'Public Bevies' }
       </Text>
-    );
-  },
-
-  _renderBevyBar() {
-    return (
-      <View style={ styles.activeBevy }>
-        <Text style={ styles.activeBevyText }>
-          { this.props.activeBevy.name }
-        </Text>
-      </View>
     );
   },
 
@@ -152,48 +205,7 @@ var BevyList = React.createClass({
           height: StatusBarSizeIOS.currentHeight
         }} />
 
-        <Accordion
-          underlayColor='#333'
-          onPress={() => {
-            this.setState({
-              profileAccordionOpen: !this.state.profileAccordionOpen
-            });
-          }}
-          header={
-            <View style={ styles.profileHeader }>
-              <Image 
-                source={{ uri: this.props.user.image_url }}
-                style={ styles.profileImage }
-              />
-              <View style={ styles.profileDetails }>
-                <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-                <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
-              </View>
-              <Icon
-                name={(this.state.profileAccordionOpen) ? 'ion|ios-arrow-down' : 'ion|ios-arrow-right'}
-                color='#fff'
-                size={ 30 }
-                style={{
-                  width: 30,
-                  height: 30
-                }}
-              />
-            </View>
-          }
-          content={
-            <View style={ styles.profileActions }>
-              <TouchableHighlight
-                underlayColor='#333'
-                style={ styles.profileAction }
-                onPress={() => {
-
-                }}
-              >
-                <Text style={ styles.profileActionText }>Sign Out</Text>
-              </TouchableHighlight>
-            </View>
-          }
-        />
+        { this._renderProfileHeader() }
 
         { this._renderPublicHeader() }
 
