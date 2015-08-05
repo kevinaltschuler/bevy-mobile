@@ -2,46 +2,46 @@
 
 var routes = {
   MAIN: {
-    LOGIN: { name: 'LoginNavigator', index: 1 },
-    TABBAR: { name: 'MainTabBar', index: 2 },
-    NEWPOST: { name: 'NewPost', index: 3 },
-    NEWBEVY: { name: 'NewBevy', index: 4 },
-    COMMENT: { name: 'Comment', index: 6 }
+    LOGIN: { name: 'LoginNavigator' },
+    TABBAR: { name: 'MainTabBar' },
+    NEWPOST: { name: 'NewPost' },
+    NEWBEVY: { name: 'NewBevy' },
+    COMMENT: { name: 'Comment' }
   },
 
   NEWPOST: {
-    INPUT: { name: 'input', index: 0 },
-    BEVYPICKER: { name: 'bevypicker', index: 1 }
+    INPUT: { name: 'input' },
+    BEVYPICKER: { name: 'bevypicker' }
   },
 
   SEARCH: {
-    IN: { name: 'in', index: 0 }, // searching
-    OUT: { name: 'out', index: 1 } // not searching
+    IN: { name: 'in' }, // searching
+    OUT: { name: 'out' } // not searching
   },
 
   LOGIN: {
-    LOGIN: { name: 'LoginView', index: 0 },
-    FORGOT: { name: 'ForgotView', index: 1 },
-    REGISTER: { name: 'RegisterView', index: 2 }
+    LOGIN: { name: 'LoginView' },
+    FORGOT: { name: 'ForgotView' },
+    REGISTER: { name: 'RegisterView' }
   },
 
   BEVY: {
-    POSTLIST: { name: 'PostList', index: 0 },
-    INFO: { name: 'InfoView', index: 1 },
-    SETTINGS: { name: 'BevySettings', index: 2 }
+    POSTLIST: { name: 'PostList' },
+    INFO: { name: 'InfoView' },
+    SETTINGS: { name: 'BevySettings' }
   },
   
   CHAT: {
-    CONVERSATIONVIEW: { name: 'ConversationView', index: 0 },
-    INCHAT: { name: 'InChatView', index: 1 }
+    CONVERSATIONVIEW: { name: 'ConversationView' },
+    INCHAT: { name: 'InChatView' }
   },
 
   PROFILE: {
-    USER: { name: 'UserView', index: 0 }
+    USER: { name: 'UserView' }
   },
 
   NOTIFICATION: {
-    LIST: { name: 'NotificationList', index: 0 }
+    LIST: { name: 'NotificationList' }
   }
 };
 
