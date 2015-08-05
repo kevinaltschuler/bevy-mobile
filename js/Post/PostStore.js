@@ -31,7 +31,7 @@ var COMMENT = constants.COMMENT;
 
 var PostActions = require('./PostActions');
 var BevyStore = require('./../bevy/BevyStore');
-var UserStore = require('./../profile/UserStore');
+var UserStore = require('./../user/UserStore');
 
 var tagRegex = /#\w+/g;
 

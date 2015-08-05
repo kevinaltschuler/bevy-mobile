@@ -9,7 +9,7 @@ var Dispatcher = require('./../shared/dispatcher');
 var Threads = require('./ThreadCollection');
 
 var constants = require('./../constants');
-var UserStore = require('./../profile/UserStore');
+var UserStore = require('./../user/UserStore');
 var user = UserStore.getUser();
 var APP = constants.APP;
 var CHAT = constants.CHAT;

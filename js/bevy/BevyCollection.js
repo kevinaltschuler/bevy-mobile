@@ -14,7 +14,7 @@ var _ = require('underscore');
 
 var Bevy = require('./BevyModel');
 var constants = require('./../constants');
-var UserStore = require('./../profile/UserStore');
+var UserStore = require('./../user/UserStore');
 
 var user = UserStore.getUser();
 

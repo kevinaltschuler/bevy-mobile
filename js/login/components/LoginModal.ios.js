@@ -21,7 +21,7 @@ var LoginNavigator = require('./LoginNavigator.ios.js');
 var _ = require('underscore');
 var constants = require('./../../constants');
 var AppActions = require('./../../app/AppActions');
-var UserStore = require('./../../profile/UserStore');
+var UserStore = require('./../../user/UserStore');
 
 var LoginModal = React.createClass({
 

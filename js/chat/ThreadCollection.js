@@ -6,7 +6,7 @@ var _ = require('underscore');
 
 var Thread = require('./ThreadModel');
 var constants = require('./../constants');
-var UserStore = require('./../profile/UserStore');
+var UserStore = require('./../user/UserStore');
 
 // backbone collection
 var ThreadCollection = Backbone.Collection.extend({

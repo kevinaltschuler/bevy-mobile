@@ -17,7 +17,7 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../constants');
-var UserStore = require('./../../profile/UserStore');
+var UserStore = require('./../../user/UserStore');
 var AppActions = require('./../../app/AppActions');
 
 var RegisterView = React.createClass({

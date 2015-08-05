@@ -85,7 +85,7 @@ var PostStore = require('./js/post/PostStore');
 var ChatStore = require('./js/chat/ChatStore');
 var FileStore = require('./js/File/FileStore');
 var NotificationStore = require('./js/notification/NotificationStore');
-var UserStore = require('./js/profile/UserStore');
+var UserStore = require('./js/user/UserStore');
 
 var AppActions = require('./js/app/AppActions');
 

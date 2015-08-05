@@ -10,7 +10,7 @@ var NOTIFICATION = constants.NOTIFICATION;
 var APP = constants.APP;
 
 var ChatStore = require('./../chat/ChatStore');
-var UserStore = require('./../profile/UserStore');
+var UserStore = require('./../user/UserStore');
 
 var Notifications = require('./NotificationCollection');
 

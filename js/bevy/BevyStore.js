@@ -36,7 +36,7 @@ var CHAT = constants.CHAT;
 var APP = constants.APP;
 
 var BevyActions = require('./BevyActions');
-var UserStore = require('./../profile/UserStore')
+var UserStore = require('./../user/UserStore')
 
 // inherit event class first
 // VERY IMPORTANT, as the PostContainer view binds functions
