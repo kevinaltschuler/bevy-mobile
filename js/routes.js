@@ -32,7 +32,7 @@ var routes = {
   },
   
   CHAT: {
-    CONVERSATIONVIEW: { name: 'ConversationView' },
+    CHATVIEW: { name: 'ChatView' },
     INCHAT: { name: 'InChatView' }
   },
 

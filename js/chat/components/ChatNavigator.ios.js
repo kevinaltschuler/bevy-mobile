@@ -18,7 +18,7 @@ var {
 
 var SideMenu = require('react-native-side-menu');
 
-var ConversationView = require('./ConversationView.ios.js');
+var ChatView = require('./ChatView.ios.js');
 var InChatView = require('./InChatView.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
@@ -30,21 +30,21 @@ var ChatNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRoute={ routes.CHAT.CONVERSATIONVIEW }
+        initialRoute={ routes.CHAT.CHATVIEW }
         initialRouteStack={[
-          routes.CHAT.CONVERSATIONVIEW
+          routes.CHAT.CHATVIEW
         ]}
         renderScene={(route, navigator) => {
           var view;
           switch(route.name) {
-            case 'ConversationView':
+            case routes.CHAT.CHATVIEW.name:
               view = (
-                <ConversationView 
+                <ChatView 
                   { ...this.props }
                 />
               );
               break;
-            case 'InChatView':
+            case routes.CHAT.INCHAT.name:
               view = (
                 <InChatView
                   { ...this.props }
@@ -57,10 +57,10 @@ var ChatNavigator = React.createClass({
           if(route.threadName)
             navbarText = route.threadName;
 
-          var backButton = (route.name == 'ConversationView')
+          var backButton = (route.name == routes.CHAT.CHATVIEW.name)
           ? <View />
           : <BackButton onPress={() => {
-            navigator.jumpTo(routes.CHAT.CONVERSATIONVIEW);
+            navigator.jumpTo(routes.CHAT.CHATVIEW);
           }} />;
 
           return (

@@ -14,7 +14,7 @@ var {
 
 var ThreadItem = require('./ThreadItem.ios.js');
 
-var ConversationView = React.createClass({
+var ChatView = React.createClass({
 
   propTypes: {
     chatRoute: React.PropTypes.object,
@@ -55,4 +55,4 @@ var styles = StyleSheet.create({
   }
 })
 
-module.exports = ConversationView;
+module.exports = ChatView;
