@@ -31,66 +31,52 @@ var ChatNavigator = React.createClass({
       <Navigator
         navigator={ this.props.mainNavigator }
         initialRoute={ routes.CHAT.CONVERSATIONVIEW }
-        initialRouteStack={ _.toArray(routes.CHAT) }
-        renderScene={(route, navigator) => 
-          <ChatView
-            chatRoute={ route }
-            chatNavigator={ navigator }
-            { ...this.props }
-          />
-        }
+        initialRouteStack={[
+          routes.CHAT.CONVERSATIONVIEW
+        ]}
+        renderScene={(route, navigator) => {
+          var view;
+          switch(route.name) {
+            case 'ConversationView':
+              view = (
+                <ConversationView 
+                  { ...this.props }
+                />
+              );
+              break;
+            case 'InChatView':
+              view = (
+                <InChatView
+                  { ...this.props }
+                />
+              );
+              break;
+          }
+
+          var navbarText = 'Chat';
+          if(route.threadName)
+            navbarText = route.threadName;
+
+          var backButton = (route.name == 'ConversationView')
+          ? <View />
+          : <BackButton onPress={() => {
+            navigator.jumpTo(routes.CHAT.CONVERSATIONVIEW);
+          }} />;
+
+          return (
+            <View style={{ flex: 1}}>
+              <Navbar 
+                chatRoute={ route }
+                chatNavigator={ navigator }
+                left={ backButton }
+                center={ navbarText }
+                { ...this.props }
+              />
+              { view }
+            </View>
+          );
+        }}
       />
-    );
-  }
-});
-
-var ChatView = React.createClass({
-
-  propTypes: {
-    chatRoute: React.PropTypes.object,
-    chatNavigator: React.PropTypes.object
-  },
-
-  render: function() {
-    var view;
-    switch(this.props.chatRoute.name) {
-      case 'ConversationView':
-        view = (
-          <ConversationView 
-            { ...this.props }
-          />
-        );
-        break;
-      case 'InChatView':
-        view = (
-          <InChatView
-            { ...this.props }
-          />
-        );
-        break;
-    }
-
-    var navbarText = 'Chat';
-    if(this.props.chatRoute.threadName)
-      navbarText = this.props.chatRoute.threadName;
-
-    var backButton = (this.props.chatRoute.name == 'ConversationView')
-    ? <View />
-    : <BackButton onPress={() => {
-      this.props.chatNavigator.jumpTo(routes.CHAT.CONVERSATIONVIEW);
-    }} />;
-
-    return (
-      <View style={{ flex: 1}}>
-        <Navbar 
-          chatRoute={ this.props.chatRoute }
-          chatNavigator={ this.props.chatNavigator }
-          left={ backButton }
-          center={ navbarText }
-          { ...this.props }
-        />
-        { view }
-      </View>
     );
   }
 });
