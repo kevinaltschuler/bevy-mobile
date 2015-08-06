@@ -13,7 +13,12 @@ var {
 } = require('react-native-icons');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
+var PostList = require('./../../post/components/PostList.ios.js');
 
+var constants = require('./../../constants');
+var POST = constants.POST;
+var PostActions = require('./../../post/PostActions');
+var PostStore = require('./../../post/PostStore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var ProfileView = React.createClass({
@@ -22,6 +27,12 @@ var ProfileView = React.createClass({
     mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
     profileUser: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+
+    };
   },
 
   render() {
@@ -75,6 +86,7 @@ var ProfileView = React.createClass({
             </View>
           </View>
 
+          <PostList { ...this.props } />
 
         </View>
       </View>
@@ -108,14 +120,14 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee',
-    padding: 10
+    backgroundColor: '#eee'
   },
 
   profileCard: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     padding: 10,
+    margin: 10,
     borderRadius: 2,
     shadowColor: 'black',
     shadowRadius: 1,

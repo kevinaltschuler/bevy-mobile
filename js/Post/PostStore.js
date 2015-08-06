@@ -70,8 +70,11 @@ _.extend(PostStore, {
 
       case POST.FETCH:
         var bevy = payload.bevy;
+        var user_id = payload.user_id;
 
-        if(bevy._id == -1) {
+        if(user_id) {
+          this.posts.url = constants.apiurl + '/users/' + user_id + '/posts';
+        } else if(bevy._id == -1) {
           this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         } else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
