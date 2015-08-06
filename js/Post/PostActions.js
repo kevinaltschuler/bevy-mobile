@@ -20,9 +20,10 @@ var POST = require('./../constants').POST;
 
 var PostActions = {
 
-	fetch(bevy) {
+	fetch(bevy, user_id) {
 		dispatch(POST.FETCH, {
-			bevy: (bevy == undefined) ? null : bevy
+			bevy: (bevy == undefined) ? null : bevy,
+			user_id: (user_id == undefined) ? null: user_id
 		});
 	},
 

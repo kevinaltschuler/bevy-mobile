@@ -32,7 +32,8 @@ var CommentView = React.createClass({
     postID: React.PropTypes.string,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    authModalActions: React.PropTypes.object
+    authModalActions: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -291,6 +292,7 @@ var CommentView = React.createClass({
             <CommentList
               comments={ this.state.comments }
               onReply={ this.onReply }
+              mainNavigator={ this.props.mainNavigator }
             />
             { this._renderNoCommentsText() }
           </View>

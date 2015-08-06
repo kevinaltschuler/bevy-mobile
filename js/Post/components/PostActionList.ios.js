@@ -11,8 +11,11 @@ var {
   Icon
 } = require('react-native-icons');
 
+var routes = require('./../../routes');
+
 var PostActionList = React.createClass({
   propTypes: {
+    mainNavigator: React.PropTypes.object,
     post: React.PropTypes.object
   },
 
@@ -72,7 +75,9 @@ var PostActionList = React.createClass({
         underlayColor='rgba(44,182,105,0.8)'
         style={ styles.postOptionsButtonContainer }
         onPress={() => {
-
+          var route = routes.MAIN.PROFILE;
+          route.profileUser = this.props.post.author;
+          this.props.mainNavigator.push(route);
         }}
       >
         <View style={ styles.postOptionsButton }>

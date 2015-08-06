@@ -16,6 +16,7 @@ var SearchBar = require('./../../shared/components/SearchBar.ios.js');
 var NewPostView = require('./../../post/components/NewPostView.ios.js');
 var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
+var ProfileView = require('./../../user/components/ProfileView.ios.js');
 
 var routes = require('./../../routes');
 
@@ -59,6 +60,10 @@ var MainView = React.createClass({
             { ...this.props } 
           />
         );
+        break;
+
+      case routes.MAIN.PROFILE.name:
+        return <ProfileView profileUser={ this.props.mainRoute.profileUser } { ...this.props } />
         break;
 
       case routes.MAIN.TABBAR.name:

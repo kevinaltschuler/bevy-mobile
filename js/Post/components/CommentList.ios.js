@@ -12,6 +12,7 @@ var {
 } = require('react-native-icons');
 
 var _ = require('underscore');
+var routes = require('./../../routes');
 var timeAgo = require('./../../shared/helpers/timeAgo');
 var colorMap = [
   '#97FF80',
@@ -27,7 +28,8 @@ var CommentItem = React.createClass({
   propTypes: {
     comment: React.PropTypes.object,
     onReply: React.PropTypes.func,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -42,6 +44,7 @@ var CommentItem = React.createClass({
       <CommentList
         comments={ this.props.comment.comments }
         onReply={ this.props.onReply }
+        mainNavigator={ this.props.mainNavigator }
       />
     );
   },
@@ -106,7 +109,9 @@ var CommentItem = React.createClass({
               <TouchableHighlight
                 underlayColor='rgba(0,0,0,0.1)'
                 onPress={() => {
-
+                  var route = routes.MAIN.PROFILE;
+                  route.profileUser = this.props.comment.author;
+                  this.props.mainNavigator.push(route);
                 }}
                 style={ styles.commentItemAction }
               >
@@ -132,7 +137,8 @@ var CommentList = React.createClass({
   propTypes: {
     comments: React.PropTypes.array,
     onReply: React.PropTypes.func,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -148,6 +154,7 @@ var CommentList = React.createClass({
               key={ 'comment:' + comment._id }
               comment={ comment }
               onReply={ this.props.onReply }
+              mainNavigator={ this.props.mainNavigator }
             />
           );
         }.bind(this)) }

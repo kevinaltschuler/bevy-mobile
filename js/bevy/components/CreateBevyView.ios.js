@@ -165,7 +165,7 @@ var CreateBevyView = React.createClass({
           center={
             <View style={ styles.navTitle }>
               <Text style={ styles.navTitleText }>
-                { (this.props.subBevy) ? 'New Subbevy' : 'New Bevy' }
+                New Bevy
               </Text>
             </View>
           }

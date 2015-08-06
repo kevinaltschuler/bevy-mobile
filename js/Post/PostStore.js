@@ -53,7 +53,8 @@ _.extend(PostStore, {
 
       case APP.LOAD:
 
-        this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
+        // frontpage posts
+        this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         this.posts.comparator = this.sortByTop;
 
         this.posts.fetch({
@@ -71,7 +72,7 @@ _.extend(PostStore, {
         var bevy = payload.bevy;
 
         if(bevy._id == -1) {
-          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
+          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         } else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
         }
@@ -224,7 +225,7 @@ _.extend(PostStore, {
         var bevy_id = BevyStore.active;
 
         if(bevy_id == -1)
-          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/posts';
+          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         }

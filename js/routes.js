@@ -5,7 +5,8 @@ var routes = {
     TABBAR: { name: 'MainTabBar' },
     NEWPOST: { name: 'NewPost' },
     NEWBEVY: { name: 'NewBevy' },
-    COMMENT: { name: 'Comment' }
+    COMMENT: { name: 'Comment' },
+    PROFILE: { name: 'Profile' }
   },
 
   NEWPOST: {
