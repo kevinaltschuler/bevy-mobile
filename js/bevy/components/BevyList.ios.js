@@ -36,7 +36,8 @@ var BevyList = React.createClass({
     activeBevy: React.PropTypes.object,
     menuActions: React.PropTypes.object,
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool
+    loggedIn: React.PropTypes.bool,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -101,6 +102,17 @@ var BevyList = React.createClass({
         }
         content={
           <View style={ styles.profileActions }>
+            <TouchableHighlight
+              underlayColor='#333'
+              style={ styles.profileAction }
+              onPress={() => {
+                var route = routes.MAIN.PROFILE;
+                route.profileUser = this.props.user;
+                this.props.mainNavigator.push(route);
+              }}
+            >
+              <Text style={ styles.profileActionText }>View Profile</Text>
+            </TouchableHighlight>
             <TouchableHighlight
               underlayColor='#333'
               style={ styles.profileAction }
