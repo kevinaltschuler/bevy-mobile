@@ -105,8 +105,7 @@ _.extend(PostStore, {
           comments: [],
           images: images,
           author: author._id,
-          bevy: bevy._id,
-          created: Date.now()
+          bevy: bevy._id
         });
 
         newPost.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
@@ -115,9 +114,6 @@ _.extend(PostStore, {
         newPost.save(null, {
           success: function(post, response, options) {
             // success
-            newPost.set('_id', post.id);
-            newPost.set('images', post.get('images'));
-            newPost.set('links', post.get('links'));
             newPost.set('author', author);
             newPost.set('bevy', tempBevy);
             newPost.set('commentCount', 0);
@@ -174,54 +170,10 @@ _.extend(PostStore, {
         break;
 
       case POST.DESTROY:
-        /*var id = payload.id;
-        var bevy = this.bevies.get(id);
-        bevy.destroy({
-          success: function(model, response) {
-            // switch to the frontpage
-            router.navigate('/b/frontpage', { trigger: true });
-
-            // update posts
-            BevyActions.switchBevy();
-
-            this.trigger(BEVY.CHANGE_ALL);
-          }.bind(this)
-        });*/
 
         break;
 
       case POST.UPDATE:
-        /*var bevy_id = payload.bevy_id;
-
-        var bevy = this.bevies.get(bevy_id);
-
-        var name = payload.name || bevy.get('name');
-        var description = payload.description || bevy.get('description');
-        var image_url = payload.image_url || bevy.get('image_url');
-        var settings = payload.settings || bevy.get('settings');
-
-        bevy.set({
-          name: name,
-          description: description,
-          image_url: image_url,
-          settings: settings
-        });
-
-        bevy.save({
-          name: name,
-          description: description,
-          image_url: image_url,
-          settings: settings
-        }, {
-          patch: true
-        });
-
-        this.trigger(BEVY.CHANGE_ALL);
-        this.trigger(BEVY.UPDATED_IMAGE);
-        // update more stuff
-        this.trigger(POST.CHANGE_ALL);
-        this.trigger(CHAT.CHANGE_ALL);
-        this.trigger(CONTACT.CHANGE_ALL);*/
 
         break;
 
@@ -288,13 +240,13 @@ _.extend(PostStore, {
 
   sortByTop(post) {
     var score = post.countVotes();
-    if(post.get('pinned') && router.bevy_id != -1) score = 9000;
+    if(post.get('pinned')) score = 9000;
     return -score;
   },
 
   sortByNew(post) {
     var date = Date.parse(post.get('created'));
-    if(post.get('pinned') && router.bevy_id != -1) date = new Date('2035', '1', '1');
+    if(post.get('pinned')) date = new Date('2035', '1', '1');
     return -date;
   },
 
