@@ -14,6 +14,7 @@ var {
   TouchableHighlight
 } = React;
 
+var _ = require('underscore');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 var POST = constants.POST;
@@ -31,13 +32,22 @@ var PostList = React.createClass({
     activeBevy: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    authModalActions: React.PropTypes.object
+    authModalActions: React.PropTypes.object,
+    showNewPostCard: React.PropTypes.bool,
+    profileUser: React.PropTypes.object
+  },
+
+  getDefaultProps() {
+    return {
+      showNewPostCard: true,
+      profileUser: null
+    };
   },
 
   getInitialState() {
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allPosts),
-      isRefreshing: this.props.loggedIn // only fetch posts automatically if logged in
+      isRefreshing: true
     };
   },
 
@@ -85,7 +95,10 @@ var PostList = React.createClass({
   },
 
   onRefresh() {
-    PostActions.fetch(this.props.activeBevy);
+    PostActions.fetch(
+      this.props.activeBevy, 
+      (this.props.profileUser) ? this.props.profileUser._id : null
+    );
   },
 
   _renderHeader() {
@@ -97,7 +110,14 @@ var PostList = React.createClass({
     } else {
       indicator = <View />
     }
-    var newPostCard = (_.isEmpty(this.props.activeBevy) || (this.state.isRefreshing && _.isEmpty(this.props.allPosts)))
+    var newPostCard = (
+      !this.props.showNewPostCard 
+      || _.isEmpty(this.props.activeBevy) 
+      || (
+          this.state.isRefreshing 
+          && _.isEmpty(this.props.allPosts)
+        )
+    )
     ? <View />
     : (
       <NewPostCard 
@@ -150,10 +170,6 @@ var styles = StyleSheet.create({
   postListHeader: {
     flex: 1,
     flexDirection: 'column'
-  },
-  button: {
-    width: 100,
-    height: 100,
   }
 })
 

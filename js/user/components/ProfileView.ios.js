@@ -26,13 +26,30 @@ var ProfileView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
-    profileUser: React.PropTypes.object
+    profileUser: React.PropTypes.object,
+    activeBevy: React.PropTypes.object
   },
 
   getInitialState() {
     return {
 
     };
+  },
+
+  componentDidMount() {
+    // get user posts
+    PostActions.fetch(
+      this.props.activeBevy, 
+      this.props.profileUser._id
+    );
+  },
+
+  componentWillUnmount() {
+    // reset posts
+    PostActions.fetch(
+      this.props.activeBevy, 
+      null
+    );
   },
 
   render() {
@@ -86,7 +103,11 @@ var ProfileView = React.createClass({
             </View>
           </View>
 
-          <PostList { ...this.props } />
+          <PostList 
+            showNewPostCard={ false }
+            profileUser={ this.props.profileUser }
+            { ...this.props } 
+          />
 
         </View>
       </View>

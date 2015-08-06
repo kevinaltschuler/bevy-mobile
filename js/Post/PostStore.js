@@ -79,8 +79,10 @@ _.extend(PostStore, {
         } else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
         }
+        // reset all posts first
+        this.posts.reset();
+        // then fetch
         this.posts.fetch({
-          reset: true,
           success: function(posts, response, options) {
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
