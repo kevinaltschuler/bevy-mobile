@@ -18,7 +18,8 @@ var {
   Icon
 } = require('react-native-icons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
-var Modal = require('react-native-modal');
+var Accordion = require('react-native-accordion');
+var PostActionList = require('./PostActionList.ios.js')
 
 var constants = require('./../../constants');
 var POST = constants.POST;
@@ -156,66 +157,77 @@ var Post = React.createClass({
 
         { this._renderPostImage() }
 
-        <View style={styles.postActionsRow}>
-          <TouchableHighlight 
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={() => {
-              PostActions.vote(post._id);
-              this.setState({
-                voted: !this.state.voted
-              });
-            }}
-          >
-            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-              <Text style={ styles.pointCountText }>
-                { this.countVotes() }
-              </Text>
-              <Icon
-                name={ (this.state.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
-                size={20}
-                color='#757d83'
-                style={styles.actionIcon}
-              />
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight 
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={() => {
-              // go to comment view
-              // return if we're already in comment view
-              if(this.props.inCommentView) return;
+        <Accordion
+          ref={ (accordion) => this.optionsAccordion = accordion }
+          animationDuration={ 200 }
+          header={
+            <View style={styles.postActionsRow}>
+              <TouchableHighlight 
+                underlayColor='rgba(0,0,0,0.1)'
+                style={[ styles.actionTouchable, { flex: 2 } ]}
+                onPress={() => {
+                  PostActions.vote(post._id);
+                  this.setState({
+                    voted: !this.state.voted
+                  });
+                }}
+              >
+                <View style={[ styles.actionTouchable, { flex: 1 } ]}>
+                  <Text style={ styles.pointCountText }>
+                    { this.countVotes() }
+                  </Text>
+                  <Icon
+                    name={ (this.state.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
+                    size={20}
+                    color='#757d83'
+                    style={styles.actionIcon}
+                  />
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight 
+                underlayColor='rgba(0,0,0,0.1)'
+                style={[ styles.actionTouchable, { flex: 2 } ]}
+                onPress={() => {
+                  // go to comment view
+                  // return if we're already in comment view
+                  if(this.props.inCommentView) return;
 
-              var commentRoute = routes.MAIN.COMMENT;
-              commentRoute.postID = this.state.post._id;
-              this.props.mainNavigator.push(commentRoute);
-            }}
-          >
-            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-              <Text style={ styles.commentCountText }>
-                { post.comments.length }
-              </Text>
-              <Icon
-                name='fontawesome|comment-o'
-                size={20}
-                color='#757d83'
-                style={styles.actionIcon}
-              />
+                  var commentRoute = routes.MAIN.COMMENT;
+                  commentRoute.postID = this.state.post._id;
+                  this.props.mainNavigator.push(commentRoute);
+                }}
+              >
+                <View style={[ styles.actionTouchable, { flex: 1 } ]}>
+                  <Text style={ styles.commentCountText }>
+                    { post.comments.length }
+                  </Text>
+                  <Icon
+                    name='fontawesome|comment-o'
+                    size={20}
+                    color='#757d83'
+                    style={styles.actionIcon}
+                  />
+                </View>
+              </TouchableHighlight>
+              <TouchableHighlight 
+                underlayColor='rgba(0,0,0,0.1)'
+                style={[ styles.actionTouchable, { flex: 1 } ]}
+                onPress={() => {
+                  this.optionsAccordion.toggle();
+                }}
+              >
+                <Icon
+                  name='fontawesome|ellipsis-v'
+                  size={20}
+                  color='#757d83'
+                  style={styles.actionIcon}
+                />
+              </TouchableHighlight>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight 
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 1 } ]}
-          >
-            <Icon
-              name='fontawesome|ellipsis-v'
-              size={20}
-              color='#757d83'
-              style={styles.actionIcon}
-            />
-          </TouchableHighlight>
-        </View>
+          }
+          content={ <PostActionList post={ this.state.post } { ...this.props } /> }
+        />
+        
       </View>
     );
   },
@@ -313,7 +325,7 @@ var styles = StyleSheet.create({
   actionIcon: {
     width: 20,
     height: 36
-  },
+  }
 });
 
 module.exports = Post;
