@@ -19,7 +19,7 @@ var constants = require('./../../constants');
 var BEVY = constants.BEVY;
 var BevyActions = require('./../BevyActions');
 var BevyStore = require('./../BevyStore');
-var FileActions = require('./../../File/FileActions');
+var FileActions = require('./../../file/FileActions');
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var ReadImageData = require('NativeModules').ReadImageData;

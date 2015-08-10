@@ -5,10 +5,9 @@ var constants = require('./../constants');
 var FILE = constants.FILE;
 
 var FileActions = {
-  upload(data : String, url: String) {
+  upload(uri: String) {
     dispatch(FILE.UPLOAD, {
-      data: data,
-      url: url
+      uri: uri
     });
   }
 };

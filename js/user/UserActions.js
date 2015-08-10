@@ -11,6 +11,12 @@ var UserActions = {
     });
   },
 
+  changeProfilePicture(uri: String) {
+    dispatch(USER.CHANGE_PROFILE_PICTURE, {
+      uri: uri
+    });
+  },
+
   logOut() {
     dispatch(USER.LOGOUT, {}); 
   }

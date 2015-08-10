@@ -13,7 +13,7 @@
     "react-native-accordion": "^0.2.1",
     "react-native-blur": "^0.5.4",
     "react-native-icons": "0.2.0",
-    "react-native-image-picker": "^0.2.1",
+    "react-native-image-picker": "^0.3.2",
     "react-native-keyboardevents": "^0.4.4",
     "react-native-modal": "^0.3.8",
     "react-native-overlay": "^0.2.8",

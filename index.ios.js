@@ -83,7 +83,7 @@ var change_all_events = [
 var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');
 var ChatStore = require('./js/chat/ChatStore');
-var FileStore = require('./js/File/FileStore');
+var FileStore = require('./js/file/FileStore');
 var NotificationStore = require('./js/notification/NotificationStore');
 var UserStore = require('./js/user/UserStore');
 

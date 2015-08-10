@@ -96,6 +96,7 @@ exports.CHAT = {
 exports.USER = {
   UPDATE: 'user_update',
   LOGOUT: 'user_logout',
+  CHANGE_PROFILE_PICTURE: 'user_change_profile_picture',
 
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded'

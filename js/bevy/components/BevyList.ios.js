@@ -22,7 +22,9 @@ var {
 
 var PostList = require('./../../post/components/PostList.ios.js');
 var Accordion = require('react-native-accordion');
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
+var FileActions = require('./../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -112,6 +114,30 @@ var BevyList = React.createClass({
               }}
             >
               <Text style={ styles.profileActionText }>View Profile</Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor='#333'
+              style={ styles.profileAction }
+              onPress={() => {
+                UIImagePickerManager.showImagePicker({
+                  title: 'Select Profile Picture',
+                  cancelButtonTitle: 'Cancel',
+                  takePhotoButtonTitle: 'Take Photo...',
+                  chooseFromLibraryButtonTitle: 'Choose from Library...',
+                  returnBase64Image: false,
+                  returnIsVertical: false
+                }, (type, response) => {
+                  if (type !== 'cancel') {
+                    //console.log(response);
+                    //FileActions.upload(response);
+                    UserActions.changeProfilePicture(response);
+                  } else {
+                    //console.log('Cancel');
+                  }
+                });
+              }}
+            >
+              <Text style={ styles.profileActionText }>Change Profile Picture</Text>
             </TouchableHighlight>
             <TouchableHighlight
               underlayColor='#333'

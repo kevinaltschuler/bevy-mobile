@@ -8,6 +8,7 @@ var USER = constants.USER;
 var BEVY = constants.BEVY;
 var APP = constants.APP;
 var AppActions = require('./../app/AppActions');
+var FileStore = require('./../file/FileStore');
 
 var {
   AsyncStorage
@@ -49,6 +50,29 @@ _.extend(UserStore, {
         this.loggedIn = false;
 
         this.trigger(USER.LOADED);
+
+        break;
+
+      case USER.UPDATE:
+
+        break;
+
+      case USER.CHANGE_PROFILE_PICTURE:
+        var uri = payload.uri;
+
+        FileStore.upload(uri, (err, filename) => {
+          console.log(err, filename);
+          if(err) return;
+          this.user.save({
+            image_url: filename
+          }, {
+            patch: true,
+            success: function(model, response, options) {
+              console.log(response);
+              this.trigger(USER.LOADED);
+            }.bind(this)
+          })
+        });
 
         break;
 
