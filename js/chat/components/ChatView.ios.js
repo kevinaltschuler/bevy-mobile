@@ -141,33 +141,21 @@ var ChatView = React.createClass({
   },
 
   _renderContent() {
+    
+    var view = <View />;
+
     return (
       <Animated.View style={[ styles.content, { 
         height: this.state.containerHeight,
         left: this.state.contentLeft 
       } ]}>
+        { view }
         { this._renderContentOverlay() }
       </Animated.View>
     );
   },
 
   render: function () {
-
-    /*var threads = [];
-    var allThreads = this.props.allThreads || [];
-    allThreads.forEach(function(thread) {
-      threads.push(
-        <ThreadItem key={ thread._id } thread={ thread } chatRoute={ this.props.chatRoute } chatNavigator={ this.props.chatNavigator } user={ this.props.user }/>
-      );
-    }.bind(this));
-
-    return (
-      <View style={styles.container} >
-        <ScrollView style={styles.scrollContainer}>
-          { threads }
-        </ScrollView>
-      </View>
-    );*/
 
     return (
       <View style={ styles.container }>
@@ -189,15 +177,19 @@ var styles = StyleSheet.create({
   menu: {
     flex: 1,
     position: 'absolute',
-    backgroundColor: '#f00',
+    backgroundColor: '#fff',
     top: 0,
     flexDirection: 'column',
-    width: menuWidth
+    width: menuWidth,
+    shadowColor: 'black',
+    shadowRadius: 1,
+    shadowOpacity: .3,
+    shadowOffset: { width: 0, height: 0 }
   },
   content: {
     flex: 1,
     position: 'absolute',
-    backgroundColor: '#0f0',
+    backgroundColor: '#eee',
     top: 0,
     flexDirection: 'column',
     width: window.width - menuOffset

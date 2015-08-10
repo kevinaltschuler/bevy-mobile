@@ -96,7 +96,7 @@ var ThreadItem = React.createClass({
 
     return (
       <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
+        underlayColor='rgba(0,0,0,.2)'
         onPress={this.goToInChat}
       >
         <View style={styles.container} >

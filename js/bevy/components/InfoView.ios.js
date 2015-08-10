@@ -226,8 +226,6 @@ var InfoView = React.createClass({
 
         <ScrollView style={styles.actionRow}>
           { this._renderSubSwitch() }
-          
-
           { this._renderAdminSettings() }
         </ScrollView>
 
