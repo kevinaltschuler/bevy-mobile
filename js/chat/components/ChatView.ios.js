@@ -15,8 +15,11 @@ var {
   TouchableHighlight,
   TouchableWithoutFeedback
 } = React;
-var ChatMenu = require('./ChatMenu.ios.js');
 
+var ChatMenu = require('./ChatMenu.ios.js');
+var MessageView = require('./MessageView.ios.js');
+
+var _ = require('underscore');
 var window = require('Dimensions').get('window');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
@@ -29,6 +32,7 @@ var ChatView = React.createClass({
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
     allThreads: React.PropTypes.array,
+    activeThread: React.PropTypes.object,
     user: React.PropTypes.object
   },
 
@@ -72,6 +76,14 @@ var ChatView = React.createClass({
     }
   },
 
+  getChatMenuActions() {
+    return {
+      openMenu: this.openMenu.bind(this),
+      closeMenu: this.closeMenu.bind(this),
+      toggleMenu: this.toggleMenu.bind(this)
+    };
+  },
+
   _renderMenuOverlay() {
     if(this.state.menuOpen) return null;
     return (
@@ -107,7 +119,7 @@ var ChatView = React.createClass({
           extrapolate: 'clamp'
         })
       } ]}>
-        <ChatMenu { ...this.props } />
+        <ChatMenu { ...this.props } chatMenuActions={ this.getChatMenuActions() }/>
         { this._renderMenuOverlay() }
       </Animated.View>
     );
@@ -141,8 +153,32 @@ var ChatView = React.createClass({
   },
 
   _renderContent() {
-    
-    var view = <View />;
+
+    var view;
+    if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
+      // create a chat
+      view = (
+        <View>
+          <Text>Create a Chat</Text>
+        </View>
+      );
+    } else if (_.isEmpty(this.props.activeThread)) {
+      // select a chat from the menu over there -->
+      view = (
+        <View>
+          <Text>No Conversation Selected</Text>
+          <Text>Select a Conversation From the Menu to the Right</Text>
+          <Text>Or, Switch to a Bevy to View It's Chat</Text>
+        </View>
+      );
+    } else {
+      // display the chat messages
+      view = (
+        <View>
+          <Text>Message List</Text>
+        </View>
+      );
+    }
 
     return (
       <Animated.View style={[ styles.content, { 

@@ -5,7 +5,6 @@
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -17,15 +16,21 @@ var {
 } = React;
 
 var SideMenu = require('react-native-side-menu');
-
 var ChatView = require('./ChatView.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 
+var _ = require('underscore');
 var routes = require('./../../routes');
 
 var ChatNavigator = React.createClass({
-  render: function() {
+
+  propTypes: {
+    allThread: React.PropTypes.array,
+    activeThread: React.PropTypes.object
+  },
+
+  render() {
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
@@ -47,8 +52,14 @@ var ChatNavigator = React.createClass({
           }
 
           var navbarText = 'Chat';
-          if(route.threadName)
-            navbarText = route.threadName;
+          if(!_.isEmpty(this.props.activeThread)) {
+            if(!_.isEmpty(this.props.activeThread.bevy)) {
+              // bevy chat
+              navbarText = this.props.activeThread.bevy.name + "'s Chat";
+            } else {
+              // PM
+            }
+          }
 
           var backButton = (route.name == routes.CHAT.CHATVIEW.name)
           ? <View />

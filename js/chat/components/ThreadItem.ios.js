@@ -19,10 +19,9 @@ var {
   TouchableHighlight
 } = React;
 
-var InChatView = require('./InChatView.ios.js');
-
 var constants = require('./../../constants');
 var routes = require('./../../routes');
+var ChatActions = require('./../ChatActions');
 
 var ThreadItem = React.createClass({
 
@@ -30,10 +29,11 @@ var ThreadItem = React.createClass({
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
     thread: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    chatMenuActions: React.PropTypes.object
   },
 
-  getInitialState: function() {
+  getInitialState() {
 
     var thread = this.props.thread;
     var threadInfo = this.getThreadInfo(thread);
@@ -43,7 +43,7 @@ var ThreadItem = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
 
     var thread = nextProps.thread;
     var threadInfo = this.getThreadInfo(thread);
@@ -54,7 +54,7 @@ var ThreadItem = React.createClass({
     });
   },
 
-  getThreadInfo: function(thread) {
+  getThreadInfo(thread) {
     var user = this.props.user;
 
     var threadName = 'Default Thread Name';
@@ -76,17 +76,7 @@ var ThreadItem = React.createClass({
     };
   },
 
-  goToInChat: function() {
-    /*this.props.chatNavigator.push({
-      name: 'InChatView',
-      index: 1,
-      activeThread: this.props.thread._id,
-      threadName: this.state.threadName,
-      threadImage: this.state.threadImage
-    });*/
-  },
-
-  render: function () {
+  render() {
 
     var thread = this.props.thread;
     //console.log(thread);
@@ -97,7 +87,11 @@ var ThreadItem = React.createClass({
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.2)'
-        onPress={this.goToInChat}
+        onPress={() => {
+          var thread_id = this.props.thread._id;
+          ChatActions.switchThread(thread_id);
+          this.props.chatMenuActions.closeMenu();
+        }}
       >
         <View style={styles.container} >
           <Image 

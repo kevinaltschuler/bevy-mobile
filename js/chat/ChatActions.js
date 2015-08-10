@@ -5,13 +5,20 @@ var constants = require('./../constants');
 var CHAT = constants.CHAT;
 
 var ChatActions = {
-  fetchMore: function(thread_id) {
+
+  switchThread(thread_id: String) {
+    dispatch(CHAT.SWITCH, {
+      thread_id: thread_id
+    });
+  },
+
+  fetchMore(thread_id: String) {
     dispatch(CHAT.FETCH_MORE, {
       thread_id: thread_id
     });
   },
 
-  postMessage: function(thread_id, author, body) {
+  postMessage(thread_id: String, author: Object, body: String) {
     dispatch(CHAT.POST_MESSAGE, {
       thread_id: thread_id,
       author: author,

@@ -86,6 +86,8 @@ exports.BEVY = {
 };
 
 exports.CHAT = {
+  SWITCH: 'chat_switch',
+
   THREAD_OPEN: 'chat_thread_open',
   FETCH_MORE: 'chat_fetch_more',
   POST_MESSAGE: 'chat_post_message',

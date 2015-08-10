@@ -16,7 +16,8 @@ var ThreadItem = require('./ThreadItem.ios.js');
 var ChatMenu = React.createClass({
 
   propTypes: {
-    allThreads: React.PropTypes.array
+    allThreads: React.PropTypes.array,
+    chatMenuActions: React.PropTypes.object
   },
 
   getInitialState() {
@@ -42,6 +43,7 @@ var ChatMenu = React.createClass({
               <ThreadItem 
                 thread={ thread }
                 user={ this.props.user }
+                chatMenuActions={ this.props.chatMenuActions }
               />
             );
           }}

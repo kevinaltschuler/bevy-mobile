@@ -20,8 +20,9 @@ var ChatStore = _.extend({}, Backbone.Events);
 _.extend(ChatStore, {
 
   threads: new Threads,
+  active: -1,
 
-	handleDispatch: function(payload) {
+	handleDispatch(payload) {
 		switch(payload.actionType) {
       case APP.LOAD:
 
@@ -40,6 +41,29 @@ _.extend(ChatStore, {
             }.bind(this));
           }.bind(this)
         });
+
+        break;
+
+      case BEVY.SWITCH:
+        var bevy_id = payload.bevy_id;
+
+        var thread = this.threads.find(function($thread) {
+          if(_.isEmpty($thread.get('bevy'))) return false; // skip over PMs
+          return $thread.get('bevy')._id == bevy_id;
+        });
+
+        if(thread == undefined) this.active = -1; // thread not found
+        else this.active = thread.get('_id');
+
+        this.trigger(CHAT.CHANGE_ALL);
+
+        break;
+
+      case CHAT.SWITCH:
+        var thread_id = payload.thread_id;
+        this.active = thread_id;
+
+        this.trigger(CHAT.CHANGE_ALL);
 
         break;
 
@@ -92,17 +116,24 @@ _.extend(ChatStore, {
     }
 	},
 
-  getAll: function() {
+  getAll() {
     return this.threads.toJSON();
   },
 
-  getMessages: function(thread_id) {
+  getActive() {
+    if(this.active == -1) return {};
+    var thread = this.threads.get(this.active);
+    if(thread == undefined) return {};
+    return thread.toJSON();
+  },
+
+  getMessages(thread_id) {
     var thread = this.threads.get(thread_id);
     if(thread == undefined) return [];
     else return thread.messages.toJSON();
   },
 
-  addMessage: function(message) {
+  addMessage(message) {
     console.log('adding message...');
     var thread = this.threads.get(message.thread);
     if(thread == undefined) return;
