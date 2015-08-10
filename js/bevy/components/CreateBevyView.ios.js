@@ -24,7 +24,6 @@ var FileActions = require('./../../file/FileActions');
 var FileStore = require('./../../file/FileStore');
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
-var ReadImageData = require('NativeModules').ReadImageData;
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 

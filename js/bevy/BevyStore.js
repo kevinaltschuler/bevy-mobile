@@ -195,9 +195,10 @@ _.extend(BevyStore, {
         break;
 
       case BEVY.UPDATE:
-        /*var bevy_id = payload.bevy_id;
+        var bevy_id = payload.bevy_id;
 
-        var bevy = this.bevies.get(bevy_id);
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
 
         var name = payload.name || bevy.get('name');
         var description = payload.description || bevy.get('description');
@@ -221,11 +222,6 @@ _.extend(BevyStore, {
         });
 
         this.trigger(BEVY.CHANGE_ALL);
-        this.trigger(BEVY.UPDATED_IMAGE);
-        // update more stuff
-        this.trigger(POST.CHANGE_ALL);
-        this.trigger(CHAT.CHANGE_ALL);
-        this.trigger(CONTACT.CHANGE_ALL);*/
 
         break;
 

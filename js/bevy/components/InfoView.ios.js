@@ -20,10 +20,15 @@ var {
   Icon
 } = require('react-native-icons');
 
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+
 var _ = require('underscore');
 var constants = require('./../../constants.js');
+var FILE = constants.FILE;
 var routes = require('./../../routes.js');
 var BevyActions = require('./../BevyActions');
+var FileActions = require('./../../file/FileActions');
+var FileStore = require('./../../file/FileStore');
 
 var InfoView = React.createClass({
 
@@ -41,8 +46,28 @@ var InfoView = React.createClass({
     //console.log(user.bevies, this.props.activeBevy._id);
     return {
       subscribed: _.findWhere(user.bevies, { _id: this.props.activeBevy._id }) != undefined,
-      public: true
+      public: true,
+      bevyImageURI: this.props.activeBevy.image_url
     };
+  },
+
+  componentDidMount() {
+    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
+      this.setState({
+        bevyImageURI: filename
+      });
+      BevyActions.update(
+        this.props.activeBevy._id, // bevy id
+        null, // name
+        null, // description
+        filename, // image_url
+        null // settings
+      );
+    });
+  },
+
+  componentWillUnmount() {
+    FileStore.off(FILE.UPLOAD_COMPLETE);
   },
 
   _renderImageButton() {
@@ -53,7 +78,21 @@ var InfoView = React.createClass({
         activeOpacity={ .8 }
         style={ styles.cameraTouchable }
         onPress={() => {
-
+          UIImagePickerManager.showImagePicker({
+            title: 'Choose Bevy Picture',
+            cancelButtonTitle: 'Cancel',
+            takePhotoButtonTitle: 'Take Photo...',
+            chooseFromLibraryButtonTitle: 'Choose from Library...',
+            returnBase64Image: false,
+            returnIsVertical: false
+          }, (type, response) => {
+            if (type !== 'cancel') {
+              //console.log(response);
+              FileActions.upload(response);
+            } else {
+              //console.log('Cancel');
+            }
+          });
         }}
       >
         <Icon
@@ -153,7 +192,7 @@ var InfoView = React.createClass({
           <View style={styles.picButton}>
             <Image 
               style={styles.profileImage}
-              source={{ uri: this.props.activeBevy.image_url }}
+              source={{ uri: this.state.bevyImageURI }}
             >
               { this._renderImageButton() }
             </Image>
