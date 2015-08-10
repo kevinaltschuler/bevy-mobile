@@ -77,13 +77,13 @@ var ThreadItem = React.createClass({
   },
 
   goToInChat: function() {
-    this.props.chatNavigator.push({
+    /*this.props.chatNavigator.push({
       name: 'InChatView',
       index: 1,
       activeThread: this.props.thread._id,
       threadName: this.state.threadName,
       threadImage: this.state.threadImage
-    });
+    });*/
   },
 
   render: function () {
@@ -100,20 +100,18 @@ var ThreadItem = React.createClass({
         onPress={this.goToInChat}
       >
         <View style={styles.container} >
-            <View style={styles.titleRow}>
-              <Image 
-                source={{ uri: threadImage }}
-                style={styles.titleImage}
-              />
-              <View style={styles.titleTextColumn}>
-                <Text style={styles.titleText}>
-                  { threadName }
-                </Text>
-                <Text style={styles.subTitleText}>
-                  Last Poster: Last Message
-                </Text>
-              </View>
-            </View>
+          <Image 
+            source={{ uri: threadImage }}
+            style={styles.titleImage}
+          />
+          <View style={styles.titleTextColumn}>
+            <Text style={styles.titleText}>
+              { threadName }
+            </Text>
+            <Text style={styles.subTitleText}>
+              Last Poster: Last Message
+            </Text>
+          </View>
         </View>
       </TouchableHighlight>
     );
@@ -123,27 +121,24 @@ var ThreadItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
-    flexDirection: 'column',
-    borderColor: '#ccc',
-  },
-  titleRow: {
-    flexDirection: 'row'
+    paddingLeft: 7,
+    paddingRight: 7,
+    paddingTop: 5,
+    paddingBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   titleImage: {
-    width: 40,
-    height: 40,
+    width: 36,
+    height: 36,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 18,
+    marginRight: 7,
   },
   titleTextColumn: {
+    flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    height: 40,
-    marginLeft: 10
+    justifyContent: 'center'
   },
   titleText: {
     color: '#282929'

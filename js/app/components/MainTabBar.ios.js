@@ -132,7 +132,8 @@ var styles = StyleSheet.create({
     flex: 1
   },
   tabBar: {
-    flex: 1
+    flex: 1,
+    height: 48
   },
   tabIcon: {
     flex: 1

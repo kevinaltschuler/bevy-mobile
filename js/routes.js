@@ -32,8 +32,7 @@ var routes = {
   },
   
   CHAT: {
-    CHATVIEW: { name: 'ChatView' },
-    INCHAT: { name: 'InChatView' }
+    CHATVIEW: { name: 'ChatView' }
   },
 
   PROFILE: {

@@ -19,7 +19,6 @@ var {
 var SideMenu = require('react-native-side-menu');
 
 var ChatView = require('./ChatView.ios.js');
-var InChatView = require('./InChatView.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 
@@ -38,15 +37,9 @@ var ChatNavigator = React.createClass({
           var view;
           switch(route.name) {
             case routes.CHAT.CHATVIEW.name:
+            default:
               view = (
                 <ChatView 
-                  { ...this.props }
-                />
-              );
-              break;
-            case routes.CHAT.INCHAT.name:
-              view = (
-                <InChatView
                   { ...this.props }
                 />
               );
