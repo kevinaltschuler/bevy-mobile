@@ -3,10 +3,10 @@
 var React = require('react-native');
 var {
   View,
+  ScrollView,
   Text,
   TextInput,
   Image,
-  ListView,
   StyleSheet,
   StatusBarIOS,
   Navigator,
@@ -20,11 +20,16 @@ var {
 var _ = require('underscore');
 var routes = require('./../../routes');
 var constants = require('./../../constants');
+var FILE = constants.FILE;
+var FileStore = require('./../../file/FileStore');
+var FileActions = require('./../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
+var window = require('Dimensions').get('window');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var PostActions = require('./../PostActions');
 
@@ -118,11 +123,14 @@ var InputView = React.createClass({
   getInitialState() {
     return {
       keyboardSpace: 0,
-      title: ''
+      title: '',
+      postImageURI: '',
+      placeholderText: 'Drop a Line'
     };
   },
 
   componentDidMount() {
+    // keyboard events
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
       this.setState({
         keyboardSpace: frames.end.height
@@ -133,6 +141,51 @@ var InputView = React.createClass({
         keyboardSpace: 0
       });
     });
+
+    // file upload events
+    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
+      console.log('caught upload', filename)
+      this.setState({
+        postImageURI: filename,
+        placeholderText: 'Say Something About This Image'
+      });
+    });
+  },
+
+  componentWillUnmount() {
+    FileStore.off(FILE.UPLOAD_COMPLETE);
+  },
+
+  uploadImage() {
+    UIImagePickerManager.showImagePicker({
+      title: 'Upload Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Library...',
+      returnBase64Image: false,
+      returnIsVertical: false
+    }, (type, response) => {
+      if (type !== 'cancel') {
+        //console.log(response);
+        FileActions.upload(response);
+      } else {
+        //console.log('Cancel');
+      }
+    });
+  },
+
+  _renderPostImage() {
+    if(_.isEmpty(this.state.postImageURI)) return <View />;
+    return (
+      <Image
+        source={{ uri: this.state.postImageURI }}
+        style={{
+          flex: 1,
+          width: window.width,
+          height: 300
+        }}
+      />
+    );
   },
 
   render() {
@@ -184,7 +237,7 @@ var InputView = React.createClass({
                 if(this.state.title.length <= 0) return; // dont post if text is empty
                 PostActions.create( // send action
                   this.state.title,
-                  null,
+                  (_.isEmpty(this.state.postImageURI)) ? [] : [this.state.postImageURI],
                   this.props.user,
                   this.props.selected
                 );
@@ -231,15 +284,30 @@ var InputView = React.createClass({
                   title: ev.nativeEvent.text
                 });
               }}
-              placeholder='Drop a Line'
+              placeholder={ this.state.placeholderText }
               style={ styles.textInput }
             />
           </View>
-          <View style={ styles.contentBar }>
+          <View style={ styles.image }>
+            { this._renderPostImage() }
+          </View>
+        </View>
+        <View style={ styles.contentBar }>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
-
+                //this.uploadImage();
+                UIImagePickerManager.showLibrary({
+                  returnBase64Image: false,
+                  returnIsVertical: false
+                }, (type, response) => {
+                  if (type !== 'cancel') {
+                    //console.log(response);
+                    FileActions.upload(response);
+                  } else {
+                    //console.log('Cancel');
+                  }
+                });
               }}
               style={ styles.contentBarItem }
             >
@@ -253,7 +321,18 @@ var InputView = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
-
+                //this.uploadImage();
+                UIImagePickerManager.showCamera({
+                  returnBase64Image: false,
+                  returnIsVertical: false
+                }, (type, response) => {
+                  if (type !== 'cancel') {
+                    //console.log(response);
+                    FileActions.upload(response);
+                  } else {
+                    //console.log('Cancel');
+                  }
+                });
               }}
               style={ styles.contentBarItem }
             >
@@ -265,7 +344,6 @@ var InputView = React.createClass({
               />
             </TouchableHighlight>
           </View>
-        </View>
       </View>
     );
   }
@@ -428,7 +506,6 @@ var styles = StyleSheet.create({
     alignSelf: 'flex-end'
   },
   input: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 10
@@ -444,6 +521,11 @@ var styles = StyleSheet.create({
     fontSize: 15
   },
   contentBar: {
+    backgroundColor: '#fff',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: window.width,
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,

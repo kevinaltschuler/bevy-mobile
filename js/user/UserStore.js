@@ -68,10 +68,11 @@ _.extend(UserStore, {
           }, {
             patch: true,
             success: function(model, response, options) {
-              console.log(response);
-              this.trigger(USER.LOADED);
+              //console.log(response);
             }.bind(this)
-          })
+          });
+          this.user.set('image_url', filename);
+          this.trigger(USER.LOADED);
         });
 
         break;
@@ -132,7 +133,7 @@ _.extend(UserStore, {
     this.trigger(USER.LOADED)
   },
 
-  getUser(user) {
+  getUser() {
     return this.user.toJSON();
   }
 });

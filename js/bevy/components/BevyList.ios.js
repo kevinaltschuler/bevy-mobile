@@ -48,11 +48,6 @@ var BevyList = React.createClass({
     };
   },
 
-  componentWillReceiveProps(nextProps) {
-    if(!nextProps.loggedIn) {
-    }
-  },
-
   changeBevy: function(rowData) {
 
   },
