@@ -4,6 +4,7 @@ var React = require('react-native');
 var {
   View,
   ScrollView,
+  ListView,
   Text,
   TextInput,
   Image,
@@ -299,7 +300,7 @@ var InputView = React.createClass({
                 //this.uploadImage();
                 UIImagePickerManager.showLibrary({
                   returnBase64Image: false,
-                  returnIsVertical: false
+                  returnIsVertical: true
                 }, (type, response) => {
                   if (type !== 'cancel') {
                     //console.log(response);
@@ -324,7 +325,7 @@ var InputView = React.createClass({
                 //this.uploadImage();
                 UIImagePickerManager.showCamera({
                   returnBase64Image: false,
-                  returnIsVertical: false
+                  returnIsVertical: true
                 }, (type, response) => {
                   if (type !== 'cancel') {
                     //console.log(response);

@@ -17,9 +17,11 @@ var {
 var routes = require('./../../routes');
 var constants = require('./../../constants');
 var BEVY = constants.BEVY;
+var FILE = constants.FILE;
 var BevyActions = require('./../BevyActions');
 var BevyStore = require('./../BevyStore');
 var FileActions = require('./../../file/FileActions');
+var FileStore = require('./../../file/FileStore');
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var ReadImageData = require('NativeModules').ReadImageData;
@@ -58,10 +60,17 @@ var CreateBevyView = React.createClass({
         creating: false
       });
     });
+
+    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
+      this.setState({
+        bevyImage: filename
+      });
+    });
   },
 
   componentWillUnmount() {
-     BevyStore.off(BEVY.CREATED);
+    BevyStore.off(BEVY.CREATED);
+    FileStore.off(FILE.UPLOAD_COMPLETE);
   },
 
   _renderLoadingView() {
@@ -89,7 +98,7 @@ var CreateBevyView = React.createClass({
     : (
       <Image
         style={ styles.bevyImage }
-        source={{ uri: this.state.bevyImage.uri }}
+        source={{ uri: this.state.bevyImage }}
       />
     );
     return (
@@ -98,27 +107,18 @@ var CreateBevyView = React.createClass({
         underlayColor='rgba(0,0,0,0)'
         onPress={() => {
           UIImagePickerManager.showImagePicker({
-              'title': 'Select Profile Picture',
-              'cancelButtonTitle': 'Cancel',
-              'takePhotoButtonTitle': 'Take Photo...',
-              'chooseFromLibraryButtonTitle': 'Choose from Library...'
-            }, (type, response) => {
+            title: 'Choose Bevy Picture',
+            cancelButtonTitle: 'Cancel',
+            takePhotoButtonTitle: 'Take Photo...',
+            chooseFromLibraryButtonTitle: 'Choose from Library...',
+            returnBase64Image: false,
+            returnIsVertical: false
+          }, (type, response) => {
             if (type !== 'cancel') {
-              var source = {};
-              if (type === 'data') { 
-                // New photo taken -  response is the 64 bit encoded image data string
-                response = 'data:image/jpeg;base64,' + response;
-                FileActions.upload(response);
-                source.isStatic = true;
-              } else { 
-                // Selected from library - response is the URI to the local file asset
-                ReadImageData.readImage(response, (data) => {
-                  data = 'data:image/jpeg;base64,' + data;
-                  FileActions.upload(data, response);
-                });
-              }
-              source.uri = response;
-              this.setState({ bevyImage: source });
+              //console.log(response);
+              FileActions.upload(response);
+            } else {
+              //console.log('Cancel');
             }
           });
         }}
@@ -179,7 +179,7 @@ var CreateBevyView = React.createClass({
                 BevyActions.create(
                   this.state.name, // bevy name
                   this.state.description, // bevy description
-                  constants.siteurl + '/img/logo_100.png', // bevy image
+                  (_.isEmpty(this.state.bevyImage)) ? constants.siteurl + '/img/logo_100.png' : this.state.bevyImage, // bevy image
                 );
 
                 // blur all text inputs
