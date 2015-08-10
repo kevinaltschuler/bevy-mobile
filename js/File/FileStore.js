@@ -2,6 +2,9 @@
 
 var Backbone = require('backbone');
 var _ = require('underscore');
+var {
+  StatusBarIOS
+} = require('react-native');
 
 var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
@@ -20,6 +23,8 @@ _.extend(FileStore, {
             return;
           }
           this.trigger(FILE.UPLOAD_COMPLETE, filename);
+          // make sure the status bar is still white
+          StatusBarIOS.setStyle(1);
         });
 
         break;
@@ -40,7 +45,9 @@ _.extend(FileStore, {
         // along with the uploaded file
       }
     }, (err, res) => {
-      //console.log(err, res);
+      // make sure the status bar is still white
+      StatusBarIOS.setStyle(1);
+
       if(err) callback(err, null);
       var data = JSON.parse(res.data);
       var filename = constants.apiurl + '/files/' + data.filename;
