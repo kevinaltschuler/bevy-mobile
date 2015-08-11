@@ -33,7 +33,7 @@ var MessageItem = React.createClass({
         ((createDate.getHours() > 12 ) ? createDate.getHours() - 12 : createDate.getHours()) // 12 hr format
         + ':'
         + createDate.getMinutes()
-        + ((createDate.getHours() > 12) ? ' PM' : ' AM');
+        + ((createDate.getHours() > 11) ? ' PM' : ' AM');
     } else if (diff <= ( 1000 * 60 * 60 * 24 * 7)) {
       // within a week - only display short weekday
       var weekdayMap = [
@@ -105,7 +105,7 @@ var MessageItem = React.createClass({
           : (
             <View style={ styles.container }>
               <Image 
-                source={{ uri: author.image_url }}
+                source={{ uri: (_.isEmpty(author.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : author.image_url }}
                 style={ styles.authorImage }
               />
               <Image 

@@ -54,6 +54,13 @@ var MessageView = React.createClass({
       dataSource: ds.cloneWithRows(messages)
     };
   },
+  
+  componentWillReceiveProps(nextProps: Object) {
+    if(this.props.activeThread._id != nextProps.activeThread._id) {
+      // switched threads
+      console.log('switched threads');
+    }
+  },
 
   componentDidMount: function() {
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);

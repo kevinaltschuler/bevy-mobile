@@ -88,7 +88,8 @@ var ChatView = React.createClass({
   _renderMenuOverlay() {
     if(this.state.menuOpen) return null;
     return (
-      <TouchableHighlight 
+      <TouchableHighlight
+        underlayColor='rgba(0,0,0,0.2)'
         onPress={() => {
           this.toggleMenu();
         }}

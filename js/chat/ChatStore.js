@@ -127,13 +127,21 @@ _.extend(ChatStore, {
     return thread.toJSON();
   },
 
-  getMessages(thread_id) {
+  getMessages(thread_id: String) {
     var thread = this.threads.get(thread_id);
     if(thread == undefined) return [];
     else return thread.messages.toJSON();
   },
 
-  addMessage(message) {
+  getLatestMessage(thread_id: String) {
+    var thread = this.threads.get(thread_id);
+    if(thread == undefined) return {};
+    var message = thread.messages.last();
+    if(!_.isEmpty(message)) return message.toJSON();
+    else return {};
+  },
+
+  addMessage(message: Object) {
     console.log('adding message...');
     var thread = this.threads.get(message.thread);
     if(thread == undefined) return;

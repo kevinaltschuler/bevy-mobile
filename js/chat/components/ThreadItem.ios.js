@@ -22,6 +22,7 @@ var {
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 var ChatActions = require('./../ChatActions');
+var ChatStore = require('./../ChatStore');
 
 var ThreadItem = React.createClass({
 
@@ -69,18 +70,28 @@ var ThreadItem = React.createClass({
     if(thread.bevy) {
       threadName = thread.bevy.name;
       threadImage = thread.bevy.image_url || constants.siteurl + '/img/logo_100.png';
-    } else if( thread.members.length > 1 ) {
-      var otherUser = _.find(thread.members, function(member) {
-        return member.user._id != user._id;
-      });
-      threadName = otherUser.user.displayName;
-      threadImage = otherUser.user.image_url || constants.siteurl + '/img/user-profile-icon.png';
+    } else if( thread.users.length > 1 ) {
+
     }
 
     return {
       threadName: threadName,
       threadImage: threadImage
     };
+  },
+
+  _renderLatestMessageInfo() {
+    var latestMessage = ChatStore.getLatestMessage(this.props.thread._id);
+    if(_.isEmpty(latestMessage)) return <View />;
+
+    var posterName = latestMessage.author.displayName;
+    if(latestMessage.author._id == this.props.user._id) posterName = 'Me';
+
+    return (
+      <Text style={ styles.subTitleText }>
+        { latestMessage.author.displayName }: { latestMessage.body }
+      </Text>
+    );
   },
 
   render() {
@@ -90,6 +101,8 @@ var ThreadItem = React.createClass({
 
     var threadName = this.state.threadName;
     var threadImage = this.state.threadImage;
+
+    
 
     return (
       <TouchableHighlight
@@ -111,9 +124,7 @@ var ThreadItem = React.createClass({
             <Text style={ styles.titleText }>
               { threadName }
             </Text>
-            <Text style={ styles.subTitleText }>
-              Last Poster: Last Message
-            </Text>
+            { this._renderLatestMessageInfo() }
           </View>
         </View>
       </TouchableHighlight>
