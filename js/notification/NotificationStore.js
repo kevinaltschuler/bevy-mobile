@@ -2,6 +2,9 @@
 
 var Backbone = require('backbone');
 var _ = require('underscore');
+var {
+  VibrationIOS
+} = require('react-native');
 
 var Dispatcher = require('./../shared/dispatcher');
 
@@ -29,7 +32,6 @@ _.extend(NotificationStore, {
         this.notifications.fetch({
           reset: true,
           success: function(collection, response, options) {
-            //this.trigger(APP.LOAD_PROGRESS, 0.1);
             this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
         });
@@ -95,12 +97,13 @@ _.extend(NotificationStore, {
             // on success
             poll();
             //console.log('JSON parsed successfully!');
-            console.log(data);
+            console.log(response);
 
             // play audio/vibrate phone
             switch(response.type) {
               case 'message':
                 ChatStore.addMessage(response.data);
+                VibrationIOS.vibrate();
                 break;
               case 'notification':
                 this.notifications.add(response.data);
