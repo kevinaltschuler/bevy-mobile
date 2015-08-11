@@ -159,8 +159,6 @@ var ChatView = React.createClass({
   },
 
   _renderContent() {
-    console.log(this.state.containerHeight);
-
     var view;
     if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
       // create a chat
@@ -197,8 +195,6 @@ var ChatView = React.createClass({
   },
 
   render: function () {
-    console.log('container height', this.state.containerHeight);
-
     return (
       <View style={ styles.container }>
         { this._renderContent() }

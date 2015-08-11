@@ -17,6 +17,7 @@ var ChatMenu = React.createClass({
 
   propTypes: {
     allThreads: React.PropTypes.array,
+    activeThread: React.PropTypes.object,
     chatMenuActions: React.PropTypes.object
   },
 
@@ -39,10 +40,15 @@ var ChatMenu = React.createClass({
         <ListView
           dataSource={ this.state.threads }
           renderRow={(thread) => {
+
+            var active = false;
+            if(thread._id == this.props.activeThread._id) active = true;
+
             return (
               <ThreadItem 
                 thread={ thread }
                 user={ this.props.user }
+                active={ active }
                 chatMenuActions={ this.props.chatMenuActions }
               />
             );

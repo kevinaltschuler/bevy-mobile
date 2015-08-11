@@ -30,7 +30,14 @@ var ThreadItem = React.createClass({
     chatNavigator: React.PropTypes.object,
     thread: React.PropTypes.object,
     user: React.PropTypes.object,
-    chatMenuActions: React.PropTypes.object
+    chatMenuActions: React.PropTypes.object,
+    active: React.PropTypes.bool // is this thread being displayed currently
+  },
+
+  getDefaultProps() {
+    return {
+      active: false
+    };
   },
 
   getInitialState() {
@@ -93,16 +100,18 @@ var ThreadItem = React.createClass({
           this.props.chatMenuActions.closeMenu();
         }}
       >
-        <View style={styles.container} >
+        <View style={[ styles.container, {
+          backgroundColor: (this.props.active) ? '#eee' : '#fff'
+        }]} >
           <Image 
             source={{ uri: threadImage }}
-            style={styles.titleImage}
+            style={ styles.titleImage }
           />
-          <View style={styles.titleTextColumn}>
-            <Text style={styles.titleText}>
+          <View style={ styles.titleTextColumn }>
+            <Text style={ styles.titleText }>
               { threadName }
             </Text>
-            <Text style={styles.subTitleText}>
+            <Text style={ styles.subTitleText }>
               Last Poster: Last Message
             </Text>
           </View>
@@ -115,7 +124,6 @@ var ThreadItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
     paddingLeft: 7,
     paddingRight: 7,
     paddingTop: 5,
