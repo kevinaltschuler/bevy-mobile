@@ -114,6 +114,7 @@ var ThreadItem = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: '#fff',
     paddingLeft: 7,
     paddingRight: 7,

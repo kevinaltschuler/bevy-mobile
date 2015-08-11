@@ -31,38 +31,35 @@ var CHAT = constants.CHAT;
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var MessageItem = require('./MessageItem.ios.js');
 
-var InChatView = React.createClass({
+var MessageView = React.createClass({
 
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
     allThreads: React.PropTypes.array,
+    activeThread: React.PropTypes.object,
     user: React.PropTypes.object
   },
 
   getInitialState: function() {
 
-    var activeThread = _.findWhere(this.props.allThreads, { 
-      _id: this.props.chatRoute.activeThread 
-    });
-    var messages = [];
-    if(activeThread) messages = ChatStore.getMessages(activeThread._id);
+    var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     return {
       isRefreshing: false,
       keyboardSpace: 0,
       messageValue: '',
-      activeThread: activeThread || {},
       messages: messages,
       dataSource: ds.cloneWithRows(messages)
     };
   },
 
   componentDidMount: function() {
-    ChatStore.on(CHAT.CHANGE_ONE + this.state.activeThread._id, this._onChatChange);
+    ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
 
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
+      console.log(frames.end.height);
       this.setState({
         keyboardSpace: frames.end.height
       });
@@ -75,11 +72,11 @@ var InChatView = React.createClass({
   },
 
   componentWillUnmount: function() {
-    ChatStore.off(CHAT.CHANGE_ONE + this.state.activeThread._id, this._onChatChange);
+    ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
   },
 
   _onChatChange: function() {
-    var messages = ChatStore.getMessages(this.state.activeThread._id);
+    var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       isRefreshing: false,
       messages: messages,
@@ -111,7 +108,7 @@ var InChatView = React.createClass({
   },
 
   onRefresh: function() {
-    ChatActions.fetchMore(this.state.activeThread._id);
+    ChatActions.fetchMore(this.props.activeThread._id);
   },
 
   onChange: function(ev) {
@@ -124,7 +121,7 @@ var InChatView = React.createClass({
   onSubmitEditing: function(ev) {
     var text = ev.nativeEvent.text;
     var user = this.props.user;
-    ChatActions.postMessage(this.state.activeThread._id, user, text);
+    ChatActions.postMessage(this.props.activeThread._id, user, text);
     this.setState({
       messageValue: ''
     });
@@ -140,24 +137,10 @@ var InChatView = React.createClass({
 
   render: function () {
 
-    var allThreads = this.props.allThreads;
-
-    var messages = [];
-    this.state.messages.forEach(function(message) {
-      messages.push(
-        <MessageItem key={ message._id } message={ message } />
-      );
-    });
-
-    var containerStyle = {
-      flexDirection: 'column',
-      flex: 1,
-      justifyContent: 'flex-end',
-      marginBottom: (this.state.keyboardSpace == 0) ? 50 : this.state.keyboardSpace,
-    };
-
     return (
-      <View style={ containerStyle } >
+      <View style={[ styles.container, {
+        marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace - 48 // tab bar height
+      } ]} >
         <ListView
           ref='messageList'
           style={ styles.scrollContainer }
@@ -172,7 +155,7 @@ var InChatView = React.createClass({
           renderHeader={ this.renderHeader }
         />
         <TextInput
-          style={styles.textInput}
+          style={[ styles.textInput ]}
           placeholder={ 'Chat' }
           value={ this.state.messageValue }
           returnKeyType={ 'send' }
@@ -186,6 +169,11 @@ var InChatView = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
+  },
   scrollContainer: {
     flex: 1,
     flexDirection: 'column',
@@ -199,8 +187,8 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 16,
     backgroundColor: '#fff',
-    color: 'black'
+    color: '#000'
   },
 })
 
-module.exports = InChatView;
+module.exports = MessageView;

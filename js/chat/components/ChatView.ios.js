@@ -21,10 +21,11 @@ var MessageView = require('./MessageView.ios.js');
 
 var _ = require('underscore');
 var window = require('Dimensions').get('window');
+var constants = require('./../../constants');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var menuOffset = 50;
-var menuWidth = window.width * 3 / 4;
+var menuWidth = constants.width * 3 / 4;
 
 var ChatView = React.createClass({
 
@@ -38,7 +39,7 @@ var ChatView = React.createClass({
 
   getInitialState() {
     return {
-      containerHeight: window.height 
+      containerHeight: constants.height 
         - StatusBarSizeIOS.currentHeight // status bar
         - 48 // search bar
         - 40 // navbar
@@ -78,9 +79,9 @@ var ChatView = React.createClass({
 
   getChatMenuActions() {
     return {
-      openMenu: this.openMenu.bind(this),
-      closeMenu: this.closeMenu.bind(this),
-      toggleMenu: this.toggleMenu.bind(this)
+      openMenu: this.openMenu,
+      closeMenu: this.closeMenu,
+      toggleMenu: this.toggleMenu
     };
   },
 
@@ -127,7 +128,7 @@ var ChatView = React.createClass({
 
   _renderContentOverlay() {
     if(!this.state.menuOpen) return null;
-    return (
+    /*return (
       <TouchableWithoutFeedback
         onPress={() => {
           this.toggleMenu();
@@ -137,22 +138,24 @@ var ChatView = React.createClass({
           position: 'absolute',
           top: 0,
           left: 0,
-          width: window.width - menuOffset,
+          width: window.width,
           height: this.state.containerHeight
         }}
       >
         <View 
           style={{
             flex: 1,
-            width: window.width - menuOffset,
+            width: window.width,
             height: this.state.containerHeight
           }}
         />
       </TouchableWithoutFeedback>
-    );
+    );*/
+    return null;
   },
 
   _renderContent() {
+    console.log(this.state.containerHeight);
 
     var view;
     if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
@@ -174,9 +177,7 @@ var ChatView = React.createClass({
     } else {
       // display the chat messages
       view = (
-        <View>
-          <Text>Message List</Text>
-        </View>
+        <MessageView { ...this.props }/>
       );
     }
 
@@ -192,6 +193,7 @@ var ChatView = React.createClass({
   },
 
   render: function () {
+    console.log('container height', this.state.containerHeight);
 
     return (
       <View style={ styles.container }>
@@ -229,10 +231,6 @@ var styles = StyleSheet.create({
     top: 0,
     flexDirection: 'column',
     width: window.width - menuOffset
-  },
-  scrollContainer: {
-    flex: 1,
-    flexDirection: 'column'
   }
 })
 
