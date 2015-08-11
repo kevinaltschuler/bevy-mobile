@@ -128,30 +128,34 @@ var ChatView = React.createClass({
 
   _renderContentOverlay() {
     if(!this.state.menuOpen) return null;
-    /*return (
+    return (
       <TouchableWithoutFeedback
         onPress={() => {
           this.toggleMenu();
         }}
         style={{ 
+          backgroundColor: 'transparent',
           flex: 1,
           position: 'absolute',
           top: 0,
           left: 0,
-          width: window.width,
+          width: window.width - menuWidth,
           height: this.state.containerHeight
         }}
       >
         <View 
           style={{
+            backgroundColor: 'transparent',
             flex: 1,
-            width: window.width,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: window.width - menuWidth,
             height: this.state.containerHeight
           }}
         />
       </TouchableWithoutFeedback>
-    );*/
-    return null;
+    );
   },
 
   _renderContent() {
