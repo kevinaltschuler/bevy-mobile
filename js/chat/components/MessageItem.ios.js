@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -9,6 +8,7 @@ var {
   Image
 } = React;
 
+var _ = require('underscore');
 var constants = require('./../../constants');
 
 var MessageItem = React.createClass({
@@ -24,25 +24,46 @@ var MessageItem = React.createClass({
     var user = this.props.user;
 
     var createDate = new Date(message.created);
-    var dateOptions = {
-      year: undefined,
-      weekday: undefined,
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    };
-    if(new Date(Date.now()).getDay() == createDate.getDay()) {
-      dateOptions.month = undefined;
-      dateOptions.day = undefined;
+    var nowDate = new Date();
+    var diff = nowDate - createDate;
+    var created = '';
+    if(diff <= ( 1000 * 60 * 60 * 24)) {
+      // within a day - only display hours and minutes
+      created = 
+        ((createDate.getHours() > 12 ) ? createDate.getHours() - 12 : createDate.getHours()) // 12 hr format
+        + ':'
+        + createDate.getMinutes()
+        + ((createDate.getHours() > 12) ? ' PM' : ' AM');
+    } else if (diff <= ( 1000 * 60 * 60 * 24 * 7)) {
+      // within a week - only display short weekday
+      var weekdayMap = [
+        'Sun',
+        'Mon',
+        'Tues',
+        'Wed',
+        'Thurs',
+        'Fri',
+        'Sat'
+      ];
+      created = weekdayMap[createDate.getDay()];
+    } else {
+      // outside of a week - display month and day
+      var monthMap = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      created = monthMap[createDate.getMonth() - 1] + ' ' + createDate.getDate();
     }
-    else if(Date.now() - createDate.getTime() <= ( 1000 * 60 * 60 * 24 * 7 )) {
-      // if within this week
-      dateOptions.month = undefined;
-      dateOptions.day = undefined;
-      dateOptions.weekday = 'short';
-    }
-    var created = createDate.toLocaleString('en-US', dateOptions);
 
     var messageBodyStyle = {
       backgroundColor: '#fff',
@@ -76,7 +97,7 @@ var MessageItem = React.createClass({
                 style={ styles.arrow } 
               />
               <Image 
-                source={{ uri: author.image_url }}
+                source={{ uri: (_.isEmpty(author.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : author.image_url }}
                 style={ styles.authorImage }
               />
             </View>
