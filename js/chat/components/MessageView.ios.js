@@ -59,6 +59,12 @@ var MessageView = React.createClass({
     if(this.props.activeThread._id != nextProps.activeThread._id) {
       // switched threads
       console.log('switched threads');
+      var messages = ChatStore.getMessages(nextProps.activeThread._id);
+      this.setState({
+        messages: messages,
+        dataSource: this.state.dataSource.cloneWithRows(messages),
+        messageValue: '' // reset text field as well
+      });
     }
   },
 

@@ -88,7 +88,7 @@ var MessageItem = React.createClass({
                   { message.body}
                   { '\n' }
                   <Text style={ styles.authorName }>
-                    { created }
+                    Me · { created }
                   </Text>
                 </Text>
               </View>
