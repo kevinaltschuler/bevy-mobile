@@ -125,6 +125,19 @@ var MessageView = React.createClass({
     this.setState({
       messageValue: ''
     });
+
+    // instant gratification
+    var messages = this.state.messages;
+    messages.push({
+      _id: Date.now(),
+      author: user,
+      body: text,
+      created: Date.now()
+    });
+    this.setState({
+      messages: messages,
+      dataSource: this.state.dataSource.cloneWithRows(messages)
+    });
   },
 
   renderHeader: function() {
