@@ -21,8 +21,7 @@ var {
 } = require('react-native-icons');
 
 var PostList = require('./../../post/components/PostList.ios.js');
-var Accordion = require('react-native-accordion');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var AddBevyModal = require('./AddBevyModal.ios.js');
 
 var FileActions = require('./../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
@@ -44,7 +43,7 @@ var BevyList = React.createClass({
 
   getInitialState() {
     return {
-      profileAccordionOpen: false
+      showAddBevyModal: false
     };
   },
 
@@ -69,91 +68,57 @@ var BevyList = React.createClass({
       );
     }
     return (
-      <Accordion
+      <TouchableHighlight
         underlayColor='#333'
+        style={ styles.profileHeaderContainer } 
         onPress={() => {
-          this.setState({
-            profileAccordionOpen: !this.state.profileAccordionOpen
-          });
+
         }}
-        header={
-          <View style={ styles.profileHeader }>
-            <Image 
-              source={{ uri: this.props.user.image_url }}
-              style={ styles.profileImage }
-            />
-            <View style={ styles.profileDetails }>
-              <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-              <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
-            </View>
-            <Icon
-              name={ (this.state.profileAccordionOpen) ? 'ion|ios-arrow-down' : 'ion|ios-arrow-right' }
-              color='#fff'
-              size={ 30 }
-              style={{
-                width: 30,
-                height: 30
-              }}
-            />
+      >
+        <View style={ styles.profileHeader }>
+          <Image 
+            source={{ uri: this.props.user.image_url }}
+            style={ styles.profileImage }
+          />
+          <View style={ styles.profileDetails }>
+            <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
+            <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
           </View>
-        }
-        content={
-          <View style={ styles.profileActions }>
-            <TouchableHighlight
-              underlayColor='#333'
-              style={ styles.profileAction }
-              onPress={() => {
-                var route = routes.MAIN.PROFILE;
-                route.profileUser = this.props.user;
-                this.props.mainNavigator.push(route);
-              }}
-            >
-              <Text style={ styles.profileActionText }>View Profile</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='#333'
-              style={ styles.profileAction }
-              onPress={() => {
-                UIImagePickerManager.showImagePicker({
-                  title: 'Select Profile Picture',
-                  cancelButtonTitle: 'Cancel',
-                  takePhotoButtonTitle: 'Take Photo...',
-                  chooseFromLibraryButtonTitle: 'Choose from Library...',
-                  returnBase64Image: false,
-                  returnIsVertical: false
-                }, (type, response) => {
-                  if (type !== 'cancel') {
-                    //console.log(response);
-                    //FileActions.upload(response);
-                    UserActions.changeProfilePicture(response);
-                  } else {
-                    //console.log('Cancel');
-                  }
-                });
-              }}
-            >
-              <Text style={ styles.profileActionText }>Change Profile Picture</Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='#333'
-              style={ styles.profileAction }
-              onPress={() => {
-                UserActions.logOut();
-              }}
-            >
-              <Text style={ styles.profileActionText }>Sign Out</Text>
-            </TouchableHighlight>
-          </View>
-        }
-      />
+        </View>
+      </TouchableHighlight>
     );
   },
 
   _renderPublicHeader() {
-    return (
+    if(!this.props.loggedIn) return (
       <Text style={ styles.publicHeader }>
-        { (this.props.loggedIn) ? 'My Bevies' : 'Public Bevies' }
+        Public Bevies
       </Text>
+    );
+    return (
+      <View style={ styles.myBeviesHeader }>
+        <Text style={ styles.myBeviesHeaderText }>
+          My Bevies
+        </Text>
+        <TouchableHighlight
+          underlayColor='#333'
+          style={ styles.bevyAddButton }
+          onPress={() => { this.setState({ showAddBevyModal: true }); }}
+        >
+          <Icon
+            name='ion|ios-plus-empty'
+            color='#999'
+            size={ 30 }
+            style={{ width: 30, height: 30 }}
+          />
+        </TouchableHighlight>
+        <AddBevyModal 
+          isVisible={ this.state.showAddBevyModal }
+          onHide={() => { this.setState({ showAddBevyModal: false }); }}
+          mainNavigator={ this.props.mainNavigator }
+          menuActions={ this.props.menuActions }
+        />
+      </View>
     );
   },
 
@@ -191,44 +156,9 @@ var BevyList = React.createClass({
             </TouchableHighlight>
           );
         }.bind(this)) }
-
-        { this._renderNewBevyButton() }
       </View>
     );
   },
-
-  _renderNewBevyButton() {
-    //if(!this.props.loggedIn) return null;
-    return (
-      <TouchableHighlight
-        style={ styles.bevyAddItem }
-        onPress={() => {
-          if(!this.props.loggedIn) {
-            this.props.authModalActions.open('Log In To Create A Bevy');
-            return;
-          }
-          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-        }}
-      >
-        <View style={ styles.bevyAdd }>
-          <Text style={ styles.bevyItemText }>
-            Create new Bevy
-          </Text>
-          <Icon
-            name='ion|plus-round'
-            size={20}
-            color='#fff'
-            style={{
-              alignSelf: 'flex-end', 
-              width: 20, 
-              height: 20
-            }}
-          />
-        </View>
-      </TouchableHighlight>
-    );
-  },
-
   
   render: function() {
     return (
@@ -266,6 +196,22 @@ var styles = StyleSheet.create({
     marginBottom: 10,
     marginTop: 10
   },
+  myBeviesHeader: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  myBeviesHeaderText: {
+    flex: 1,
+    fontSize: 15,
+    color: '#999',
+    paddingLeft: 10
+  },
+  bevyAddButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
 
   profileHeader: {
     flexDirection: 'row',
@@ -290,20 +236,6 @@ var styles = StyleSheet.create({
   profileEmail: {
     color: '#eee', 
     fontSize: 12
-  },
-  profileActions: {
-    flexDirection: 'column'
-  },
-  profileAction: {
-    backgroundColor: '#222',
-    flex: 1,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333'
-  },
-  profileActionText: {
-    color: '#fff', 
-    fontSize: 15
   },
 
   bevyList: {

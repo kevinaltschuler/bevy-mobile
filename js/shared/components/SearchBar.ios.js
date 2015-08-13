@@ -153,6 +153,7 @@ var SearchNavigator = React.createClass({
         ]}
         initialRoute={ routes.SEARCH.OUT } // start out of search view
         renderScene={(route, navigator) => {
+          constants.setSearchNavigator(navigator);
           var view;
           switch(route.name) {
             case 'in':

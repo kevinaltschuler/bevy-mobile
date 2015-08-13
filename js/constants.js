@@ -10,7 +10,7 @@
 'use strict';
 
 var user = {};
-var bevyNavigator = {};
+var searchNavigator = {};
 var slashes = '//';
 
 var api_subdomain = 'api';
@@ -117,10 +117,10 @@ exports.NOTIFICATION = {
     CHANGE_ALL: 'notification_change_all'
 };
 
-exports.setBevyNavigator = function(navigator) {
-	bevyNavigator = navigator;
+exports.setSearchNavigator = function(navigator) {
+	searchNavigator = navigator;
 };
 
-exports.getBevyNavigator = function() {
-	return bevyNavigator;
+exports.getSearchNavigator = function() {
+	return searchNavigator;
 }
