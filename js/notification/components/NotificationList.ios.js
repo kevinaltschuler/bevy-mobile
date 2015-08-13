@@ -24,23 +24,26 @@ var NotificationList = React.createClass({
     allNotifications: React.PropTypes.array
   },
 
-  getInitialState: function() {
-    return { };
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-
-  },
-
-  render: function () {
-
+  getInitialState() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataSource = ds.cloneWithRows(this.props.allNotifications);
+
+    return { 
+      dataSource: ds.cloneWithRows(this.props.allNotifications)
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.allNotifications)
+    });
+  },
+
+  render() {
 
     return (
       <View style={ styles.container }>
         <ListView
-          dataSource={dataSource}
+          dataSource={ this.state.dataSource }
           renderRow={(notification) => 
             <NotificationItem 
               notification={ notification }
