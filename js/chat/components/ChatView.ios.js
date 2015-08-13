@@ -161,20 +161,26 @@ var ChatView = React.createClass({
 
   _renderContent() {
     var view;
-    if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
+    if(!this.props.loggedIn) {
+      view = (
+        <View style={ styles.infoView }>
+          <Text style={ styles.infoViewText }>Sign In to Chat</Text>
+        </View>
+      );
+    } else if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
       // create a chat
       view = (
-        <View>
-          <Text>Create a Chat</Text>
+        <View style={ styles.infoView }>
+          <Text style={ styles.infoViewText }>Create a Chat</Text>
         </View>
       );
     } else if (_.isEmpty(this.props.activeThread)) {
       // select a chat from the menu over there -->
       view = (
-        <View>
-          <Text>No Conversation Selected</Text>
-          <Text>Select a Conversation From the Menu to the Right</Text>
-          <Text>Or, Switch to a Bevy to View It's Chat</Text>
+        <View style={ styles.infoView }>
+          <Text style={ styles.infoViewText }>No Conversation Selected</Text>
+          <Text style={ styles.infoViewText }>Select a Conversation From the Menu to the Right</Text>
+          <Text style={ styles.infoViewText }>Or, Switch to a Bevy to View It's Chat</Text>
         </View>
       );
     } else {
@@ -232,6 +238,19 @@ var styles = StyleSheet.create({
     top: 0,
     flexDirection: 'column',
     width: window.width - menuOffset
+  },
+
+  infoView: {
+    flex: 1,
+    flexDirection: 'column',
+    padding: 15,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
+  },
+  infoViewText: {
+    fontSize: 17,
+    color: '#888',
+    marginBottom: 15
   }
 })
 

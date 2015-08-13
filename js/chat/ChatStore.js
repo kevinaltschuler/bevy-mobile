@@ -7,6 +7,7 @@ var _ = require('underscore');
 var Dispatcher = require('./../shared/dispatcher');
 
 var Threads = require('./ThreadCollection');
+var Thread = require('./ThreadModel');
 
 var constants = require('./../constants');
 var UserStore = require('./../user/UserStore');
@@ -54,6 +55,36 @@ _.extend(ChatStore, {
 
         if(thread == undefined) this.active = -1; // thread not found
         else this.active = thread.get('_id');
+
+        this.trigger(CHAT.CHANGE_ALL);
+
+        break;
+
+      case BEVY.SUBSCRIBE:
+        // add the group chat of the subscribed bevy
+        var bevy_id = payload.bevy_id;
+
+        var new_thread = new Thread;
+        new_thread.url = constants.apiurl + '/bevies/' + bevy_id + '/thread';
+        new_thread.fetch({
+          success: function(model, response, options) {
+            this.threads.add(model);
+            this.trigger(CHAT.CHANGE_ALL);
+          }.bind(this)
+        });
+
+        break;
+      case BEVY.UNSUBSCRIBE:
+        // remove the group chat of the unsubscribed bevy
+        var bevy_id = payload.bevy_id;
+
+        var thread = this.threads.find(function($thread) {
+          if(_.isEmpty($thread.get('bevy'))) return false; // skip over PMs
+          return $thread.get('bevy')._id == bevy_id;
+        });
+
+        if(thread == undefined) break;
+        this.threads.remove(thread);
 
         this.trigger(CHAT.CHANGE_ALL);
 
