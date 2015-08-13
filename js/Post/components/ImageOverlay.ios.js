@@ -147,7 +147,7 @@ var styles = StyleSheet.create({
 
   topBar: {
     position: 'absolute',
-    top: 0,
+    top: -10,
     left: 0,
     width: constants.width,
     height: 48,
