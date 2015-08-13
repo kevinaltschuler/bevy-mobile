@@ -6,7 +6,8 @@ var {
   View,
   Text,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  PanResponder
 } = React;
 var {
   Icon
@@ -14,6 +15,9 @@ var {
 var Modal = require('react-native-modal');
 
 var constants = require('./../../constants');
+
+var toleranceX = 10;
+var toleranceY = 10;
 
 var ImageOverlay = React.createClass({
 
@@ -27,6 +31,38 @@ var ImageOverlay = React.createClass({
       isVisible: this.props.isVisible,
       imageIndex: 0
     };
+  },
+
+  componentDidMount() {
+    console.log('image overlay mounted');
+    this._panResponder = PanResponder.create({
+      // permission to use the responder
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        //var direction = (gestureState.dx > 0) ? 'right' : 'left';
+        console.log('testing 1 2 3');
+        var x = Math.round(Math.abs(gestureState.dx));
+        var y = Math.round(Math.abs(gestureState.dy));
+        return this.state.isVisible && x > toleranceX && y < toleranceY;
+      },
+
+      onPanResponderGrant: (evt, gestureState) => {
+        // The guesture has started. Show visual feedback so the user knows
+        // what is happening!
+
+        // gestureState.{x,y}0 will be set to zero now
+        console.log('image overlay gesture started');
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        // The most recent move distance is gestureState.move{X,Y}
+
+        // The accumulated gesture distance since becoming responder is
+        // gestureState.d{x,y}
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        // The user has released all touches while this view is the
+        // responder. This typically means a gesture has succeeded
+      }
+    });
   },
 
   componentWillReceiveProps(nextProps) {
@@ -114,6 +150,14 @@ var ImageOverlay = React.createClass({
           resizeMode='contain'
         >
         </Image>
+        {/*<View { ...this._panResponder.panHandlers } style={{
+          position: 'absolute',
+          top: 68,
+          left: 0,
+          width: constants.width,
+          height: constants.height - 48 - 10 - 10, // top bar plus padding
+          backgroundColor: 'rgba(255,0,0,0.2)'
+        }}/>*/}
         <Text> </Text>
       </Modal>
     );
