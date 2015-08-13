@@ -165,7 +165,8 @@ var styles = StyleSheet.create({
   postContainer: {
     flexDirection: 'column',
     flex: 1,
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
+    paddingBottom: 40
   },
   postListHeader: {
     flex: 1,
