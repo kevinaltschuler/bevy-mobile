@@ -7,15 +7,15 @@
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
   ListView
 } = React;
 
 var NotificationItem = require('./NotificationItem.ios.js');
+
+var _ = require('underscore');
 var constants = require('./../../constants.js');
 
 var NotificationList = React.createClass({
@@ -38,10 +38,24 @@ var NotificationList = React.createClass({
     });
   },
 
-  render() {
+  _renderNoNotificationsText() {
+    if(_.isEmpty(this.props.allNotifications)) {
+      return (
+        <View style={ styles.noNotificationsContainer }>
+          <Text style={ styles.noNotificationsText }>
+            No Notifications
+          </Text>
+        </View>
+      );
+    } else {
+      return <View />;
+    }
+  },
 
+  render() {
     return (
       <View style={ styles.container }>
+        { this._renderNoNotificationsText() }
         <ListView
           dataSource={ this.state.dataSource }
           renderRow={(notification) => 
@@ -59,7 +73,18 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ddd'
+  },
+  noNotificationsContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noNotificationsText: {
+    fontSize: 22,
+    color: '#aaa'
   }
-})
+});
 
 module.exports = NotificationList;

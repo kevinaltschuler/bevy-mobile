@@ -6,7 +6,6 @@
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -14,7 +13,6 @@ var {
   TouchableHighlight,
   Navigator
 } = React;
-
 var {
   Icon
 } = require('react-native-icons');
@@ -24,12 +22,14 @@ var BackButton = require('./../../shared/components/BackButton.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 
 var routes = require('./../../routes');
+var _ = require('underscore');
 var NotificationActions = require('./../NotificationActions');
 
 var NotificationView = React.createClass({
   propTypes: {
     notificationRoute: React.PropTypes.object,
-    notificationNavigator: React.PropTypes.object
+    notificationNavigator: React.PropTypes.object,
+    allNotifications: React.PropTypes.array
   },
 
   render: function() {
@@ -45,7 +45,9 @@ var NotificationView = React.createClass({
         break;
     }
 
-    var clearAllButton = (
+    var clearAllButton = (_.isEmpty(this.props.allNotifications))
+    ? <View />
+    : (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
         onPress={() => {
