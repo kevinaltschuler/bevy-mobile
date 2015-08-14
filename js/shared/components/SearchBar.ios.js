@@ -30,8 +30,8 @@ var SearchView = require('./../../app/components/SearchView.ios.js');
 var SearchBar = React.createClass({
 
   propTypes: {
-    searchRoute: React.PropTypes.object,
-    searchNavigator: React.PropTypes.object,
+    navState: React.PropTypes.object,
+    navigator: React.PropTypes.object,
     menuActions: React.PropTypes.object // for side menu
   },
 
@@ -42,19 +42,25 @@ var SearchBar = React.createClass({
     };
   },
 
+  componentWillReceiveProps(nextProps) {
+    /*var activeRoute = nextProps.navState.routeStack[nextProps.navState.presentedIndex];
+    this.setState({
+      activeRoute: activeRoute
+    });*/
+  },
+
   componentDidMount() {
-    BevyStore.on(BEVY.SWITCHED, () => {
-      // switched bevies
-      // force rerender so the left button can update
+    this.props.navigator.navigationContext.addListener('willfocus', (ev) => {
+      var route = ev.data.route;
       this.setState({
-        activeRoute: routes.SEARCH.OUT
-      })
+        activeRoute: route
+      });
       this.forceUpdate();
     });
   },
 
   componentWillUnmount() {
-    BevyStore.off(BEVY.SWITCHED);
+    this.props.navigator.navigationContext.removeListener('willfocus');
   },
 
   onSearchBlur() {
@@ -75,8 +81,8 @@ var SearchBar = React.createClass({
   },
 
   render() {
-    var leftButton = (this.state.activeRoute.name === routes.SEARCH.IN.name)
-    ? (
+    console.log('rendering search bar', this.state.activeRoute);
+    var leftButton = (
       <BackButton 
         color='#fff'
         onPress={() => {
@@ -87,14 +93,16 @@ var SearchBar = React.createClass({
           });
         }}
       />
-    )
-    : (
-      <BevyListButton 
-        onPress={() => {
-          this.props.menuActions.toggle();
-        }}
-      />
     );
+    if(this.state.activeRoute.name != routes.SEARCH.IN.name) {
+      leftButton = (
+        <BevyListButton 
+          onPress={() => {
+            this.props.menuActions.toggle();
+          }}
+        />
+      );
+    }
 
     return (
       <View style={ styles.navbar }>
@@ -117,7 +125,6 @@ var SearchBar = React.createClass({
                 autoCapitalize='none'
                 autoCorrect={ false }
                 clearButtonMode='while-editing'
-                enablesReturnKeyAutomatically={ true }
                 onBlur={ this.onSearchBlur }
                 onFocus={ this.onSearchFocus }
                 onChange={ this.onSearch }

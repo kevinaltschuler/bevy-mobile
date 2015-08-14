@@ -34,7 +34,6 @@ var ImageOverlay = React.createClass({
   },
 
   componentDidMount() {
-    console.log('image overlay mounted');
     this._panResponder = PanResponder.create({
       // permission to use the responder
       onMoveShouldSetPanResponder: (evt, gestureState) => {
