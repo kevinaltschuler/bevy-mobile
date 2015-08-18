@@ -68,24 +68,16 @@ var BevyList = React.createClass({
       );
     }
     return (
-      <TouchableHighlight
-        underlayColor='#333'
-        style={ styles.profileHeaderContainer } 
-        onPress={() => {
-
-        }}
-      >
-        <View style={ styles.profileHeader }>
-          <Image 
-            source={{ uri: this.props.user.image_url }}
-            style={ styles.profileImage }
-          />
-          <View style={ styles.profileDetails }>
-            <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-            <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
-          </View>
+      <View style={ styles.profileHeader }>
+        <Image 
+          source={{ uri: this.props.user.image_url }}
+          style={ styles.profileImage }
+        />
+        <View style={ styles.profileDetails }>
+          <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
+          <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
         </View>
-      </TouchableHighlight>
+      </View>
     );
   },
 
