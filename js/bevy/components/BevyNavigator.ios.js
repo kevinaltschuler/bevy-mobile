@@ -107,7 +107,7 @@ var BevyView = React.createClass({
         alignItems: 'center',
         justifyContent: 'flex-end'
       }}>
-        { sortButton }
+        {/* sortButton */}
         { infoButton }
       </View>
     );
