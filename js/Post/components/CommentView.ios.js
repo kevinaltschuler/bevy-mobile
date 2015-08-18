@@ -313,7 +313,8 @@ var styles = StyleSheet.create({
   },
 
   navButtonLeft: {
-    flex: 1
+    flex: 1,
+    marginLeft: 8
   },
   navButtonRight: {
     flex: 1,
