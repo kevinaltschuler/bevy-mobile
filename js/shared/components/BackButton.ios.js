@@ -2,6 +2,8 @@
 
 var React = require('react-native');
 var {
+  View,
+  Text,
   StyleSheet,
   TouchableOpacity
 } = React;
@@ -13,17 +15,30 @@ var BackButton = React.createClass({
 
   propTypes: {
     onPress: React.PropTypes.func,
-    color: React.PropTypes.string
+    color: React.PropTypes.string,
+    text: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
-      color: '#666'
+      color: '#666',
+      text: null
     };
   },
 
   onPress: function() {
     this.props.onPress();
+  },
+
+  _renderText() {
+    if(!this.props.text) return <View />;
+    return (
+      <Text style={[ styles.backButtonText, {
+        color: this.props.color
+      } ]}>
+        { this.props.text }
+      </Text>
+    );
   },
 
   render: function() {
@@ -33,12 +48,15 @@ var BackButton = React.createClass({
         onPress={ this.onPress } 
         style={ styles.backButtonContainer } 
       >
-        <Icon
-          name='ion|chevron-left'
-          size={ 30 }
-          color={ this.props.color }
-          style={ styles.backButton }
-        />
+        <View style={ styles.backButton }>
+          <Icon
+            name='ion|ios-arrow-left'
+            size={ 30 }
+            color={ this.props.color }
+            style={ styles.backButtonIcon }
+          />
+          { this._renderText() }
+        </View>
       </TouchableOpacity>
     );
   }
@@ -51,10 +69,17 @@ var styles = StyleSheet.create({
     height: 48
   },
   backButton: {
-    paddingLeft: 15,
-    paddingRight: 15,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  backButtonIcon: {
+    paddingLeft: 5,
+    paddingRight: 5,
     width: 30,
     height: 30
+  },
+  backButtonText: {
+    fontSize: 15
   }
 });
 

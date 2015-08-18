@@ -114,7 +114,7 @@ var BevyView = React.createClass({
 
     var backButton = (this.props.bevyRoute.name == 'PostList')
     ? <View />
-    : <BackButton onPress={() => {
+    : <BackButton text='Posts' color='#888' onPress={() => {
       this.props.bevyNavigator.pop();
     }} />;
     

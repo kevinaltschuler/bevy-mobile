@@ -116,7 +116,6 @@ var styles = StyleSheet.create({
   },
   left: {
     flex: 1,
-    paddingLeft: 8,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'flex-start'
@@ -129,7 +128,6 @@ var styles = StyleSheet.create({
   },
   right: {
     flex: 1,
-    paddingRight: 8,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'flex-end'
