@@ -22,6 +22,7 @@ var Navbar = require('./../../shared/components/Navbar.ios.js');
 var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
+var _ = require('underscore');
 var routes = require('./../../routes');
 var UserActions = require('./../../user/UserActions');
 
@@ -37,12 +38,13 @@ var SettingsView = React.createClass({
 
   getInitialState() {
     return {
-      profilePicture: this.props.user.image_url
+      profilePicture: (_.isEmpty(this.props.user.image_url)) ? '/img/user-profile-icon.png' : this.props.user.image_url
     };
   },
 
   _renderUserHeader() {
     if(!this.props.loggedIn) return <View />;
+
     return (
       <View style={ styles.profileHeader }>
         <Image 

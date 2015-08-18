@@ -6,7 +6,6 @@
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
 var {
   StyleSheet,
   Text,
@@ -24,6 +23,7 @@ var AddBevyModal = require('./AddBevyModal.ios.js');
 
 var FileActions = require('./../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
+var _ = require('underscore');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 var BevyActions = require('./../BevyActions');
@@ -66,10 +66,15 @@ var BevyList = React.createClass({
         </View>
       );
     }
+
+    var image_url = (_.isEmpty(this.props.user.image_url))
+    ? constants.siteurl + '/img/user-profile-icon.png'
+    : this.props.user.image_url;
+
     return (
       <View style={ styles.profileHeader }>
         <Image 
-          source={{ uri: this.props.user.image_url }}
+          source={{ uri: image_url }}
           style={ styles.profileImage }
         />
         <View style={ styles.profileDetails }>

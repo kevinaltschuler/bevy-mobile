@@ -12,6 +12,7 @@ var {
   Icon
 } = require('react-native-icons');
 
+var _ = require('underscore');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 
@@ -26,7 +27,7 @@ var NewPostCard = React.createClass({
 
   render() {
 
-    var image_url = (this.props.loggedIn)
+    var image_url = (this.props.loggedIn && !_.isEmpty(this.props.user.image_url))
     ? this.props.user.image_url
     : constants.siteurl + '/img/user-profile-icon.png';
 
