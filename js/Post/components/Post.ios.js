@@ -142,7 +142,7 @@ var Post = React.createClass({
             source={{ uri: post.author.image_url }}
           />
           <View style={styles.titleTextColumn}>
-            <Text style={styles.titleText}>
+            <Text numberOfLines={ 1 } style={styles.titleText}>
               { post.author.displayName } • { post.bevy.name }
             </Text>
             <Text style={styles.subTitleText}>
@@ -233,12 +233,16 @@ var Post = React.createClass({
   },
 });
 
+var sideMargins = 10;
+var cardWidth = constants.width - sideMargins * 2;
+
 var styles = StyleSheet.create({
   postCard: {
     flexDirection: 'column',
+    width: cardWidth,
     marginTop: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: sideMargins,
+    marginRight: sideMargins,
     paddingTop: 8,
     backgroundColor: 'white',
     borderRadius: 2,
@@ -249,6 +253,7 @@ var styles = StyleSheet.create({
   },
   titleRow: {
     flexDirection: 'row',
+    width: cardWidth,
     paddingLeft: 8,
     paddingRight: 8,
     marginBottom: 10
@@ -260,12 +265,15 @@ var styles = StyleSheet.create({
     borderRadius: 20,
   },
   titleTextColumn: {
+    flex: 1,
+    width: cardWidth - 40 - 10 - 16,
     flexDirection: 'column',
     justifyContent: 'center',
     height: 40,
     marginLeft: 10
   },
   titleText: {
+    width: cardWidth - 40 - 10 - 16,
     color: '#282929'
   },
   subTitleText: {
@@ -274,6 +282,7 @@ var styles = StyleSheet.create({
   },
 
   body: {
+    flex: 1,
     flexDirection: 'column',
     marginBottom: 15,
     paddingLeft: 15,
