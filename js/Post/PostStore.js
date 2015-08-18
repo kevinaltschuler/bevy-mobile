@@ -81,6 +81,8 @@ _.extend(PostStore, {
         }
         // reset all posts first
         this.posts.reset();
+        this.trigger(POST.CHANGE_ALL);
+        
         // then fetch
         this.posts.fetch({
           success: function(posts, response, options) {
@@ -193,6 +195,10 @@ _.extend(PostStore, {
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
+
+        // clear posts immediately
+        this.posts.reset();
+        this.trigger(POST.CHANGE_ALL);
 
         break;
 
