@@ -6,7 +6,6 @@
 'use strict';
 
 var React = require('react-native');
-var window = require('Dimensions').get('window');
 var _ = require('underscore');
 var {
   StyleSheet,
@@ -177,7 +176,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 3,
     width: constants.sideMenuWidth,
-    height: window.height,
+    height: constants.height,
     backgroundColor: '#111',
   },
 

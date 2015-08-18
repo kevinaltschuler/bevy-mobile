@@ -20,12 +20,13 @@ var {
 var BevyNavigator = require('./../../bevy/components/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../chat/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../notification/components/NotificationNavigator.ios.js');
+var SettingsView = require('./../../settings/components/SettingsView.ios.js');
 
 var tabs = {
   Posts: 'BevyNavigator',
   Chat: 'ChatNavigator',
   Notifications: 'NotificationNavigator',
-  Profile: 'ProfileNavigator'
+  More: 'SettingsNavigator'
 };
 
 var MainTabBar = React.createClass({
@@ -51,25 +52,43 @@ var MainTabBar = React.createClass({
     switch(this.state.selectedTab) {
       case tabs.Posts:
         return (
-          <View style={styles.tabContent}>
-            <BevyNavigator { ...this.props } tabBarActions={ tabBarActions }/>
+          <View style={ styles.tabContent }>
+            <BevyNavigator 
+              { ...this.props } 
+              tabBarActions={ tabBarActions }
+            />
           </View>
         );
         break;
       case tabs.Chat:
         return (
-          <View style={styles.tabContent}>
-            <ChatNavigator { ...this.props } tabBarActions={ tabBarActions }/>
+          <View style={ styles.tabContent }>
+            <ChatNavigator 
+              { ...this.props } 
+              tabBarActions={ tabBarActions }
+            />
           </View>
         );
         break;
       case tabs.Notifications:
         return (
-          <View style={styles.tabContent}>
-            <NotificationNavigator { ...this.props } tabBarActions={ tabBarActions }/>
+          <View style={ styles.tabContent }>
+            <NotificationNavigator 
+              { ...this.props } 
+              tabBarActions={ tabBarActions }
+            />
           </View>
         );
         break;
+      case tabs.More:
+        return (
+          <View style={ styles.tabContent }>
+            <SettingsView 
+              { ...this.props } 
+              tabBarActions={ tabBarActions } 
+            />
+          </View>
+        );
     }
   },
 
@@ -111,6 +130,19 @@ var MainTabBar = React.createClass({
             onPress={() => {
               this.setState({
                 selectedTab: tabs.Notifications
+              });
+            }}
+          >
+            { this._renderContent() }
+          </TabBarIOS.Item>
+          <TabBarIOS.Item
+            title='More'
+            iconName={ 'ion|ios-more-outline' }
+            selected={ this.state.selectedTab === tabs.More }
+            style={ styles.tabIcon }
+            onPress={() => {
+              this.setState({
+                selectedTab: tabs.More
               });
             }}
           >
