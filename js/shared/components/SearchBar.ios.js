@@ -81,7 +81,6 @@ var SearchBar = React.createClass({
   },
 
   render() {
-    console.log('rendering search bar', this.state.activeRoute);
     var leftButton = (
       <BackButton 
         color='#fff'

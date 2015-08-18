@@ -20,17 +20,24 @@ var {
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+
+var routes = require('./../../routes');
+var UserActions = require('./../../user/UserActions');
 
 var SettingsView = React.createClass({
 
   propTypes: {
     loggedIn: React.PropTypes.bool,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+
+    mainNavigator: React.PropTypes.object,
+    authModalActions: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-
+      profilePicture: this.props.user.image_url
     };
   },
 
@@ -39,13 +46,65 @@ var SettingsView = React.createClass({
     return (
       <View style={ styles.profileHeader }>
         <Image 
-          source={{ uri: this.props.user.image_url }}
+          source={{ uri: this.state.profilePicture }}
           style={ styles.profileImage }
         />
         <View style={ styles.profileDetails }>
           <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
           <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
         </View>
+      </View>
+    );
+  },
+
+  _renderAccountSettings() {
+    if(!this.props.loggedIn) {
+      return (
+        <SettingsItem
+          title='Log In'
+          onPress={() => {
+            this.props.authModalActions.open('Log In');
+          }}
+        />
+      );
+    }
+
+    return (
+      <View style={{ flexDirection: 'column' }}>
+        <SettingsItem
+          title='View Public Profile'
+          onPress={() => {
+            var route = routes.MAIN.PROFILE;
+            route.profileUser = this.props.user;
+            this.props.mainNavigator.push(route);
+          }}
+        />
+        <SettingsItem
+          title='Change Profile Picture'
+          onPress={() => {
+            UIImagePickerManager.showImagePicker({
+              title: 'Change Profile Picture',
+              cancelButtonTitle: 'Cancel',
+              takePhotoButtonTitle: 'Take Photo...',
+              chooseFromLibraryButtonTitle: 'Choose from Library...',
+              returnBase64Image: false,
+              returnIsVertical: true
+            }, (type, response) => {
+              if (type !== 'cancel') {
+                UserActions.changeProfilePicture(response);
+                this.setState({
+                  profilePicture: response
+                });
+              }
+            });
+          }}
+        />
+        <SettingsItem
+          title='Sign Out'
+          onPress={() => {
+            UserActions.logOut();
+          }}
+        />
       </View>
     );
   },
@@ -61,18 +120,7 @@ var SettingsView = React.createClass({
           { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>
-          <SettingsItem
-            title='View Public Profile'
-            onPress={() => {}}
-          />
-          <SettingsItem
-            title='Change Profile Picture'
-            onPress={() => {}}
-          />
-          <SettingsItem
-            title='Sign Out'
-            onPress={() => {}}
-          />
+          { this._renderAccountSettings() }
 
           <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>Settings</Text>
           <SettingsItem
