@@ -112,6 +112,9 @@ var ChatView = React.createClass({
   },
 
   _renderMenu() {
+    if(!this.props.loggedIn) 
+      return <View/>;
+
     return (
       <Animated.View style={[ styles.menu, { 
         height: this.state.containerHeight,
@@ -244,13 +247,15 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     padding: 15,
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'flex-start'
   },
   infoViewText: {
-    fontSize: 17,
-    color: '#888',
-    marginBottom: 15
+    fontSize: 22,
+    color: '#aaa',
+    marginBottom: 15,
+    marginLeft: 50,
+    marginTop: 120
   }
 })
 

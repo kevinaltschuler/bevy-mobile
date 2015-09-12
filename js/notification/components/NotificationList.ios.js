@@ -72,7 +72,7 @@ var NotificationList = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ddd'
+    backgroundColor: '#eee'
   },
   noNotificationsContainer: {
     flex: 1,

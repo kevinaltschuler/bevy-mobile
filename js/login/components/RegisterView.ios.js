@@ -30,7 +30,7 @@ var RegisterView = React.createClass({
 
   getInitialState() {
     return {
-      email: '',
+      username: '',
       pass: '',
       error: ''
     };
@@ -44,7 +44,7 @@ var RegisterView = React.createClass({
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: this.state.email,
+        username: this.state.username,
         password: this.state.pass
       })
     })
@@ -56,7 +56,7 @@ var RegisterView = React.createClass({
         AppActions.load();
 
         this.setState({
-          email: '',
+          username: '',
           pass: '',
           error: ''
         });
@@ -90,12 +90,12 @@ var RegisterView = React.createClass({
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
-          keyboardType='email-address'
-          placeholder='Email Address'
+          keyboardType='default'
+          placeholder='Username'
           placeholderTextColor='#aaa'
           style={ styles.registerInput }
-          value={ this.state.email }
-          onChangeText={(text) => this.setState({ email: text })}
+          value={ this.state.username }
+          onChangeText={(text) => this.setState({ username: text })}
         />
         <View style={{
           flex: 1,

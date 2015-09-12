@@ -31,7 +31,6 @@ var SettingsView = React.createClass({
   propTypes: {
     loggedIn: React.PropTypes.bool,
     user: React.PropTypes.object,
-
     mainNavigator: React.PropTypes.object,
     authModalActions: React.PropTypes.object
   },

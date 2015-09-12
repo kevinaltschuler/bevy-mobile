@@ -27,7 +27,7 @@ var LoginView = React.createClass({
 
   getInitialState() {
     return {
-      email: '',
+      username: '',
       pass: '',
       error: ''
     }
@@ -42,7 +42,7 @@ var LoginView = React.createClass({
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        email: this.state.email,
+        username: this.state.username,
         password: this.state.pass
       })
     })
@@ -138,7 +138,7 @@ var LoginView = React.createClass({
     AppActions.load();
 
     this.setState({
-      email: '',
+      username: '',
       pass: '',
       error: ''
     });
@@ -165,10 +165,10 @@ var LoginView = React.createClass({
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
-          placeholder='Email Address'
-          keyboardType='email-address'
+          placeholder='username'
+          keyboardType='default'
           style={ styles.loginInput }
-          onChangeText={ (text) => this.setState({ email: text }) }
+          onChangeText={ (text) => this.setState({ username: text }) }
           placeholderTextColor='#aaa'
         />
         <View style={{
