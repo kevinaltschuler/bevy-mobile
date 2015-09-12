@@ -16,7 +16,7 @@ bevy for iphone, using <a href='https://facebook.github.io/react-native/'>React 
 
 ### Setup ###
 1. ```git clone git@github.com:kevtastic/Bevy-xcode.git```
-3. in the shell, naviagte to (your git folder)/bevy-xcode/bevyios/
+3. in the shell, naviagte to (your git folder)/bevy-xcode/
 4. ```npm install```
 5. open xcode
 7. In XCode, in the project navigator right click `Libraries` ➜ `Add Files to [your project's name]`
