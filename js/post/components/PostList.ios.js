@@ -145,6 +145,7 @@ var PostList = React.createClass({
           onResponderGrant={ this.handleResponderGrant }
           onResponderRelease={ this.handleResponderRelease }
           style={ styles.postContainer }
+          scrollRenderAheadDistance={3}
           renderRow={(post) => {
             if(!_.isEmpty(post.bevy))
               return <Post 

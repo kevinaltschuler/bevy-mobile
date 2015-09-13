@@ -7,7 +7,8 @@ var {
   TextInput,
   Image,
   StyleSheet,
-  createElement
+  createElement,
+  TouchableHighlight
 } = React;
 
 var _ = require('underscore');
@@ -15,6 +16,7 @@ var _ = require('underscore');
 var {
   Icon
 } = require('react-native-icons');
+var routes = require('./../../routes');
 
 var SideMenu = require('react-native-side-menu');
 var BevyListButton = require('./BevyListButton.ios.js');
@@ -33,6 +35,7 @@ var Navbar = React.createClass({
   },
 
   getDefaultProps() {
+
     return {
       styleParent: {
         backgroundColor: '#2CB673',
@@ -85,12 +88,38 @@ var Navbar = React.createClass({
     return this.props.right;
   },
 
-  render() {
-    return (
-      <View style={ this.props.styleParent }>
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight
-        }}/>
+  _renderBottom() {
+    if(this.props.center == 'Settings' && this.props.loggedIn) {
+      return (
+        <TouchableHighlight
+          underlayColor='rgba(200,200,200,1)'
+          style={[ styles.settingItemContainer ]}
+          onPress={() => {
+            var route = routes.MAIN.PROFILE;
+            route.profileUser = this.props.user;
+            this.props.mainNavigator.push(route);
+          }}
+        >
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <View style={ styles.profileHeader }>
+            <Image 
+              source={{ uri: this.props.profilePicture }}
+              style={ styles.profileImage }
+            />
+            <View style={ styles.profileDetails }>
+              <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
+              <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
+            </View>
+          </View>
+          <Text style={{color: '#888', fontSize: 12}}>
+            View Public Profile
+          </Text>
+        </View>
+        </TouchableHighlight>
+      );
+    }
+    else {
+      return (
         <View style={ this.props.styleBottom }>
           <View style={ styles.left }>
             { this._renderLeft() }
@@ -102,6 +131,17 @@ var Navbar = React.createClass({
             { this._renderRight() }
           </View>
         </View>
+      );
+    }
+  },
+
+  render() {
+    return (
+      <View style={ this.props.styleParent }>
+        <View style={{
+          height: StatusBarSizeIOS.currentHeight
+        }}/>
+        {this._renderBottom()}
       </View>
     );
   }
@@ -113,6 +153,24 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 17,
     fontWeight: '500'
+  },
+  settingItemContainer: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd'
+  },
+  navbarTextLight: {
+    color: '#888',
+    textAlign: 'center',
+    paddingRight: 10,
+    fontSize: 14,
+    fontWeight: '400'
   },
   left: {
     flex: 1,
@@ -131,7 +189,32 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'flex-end'
-  }
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    padding: 5,
+    height: 39,
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
+  profileImage: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    marginRight: 10
+  },
+  profileDetails: {
+    flex: 1,
+    flexDirection: 'column',
+    marginTop: -2
+  },
+  profileName: {
+    color: '#000', 
+    fontSize: 15
+  },
+  profileEmail: {
+    color: '#888', 
+    fontSize: 12
+  },
 });
 
 module.exports = Navbar;

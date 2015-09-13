@@ -91,7 +91,6 @@ _.extend(UserStore, {
         }, {
           patch: true,
           success: function(model, response, options) {
-            console.log(response);
             // update local storage user
             AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
             this.trigger(USER.LOADED);
@@ -100,13 +99,11 @@ _.extend(UserStore, {
         break;
       case BEVY.UNSUBSCRIBE:
         var bevy_id = payload.bevy_id;
-        console.log(bevy_id);
         var bevies = this.user.get('bevies');
         bevies = _.reject(bevies, function(bevy) {
           return bevy._id == bevy_id;
         });
         var bevy_ids = _.pluck(bevies, '_id');
-        console.log(bevy_ids);
 
         // save user to server
         this.user.save({
@@ -114,7 +111,6 @@ _.extend(UserStore, {
         }, {
           patch: true,
           success: function(model, response, options) {
-            console.log(response);
             // update local storage user
             AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
 

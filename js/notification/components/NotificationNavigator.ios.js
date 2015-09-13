@@ -45,7 +45,7 @@ var NotificationView = React.createClass({
         break;
     }
 
-    var clearAllButton = (_.isEmpty(this.props.allNotifications))
+    var clearAllButton = (true)
     ? <View />
     : (
       <TouchableHighlight

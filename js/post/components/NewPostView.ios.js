@@ -456,15 +456,17 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   navButtonLeft: {
-    flex: 1
+    flex: 1,
+    padding: 10,
   },
   navButtonRight: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    padding: 10,
   },
   navButtonTextLeft: {
     color: '#ddd',
-    fontSize: 17
+    fontSize: 17,
   },
   navButtonTextRight: {
     color: '#ddd',

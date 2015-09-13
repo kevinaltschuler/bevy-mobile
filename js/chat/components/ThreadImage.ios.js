@@ -133,7 +133,6 @@ var ThreadImage = React.createClass({
               }
               break;
           }
-          console.log(image_url);
           users.push(
             <Image key={ 'threadimage:user:' + user._id } style={ iconStyle } source={{uri: image_url}}/>
           );

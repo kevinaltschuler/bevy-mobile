@@ -244,17 +244,6 @@ var NotificationItem = React.createClass({
     return (
       <View style={styles.notificationCard}>
         { body }
-        <TouchableHighlight 
-          underlayColor='rgba(0,0,0,.1)'
-          style={styles.dismiss}
-          onPress={ this.dismiss }
-        >
-          <View style={styles.textWrapper}>
-            <Text>
-              Dismiss
-            </Text>
-          </View>
-        </TouchableHighlight>
       </View>
     );
   }
@@ -267,7 +256,8 @@ var styles = StyleSheet.create({
 		backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    height: 60
+    height: 60,
+    paddingLeft: 7
   },
   notificationBody: {
     flex: 1,

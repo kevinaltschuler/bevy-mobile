@@ -133,6 +133,7 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
+    height: 60
   },
   titleImage: {
     width: 36,

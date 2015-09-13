@@ -72,6 +72,49 @@ var ImageOverlay = React.createClass({
 
   render() {
     if(!this.state.isVisible) return null;
+
+    var leftButton = (this.props.images.length == 1) 
+    ? <View />
+    : <TouchableHighlight
+        underlayColor='rgba(0,0,0,0.2)'
+        style={ styles.rightArrow }
+        onPress={() => {
+          this.setState({
+            imageIndex: (this.state.imageIndex == this.props.images.length - 1) ? 0 : ++this.state.imageIndex
+          });
+        }}
+      >
+        <Icon
+          name='ion|ios-arrow-right'
+          size={ 30 }
+          style={{ width: 30, height: 30 }}
+          color='#fff'
+        />
+      </TouchableHighlight>;
+    var rightButton = (this.props.images.length == 1)
+    ? <View/>
+    :  <TouchableHighlight
+        underlayColor='rgba(0,0,0,0.2)'
+        style={ styles.rightArrow }
+        onPress={() => {
+          this.setState({
+            imageIndex: (this.state.imageIndex == this.props.images.length - 1) ? 0 : ++this.state.imageIndex
+          });
+        }}
+      >
+        <Icon
+          name='ion|ios-arrow-right'
+          size={ 30 }
+          style={{ width: 30, height: 30 }}
+          color='#fff'
+        />
+      </TouchableHighlight>;
+      var imageCount = (this.props.images.length == 1)
+      ? <View/>
+      : <Text style={ styles.imageCountText }>
+          { this.state.imageIndex + 1 }/{ this.props.images.length }
+        </Text>;
+
     return (
       <Modal
         forceToFront={ true }
@@ -97,42 +140,9 @@ var ImageOverlay = React.createClass({
               />
             </TouchableHighlight>
 
-            <Text style={ styles.imageCountText }>
-              { this.state.imageIndex + 1 }/{ this.props.images.length }
-            </Text>
-
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.2)'
-              style={ styles.leftArrow }
-              onPress={() => {
-                this.setState({
-                  imageIndex: (this.state.imageIndex == 0) ? this.props.images.length - 1 : --this.state.imageIndex
-                });
-              }}
-            >
-              <Icon
-                name='ion|ios-arrow-left'
-                size={ 30 }
-                style={{ width: 30, height: 30 }}
-                color='#fff'
-              />
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.2)'
-              style={ styles.rightArrow }
-              onPress={() => {
-                this.setState({
-                  imageIndex: (this.state.imageIndex == this.props.images.length - 1) ? 0 : ++this.state.imageIndex
-                });
-              }}
-            >
-              <Icon
-                name='ion|ios-arrow-right'
-                size={ 30 }
-                style={{ width: 30, height: 30 }}
-                color='#fff'
-              />
-            </TouchableHighlight>
+            {imageCount}
+            {leftButton}
+            {rightButton}
           </View>
         }
         onPressBackdrop={() => {

@@ -73,14 +73,6 @@ var SettingsView = React.createClass({
     return (
       <View style={{ flexDirection: 'column' }}>
         <SettingsItem
-          title='View Public Profile'
-          onPress={() => {
-            var route = routes.MAIN.PROFILE;
-            route.profileUser = this.props.user;
-            this.props.mainNavigator.push(route);
-          }}
-        />
-        <SettingsItem
           title='Change Profile Picture'
           onPress={() => {
             UIImagePickerManager.showImagePicker({
@@ -116,9 +108,10 @@ var SettingsView = React.createClass({
         <Navbar
           center='Settings'
           { ...this.props }
+          profilePicture={ this.state.profilePicture }
         />
         <ScrollView style={ styles.scrollView }>
-          { this._renderUserHeader() }
+          {/* this._renderUserHeader() */}
 
           <Text style={ styles.settingsTitle }>Account</Text>
           { this._renderAccountSettings() }
@@ -150,8 +143,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     marginBottom: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
+    marginTop: -21,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
   },

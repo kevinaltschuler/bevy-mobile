@@ -122,10 +122,11 @@ var styles = StyleSheet.create({
   },
 
   navButtonLeft: {
-    flex: 1
+    flex: 1,
+    padding: 10
   },
   navButtonTextLeft: {
-    color: '#ddd',
+    color: '#fff',
     fontSize: 17
   },
   navTitle: {

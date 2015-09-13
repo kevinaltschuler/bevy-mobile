@@ -321,7 +321,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   navButtonTextLeft: {
-    color: '#ddd',
+    color: '#fff',
     fontSize: 17
   },
   navButtonTextRight: {

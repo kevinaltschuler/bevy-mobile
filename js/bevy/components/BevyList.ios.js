@@ -182,7 +182,7 @@ var styles = StyleSheet.create({
     paddingTop: 3,
     width: constants.sideMenuWidth,
     height: constants.height,
-    backgroundColor: '#111',
+    backgroundColor: '#333',
   },
 
   publicHeader: {
@@ -213,7 +213,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#333'
+    borderBottomColor: '#555'
   },
   profileImage: {
     width: 30,
@@ -243,7 +243,7 @@ var styles = StyleSheet.create({
     padding: 10
   },
   bevyItemActive: {
-    backgroundColor: '#222',
+    backgroundColor: '#444',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10
