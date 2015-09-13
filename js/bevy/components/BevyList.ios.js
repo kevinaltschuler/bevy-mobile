@@ -143,7 +143,7 @@ var BevyList = React.createClass({
                 if(active) return;
                 BevyActions.switchBevy(bevy._id);
                 // close the side menu
-                //this.props.menuActions.close();
+                this.props.menuActions.close();
               }}
             >
               <Text style={ (active) ? styles.bevyItemActiveText : styles.bevyItemText }>

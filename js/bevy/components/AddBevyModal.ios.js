@@ -172,7 +172,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     width: constants.width * 2 / 3,
-    height: constants.height / 2
+    height: constants.height / 3
   },
   panelHeaderText: {
     marginTop: 15,

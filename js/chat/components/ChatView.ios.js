@@ -44,122 +44,8 @@ var ChatView = React.createClass({
         - 48 // search bar
         - 40 // navbar
         - 48, // main tab bar
-      menuRight: new Animated.Value(menuOffset - menuWidth),
-      menuOpen: false,
       contentLeft: new Animated.Value(0)
     };
-  },
-
-  componentDidMount() {
-    this.menuCloseAnimation = Animated.decay(this.state.menuRight, { velocity: -1.25 });
-    this.menuOpenAnimation = Animated.decay(this.state.menuRight, { velocity: 1.25 });
-  },
-
-  openMenu() {
-    this.menuCloseAnimation.stop();
-    this.menuOpenAnimation.start();
-    this.setState({
-      menuOpen: true
-    });
-  },
-  closeMenu() {
-    this.menuOpenAnimation.stop();
-    this.menuCloseAnimation.start();
-    this.setState({
-      menuOpen: false
-    });
-  },
-  toggleMenu() {
-    if(this.state.menuOpen) {
-      this.closeMenu();
-    } else {
-      this.openMenu(); 
-    }
-  },
-
-  getChatMenuActions() {
-    return {
-      openMenu: this.openMenu,
-      closeMenu: this.closeMenu,
-      toggleMenu: this.toggleMenu
-    };
-  },
-
-  _renderMenuOverlay() {
-    if(this.state.menuOpen) return null;
-    return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.2)'
-        onPress={() => {
-          this.toggleMenu();
-        }}
-        style={{ 
-          flex: 1,
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: menuWidth,
-          height: this.state.containerHeight
-        }}
-      >
-        <View style={{
-          flex: 1,
-          width: menuWidth,
-          height: this.state.containerHeight
-        }}/>
-      </TouchableHighlight>
-    );
-  },
-
-  _renderMenu() {
-    if(!this.props.loggedIn) 
-      return <View/>;
-
-    return (
-      <Animated.View style={[ styles.menu, { 
-        height: this.state.containerHeight,
-        right: this.state.menuRight.interpolate({
-          inputRange: [0, 100],
-          outputRange: [menuOffset - menuWidth, 0],
-          extrapolate: 'clamp'
-        })
-      } ]}>
-        <ChatMenu { ...this.props } chatMenuActions={ this.getChatMenuActions() }/>
-        { this._renderMenuOverlay() }
-      </Animated.View>
-    );
-  },
-
-  _renderContentOverlay() {
-    if(!this.state.menuOpen) return null;
-    return (
-      <TouchableWithoutFeedback
-        onPress={() => {
-          this.toggleMenu();
-        }}
-        style={{ 
-          backgroundColor: 'transparent',
-          flex: 1,
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: window.width - menuWidth,
-          height: this.state.containerHeight
-        }}
-      >
-        <View 
-          style={{
-            backgroundColor: 'transparent',
-            flex: 1,
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: window.width - menuWidth,
-            height: this.state.containerHeight
-          }}
-        />
-      </TouchableWithoutFeedback>
-    );
   },
 
   _renderContent() {
@@ -182,8 +68,8 @@ var ChatView = React.createClass({
       view = (
         <View style={ styles.infoView }>
           <Text style={ styles.infoViewText }>No Conversation Selected</Text>
-          <Text style={ styles.infoViewText }>Select a Conversation From the Menu to the Right</Text>
-          <Text style={ styles.infoViewText }>Or, Switch to a Bevy to View It's Chat</Text>
+          {/*<Text style={ styles.infoViewText }>Select a Conversation From the Menu to the Right</Text>
+          <Text style={ styles.infoViewText }>Or, Switch to a Bevy to View It's Chat</Text>*/}
         </View>
       );
     } else {
@@ -194,13 +80,12 @@ var ChatView = React.createClass({
     }
 
     return (
-      <Animated.View style={[ styles.content, { 
+      <View style={[ styles.content, { 
         height: this.state.containerHeight,
-        left: this.state.contentLeft 
+        left: 0 
       } ]}>
         { view }
-        { this._renderContentOverlay() }
-      </Animated.View>
+      </View>
     );
   },
 
@@ -208,7 +93,6 @@ var ChatView = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderContent() }
-        { this._renderMenu() }
       </View>
     );
   }
@@ -222,25 +106,13 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  menu: {
-    flex: 1,
-    position: 'absolute',
-    backgroundColor: '#fff',
-    top: 0,
-    flexDirection: 'column',
-    width: menuWidth,
-    shadowColor: 'black',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset: { width: 0, height: 0 }
-  },
   content: {
     flex: 1,
     position: 'absolute',
     backgroundColor: '#eee',
     top: 0,
     flexDirection: 'column',
-    width: window.width - menuOffset
+    width: window.width
   },
 
   infoView: {

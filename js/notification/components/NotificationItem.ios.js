@@ -117,16 +117,6 @@ var NotificationItem = React.createClass({
               </View>
             </TouchableHighlight>
 
-            <TouchableHighlight 
-              underlayColor='rgba(0,0,0,.1)'
-              style={styles.right}
-            >
-              <View style={styles.textWrapper}>
-                <Text>
-                  View
-                </Text>
-              </View>
-            </TouchableHighlight>
           </View>
         );
         break;
@@ -206,17 +196,6 @@ var NotificationItem = React.createClass({
                 </View>
               </View>
             </TouchableHighlight>
-
-            <TouchableHighlight 
-              underlayColor='rgba(0,0,0,.1)'
-              style={styles.right}
-            >
-              <View style={styles.textWrapper}>
-                <Text>
-                  View
-                </Text>
-              </View>
-            </TouchableHighlight>
           </View>
         );
 
@@ -249,17 +228,6 @@ var NotificationItem = React.createClass({
                     </Text>
                   </View>
                 </View>
-              </View>
-            </TouchableHighlight>
-
-            <TouchableHighlight 
-              underlayColor='rgba(0,0,0,.1)'
-              style={styles.right}
-            >
-              <View style={styles.textWrapper}>
-                <Text>
-                  View
-                </Text>
               </View>
             </TouchableHighlight>
           </View>

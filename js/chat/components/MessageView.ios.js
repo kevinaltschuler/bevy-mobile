@@ -209,8 +209,8 @@ var styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    borderTopWidth: 1,
+    borderTopColor: '#111',
     paddingLeft: 16,
     backgroundColor: '#fff',
     color: '#000'

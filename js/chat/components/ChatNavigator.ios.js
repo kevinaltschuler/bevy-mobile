@@ -19,6 +19,7 @@ var SideMenu = require('react-native-side-menu');
 var ChatView = require('./ChatView.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
+var ThreadList = require('./ThreadList.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../routes');
@@ -34,20 +35,29 @@ var ChatNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRoute={ routes.CHAT.CHATVIEW }
+        initialRoute={ routes.CHAT.LISTVIEW }
         initialRouteStack={[
-          routes.CHAT.CHATVIEW
+          routes.CHAT.LISTVIEW
         ]}
         renderScene={(route, navigator) => {
           var view;
           switch(route.name) {
-            case routes.CHAT.CHATVIEW.name:
+            case routes.CHAT.LISTVIEW.name:
             default:
               view = (
-                <ChatView 
+                <ThreadList 
                   { ...this.props }
+                  chatNavigator={ navigator }
                 />
               );
+              break;
+            case routes.CHAT.CHATVIEW.name:
+              view = (
+                <ChatView
+                  {...this.props }
+                  chatNavigator={ navigator }
+                />
+              )
               break;
           }
 
@@ -61,14 +71,14 @@ var ChatNavigator = React.createClass({
             }
           }
 
-          var backButton = (route.name == routes.CHAT.CHATVIEW.name)
+          var backButton = (route.name != routes.CHAT.CHATVIEW.name)
           ? <View />
           : <BackButton onPress={() => {
-            navigator.jumpTo(routes.CHAT.CHATVIEW);
+            navigator.pop();
           }} />;
 
           return (
-            <View style={{ flex: 1}}>
+            <View style={{ flex: 1, backgroundColor: '#eee'}}>
               <Navbar 
                 chatRoute={ route }
                 chatNavigator={ navigator }
@@ -88,7 +98,7 @@ var ChatNavigator = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 64
+    paddingTop: 64,
   },
   headerStyle: {
     backgroundColor: '#2CB673',

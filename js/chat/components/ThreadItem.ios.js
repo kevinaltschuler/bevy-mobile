@@ -31,7 +31,6 @@ var ThreadItem = React.createClass({
     chatNavigator: React.PropTypes.object,
     thread: React.PropTypes.object,
     user: React.PropTypes.object,
-    chatMenuActions: React.PropTypes.object,
     active: React.PropTypes.bool // is this thread being displayed currently
   },
 
@@ -110,7 +109,7 @@ var ThreadItem = React.createClass({
         onPress={() => {
           var thread_id = this.props.thread._id;
           ChatActions.switchThread(thread_id);
-          this.props.chatMenuActions.closeMenu();
+          this.props.chatNavigator.push(routes.CHAT.CHATVIEW);
         }}
       >
         <View style={[ styles.container, {
