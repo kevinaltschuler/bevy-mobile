@@ -24,6 +24,8 @@ var routes = require('./../../routes');
 var ChatActions = require('./../ChatActions');
 var ChatStore = require('./../ChatStore');
 
+var ThreadImage = require('./ThreadImage.ios.js');
+
 var ThreadItem = React.createClass({
 
   propTypes: {
@@ -63,16 +65,10 @@ var ThreadItem = React.createClass({
 
   getThreadInfo(thread) {
     var user = this.props.user;
+    var thread = this.props.thread;
 
-    var threadName = 'Default Thread Name';
-    var threadImage = constants.siteurl + '/img/logo_100.png';
-    if(thread.bevy) {
-      threadName = thread.bevy.name;
-      threadImage = thread.bevy.image_url || constants.siteurl + '/img/logo_100.png';
-    } else if( thread.users.length > 1 ) {
-
-    }
-
+    var threadName = ChatStore.getThreadName(thread._id);
+    var threadImage = ChatStore.getThreadImageURL(thread._id);
     return {
       threadName: threadName,
       threadImage: threadImage
@@ -101,8 +97,6 @@ var ThreadItem = React.createClass({
     var threadName = this.state.threadName;
     var threadImage = this.state.threadImage;
 
-    
-
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.2)'
@@ -115,9 +109,8 @@ var ThreadItem = React.createClass({
         <View style={[ styles.container, {
           backgroundColor: (this.props.active) ? '#eee' : '#fff'
         }]} >
-          <Image 
-            source={{ uri: threadImage }}
-            style={ styles.titleImage }
+          <ThreadImage 
+            thread={thread}
           />
           <View style={ styles.titleTextColumn }>
             <Text style={ styles.titleText }>

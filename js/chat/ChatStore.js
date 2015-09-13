@@ -30,7 +30,7 @@ _.extend(ChatStore, {
         this.threads.fetch({
           reset: true,
           success: function(collection, response, options) {
-            console.log('threads fetched', this.threads.toJSON());
+            //console.log('threads fetched', this.threads.toJSON());
             this.threads.forEach(function(thread) {
               thread.messages.fetch({
                 reset: true,
@@ -157,7 +157,16 @@ _.extend(ChatStore, {
     if(thread == undefined) return {};
     return thread.toJSON();
   },
-
+  getThreadName(thread_id) {
+    var thread = this.threads.get(thread_id);
+    if(thread == undefined) return 'thread not found';
+    return thread.getName();
+  },
+  getThreadImageURL(thread_id) {
+    var thread = this.threads.get(thread_id);
+    if(thread == undefined) return '/img/logo_100.png';
+    return thread.getImageURL();
+  },
   getMessages(thread_id: String) {
     var thread = this.threads.get(thread_id);
     if(thread == undefined) return [];
@@ -173,7 +182,7 @@ _.extend(ChatStore, {
   },
 
   addMessage(message: Object) {
-    console.log('adding message...');
+    //console.log('adding message...');
     var thread = this.threads.get(message.thread);
     if(thread == undefined) return;
     thread.messages.add(message);
