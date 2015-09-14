@@ -58,8 +58,9 @@ var NotificationList = React.createClass({
         { this._renderNoNotificationsText() }
         <ListView
           dataSource={ this.state.dataSource }
+
           renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          renderFooter={() => (<View style={{marginBottom: -20}}/>)}
+          renderFooter={() => (<View style={{marginBottom: -20, borderBottomColor: '#AAA', borderBottomWidth: 0}}/>)}
           renderRow={(notification) => 
             <NotificationItem 
               notification={ notification }

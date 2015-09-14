@@ -22,6 +22,8 @@ var ChatNavigator = require('./../../chat/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../notification/components/NotificationNavigator.ios.js');
 var SettingsView = require('./../../settings/components/SettingsView.ios.js');
 
+var NotificationStore = require('./../../notification/NotificationStore');
+
 var tabs = {
   Posts: 'BevyNavigator',
   Chat: 'ChatNavigator',
@@ -125,6 +127,7 @@ var MainTabBar = React.createClass({
           <TabBarIOS.Item
             title='Notifications'
             iconName={ 'ion|ios-bell-outline' }
+            badge={NotificationStore.unread}
             selected={ this.state.selectedTab === tabs.Notifications }
             style={ styles.tabIcon }
             onPress={() => {
@@ -165,7 +168,7 @@ var styles = StyleSheet.create({
   },
   tabBar: {
     flex: 1,
-    height: 48
+    height: 48,
   },
   tabIcon: {
     flex: 1

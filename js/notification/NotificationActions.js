@@ -15,6 +15,11 @@ var NotificationActions = {
     dispatch(NOTIFICATION.DISMISS_ALL, {
 
     });
+  },
+  read(id) {
+    dispatch(NOTIFICATION.READ, {
+      id: (id == undefined) ? '0' : id
+    });
   }
 };
 

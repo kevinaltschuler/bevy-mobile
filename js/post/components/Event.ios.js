@@ -1,7 +1,7 @@
 /**
- * Post.ios.js
+ * Event.ios.js
  * kevin made this
- * yo that party was tight
+ * i will never drink again
  */
  'use strict';
 
@@ -28,7 +28,7 @@ var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostActions = require('./../PostActions');
 var PostStore = require('./../PostStore');
 
-var Post = React.createClass({
+var Event = React.createClass({
   propTypes: {
     mainRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
@@ -136,6 +136,12 @@ var Post = React.createClass({
 
     return (
       <View style={styles.postCard}>
+
+        { this._renderImageOverlay() }
+        { this._renderPostImage() }
+        
+        { this._renderPostTitle() }
+
         <View style={styles.titleRow}>
           <Image 
             style={styles.titleImage}
@@ -150,12 +156,6 @@ var Post = React.createClass({
             </Text>
           </View>
         </View>
-        
-        { this._renderPostTitle() }
-
-        { this._renderImageOverlay() }
-
-        { this._renderPostImage() }
 
         <Accordion
           ref={ (accordion) => this.optionsAccordion = accordion }
@@ -243,7 +243,7 @@ var styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: sideMargins,
     marginRight: sideMargins,
-    paddingTop: 8,
+    paddingTop: 0,
     backgroundColor: 'white',
     borderRadius: 2,
     shadowColor: 'black',
@@ -259,10 +259,10 @@ var styles = StyleSheet.create({
     marginBottom: 10
   },
   titleImage: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     backgroundColor: 'black',
-    borderRadius: 15,
+    borderRadius: 12.5,
     marginLeft: 0
   },
   titleTextColumn: {
@@ -286,8 +286,8 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    marginBottom: 15,
-    paddingLeft: 15,
+    marginBottom: 5,
+    paddingLeft: 5,
     paddingRight: 15
   },
   bodyText: {
@@ -296,7 +296,7 @@ var styles = StyleSheet.create({
   },
 
   postImage: {
-    height: 75,
+    height: 25,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-end'
@@ -339,4 +339,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = Post;
+module.exports = Event;

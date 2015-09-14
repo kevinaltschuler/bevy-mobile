@@ -33,11 +33,18 @@ var NotificationItem = React.createClass({
     NotificationActions.dismiss(this.props.notification._id);
   },
 
+  markRead: function() {
+    NotificationActions.read(this.props.notification._id);
+  },
+
   render: function () {
 
     var notification = this.props.notification;
     var event = notification.event;
     var data = notification.data;
+    var unreadStyle = (!notification.read)
+    ? {backgroundColor: '#EDFAF4'}
+    : {}
 
     var body;
 
@@ -52,7 +59,8 @@ var NotificationItem = React.createClass({
           <View style={ styles.notificationBody }>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
-              style={styles.left} 
+              style={styles.left}
+              onPress={this.markRead} 
             >
               <View style={styles.row}>
                 <Image 
@@ -98,6 +106,7 @@ var NotificationItem = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
+              onPress={this.markRead}
             >
               <View style={styles.row}>
                 <Image 
@@ -133,6 +142,7 @@ var NotificationItem = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
+              onPress={this.markRead}
             >
               <View style={styles.row}>
                 <Image 
@@ -178,6 +188,7 @@ var NotificationItem = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
+              onPress={this.markRead}
             >
               <View style={styles.row}>
                 <Image 
@@ -212,6 +223,7 @@ var NotificationItem = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
+              onPress={this.markRead}
             >
               <View style={styles.row}>
                 <Image 
@@ -242,7 +254,7 @@ var NotificationItem = React.createClass({
     }
 
     return (
-      <View style={styles.notificationCard}>
+      <View style={[styles.notificationCard, unreadStyle]}>
         { body }
       </View>
     );
@@ -257,13 +269,13 @@ var styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'stretch',
     height: 60,
-    paddingLeft: 7
   },
   notificationBody: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+
   },
   row: {
     flexDirection: 'row'
@@ -295,7 +307,8 @@ var styles = StyleSheet.create({
   },
   left: {
     padding: 10,
-    flex: 3
+    flex: 3,
+    paddingLeft: 17
   },
   right: {
     flexDirection: 'row',

@@ -22,6 +22,7 @@ var PostStore = require('./../PostStore');
 var PostActions = require('./../PostActions');
 
 var Post = require('./Post.ios.js');
+var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
 
@@ -139,26 +140,34 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-        <ListView 
-          dataSource={ this.state.dataSource }
-          onScroll={ this.handleScroll }
-          onResponderGrant={ this.handleResponderGrant }
-          onResponderRelease={ this.handleResponderRelease }
-          style={ styles.postContainer }
-          scrollRenderAheadDistance={3}
-          renderRow={(post) => {
-            if(!_.isEmpty(post.bevy))
-              return <Post 
-                key={ 'postlist:' + post._id } 
-                post={ post } 
-                mainRoute={ this.props.mainRoute }
-                mainNavigator={ this.props.mainNavigator }
-              />
-            else 
-              return <View/>
-          }}
-          renderHeader={ this._renderHeader }
-        />
+          <ListView 
+            dataSource={ this.state.dataSource }
+            onScroll={ this.handleScroll }
+            onResponderGrant={ this.handleResponderGrant }
+            onResponderRelease={ this.handleResponderRelease }
+            style={ styles.postContainer }
+            scrollRenderAheadDistance={3}
+            renderRow={(post) => {
+              if(!_.isEmpty(post.bevy))
+                if(post.type == 'event')
+                  return <Event 
+                    key={ 'postlist:' + post._id } 
+                    post={ post } 
+                    mainRoute={ this.props.mainRoute }
+                    mainNavigator={ this.props.mainNavigator }
+                  />
+                else
+                  return  <Post 
+                    key={ 'postlist:' + post._id } 
+                    post={ post } 
+                    mainRoute={ this.props.mainRoute }
+                    mainNavigator={ this.props.mainNavigator }
+                  />
+              else 
+                return <View/>
+            }}
+            renderHeader={ this._renderHeader }
+          />
       </View>
     );
   }
@@ -170,7 +179,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#eee',
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   postListHeader: {
     flex: 1,

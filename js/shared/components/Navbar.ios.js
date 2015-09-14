@@ -38,9 +38,10 @@ var Navbar = React.createClass({
 
     return {
       styleParent: {
-        backgroundColor: '#2CB673',
         flexDirection: 'column',
-        paddingTop: 48
+        paddingTop: 48,
+        overflow: 'visible',
+        backgroundColor: '#eee'
       },
       styleBottom: {
         backgroundColor: '#fff',
@@ -48,12 +49,12 @@ var Navbar = React.createClass({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        shadowColor: 'black',
-        shadowOpacity: 0.5,
-        shadowRadius: 1,
+        borderBottomWidth: .5,
+        borderBottomColor: '#ddd',
+        shadowColor: '#111',
+        shadowOpacity: .3,
+        shadowRadius: 3.5,
         shadowOffset: { width: 0, height: 0 },
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd'
       },
       center: 'Default',
       left: <View />,
@@ -139,7 +140,8 @@ var Navbar = React.createClass({
     return (
       <View style={ this.props.styleParent }>
         <View style={{
-          height: StatusBarSizeIOS.currentHeight
+          height: StatusBarSizeIOS.currentHeight,
+          backgroundColor: '#2CB673',
         }}/>
         {this._renderBottom()}
       </View>
@@ -182,7 +184,7 @@ var styles = StyleSheet.create({
     flex: 2,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   right: {
     flex: 1,

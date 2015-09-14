@@ -212,7 +212,7 @@ var styles = StyleSheet.create({
   profileHeader: {
     flexDirection: 'row',
     padding: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: .5,
     borderBottomColor: '#555'
   },
   profileImage: {

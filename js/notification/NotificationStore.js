@@ -22,6 +22,7 @@ var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
 
   notifications: new Notifications,
+  unread: 0,
 
   handleDispatch: function(payload) {
     switch(payload.actionType) {
@@ -33,6 +34,8 @@ _.extend(NotificationStore, {
           reset: true,
           success: function(collection, response, options) {
             this.trigger(NOTIFICATION.CHANGE_ALL);
+            this.unread = this.notifications.filter(function(notification){ return notification.read == false; })
+            .length; // count all notifications that are unread
           }.bind(this)
         });
 
@@ -136,6 +139,15 @@ _.extend(NotificationStore, {
         notification.destroy();
         this.trigger(NOTIFICATION.CHANGE_ALL);
 
+        break;
+
+      case NOTIFICATION.READ:
+        var id = payload.id;
+        var notification = this.notifications.get(id);
+        notification.read = true;
+        this.unread -= 1;
+        notification.save({read: true}, {patch: true});
+        this.trigger(NOTIFICATION.CHANGE_ALL);
         break;
 
       case NOTIFICATION.DISMISS_ALL:
