@@ -119,7 +119,7 @@ var PostList = React.createClass({
           && _.isEmpty(this.props.allPosts)
         )
     )
-    ? <View />
+    ? <View style={{height: 0}} />
     : (
       <NewPostCard 
         user={ this.props.user }

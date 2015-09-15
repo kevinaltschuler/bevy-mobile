@@ -63,7 +63,9 @@ var NotificationList = React.createClass({
           renderFooter={() => (<View style={{marginBottom: -20, borderBottomColor: '#AAA', borderBottomWidth: 0}}/>)}
           renderRow={(notification) => 
             <NotificationItem 
+              mainNavigator={ this.props.mainNavigator }
               notification={ notification }
+            
             />
           }
         />

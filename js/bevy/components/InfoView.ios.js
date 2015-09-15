@@ -269,7 +269,7 @@ var styles = StyleSheet.create({
     width: 66,
     height: 66,
     borderRadius: 33,
-    borderWidth: 1,
+    borderWidth: 0,
     borderColor: '#666',
   },
   cameraTouchable: {

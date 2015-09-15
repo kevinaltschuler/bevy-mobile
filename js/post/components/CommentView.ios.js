@@ -135,7 +135,7 @@ var CommentView = React.createClass({
     // increment depth (used for indenting later)
     if(typeof depth === 'number') depth++;
     else depth = 0;
-
+    if(_.isEmpty(comments)) return;
     if(comments.length < 0) return []; // return if it's the end of the line
 
     var $comments = [];
@@ -158,14 +158,17 @@ var CommentView = React.createClass({
       return null;
     } 
     return (
-      <Post
-        inCommentView={ true }
-        post={ this.state.post }
-      />
+      <View style={{marginTop: -20}}>
+        <Post
+          inCommentView={ true }
+          post={ this.state.post }
+        />
+      </View>
     );
   },
 
   _renderNoCommentsText() {
+    if(_.isEmpty(this.state.comments)) return;
     if(this.state.comments.length <= 0) {
       return (
         <Text style={ styles.noCommentsText }>
@@ -243,6 +246,31 @@ var CommentView = React.createClass({
   },
 
   render() {
+    var content = (_.isEmpty(this.state.post))
+    ? (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Text style={{color: '#555', fontWeight: 600}}>
+          post was not found
+        </Text>
+      </View>
+      )
+    : (
+      <View>
+        <ScrollView style={ styles.scrollView }>
+          { this._renderPost() }
+          <View style={ styles.commentsCard }>
+            <CommentList
+              comments={ this.state.comments }
+              onReply={ this.onReply }
+              mainNavigator={ this.props.mainNavigator }
+            />
+            { this._renderNoCommentsText() }
+          </View>
+        </ScrollView>
+
+        { this._renderReplyBar() }
+      </View>
+    );
     return (
       <View style={ styles.container }>
         <Navbar 
@@ -256,7 +284,7 @@ var CommentView = React.createClass({
             height: 48,
             flexDirection: 'row',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
           }}
           left={
             <TouchableHighlight
@@ -285,21 +313,7 @@ var CommentView = React.createClass({
             <View style={ styles.navButtonRight } />
           }
         />
-
-        <ScrollView style={ styles.scrollView }>
-          { this._renderPost() }
-          <View style={ styles.commentsCard }>
-            <CommentList
-              comments={ this.state.comments }
-              onReply={ this.onReply }
-              mainNavigator={ this.props.mainNavigator }
-            />
-            { this._renderNoCommentsText() }
-          </View>
-        </ScrollView>
-
-        { this._renderReplyBar() }
-
+        {content}
       </View>
     );
   }

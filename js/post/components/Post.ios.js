@@ -177,7 +177,7 @@ var Post = React.createClass({
                     { this.countVotes() }
                   </Text>
                   <Icon
-                    name={ (this.state.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
+                    name={ (this.state.voted) ? 'ion|ios-heart' : 'ion|ios-heart-outline' }
                     size={20}
                     color='#757d83'
                     style={styles.actionIcon}
@@ -202,7 +202,7 @@ var Post = React.createClass({
                     { post.comments.length }
                   </Text>
                   <Icon
-                    name='fontawesome|comment-o'
+                    name='ion|ios-chatbubble-outline'
                     size={20}
                     color='#757d83'
                     style={styles.actionIcon}
@@ -217,7 +217,7 @@ var Post = React.createClass({
                 }}
               >
                 <Icon
-                  name='fontawesome|ellipsis-v'
+                  name='ion|ios-more'
                   size={20}
                   color='#757d83'
                   style={styles.actionIcon}

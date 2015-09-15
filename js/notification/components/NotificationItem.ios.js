@@ -21,6 +21,8 @@ var {
 } = require('react-native-icons');
 
 var NotificationActions = require('./../NotificationActions');
+var routes = require('./../../routes');
+
 
 var NotificationItem = React.createClass({
 
@@ -106,7 +108,13 @@ var NotificationItem = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
-              onPress={this.markRead}
+              onPress={() => {
+                this.markRead();
+                if(this.props.inCommentView) return;
+                var commentRoute = routes.MAIN.COMMENT;
+                commentRoute.postID = post_id;
+                this.props.mainNavigator.push(commentRoute);
+              }}
             >
               <View style={styles.row}>
                 <Image 

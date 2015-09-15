@@ -84,6 +84,9 @@ var Event = React.createClass({
         <Text style={styles.bodyText}>
           { this.state.post.title }
         </Text>
+        <Text style={styles.descriptionText}>
+          { this.state.post.event.description }
+        </Text>
       </View>
     );
   },
@@ -99,17 +102,7 @@ var Event = React.createClass({
   },
 
   _renderPostImage() {
-    if(_.isEmpty(this.state.post.images)) {
-      return <View />;
-    }
-    var imageCount = this.state.post.images.length;
-    var imageCountText = (imageCount > 1) 
-    ? (
-      <Text style={ styles.postImageCountText }>
-        + { imageCount - 1 } more
-      </Text>
-    )
-    : null;
+    var imageURL = _.isEmpty(this.state.post.images[0])? '/img/default_group_img.png' : this.state.post.images[0];
 
     return (
       <TouchableHighlight
@@ -122,10 +115,9 @@ var Event = React.createClass({
       >
         <Image
           style={ styles.postImage }
-          source={{ uri: this.state.post.images[0] }}
+          source={{ uri: imageURL }}
           resizeMode='cover'
         >
-          { imageCountText }
         </Image>
       </TouchableHighlight>
     );
@@ -138,21 +130,14 @@ var Event = React.createClass({
       <View style={styles.postCard}>
 
         { this._renderImageOverlay() }
-        { this._renderPostImage() }
+        {/* this._renderPostImage() */}
         
         { this._renderPostTitle() }
 
         <View style={styles.titleRow}>
-          <Image 
-            style={styles.titleImage}
-            source={{ uri: post.author.image_url }}
-          />
           <View style={styles.titleTextColumn}>
             <Text numberOfLines={ 1 } style={styles.titleText}>
               { post.author.displayName } • { post.bevy.name }
-            </Text>
-            <Text style={styles.subTitleText}>
-              { timeAgo(Date.parse(post.created)) }
             </Text>
           </View>
         </View>
@@ -177,7 +162,7 @@ var Event = React.createClass({
                     { this.countVotes() }
                   </Text>
                   <Icon
-                    name={ (this.state.voted) ? 'fontawesome|thumbs-up' : 'fontawesome|thumbs-o-up' }
+                    name={ (this.state.voted) ? 'ion|ios-heart' : 'ion|ios-heart-outline' }
                     size={20}
                     color='#757d83'
                     style={styles.actionIcon}
@@ -202,7 +187,7 @@ var Event = React.createClass({
                     { post.comments.length }
                   </Text>
                   <Icon
-                    name='fontawesome|comment-o'
+                    name='ion|ios-chatbubble-outline'
                     size={20}
                     color='#757d83'
                     style={styles.actionIcon}
@@ -217,7 +202,7 @@ var Event = React.createClass({
                 }}
               >
                 <Icon
-                  name='fontawesome|ellipsis-v'
+                  name='ion|ios-more'
                   size={20}
                   color='#757d83'
                   style={styles.actionIcon}
@@ -271,7 +256,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     height: 26,
-    marginLeft: 10
+    marginLeft: 5
   },
   titleText: {
     width: cardWidth - 40 - 10 - 16,
@@ -287,12 +272,17 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     marginBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 15
+    paddingLeft: 10,
+    paddingTop: 5,
+    fontSize: 20
   },
   bodyText: {
-    fontSize: 13,
-    color: '#282929'
+    fontSize: 18,
+    color: '#393939'
+  },
+  descriptionText: {
+    color: '#777',
+    fontSize: 12
   },
 
   postImage: {

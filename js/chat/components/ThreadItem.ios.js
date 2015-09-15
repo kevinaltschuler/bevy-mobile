@@ -107,7 +107,7 @@ var ThreadItem = React.createClass({
         }}
       >
         <View style={[ styles.container, {
-          backgroundColor: (this.props.active) ? '#eee' : '#fff'
+          backgroundColor: '#fff'
         }]} >
           <ThreadImage 
             thread={thread}
