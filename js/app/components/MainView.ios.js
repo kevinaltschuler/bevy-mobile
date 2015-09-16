@@ -13,6 +13,7 @@ var {
 
 var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../shared/components/SearchBar.ios.js');
+var LocationView = require('./../../shared/components/LocationView.ios.js');
 var NewPostView = require('./../../post/components/NewPostView.ios.js');
 var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
@@ -64,6 +65,13 @@ var MainView = React.createClass({
 
       case routes.MAIN.PROFILE.name:
         return <ProfileView profileUser={ this.props.mainRoute.profileUser } { ...this.props } />
+        break;
+
+      case routes.MAIN.MAP.name:
+        return <LocationView
+                location={this.props.mainRoute.location || 'no location'}
+                { ...this.props }
+               />
         break;
 
       case routes.MAIN.TABBAR.name:

@@ -78,6 +78,7 @@ var Event = React.createClass({
   },
 
   _renderPostTitle() {
+    var date = new Date(this.state.post.event.date);
     if(_.isEmpty(this.state.post.title)) return null;
     return (
       <View style={styles.body}>
@@ -87,6 +88,35 @@ var Event = React.createClass({
         <Text style={styles.descriptionText}>
           { this.state.post.event.description }
         </Text>
+        <TouchableHighlight
+          underlayColor='rgba(0,0,0,0.1)'
+          onPress={() => {
+
+        }}>
+          <Text style={styles.eventDetail}>
+            { date.toLocaleDateString() }
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor='rgba(0,0,0,0.1)'
+          onPress={() => {
+            
+        }}>
+          <Text style={styles.eventDetail}>
+            { date.toLocaleTimeString() }
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor='rgba(0,0,0,0.1)'
+          onPress={() => {
+            var mapRoute = routes.MAIN.MAP;
+            mapRoute.location = this.state.post.event.location;
+            this.props.mainNavigator.push(mapRoute);
+        }}>
+          <Text style={styles.eventDetail}>
+            { this.state.post.event.location }
+          </Text>
+        </TouchableHighlight>
       </View>
     );
   },
@@ -131,16 +161,22 @@ var Event = React.createClass({
 
         { this._renderImageOverlay() }
         {/* this._renderPostImage() */}
-        
-        { this._renderPostTitle() }
-
         <View style={styles.titleRow}>
+          <Image 
+            style={styles.titleImage}
+            source={{ uri: post.author.image_url }}
+          />
           <View style={styles.titleTextColumn}>
             <Text numberOfLines={ 1 } style={styles.titleText}>
               { post.author.displayName } • { post.bevy.name }
             </Text>
+            <Text style={styles.subTitleText}>
+              { timeAgo(Date.parse(post.created)) }
+            </Text>
           </View>
         </View>
+        
+        { this._renderPostTitle() }
 
         <Accordion
           ref={ (accordion) => this.optionsAccordion = accordion }
@@ -241,7 +277,8 @@ var styles = StyleSheet.create({
     width: cardWidth,
     paddingLeft: 8,
     paddingRight: 8,
-    marginBottom: 10
+    marginTop: 8,
+    marginBottom: 0
   },
   titleImage: {
     width: 25,
@@ -283,6 +320,11 @@ var styles = StyleSheet.create({
   descriptionText: {
     color: '#777',
     fontSize: 12
+  },
+  eventDetail: {
+    color: '#777',
+    fontSize: 12,
+
   },
 
   postImage: {
