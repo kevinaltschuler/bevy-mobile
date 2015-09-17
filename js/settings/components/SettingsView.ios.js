@@ -45,16 +45,31 @@ var SettingsView = React.createClass({
     if(!this.props.loggedIn) return <View />;
 
     return (
-      <View style={ styles.profileHeader }>
-        <Image 
-          source={{ uri: this.state.profilePicture }}
-          style={ styles.profileImage }
-        />
-        <View style={ styles.profileDetails }>
-          <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-          <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
+      <TouchableHighlight
+        underlayColor='rgba(200,200,200,1)'
+        style={[ styles.settingItemContainer ]}
+        onPress={() => {
+          var route = routes.MAIN.PROFILE;
+          route.profileUser = this.props.user;
+          this.props.mainNavigator.push(route);
+        }}
+      >
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <View style={ styles.profileHeader }>
+            <Image 
+              source={{ uri: this.state.profilePicture }}
+              style={ styles.profileImage }
+            />
+            <View style={ styles.profileDetails }>
+              <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
+              <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
+            </View>
+          </View>
+          <Text style={{color: '#888', fontSize: 12}}>
+            View Public Profile
+          </Text>
         </View>
-      </View>
+      </TouchableHighlight>
     );
   },
 
@@ -111,7 +126,7 @@ var SettingsView = React.createClass({
           profilePicture={ this.state.profilePicture }
         />
         <ScrollView style={ styles.scrollView }>
-          {/* this._renderUserHeader() */}
+          { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>
           { this._renderAccountSettings() }
@@ -135,27 +150,37 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   scrollView: {
-    flex: 1
+    flex: 1,
+    marginTop: -20
   },
-
-  profileHeader: {
+  settingItemContainer: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    padding: 10,
-    marginBottom: 10,
-    marginTop: -21,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingLeft: 10,
+    paddingRight: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
+    borderBottomColor: '#ddd',
+    marginBottom: 10
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    padding: 5,
+    height: 39,
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   profileImage: {
     width: 30,
     height: 30,
     borderRadius: 15,
-    marginRight: 10
+    marginRight: 10,
   },
   profileDetails: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    marginTop: -2
   },
   profileName: {
     color: '#000', 

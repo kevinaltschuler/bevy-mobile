@@ -73,12 +73,15 @@ exports.BEVY = {
   SWITCH: 'bevy_switch',
   INVITE: 'bevy_invite',
   ADD_USER: 'bevy_add_user',
+  SEARCH: 'bevy_search',
   SUBSCRIBE: 'bevy_subscribe',
   UNSUBSCRIBE: 'bevy_unsubscribe',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
 
+  SEARCHING: 'bevy_searching',
+  SEARCH_COMPLETE: 'bevy_search_complete',
   CHANGE_ALL: 'bevy_change_all',
   CHANGE_ONE: 'bevy_change_one',
   SWITCHED: 'bevy_switched',

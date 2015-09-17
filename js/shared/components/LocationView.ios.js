@@ -9,7 +9,7 @@ var {
   StyleSheet,
   Text,
   View,
-  MapView,
+  WebView,
   TouchableHighlight
 } = React;
 
@@ -71,8 +71,12 @@ var LocationView = React.createClass({
 		          	<View style={ styles.navButtonRight } />
 		          }
 		        />
-		        <MapView 
-		        	style={styles.map}
+		        <WebView
+		        	style={styles.map} 
+		        	url={'https://www.google.com/maps/search/' + this.props.location.replace(/ /g, '+')}
+		        	scrollEnabled={false}
+		        	scalePageToFit={true}
+		        	contentInset={{top: -20,left: 0,bottom: 0,right: 0}}
 		        />
 			</View>
 		);
@@ -117,7 +121,7 @@ var styles = StyleSheet.create({
   },
   map: {
   	flex: 1,
-
+  	height: window.height
   }
 });
 

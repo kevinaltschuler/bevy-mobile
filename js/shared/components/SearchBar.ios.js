@@ -18,6 +18,7 @@ var StatusBarSizeIOS = require('react-native-status-bar-size');
 var routes = require('./../../routes');
 var constants = require('./../../constants');
 var BevyStore = require('./../../bevy/BevyStore');
+var BevyActions = require('./../../bevy/BevyActions');
 var BEVY = constants.BEVY;
 
 var BevyList = require('./../../bevy/components/BevyList.ios.js');
@@ -38,7 +39,8 @@ var SearchBar = React.createClass({
   getInitialState() {
     var activeRoute = this.props.navState.routeStack[this.props.navState.presentedIndex];
     return {
-      activeRoute: activeRoute
+      activeRoute: activeRoute,
+      query: ''
     };
   },
 
@@ -76,8 +78,17 @@ var SearchBar = React.createClass({
     }
   },
 
-  onSearch() {
-
+  onSearch(query) {
+    if(this.searchDelay != undefined) {
+      clearTimeout(this.searchDelay);
+      delete this.searchDelay;
+    }
+    this.searchDelay = setTimeout(function() {
+      this.setState({
+        query: query
+      });
+      BevyActions.search(this.state.query);
+    }.bind(this), 500);
   },
 
   render() {
@@ -126,8 +137,7 @@ var SearchBar = React.createClass({
                 clearButtonMode='while-editing'
                 onBlur={ this.onSearchBlur }
                 onFocus={ this.onSearchFocus }
-                onChange={ this.onSearch }
-                onSubmitEditing={ this.onSearch }
+                onChangeText={ this.onSearch }
                 placeholder='Search'
                 placeholderTextColor='#fff'
                 returnKeyType='search'

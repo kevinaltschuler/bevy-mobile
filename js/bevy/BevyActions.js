@@ -61,6 +61,12 @@ var BevyActions = {
     });
   },
 
+  search(query) {
+    dispatch(BEVY.SEARCH, {
+      query: (query == undefined) ? null : query
+    });
+  },
+
   /**
    * switch bevies and update posts accordingly
    * @param  {int} id  id of bevy being switched to

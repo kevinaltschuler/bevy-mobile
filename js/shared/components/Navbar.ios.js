@@ -92,31 +92,7 @@ var Navbar = React.createClass({
   _renderBottom() {
     if(this.props.center == 'Settings' && this.props.loggedIn) {
       return (
-        <TouchableHighlight
-          underlayColor='rgba(200,200,200,1)'
-          style={[ styles.settingItemContainer ]}
-          onPress={() => {
-            var route = routes.MAIN.PROFILE;
-            route.profileUser = this.props.user;
-            this.props.mainNavigator.push(route);
-          }}
-        >
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <View style={ styles.profileHeader }>
-            <Image 
-              source={{ uri: this.props.profilePicture }}
-              style={ styles.profileImage }
-            />
-            <View style={ styles.profileDetails }>
-              <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-              <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
-            </View>
-          </View>
-          <Text style={{color: '#888', fontSize: 12}}>
-            View Public Profile
-          </Text>
-        </View>
-        </TouchableHighlight>
+        <View/>
       );
     }
     else {

@@ -199,7 +199,7 @@ var styles = StyleSheet.create({
     height: 48,
   },
   tabIcon: {
-    flex: 1
+    flex: 1,
   }
 });
 
