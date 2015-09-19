@@ -80,14 +80,18 @@ _.extend(UserStore, {
       case BEVY.SUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevies = this.user.get('bevies');
+        console.log(bevies);
+        bevies = _.reject(bevies, function(bevy) {
+          return bevy == null
+        });
 
-        if(_.findWhere(bevies, { _id: bevy_id }) != undefined) break; // user is already subbed
 
-        var bevy_ids = _.pluck(bevies, '_id');
-        bevy_ids.push(bevy_id);
+        if(_.find(bevies, function(bevy){ return bevy == bevy_id}) != undefined) break; // user is already subbed
+
+        bevies.push(bevy_id);
 
         this.user.save({
-          bevies: bevy_ids
+          bevies: bevies
         }, {
           patch: true,
           success: function(model, response, options) {
@@ -100,14 +104,14 @@ _.extend(UserStore, {
       case BEVY.UNSUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevies = this.user.get('bevies');
+        console.log(bevies);
         bevies = _.reject(bevies, function(bevy) {
-          return bevy._id == bevy_id;
+          return bevy == null
         });
-        var bevy_ids = _.pluck(bevies, '_id');
 
         // save user to server
         this.user.save({
-          bevies: bevy_ids
+          bevies: bevies
         }, {
           patch: true,
           success: function(model, response, options) {

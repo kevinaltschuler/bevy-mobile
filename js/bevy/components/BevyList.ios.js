@@ -12,7 +12,8 @@ var {
   View,
   Image,
   ListView,
-  TouchableHighlight
+  TouchableHighlight,
+  ScrollView
 } = React;
 var {
   Icon
@@ -131,7 +132,7 @@ var BevyList = React.createClass({
     }
 
     return (
-      <View style={ styles.bevyList }>
+      <ScrollView style={ styles.bevyList }>
         { _.map(bevies, function(bevy) {
           var active = (bevy._id == this.props.activeBevy._id);
 
@@ -152,7 +153,7 @@ var BevyList = React.createClass({
             </TouchableHighlight>
           );
         }.bind(this)) }
-      </View>
+      </ScrollView>
     );
   },
   
@@ -235,7 +236,7 @@ var styles = StyleSheet.create({
   },
 
   bevyList: {
-    flex: 1
+    flex: 1,
   },
   bevyItem: {
     flexDirection: 'row',

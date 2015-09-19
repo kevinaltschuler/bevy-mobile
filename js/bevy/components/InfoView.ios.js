@@ -29,6 +29,7 @@ var routes = require('./../../routes.js');
 var BevyActions = require('./../BevyActions');
 var FileActions = require('./../../file/FileActions');
 var FileStore = require('./../../file/FileStore');
+var SubSwitch = require('./../../app/components/SubSwitch.ios.js');
 
 var InfoView = React.createClass({
 
@@ -108,6 +109,7 @@ var InfoView = React.createClass({
   _renderSubSwitch() {
     var user = this.props.user;
     var bevy = this.props.activeBevy;
+    var subbed = _.find(this.props.user.bevies, function(bevyId){ return bevyId == bevy._id }) != undefined;
     // dont render this if you're an admin
     if(_.contains(bevy.admins, user._id)) return null;
     return (
@@ -117,22 +119,12 @@ var InfoView = React.createClass({
         borderTopColor: '#ddd'
       }]}>
         <Text style={ styles.switchDescription }>Subscribed</Text>
-        <SwitchIOS
-          value={ this.state.subscribed }
-          onValueChange={(value) => {
-            if(!this.props.loggedIn) {
-              this.props.authModalActions.open('Log In To Subscribe');
-              return;
-            }
-            this.setState({
-              subscribed: value
-            });
-            if(value) {
-              BevyActions.subscribe(this.props.activeBevy._id);
-            } else {
-              BevyActions.unsubscribe(this.props.activeBevy._id);
-            }
-          }}
+        <SubSwitch
+          subbed={subbed}
+          loggedIn={ this.props.loggedIn }
+          authModalActions={ this.props.authModalActions }
+          bevy={bevy}
+          user={user}
         />
       </View>
     );

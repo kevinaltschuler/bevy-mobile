@@ -18,8 +18,11 @@ var routes = require('./../../routes');
 var BevyActions = require('./../../bevy/BevyActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../bevy/BevyStore');
+var UserStore = require('./../../user/UserStore');
 var BevyActions = require('./../../bevy/BevyActions');
 var BEVY = constants.BEVY;
+
+var SubSwitch = require('./SubSwitch.ios.js');
 
 var SearchView = React.createClass({
 
@@ -69,26 +72,15 @@ var SearchView = React.createClass({
     var user = this.props.user;
     var subbed = _.find(this.props.user.bevies, function(bevyId){ return bevyId == bevy._id }) != undefined;
     // dont render this if you're an admin
-    if(_.contains(bevy.admins, user._id)) return null;
+    if(_.contains(bevy.admins, user._id)) return <View/>;
     return (
-      <View>
-        <SwitchIOS
-          value={ subbed }
-          onValueChange={(value) => {
-            if(!this.props.loggedIn) {
-              this.props.authModalActions.open('Log In To Subscribe');
-              return;
-            }
-            if(!subbed) {
-              console.log('subbing');
-              BevyActions.subscribe(bevy._id);
-            } else {
-              console.log('unsubbing');
-              BevyActions.unsubscribe(bevy._id);
-            }
-          }}
+        <SubSwitch
+          subbed={subbed}
+          loggedIn={ this.props.loggedIn }
+          authModalActions={ this.props.authModalActions }
+          bevy={bevy}
+          user={user}
         />
-      </View>
     );
   },
 
