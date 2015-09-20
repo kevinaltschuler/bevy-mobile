@@ -33,7 +33,7 @@ bevy for iphone and android, using <a href='https://facebook.github.io/react-nat
   1. Mac OSX: ```brew install node.```
   2. Windows: <a href='https://github.com/marcelklehr/nodist'>nodist</a>
   3. Linux: <a href='https://github.com/creationix/nvm'>nvm</a>
-4. 
+4. If not using an emulator, enable developer mode on your device
 
 ### Setup ###
 1. ```git clone git@github.com:kevtastic/bevy-mobile.git```
