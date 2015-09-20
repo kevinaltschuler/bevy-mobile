@@ -11,6 +11,7 @@
 
 var user = {};
 var searchNavigator = {};
+var mainTabBar = {};
 var slashes = '//';
 
 var api_subdomain = 'api';
@@ -126,4 +127,12 @@ exports.setSearchNavigator = function(navigator) {
 
 exports.getSearchNavigator = function() {
 	return searchNavigator;
+};
+
+exports.setMainTabBar = function(theBar) {
+  mainTabBar = theBar;
+};
+
+exports.getMainTabBar = function() {
+  return mainTabBar;
 }

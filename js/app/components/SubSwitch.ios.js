@@ -27,46 +27,52 @@ var BevyActions = require('./../../bevy/BevyActions');
 var BEVY = constants.BEVY;
 
 var SubSwitch = React.createClass({
-	propTypes: {
-		subbed: React.PropTypes.bool,
-		loggedIn: React.PropTypes.bool,
-		bevy: React.PropTypes.object,
-		user: React.PropTypes.object
-	},
+  propTypes: {
+    subbed: React.PropTypes.bool,
+    loggedIn: React.PropTypes.bool,
+    bevy: React.PropTypes.object,
+    user: React.PropTypes.object
+  },
 
-	getInitialState() {
-		return {
-			value: this.props.subbed
-		}
-	},
+  getInitialState() {
+    return {
+      value: this.props.subbed
+    }
+  },
 
-	render() {
-		var bevy = this.props.bevy;
+  render() {
+    var bevy = this.props.bevy;
 
-		return (     
-			<SwitchIOS
-	          value={this.state.value}
-	          onValueChange={(value) => {
+    return (     
+      <SwitchIOS
+        value={this.state.value}
+        style={styles.switch}
+        onValueChange={(value) => {
 
-	            if(!this.props.loggedIn) {
-	              this.props.authModalActions.open('Log In To Subscribe');
-	              return;
-	            }
+          if(!this.props.loggedIn) {
+            this.props.authModalActions.open('Log In To Subscribe');
+            return;
+          }
 
-	            this.setState({
-	            	value: value
-	            });
-	  
-	            if(!this.state.value) {
-	              BevyActions.subscribe(bevy._id);
-	            } else {
-	              BevyActions.unsubscribe(bevy._id);
-	            }
-	          }}
-	        />
-       );
-	}
+          this.setState({
+            value: value
+          });
+
+          if(!this.state.value) {
+            BevyActions.subscribe(bevy._id);
+          } else {
+            BevyActions.unsubscribe(bevy._id);
+          }
+        }}
+      />
+    );
+  }
 
 });
 
+var styles = StyleSheet.create({
+  switch: {
+    
+  }
+});
 module.exports = SubSwitch;

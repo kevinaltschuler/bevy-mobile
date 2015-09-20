@@ -80,12 +80,12 @@ var ImageOverlay = React.createClass({
         style={ styles.rightArrow }
         onPress={() => {
           this.setState({
-            imageIndex: (this.state.imageIndex == this.props.images.length - 1) ? 0 : ++this.state.imageIndex
+            imageIndex: (this.state.imageIndex == 0) ? this.props.images.length - 1 : --this.state.imageIndex
           });
         }}
       >
         <Icon
-          name='ion|ios-arrow-right'
+          name='ion|ios-arrow-left'
           size={ 30 }
           style={{ width: 30, height: 30 }}
           color='#fff'

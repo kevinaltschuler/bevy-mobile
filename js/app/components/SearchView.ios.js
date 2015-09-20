@@ -113,6 +113,7 @@ var SearchView = React.createClass({
               <View style={ styles.bevyRow }> 
                 <TouchableHighlight
                   underlayColor='rgba(0,0,0,.1)'
+                  style={styles.bevyButton}
                   onPress={() => {
                     // switch bevy
                     BevyActions.switchBevy(bevy._id);
@@ -183,6 +184,9 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 17,
     paddingLeft: 15
+  },
+  bevyButton: {
+    flex: 2
   }
 });
 
