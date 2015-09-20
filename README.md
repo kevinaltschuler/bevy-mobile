@@ -38,3 +38,9 @@ bevy for iphone and android, using <a href='https://facebook.github.io/react-nat
 ### Setup ###
 1. ```git clone git@github.com:kevtastic/bevy-mobile.git```
 2. ```npm install```
+3. ```npm install -g react-native-cli```
+4. Add the ANDROID_HOME path variable
+  1. Linux: ```export ANDROID_HOME="/home/[user]/Android/Sdk"```
+  2. Windows: path is probably at C:\Users\[user]\.android\sdk
+5. ```react-native run-android```
+6. in a separate terminal - ```npm start```
