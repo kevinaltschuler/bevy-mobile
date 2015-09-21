@@ -1,8 +1,6 @@
-*.DS_Store
-*.sublime-project
-*.sublime-workspace
-*.log
-*.jsbundle
+# OSX
+#
+.DS_Store
 
 # Xcode
 #
@@ -24,4 +22,7 @@ DerivedData
 *.xcuserstate
 project.xcworkspace
 
+# node.js
+#
 node_modules/
+npm-debug.log
