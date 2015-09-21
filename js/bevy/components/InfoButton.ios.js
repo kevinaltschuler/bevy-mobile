@@ -27,6 +27,7 @@ var InfoButton = React.createClass({
     return (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0.1)'}
+        style={styles.highlight}
         onPress={this.onPress}
       >
         <Icon
@@ -43,7 +44,10 @@ var InfoButton = React.createClass({
 var styles = StyleSheet.create({
   bevyListButton: {
     width: 35,
-    height: 35
+    height: 35,
+  },
+  highlight: {
+    borderRadius: 17
   }
 });
 

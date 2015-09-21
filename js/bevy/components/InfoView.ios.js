@@ -27,6 +27,7 @@ var constants = require('./../../constants.js');
 var FILE = constants.FILE;
 var routes = require('./../../routes.js');
 var BevyActions = require('./../BevyActions');
+var BevyStore = require('./../BevyStore');
 var FileActions = require('./../../file/FileActions');
 var FileStore = require('./../../file/FileStore');
 var SubSwitch = require('./../../app/components/SubSwitch.ios.js');
@@ -176,6 +177,44 @@ var InfoView = React.createClass({
     );
   },
 
+  _renderRelatedBevies() {
+    var bevy = this.props.activeBevy;
+    var relatedList = <View/>;
+    if(!_.isEmpty(bevy.siblings)) {
+      relatedList = [];
+      for(var key in bevy.siblings) {
+        var sibling = BevyStore.getBevy(bevy.siblings[key]);
+        relatedList.push(
+          <TouchableHighlight 
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.switchContainer, {
+              borderTopWidth: .5,
+              borderTopColor: '#ddd'
+            }]}
+          >
+            <View style={styles.settingContainer}>
+              <Image 
+                style={styles.relatedImage}
+                source={{ uri: sibling.image_url }}
+              />
+              <Text style={styles.settingValue}>
+                { sibling.name }
+              </Text>
+            </View>
+          </TouchableHighlight>
+          );
+      }
+    }
+    return (
+      <View style={[ styles.actionRow, {
+        marginTop: 15
+      }]}>
+        <Text style={ styles.settingsTitle }>Related Bevies</Text>
+        { relatedList }
+      </View>
+    );
+  },
+
   render() {
     return (
       <View style={styles.container}>
@@ -219,6 +258,7 @@ var InfoView = React.createClass({
         <ScrollView style={styles.actionRow}>
           { this._renderSubSwitch() }
           { this._renderAdminSettings() }
+          { this._renderRelatedBevies() }
         </ScrollView>
 
       </View>
@@ -257,6 +297,15 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  relatedImage: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 10,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   picButton: {
     width: 66,
     height: 66,
@@ -286,7 +335,8 @@ var styles = StyleSheet.create({
   description: {
     fontSize: 15,
     textAlign: 'left',
-    color: '#666'
+    color: '#666',
+    width: constants.width - 150
   },
   details: {
     flexDirection: 'row',
@@ -297,7 +347,6 @@ var styles = StyleSheet.create({
     color: '#888',
     fontSize: 14
   },
-
   actionRow: {
     flex: 1,
     backgroundColor: 'transparent',
@@ -307,8 +356,8 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 6,
-    paddingBottom: 6
+    paddingTop: 0,
+    paddingBottom: 0
   },
   settingsTitle: {
     color: '#888',
@@ -322,9 +371,9 @@ var styles = StyleSheet.create({
     color: '#222'
   },
   settingValue: {
-    alignSelf: 'flex-end',
     fontSize: 17,
-    color: '#888'
+    color: '#888',
+
   },
   switchContainer: {
     backgroundColor: '#fff',

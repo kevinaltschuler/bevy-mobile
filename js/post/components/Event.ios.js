@@ -82,29 +82,45 @@ var Event = React.createClass({
     if(_.isEmpty(this.state.post.title)) return null;
     return (
       <View style={styles.body}>
-        <Text style={styles.bodyText}>
-          { this.state.post.title }
-        </Text>
-        <Text style={styles.descriptionText}>
-          { this.state.post.event.description }
-        </Text>
         <TouchableHighlight
           underlayColor='rgba(0,0,0,0.1)'
           onPress={() => {
+            // go to comment view
+            // return if we're already in comment view
+            if(this.props.inCommentView) return;
 
+            var commentRoute = routes.MAIN.COMMENT;
+            commentRoute.postID = this.state.post._id;
+            this.props.mainNavigator.push(commentRoute);
         }}>
-          <Text style={styles.eventDetail}>
-            { date.toLocaleDateString() }
-          </Text>
+          <View>
+            <Text style={styles.eventDetail}>
+              { date.toLocaleDateString() }
+            </Text>
+            <Text style={styles.eventDetail}>
+              { date.toLocaleTimeString() }
+            </Text>
+          </View>
         </TouchableHighlight>
         <TouchableHighlight
           underlayColor='rgba(0,0,0,0.1)'
           onPress={() => {
-            
+            // go to comment view
+            // return if we're already in comment view
+            if(this.props.inCommentView) return;
+
+            var commentRoute = routes.MAIN.COMMENT;
+            commentRoute.postID = this.state.post._id;
+            this.props.mainNavigator.push(commentRoute);
         }}>
-          <Text style={styles.eventDetail}>
-            { date.toLocaleTimeString() }
-          </Text>
+          <View style={styles.titleTextColumn}>
+            <Text style={styles.bodyText}>
+              { this.state.post.title }
+            </Text>
+            <Text style={styles.descriptionText}>
+              { this.state.post.event.description }
+            </Text>
+          </View>
         </TouchableHighlight>
         <TouchableHighlight
           underlayColor='rgba(0,0,0,0.1)'
@@ -138,17 +154,20 @@ var Event = React.createClass({
       <TouchableHighlight
         underlayColor='rgba(0,0,0,0.1)'
         onPress={() => {
-          this.setState({
-            overlayVisible: true
-          });
+          // go to comment view
+          // return if we're already in comment view
+          if(this.props.inCommentView) return;
+
+          var commentRoute = routes.MAIN.COMMENT;
+          commentRoute.postID = this.state.post._id;
+          this.props.mainNavigator.push(commentRoute);
         }}
       >
         <Image
           style={ styles.postImage }
           source={{ uri: imageURL }}
           resizeMode='cover'
-        >
-        </Image>
+        />
       </TouchableHighlight>
     );
   },
@@ -160,8 +179,8 @@ var Event = React.createClass({
       <View style={styles.postCard}>
 
         { this._renderImageOverlay() }
-        {/* this._renderPostImage() */}
-        <View style={styles.titleRow}>
+        { this._renderPostImage() }
+        {/*<View style={styles.titleRow}>
           <Image 
             style={styles.titleImage}
             source={{ uri: post.author.image_url }}
@@ -174,7 +193,7 @@ var Event = React.createClass({
               { timeAgo(Date.parse(post.created)) }
             </Text>
           </View>
-        </View>
+        </View>*/}
         
         { this._renderPostTitle() }
 
@@ -288,10 +307,9 @@ var styles = StyleSheet.create({
     marginLeft: 0
   },
   titleTextColumn: {
-    flex: 1,
-    width: cardWidth - 40 - 10 - 16,
+    flex: 2,
+    width: cardWidth - 40 - 10 - 16 - 100,
     flexDirection: 'column',
-    justifyContent: 'center',
     height: 26,
     marginLeft: 5
   },
@@ -307,15 +325,16 @@ var styles = StyleSheet.create({
 
   body: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: 'row',
     marginBottom: 5,
     paddingLeft: 10,
     paddingTop: 5,
     fontSize: 20
   },
   bodyText: {
-    fontSize: 18,
-    color: '#393939'
+    fontSize: 15,
+    color: '#393939',
+    fontWeight: 'bold'
   },
   descriptionText: {
     color: '#777',
@@ -324,11 +343,11 @@ var styles = StyleSheet.create({
   eventDetail: {
     color: '#777',
     fontSize: 12,
-
+    width: 70
   },
 
   postImage: {
-    height: 25,
+    height: 65,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'flex-end'
