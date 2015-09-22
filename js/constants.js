@@ -86,7 +86,8 @@ exports.BEVY = {
   CHANGE_ALL: 'bevy_change_all',
   CHANGE_ONE: 'bevy_change_one',
   SWITCHED: 'bevy_switched',
-  CREATED: 'bevy_created'
+  CREATED: 'bevy_created',
+  NAV_POSTVIEW: 'bevy_nav_postview'
 };
 
 exports.CHAT = {

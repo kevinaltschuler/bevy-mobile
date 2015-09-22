@@ -22,6 +22,8 @@ var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
 
+var dropdown = require('react-native-dropdown');
+
 var _ = require('underscore');
 var window = require('Dimensions').get('window');
 var routes = require('./../../routes');
@@ -37,6 +39,12 @@ var BevyView = React.createClass({
     bevyNavigator: React.PropTypes.object,
     activeBevy: React.PropTypes.object,
     allPosts: React.PropTypes.array
+  },
+
+  getInitialState() {
+    return {
+      showTags: false
+    }
   },
 
   render: function() {
@@ -62,6 +70,7 @@ var BevyView = React.createClass({
         view = (
           <PostList
             { ...this.props }
+            showTags={ this.state.showTags }
           />
         );
         break;
@@ -72,14 +81,16 @@ var BevyView = React.createClass({
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
         onPress={() => {
-
+          this.setState({
+            showTags: true
+          });
         }}
         style={{
-          marginRight: 5
+          marginRight: 15
         }}
       >
         <Icon
-          name='fontawesome|sort-amount-desc'
+          name='ion|ios-pricetag'
           size={20}
           color='#666'
           style={{
@@ -107,7 +118,7 @@ var BevyView = React.createClass({
         alignItems: 'center',
         justifyContent: 'flex-end'
       }}>
-        {/* sortButton */}
+        { sortButton }
         { infoButton }
       </View>
     );

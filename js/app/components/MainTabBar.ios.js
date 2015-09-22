@@ -17,12 +17,17 @@ var {
   TabBarIOS
 } = require('react-native-icons');
 
+var constants = require('./../../constants');
+var routes = require('./../../routes');
+var BEVY = constants.BEVY;
+
 var BevyNavigator = require('./../../bevy/components/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../chat/components/ChatNavigator.ios.js');
 var NotificationNavigator = require('./../../notification/components/NotificationNavigator.ios.js');
 var SettingsView = require('./../../settings/components/SettingsView.ios.js');
 
 var NotificationStore = require('./../../notification/NotificationStore');
+var BevyStore = require('./../../bevy/BevyStore');
 
 var tabs = {
   Posts: 'BevyNavigator',
@@ -45,6 +50,17 @@ var MainTabBar = React.createClass({
 
   componentDidMount() {
     this.setState({
+      chatIcon: 'ion|ios-chatbubble-outline',
+      notificationIcon: 'ion|ios-bell-outline',
+      moreIcon: 'ion|ios-more-outline'
+    });
+    BevyStore.on(BEVY.NAV_POSTVIEW, this.navPostView);
+  },
+
+  navPostView() {
+    this.setState({
+      selectedTab: tabs.Posts,
+      postIcon: 'ion|ios-list',
       chatIcon: 'ion|ios-chatbubble-outline',
       notificationIcon: 'ion|ios-bell-outline',
       moreIcon: 'ion|ios-more-outline'

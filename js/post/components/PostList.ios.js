@@ -25,6 +25,7 @@ var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
+var TagModal = require('./TagModal.ios.js');
 
 var PostList = React.createClass({
 
@@ -35,20 +36,22 @@ var PostList = React.createClass({
     loggedIn: React.PropTypes.bool,
     authModalActions: React.PropTypes.object,
     showNewPostCard: React.PropTypes.bool,
-    profileUser: React.PropTypes.object
+    profileUser: React.PropTypes.object,
+    showTags: React.PropTypes.bool
   },
 
   getDefaultProps() {
     return {
       showNewPostCard: true,
-      profileUser: null
+      profileUser: null,
     };
   },
 
   getInitialState() {
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allPosts),
-      isRefreshing: true
+      isRefreshing: true,
+      showTags: this.props.showTags
     };
   },
 
@@ -140,6 +143,10 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
+          <TagModal 
+            isVisible={this.state.showTags} 
+            mainNavigator={this.props.mainNavigator}
+          />
           <ListView 
             dataSource={ this.state.dataSource }
             onScroll={ this.handleScroll }
@@ -184,6 +191,9 @@ var styles = StyleSheet.create({
   postListHeader: {
     flex: 1,
     flexDirection: 'column'
+  },
+  tagOverlay: {
+
   }
 })
 

@@ -109,6 +109,8 @@ _.extend(BevyStore, {
       case BEVY.SWITCH:
         var bevy_id = payload.bevy_id;
 
+        this.trigger(BEVY.NAV_POSTVIEW);
+
         // look for it in my bevies
         var bevy = this.myBevies.get(bevy_id);
         if(bevy == undefined) {

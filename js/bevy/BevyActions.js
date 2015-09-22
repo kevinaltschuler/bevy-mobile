@@ -75,7 +75,7 @@ var BevyActions = {
     dispatch(BEVY.SWITCH, {
       bevy_id: (bevy_id == undefined) ? null : bevy_id
     });
-  }
+  },
 };
 
 module.exports = BevyActions;

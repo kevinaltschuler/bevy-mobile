@@ -191,6 +191,11 @@ var InfoView = React.createClass({
               borderTopWidth: .5,
               borderTopColor: '#ddd'
             }]}
+            onPress={() => {
+                this.props.bevyNavigator.pop();
+                BevyActions.switchBevy(sibling._id);
+              }
+            }
           >
             <View style={styles.settingContainer}>
               <Image 
@@ -215,10 +220,8 @@ var InfoView = React.createClass({
     );
   },
 
-  render() {
+  _renderCard() {
     return (
-      <View style={styles.container}>
-
         <View style={styles.infoRow} >
           <View style={styles.picButton}>
             <Image 
@@ -255,12 +258,18 @@ var InfoView = React.createClass({
           </View>
         </View>
 
+    );
+  },
+
+  render() {
+    return (
+      <View style={styles.container}>
         <ScrollView style={styles.actionRow}>
+          { this._renderCard() }
           { this._renderSubSwitch() }
           { this._renderAdminSettings() }
           { this._renderRelatedBevies() }
         </ScrollView>
-
       </View>
     );
   }
@@ -283,6 +292,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
     margin: 10,
+    marginBottom: 20,
+    marginTop: -10,
     borderRadius: 2,
     shadowColor: 'black',
     shadowRadius: 1,
