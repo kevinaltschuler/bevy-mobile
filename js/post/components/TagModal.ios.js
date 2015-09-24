@@ -11,6 +11,7 @@ var {
   Icon
 } = require('react-native-icons');
 var Modal = require('react-native-modal');
+var FilterItem = require('./FilterItem.ios.js');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -19,7 +20,9 @@ var TagModal = React.createClass({
 	propTypes: {
 		isVisible: React.PropTypes.bool,
 		mainNavigator: React.PropTypes.object,
-		onHide: React.PropTypes.object,
+		onHide: React.PropTypes.func,
+		frontpageFilters: React.PropTypes.array,
+    activeTags: React.PropTypes.array
 	},
 
 	getInitialState() {
@@ -33,6 +36,18 @@ var TagModal = React.createClass({
 	      isVisible: nextProps.isVisible
 	    });
 	},
+
+  _renderFilterItems() {
+    var filterItems = [];
+    for(var key in activeTags) {
+      var filter = activeTags[key]
+      filterItems.push(
+        <FilterItem
+          filter={filter}
+        />
+      )
+    }
+  },
 
   render() {
     if(!this.state.isVisible) return null;
@@ -63,47 +78,12 @@ var TagModal = React.createClass({
         }
       >
         <View style={ styles.panel }>
-          <Text style={ styles.panelHeaderText }>Add a Bevy</Text>
+          <Text style={ styles.panelHeaderText }>Filter Posts by bevy</Text>
           <View style={ styles.actionRow }>
             <View style={ styles.actionRowItem }>
-              <Text style={ styles.actionRowItemText }>Search</Text>
-              <TouchableHighlight
-                underlayColor='#eee'
-                style={ styles.actionRowItemButton }
-                onPress={() => {
-                  // close self
-                  this.props.onHide();
-                  // close the side menu
-                  this.props.menuActions.close();
-                }}
-              >
-                <Icon
-                  name='ion|ios-search'
-                  color='#aaa'
-                  size={ 80 }
-                  style={{ width: 80, height: 80, borderRadius: 15 }}
-                />
-              </TouchableHighlight>
-            </View>
-            <View style={ styles.actionRowItem }>
-              <Text style={ styles.actionRowItemText }>Create</Text>
-              <TouchableHighlight
-                underlayColor='#eee'
-                style={ styles.actionRowItemButton }
-                onPress={() => {
-                  // close self
-                  this.props.onHide();
-                  // close the side menu
-                  this.props.menuActions.close();
-                }}
-              >
-                <Icon
-                  name='ion|ios-plus-empty'
-                  color='#aaa'
-                  size={ 80 }
-                  style={{ width: 80, height: 80, borderRadius: 15 }}
-                />
-              </TouchableHighlight>
+              <Text style={ styles.actionRowItemText }>
+              	{ this.props.frontpageFilters }
+              </Text>	
             </View>
           </View>
         </View>
