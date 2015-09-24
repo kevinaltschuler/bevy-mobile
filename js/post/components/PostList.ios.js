@@ -37,7 +37,10 @@ var PostList = React.createClass({
     authModalActions: React.PropTypes.object,
     showNewPostCard: React.PropTypes.bool,
     profileUser: React.PropTypes.object,
-    showTags: React.PropTypes.bool
+    showTags: React.PropTypes.bool,
+    onHideTags: React.PropTypes.func,
+    frontpageFilters: React.PropTypes.array,
+    activeTags: React.PropTypes.array
   },
 
   getDefaultProps() {
@@ -51,7 +54,6 @@ var PostList = React.createClass({
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
-      showTags: this.props.showTags
     };
   },
 
@@ -144,8 +146,12 @@ var PostList = React.createClass({
     return (
       <View style={ styles.postContainer }>
           <TagModal 
-            isVisible={this.state.showTags} 
+            isVisible={this.props.showTags} 
             mainNavigator={this.props.mainNavigator}
+            onHide={this.props.onHideTags}
+            activeBevy={ this.props.activeBevy }
+            frontpageFilters={ this.props.frontpageFilters }
+            activeTags={this.props.activeTags}
           />
           <ListView 
             dataSource={ this.state.dataSource }

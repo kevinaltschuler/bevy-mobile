@@ -47,6 +47,12 @@ var BevyView = React.createClass({
     }
   },
 
+  onHideTags() {
+    this.setState({
+      showTags: false
+    })
+  },
+
   render: function() {
     var view;
     switch(this.props.bevyRoute.name) {
@@ -71,6 +77,7 @@ var BevyView = React.createClass({
           <PostList
             { ...this.props }
             showTags={ this.state.showTags }
+            onHideTags={ this.onHideTags}
           />
         );
         break;
