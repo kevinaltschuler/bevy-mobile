@@ -10,21 +10,34 @@ var {
   StyleSheet,
   Text,
   View,
+  Navigator
 } = React;
+var MainView = require('./js/app/components/android/MainView.android.js')
+
+var routes = require('./js/routes');
+var constants = require('./js/constants');
 
 var bevyios = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for desu
-        </Text>
+        <Navigator
+          initialRouteStack={[
+            routes.MAIN.TABBAR
+          ]}
+          sceneStyle={{
+            flex: 1,
+            width: constants.width,
+            height: constants.height
+          }}
+          renderScene={(route, navigator) => 
+            <MainView 
+              mainRoute={ route }
+              mainNavigator={ navigator }
+              { ...this.state }
+            />
+          }
+        />
       </View>
     );
   }
@@ -33,9 +46,7 @@ var bevyios = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF'
   },
   welcome: {
     fontSize: 20,
