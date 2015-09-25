@@ -22,12 +22,8 @@ var TagModal = React.createClass({
 		mainNavigator: React.PropTypes.object,
 		onHide: React.PropTypes.func,
 		frontpageFilters: React.PropTypes.array,
-<<<<<<< HEAD
     activeTags: React.PropTypes.array,
     activeBevy: React.PropTypes.object
-=======
-    activeTags: React.PropTypes.array
->>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
 	},
 
 	getInitialState() {
@@ -43,7 +39,6 @@ var TagModal = React.createClass({
 	},
 
   _renderFilterItems() {
-<<<<<<< HEAD
     var source = (this.props.activeBevy._id == -1) ? this.props.frontpageFilters : this.props.activeTags;
     var filterItems = [];
     for(var key in source) {
@@ -58,7 +53,6 @@ var TagModal = React.createClass({
       )
     }
     return filterItems;
-=======
     var filterItems = [];
     for(var key in activeTags) {
       var filter = activeTags[key]
@@ -68,7 +62,6 @@ var TagModal = React.createClass({
         />
       )
     }
->>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
   },
 
   render() {

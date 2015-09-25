@@ -2,11 +2,7 @@
 *  i have no more gains
 */
 
-<<<<<<< HEAD
 'use strict';
-=======
-'use strict':
->>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
 
 var React = require('react-native');
 var _ = require('underscore');
@@ -79,16 +75,11 @@ var FilterItem = React.createClass({
 });
 
 var styles = StyleSheet.create({
-<<<<<<< HEAD
   container: {
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center'
-=======
-  switch: {
-    
->>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
   }
 });
 module.exports = FilterItem;
