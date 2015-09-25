@@ -1,5 +1,5 @@
 /**
- * Sample React Native App
+ * entry point of android app
  * https://github.com/facebook/react-native
  */
 'use strict';
@@ -46,7 +46,7 @@ var bevyios = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#eee'
   },
   welcome: {
     fontSize: 20,

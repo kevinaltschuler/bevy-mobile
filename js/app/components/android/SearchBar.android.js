@@ -11,7 +11,9 @@ var {
   Text,
   StyleSheet,
   Navigator,
-  DrawerLayoutAndroid
+  DrawerLayoutAndroid,
+  TouchableNativeFeedback,
+  TextInput
 } = React;
 var MainTabBar = require('./MainTabBar.android.js');
 var SearchView = require('./SearchView.android.js');
@@ -20,10 +22,37 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 
 var SearchBar = React.createClass({
+
+  propTypes: {
+    drawerOpen: React.PropTypes.bool,
+    drawerActions: React.PropTypes.object
+  },
+
+  toggleDrawer() {
+    if(this.props.drawerOpen)
+      this.props.drawerActions.close();
+    else
+      this.props.drawerActions.open();
+  },
+
   render() {
     return (
       <View style={ styles.navbar }>
-        <Text>THE NAVBAR</Text>
+        <TouchableNativeFeedback  
+          background={ TouchableNativeFeedback.Ripple('#000', false) } 
+          onPress={ this.toggleDrawer }
+        >
+          <View style={ styles.menuButton }>
+            <Text>Menu</Text>
+          </View>
+        </TouchableNativeFeedback>
+        <View style={ styles.searchInputWrapper }>
+          <TextInput
+            ref='Search'
+            style={ styles.searchInput }
+            placeholder='Search'
+          />
+        </View>
       </View>
     );
   }
@@ -40,6 +69,10 @@ var SearchNavigator = React.createClass({
         initialRouteStack={[
           routes.SEARCH.OUT
         ]}
+        sceneStyle={{
+          flex: 1,
+          width: constants.width
+        }}
         renderScene={(route, navigator) => {
           constants.setSearchNavigator(navigator);
           switch(route.name) {
@@ -70,14 +103,38 @@ var SearchNavigator = React.createClass({
 });
 
 var SearchBarWrapper = React.createClass({
+
+  getInitialState() {
+    return {
+      drawerOpen: false
+    };
+  },
+
+  openDrawer() {
+    this.refs.Drawer.openDrawer();
+  },
+
+  closeDrawer() {
+    this.refs.Drawer.closeDrawer();
+  },
+
   render() {
+
+    var drawerActions = {
+      open: this.openDrawer,
+      close: this.closeDrawer
+    };
+
     return (
       <DrawerLayoutAndroid
+        ref='Drawer'
         drawerWidth={ (constants.width / 3) * 2 }
         drawerPosition={DrawerLayoutAndroid.positions.Left}
+        onDrawerOpen={() => this.setState({ drawerOpen: true })}
+        onDrawerClose={() => this.setState({ drawerOpen: false })}
         renderNavigationView={() => <View style={{ flex: 1, backgroundColor: '#00f' }}/>}
       >
-        <SearchNavigator { ...this.props } />
+        <SearchNavigator drawerOpen={ this.state.drawerOpen } drawerActions={ drawerActions } { ...this.props } />
       </DrawerLayoutAndroid>
     );
   }
@@ -86,12 +143,42 @@ var SearchBarWrapper = React.createClass({
 var styles = StyleSheet.create({
   navbar: {
     backgroundColor: '#2CB673',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     position: 'absolute',
     top: 0,
     left: 0,
     width: constants.width,
-    height: 48
+    height: 48,
+    paddingLeft: 8,
+    paddingRight: 8
+  },
+  menuButton: {
+    height: 48,
+    paddingLeft: 5,
+    paddingRight: 5,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  searchInputWrapper: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginRight: 20,
+    marginLeft: 10
+  },
+  searchIcon: {
+    width: 25,
+    height: 25
+  },
+  searchInput: {
+    flex: 1,
+    height: 48,
+    paddingRight: 20,
+    paddingLeft: 10,
+    color: 'white'
   },
 });
 
