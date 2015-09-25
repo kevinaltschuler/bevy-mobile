@@ -53,7 +53,7 @@ _.extend(BevyStore, {
   active: -1, // id of active bevy
   subBevies: new Bevies, // sub bevies of the active bevy
   activeTags: [],
-  activeBevyFilters: new Bevies,
+  frontpageFilters: new Bevies,
 
   // handle calls from the dispatcher
   // these are created from BevyActions.js
@@ -72,8 +72,8 @@ _.extend(BevyStore, {
                 _id: '-1',
                 name: 'Frontpage'
               });
+              this.frontpageFilters = this.myBevies;
 
-              this.activeBevyFilters = this.myBevies;
 
               //this.trigger(APP.LOAD_PROGRESS, 0.1);
               this.trigger(BEVY.CHANGE_ALL);
@@ -235,18 +235,21 @@ _.extend(BevyStore, {
   },
 
   getMyBevies() {
+    if(this.myBevies == undefined) return [];
     return this.myBevies.toJSON();
   },
 
-  getActiveBevyFilters() {
-    return this.activeBevyFilters.toJSON();
+  getFrontpageFilters() {
+    if(this.frontpageFilters == undefined) return [];
+    return this.frontpageFilters.toJSON();
   },
 
   getActiveTags() {
-    return this.activeTags.toJSON();
-  }
+    return this.activeTags;
+  },
 
   getPublicBevies() {
+    if(this.publicBevies == undefined) return [];
     return this.publicBevies.toJSON();
   },
 

@@ -2,7 +2,11 @@
 *  i have no more gains
 */
 
+<<<<<<< HEAD
+'use strict';
+=======
 'use strict':
+>>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
 
 var React = require('react-native');
 var _ = require('underscore');
@@ -29,7 +33,8 @@ var BEVY = constants.BEVY;
 var FilterItem = React.createClass({
   propTypes: {
     filter: React.PropTypes.object,
-    value: React.PropTypes.bool
+    value: React.PropTypes.bool,
+    isFrontpage: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -40,36 +45,50 @@ var FilterItem = React.createClass({
 
   render() {
 
-    return (     
-      <SwitchIOS
-        value={this.state.value}
-        style={styles.switch}
-        onValueChange={(value) => {
+    return (
+	    <View style={styles.container}>     
+	      <SwitchIOS
+	        value={this.state.value}
+	        style={styles.switch}
+	        onValueChange={(value) => {
 
-          if(!this.props.loggedIn) {
-            this.props.authModalActions.open('Log In To Filter posts');
-            return;
-          }
+	          if(!this.props.loggedIn) {
+	            this.props.authModalActions.open('Log In To Filter posts');
+	            return;
+	          }
 
-          this.setState({
-            value: value
-          });
+	          this.setState({
+	            value: value
+	          });
 
-          if(!this.state.value) {
-            BevyActions.addFilter(this.props.filter);
-          } else {
-            BevyActions.removeFilter(this.props.filter);
-          }
-        }}
-      />
+	          if(!this.state.value) {
+	            BevyActions.addFilter(this.props.filter);
+	          } else {
+	            BevyActions.removeFilter(this.props.filter);
+	          }
+	        }}
+	      />
+	      <Text>
+	      	{this.props.filter.name}
+	      </Text>
+	    </View>
+
     );
   }
 
 });
 
 var styles = StyleSheet.create({
+<<<<<<< HEAD
+  container: {
+    flexDirection: 'row',
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+=======
   switch: {
     
+>>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
   }
 });
 module.exports = FilterItem;

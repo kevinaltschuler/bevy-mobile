@@ -22,7 +22,12 @@ var TagModal = React.createClass({
 		mainNavigator: React.PropTypes.object,
 		onHide: React.PropTypes.func,
 		frontpageFilters: React.PropTypes.array,
+<<<<<<< HEAD
+    activeTags: React.PropTypes.array,
+    activeBevy: React.PropTypes.object
+=======
     activeTags: React.PropTypes.array
+>>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
 	},
 
 	getInitialState() {
@@ -38,6 +43,22 @@ var TagModal = React.createClass({
 	},
 
   _renderFilterItems() {
+<<<<<<< HEAD
+    var source = (this.props.activeBevy._id == -1) ? this.props.frontpageFilters : this.props.activeTags;
+    var filterItems = [];
+    for(var key in source) {
+      var filter = source[key];
+      filterItems.push(
+        <FilterItem
+          key={'filterItem:' + filter.name}
+          filter={filter}
+          isFrontpage={this.props.activeBevy._id == -1}
+          value={true}
+        />
+      )
+    }
+    return filterItems;
+=======
     var filterItems = [];
     for(var key in activeTags) {
       var filter = activeTags[key]
@@ -47,6 +68,7 @@ var TagModal = React.createClass({
         />
       )
     }
+>>>>>>> c113b97dfebd94f7c12b905cd2bab3b21b4a5026
   },
 
   render() {
@@ -81,9 +103,7 @@ var TagModal = React.createClass({
           <Text style={ styles.panelHeaderText }>Filter Posts by bevy</Text>
           <View style={ styles.actionRow }>
             <View style={ styles.actionRowItem }>
-              <Text style={ styles.actionRowItemText }>
-              	{ this.props.frontpageFilters }
-              </Text>	
+              	{ this._renderFilterItems() }
             </View>
           </View>
         </View>
@@ -145,7 +165,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
     width: constants.width * 2 / 3,
-    height: constants.height / 3
   },
   panelHeaderText: {
     marginTop: 15,
