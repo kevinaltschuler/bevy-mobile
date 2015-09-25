@@ -72,8 +72,8 @@ _.extend(BevyStore, {
                 _id: '-1',
                 name: 'Frontpage'
               });
-
               this.frontpageFilters = this.myBevies;
+
 
               //this.trigger(APP.LOAD_PROGRESS, 0.1);
               this.trigger(BEVY.CHANGE_ALL);

@@ -52,7 +52,6 @@ var TagModal = React.createClass({
         />
       )
     }
-    return filterItems;
   },
 
   render() {

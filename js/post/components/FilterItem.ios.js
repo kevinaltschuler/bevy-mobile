@@ -68,6 +68,7 @@ var FilterItem = React.createClass({
 	      	{this.props.filter.name}
 	      </Text>
 	    </View>
+
     );
   }
 
