@@ -12,35 +12,77 @@ var {
   StyleSheet,
   TouchableNativeFeedback
 } = React;
+var TabBarItem = require('./TabBarItem.android.js');
 
 var constants = require('./../../../constants');
 
+var tabs = {
+  posts: 'POSTS',
+  chat: 'CHAT',
+  notifications: 'NOTIFS',
+  more: 'MORE'
+};
+
 var MainTabBar = React.createClass({
+
+  getInitialState() {
+    return {
+      activeTab: tabs.posts
+    };
+  },
+
+  _renderTabContent() {
+    switch(this.state.activeTab) {
+      case tabs.posts:
+        return <Text>Posts Tab Here</Text>
+        break;
+      case tabs.chat:
+        return <Text>Chat Tab Here</Text>
+        break;
+      case tabs.notifications:
+        return <Text>Notifications Tab Here</Text>
+        break;
+      case tabs.more:
+        return <Text>More Tab Here</Text>
+        break;
+      default:
+        break;
+    }
+    return <Text>Some Tab Content</Text>
+  },
+
   render() {
+    console.log(this.state.activeTab);
+    console.log(tabs);
     return (
       <View style={ styles.container }>
         <View style={ styles.tabBar }>
-          <TouchableNativeFeedback onPress={() => console.log('nuts') }background={ TouchableNativeFeedback.Ripple('#000', false) }>
-            <View style={ styles.tabBarItem }>
-              <Text>Posts</Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback background={ TouchableNativeFeedback.Ripple('#000', false) }>
-            <View style={ styles.tabBarItem }>
-              <Text>Chat</Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback background={ TouchableNativeFeedback.Ripple('#000', false) }>
-            <View style={ styles.tabBarItem }>
-              <Text>Notifications</Text>
-            </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback background={ TouchableNativeFeedback.Ripple('#000', false) }>
-            <View style={ styles.tabBarItem }>
-              <Text>More</Text>
-            </View>
-          </TouchableNativeFeedback>
+          <TabBarItem 
+            tab={ tabs.posts }
+            activeTab={ this.state.activeTab }
+            onPress={() => this.setState({ activeTab: tabs.posts }) } 
+            content='Posts'
+          />
+          <TabBarItem 
+            tab={ tabs.chat }
+            activeTab={ this.state.activeTab }
+            onPress={() => this.setState({ activeTab: tabs.chat }) } 
+            content='Chat'
+          />
+          <TabBarItem 
+            tab={ tabs.notifications }
+            activeTab={ this.state.activeTab }
+            onPress={() => this.setState({ activeTab: tabs.notifications }) } 
+            content='Notifications'
+          />
+          <TabBarItem 
+            tab={ tabs.more }
+            activeTab={ this.state.activeTab }
+            onPress={() => this.setState({ activeTab: tabs.more }) } 
+            content='More'
+          />
         </View>
+        { this._renderTabContent() }
       </View>
     );
   }
@@ -58,13 +100,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#fff'
-  },
-  tabBarItem: {
-    height: 48,
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
 

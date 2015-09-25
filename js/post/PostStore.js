@@ -11,10 +11,7 @@
 
 // imports
 var Backbone = require('backbone');
-//var $ = require('jquery');
 var _ = require('underscore');
-
-//var router = require('./../router');
 
 var Dispatcher = require('./../shared/dispatcher');
 
