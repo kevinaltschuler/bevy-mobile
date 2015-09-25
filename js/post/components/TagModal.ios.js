@@ -52,6 +52,16 @@ var TagModal = React.createClass({
         />
       )
     }
+    return filterItems;
+    var filterItems = [];
+    for(var key in activeTags) {
+      var filter = activeTags[key]
+      filterItems.push(
+        <FilterItem
+          filter={filter}
+        />
+      )
+    }
   },
 
   render() {
