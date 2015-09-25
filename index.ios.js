@@ -111,7 +111,9 @@ var App = React.createClass({
     return {
       myBevies: BevyStore.getMyBevies(),
       activeBevy: BevyStore.getActive(),
-      publicBevies: BevyStore.getPublicBevies()
+      publicBevies: BevyStore.getPublicBevies(),
+      frontpageFilters: BevyStore.getFrontpageFilters(),
+      activeTags: BevyStore.getActiveTags()
     };
   },
 
