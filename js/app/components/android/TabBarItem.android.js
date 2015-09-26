@@ -54,16 +54,15 @@ var TabBarItem = React.createClass({
   },
 
   render() {
-    var buttonStyles = (this.state.active)
+    /*var buttonStyles = (this.state.active)
     ? [styles.tabBarItem, { backgroundColor: '#2cb673' }]
-    : [styles.tabBarItem];
-
+    : [styles.tabBarItem];*/
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#000', false) }
         onPress={() => this.props.onPress() }
       >
-        <View style={ buttonStyles }>
+        <View style={ styles.tabBarItem }>
           { this._renderContent() }
         </View>
       </TouchableNativeFeedback>

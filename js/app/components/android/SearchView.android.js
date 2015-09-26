@@ -15,7 +15,9 @@ var {
 var SearchView = React.createClass({
   render() {
     return (
-      <View />
+      <View>
+      	<Text>Search View</Text>
+      </View>
     );
   }
 });
