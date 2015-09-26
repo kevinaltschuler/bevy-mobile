@@ -7,7 +7,8 @@ var routes = {
     NEWBEVY: { name: 'NewBevy' },
     COMMENT: { name: 'Comment' },
     PROFILE: { name: 'Profile' },
-    MAP: { name: 'Map' }
+    MAP: { name: 'Map' },
+    LOGIN: { name: 'Login' }
   },
 
   NEWPOST: {

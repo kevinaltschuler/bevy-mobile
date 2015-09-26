@@ -15,14 +15,17 @@ var {
 var BevyList = React.createClass({
   render() {
     return (
-      <View>
+      <View style={ styles.container }>
+        <Text>Bevy List</Text>
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
+  container: {
 
+  }
 });
 
 module.exports = BevyList;

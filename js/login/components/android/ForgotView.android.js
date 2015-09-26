@@ -1,5 +1,5 @@
 /**
- * LoginView.android.js
+ * ForgotView.android.js
  * @author albert
  */
 
@@ -7,16 +7,16 @@
 
 var React = require('react-native');
 var {
-  Text,
   View,
+  Text,
   StyleSheet
 } = React;
 
-var LoginView = React.createClass({
+var ForgotView = React.createClass({
   render() {
-    return(
+    return (
       <View style={ styles.container }>
-        <Text>Login</Text>
+        <Text>Forgot View</Text>
       </View>
     );
   }
@@ -24,8 +24,8 @@ var LoginView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1
+
   }
 });
 
-module.exports = LoginView;
+module.exports = ForgotView;

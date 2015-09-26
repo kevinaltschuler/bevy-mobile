@@ -33,6 +33,7 @@ var Drawer = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderProfile() }
+        <BevyList { ...this.props } />
       </View>
     );
   }
@@ -41,13 +42,16 @@ var Drawer = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     backgroundColor: '#222'
   },
   logInButton: {
-
+    flexDirection: 'row',
+    padding: 10
   },
   logInButtonText: {
-
+    flex: 1,
+    color: '#fff'
   }
 });
 
