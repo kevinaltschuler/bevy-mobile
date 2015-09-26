@@ -17,6 +17,7 @@ var {
 } = React;
 var MainTabBar = require('./MainTabBar.android.js');
 var SearchView = require('./SearchView.android.js');
+var Drawer = require('./Drawer.android.js');
 
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -118,11 +119,19 @@ var SearchBarWrapper = React.createClass({
     this.refs.Drawer.closeDrawer();
   },
 
+  toggleDrawer() {
+    if(this.state.drawerOpen)
+      this.closeDrawer();
+    else
+      this.openDrawer();
+  },
+
   render() {
 
     var drawerActions = {
       open: this.openDrawer,
-      close: this.closeDrawer
+      close: this.closeDrawer,
+      toggle: this.toggleDrawer
     };
 
     return (
@@ -132,7 +141,7 @@ var SearchBarWrapper = React.createClass({
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         onDrawerOpen={() => this.setState({ drawerOpen: true })}
         onDrawerClose={() => this.setState({ drawerOpen: false })}
-        renderNavigationView={() => <View style={{ flex: 1, backgroundColor: '#00f' }}/>}
+        renderNavigationView={() => <Drawer drawerActions={ drawerActions } { ...this.props } />}
       >
         <SearchNavigator drawerOpen={ this.state.drawerOpen } drawerActions={ drawerActions } { ...this.props } />
       </DrawerLayoutAndroid>
