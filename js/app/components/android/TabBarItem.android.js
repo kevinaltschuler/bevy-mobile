@@ -12,6 +12,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var TouchableNativeFeedback = require('TouchableNativeFeedback');
 
 var noop = function() {};
 
