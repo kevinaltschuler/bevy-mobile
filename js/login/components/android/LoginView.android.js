@@ -13,27 +13,21 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
-var InfoBar = require('./../../../shared/components/android/InfoBar.android.js');
 
+var routes = require('./../../../routes')
 var constants = require('./../../../constants');
 
 var LoginView = React.createClass({
   propTypes: {
     mainRoute: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    loginRoute: React.PropTypes.object,
+    loginNavigator: React.PropTypes.object
   },
 
   render() {
     return(
       <View style={ styles.container }>
-        <InfoBar 
-          backButton={ true }
-          backButtonOnPress={() => {
-            this.props.mainNavigator.pop();
-          }}
-          title='Login'
-        />
-
         <Text style={ styles.titleText }>Bevy</Text>
         <TextInput 
           style={ styles.usernameInput }
@@ -70,7 +64,9 @@ var LoginView = React.createClass({
 
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#FFF', false) }
-          onPress={() => {}}
+          onPress={() => {
+            this.props.loginNavigator.push(routes.LOGIN.REGISTER);
+          }}
         >
           <View style={ styles.registerButton }>
             <Text style={ styles.registerButtonText }>Create An Account</Text>
@@ -78,7 +74,9 @@ var LoginView = React.createClass({
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#FFF', false) }
-          onPress={() => {}}
+          onPress={() => {
+            this.props.loginNavigator.push(routes.LOGIN.FORGOT);
+          }}
         >
           <View style={ styles.forgotButton }>
             <Text style={ styles.forgotButtonText }>Forgot Password?</Text>
@@ -135,9 +133,36 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DF4A32',
-    borderRadius: 24
+    borderRadius: 24,
+    marginBottom: 10
   },
   googleLogInButtonText: {
+    color: '#FFF'
+  },
+
+  registerButton: {
+    height: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  registerButtonText: {
+    color: '#FFF'
+  },
+  forgotButton: {
+    height: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 12,
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  forgotButtonText: {
     color: '#FFF'
   }
 });

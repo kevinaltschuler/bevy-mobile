@@ -12,7 +12,15 @@ var {
   StyleSheet
 } = React;
 
+var routes = require('./../../../routes');
+var constants = require('./../../../constants');
+
 var ForgotView = React.createClass({
+  propTypes: {
+    loginRoute: React.PropTypes.object,
+    loginNavigator: React.PropTypes.object
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -24,7 +32,8 @@ var ForgotView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-
+    flex: 1,
+    backgroundColor: '#2CB673'
   }
 });
 

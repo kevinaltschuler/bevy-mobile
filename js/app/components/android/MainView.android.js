@@ -12,7 +12,7 @@ var {
   StyleSheet
 } = React;
 var SearchBar = require('./SearchBar.android.js');
-var LoginView = require('./../../../login/components/android/LoginView.android.js');
+var LoginNavigator = require('./../../../login/components/android/LoginNavigator.android.js');
 
 var routes = require('./../../../routes');
 
@@ -36,7 +36,7 @@ var MainView = React.createClass({
         break;
       case routes.MAIN.LOGIN.name:
         return (
-          <LoginView { ...this.props } />
+          <LoginNavigator { ...this.props } />
         );
         break;
       default:
