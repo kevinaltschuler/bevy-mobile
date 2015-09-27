@@ -5,12 +5,12 @@ var {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  Modal
 } = React;
 var {
   Icon
 } = require('react-native-icons');
-var Modal = require('react-native-modal');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');

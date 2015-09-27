@@ -22,7 +22,6 @@ var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
 
-var dropdown = require('react-native-dropdown');
 
 var _ = require('underscore');
 var window = require('Dimensions').get('window');

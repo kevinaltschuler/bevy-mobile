@@ -5,12 +5,12 @@ var {
   View,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  Modal
 } = React;
 var {
   Icon
 } = require('react-native-icons');
-var Modal = require('react-native-modal');
 var FilterItem = require('./FilterItem.ios.js');
 
 var constants = require('./../../constants');
