@@ -52,8 +52,8 @@ var MainTabBar = React.createClass({
   },
 
   render() {
-    console.log(this.state.activeTab);
-    console.log(tabs);
+    //console.log(this.state.activeTab);
+    //console.log(tabs);
     return (
       <View style={ styles.container }>
         <View style={ styles.tabBar }>
