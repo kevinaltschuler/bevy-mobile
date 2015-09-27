@@ -1,0 +1,18 @@
+'use strict';
+
+var React = require('react-native');
+var {
+	AppRegistry,
+	View,
+	Text
+} = React;
+
+var App = React.createClass({
+	render() {
+		return (
+			<View style={{ flex: 1 }}><Text>HEllo World</Text></View>
+		);
+	}
+});
+
+AppRegistry.registerComponent('bevyios', () => App);

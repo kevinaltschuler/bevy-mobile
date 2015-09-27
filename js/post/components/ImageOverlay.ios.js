@@ -7,12 +7,12 @@ var {
   Text,
   StyleSheet,
   TouchableHighlight,
-  PanResponder
+  PanResponder,
+  Modal
 } = React;
 var {
   Icon
 } = require('react-native-icons');
-var Modal = require('react-native-modal');
 
 var constants = require('./../../constants');
 

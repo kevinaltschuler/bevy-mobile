@@ -9,12 +9,12 @@ var {
   StyleSheet,
   TouchableHighlight,
   AsyncStorage,
-  LinkingIOS
+  LinkingIOS,
+  Modal
 } = React;
 var {
   Icon
 } = require('react-native-icons');
-var Modal = require('react-native-modal');
 
 var LoginNavigator = require('./LoginNavigator.ios.js');
 

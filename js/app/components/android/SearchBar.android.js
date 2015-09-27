@@ -21,6 +21,8 @@ var Drawer = require('./Drawer.android.js');
 
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var TouchableNativeFeedback = require('TouchableNativeFeedback');
+var DrawerLayoutAndroid = require('DrawerLayoutAndroid');
 
 var SearchBar = React.createClass({
 
