@@ -117,42 +117,31 @@ var ImageOverlay = React.createClass({
 
     return (
       <Modal
-        forceToFront={ true }
-        backdropType="blur"
-        backdropBlur="dark"
-        isVisible={ this.state.isVisible }
-        customCloseButton={
-          <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.2)'
-              style={ styles.closeButton }
-              onPress={() => {
-                this.setState({
-                  isVisible: false
-                });
-              }}
-            >
-              <Icon
-                name='ion|ios-close-empty'
-                size={ 30 }
-                style={{ width: 30, height: 30 }}
-                color='#fff'
-              />
-            </TouchableHighlight>
-
-            {imageCount}
-            {leftButton}
-            {rightButton}
-          </View>
-        }
-        onPressBackdrop={() => {
-          console.log('backdrop pressed');
-          this.setState({
-            isVisible: false
-          });
-        }}
-        style={ styles }
+        transparent={true}
+        Visible={ this.state.isVisible }
       >
+        <View style={ styles.topBar }>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.2)'
+            style={ styles.closeButton }
+            onPress={() => {
+              this.setState({
+                isVisible: false
+              });
+            }}
+          >
+            <Icon
+              name='ion|ios-close-empty'
+              size={ 30 }
+              style={{ width: 30, height: 30 }}
+              color='#fff'
+            />
+          </TouchableHighlight>
+
+          {imageCount}
+          {leftButton}
+          {rightButton}
+        </View>
         <Image
           style={ styles.image }
           source={{ uri: this.props.images[this.state.imageIndex] }}

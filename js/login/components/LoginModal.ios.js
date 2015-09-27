@@ -51,8 +51,8 @@ var LoginModal = React.createClass({
   },
 
   render() {
-
-    return (
+    return <View/>;
+    /*return (
       <Modal
         forceToFront={ true }
         isVisible={ this.state.isOpen }
@@ -86,7 +86,7 @@ var LoginModal = React.createClass({
       >
         <LoginNavigator authModalActions={ this.props.authModalActions } { ...this.state } />
       </Modal>
-    );
+    );*/
   }
 });
 
