@@ -14,13 +14,21 @@ var {
 } = React;
 var BevyList = require('./../../../bevy/components/android/BevyList.android.js');
 
+var routes = require('./../../../routes');
+
 var Drawer = React.createClass({
+  propTypes: {
+    mainRoute: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
+  },
 
   _renderProfile() {
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#aaa', false) }
-        onPress={() => {}}
+        background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.LOGIN);
+        }}
       >
         <View style={ styles.logInButton }>
           <Text style={ styles.logInButtonText }>Log In</Text>
