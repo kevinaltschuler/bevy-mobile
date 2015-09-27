@@ -13,7 +13,7 @@ var {
   StyleSheet
 } = React;
 var BevyList = require('./../../../bevy/components/android/BevyList.android.js');
-
+var TouchableNativeFeedback = require('TouchableNativeFeedback');
 var Drawer = React.createClass({
 
   _renderProfile() {
