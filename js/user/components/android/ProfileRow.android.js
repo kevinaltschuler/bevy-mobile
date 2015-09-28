@@ -19,7 +19,8 @@ var ProfileRow = React.createClass({
     height: React.PropTypes.number,
     imageSize: React.PropTypes.number,
     nameColor: React.PropTypes.string,
-    emailColor: React.PropTypes.string
+    emailColor: React.PropTypes.string,
+    style: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -31,13 +32,14 @@ var ProfileRow = React.createClass({
       height: 48,
       imageSize: 30,
       nameColor: '#FFF',
-      emailColor: '#FFF'
+      emailColor: '#FFF',
+      style: {}
     };
   },
 
   render() {
     return (
-      <View style={[ styles.container, { height: this.props.height } ]}>
+      <View style={[ styles.container, { height: this.props.height }, this.props.style ]}>
         <Image
           //source={{ uri: this.props.user.image_url }}
           source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}

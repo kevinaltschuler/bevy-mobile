@@ -43,6 +43,11 @@ var Drawer = React.createClass({
       return (
         <ProfileRow
           user={ this.props.user }
+          style={{
+            backgroundColor: '#333',
+            borderBottomColor: '#444',
+            borderBottomWidth: 1
+          }}
         />
       );
     }
@@ -52,6 +57,9 @@ var Drawer = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderProfile() }
+        <View style={ styles.myBeviesHeader }>
+          <Text style={ styles.myBeviesText }>My Bevies</Text>
+        </View>
         <BevyList { ...this.props } />
       </View>
     );
@@ -70,7 +78,19 @@ var styles = StyleSheet.create({
   },
   logInButtonText: {
     flex: 1,
-    color: '#fff'
+    color: '#FFF'
+  },
+  myBeviesHeader: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderBottomColor: '#333',
+    borderBottomWidth: 1
+  },
+  myBeviesText: {
+    marginLeft: 10,
+    color: '#FFF'
   }
 });
 

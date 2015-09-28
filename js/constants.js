@@ -38,7 +38,6 @@ exports.height = window.height
 
 exports.sideMenuWidth = ((window.width * (2/3)) >= 300) ? 300 : (window.width * (2/3));
 
-
 exports.APP = {
   LOAD: 'app_load',
   UNLOAD: 'app_unload',
