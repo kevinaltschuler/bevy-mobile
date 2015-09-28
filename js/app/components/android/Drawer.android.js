@@ -71,30 +71,6 @@ var styles = StyleSheet.create({
   logInButtonText: {
     flex: 1,
     color: '#fff'
-  },
-  profileRow: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  profileImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
-    marginRight: 10
-  },
-  profileDetails: {
-    flexDirection: 'column',
-    alignItems: 'flex-start'
-  },
-  displayName: {
-    color: '#FFF'
-  },
-  email: {
-    color: '#FFF'
   }
 });
 
