@@ -33,7 +33,6 @@ var TabBarItem = React.createClass({
   },
 
   getInitialState() {
-    console.log(this.props.activeTab, this.props.tab);
     return {
       active: this.props.activeTab == this.props.tab
     };
@@ -54,14 +53,14 @@ var TabBarItem = React.createClass({
   },
 
   render() {
-    /*var buttonStyles = (this.state.active)
-    ? [styles.tabBarItem, { backgroundColor: '#2cb673' }]
-    : [styles.tabBarItem];*/
+    var buttonStyles = (this.state.active)
+    ? [styles.tabBarItem, { backgroundColor: '#2CB673' }]
+    : [styles.tabBarItem, { backgroundColor: '#FFF', }];
     return (
       <TouchableNativeFeedback
         onPress={() => this.props.onPress() }
       >
-        <View style={ styles.tabBarItem }>
+        <View style={ buttonStyles }>
           { this._renderContent() }
         </View>
       </TouchableNativeFeedback>
