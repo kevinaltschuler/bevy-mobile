@@ -14,6 +14,9 @@ var {
   TouchableHighlight
 } = React;
 
+var RListView = require('react-native-refreshable-listview');
+var RIndicator = RListView.RefreshingIndicator;
+
 var _ = require('underscore');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -108,35 +111,68 @@ var PostList = React.createClass({
   },
 
   _renderHeader() {
-    var indicator;
-    if(this.state.isRefreshing) {
-      indicator = (
-        <RefreshingIndicator description='Loading Posts...'/>
-      );
-    } else {
-      indicator = <View />
-    }
-    var newPostCard = (
-      !this.props.showNewPostCard 
-      || _.isEmpty(this.props.activeBevy) 
-      || (
-          this.state.isRefreshing 
-          && _.isEmpty(this.props.allPosts)
-        )
-    )
+    var newPostCard = (!this.props.showNewPostCard || _.isEmpty(this.props.activeBevy))
     ? <View style={{height: 0}} />
     : (
-      <NewPostCard 
-        user={ this.props.user }
-        loggedIn={ this.props.loggedIn }
-        mainNavigator={ this.props.mainNavigator }
-        authModalActions={ this.props.authModalActions }
-      />
+      <View style={styles.cardContainer}>
+        <NewPostCard 
+          user={ this.props.user }
+          loggedIn={ this.props.loggedIn }
+          mainNavigator={ this.props.mainNavigator }
+          authModalActions={ this.props.authModalActions }
+        />
+      </View>
     );
     return (
-      <View style={ styles.postListHeader }>
-        { indicator }
         { newPostCard }
+    );
+  },
+
+  _renderHeaderWrapper(refreshingIndicator) {
+    return (
+      <View>
+        {this._renderHeader()}
+        {refreshingIndicator}
+      </View>
+    );
+  },
+
+  _renderList() {
+    var list = (_.isEmpty(this.props.activeBevy) || _.isEmpty(this.props.allPosts))
+    ? <View style={{height: 0}} />
+    : (
+        <RListView 
+          dataSource={ this.state.dataSource }
+          style={ styles.postContainer }
+          loadData={this.onRefresh}
+          refreshDescription="reloading"
+          refreshingIndictatorComponent={<View style={{backgroundColor: '#eee', height: 50, flex: 1, width: 50}} />}
+          renderHeaderWrapper={this._renderHeaderWrapper}
+          scrollRenderAheadDistance={3}
+          renderRow={(post) => {
+            if(!_.isEmpty(post.bevy))
+              if(post.type == 'event')
+                return <Event 
+                  key={ 'postlist:' + post._id } 
+                  post={ post } 
+                  mainRoute={ this.props.mainRoute }
+                  mainNavigator={ this.props.mainNavigator }
+                />
+              else
+                return  <Post 
+                  key={ 'postlist:' + post._id } 
+                  post={ post } 
+                  mainRoute={ this.props.mainRoute }
+                  mainNavigator={ this.props.mainNavigator }
+                />
+            else 
+              return <View/>
+          }}
+        />
+    );
+    return (
+      <View style={styles.listContainer}>
+        { list }
       </View>
     );
   },
@@ -153,34 +189,7 @@ var PostList = React.createClass({
             frontpageFilters={ this.props.frontpageFilters }
             activeTags={this.props.activeTags}
           />
-          <ListView 
-            dataSource={ this.state.dataSource }
-            onScroll={ this.handleScroll }
-            onResponderGrant={ this.handleResponderGrant }
-            onResponderRelease={ this.handleResponderRelease }
-            style={ styles.postContainer }
-            scrollRenderAheadDistance={3}
-            renderRow={(post) => {
-              if(!_.isEmpty(post.bevy))
-                if(post.type == 'event')
-                  return <Event 
-                    key={ 'postlist:' + post._id } 
-                    post={ post } 
-                    mainRoute={ this.props.mainRoute }
-                    mainNavigator={ this.props.mainNavigator }
-                  />
-                else
-                  return  <Post 
-                    key={ 'postlist:' + post._id } 
-                    post={ post } 
-                    mainRoute={ this.props.mainRoute }
-                    mainNavigator={ this.props.mainNavigator }
-                  />
-              else 
-                return <View/>
-            }}
-            renderHeader={ this._renderHeader }
-          />
+          { this._renderList() }
       </View>
     );
   }
@@ -200,6 +209,15 @@ var styles = StyleSheet.create({
   },
   tagOverlay: {
 
+  },
+  cardContainer: {
+    height: 50,
+    backgroundColor: '#eee',
+    marginTop: 0,
+    marginBottom: -10
+  },
+  listContainer: {
+    flex: 1,
   }
 })
 

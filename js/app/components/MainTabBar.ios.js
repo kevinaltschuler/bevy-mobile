@@ -41,29 +41,16 @@ var MainTabBar = React.createClass({
   getInitialState() {
     return {
       selectedTab: tabs.Posts,
-      postIcon: 'ion|ios-list',
-      chatIcon: 'ion|ios-chatbubble',
-      notificationIcon: 'ion|ios-bell',
-      moreIcon: 'ion|ios-more'
     };
   },
 
   componentDidMount() {
-    this.setState({
-      chatIcon: 'ion|ios-chatbubble-outline',
-      notificationIcon: 'ion|ios-bell-outline',
-      moreIcon: 'ion|ios-more-outline'
-    });
     BevyStore.on(BEVY.NAV_POSTVIEW, this.navPostView);
   },
 
   navPostView() {
     this.setState({
       selectedTab: tabs.Posts,
-      postIcon: 'ion|ios-list',
-      chatIcon: 'ion|ios-chatbubble-outline',
-      notificationIcon: 'ion|ios-bell-outline',
-      moreIcon: 'ion|ios-more-outline'
     });
   },
 
@@ -128,16 +115,14 @@ var MainTabBar = React.createClass({
         <TabBarIOS tintColor={ '#393939' } barTintColor={ 'white' } style={ styles.tabBar }>
           <TabBarIOS.Item
             title='Posts'
-            iconName={this.state.postIcon}
+            iconName={'ion|ios-list-outline'}
+            selectedIconName={'ion|ios-list'}
+            selectedIconSize={28}
             selected={ this.state.selectedTab === tabs.Posts }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
                 selectedTab: tabs.Posts,
-                postIcon: 'ion|ios-list',
-                chatIcon: 'ion|ios-chatbubble-outline',
-                notificationIcon: 'ion|ios-bell-outline',
-                moreIcon: 'ion|ios-more-outline'
               });
             }}
           >
@@ -145,16 +130,14 @@ var MainTabBar = React.createClass({
           </TabBarIOS.Item>
           <TabBarIOS.Item
             title='Chat'
-            iconName={this.state.chatIcon}
+            iconName={'ion|ios-chatbubble-outline'}
+            selectedIconName={'ion|ios-chatbubble'}
+            selectedIconSize={28}
             selected={ this.state.selectedTab === tabs.Chat }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
                 selectedTab: tabs.Chat,
-                postIcon: 'ion|ios-list-outline',
-                chatIcon: 'ion|ios-chatbubble',
-                notificationIcon: 'ion|ios-bell-outline',
-                moreIcon: 'ion|ios-more-outline'
               });
             }}
           >
@@ -162,17 +145,15 @@ var MainTabBar = React.createClass({
           </TabBarIOS.Item>
           <TabBarIOS.Item
             title='Notifications'
-            iconName={this.state.notificationIcon}
+            iconName={'ion|ios-bell-outline'}
+            selectedIconName={'ion|ios-bell'}
+            selectedIconSize={28}
             badge={NotificationStore.unread}
             selected={ this.state.selectedTab === tabs.Notifications }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
                 selectedTab: tabs.Notifications,
-                postIcon: 'ion|ios-list-outline',
-                chatIcon: 'ion|ios-chatbubble-outline',
-                notificationIcon: 'ion|ios-bell',
-                moreIcon: 'ion|ios-more-outline'
               });
             }}
           >
@@ -180,16 +161,14 @@ var MainTabBar = React.createClass({
           </TabBarIOS.Item>
           <TabBarIOS.Item
             title='More'
-            iconName={this.state.moreIcon}
+            iconName={'ion|ios-more-outline'}
+            selectedIconName={'ion|ios-more'}
+            selectedIconSize={28}
             selected={ this.state.selectedTab === tabs.More }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
                 selectedTab: tabs.More,
-                postIcon: 'ion|ios-list-outline',
-                chatIcon: 'ion|ios-chatbubble-outline',
-                notificationIcon: 'ion|ios-bell-outline',
-                moreIcon: 'ion|ios-more'
               });
             }}
           >

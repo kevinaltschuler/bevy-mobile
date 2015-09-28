@@ -117,6 +117,7 @@ var ImageOverlay = React.createClass({
 
     return (
       <Modal
+        animated={true}
         transparent={true}
         Visible={ this.state.isVisible }
       >
@@ -186,7 +187,6 @@ var styles = StyleSheet.create({
     marginTop: 48,
     flexDirection: 'row',
   },
-
   topBar: {
     position: 'absolute',
     top: -10,
@@ -226,7 +226,6 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-
   image: {
     flex: 1,
     width: constants.width,
