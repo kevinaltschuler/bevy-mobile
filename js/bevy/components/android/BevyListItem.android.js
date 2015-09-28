@@ -13,10 +13,14 @@ var {
 } = React;
 
 var BevyListItem = React.createClass({
+  propTypes: {
+    bevy: React.PropTypes.object
+  },
+
   render() {
     return (
       <View style={ styles.container }>
-        <Text>Bevy List Item</Text>
+        <Text>{ this.props.bevy.name }</Text>
       </View>
     );
   }
