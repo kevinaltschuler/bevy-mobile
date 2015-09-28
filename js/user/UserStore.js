@@ -63,10 +63,16 @@ _.extend(UserStore, {
         .then((res) => {
           if(res.object == undefined) {
             // success
+            console.log('logged in', res);
+            
+            AsyncStorage.setItem('user', JSON.stringify(res))
+            .then((err, result) => {
+            });
+
             this.trigger(USER.LOGIN_SUCCESS, res);
             this.setUser(res);
-            AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
           } else {
+            console.log('error', res);
             // error
             this.trigger(USER.LOGIN_ERROR, res.message);
           }
