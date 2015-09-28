@@ -13,6 +13,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var BevyList = require('./../../../bevy/components/android/BevyList.android.js');
 
 var routes = require('./../../../routes');
@@ -40,17 +41,9 @@ var Drawer = React.createClass({
       );
     } else {
       return (
-        <View style={ styles.profileRow }>
-          <Image
-            //source={{ uri: this.props.user.image_url }}
-            source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
-            style={ styles.profileImage }
-          />
-          <View style={ styles.profileDetails }>
-            <Text style={ styles.displayName }>{ this.props.user.displayName }</Text>
-            <Text style={ styles.email }>{ this.props.user.email }</Text>
-          </View>
-        </View>
+        <ProfileRow
+          user={ this.props.user }
+        />
       );
     }
   },
