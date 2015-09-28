@@ -15,10 +15,16 @@ var {
 } = React;
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 
+var constants = require('./../../../constants');
+var routes = require('./../../../routes');
+var UserActions = require('./../../../user/UserActions');
+
 var SettingsView = React.createClass({
   propTypes: {
+    mainNavigator: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    tabActions: React.PropTypes.object
   },
 
   _renderProfile() {
@@ -33,7 +39,9 @@ var SettingsView = React.createClass({
     } else {
       return (
         <TouchableNativeFeedback 
-          onPress={() => {}}
+          onPress={() => {
+            this.props.mainNavigator.push(routes.MAIN.LOGIN);
+          }}
         >
           <View style={ styles.logInButton }>
             <Text style={ styles.logInButtonText }>Log In</Text>
@@ -47,7 +55,11 @@ var SettingsView = React.createClass({
     if(!this.props.loggedIn) return <View />;
     return (
       <TouchableNativeFeedback
-        onPress={() => {}}
+        onPress={() => {
+          UserActions.logOut();
+          // switch back to posts tab
+          this.props.tabActions.switchTab('POSTS');
+        }}
       >
         <View style={ styles.logOutButton }>
           <Text style={ styles.logOutButtonText }>Log Out</Text>

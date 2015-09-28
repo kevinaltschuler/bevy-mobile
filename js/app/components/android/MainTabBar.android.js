@@ -32,7 +32,16 @@ var MainTabBar = React.createClass({
     };
   },
 
+  switchTab(tab) {
+    this.setState({
+      activeTab: tab
+    });
+  },
+
   _renderTabContent() {
+    var tabActions = {
+      switchTab: this.switchTab
+    };
     switch(this.state.activeTab) {
       case tabs.posts:
         return <Text>Posts Tab Here</Text>
@@ -44,7 +53,7 @@ var MainTabBar = React.createClass({
         return <Text>Notifications Tab Here</Text>
         break;
       case tabs.more:
-        return <SettingsView { ...this.props } />
+        return <SettingsView tabActions={ tabActions } { ...this.props } />
         break;
       default:
         break;

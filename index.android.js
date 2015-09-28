@@ -8,6 +8,7 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
+  AsyncStorage,
   Text,
   View,
   Navigator
@@ -53,7 +54,7 @@ Backbone.sync = function(method, model, options) {
   };
   method = methodMap[method];
 
-  console.log(url, method);
+  console.log(method, url);
 
   return fetch(url, {
     method: method,
@@ -62,11 +63,6 @@ Backbone.sync = function(method, model, options) {
   })
   .then(res => {
     var response = JSON.parse(res._bodyText);
-
-    //console.log('model', model);
-    //console.log('response', response);
-    //console.log('options', options);
-
     options.success(response, options);
   });
 }
@@ -158,7 +154,19 @@ var App = React.createClass({
 
     UserStore.on(USER.LOADED, this._onUserChange);
 
-    AppActions.load();
+    // first things first try to load the user
+    console.log('loading...');
+    AsyncStorage.getItem('user')
+    .then((user) => {
+      if(user) {
+        console.log('user fetched');
+        UserStore.setUser(JSON.parse(user));
+        AppActions.load();
+      } else {
+        console.log('going to login screen...');
+        AppActions.load();
+      }
+    });
   },
 
   componentWillUnmount() {
