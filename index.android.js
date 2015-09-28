@@ -25,6 +25,8 @@ var USER = constants.USER;
 var Backbone = require('backbone');
 var _ = require('underscore');
 
+constants.apiurl = 'http://joinbevy.com/api';
+
 // backbone shim
 Backbone.sync = function(method, model, options) {
 
@@ -40,7 +42,7 @@ Backbone.sync = function(method, model, options) {
     url = options.url;
   }
 
-  if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+  if(options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
     headers['Content-Type'] = 'application/json';
     body = JSON.stringify(options.attrs || model.toJSON(options));
   }
@@ -54,18 +56,49 @@ Backbone.sync = function(method, model, options) {
   };
   method = methodMap[method];
 
-  console.log(method, url);
+  var startTime = Date.now();
+  console.log('START', method, url);
 
-  return fetch(url, {
+  /*return fetch(url, {
     method: method,
     headers: headers,
     body: body
   })
-  .then(res => {
+  .then((res) => {
     var response = JSON.parse(res._bodyText);
+    console.log('END', method, url);
     options.success(response, options);
+  })
+  .catch((error) => {
+    console.error(error);
+  })
+  .done();*/
+
+  var request = new XMLHttpRequest();
+  request.onreadystatechange = (e) => {
+    if (request.readyState !== 4) {
+      return;
+    }
+
+    console.log('request status', request.status);
+
+    if (request.status === 200) {
+      var endTime = Date.now();
+      var deltaTime = endTime - startTime;
+      console.log('END', method, url, deltaTime, 'ms');
+      var response = JSON.parse(request.responseText);
+      options.success(response, options);
+    } else {
+      console.warn('error');
+    }
+  };
+
+  request.open(method, url);
+  _.each(headers, (value, key) => {
+    request.setRequestHeader(key, value);
   });
-}
+  request.send();
+};
 
 var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');
