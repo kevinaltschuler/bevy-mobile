@@ -12,7 +12,6 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
-var TouchableNativeFeedback = require('TouchableNativeFeedback');
 
 var noop = function() {};
 
@@ -21,7 +20,7 @@ var TabBarItem = React.createClass({
     onPress: React.PropTypes.func,
     content: React.PropTypes.node,
     tab: React.PropTypes.string,
-    activeTab: React.PropTypes.object
+    activeTab: React.PropTypes.string
   },
 
   getDefaultProps() {
@@ -60,7 +59,6 @@ var TabBarItem = React.createClass({
     : [styles.tabBarItem];*/
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#000', false) }
         onPress={() => this.props.onPress() }
       >
         <View style={ styles.tabBarItem }>

@@ -14,8 +14,13 @@ var {
   StyleSheet
 } = React;
 
+var _ = require('underscore');
 var routes = require('./../../../routes')
 var constants = require('./../../../constants');
+var USER = constants.USER;
+var UserStore = require('./../../../user/UserStore');
+var UserActions = require('./../../../user/UserActions');
+var AppActions = require('./../../../app/AppActions');
 
 var LoginView = React.createClass({
   propTypes: {
@@ -25,36 +30,90 @@ var LoginView = React.createClass({
     loginNavigator: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      errorText: '',
+      username: '',
+      password: ''
+    };
+  },
+
+  componentDidMount() {
+    UserStore.on(USER.LOGIN_ERROR, this.onLoginError);
+    UserStore.on(USER.LOGIN_SUCCESS, this.onLoginSuccess);
+  },
+
+  componentWillUnmount() {
+    UserStore.off(USER.LOGIN_ERROR, this.onLoginError);
+    UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
+  },
+
+  logIn() {
+    UserActions.logIn(this.state.username, this.state.password);
+  },
+
+  onLoginError(message) {
+    this.setState({
+      errorText: message
+    });
+  },
+
+  onLoginSuccess(user) {
+    this.setState({
+      errorText: '',
+      username: '',
+      password: ''
+    });
+    // go back to tabbar
+    this.props.mainNavigator.pop();
+    // reload app
+    AppActions.load();
+  },
+
+  _renderErrorText() {
+    if(_.isEmpty(this.state.errorText)) return <View />;
+    return (
+      <View style={ styles.errorTextContainer }>
+        <Text style={ styles.errorText }>{ this.state.errorText }</Text>
+      </View>
+    );
+  },
+
   render() {
     return(
       <View style={ styles.container }>
         <Text style={ styles.titleText }>Bevy</Text>
+        { this._renderErrorText() }
         <TextInput 
+          ref='Username'
           style={ styles.usernameInput }
           autoCorrect={ false }
           placeholder='Username'
           placeholderTextColor='#EEE'
           underlineColorAndroid='#FFF'
+          value={ this.state.username }
+          onChangeText={(text) => this.setState({ username: text })}
         />
         <TextInput 
+          ref='Email'
           style={ styles.passwordInput }
           autoCorrect={ false }
           placeholder='Password'
           placeholderTextColor='#EEE'
           secureTextEntry={ true }
           underlineColorAndroid='#FFF'
+          value={ this.state.password }
+          onChangeText={(text) => this.setState({ password: text })}
         />
 
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#FFF', false) }
-          onPress={() => {}}
+          onPress={ this.logIn }
         >
           <View style={ styles.logInButton }>
             <Text style={ styles.logInButtonText }>Sign In</Text>
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#FFF', false) }
           onPress={() => {}}
         >
           <View style={ styles.googleLogInButton }>
@@ -63,7 +122,6 @@ var LoginView = React.createClass({
         </TouchableNativeFeedback>
 
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#FFF', false) }
           onPress={() => {
             this.props.loginNavigator.push(routes.LOGIN.REGISTER);
           }}
@@ -73,7 +131,6 @@ var LoginView = React.createClass({
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#FFF', false) }
           onPress={() => {
             this.props.loginNavigator.push(routes.LOGIN.FORGOT);
           }}
@@ -99,7 +156,20 @@ var styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 24,
     textAlign: 'center',
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 10
+  },
+  errorTextContainer: {
+    backgroundColor: '#DF4A32',
+    height: 24,
+    borderRadius: 12,
+    paddingLeft: 8,
+    paddingRight: 8,
+    marginBottom: 10
+  },
+  errorText: {
+    color: '#FFF',
+    fontSize: 15
   },
 
   usernameInput: {
@@ -120,7 +190,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF',
-    borderRadius: 24,
+    //borderRadius: 24,
     marginBottom: 10
   },
   logInButtonText: {
@@ -133,7 +203,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DF4A32',
-    borderRadius: 24,
+    //borderRadius: 24,
     marginBottom: 10
   },
   googleLogInButtonText: {

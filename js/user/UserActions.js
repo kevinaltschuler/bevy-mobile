@@ -17,6 +17,13 @@ var UserActions = {
     });
   },
 
+  logIn(username, password) {
+    dispatch(USER.LOGIN, {
+      username: username,
+      password: password
+    });
+  },
+
   logOut() {
     dispatch(USER.LOGOUT, {}); 
   }

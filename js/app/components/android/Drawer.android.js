@@ -19,22 +19,31 @@ var routes = require('./../../../routes');
 var Drawer = React.createClass({
   propTypes: {
     mainRoute: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
+    user: React.PropTypes.object
   },
 
   _renderProfile() {
-    return (
-      <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#AAA', false) }
-        onPress={() => {
-          this.props.mainNavigator.push(routes.MAIN.LOGIN);
-        }}
-      >
-        <View style={ styles.logInButton }>
-          <Text style={ styles.logInButtonText }>Log In</Text>
+    if(!this.props.loggedIn) {
+      return (
+        <TouchableNativeFeedback
+          onPress={() => {
+            this.props.mainNavigator.push(routes.MAIN.LOGIN);
+          }}
+        >
+          <View style={ styles.logInButton }>
+            <Text style={ styles.logInButtonText }>Log In</Text>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    } else {
+      return (
+        <View style={ styles.profileRow }>
+          <Text style={ styles.displayName }>{ this.props.user.displayName }</Text>
         </View>
-      </TouchableNativeFeedback>
-    );
+      );
+    }
   },
 
   render() {

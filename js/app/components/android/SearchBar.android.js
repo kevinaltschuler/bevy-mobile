@@ -42,7 +42,6 @@ var SearchBar = React.createClass({
     return (
       <View style={ styles.navbar }>
         <TouchableNativeFeedback  
-          background={ TouchableNativeFeedback.Ripple('#000', false) } 
           onPress={ this.toggleDrawer }
         >
           <View style={ styles.menuButton }>
