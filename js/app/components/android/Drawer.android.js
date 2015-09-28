@@ -9,6 +9,7 @@ var React = require('react-native');
 var {
   View,
   Text,
+  Image,
   TouchableNativeFeedback,
   StyleSheet
 } = React;
@@ -40,7 +41,15 @@ var Drawer = React.createClass({
     } else {
       return (
         <View style={ styles.profileRow }>
-          <Text style={ styles.displayName }>{ this.props.user.displayName }</Text>
+          <Image
+            //source={{ uri: this.props.user.image_url }}
+            source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
+            style={ styles.profileImage }
+          />
+          <View style={ styles.profileDetails }>
+            <Text style={ styles.displayName }>{ this.props.user.displayName }</Text>
+            <Text style={ styles.email }>{ this.props.user.email }</Text>
+          </View>
         </View>
       );
     }
@@ -69,6 +78,30 @@ var styles = StyleSheet.create({
   logInButtonText: {
     flex: 1,
     color: '#fff'
+  },
+  profileRow: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  profileImage: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    marginRight: 10
+  },
+  profileDetails: {
+    flexDirection: 'column',
+    alignItems: 'flex-start'
+  },
+  displayName: {
+    color: '#FFF'
+  },
+  email: {
+    color: '#FFF'
   }
 });
 
