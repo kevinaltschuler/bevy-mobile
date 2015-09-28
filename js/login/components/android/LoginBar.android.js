@@ -61,7 +61,6 @@ var LoginBar = React.createClass({
   _renderBackButton() {
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#aaa', false) }
         onPress={ this.onBack }
       >
         <View style={ styles.backButton }>

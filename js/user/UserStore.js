@@ -15,6 +15,9 @@ var {
 } = require('react-native');
 
 var User = Backbone.Model.extend({
+  defaults: {
+    image_url: constants.siteurl + '/img/user-profile-icon.png'
+  },
   _idAttribute: '_id'
 });
 
@@ -28,8 +31,12 @@ _.extend(UserStore, {
     switch(payload.actionType) {
       case APP.LOAD:
         // fetch user from server if its been updated?
-        if(!this.loggedIn) break;
-        this.user.fetch({
+        AsyncStorage.getItem('user', function(err, user) {
+          if(err) return;
+          this.setUser(JSON.parse(user));
+          this.trigger(USER.LOADED);
+        }.bind(this));
+        /*this.user.fetch({
           success: function(model, response, options) {
             //console.log('user fetched from server');
             // update local storage user
@@ -37,7 +44,39 @@ _.extend(UserStore, {
 
             this.trigger(USER.LOADED);
           }.bind(this)
+        });*/
+        break;
+
+      case USER.LOGIN:
+        var username = payload.username;
+        var password = payload.password;
+
+        fetch(constants.siteurl + '/login',
+        {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        })
+        // on fetch
+        .then((res) => (res.json()))
+        .then((res) => {
+          if(res.object == undefined) {
+            // success
+            this.trigger(USER.LOGIN_SUCCESS, res);
+            this.setUser(res);
+            AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
+          } else {
+            // error
+            this.trigger(USER.LOGIN_ERROR, res.message);
+          }
         });
+
         break;
 
       case USER.LOGOUT:
@@ -127,7 +166,7 @@ _.extend(UserStore, {
 
   setUser(user) {
     this.user = new User(user);
-    this.user.url = constants.apiurl + '/users/' + this.user.id;
+    this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
     //console.log(this.user.toJSON());
     this.trigger(USER.LOADED)

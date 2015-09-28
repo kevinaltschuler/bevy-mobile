@@ -9,6 +9,8 @@ var React = require('react-native');
 var {
   View,
   Text,
+  TextInput,
+  TouchableNativeFeedback,
   StyleSheet
 } = React;
 
@@ -24,7 +26,23 @@ var ForgotView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <Text>Forgot View</Text>
+        <Text style={ styles.title }>Forgot Password</Text>
+        <TextInput
+          style={ styles.emailInput }
+          autoCorrect={ false }
+          keyboardType='email-address'
+          placeholder='Email Address (required)'
+          placeholderTextColor='#EEE'
+          underlineColorAndroid='#FFF'
+        />
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#FFF', false) }
+          onPress={() => {}}
+        >
+          <View style={ styles.requestButton }>
+            <Text style={ styles.requestButtonText }>Send Code</Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   }
@@ -33,7 +51,33 @@ var ForgotView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
     backgroundColor: '#2CB673'
+  },
+  title: {
+    color: '#FFF',
+    fontSize: 24,
+    textAlign: 'center',
+    marginTop: 20
+  },
+  emailInput: {
+    width: (constants.width / 3) * 2,
+    color: '#FFF',
+    marginBottom: 10
+  },
+  requestButton: {
+    width: (constants.width / 3) * 2,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF',
+    borderRadius: 24,
+    marginBottom: 10
+  },
+  requestButtonText: {
+    color: '#000'
   }
 });
 

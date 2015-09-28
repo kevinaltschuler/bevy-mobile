@@ -102,9 +102,12 @@ exports.CHAT = {
 
 exports.USER = {
   UPDATE: 'user_update',
+  LOGIN: 'user_login',
   LOGOUT: 'user_logout',
   CHANGE_PROFILE_PICTURE: 'user_change_profile_picture',
 
+  LOGIN_ERROR: 'user_login_error',
+  LOGIN_SUCCESS: 'user_login_success',
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded'
 };

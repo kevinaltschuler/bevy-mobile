@@ -40,7 +40,6 @@ var InfoBar = React.createClass({
     if(!this.props.backButton) return <View />;
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#aaa', false) }
         onPress={ this.props.backButtonOnPress }
       >
         <View style={ styles.backButton }>
