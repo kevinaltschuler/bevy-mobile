@@ -13,6 +13,7 @@ var {
   TouchableNativeFeedback
 } = React;
 var TabBarItem = require('./TabBarItem.android.js');
+var SettingsView = require('./../../../settings/components/android/SettingsView');
 
 var constants = require('./../../../constants');
 
@@ -43,7 +44,7 @@ var MainTabBar = React.createClass({
         return <Text>Notifications Tab Here</Text>
         break;
       case tabs.more:
-        return <Text>More Tab Here</Text>
+        return <SettingsView { ...this.props } />
         break;
       default:
         break;
