@@ -65,6 +65,9 @@ var TagModal = React.createClass({
   },
 
   render() {
+    return <View/>;
+
+    /*
     if(!this.state.isVisible) return null;
     return (
       <Modal
@@ -102,7 +105,7 @@ var TagModal = React.createClass({
         </View>
       </Modal>
     );
-  }
+  */}
 });
 
 var styles = StyleSheet.create({

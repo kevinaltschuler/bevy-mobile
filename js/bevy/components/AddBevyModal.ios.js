@@ -38,7 +38,8 @@ var AddBevyModal = React.createClass({
 
   render() {
     if(!this.state.isVisible) return null;
-    return (
+    return <View/>;
+    /*return (
       <Modal
         forceToFront={ true }
         backdropType="blur"
@@ -115,7 +116,7 @@ var AddBevyModal = React.createClass({
           </View>
         </View>
       </Modal>
-    );
+    );*/
   }
 });
 
