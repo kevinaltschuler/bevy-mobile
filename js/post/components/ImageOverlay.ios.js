@@ -15,6 +15,7 @@ var {
 } = require('react-native-icons');
 
 var constants = require('./../../constants');
+var BlurView = require('react-native-blur').BlurView;
 
 var toleranceX = 10;
 var toleranceY = 10;
@@ -88,7 +89,7 @@ var ImageOverlay = React.createClass({
           name='ion|ios-arrow-left'
           size={ 30 }
           style={{ width: 30, height: 30 }}
-          color='#fff'
+          color='#333'
         />
       </TouchableHighlight>;
     var rightButton = (this.props.images.length == 1)
@@ -106,7 +107,7 @@ var ImageOverlay = React.createClass({
           name='ion|ios-arrow-right'
           size={ 30 }
           style={{ width: 30, height: 30 }}
-          color='#fff'
+          color='#333'
         />
       </TouchableHighlight>;
       var imageCount = (this.props.images.length == 1)
@@ -121,43 +122,63 @@ var ImageOverlay = React.createClass({
         transparent={true}
         Visible={ this.state.isVisible }
       >
-        <View style={ styles.topBar }>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.2)'
-            style={ styles.closeButton }
-            onPress={() => {
-              this.setState({
-                isVisible: false
-              });
-            }}
-          >
-            <Icon
-              name='ion|ios-close-empty'
-              size={ 30 }
-              style={{ width: 30, height: 30 }}
-              color='#fff'
-            />
-          </TouchableHighlight>
+        <View style={ styles.container }>
+            <View style={ styles.backdrop }>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setState({
+                    isVisible: false
+                  });
+                }}
+              >
+                <View>
+                  <BlurView 
+                    blurType="dark" 
+                    style={styles.blur}
+                  />
+                </View>
+              </TouchableHighlight>
+            </View>
+            <View style={ styles.card }>
+              <View style={ styles.topBar }>
+                <TouchableHighlight
+                  underlayColor='rgba(0,0,0,0.2)'
+                  style={ styles.closeButton }
+                  onPress={() => {
+                    this.setState({
+                      isVisible: false
+                    });
+                  }}
+                >
+                  <Icon
+                    name='ion|ios-close-empty'
+                    size={ 30 }
+                    style={{ width: 30, height: 30 }}
+                    color='#333'
+                  />
+                </TouchableHighlight>
 
-          {imageCount}
-          {leftButton}
-          {rightButton}
+                {imageCount}
+                {leftButton}
+                {rightButton}
+              </View>
+              <Image
+                style={ styles.image }
+                source={{ uri: this.props.images[this.state.imageIndex] }}
+                resizeMode='contain'
+              >
+              </Image>
+              {/*<View { ...this._panResponder.panHandlers } style={{
+                position: 'absolute',
+                top: 68,
+                left: 0,
+                width: constants.width,
+                height: constants.height - 48 - 10 - 10, // top bar plus padding
+                backgroundColor: 'rgba(255,0,0,0.2)'
+              }}/>*/}
+              <Text> </Text>
+            </View>
         </View>
-        <Image
-          style={ styles.image }
-          source={{ uri: this.props.images[this.state.imageIndex] }}
-          resizeMode='contain'
-        >
-        </Image>
-        {/*<View { ...this._panResponder.panHandlers } style={{
-          position: 'absolute',
-          top: 68,
-          left: 0,
-          width: constants.width,
-          height: constants.height - 48 - 10 - 10, // top bar plus padding
-          backgroundColor: 'rgba(255,0,0,0.2)'
-        }}/>*/}
-        <Text> </Text>
       </Modal>
     );
     // empty text ^^^ to stop some obscure context bug in native ios.
@@ -171,8 +192,23 @@ var styles = StyleSheet.create({
     left: 0,
     width: constants.width,
     height: constants.height,
-    backgroundColor: 'transparent',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  card: {
+    backgroundColor: '#fff',
+    height: constants.height * .8,
+    width: constants.width * .8,
+    flexDirection: 'column',
+    shadowColor: 'black',
+    borderRadius: 20,
+    shadowRadius: 80,
+    shadowOpacity: .5,
+    shadowOffset:  {width: 0, height: 0}
+
+  },
+  blur: {
+    flex: 1
   },
   backdrop: {
     position: 'absolute',
@@ -180,7 +216,6 @@ var styles = StyleSheet.create({
     left: 0,
     width: constants.width,
     height: constants.height,
-    backgroundColor: '#000',
     opacity: 0.5
   },
   modal: {
@@ -188,27 +223,21 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
   },
   topBar: {
-    position: 'absolute',
-    top: -10,
-    left: 0,
-    width: constants.width,
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#000',
-    opacity: 0.75
   },
   closeButton: {
     height: 48,
     paddingLeft: 10,
     paddingRight: 10,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   imageCountText: {
     flex: 1,
-    color: '#fff',
+    color: '#333',
     fontSize: 17,
     textAlign: 'center'
   },
@@ -228,7 +257,7 @@ var styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: constants.width,
+    width: constants.width * .8,
     height: constants.height - 48 - 10 - 10 // top bar plus padding
   }
 });

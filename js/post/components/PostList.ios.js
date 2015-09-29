@@ -14,8 +14,10 @@ var {
   TouchableHighlight
 } = React;
 
-var RListView = require('react-native-refreshable-listview');
-var RIndicator = RListView.RefreshingIndicator;
+var {
+  RefresherListView,
+  LoadingBarIndicator
+} = require('react-native-refresher');
 
 var _ = require('underscore');
 var constants = require('./../../constants');
@@ -43,7 +45,8 @@ var PostList = React.createClass({
     showTags: React.PropTypes.bool,
     onHideTags: React.PropTypes.func,
     frontpageFilters: React.PropTypes.array,
-    activeTags: React.PropTypes.array
+    activeTags: React.PropTypes.array,
+    myBevies: React.PropTypes.array
   },
 
   getDefaultProps() {
@@ -69,38 +72,15 @@ var PostList = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
+    /*this.setState({
       dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
-    });
+    });*/
   },
 
   _onPostsLoaded() {
     this.setState({
-      isRefreshing: false
+      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll())
     });
-  },
-
-  handleScroll(e) {
-    var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
-    //console.log(scrollY);
-    if(this.isTouching) {
-      if(scrollY < -60) {
-        if(!this.state.isRefreshing) {
-          this.setState({
-            isRefreshing: true
-          });
-          this.onRefresh();
-        }
-      }
-    }
-  },
-
-  handleResponderGrant() {
-    this.isTouching = true;
-  },
-
-  handleResponderRelease() {
-    this.isTouching = false;
   },
 
   onRefresh() {
@@ -128,55 +108,6 @@ var PostList = React.createClass({
     );
   },
 
-  _renderHeaderWrapper(refreshingIndicator) {
-    return (
-      <View>
-        {this._renderHeader()}
-        {refreshingIndicator}
-      </View>
-    );
-  },
-
-  _renderList() {
-    var list = (_.isEmpty(this.props.activeBevy) || _.isEmpty(this.props.allPosts))
-    ? <View style={{height: 0}} />
-    : (
-        <RListView 
-          dataSource={ this.state.dataSource }
-          style={ styles.postContainer }
-          loadData={this.onRefresh}
-          refreshDescription="reloading"
-          refreshingIndictatorComponent={<View style={{backgroundColor: '#eee', height: 50, flex: 1, width: 50}} />}
-          renderHeaderWrapper={this._renderHeaderWrapper}
-          scrollRenderAheadDistance={3}
-          renderRow={(post) => {
-            if(!_.isEmpty(post.bevy))
-              if(post.type == 'event')
-                return <Event 
-                  key={ 'postlist:' + post._id } 
-                  post={ post } 
-                  mainRoute={ this.props.mainRoute }
-                  mainNavigator={ this.props.mainNavigator }
-                />
-              else
-                return  <Post 
-                  key={ 'postlist:' + post._id } 
-                  post={ post } 
-                  mainRoute={ this.props.mainRoute }
-                  mainNavigator={ this.props.mainNavigator }
-                />
-            else 
-              return <View/>
-          }}
-        />
-    );
-    return (
-      <View style={styles.listContainer}>
-        { list }
-      </View>
-    );
-  },
-
   render() {
 
     return (
@@ -188,8 +119,37 @@ var PostList = React.createClass({
             activeBevy={ this.props.activeBevy }
             frontpageFilters={ this.props.frontpageFilters }
             activeTags={this.props.activeTags}
+            myBevies={ this.props.myBevies }
           />
-          { this._renderList() }
+          <RefresherListView 
+            dataSource={ this.state.dataSource }
+            style={ styles.postContainer }
+            onRefresh={this.onRefresh}
+            indicator={<LoadingBarIndicator />}
+            scrollRenderAheadDistance={3}
+            renderHeader={() => { 
+              return this._renderHeader();
+            }}
+            renderRow={(post) => {
+              if(!_.isEmpty(post.bevy))
+                if(post.type == 'event')
+                  return <Event 
+                    key={ 'postlist:' + post._id } 
+                    post={ post } 
+                    mainRoute={ this.props.mainRoute }
+                    mainNavigator={ this.props.mainNavigator }
+                  />
+                else
+                  return  <Post 
+                    key={ 'postlist:' + post._id } 
+                    post={ post } 
+                    mainRoute={ this.props.mainRoute }
+                    mainNavigator={ this.props.mainNavigator }
+                  />
+              else 
+                return <View/>
+            }}
+          />
       </View>
     );
   }
@@ -201,7 +161,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#eee',
-    paddingBottom: 40,
   },
   postListHeader: {
     flex: 1,

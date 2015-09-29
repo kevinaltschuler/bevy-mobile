@@ -76,6 +76,18 @@ var BevyActions = {
       bevy_id: (bevy_id == undefined) ? null : bevy_id
     });
   },
+
+  updateTags(tags) {
+    dispatch(BEVY.UPDATE_TAGS,{
+      tags: (tags == undefined) ? null : tags
+    });
+  },
+
+  updateFront(tags) {
+    dispatch(BEVY.UPDATE_FRONT,{
+      bevies: (bevies == undefined) ? null : bevies
+    });
+  }
 };
 
 module.exports = BevyActions;

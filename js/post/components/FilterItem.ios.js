@@ -30,7 +30,10 @@ var FilterItem = React.createClass({
   propTypes: {
     filter: React.PropTypes.object,
     value: React.PropTypes.bool,
-    isFrontpage: React.PropTypes.bool
+    isFrontpage: React.PropTypes.bool,
+    frontpageFilters: React.PropTypes.array,
+    source: React.PropTypes.array,
+    myBevies: React.PropTypes.array
   },
 
   getInitialState() {
@@ -48,23 +51,26 @@ var FilterItem = React.createClass({
 	        style={styles.switch}
 	        onValueChange={(value) => {
 
-	          if(!this.props.loggedIn) {
-	            this.props.authModalActions.open('Log In To Filter posts');
-	            return;
-	          }
-
 	          this.setState({
 	            value: value
 	          });
 
+            var filters = this.props.source;
+
 	          if(!this.state.value) {
-	            BevyActions.addFilter(this.props.filter);
+              filters.push(this.props.filter);
 	          } else {
-	            BevyActions.removeFilter(this.props.filter);
+              filters = _.reject(filters, function($filter){ $filter == this.props.filter });
+              //removing
 	          }
+
+            if(this.props.isFrontpage) 
+              BevyActions.updateFilters(filters);
+            else 
+              BevyActions.updateTags(filters);
 	        }}
 	      />
-	      <Text>
+	      <Text style={ styles.label }>
 	      	{this.props.filter.name}
 	      </Text>
 	    </View>
@@ -79,7 +85,11 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 15
+  },
+  label: {
+    marginLeft: 10
   }
 });
 module.exports = FilterItem;
