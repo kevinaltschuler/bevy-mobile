@@ -14,6 +14,7 @@ var {
 } = React;
 var TabBarItem = require('./TabBarItem.android.js');
 var SettingsView = require('./../../../settings/components/android/SettingsView');
+var ChatNavigator = require('./../../../chat/components/android/ChatNavigator.android.js');
 
 var constants = require('./../../../constants');
 
@@ -47,13 +48,13 @@ var MainTabBar = React.createClass({
         return <Text>Posts Tab Here</Text>
         break;
       case tabs.chat:
-        return <Text>Chat Tab Here</Text>
+        return <ChatNavigator tabActions={ tabActions } { ...this.props } />;
         break;
       case tabs.notifications:
         return <Text>Notifications Tab Here</Text>
         break;
       case tabs.more:
-        return <SettingsView tabActions={ tabActions } { ...this.props } />
+        return <SettingsView tabActions={ tabActions } { ...this.props } />;
         break;
       default:
         break;
