@@ -1,12 +1,14 @@
 'use strict';
 
 var React = require('react-native');
+var _ = require('underscore');
 var {
   View,
   Text,
   TouchableHighlight,
   StyleSheet,
-  Modal
+  Modal,
+  ScrollView
 } = React;
 var {
   Icon
@@ -39,73 +41,65 @@ var TagModal = React.createClass({
 	},
 
   _renderFilterItems() {
-    var source = (this.props.activeBevy._id == -1) ? this.props.frontpageFilters : this.props.activeTags;
+    var source = (this.props.activeBevy._id == -1) ? this.props.myBevies : this.props.activeBevy.tags;
     var filterItems = [];
     for(var key in source) {
       var filter = source[key];
+      var value = _.contains(source, filter);
       filterItems.push(
         <FilterItem
           key={'filterItem:' + filter.name}
           filter={filter}
           isFrontpage={this.props.activeBevy._id == -1}
-          value={true}
+          value={value}
+          source={ source }
         />
       )
     }
     return filterItems;
-    var filterItems = [];
-    for(var key in activeTags) {
-      var filter = activeTags[key]
-      filterItems.push(
-        <FilterItem
-          filter={filter}
-        />
-      )
-    }
   },
 
   render() {
-    return <View/>;
-
-    /*
     if(!this.state.isVisible) return null;
     return (
       <Modal
-        forceToFront={ true }
-        backdropType="blur"
-        backdropBlur="dark"
         isVisible={ this.state.isVisible }
-        style={ styles }
-        onPressBackdrop={() => { this.props.onHide(); }}
-        customCloseButton={
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,0.1)'
-            style={ styles.closeButton }
-            onPress={() => { this.props.onHide(); }}
-          >
-            <View style={ styles.closeButtonContainer }>
-              <Text style={ styles.closeButtonText }>Close</Text>
-              <Icon
-                name='ion|ios-close-empty'
-                size={ 30 }
-                color='#fff'
-                style={{ width: 30, height: 30 }}
-              />
-            </View>
-          </TouchableHighlight>
-        }
+        animated={ true }
+        transparent={ true }
       >
-        <View style={ styles.panel }>
-          <Text style={ styles.panelHeaderText }>Filter Posts by bevy</Text>
-          <View style={ styles.actionRow }>
-            <View style={ styles.actionRowItem }>
-              	{ this._renderFilterItems() }
-            </View>
+        <View style={ styles.container}>
+          <View style={ styles.panel }>
+              <View style={ styles.topBar }>
+                <TouchableHighlight
+                  underlayColor='rgba(0,0,0,0.2)'
+                  style={ styles.closeButton }
+                  onPress={() => {
+                    this.setState({
+                      isVisible: false
+                    });
+                  }}
+                >
+                  <Icon
+                    name='ion|ios-close-empty'
+                    size={ 30 }
+                    style={{ width: 30, height: 30 }}
+                    color='#333'
+                  />
+                </TouchableHighlight>
+
+                <Text style={ styles.panelHeaderText }>filter posts by bevy</Text>
+              </View>
+            <ScrollView 
+              style={ styles.actionRow }
+              contentContainerStyle={{flexDirection: 'column'}}
+            >
+                	{ this._renderFilterItems() }
+            </ScrollView>
           </View>
         </View>
       </Modal>
     );
-  */}
+  }
 });
 
 var styles = StyleSheet.create({
@@ -118,7 +112,7 @@ var styles = StyleSheet.create({
     backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-start'
+    alignItems: 'center'
   },
   backdrop: {
     position: 'absolute',
@@ -126,7 +120,7 @@ var styles = StyleSheet.create({
     left: 0,
     width: constants.width,
     height: constants.height,
-    backgroundColor: '#000',
+    backgroundColor: 'transparent',
     opacity: 0.5
   },
   modal: {
@@ -134,17 +128,19 @@ var styles = StyleSheet.create({
     marginTop: constants.height / 4
   },
 
+  topBar: {
+    height: 42,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 10
+  },
   closeButton: {
-    position: 'absolute',
-    borderColor: '#fff',
-    borderRadius: 2,
-    borderWidth: 1,
-    right: 20 - (constants.width * 1 / 6),
-    top: 20,
+    height: 48,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   closeButtonContainer: {
     flexDirection: 'row',
@@ -159,21 +155,22 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'column',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 20,
     width: constants.width * 2 / 3,
+    height: constants.height * .8,
+    shadowColor: 'black',
+    shadowRadius: 80,
+    shadowOpacity: .5,
+    shadowOffset:  {width: 0, height: 0}
   },
   panelHeaderText: {
-    marginTop: 15,
-    fontSize: 22,
+    fontSize: 20,
     color: '#666'
   },
   actionRow: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
   },
   actionRowItem: {
     flex: 1,

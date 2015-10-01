@@ -14,6 +14,11 @@ var {
   TouchableHighlight
 } = React;
 
+var {
+  RefresherListView,
+  LoadingBarIndicator
+} = require('react-native-refresher');
+
 var _ = require('underscore');
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -40,7 +45,8 @@ var PostList = React.createClass({
     showTags: React.PropTypes.bool,
     onHideTags: React.PropTypes.func,
     frontpageFilters: React.PropTypes.array,
-    activeTags: React.PropTypes.array
+    activeTags: React.PropTypes.array,
+    myBevies: React.PropTypes.array
   },
 
   getDefaultProps() {
@@ -66,38 +72,15 @@ var PostList = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
+    /*this.setState({
       dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
-    });
+    });*/
   },
 
   _onPostsLoaded() {
     this.setState({
-      isRefreshing: false
+      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll())
     });
-  },
-
-  handleScroll(e) {
-    var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
-    //console.log(scrollY);
-    if(this.isTouching) {
-      if(scrollY < -60) {
-        if(!this.state.isRefreshing) {
-          this.setState({
-            isRefreshing: true
-          });
-          this.onRefresh();
-        }
-      }
-    }
-  },
-
-  handleResponderGrant() {
-    this.isTouching = true;
-  },
-
-  handleResponderRelease() {
-    this.isTouching = false;
   },
 
   onRefresh() {
@@ -108,36 +91,20 @@ var PostList = React.createClass({
   },
 
   _renderHeader() {
-    var indicator;
-    if(this.state.isRefreshing) {
-      indicator = (
-        <RefreshingIndicator description='Loading Posts...'/>
-      );
-    } else {
-      indicator = <View />
-    }
-    var newPostCard = (
-      !this.props.showNewPostCard 
-      || _.isEmpty(this.props.activeBevy) 
-      || (
-          this.state.isRefreshing 
-          && _.isEmpty(this.props.allPosts)
-        )
-    )
+    var newPostCard = (!this.props.showNewPostCard || _.isEmpty(this.props.activeBevy))
     ? <View style={{height: 0}} />
     : (
-      <NewPostCard 
-        user={ this.props.user }
-        loggedIn={ this.props.loggedIn }
-        mainNavigator={ this.props.mainNavigator }
-        authModalActions={ this.props.authModalActions }
-      />
+      <View style={styles.cardContainer}>
+        <NewPostCard 
+          user={ this.props.user }
+          loggedIn={ this.props.loggedIn }
+          mainNavigator={ this.props.mainNavigator }
+          authModalActions={ this.props.authModalActions }
+        />
+      </View>
     );
     return (
-      <View style={ styles.postListHeader }>
-        { indicator }
         { newPostCard }
-      </View>
     );
   },
 
@@ -152,14 +119,17 @@ var PostList = React.createClass({
             activeBevy={ this.props.activeBevy }
             frontpageFilters={ this.props.frontpageFilters }
             activeTags={this.props.activeTags}
+            myBevies={ this.props.myBevies }
           />
-          <ListView 
+          <RefresherListView 
             dataSource={ this.state.dataSource }
-            onScroll={ this.handleScroll }
-            onResponderGrant={ this.handleResponderGrant }
-            onResponderRelease={ this.handleResponderRelease }
             style={ styles.postContainer }
+            onRefresh={this.onRefresh}
+            indicator={<LoadingBarIndicator />}
             scrollRenderAheadDistance={3}
+            renderHeader={() => { 
+              return this._renderHeader();
+            }}
             renderRow={(post) => {
               if(!_.isEmpty(post.bevy))
                 if(post.type == 'event')
@@ -179,7 +149,6 @@ var PostList = React.createClass({
               else 
                 return <View/>
             }}
-            renderHeader={ this._renderHeader }
           />
       </View>
     );
@@ -192,7 +161,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#eee',
-    paddingBottom: 40,
   },
   postListHeader: {
     flex: 1,
@@ -200,6 +168,15 @@ var styles = StyleSheet.create({
   },
   tagOverlay: {
 
+  },
+  cardContainer: {
+    height: 50,
+    backgroundColor: '#eee',
+    marginTop: 0,
+    marginBottom: -10
+  },
+  listContainer: {
+    flex: 1,
   }
 })
 
