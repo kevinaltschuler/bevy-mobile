@@ -25,7 +25,7 @@ var USER = constants.USER;
 var Backbone = require('backbone');
 var _ = require('underscore');
 
-constants.apiurl = 'http://joinbevy.com/api';
+//constants.apiurl = 'http://joinbevy.com/api';
 
 // backbone shim
 Backbone.sync = function(method, model, options) {
@@ -65,8 +65,10 @@ Backbone.sync = function(method, model, options) {
     body: body
   })
   .then((res) => {
-    var response = JSON.parse(res._bodyText);
+    var endTime = Date.now();
+    var deltaTime = endTime - startTime;
     console.log('END', method, url);
+    var response = JSON.parse(res._bodyText);
     options.success(response, options);
   })
   .catch((error) => {

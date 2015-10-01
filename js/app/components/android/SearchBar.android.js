@@ -18,11 +18,10 @@ var {
 var MainTabBar = require('./MainTabBar.android.js');
 var SearchView = require('./SearchView.android.js');
 var Drawer = require('./Drawer.android.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var TouchableNativeFeedback = require('TouchableNativeFeedback');
-var DrawerLayoutAndroid = require('DrawerLayoutAndroid');
 
 var SearchBar = React.createClass({
 
@@ -45,14 +44,17 @@ var SearchBar = React.createClass({
           onPress={ this.toggleDrawer }
         >
           <View style={ styles.menuButton }>
-            <Text>Menu</Text>
+            <Icon name='menu' color='#fff' size={ 24 } />
           </View>
         </TouchableNativeFeedback>
         <View style={ styles.searchInputWrapper }>
+          <Icon name='search' color='#fff' size={ 24 } />
           <TextInput
             ref='Search'
             style={ styles.searchInput }
             placeholder='Search'
+            placeholderTextColor='#FFF'
+            underlineColorAndroid='#FFF'
           />
         </View>
       </View>
@@ -160,14 +162,12 @@ var styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: constants.width,
-    height: 48,
-    paddingLeft: 8,
-    paddingRight: 8
+    height: 48
   },
   menuButton: {
     height: 48,
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 16,
+    paddingRight: 16,
     flexDirection: 'row',
     alignItems: 'center'
   },

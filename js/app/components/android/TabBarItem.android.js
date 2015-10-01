@@ -18,7 +18,8 @@ var noop = function() {};
 var TabBarItem = React.createClass({
   propTypes: {
     onPress: React.PropTypes.func,
-    content: React.PropTypes.node,
+    icon: React.PropTypes.node,
+    selectedIcon: React.PropTypes.node,
     tab: React.PropTypes.string,
     activeTab: React.PropTypes.string
   },
@@ -26,7 +27,8 @@ var TabBarItem = React.createClass({
   getDefaultProps() {
     return {
       onPress: noop,
-      content: <Text>Tab</Text>,
+      icon: <Text>Icon</Text>,
+      selectedIcon: <Text>Selected Icon</Text>,
       tab: '',
       activeTab: ''
     };
@@ -44,12 +46,8 @@ var TabBarItem = React.createClass({
     });
   },
 
-  _renderContent() {
-    if(typeof this.props.content === 'string') {
-      return <Text>{ this.props.content }</Text>
-    } else {
-      return this.props.content;
-    }
+  _renderIcon() {
+    return (this.state.active) ? this.props.selectedIcon : this.props.icon;
   },
 
   render() {
@@ -61,7 +59,7 @@ var TabBarItem = React.createClass({
         onPress={ this.props.onPress }
       >
         <View style={ buttonStyles }>
-          { this._renderContent() }
+          { this._renderIcon() }
         </View>
       </TouchableNativeFeedback>
     );
