@@ -16,6 +16,7 @@ var {
 } = React;
 var ChatBar = require('./ChatBar.android.js');
 var MessageItem = require('./MessageItem.android.js');
+var InvertibleScrollView = require('react-native-invertible-scroll-view');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -82,22 +83,21 @@ var MessageView = React.createClass({
           activeThread={ this.props.activeThread }
           mainNavigator={ this.props.mainNavigator }
         />
-        <View style={ styles.bodyContainer }>
-          <ListView
-            dataSource={ this.state.messages }
-            style={ styles.messageList }
-            renderRow={(message) => {
-              return (
-                <MessageItem
-                  key={ 'message:' + message._id }
-                  message={ message }
-                  user={ this.props.user }
-                />
-              );
-            }}
-          />
-          { this._renderInput() }
-        </View>
+        <ListView
+          renderScrollComponent={(props) => <InvertibleScrollView {...props} inverted />}
+          dataSource={ this.state.messages }
+          style={ styles.messageList }
+          renderRow={(message) => {
+            return (
+              <MessageItem
+                key={ 'message:' + message._id }
+                message={ message }
+                user={ this.props.user }
+              />
+            );
+          }}
+        />
+        { this._renderInput() }
       </View>
     );
   }
@@ -107,25 +107,16 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-start'
-  },
-  bodyContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    marginTop: 48
+    justifyContent: 'flex-end'
   },
   messageList: {
-    flex: 1,
-    paddingTop: 12,
-    paddingBottom: 12,
-    paddingLeft: 12,
-    paddingRight: 12
+    flexDirection: 'column',
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 10
   },
   inputContainer: {
-    position: 'absolute',
-    left: 0,
-    bottom: 24,
+    marginBottom: 24,
     height: 48,
     width: constants.width,
     backgroundColor: '#FFF',
@@ -133,14 +124,15 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingLeft: 8,
-    paddingRight: 8
   },
   messageInput: {
     flex: 1
   },
   sendMessageButton: {
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 8,
     paddingLeft: 12,
     paddingRight: 12
   },

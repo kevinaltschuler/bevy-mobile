@@ -68,9 +68,6 @@ var ChatBar = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     width: constants.width,
     height: 48,
     flexDirection: 'row',
