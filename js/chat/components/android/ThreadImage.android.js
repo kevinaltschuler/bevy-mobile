@@ -36,7 +36,7 @@ var ThreadImage = React.createClass({
       borderRadius: 20,
     };
     return (
-      <Image style={ imageStyle } source={{ uri: image_url }}/>
+      <Image style={ imageStyle } source={{ uri: image_url + '?w=50&h=50' }}/>
     );
   },
 

@@ -13,7 +13,8 @@ var {
   View,
   Navigator
 } = React;
-var MainView = require('./js/app/components/android/MainView.android.js')
+var MainView = require('./js/app/components/android/MainView.android.js');
+var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
 
 var routes = require('./js/routes');
 var constants = require('./js/constants');
@@ -33,7 +34,7 @@ Backbone.sync = function(method, model, options) {
   var headers = {
     'Accept': 'application/json'
   };
-  var body = '';
+  var body = {};
 
   var url = model.url;
   if (!options.url) {
@@ -44,7 +45,8 @@ Backbone.sync = function(method, model, options) {
 
   if(options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
     headers['Content-Type'] = 'application/json';
-    body = JSON.stringify(options.attrs || model.toJSON(options));
+    headers['Content-Encoding'] = 'gzip';
+    body = options.attrs || model.toJSON(options);
   }
 
   var methodMap = {
@@ -57,7 +59,21 @@ Backbone.sync = function(method, model, options) {
   method = methodMap[method];
 
   var startTime = Date.now();
-  console.log('START', method, url);
+  console.log('START ' + method + ' ' + url);
+
+  Fletcher.fletch(url, {
+    method: method,
+    headers: headers,
+    body: JSON.stringify(body)
+  }, function(error) {
+    console.error(error);
+  }, function(response) {
+    var endTime = Date.now();
+    var deltaTime = endTime - startTime;
+    console.log('END ' + deltaTime + 'ms ' + method + ' ' + url);
+    response = JSON.parse(response);
+    options.success(response, options);
+  });
 
   /*return fetch(url, {
     method: method,
@@ -75,32 +91,9 @@ Backbone.sync = function(method, model, options) {
     console.error(error);
   })
   .done();*/
-
-  var request = new XMLHttpRequest();
-  request.onreadystatechange = (e) => {
-    if (request.readyState !== 4) {
-      return;
-    }
-
-    console.log('request status', request.status);
-
-    if (request.status === 200) {
-      var endTime = Date.now();
-      var deltaTime = endTime - startTime;
-      console.log('END', method, url, deltaTime, 'ms');
-      var response = JSON.parse(request.responseText);
-      options.success(response, options);
-    } else {
-      console.warn('error');
-    }
-  };
-
-  request.open(method, url);
-  _.each(headers, (value, key) => {
-    request.setRequestHeader(key, value);
-  });
-  request.send();
 };
+
+
 
 var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');
