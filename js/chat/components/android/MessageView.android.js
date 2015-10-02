@@ -24,7 +24,9 @@ var ChatStore = require('./../../ChatStore');
 var MessageView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
-    activeThread: React.PropTypes.object
+    activeThread: React.PropTypes.object,
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -89,6 +91,7 @@ var MessageView = React.createClass({
                 <MessageItem
                   key={ 'message:' + message._id }
                   message={ message }
+                  user={ this.props.user }
                 />
               );
             }}
@@ -113,7 +116,11 @@ var styles = StyleSheet.create({
     marginTop: 48
   },
   messageList: {
-    flex: 1
+    flex: 1,
+    paddingTop: 12,
+    paddingBottom: 12,
+    paddingLeft: 12,
+    paddingRight: 12
   },
   inputContainer: {
     position: 'absolute',
@@ -124,7 +131,9 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    paddingLeft: 8,
+    paddingRight: 8
   },
   messageInput: {
     flex: 1
