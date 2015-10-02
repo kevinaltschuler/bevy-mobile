@@ -30,6 +30,9 @@ var selectedColor='#FFF';
 var iconSize = 24;
 
 var MainTabBar = React.createClass({
+  propTypes: {
+
+  },
 
   getInitialState() {
     return {
