@@ -1,5 +1,5 @@
 /**
- * InfoBar.android.js
+ * LoginBar.android.js
  * @author albert
  *
  * just like Navbar.ios.js, except more generic

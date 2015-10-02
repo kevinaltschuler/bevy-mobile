@@ -31,12 +31,7 @@ _.extend(UserStore, {
     switch(payload.actionType) {
       case APP.LOAD:
         // fetch user from server if its been updated?
-        AsyncStorage.getItem('user', function(err, user) {
-          if(err) return;
-          this.setUser(JSON.parse(user));
-          this.trigger(USER.LOADED);
-        }.bind(this));
-        /*this.user.fetch({
+        this.user.fetch({
           success: function(model, response, options) {
             //console.log('user fetched from server');
             // update local storage user
@@ -44,7 +39,7 @@ _.extend(UserStore, {
 
             this.trigger(USER.LOADED);
           }.bind(this)
-        });*/
+        });
         break;
 
       case USER.LOGIN:
@@ -68,10 +63,16 @@ _.extend(UserStore, {
         .then((res) => {
           if(res.object == undefined) {
             // success
+            console.log('logged in', res);
+            
+            AsyncStorage.setItem('user', JSON.stringify(res))
+            .then((err, result) => {
+            });
+
             this.trigger(USER.LOGIN_SUCCESS, res);
             this.setUser(res);
-            AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
           } else {
+            console.log('error', res);
             // error
             this.trigger(USER.LOGIN_ERROR, res.message);
           }
@@ -89,7 +90,6 @@ _.extend(UserStore, {
         this.loggedIn = false;
 
         this.trigger(USER.LOADED);
-
         break;
 
       case USER.UPDATE:

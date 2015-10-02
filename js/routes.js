@@ -8,7 +8,8 @@ var routes = {
     COMMENT: { name: 'Comment' },
     PROFILE: { name: 'Profile' },
     MAP: { name: 'Map' },
-    LOGIN: { name: 'Login' }
+    LOGIN: { name: 'Login' },
+    MESSAGEVIEW: { name: 'Messages' }
   },
 
   NEWPOST: {

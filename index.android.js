@@ -8,11 +8,13 @@ var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
+  AsyncStorage,
   Text,
   View,
   Navigator
 } = React;
-var MainView = require('./js/app/components/android/MainView.android.js')
+var MainView = require('./js/app/components/android/MainView.android.js');
+var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
 
 var routes = require('./js/routes');
 var constants = require('./js/constants');
@@ -24,13 +26,15 @@ var USER = constants.USER;
 var Backbone = require('backbone');
 var _ = require('underscore');
 
+//constants.apiurl = 'http://joinbevy.com/api';
+
 // backbone shim
 Backbone.sync = function(method, model, options) {
 
   var headers = {
     'Accept': 'application/json'
   };
-  var body = '';
+  var body = {};
 
   var url = model.url;
   if (!options.url) {
@@ -39,9 +43,10 @@ Backbone.sync = function(method, model, options) {
     url = options.url;
   }
 
-  if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+  if(options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
     headers['Content-Type'] = 'application/json';
-    body = JSON.stringify(options.attrs || model.toJSON(options));
+    headers['Content-Encoding'] = 'gzip';
+    body = options.attrs || model.toJSON(options);
   }
 
   var methodMap = {
@@ -53,23 +58,42 @@ Backbone.sync = function(method, model, options) {
   };
   method = methodMap[method];
 
-  console.log(url, method);
+  var startTime = Date.now();
+  console.log('START ' + method + ' ' + url);
 
-  return fetch(url, {
+  Fletcher.fletch(url, {
+    method: method,
+    headers: headers,
+    body: JSON.stringify(body)
+  }, function(error) {
+    console.error(error);
+  }, function(response) {
+    var endTime = Date.now();
+    var deltaTime = endTime - startTime;
+    console.log('END ' + deltaTime + 'ms ' + method + ' ' + url);
+    response = JSON.parse(response);
+    options.success(response, options);
+  });
+
+  /*return fetch(url, {
     method: method,
     headers: headers,
     body: body
   })
-  .then(res => {
+  .then((res) => {
+    var endTime = Date.now();
+    var deltaTime = endTime - startTime;
+    console.log('END', method, url);
     var response = JSON.parse(res._bodyText);
-
-    //console.log('model', model);
-    //console.log('response', response);
-    //console.log('options', options);
-
     options.success(response, options);
-  });
-}
+  })
+  .catch((error) => {
+    console.error(error);
+  })
+  .done();*/
+};
+
+
 
 var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');
@@ -158,7 +182,19 @@ var App = React.createClass({
 
     UserStore.on(USER.LOADED, this._onUserChange);
 
-    AppActions.load();
+    // first things first try to load the user
+    console.log('loading...');
+    AsyncStorage.getItem('user')
+    .then((user) => {
+      if(user) {
+        console.log('user fetched');
+        UserStore.setUser(JSON.parse(user));
+        AppActions.load();
+      } else {
+        console.log('going to login screen...');
+        AppActions.load();
+      }
+    });
   },
 
   componentWillUnmount() {

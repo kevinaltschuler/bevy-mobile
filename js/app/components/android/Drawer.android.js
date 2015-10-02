@@ -13,6 +13,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var BevyList = require('./../../../bevy/components/android/BevyList.android.js');
 
 var routes = require('./../../../routes');
@@ -40,17 +41,14 @@ var Drawer = React.createClass({
       );
     } else {
       return (
-        <View style={ styles.profileRow }>
-          <Image
-            //source={{ uri: this.props.user.image_url }}
-            source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
-            style={ styles.profileImage }
-          />
-          <View style={ styles.profileDetails }>
-            <Text style={ styles.displayName }>{ this.props.user.displayName }</Text>
-            <Text style={ styles.email }>{ this.props.user.email }</Text>
-          </View>
-        </View>
+        <ProfileRow
+          user={ this.props.user }
+          style={{
+            backgroundColor: '#333',
+            borderBottomColor: '#444',
+            borderBottomWidth: 1
+          }}
+        />
       );
     }
   },
@@ -59,6 +57,9 @@ var Drawer = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderProfile() }
+        <View style={ styles.myBeviesHeader }>
+          <Text style={ styles.myBeviesText }>My Bevies</Text>
+        </View>
         <BevyList { ...this.props } />
       </View>
     );
@@ -77,30 +78,18 @@ var styles = StyleSheet.create({
   },
   logInButtonText: {
     flex: 1,
-    color: '#fff'
-  },
-  profileRow: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  profileImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
-    marginRight: 10
-  },
-  profileDetails: {
-    flexDirection: 'column',
-    alignItems: 'flex-start'
-  },
-  displayName: {
     color: '#FFF'
   },
-  email: {
+  myBeviesHeader: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderBottomColor: '#333',
+    borderBottomWidth: 1
+  },
+  myBeviesText: {
+    marginLeft: 10,
     color: '#FFF'
   }
 });

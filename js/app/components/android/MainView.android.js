@@ -13,6 +13,7 @@ var {
 } = React;
 var SearchBar = require('./SearchBar.android.js');
 var LoginNavigator = require('./../../../login/components/android/LoginNavigator.android.js');
+var MessageView = require('./../../../chat/components/android/MessageView.android.js');
 
 var routes = require('./../../../routes');
 
@@ -37,6 +38,11 @@ var MainView = React.createClass({
       case routes.MAIN.LOGIN.name:
         return (
           <LoginNavigator { ...this.props } />
+        );
+        break;
+      case routes.MAIN.MESSAGEVIEW.name:
+        return (
+          <MessageView { ...this.props } />
         );
         break;
       default:

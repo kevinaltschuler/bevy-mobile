@@ -13,6 +13,9 @@ var {
   TouchableNativeFeedback
 } = React;
 var TabBarItem = require('./TabBarItem.android.js');
+var SettingsView = require('./../../../settings/components/android/SettingsView');
+var ChatNavigator = require('./../../../chat/components/android/ChatNavigator.android.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var constants = require('./../../../constants');
 
@@ -22,6 +25,9 @@ var tabs = {
   notifications: 'NOTIFS',
   more: 'MORE'
 };
+var unselectedColor='#888';
+var selectedColor='#fff';
+var iconSize = 24;
 
 var MainTabBar = React.createClass({
 
@@ -31,19 +37,28 @@ var MainTabBar = React.createClass({
     };
   },
 
+  switchTab(tab) {
+    this.setState({
+      activeTab: tab
+    });
+  },
+
   _renderTabContent() {
+    var tabActions = {
+      switchTab: this.switchTab
+    };
     switch(this.state.activeTab) {
       case tabs.posts:
         return <Text>Posts Tab Here</Text>
         break;
       case tabs.chat:
-        return <Text>Chat Tab Here</Text>
+        return <ChatNavigator tabActions={ tabActions } { ...this.props } />;
         break;
       case tabs.notifications:
         return <Text>Notifications Tab Here</Text>
         break;
       case tabs.more:
-        return <Text>More Tab Here</Text>
+        return <SettingsView tabActions={ tabActions } { ...this.props } />;
         break;
       default:
         break;
@@ -59,25 +74,29 @@ var MainTabBar = React.createClass({
             tab={ tabs.posts }
             activeTab={ this.state.activeTab }
             onPress={() => this.setState({ activeTab: tabs.posts }) } 
-            content='Posts'
+            icon={<Icon name='view-list' size={ iconSize } color={ unselectedColor } />}
+            selectedIcon={<Icon name='view-list' size={ iconSize } color={ selectedColor } />}
           />
           <TabBarItem 
             tab={ tabs.chat }
             activeTab={ this.state.activeTab }
             onPress={() => this.setState({ activeTab: tabs.chat }) } 
-            content='Chat'
+            icon={<Icon name='chat-bubble' size={ iconSize } color={ unselectedColor } />}
+            selectedIcon={<Icon name='chat-bubble' size={ iconSize } color={ selectedColor } />}
           />
           <TabBarItem 
             tab={ tabs.notifications }
             activeTab={ this.state.activeTab }
             onPress={() => this.setState({ activeTab: tabs.notifications }) } 
-            content='Notifications'
+            icon={<Icon name='notifications' size={ iconSize } color={ unselectedColor } />}
+            selectedIcon={<Icon name='notifications' size={ iconSize } color={ selectedColor } />}
           />
           <TabBarItem 
             tab={ tabs.more }
             activeTab={ this.state.activeTab }
             onPress={() => this.setState({ activeTab: tabs.more }) } 
-            content='More'
+            icon={<Icon name='more-horiz' size={ iconSize } color={ unselectedColor } />}
+            selectedIcon={<Icon name='more-horiz' size={ iconSize } color={ selectedColor } />}
           />
         </View>
         { this._renderTabContent() }

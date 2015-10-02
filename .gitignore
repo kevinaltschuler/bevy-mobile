@@ -28,5 +28,7 @@ node_modules/
 npm-debug.log
 
 # android
-.gradle/*/*.bin
-.gradle/*/*.lock
+.gradle/**/*.bin
+.gradle/**/*.lock
+*.lock
+*.bin
