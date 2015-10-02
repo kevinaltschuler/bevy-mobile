@@ -26,7 +26,7 @@ var tabs = {
   more: 'MORE'
 };
 var unselectedColor='#888';
-var selectedColor='#fff';
+var selectedColor='#FFF';
 var iconSize = 24;
 
 var MainTabBar = React.createClass({
