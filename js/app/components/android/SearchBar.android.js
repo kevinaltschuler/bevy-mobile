@@ -161,13 +161,12 @@ var SearchNavigator = React.createClass({
           routes.SEARCH.OUT
         ]}
         sceneStyle={{
-          flex: 1,
-          width: constants.width
+          flex: 1
         }}
         renderScene={(route, navigator) => {
           constants.setSearchNavigator(navigator);
           switch(route.name) {
-            case 'in':
+            case routes.SEARCH.IN.name:
               return (
                 <SearchView 
                   searchRoute={ route }
@@ -176,7 +175,7 @@ var SearchNavigator = React.createClass({
                 />
               );
               break;
-            case 'out':
+            case routes.SEARCH.OUT.name:
             default:
               return (
                 <MainTabBar 

@@ -15,7 +15,7 @@ var {
 var SearchView = React.createClass({
   render() {
     return (
-      <View>
+      <View style={ styles.container }>
       	<Text>Search View</Text>
       </View>
     );
@@ -23,7 +23,10 @@ var SearchView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    paddingTop: 48
+  }
 });
 
 module.exports = SearchView;
