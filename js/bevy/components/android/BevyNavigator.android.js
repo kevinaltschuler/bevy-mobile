@@ -12,7 +12,7 @@ var {
   Navigator,
   StyleSheet
 } = React;
-var PostList = require('./../../../post/components/android/PostList.android.js');
+var PostView = require('./../../../post/components/android/PostView.android.js');
 
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
@@ -35,10 +35,10 @@ var BevyNavigator = React.createClass({
           switch(route.name) {
             case routes.BEVY.POSTLIST.name:
               return (
-                <PostList
+                <PostView
                   bevyNavigator={ navigator }
                   bevyRoute={ route }
-                  allPosts={ this.props.allPosts }
+                  { ...this.props }
                 />
               );
               break;

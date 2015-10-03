@@ -12,12 +12,23 @@ var {
   Text,
   StyleSheet
 } = React;
+var NewPostCard = require('./NewPostCard.android.js');
 var Post = require('./Post.android.js');
 
 
 var PostList = React.createClass({
   propTypes: {
-    allPosts: React.PropTypes.array
+    allPosts: React.PropTypes.array,
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
+    showNewPostCard: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      allPosts: [],
+      showNewPostCard: false
+    }
   },
 
   getInitialState() {
@@ -33,13 +44,23 @@ var PostList = React.createClass({
     });
   },
 
+  _renderNewPostCard() {
+    if(!this.props.showNewPostCard) return <View />;
+    else return (
+      <NewPostCard
+        user={ this.props.user }
+        loggedIn={ this.props.loggedIn }
+      />
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
-        <Text>Post List</Text>
         <ListView
           dataSource={ this.state.posts }
           style={ styles.postList }
+          renderHeader={ this._renderNewPostCard }
           renderRow={(post) => 
             <Post
               key={ 'post:' + post._id }
