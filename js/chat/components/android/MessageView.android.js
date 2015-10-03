@@ -48,7 +48,7 @@ var MessageView = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      messages: messages.cloneWithRows(ChatStore.getMessage(nextProps.activeThread._id))
+      messages: this.state.messages.cloneWithRows(ChatStore.getMessage(nextProps.activeThread._id))
     });
   },
 
