@@ -34,19 +34,16 @@ var PostList = React.createClass({
 
   render() {
     return (
-      <View style={ styles.container }>
-        <Text>Post List</Text>
-        <ListView
-          dataSource={ this.state.posts }
-          style={ styles.postList }
-          renderRow={(post) => 
-            <Post
-              key={ 'post:' + post._id }
-              post={ post }
-            />
-          }
-        />
-      </View>
+      <ListView
+        dataSource={ this.state.posts }
+        style={ styles.postList }
+        renderRow={(post) => 
+          <Post
+            key={ 'post:' + post._id }
+            post={ post }
+          />
+        }
+      />
     );
   }
 });
