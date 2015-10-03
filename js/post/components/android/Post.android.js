@@ -11,6 +11,7 @@ var {
   Text,
   StyleSheet
 } = React;
+var PostHeader = require('./PostHeader.android.js');
 
 var Post = React.createClass({
   propTypes: {
@@ -20,7 +21,8 @@ var Post = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <Text>Post</Text>
+        <PostHeader post={ this.props.post } />
+        <Text>{ this.props.post.title }</Text>
       </View>
     );
   }
@@ -28,7 +30,8 @@ var Post = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-
+    flexDirection: 'column',
+    backgroundColor: '#FFF'
   }
 });
 
