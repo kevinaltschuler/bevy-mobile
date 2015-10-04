@@ -9,6 +9,8 @@ var React = require('react-native');
 var {
   View,
   Text,
+  TouchableHighlight,
+  Image,
   StyleSheet
 } = React;
 var PostHeader = require('./PostHeader.android.js');
