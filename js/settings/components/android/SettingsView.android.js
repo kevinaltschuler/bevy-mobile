@@ -51,7 +51,7 @@ var SettingsView = React.createClass({
           }}
         >
           <View style={ styles.logInButton }>
-            <Text style={ styles.logInButtonText }>Log In</Text>
+            <Text style={ styles.logInButtonText }></Text>
           </View>
         </TouchableNativeFeedback>
       );
