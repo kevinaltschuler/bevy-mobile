@@ -18,6 +18,7 @@ var Post = require('./Post.android.js');
 var PostList = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
+    mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     showNewPostCard: React.PropTypes.bool
@@ -49,6 +50,7 @@ var PostList = React.createClass({
       <NewPostCard
         user={ this.props.user }
         loggedIn={ this.props.loggedIn }
+        mainNavigator={ this.props.mainNavigator }
       />
     );
   },

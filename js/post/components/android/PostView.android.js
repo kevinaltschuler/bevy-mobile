@@ -17,6 +17,7 @@ var NewPostCard = require('./NewPostCard.android.js');
 var PostView = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
+    mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool
   },
@@ -26,6 +27,7 @@ var PostView = React.createClass({
       <View style={ styles.container }>
         <PostList
           allPosts={ this.props.allPosts }
+          mainNavigator={ this.props.mainNavigator }
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
           showNewPostCard={ true }

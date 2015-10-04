@@ -16,20 +16,28 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 
 var NewPostCard = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool
+    loggedIn: React.PropTypes.bool,
+    mainNavigator: React.PropTypes.object
+  },
+
+  goToNewPost() {
+    if(this.props.loggedIn) {
+      this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+    } else {
+      
+    }
   },
 
   render() {
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#000', false) }
-        onPress={() => {
-
-        }}
+        onPress={ this.goToNewPost }
       >
         <View style={ styles.container }>
           <Image

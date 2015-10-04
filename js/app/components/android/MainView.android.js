@@ -14,6 +14,7 @@ var {
 var SearchBar = require('./SearchBar.android.js');
 var LoginNavigator = require('./../../../login/components/android/LoginNavigator.android.js');
 var MessageView = require('./../../../chat/components/android/MessageView.android.js');
+var NewPostView = require('./../../../post/components/android/NewPostView.android.js');
 
 var routes = require('./../../../routes');
 
@@ -43,6 +44,11 @@ var MainView = React.createClass({
       case routes.MAIN.MESSAGEVIEW.name:
         return (
           <MessageView { ...this.props } />
+        );
+        break;
+      case routes.MAIN.NEWPOST.name:
+        return (
+          <NewPostView { ...this.props } />
         );
         break;
       default:
