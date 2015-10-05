@@ -7,13 +7,14 @@
 
 var React = require('react-native');
 var {
-  View,
+  View,  
   Text,
   StyleSheet,
   TouchableHighlight,
   Image
 } = React;
 var PostHeader = require('./PostHeader.android.js');
+var PostBody = require('./PostBody.android.js');
 var PostStore = require('./../../PostStore');
 var _ = require('underscore');
 
@@ -75,7 +76,7 @@ var Post = React.createClass({
     return (
       <View style={ styles.container }>
         <PostHeader post={ this.props.post } />
-        <Text>{ this.props.post.title }</Text>
+        <PostBody post={ this.props.post } />
         { this._renderPostImage() }
       </View>
 
