@@ -257,10 +257,16 @@ var BevyPickerItem = React.createClass({
   },
 
   _renderIcon() {
-    if(!this.props.isSelected) return <View />;
+    if(!this.props.isSelected) return (
+      <Icon
+        name='check-box-outline-blank'
+        size={ 30 }
+        color='#2CB673'
+      />
+    );
     return (
       <Icon
-        name='done'
+        name='check-box'
         size={ 30 }
         color='#2CB673'
       />
@@ -291,9 +297,10 @@ var BevyPickerItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF'
+    backgroundColor: '#EEE'
   },
   topBar: {
+    backgroundColor: '#FFF',
     height: 48,
     width: constants.width,
     flexDirection: 'row',
@@ -359,7 +366,7 @@ var styles = StyleSheet.create({
     marginBottom: 24,
     height: 48,
     width: constants.width,
-    backgroundColor: '#EEE',
+    backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center'
   },
@@ -377,15 +384,20 @@ var styles = StyleSheet.create({
   bevyPickerItem: {
     height: 40,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: 12,
+    paddingRight: 12
   },
   bevyImage: {
     height: 30,
     width: 30,
     borderRadius: 15,
-    marginRight: 10
+    marginRight: 10,
+    marginLeft: 10
   },
   bevyName: {
+    flex: 1,
+    textAlign: 'left',
     color: '#888'
   }
 });
