@@ -55,14 +55,17 @@ var PostHeader = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    height: 40,
+    height: 48,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8
   },
   authorImage: {
     width: 30,
     height: 30,
-    borderRadius: 15
+    borderRadius: 15,
+    marginRight: 8
   },
   details: {
     flexDirection: 'column'

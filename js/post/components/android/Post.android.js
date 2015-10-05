@@ -9,7 +9,9 @@ var React = require('react-native');
 var {
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  TouchableHighlight,
+  Image
 } = React;
 var PostHeader = require('./PostHeader.android.js');
 var PostStore = require('./../../PostStore');
@@ -84,7 +86,9 @@ var Post = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    backgroundColor: '#FFF'
+    backgroundColor: '#FFF',
+    margin: 10,
+    borderRadius: 5
   }
 });
 
