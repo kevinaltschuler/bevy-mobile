@@ -261,6 +261,16 @@ _.extend(PostStore, {
     var post = this.posts.get(post_id);
     if(post == undefined) return {};
     else return post.toJSON();
+  },
+
+  getPostVoteCount(post_id) {
+    var sum = 0;
+    var post = this.posts.get(post_id);
+    if(post == undefined) return sum;
+    post.get('votes').forEach(function(vote) {
+      sum += vote.score;
+    });
+    return sum;
   }
 });
 
