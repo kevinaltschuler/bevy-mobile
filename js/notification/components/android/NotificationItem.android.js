@@ -1,5 +1,5 @@
 /**
- * SearchView.android.js
+ * NotificationItem.android.js
  * @author albert
  */
 
@@ -12,11 +12,15 @@ var {
   StyleSheet
 } = React;
 
-var SearchView = React.createClass({
+var NotificationItem = React.createClass({
+  propTypes: {
+    notification: React.PropTypes.object
+  },
+
   render() {
     return (
       <View style={ styles.container }>
-      	<Text>Search View</Text>
+        <Text>Notification Item</Text>
       </View>
     );
   }
@@ -24,9 +28,8 @@ var SearchView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 48
+
   }
 });
 
-module.exports = SearchView;
+module.exports = NotificationItem;

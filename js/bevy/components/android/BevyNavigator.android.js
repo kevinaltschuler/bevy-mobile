@@ -12,6 +12,7 @@ var {
   Navigator,
   StyleSheet
 } = React;
+var PostView = require('./../../../post/components/android/PostView.android.js');
 
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
@@ -31,31 +32,25 @@ var BevyNavigator = React.createClass({
           flex: 1
         }}
         renderScene={(route, navigator) => {
-          <BevyView
-            bevyRoute={ route }
-            bevyNavigator={ navigator }
-            { ...this.props }
-          />
+          switch(route.name) {
+            case routes.BEVY.POSTLIST.name:
+              return (
+                <PostView
+                  bevyNavigator={ navigator }
+                  bevyRoute={ route }
+                  { ...this.props }
+                />
+              );
+              break;
+            default:
+              return (
+                <Text>Default Bevy Navigator Route</Text>
+              );
+              break;
+          }
         }}
       />
     );
-  }
-});
-
-var BevyView = React.createClass({
-  propTypes: {
-    bevyRoute: React.PropTypes.object,
-    bevyNavigator: React.PropTypes.object
-  },
-
-  render() {
-
-  }
-});
-
-var styles = StyleSheet.create({
-  container: {
-
   }
 });
 

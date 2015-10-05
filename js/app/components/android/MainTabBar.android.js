@@ -15,6 +15,8 @@ var {
 var TabBarItem = require('./TabBarItem.android.js');
 var SettingsView = require('./../../../settings/components/android/SettingsView');
 var ChatNavigator = require('./../../../chat/components/android/ChatNavigator.android.js');
+var NotificationView = require('./../../../notification/components/android/NotificationView.android.js');
+var BevyNavigator = require('./../../../bevy/components/android/BevyNavigator.android.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var constants = require('./../../../constants');
@@ -26,10 +28,13 @@ var tabs = {
   more: 'MORE'
 };
 var unselectedColor='#888';
-var selectedColor='#fff';
+var selectedColor='#FFF';
 var iconSize = 24;
 
 var MainTabBar = React.createClass({
+  propTypes: {
+
+  },
 
   getInitialState() {
     return {
@@ -49,13 +54,13 @@ var MainTabBar = React.createClass({
     };
     switch(this.state.activeTab) {
       case tabs.posts:
-        return <Text>Posts Tab Here</Text>
+        return <BevyNavigator tabActions={ tabActions } { ...this.props } />;
         break;
       case tabs.chat:
         return <ChatNavigator tabActions={ tabActions } { ...this.props } />;
         break;
       case tabs.notifications:
-        return <Text>Notifications Tab Here</Text>
+        return <NotificationView tabActions={ tabActions } { ...this.props } />;
         break;
       case tabs.more:
         return <SettingsView tabActions={ tabActions } { ...this.props } />;

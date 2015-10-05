@@ -20,14 +20,73 @@ var SearchView = require('./SearchView.android.js');
 var Drawer = require('./Drawer.android.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var SearchBar = React.createClass({
-
   propTypes: {
+    navState: React.PropTypes.object,
+    navigator: React.PropTypes.object,
     drawerOpen: React.PropTypes.bool,
     drawerActions: React.PropTypes.object
+  },
+
+  getInitialState() {
+    var activeRoute = this.props.navState.routeStack[this.props.navState.presentedIndex];
+    return {
+      activeRoute: activeRoute,
+      query: ''
+    };
+  },
+
+  componentDidMount() {
+    this.props.navigator.navigationContext.addListener('willfocus', (ev) => {
+      var route = ev.data.route;
+      this.setState({
+        activeRoute: route
+      });
+      this.forceUpdate();
+    });
+  },
+
+  componentWillUnmount() {
+    this.props.navigator.navigationContext.removeListener('willfocus');
+  },
+
+  onSearchBlur() {
+
+  },
+
+  onSearchFocus() {
+    if(this.state.activeRoute.name === routes.SEARCH.OUT.name) {
+      this.props.navigator.push(routes.SEARCH.IN);
+      this.setState({
+        activeRoute: routes.SEARCH.IN
+      });
+    }
+  },
+
+  onSearch(query) {
+    if(this.searchDelay != undefined) {
+      clearTimeout(this.searchDelay);
+      delete this.searchDelay;
+    }
+    this.searchDelay = setTimeout(function() {
+      this.setState({
+        query: query
+      });
+      BevyActions.search(this.state.query);
+    }.bind(this), 500);
+  },
+
+  goBack() {
+    this.refs.Search.blur();
+    this.props.navigator.pop();
+    this.setState({
+      activeRoute: routes.SEARCH.OUT
+    });
   },
 
   toggleDrawer() {
@@ -37,9 +96,26 @@ var SearchBar = React.createClass({
       this.props.drawerActions.open();
   },
 
-  render() {
-    return (
-      <View style={ styles.navbar }>
+  _renderLeftButton() {
+    if(this.state.activeRoute.name == routes.SEARCH.IN.name) {
+      return (
+        <TouchableNativeFeedback  
+          onPress={ this.goBack }
+        >
+          <View style={ styles.backButton }>
+            <Icon 
+              name='chevron-left' 
+              color='#fff' 
+              size={ 30 } 
+              style={{
+
+              }}
+            />
+          </View>
+        </TouchableNativeFeedback>
+      );
+    } else {
+      return (
         <TouchableNativeFeedback  
           onPress={ this.toggleDrawer }
         >
@@ -47,6 +123,14 @@ var SearchBar = React.createClass({
             <Icon name='menu' color='#fff' size={ 24 } />
           </View>
         </TouchableNativeFeedback>
+      );
+    }
+  },
+
+  render() {
+    return (
+      <View style={ styles.navbar }>
+        { this._renderLeftButton() }
         <View style={ styles.searchInputWrapper }>
           <Icon name='search' color='#fff' size={ 24 } />
           <TextInput
@@ -55,6 +139,9 @@ var SearchBar = React.createClass({
             placeholder='Search'
             placeholderTextColor='#FFF'
             underlineColorAndroid='#FFF'
+            onBlur={ this.onSearchBlur }
+            onFocus={ this.onSearchFocus }
+            onChangeText={ this.onSearch }
           />
         </View>
       </View>
@@ -74,13 +161,12 @@ var SearchNavigator = React.createClass({
           routes.SEARCH.OUT
         ]}
         sceneStyle={{
-          flex: 1,
-          width: constants.width
+          flex: 1
         }}
         renderScene={(route, navigator) => {
           constants.setSearchNavigator(navigator);
           switch(route.name) {
-            case 'in':
+            case routes.SEARCH.IN.name:
               return (
                 <SearchView 
                   searchRoute={ route }
@@ -89,7 +175,7 @@ var SearchNavigator = React.createClass({
                 />
               );
               break;
-            case 'out':
+            case routes.SEARCH.OUT.name:
             default:
               return (
                 <MainTabBar 
@@ -171,13 +257,23 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  backButton: {
+    height: 48,
+    paddingLeft: 8,
+    paddingRight: 8,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  backButtonText: {
+    color: '#FFF'
+  },
   searchInputWrapper: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginRight: 20,
-    marginLeft: 10
+    paddingLeft: 8,
+    paddingRight: 8
   },
   searchIcon: {
     width: 25,
@@ -186,8 +282,6 @@ var styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 48,
-    paddingRight: 20,
-    paddingLeft: 10,
     color: 'white'
   },
 });

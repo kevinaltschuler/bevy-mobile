@@ -15,6 +15,7 @@ var {
 } = React;
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var BevyList = require('./../../../bevy/components/android/BevyList.android.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var routes = require('./../../../routes');
 
@@ -53,13 +54,35 @@ var Drawer = React.createClass({
     }
   },
 
+  _renderBeviesHeader() {
+    if(!this.props.loggedIn) {
+      return (
+        <View style={ styles.myBeviesHeader }>
+          <Text style={ styles.myBeviesText }>Public Bevies</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View style={ styles.myBeviesHeader }>
+          <Text style={ styles.myBeviesText }>My Bevies</Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#FFF', false) } 
+            onPress={ () => {}}
+          >
+            <View style={ styles.bevyAddButton }>
+              <Icon name='add' size={ 24 } color='#FFF' />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      );
+    }
+  },
+
   render() {
     return (
       <View style={ styles.container }>
         { this._renderProfile() }
-        <View style={ styles.myBeviesHeader }>
-          <Text style={ styles.myBeviesText }>My Bevies</Text>
-        </View>
+        { this._renderBeviesHeader() }
         <BevyList { ...this.props } />
       </View>
     );
@@ -89,8 +112,16 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   myBeviesText: {
+    flex: 1,
     marginLeft: 10,
     color: '#FFF'
+  },
+  bevyAddButton: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 12,
+    paddingRight: 12
   }
 });
 

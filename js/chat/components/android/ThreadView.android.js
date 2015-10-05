@@ -18,7 +18,8 @@ var ThreadView = React.createClass({
   propTypes: {
     allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object,
-    chatNavigator: React.PropTypes.object
+    chatNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -51,6 +52,7 @@ var ThreadView = React.createClass({
                 user={ this.props.user }
                 active={ active }
                 chatNavigator={ this.props.chatNavigator }
+                mainNavigator={ this.props.mainNavigator }
               />
             );
           }}

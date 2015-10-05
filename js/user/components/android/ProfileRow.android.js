@@ -13,6 +13,8 @@ var {
   StyleSheet
 } = React;
 
+var _ = require('underscore');
+
 var ProfileRow = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
@@ -37,6 +39,13 @@ var ProfileRow = React.createClass({
     };
   },
 
+  _renderEmail() {
+    if(_.isEmpty(this.props.user.email)) return <View />;
+    else return (
+      <Text style={[ styles.email, { color: this.props.emailColor } ]}>{ this.props.user.email }</Text>
+    );
+  },
+
   render() {
     return (
       <View style={[ styles.container, { height: this.props.height }, this.props.style ]}>
@@ -47,7 +56,7 @@ var ProfileRow = React.createClass({
         />
         <View style={ styles.profileDetails }>
           <Text style={[ styles.displayName, { color: this.props.nameColor } ]}>{ this.props.user.displayName }</Text>
-          <Text style={[ styles.email, { color: this.props.emailColor } ]}>{ this.props.user.email }</Text>
+          { this._renderEmail() }
         </View>
       </View>
     );
@@ -66,8 +75,10 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   profileDetails: {
+    flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    justifyContent: 'center'
   },
   displayName: {
   },

@@ -34,6 +34,13 @@ var SettingsView = React.createClass({
           user={ this.props.user }
           nameColor='#000'
           emailColor='#000'
+          style={{
+            marginTop: 10,
+            marginBottom: 10,
+            backgroundColor: '#FFF',
+            borderBottomWidth: 1,
+            borderBottomColor: '#DDD'
+          }}
         />
       );
     } else {
@@ -44,7 +51,7 @@ var SettingsView = React.createClass({
           }}
         >
           <View style={ styles.logInButton }>
-            <Text style={ styles.logInButtonText }>Log In</Text>
+            <Text style={ styles.logInButtonText }></Text>
           </View>
         </TouchableNativeFeedback>
       );
@@ -95,11 +102,15 @@ var styles = StyleSheet.create({
   },
   logOutButton: {
     height: 48,
+    backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    paddingLeft: 12,
+    paddingRight: 12
   },
   logOutButtonText: {
+    flex: 1,
     textAlign: 'left',
     color: '#000'
   }
