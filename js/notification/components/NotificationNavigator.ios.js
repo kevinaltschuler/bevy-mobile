@@ -13,9 +13,7 @@ var {
   TouchableHighlight,
   Navigator
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var NotificationList = require('./NotificationList.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
@@ -55,7 +53,7 @@ var NotificationView = React.createClass({
         }}
       >
         <Icon
-          name='ion|ios-minus'
+          name='ios-minus'
           size={30}
           color='#666'
           style={styles.dismissAllButton}

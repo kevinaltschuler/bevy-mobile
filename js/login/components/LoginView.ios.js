@@ -155,13 +155,7 @@ var LoginView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <Text style={ styles.logInTitle }>{ this.props.message }</Text>
         { this._renderError() }
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd'
-        }} />
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
@@ -171,11 +165,13 @@ var LoginView = React.createClass({
           onChangeText={ (text) => this.setState({ username: text }) }
           placeholderTextColor='#aaa'
         />
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd'
-        }} />
+        <View 
+          style={{
+            flex: 1,
+            color: '#ddd',
+            height: 1
+          }}
+        />
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
@@ -185,12 +181,6 @@ var LoginView = React.createClass({
           onChangeText={ (text) => this.setState({ pass: text }) }
           placeholderTextColor='#aaa'
         />
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd',
-          marginBottom: 15
-        }} />
         <TouchableHighlight 
           style={ styles.loginButton }
           underlayColor='rgba(44,182,105,0.8)'
@@ -257,12 +247,19 @@ var styles = StyleSheet.create({
     flex: 1,
     height: 40,
     paddingLeft: 16,
-    color: '#000'
+    color: '#000',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    marginBottom: 10
   },
   loginButton: {
     flex: 1,
     padding: 10,
-    backgroundColor: '#2CB673'
+    backgroundColor: '#2CB673',
+    height: 40,
+    flexDirection: 'column',
+    borderRadius: 20,
+    marginBottom: 10
   },
   loginButtonText: {
     flex: 1,
@@ -274,7 +271,10 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#df4a32',
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
+    flexDirection: 'column',
+    height: 40,
+    borderRadius: 20
   },
   loginButtonTextGoogle: {
     flex: 1,
@@ -285,11 +285,13 @@ var styles = StyleSheet.create({
 
   textButton: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingTop: 5,
     paddingBottom: 5,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderRadius: 20,
+    height: 40
   },
   textButtonText: {
     textAlign: 'center',

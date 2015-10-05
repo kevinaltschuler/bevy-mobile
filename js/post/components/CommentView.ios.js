@@ -10,9 +10,7 @@ var {
   TouchableHighlight,
   TouchableOpacity
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var Post = require('./Post.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
@@ -364,7 +362,7 @@ var styles = StyleSheet.create({
     paddingBottom: 8,
     backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: 'black',
+    shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
     shadowOffset:  {width: 0, height: 0}

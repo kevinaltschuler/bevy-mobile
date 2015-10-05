@@ -28,9 +28,7 @@ var window = require('Dimensions').get('window');
 var routes = require('./../../routes');
 
 // get icons
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var BevyView = React.createClass({
   propTypes: {
@@ -96,7 +94,7 @@ var BevyView = React.createClass({
         }}
       >
         <Icon
-          name='ion|ios-pricetag'
+          name='ios-pricetag'
           size={20}
           color='#666'
           style={{
@@ -194,7 +192,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 64,
-    backgroundColor: 'black'
+    backgroundColor: '#000'
   },
   headerStyle: {
     backgroundColor: '#2CB673',

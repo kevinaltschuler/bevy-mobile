@@ -8,9 +8,7 @@ var {
   StyleSheet,
   Modal
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -56,7 +54,7 @@ var AddBevyModal = React.createClass({
             <View style={ styles.closeButtonContainer }>
               <Text style={ styles.closeButtonText }>Close</Text>
               <Icon
-                name='ion|ios-close-empty'
+                name='ios-close-empty'
                 size={ 30 }
                 color='#fff'
                 style={{ width: 30, height: 30 }}
@@ -84,7 +82,7 @@ var AddBevyModal = React.createClass({
                 }}
               >
                 <Icon
-                  name='ion|ios-search'
+                  name='ios-search'
                   color='#aaa'
                   size={ 80 }
                   style={{ width: 80, height: 80, borderRadius: 15 }}
@@ -106,7 +104,7 @@ var AddBevyModal = React.createClass({
                 }}
               >
                 <Icon
-                  name='ion|ios-plus-empty'
+                  name='ios-plus-empty'
                   color='#aaa'
                   size={ 80 }
                   style={{ width: 80, height: 80, borderRadius: 15 }}

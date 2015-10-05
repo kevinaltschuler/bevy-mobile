@@ -14,9 +14,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');

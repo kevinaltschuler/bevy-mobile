@@ -78,15 +78,7 @@ var RegisterView = React.createClass({
   render: function() {
     return ( 
       <View style={styles.container}>
-        <Text style={styles.registerTitle}>
-          Create An Account
-        </Text>
         { this._renderError() }
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd'
-        }} />
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
@@ -97,11 +89,6 @@ var RegisterView = React.createClass({
           value={ this.state.username }
           onChangeText={(text) => this.setState({ username: text })}
         />
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd'
-        }} />
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
@@ -112,12 +99,6 @@ var RegisterView = React.createClass({
           value={ this.state.pass }
           onChangeText={(text) => this.setState({ pass: text })}
         />
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd',
-          marginBottom: 15
-        }} />
         <TouchableHighlight 
           style={ styles.registerButton }
           underlayColor='rgba(44,182,105,0.8)'
@@ -166,13 +147,17 @@ var styles = StyleSheet.create({
     flex: 1,
     height: 40,
     paddingLeft: 16,
-    color: '#000'
+    color: '#000',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: .5,
+    marginBottom: 10
   },
   registerButton: {
     flex: 1,
     padding: 10,
     backgroundColor: '#2CB673',
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius: 20
   },
   registerButtonText: {
     flex: 1,

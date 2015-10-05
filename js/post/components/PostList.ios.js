@@ -125,29 +125,42 @@ var PostList = React.createClass({
             dataSource={ this.state.dataSource }
             style={ styles.postContainer }
             onRefresh={this.onRefresh}
-            indicator={<LoadingBarIndicator />}
+            indicator={<LoadingBarIndicator position="fixed" />}
             scrollRenderAheadDistance={3}
             renderHeader={() => { 
               return this._renderHeader();
             }}
             renderRow={(post) => {
-              if(!_.isEmpty(post.bevy))
-                if(post.type == 'event')
-                  return <Event 
-                    key={ 'postlist:' + post._id } 
-                    post={ post } 
-                    mainRoute={ this.props.mainRoute }
-                    mainNavigator={ this.props.mainNavigator }
-                  />
-                else
-                  return  <Post 
-                    key={ 'postlist:' + post._id } 
-                    post={ post } 
-                    mainRoute={ this.props.mainRoute }
-                    mainNavigator={ this.props.mainNavigator }
-                  />
-              else 
+              if(_.isEmpty(post.bevy)) {
                 return <View/>
+              }
+              if(this.props.activeBevy._id == -1) {
+                if(!_.contains(this.props.frontpageFilters, post.bevy._id)) { 
+                  //console.log("filtering by bevy", this.props.frontpageFilters, post.bevy._id);
+                  return <View/>;
+                }
+              }
+              if(this.props.activeBevy._id != -1) {
+                if(!_.contains(this.props.activeTags, post.tag)) {
+                  //console.log("filtering by tag", this.props.activeBevy._id);
+                  return <View/>;
+                }
+              }
+              
+              if(post.type == 'event')
+                return <Event 
+                  key={ 'postlist:' + post._id } 
+                  post={ post } 
+                  mainRoute={ this.props.mainRoute }
+                  mainNavigator={ this.props.mainNavigator }
+                />
+              else
+                return  <Post 
+                  key={ 'postlist:' + post._id } 
+                  post={ post } 
+                  mainRoute={ this.props.mainRoute }
+                  mainNavigator={ this.props.mainNavigator }
+                />
             }}
           />
       </View>

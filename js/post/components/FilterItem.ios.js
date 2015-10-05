@@ -38,7 +38,8 @@ var FilterItem = React.createClass({
 
   getInitialState() {
     return {
-      value: this.props.value
+      value: this.props.value,
+      filter: this.props.filter
     }
   },
 
@@ -58,20 +59,20 @@ var FilterItem = React.createClass({
             var filters = this.props.source;
 
 	          if(!this.state.value) {
-              filters.push(this.props.filter);
+              filters.push(this.state.filter);
 	          } else {
-              filters = _.reject(filters, function($filter){ $filter == this.props.filter });
+              filters = _.reject(filters, function($filter){ $filter == this.state.filter }.bind(this));
               //removing
 	          }
 
             if(this.props.isFrontpage) 
-              BevyActions.updateFilters(filters);
+              BevyActions.updateFront(filters);
             else 
               BevyActions.updateTags(filters);
 	        }}
 	      />
 	      <Text style={ styles.label }>
-	      	{this.props.filter.name}
+	      	{this.state.filter.name}
 	      </Text>
 	    </View>
 

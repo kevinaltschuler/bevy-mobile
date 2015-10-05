@@ -37,7 +37,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle"];
+  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios"];
   // ALBERTS HOUSE
   //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.19:8081/index.ios.bundle"];
   // KEVINS HOUSE

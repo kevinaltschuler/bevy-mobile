@@ -8,9 +8,7 @@ var {
   StyleSheet,
   Navigator
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var window = require('Dimensions').get('window');
 var _ = require('underscore');
@@ -124,7 +122,7 @@ var SearchBar = React.createClass({
             { leftButton }
             <View style={ styles.searchInputWrapper }>
               <Icon 
-                name='ion|ios-search'
+                name='ios-search'
                 color='#fff'
                 size={ 25 }
                 style={ styles.searchIcon }

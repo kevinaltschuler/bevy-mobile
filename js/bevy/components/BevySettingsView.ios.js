@@ -15,7 +15,7 @@ var {
 } = React;
 var {
   Icon
-} = require('react-native-icons');
+} = require('react-native-vector-icons');
 
 var _ = require('underscore');
 
@@ -71,7 +71,7 @@ var BevySettingsView = React.createClass({
               var check = (setting.active)
               ? (
                 <Icon
-                  name='ion|ios-checkmark-empty'
+                  name='ios-checkmark-empty'
                   color='#2CB673'
                   size={ 35 }
                   style={{ width: 35, height: 35 }}

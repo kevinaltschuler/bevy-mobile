@@ -16,9 +16,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var SettingsItem = React.createClass({
 
@@ -40,33 +38,33 @@ var SettingsItem = React.createClass({
   },
 
   render() {
-      var check = (this.props.checked)
-      ? (
-        <Icon
-          name='ion|ios-checkmark-empty'
-          color='#2CB673'
-          size={ 35 }
-          style={{ width: 35, height: 35 }}
-        />
-      )
-      : null;
+    var check = (this.props.checked)
+    ? (
+      <Icon
+        name='ios-checkmark-empty'
+        color='#2CB673'
+        size={ 35 }
+        style={{ width: 35, height: 35 }}
+      />
+    )
+    : <View />;
 
-      return (
-        <TouchableHighlight
-          underlayColor='rgba(0,0,0,0.1)'
-          style={[ styles.settingItemContainer ]}
-          onPress={() => {
-            this.props.onPress();
-          }}
-        >
-          <View style={ styles.settingItem}>
-            <Text style={ styles.settingTitle }>
-              { this.props.title }
-            </Text>
-            { check }
-          </View>
-        </TouchableHighlight>
-      );
+    return (
+      <TouchableHighlight
+        underlayColor='rgba(0,0,0,0.1)'
+        style={[ styles.settingItemContainer ]}
+        onPress={() => {
+          this.props.onPress();
+        }}
+      >
+        <View style={ styles.settingItem}>
+          <Text style={ styles.settingTitle }>
+            { this.props.title }
+          </Text>
+          { check }
+        </View>
+      </TouchableHighlight>
+    );
   }
 });
 

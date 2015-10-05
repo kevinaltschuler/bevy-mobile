@@ -16,9 +16,7 @@ var {
   SwitchIOS,
   TouchableOpacity,
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
@@ -98,7 +96,7 @@ var InfoView = React.createClass({
         }}
       >
         <Icon
-          name='ion|ios-camera-outline'
+          name='ios-camera-outline'
           size={40}
           color='white'
           style={styles.cameraIcon}
@@ -241,14 +239,14 @@ var InfoView = React.createClass({
             </Text>
             <View style={ styles.details }>
               <Icon
-                name='ion|earth'
+                name='earth'
                 size={ 15 }
                 color='#888'
                 style={{ width: 15, height: 15 }}
               />
               <Text style={ styles.detailText }> Public  </Text>
               <Icon
-                name='ion|ios-people'
+                name='ios-people'
                 size={ 15 }
                 color='#888'
                 style={{ width: 15, height: 15 }}
@@ -295,7 +293,7 @@ var styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: -10,
     borderRadius: 2,
-    shadowColor: 'black',
+    shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
     shadowOffset:  { width: 0, height: 0 }

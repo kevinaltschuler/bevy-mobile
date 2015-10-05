@@ -15,9 +15,7 @@ var {
   TouchableHighlight,
   ScrollView
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var PostList = require('./../../post/components/PostList.ios.js');
 var AddBevyModal = require('./AddBevyModal.ios.js');
@@ -103,7 +101,7 @@ var BevyList = React.createClass({
           onPress={() => { this.setState({ showAddBevyModal: true }); }}
         >
           <Icon
-            name='ion|ios-plus-empty'
+            name='ios-plus-empty'
             color='#999'
             size={ 30 }
             style={{ width: 30, height: 30 }}

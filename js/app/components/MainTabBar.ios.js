@@ -10,12 +10,11 @@ var {
   Text,
   Image,
   View,
-  StatusBarIOS
+  StatusBarIOS,
+  TabBarIOS,
 } = React;
-var {
-  Icon,
-  TabBarIOS
-} = require('react-native-icons');
+
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -69,55 +68,51 @@ var MainTabBar = React.createClass({
     switch(this.state.selectedTab) {
       case tabs.Posts:
         return (
-          <View style={ styles.tabContent }>
-            <BevyNavigator 
-              { ...this.props } 
-              tabBarActions={ tabBarActions }
-            />
-          </View>
+          <BevyNavigator 
+            { ...this.props } 
+            tabBarActions={ tabBarActions }
+          />
         );
         break;
       case tabs.Chat:
         return (
-          <View style={ styles.tabContent }>
-            <ChatNavigator 
-              { ...this.props } 
-              tabBarActions={ tabBarActions }
-            />
-          </View>
+          <ChatNavigator 
+            { ...this.props } 
+            tabBarActions={ tabBarActions }
+          />
         );
         break;
       case tabs.Notifications:
         return (
-          <View style={ styles.tabContent }>
-            <NotificationNavigator 
-              { ...this.props } 
-              tabBarActions={ tabBarActions }
-            />
-          </View>
+          <NotificationNavigator 
+            { ...this.props } 
+            tabBarActions={ tabBarActions }
+          />
         );
         break;
       case tabs.More:
         return (
-          <View style={ styles.tabContent }>
-            <SettingsView 
-              { ...this.props } 
-              tabBarActions={ tabBarActions } 
-            />
-          </View>
+          <SettingsView 
+            { ...this.props } 
+            tabBarActions={ tabBarActions } 
+          />
         );
     }
   },
 
   render() {
     return (
-      <View style={styles.mainContainer}>
-        <TabBarIOS tintColor={ '#393939' } barTintColor={ 'white' } style={ styles.tabBar }>
-          <TabBarIOS.Item
+        <TabBarIOS 
+          tintColor='#000' 
+          barTintColor='#FFF' 
+          translucent={ false }
+        >
+          <Icon.TabBarItem
             title='Posts'
-            iconName={'ion|ios-list-outline'}
-            selectedIconName={'ion|ios-list'}
-            selectedIconSize={28}
+            iconName='ios-list-outline'
+            selectedIconName='ios-list'
+            color='#000'
+            size={ 28 }
             selected={ this.state.selectedTab === tabs.Posts }
             style={ styles.tabIcon }
             onPress={() => {
@@ -127,12 +122,13 @@ var MainTabBar = React.createClass({
             }}
           >
             { this._renderContent() }
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
+          </Icon.TabBarItem>
+          <Icon.TabBarItem
             title='Chat'
-            iconName={'ion|ios-chatbubble-outline'}
-            selectedIconName={'ion|ios-chatbubble'}
-            selectedIconSize={28}
+            iconName='ios-chatbubble-outline'
+            selectedIconName='ios-chatbubble'
+            color='#000'
+            size={ 28 }
             selected={ this.state.selectedTab === tabs.Chat }
             style={ styles.tabIcon }
             onPress={() => {
@@ -142,13 +138,13 @@ var MainTabBar = React.createClass({
             }}
           >
             { this._renderContent() }
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
+          </Icon.TabBarItem>
+          <Icon.TabBarItem
             title='Notifications'
-            iconName={'ion|ios-bell-outline'}
-            selectedIconName={'ion|ios-bell'}
-            selectedIconSize={28}
-            badge={NotificationStore.unread}
+            iconName='ios-bell-outline'
+            selectedIconName='ios-bell'
+            color='#000'
+            size={ 28 }
             selected={ this.state.selectedTab === tabs.Notifications }
             style={ styles.tabIcon }
             onPress={() => {
@@ -158,14 +154,14 @@ var MainTabBar = React.createClass({
             }}
           >
             { this._renderContent() }
-          </TabBarIOS.Item>
-          <TabBarIOS.Item
+          </Icon.TabBarItem>
+          <Icon.TabBarItem
             title='More'
-            iconName={'ion|ios-more-outline'}
-            selectedIconName={'ion|ios-more'}
-            selectedIconSize={28}
+            iconName='ios-more-outline'
+            selectedIconName='ios-more'
+            size={ 28 }
+            color='#000000'
             selected={ this.state.selectedTab === tabs.More }
-            style={ styles.tabIcon }
             onPress={() => {
               this.setState({
                 selectedTab: tabs.More,
@@ -173,28 +169,18 @@ var MainTabBar = React.createClass({
             }}
           >
             { this._renderContent() }
-          </TabBarIOS.Item>
+          </Icon.TabBarItem>
         </TabBarIOS>
-      </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    marginTop: 0,
-    flexDirection: 'column'
-  },
-  tabContent: {
-    flex: 1
-  },
   tabBar: {
-    flex: 1,
     height: 48,
+    width: constants.width
   },
   tabIcon: {
-    flex: 1,
   }
 });
 

@@ -7,9 +7,7 @@ var {
   StyleSheet,
   TouchableOpacity
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var BackButton = React.createClass({
 
@@ -50,7 +48,7 @@ var BackButton = React.createClass({
       >
         <View style={ styles.backButton }>
           <Icon
-            name='ion|ios-arrow-left'
+            name='ios-arrow-left'
             size={ 30 }
             color={ this.props.color }
             style={ styles.backButtonIcon }

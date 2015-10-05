@@ -16,9 +16,7 @@ var {
   TouchableOpacity
 } = React;
 
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var NotificationActions = require('./../NotificationActions');
 var routes = require('./../../routes');
@@ -291,7 +289,7 @@ var styles = StyleSheet.create({
   titleImage: {
     width: 40,
     height: 40,
-    backgroundColor: 'black',
+    backgroundColor: '#000',
     borderRadius: 20,
   },
   rightRow: {

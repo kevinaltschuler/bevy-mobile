@@ -66,17 +66,9 @@ var ForgotView = React.createClass({
   render: function() {
     return ( 
       <View style={styles.container}>
-        <Text style={styles.loginTitle}>
-          Lost Password?
-        </Text>
         <Text style={styles.loginSubTitle}>
           { this.state.subTitle }
         </Text>
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd'
-        }} />
         <TextInput
           autoCorrect={false}
           autoCapitalize='none'
@@ -87,12 +79,6 @@ var ForgotView = React.createClass({
           value={ this.state.email }
           onChangeText={(text) => this.setState({email: text})}
         />
-        <View style={{
-          flex: 1,
-          height: 1,
-          backgroundColor: '#ddd',
-          marginBottom: 15
-        }} />
         <TouchableHighlight 
           style={ styles.loginButton }
           underlayColor='rgba(44,182,105,0.8)'
@@ -140,13 +126,17 @@ var styles = StyleSheet.create({
     flex: 1,
     height: 40,
     paddingLeft: 16,
-    color: '#000'
+    color: '#000',
+    borderBottomWidth: .5,
+    borderBottomColor: '#ddd',
+    marginBottom: 10
   },
   loginButton: {
     flex: 1,
     padding: 10,
     backgroundColor: '#2CB673',
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius: 20
   },
   loginButtonText: {
     flex: 1,

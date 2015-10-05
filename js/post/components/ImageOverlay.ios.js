@@ -10,12 +10,9 @@ var {
   PanResponder,
   Modal
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var constants = require('./../../constants');
-var BlurView = require('react-native-blur').BlurView;
 
 var toleranceX = 10;
 var toleranceY = 10;
@@ -86,7 +83,7 @@ var ImageOverlay = React.createClass({
         }}
       >
         <Icon
-          name='ion|ios-arrow-left'
+          name='ios-arrow-left'
           size={ 30 }
           style={{ width: 30, height: 30 }}
           color='#333'
@@ -104,7 +101,7 @@ var ImageOverlay = React.createClass({
         }}
       >
         <Icon
-          name='ion|ios-arrow-right'
+          name='ios-arrow-right'
           size={ 30 }
           style={{ width: 30, height: 30 }}
           color='#333'
@@ -132,10 +129,6 @@ var ImageOverlay = React.createClass({
                 }}
               >
                 <View>
-                  <BlurView 
-                    blurType="dark" 
-                    style={styles.blur}
-                  />
                 </View>
               </TouchableHighlight>
             </View>
@@ -151,7 +144,7 @@ var ImageOverlay = React.createClass({
                   }}
                 >
                   <Icon
-                    name='ion|ios-close-empty'
+                    name='ios-close-empty'
                     size={ 30 }
                     style={{ width: 30, height: 30 }}
                     color='#333'
@@ -200,7 +193,7 @@ var styles = StyleSheet.create({
     height: constants.height * .8,
     width: constants.width * .8,
     flexDirection: 'column',
-    shadowColor: 'black',
+    shadowColor: '#000',
     borderRadius: 20,
     shadowRadius: 80,
     shadowOpacity: .5,
