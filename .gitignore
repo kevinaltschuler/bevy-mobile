@@ -28,8 +28,8 @@ node_modules/
 npm-debug.log
 
 # android
-.gradle/**/*.bin
-.gradle/**/*.lock
+android/.gradle/**/*.bin
+android/.gradle/**/*.lock
 *.lock
 *.bin
-.gradle/**/*.properties
+android/.gradle/2.4/taskArtifacts/cache.properties
