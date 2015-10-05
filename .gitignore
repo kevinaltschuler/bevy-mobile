@@ -32,3 +32,4 @@ npm-debug.log
 .gradle/**/*.lock
 *.lock
 *.bin
+.gradle/**/*.properties
