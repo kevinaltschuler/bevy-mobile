@@ -17,10 +17,20 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var PostStore = require('./../../PostStore');
+var $PostActions = require('./../../PostActions');
+var UserStore = require('./../../../user/UserStore');
 
 var PostActions = React.createClass({
   propTypes: {
     post: React.PropTypes.object
+  },
+
+  getInitialState() {
+    var user = UserStore.getUser();
+    var vote = _.findWhere(this.props.post.votes, { voter: user._id });
+    return {
+      voted: (vote != undefined && vote.score > 0)
+    };
   },
 
   getLikeCountText() {
@@ -43,16 +53,19 @@ var PostActions = React.createClass({
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#CCC', false) }
           onPress={() => {
-
+            $PostActions.vote(this.props.post._id);
+            this.setState({
+              voted: !this.state.voted
+            });
           }}
         >
           <View style={ styles.likeButton }>
             <Icon
               name='thumb-up'
               size={ 24 }
-              color='#AAA'
+              color={(this.state.voted) ? '#666' : '#AAA'}
             />
-            <Text style={ styles.likeButtonText }>
+            <Text style={[styles.likeButtonText, { color: (this.state.voted) ? '#666' : '#AAA' }]}>
               { this.getLikeCountText() }
             </Text>
           </View>
@@ -82,7 +95,7 @@ var PostActions = React.createClass({
         >
           <View style={ styles.moreButton }>
             <Icon
-              name='more-horiz'
+              name='more-vert'
               size={ 24 }
               color='#AAA'
             />
