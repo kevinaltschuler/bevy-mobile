@@ -12,7 +12,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var FilterItem = require('./FilterItem.ios.js');
-const { BlurView, VibrancyView } = require('react-native-blur');
+var { BlurView, VibrancyView } = require('react-native-blur');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -76,6 +76,7 @@ var TagModal = React.createClass({
                     this.setState({
                       isVisible: false
                     });
+                    this.props.onHide();
                   }}
                 >
                   <Icon

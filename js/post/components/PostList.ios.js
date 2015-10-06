@@ -65,10 +65,12 @@ var PostList = React.createClass({
 
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
+    PostStore.on(POST.UPDATE_LIST, this._onPostsLoaded);
   },
 
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
+    PostStore.off(POST.UPDATE_LIST, this._onPostsLoaded);
   },
 
   componentWillReceiveProps(nextProps) {

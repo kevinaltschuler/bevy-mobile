@@ -237,6 +237,7 @@ _.extend(BevyStore, {
           this.activeTags = tags;
           this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.UPDATE_LIST);
         break;
 
         case BEVY.UPDATE_FRONT:
@@ -245,6 +246,7 @@ _.extend(BevyStore, {
           this.frontpageFilters = bevies;
           this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.UPDATE_LIST);
         break;
     }
   },

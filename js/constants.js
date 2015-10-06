@@ -50,6 +50,7 @@ exports.POST = {
   DESTROY: 'post_destroy',
   VOTE: 'post_vote',
   SORT: 'post_sort',
+  UPDATE_LIST: 'post_update_list',
 
   FETCH: 'post_fetch',
 
