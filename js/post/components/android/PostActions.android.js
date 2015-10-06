@@ -16,13 +16,15 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var PostStore = require('./../../PostStore');
 var $PostActions = require('./../../PostActions');
 var UserStore = require('./../../../user/UserStore');
 
 var PostActions = React.createClass({
   propTypes: {
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -73,7 +75,12 @@ var PostActions = React.createClass({
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#CCC', false) }
           onPress={() => {
-
+            // dont navigate if already in comment view
+            if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+            // navigate to comments
+            var commentRoute = routes.MAIN.COMMENT;
+            commentRoute.post = this.props.post;
+            this.props.mainNavigator.push(commentRoute);
           }}
         >
           <View style={ styles.commentButton }>

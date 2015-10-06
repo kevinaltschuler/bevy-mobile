@@ -15,6 +15,7 @@ var SearchBar = require('./SearchBar.android.js');
 var LoginNavigator = require('./../../../login/components/android/LoginNavigator.android.js');
 var MessageView = require('./../../../chat/components/android/MessageView.android.js');
 var NewPostView = require('./../../../post/components/android/NewPostView.android.js');
+var CommentView = require('./../../../post/components/android/CommentView.android.js');
 
 var routes = require('./../../../routes');
 
@@ -51,6 +52,10 @@ var MainView = React.createClass({
           <NewPostView { ...this.props } />
         );
         break;
+      case routes.MAIN.COMMENT.name:
+        return (
+          <CommentView post={ this.props.mainRoute.post } { ...this.props } />
+        );
       default:
         return (
           <View style={ styles.container }>

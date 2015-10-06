@@ -18,6 +18,7 @@ var PostView = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
     mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool
   },
@@ -28,6 +29,7 @@ var PostView = React.createClass({
         <PostList
           allPosts={ this.props.allPosts }
           mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
           showNewPostCard={ true }
