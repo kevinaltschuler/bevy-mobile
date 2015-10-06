@@ -15,13 +15,17 @@ var {
 } = React;
 var PostHeader = require('./PostHeader.android.js');
 var PostBody = require('./PostBody.android.js');
+var PostActions = require('./PostActions.android.js');
+
 var PostStore = require('./../../PostStore');
 var _ = require('underscore');
 
 
 var Post = React.createClass({
   propTypes: {
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -78,8 +82,12 @@ var Post = React.createClass({
         <PostHeader post={ this.props.post } />
         <PostBody post={ this.props.post } />
         { this._renderPostImage() }
+        <PostActions 
+          post={ this.props.post } 
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
+        />
       </View>
-
     );
   }
 });

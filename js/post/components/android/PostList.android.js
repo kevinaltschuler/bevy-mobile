@@ -20,6 +20,7 @@ var PostList = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
     mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     showNewPostCard: React.PropTypes.bool
@@ -67,6 +68,8 @@ var PostList = React.createClass({
             <Post
               key={ 'post:' + post._id }
               post={ post }
+              mainNavigator={ this.props.mainNavigator }
+              mainRoute={ this.props.mainRoute }
             />
           }
         />
