@@ -7,9 +7,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var routes = require('./../../routes');
 
@@ -31,7 +29,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='ion|ios-redo'
+            name='ios-redo'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }
@@ -56,7 +54,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='ion|pin'
+            name='pin'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }
@@ -82,7 +80,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='ion|ios-person'
+            name='ios-person'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }
@@ -107,7 +105,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='ion|ios-trash'
+            name='ios-trash'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }

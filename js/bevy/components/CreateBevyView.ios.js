@@ -10,9 +10,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var routes = require('./../../routes');
 var constants = require('./../../constants');
@@ -88,7 +86,7 @@ var CreateBevyView = React.createClass({
     var middle = (_.isEmpty(this.state.bevyImage))
     ? (
       <Icon
-        name='ion|plus'
+        name='plus'
         size={ 30 }
         style={{ width: 30, height: 30 }}
         color='#ccc'

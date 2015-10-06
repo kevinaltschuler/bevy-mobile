@@ -7,9 +7,7 @@ var {
   Text,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var ThreadItem = require('./ThreadItem.ios.js');
 

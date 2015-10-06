@@ -12,9 +12,7 @@ var {
   LinkingIOS,
   Modal
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var LoginNavigator = require('./LoginNavigator.ios.js');
 
@@ -48,45 +46,26 @@ var LoginModal = React.createClass({
   close() {
     console.log('close modal');
     this.props.authModalActions.close();
+    this.setState({
+      IsOpen: false
+    });
   },
 
   render() {
-    return <View/>;
-    /*return (
+    return (
       <Modal
-        forceToFront={ true }
-        isVisible={ this.state.isOpen }
-        style={ styles }
-        backdropType="blur"
-        backdropBlur="dark"
-        customCloseButton={
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,0.1)'
-            style={ styles.closeButton }
-            onPress={ this.close }
-          >
-            <View style={ styles.closeButtonContainer }>
-              <Text style={ styles.closeButtonText }>Close</Text>
-              <Icon
-                name='ion|ios-close-empty'
-                size={ 30 }
-                color='#fff'
-                style={{ width: 30, height: 30 }}
-              />
-            </View>
-          </TouchableHighlight>
-        }
-        onPressBackdrop={() => {
-          //console.log('backdrop pressed');
-          //this.setState({
-          //  isOpen: false
-          //});
-        }}
-        onClose={ this.close }
+        visible={ this.state.isOpen }
+        animated={true}
+        transparent={true}
+        onDismiss={ this.close }
       >
-        <LoginNavigator authModalActions={ this.props.authModalActions } { ...this.state } />
+          <LoginNavigator 
+            close={ this.close }
+            authModalActions={ this.props.authModalActions } 
+            { ...this.state } 
+          />
       </Modal>
-    );*/
+    );
   }
 });
 

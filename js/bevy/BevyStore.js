@@ -53,7 +53,7 @@ _.extend(BevyStore, {
   active: -1, // id of active bevy
   subBevies: new Bevies, // sub bevies of the active bevy
   activeTags: [],
-  frontpageFilters: new Bevies,
+  frontpageFilters: [],
 
   // handle calls from the dispatcher
   // these are created from BevyActions.js
@@ -72,8 +72,8 @@ _.extend(BevyStore, {
                 _id: '-1',
                 name: 'Frontpage'
               });
-              this.frontpageFilters = this.myBevies;
-
+              this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
+              this.frontpageFilters = _.filter(frontpageFilters, function(bevy_id){ return bevy_id == -1 });
 
               //this.trigger(APP.LOAD_PROGRESS, 0.1);
               this.trigger(BEVY.CHANGE_ALL);
@@ -241,6 +241,7 @@ _.extend(BevyStore, {
 
         case BEVY.UPDATE_FRONT:
           var bevies = payload.bevies || [];
+          console.log(bevies);
           this.frontpageFilters = bevies;
           this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
@@ -255,7 +256,7 @@ _.extend(BevyStore, {
 
   getFrontpageFilters() {
     if(this.frontpageFilters == undefined) return [];
-    return this.frontpageFilters.toJSON();
+    return this.frontpageFilters;
   },
 
   getActiveTags() {
@@ -278,14 +279,19 @@ _.extend(BevyStore, {
   },
 
   getActive() {
-    var bevy = this.myBevies.get(this.active) || this.publicBevies.get(this.active);
-    //console.log(bevy);
+    var bevy = this.getBevy(this.active);
     if(bevy == undefined) return {};
-    else return bevy.toJSON();
+    else return bevy;
   },
 
   getBevy(bevy_id) {
     // try to get from myBevies first
+    if(bevy_id == -1) {
+      return {
+        _id: '-1',
+        name: 'Frontpage'
+      }
+    }
     var bevy = this.myBevies.get(bevy_id);
     if(bevy == undefined) {
       // now try to get from publicBevies

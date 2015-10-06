@@ -76,6 +76,8 @@ exports.BEVY = {
   SEARCH: 'bevy_search',
   SUBSCRIBE: 'bevy_subscribe',
   UNSUBSCRIBE: 'bevy_unsubscribe',
+  UPDATE_FRONT: 'bevy_updatefront',
+  UPDATE_TAGS: 'bevy_updatetags',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',

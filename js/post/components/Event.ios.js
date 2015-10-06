@@ -14,9 +14,7 @@ var {
   Image,
   TouchableHighlight
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
 var Accordion = require('react-native-accordion');
 var PostActionList = require('./PostActionList.ios.js')
@@ -217,7 +215,7 @@ var Event = React.createClass({
                     { this.countVotes() }
                   </Text>
                   <Icon
-                    name={ (this.state.voted) ? 'ion|ios-heart' : 'ion|ios-heart-outline' }
+                    name={ (this.state.voted) ? 'ios-heart' : 'ios-heart-outline' }
                     size={20}
                     color='#757d83'
                     style={styles.actionIcon}
@@ -242,7 +240,7 @@ var Event = React.createClass({
                     { post.comments.length }
                   </Text>
                   <Icon
-                    name='ion|ios-chatbubble-outline'
+                    name='ios-chatbubble-outline'
                     size={20}
                     color='#757d83'
                     style={styles.actionIcon}
@@ -257,7 +255,7 @@ var Event = React.createClass({
                 }}
               >
                 <Icon
-                  name='ion|ios-more'
+                  name='ios-more'
                   size={20}
                   color='#757d83'
                   style={styles.actionIcon}
@@ -286,7 +284,7 @@ var styles = StyleSheet.create({
     paddingTop: 0,
     backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: 'black',
+    shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
     shadowOffset:  {width: 0, height: 0}
@@ -302,7 +300,7 @@ var styles = StyleSheet.create({
   titleImage: {
     width: 25,
     height: 25,
-    backgroundColor: 'black',
+    backgroundColor: '#000',
     borderRadius: 12.5,
     marginLeft: 0
   },

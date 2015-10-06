@@ -14,9 +14,7 @@ var {
   TouchableHighlight
 } = React;
 
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var _ = require('underscore');
 var routes = require('./../../routes');

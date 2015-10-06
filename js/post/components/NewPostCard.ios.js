@@ -8,9 +8,7 @@ var {
   Text,
   TouchableHighlight
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var _ = require('underscore');
 var constants = require('./../../constants');
@@ -60,7 +58,7 @@ var NewPostCard = React.createClass({
 
 var styles = StyleSheet.create({
   touchContainer: {
-    shadowColor: 'black',
+    shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
     shadowOffset:  {width: 0, height: 0}

@@ -10,10 +10,9 @@ var {
   Modal,
   ScrollView
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 var FilterItem = require('./FilterItem.ios.js');
+const { BlurView, VibrancyView } = require('react-native-blur');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -64,10 +63,10 @@ var TagModal = React.createClass({
     return (
       <Modal
         isVisible={ this.state.isVisible }
-        animated={ true }
+        animated={ false }
         transparent={ true }
       >
-        <View style={ styles.container}>
+        <BlurView blurType='dark' style={ styles.container}>
           <View style={ styles.panel }>
               <View style={ styles.topBar }>
                 <TouchableHighlight
@@ -80,7 +79,7 @@ var TagModal = React.createClass({
                   }}
                 >
                   <Icon
-                    name='ion|ios-close-empty'
+                    name='ios-close-empty'
                     size={ 30 }
                     style={{ width: 30, height: 30 }}
                     color='#333'
@@ -96,7 +95,7 @@ var TagModal = React.createClass({
                 	{ this._renderFilterItems() }
             </ScrollView>
           </View>
-        </View>
+        </BlurView>
       </Modal>
     );
   }
@@ -158,10 +157,6 @@ var styles = StyleSheet.create({
     borderRadius: 20,
     width: constants.width * 2 / 3,
     height: constants.height * .8,
-    shadowColor: 'black',
-    shadowRadius: 80,
-    shadowOpacity: .5,
-    shadowOffset:  {width: 0, height: 0}
   },
   panelHeaderText: {
     fontSize: 20,

@@ -7,9 +7,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var _ = require('underscore');
 var routes = require('./../../routes');
@@ -100,7 +98,7 @@ var CommentItem = React.createClass({
                 style={ styles.commentItemAction }
               >
                 <Icon
-                  name='ion|ios-undo'
+                  name='ios-undo'
                   size={ 20 }
                   color='#fff'
                   style={{ width: 20, height: 20 }}
@@ -116,7 +114,7 @@ var CommentItem = React.createClass({
                 style={ styles.commentItemAction }
               >
                 <Icon
-                  name='ion|ios-person'
+                  name='ios-person'
                   size={ 20 }
                   color='#fff'
                   style={{ width: 20, height: 20 }}

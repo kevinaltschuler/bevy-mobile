@@ -83,7 +83,7 @@ var BevyActions = {
     });
   },
 
-  updateFront(tags) {
+  updateFront(bevies) {
     dispatch(BEVY.UPDATE_FRONT,{
       bevies: (bevies == undefined) ? null : bevies
     });

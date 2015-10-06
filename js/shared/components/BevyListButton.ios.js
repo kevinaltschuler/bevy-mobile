@@ -5,9 +5,7 @@ var {
   TouchableOpacity,
   StyleSheet
 } = React;
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var BevyListButton = React.createClass({
 
@@ -27,7 +25,7 @@ var BevyListButton = React.createClass({
         style={ styles.buttonContainer }
       >
         <Icon
-          name='ion|navicon'
+          name='navicon'
           size={ 30 }
           color='white'
           style={styles.bevyListButton}

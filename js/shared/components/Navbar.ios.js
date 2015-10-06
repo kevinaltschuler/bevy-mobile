@@ -13,9 +13,7 @@ var {
 
 var _ = require('underscore');
 
-var {
-  Icon
-} = require('react-native-icons');
+var Icon = require('react-native-vector-icons/Ionicons');
 var routes = require('./../../routes');
 
 var SideMenu = require('react-native-side-menu');
