@@ -14,10 +14,12 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var Post = require('./Post.android.js');
+var CommentList = require('./CommentList.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var UserStore = require('./../../../user/UserStore');
 
 var CommentView = React.createClass({
   propTypes: {
@@ -25,6 +27,10 @@ var CommentView = React.createClass({
     mainRoute: React.PropTypes.object,
     post: React.PropTypes.object,
     activeBevy: React.PropTypes.object
+  },
+
+  onReply() {
+
   },
 
   render() {
@@ -60,6 +66,13 @@ var CommentView = React.createClass({
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
         />
+        <CommentList
+          comments={ this.props.post.comments }
+          onReply={ this.onReply }
+          user={ UserStore.getUser() }
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
+        />
       </View>
     );
   }
@@ -83,7 +96,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 8,
-    paddingRight: 8
+    paddingRight: 8,
+    marginRight: 8
   },
   title: {
     textAlign: 'center',
