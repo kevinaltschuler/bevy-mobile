@@ -10,8 +10,10 @@ var {
   View,
   Text,
   TouchableWithoutFeedback,
+  TouchableNativeFeedback,
   StyleSheet
 } = React;
+var Collapsible = require('react-native-collapsible');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var CommentList = require('./CommentList.android.js');
 
@@ -29,21 +31,9 @@ var CommentItem = React.createClass({
 
   getInitialState() {
     return {
-      isCompact: false
+      isCompact: false,
+      showActionBar: false
     };
-  },
-
-  _renderCommentList() {
-    if(_.isEmpty(this.props.comment.comments) || this.state.isCompact) return <View />;
-    return (
-      <CommentList
-        comments={ this.props.comment.comments }
-        user={ this.props.user }
-        onReply={ this.props.onReply }
-        mainNavigator={ this.props.mainNavigator }
-        mainRoute={ this.props.mainRoute }
-      />
-    );
   },
 
   _renderComment() {
@@ -77,6 +67,65 @@ var CommentItem = React.createClass({
     }
   },
 
+  _renderActionBar() {
+    return (
+      <Collapsible duration={ 1000 } collapsed={ !this.state.showActionBar }>
+        <View style={ styles.actionBar }>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+            onPress={() => {}}
+          >
+            <View style={ styles.actionBarItem }>
+              <Icon
+                name='person'
+                size={ 24 }
+                color='#FFF'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+            onPress={() => {}}
+          >
+            <View style={ styles.actionBarItem }>
+              <Icon
+                name='reply'
+                size={ 24 }
+                color='#FFF'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+            onPress={() => {}}
+          >
+            <View style={ styles.actionBarItem }>
+              <Icon
+                name='more-vert'
+                size={ 24 }
+                color='#FFF'
+              />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      </Collapsible>
+    );
+  },
+
+  _renderCommentList() {
+    if(_.isEmpty(this.props.comment.comments) || this.state.isCompact) return <View />;
+    return (
+      <CommentList
+        comments={ this.props.comment.comments }
+        user={ this.props.user }
+        onReply={ this.props.onReply }
+        mainNavigator={ this.props.mainNavigator }
+        mainRoute={ this.props.mainRoute }
+      />
+    );
+  },
+
+
   render() {
     return (
       <View style={ styles.container }>
@@ -84,12 +133,15 @@ var CommentItem = React.createClass({
           onPress={() => {
             if(this.state.isCompact)
               this.setState({ isCompact: false });
+            else
+              this.setState({ showActionBar: !this.state.showActionBar });
           }}
           delayLongPress={ 750 }
           onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}
         >
           { this._renderComment() }
         </TouchableWithoutFeedback>
+        { this._renderActionBar() }
         { this._renderCommentList() }
       </View>
     );
@@ -131,6 +183,19 @@ var styles = StyleSheet.create({
   },
   bodyText: {
     color: '#888'
+  },
+  actionBar: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2CB673'
+  },
+  actionBarItem: {
+    height: 40,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

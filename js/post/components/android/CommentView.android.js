@@ -9,6 +9,7 @@ var React = require('react-native');
 var {
   View,
   Text,
+  TextInput,
   TouchableNativeFeedback,
   StyleSheet
 } = React;
@@ -29,8 +30,58 @@ var CommentView = React.createClass({
     activeBevy: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      input: ''
+    };
+  },
+
   onReply() {
 
+  },
+
+  postComment() {
+
+  },
+
+  _renderCommentList() {
+    return (
+      <CommentList
+        comments={ this.props.post.comments }
+        onReply={ this.onReply }
+        user={ UserStore.getUser() }
+        mainNavigator={ this.props.mainNavigator }
+        mainRoute={ this.props.mainRoute }
+      />
+    );
+  },
+
+  _renderReplyBar() {
+    return <View />;
+  },
+
+  _renderInput() {
+    return (
+      <View style={ styles.input }>
+        <TextInput
+          ref='Input'
+          value={ this.state.input }
+          style={ styles.textInput }
+          onChangeText={(text) => this.setState({ input: text })}
+          placeholder='Comment'
+          placeholderTextColor='#AAA'
+          underlineColorAndroid='#AAA'
+        />
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#CCC', false) }
+          onPress={ this.postComment }
+        >
+          <View style={ styles.sendButton }>
+            <Text style={ styles.sendButtonText }>Send</Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    );
   },
 
   render() {
@@ -66,13 +117,9 @@ var CommentView = React.createClass({
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
         />
-        <CommentList
-          comments={ this.props.post.comments }
-          onReply={ this.onReply }
-          user={ UserStore.getUser() }
-          mainNavigator={ this.props.mainNavigator }
-          mainRoute={ this.props.mainRoute }
-        />
+        { this._renderCommentList() }
+        { this._renderReplyBar() }
+        { this._renderInput() }
       </View>
     );
   }
@@ -102,6 +149,29 @@ var styles = StyleSheet.create({
   title: {
     textAlign: 'center',
     color: '#666'
+  },
+  input: {
+    backgroundColor: '#FFF',
+    height: 48,
+    width: constants.width,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    marginBottom: 24
+  },
+  textInput: {
+    flex: 1
+  },
+  sendButton: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8
+  },
+  sendButtonText: {
+    color: '#2CB673'
   }
 });
 
