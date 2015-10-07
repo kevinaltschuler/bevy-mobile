@@ -103,13 +103,26 @@ var CommentView = React.createClass({
     if(_.isEmpty(this.state.replyToComment)) return <View />;
     else return (
       <View style={ styles.replyBar }>
-        <Text style={ styles.replyingTo }>Replying To</Text>
+        <Text style={ styles.replyingTo }>Replying to:</Text>
         <Text style={ styles.replyAuthor }>
           { this.state.replyToComment.author.displayName }
         </Text>
         <Text style={ styles.replyBody }>
           { this.state.replyToComment.body }
         </Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#CCC') }
+          onPress={() => {
+            this.refs.Input.blur();
+            this.setState({ replyToComment: {} });
+          }}
+        >
+          <View style={ styles.cancelButton }>
+            <Text style={ styles.cancelButtonText }>
+              Cancel
+            </Text> 
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   },
@@ -241,19 +254,32 @@ var styles = StyleSheet.create({
     height: 36,
     width: constants.width,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8
+    alignItems: 'center'
   },
   replyingTo: {
     color: '#FFF',
+    marginLeft: 8,
     marginRight: 4
   },
   replyAuthor: {
     color: '#FFF',
+    fontWeight: 'bold',
     marginRight: 4
   },
   replyBody: {
+    flex: 1,
+    color: '#FFF',
+    fontStyle: 'italic'
+  },
+  cancelButton: {
+    backgroundColor: '#62D487',
+    height: 36,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 4,
+    paddingHorizontal: 6
+  },
+  cancelButtonText: {
     color: '#FFF'
   }
 });
