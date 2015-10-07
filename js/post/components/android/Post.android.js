@@ -102,7 +102,8 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     backgroundColor: '#FFF',
-    margin: 10,
+    marginHorizontal: 10,
+    marginBottom: 10,
     borderRadius: 5
   }
 });
