@@ -230,9 +230,7 @@ var App = React.createClass({
             routes.MAIN.TABBAR
           ]}
           sceneStyle={{
-            flex: 1,
-            width: constants.width,
-            height: constants.height
+            flex: 1
           }}
           renderScene={(route, navigator) => 
             <MainView 

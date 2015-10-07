@@ -10,6 +10,7 @@ var {
   View,
   Text,
   TextInput,
+  BackAndroid,
   TouchableNativeFeedback,
   StyleSheet
 } = React;
@@ -32,12 +33,51 @@ var CommentView = React.createClass({
 
   getInitialState() {
     return {
-      input: ''
+      input: '',
+      replyToComment: {}
     };
   },
 
-  onReply() {
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this.onBack);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBack);
+  },
 
+  onBack() {
+    this.refs.Input.blur();
+    return true;
+  },
+
+  onReply(comment) {
+    this.setState({
+      replyToComment: comment
+    });
+    // focus the input
+    this.refs.Input.focus();
+  },
+
+  nestComments(comments, parentId, depth) {
+    // increment depth (used for indenting later)
+    if(typeof depth === 'number') depth++;
+    else depth = 0;
+    if(_.isEmpty(comments)) return [];
+    if(comments.length < 0) return []; // return if it's the end of the line
+
+    var $comments = [];
+    comments.forEach(function(comment, index) {
+      // look for comments under this one
+      if(comment.parentId == parentId) {
+        comment.depth = depth;
+        // and keep going
+        comment.comments = this.nestComments(comments, comment._id, depth);
+        $comments.push(comment);
+        // TODO: splice the matched comment out of the list so we can go faster
+      }
+    }.bind(this));
+
+    return $comments;
   },
 
   postComment() {
@@ -46,18 +86,31 @@ var CommentView = React.createClass({
 
   _renderCommentList() {
     return (
-      <CommentList
-        comments={ this.props.post.comments }
-        onReply={ this.onReply }
-        user={ UserStore.getUser() }
-        mainNavigator={ this.props.mainNavigator }
-        mainRoute={ this.props.mainRoute }
-      />
+      <View style={{ flex: 1 }}>
+        <CommentList
+          comments={ this.nestComments(this.props.post.comments) }
+          onReply={ this.onReply }
+          user={ UserStore.getUser() }
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
+        />
+      </View>
     );
   },
 
   _renderReplyBar() {
-    return <View />;
+    if(_.isEmpty(this.state.replyToComment)) return <View />;
+    else return (
+      <View style={ styles.replyBar }>
+        <Text style={ styles.replyingTo }>Replying To</Text>
+        <Text style={ styles.replyAuthor }>
+          { this.state.replyToComment.author.displayName }
+        </Text>
+        <Text style={ styles.replyBody }>
+          { this.state.replyToComment.body }
+        </Text>
+      </View>
+    );
   },
 
   _renderInput() {
@@ -68,6 +121,7 @@ var CommentView = React.createClass({
           value={ this.state.input }
           style={ styles.textInput }
           onChangeText={(text) => this.setState({ input: text })}
+          onBlur={() => this.setState({ replyToComment: {} })}
           placeholder='Comment'
           placeholderTextColor='#AAA'
           underlineColorAndroid='#AAA'
@@ -155,13 +209,11 @@ var styles = StyleSheet.create({
     height: 48,
     width: constants.width,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
-    marginBottom: 24
+    alignItems: 'center'
   },
   textInput: {
-    flex: 1
+    flex: 1,
+    marginRight: 8
   },
   sendButton: {
     height: 48,
@@ -172,6 +224,26 @@ var styles = StyleSheet.create({
   },
   sendButtonText: {
     color: '#2CB673'
+  },
+  replyBar: {
+    backgroundColor: '#2CB673',
+    height: 36,
+    width: constants.width,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8
+  },
+  replyingTo: {
+    color: '#FFF',
+    marginRight: 4
+  },
+  replyAuthor: {
+    color: '#FFF',
+    marginRight: 4
+  },
+  replyBody: {
+    color: '#FFF'
   }
 });
 
