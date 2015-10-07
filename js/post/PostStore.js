@@ -196,6 +196,7 @@ _.extend(PostStore, {
         // clear posts immediately
         this.posts.reset();
         this.trigger(POST.CHANGE_ALL);
+        this.trigger(POST.LOADED);
 
         break;
 

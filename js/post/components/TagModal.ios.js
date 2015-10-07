@@ -41,10 +41,12 @@ var TagModal = React.createClass({
 
   _renderFilterItems() {
     var source = (this.props.activeBevy._id == -1) ? this.props.myBevies : this.props.activeBevy.tags;
+    var activeCheck = (this.props.activeBevy._id == -1) ? this.props.frontpageFilters : this.props.activeTags;
     var filterItems = [];
     for(var key in source) {
       var filter = source[key];
-      var value = _.contains(source, filter);
+      var filterCheck = (this.props.activeBevy._id == -1) ? filter._id : filter;
+      var value = _.contains(activeCheck, filterCheck);
       filterItems.push(
         <FilterItem
           key={'filterItem:' + filter.name}
@@ -61,6 +63,7 @@ var TagModal = React.createClass({
   },
 
   render() {
+    var title = (this.props.activeBevy._id == -1) ? 'filter posts by bevy' : 'filter posts by tag';
     if(!this.state.isVisible) return null;
     return (
       <Modal
@@ -89,7 +92,7 @@ var TagModal = React.createClass({
                   />
                 </TouchableHighlight>
 
-                <Text style={ styles.panelHeaderText }>filter posts by bevy</Text>
+                <Text style={ styles.panelHeaderText }>{ title }</Text>
               </View>
             <ScrollView 
               style={ styles.actionRow }

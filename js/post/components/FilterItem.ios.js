@@ -61,30 +61,30 @@ var FilterItem = React.createClass({
               // if filtering by bevy
               // this.props.filter = a bevy object & 
               // this.props.source = array of myBevies
-              var filters = _.pluck(this.props.source, '_id');
+              /*var filters = _.pluck(this.props.source, '_id');
               var filters = _.filter(filters, function(filter){
                 return _.contains(this.props.frontpageFilters, filter);
-              }.bind(this));
-              if(!this.state.value) {
+              }.bind(this));*/
+              var filters = this.props.frontpageFilters;
+              console.log(filters);
+
+              if(!this.state.value) 
                 filters.push(this.state.filter._id);
-              } else {
+              else 
                 filters = _.reject(filters, function($filter){ return $filter == this.state.filter._id }.bind(this));
-                //removing
-              }
+
               BevyActions.updateFront(filters); 
             }
             else {
               //this.props.source is a list of tag objects
               //this.state.filter is a tag object
-              var filters = _.filter(this.props.source, function(filter) {
-                return _.contains(this.props.activeTags, filter);
-              }.bind(this));
-              if(!this.state.value) {
+              var filters = this.props.activeTags;
+
+              if(!this.state.value) 
                 filters.push(this.state.filter);
-              } else {
+              else 
                 filters = _.reject(filters, function($filter){ return $filter == this.state.filter }.bind(this));
-                //removing
-              }
+
               BevyActions.updateTags(filters);
             } 
 	        }}

@@ -16,6 +16,10 @@ var {
   TouchableOpacity
 } = React;
 
+var _ = require('underscore');
+var BevyStore = require('./../../bevy/BevyStore');
+var PostStore = require('./../../post/PostStore');
+
 var Icon = require('react-native-vector-icons/Ionicons');
 
 var NotificationActions = require('./../NotificationActions');
@@ -101,6 +105,9 @@ var NotificationItem = React.createClass({
         var post_id = data.post_id;
         var post_created = data.post_created;
 
+        if(_.isEmpty(PostStore.getPost(post_id)) || _.isEmpty(BevyStore.getBevy(bevy_id)))
+          return <View/>;
+
         body = (
           <View style={ styles.notificationBody }>
             <TouchableHighlight
@@ -111,6 +118,7 @@ var NotificationItem = React.createClass({
                 if(this.props.inCommentView) return;
                 var commentRoute = routes.MAIN.COMMENT;
                 commentRoute.postID = post_id;
+                console.log(commentRoute);
                 this.props.mainNavigator.push(commentRoute);
               }}
             >
@@ -188,13 +196,22 @@ var NotificationItem = React.createClass({
         var author_image = data.author_image;
         var post_title = data.post_title;
         var bevy_name = data.bevy_name;
+        var post_id = data.post_id;
+        var bevy_id = data.bevy_id;
 
         body = (
           <View style={ styles.notificationBody }>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
-              onPress={this.markRead}
+              onPress={() => {
+                this.markRead();
+                if(this.props.inCommentView) return;
+                var commentRoute = routes.MAIN.COMMENT;
+                commentRoute.postID = post_id;
+                console.log(commentRoute);
+                this.props.mainNavigator.push(commentRoute);
+              }}
             >
               <View style={styles.row}>
                 <Image 
@@ -223,13 +240,22 @@ var NotificationItem = React.createClass({
         var author_image = data.author_image;
         var post_title = data.post_title;
         var bevy_name = data.bevy_name;
+        var post_id = data.post_id;
+        var bevy_id = data.bevy_id;
 
         body = (
           <View style={ styles.notificationBody }>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,.1)'
               style={styles.left} 
-              onPress={this.markRead}
+              onPress={() => {
+                this.markRead();
+                if(this.props.inCommentView) return;
+                var commentRoute = routes.MAIN.COMMENT;
+                commentRoute.postID = post_id;
+                console.log(commentRoute);
+                this.props.mainNavigator.push(commentRoute);
+              }}
             >
               <View style={styles.row}>
                 <Image 

@@ -235,17 +235,20 @@ _.extend(BevyStore, {
         case BEVY.UPDATE_TAGS:
           var tags = payload.tags || [];
           this.activeTags = tags;
-          this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
-          this.trigger(POST.UPDATE_LIST);
+          this.trigger(BEVY.CHANGE_ALL);
+          this.trigger(POST.LOADED);
         break;
 
         case BEVY.UPDATE_FRONT:
           var bevies = payload.bevies || [];
+          //console.log('old', this.frontpageFilters);
+          //console.log('new', bevies);
           this.frontpageFilters = bevies;
-          this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
-          this.trigger(POST.UPDATE_LIST);
+          this.trigger(BEVY.CHANGE_ALL);
+          this.trigger(POST.LOADED);
+
         break;
     }
   },
