@@ -141,7 +141,7 @@ var CommentView = React.createClass({
 
   render() {
     return (
-      <ScrollView style={ styles.container }>
+      <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
             onPress={() => {
@@ -167,16 +167,21 @@ var CommentView = React.createClass({
             />
           </View>
         </View>
-        <Post
-          post={ this.props.post }
-          mainNavigator={ this.props.mainNavigator }
-          mainRoute={ this.props.mainRoute }
-          expandText={ true }
-        />
-        { this._renderCommentList() }
+        <ScrollView 
+          style={ styles.listContainer }
+          showsVerticalScrollIndicator={ true }
+        >
+          <Post
+            post={ this.props.post }
+            mainNavigator={ this.props.mainNavigator }
+            mainRoute={ this.props.mainRoute }
+            expandText={ true }
+          />
+          { this._renderCommentList() }
+        </ScrollView>
         { this._renderReplyBar() }
         { this._renderInput() }
-      </ScrollView>
+      </View>
     );
   }
 });
@@ -185,6 +190,10 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#EEE'
+  },
+  listContainer: {
+    flex: 1,
+    paddingBottom: 48
   },
   topBar: {
     width: constants.width,
