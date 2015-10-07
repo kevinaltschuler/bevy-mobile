@@ -247,7 +247,7 @@ var CommentView = React.createClass({
     var content = (_.isEmpty(this.state.post))
     ? (
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{color: '#555', fontWeight: 600}}>
+        <Text style={{color: '#555', fontWeight: '600'}}>
           post was not found
         </Text>
       </View>

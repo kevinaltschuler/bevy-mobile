@@ -24,6 +24,7 @@ var constants = require('./../../constants');
 var routes = require('./../../routes');
 var POST = constants.POST;
 var PostStore = require('./../PostStore');
+var BevyStore = require('./../../bevy/BevyStore');
 var PostActions = require('./../PostActions');
 
 var Post = require('./Post.ios.js');
@@ -58,19 +59,29 @@ var PostList = React.createClass({
 
   getInitialState() {
     return {
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(this.props.allPosts),
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (r1, r2) => true
+      }).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
     };
   },
 
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
-    PostStore.on(POST.UPDATE_LIST, this._onPostsLoaded);
+    BevyStore.on(POST.LOADED, this._rerender);
   },
 
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
-    PostStore.off(POST.UPDATE_LIST, this._onPostsLoaded);
+    BevyStore.off(POST.LOADED, this._rerender);
+  },
+
+  _rerender() {
+    console.log('rerender');
+    var allPosts = JSON.parse(JSON.stringify(PostStore.getAll()));
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(allPosts)
+    });
   },
 
   componentWillReceiveProps(nextProps) {
@@ -80,6 +91,7 @@ var PostList = React.createClass({
   },
 
   _onPostsLoaded() {
+    console.log('posts loaded');
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll())
     });
@@ -143,8 +155,10 @@ var PostList = React.createClass({
                 }
               }
               if(this.props.activeBevy._id != -1) {
-                if(!_.contains(this.props.activeTags, post.tag)) {
-                  //console.log("filtering by tag", this.props.activeBevy._id);
+                if(post.tag == undefined)
+                  return <View />;
+                if(!_.contains(_.pluck(this.props.activeTags, 'name'), post.tag.name)) {
+                  //console.log("filtering by tag", _.pluck(this.props.activeTags, 'name'), post.tag.name);
                   return <View/>;
                 }
               }
