@@ -17,21 +17,22 @@ var PostHeader = require('./PostHeader.android.js');
 var PostBody = require('./PostBody.android.js');
 var PostActions = require('./PostActions.android.js');
 
-var PostStore = require('./../../PostStore');
 var _ = require('underscore');
-
+var PostStore = require('./../../PostStore');
 
 var Post = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    mainRoute: React.PropTypes.object
+    mainRoute: React.PropTypes.object,
+    expandText: React.PropTypes.bool
   },
 
   getDefaultProps() {
     return {
       inCommentView: false,
-      post: {}
+      post: {},
+      expandText: false
     };
   },
 
@@ -80,7 +81,12 @@ var Post = React.createClass({
     return (
       <View style={ styles.container }>
         <PostHeader post={ this.props.post } />
-        <PostBody post={ this.props.post } />
+        <PostBody 
+          post={ this.props.post } 
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
+          expandText={ this.props.expandText }
+        />
         { this._renderPostImage() }
         <PostActions 
           post={ this.props.post } 

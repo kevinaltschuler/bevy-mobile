@@ -8,6 +8,7 @@
 var React = require('react-native');
 var {
   View,
+  ScrollView,
   Text,
   TextInput,
   BackAndroid,
@@ -140,7 +141,7 @@ var CommentView = React.createClass({
 
   render() {
     return (
-      <View style={ styles.container }>
+      <ScrollView style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
             onPress={() => {
@@ -170,11 +171,12 @@ var CommentView = React.createClass({
           post={ this.props.post }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          expandText={ true }
         />
         { this._renderCommentList() }
         { this._renderReplyBar() }
         { this._renderInput() }
-      </View>
+      </ScrollView>
     );
   }
 });
