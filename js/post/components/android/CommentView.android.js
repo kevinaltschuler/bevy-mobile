@@ -261,6 +261,7 @@ var styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
+    paddingTop: 10,
     paddingBottom: 48
   },
   topBar: {
