@@ -121,11 +121,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 20,
-    width: constants.width * 2 / 3,
-    shadowColor: 'black',
-    shadowRadius: 80,
-    shadowOpacity: .5,
-    shadowOffset:  {width: 0, height: 0}
+    width: constants.width * 2 / 3
   },
   topBar: {
     height: 42,

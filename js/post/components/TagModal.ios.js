@@ -52,6 +52,8 @@ var TagModal = React.createClass({
           isFrontpage={this.props.activeBevy._id == -1}
           value={value}
           source={ source }
+          frontpageFilters={ this.props.frontpageFilters}
+          activeTags={ this.props.activeTags }
         />
       )
     }
