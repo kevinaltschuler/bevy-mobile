@@ -12,7 +12,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var FilterItem = require('./FilterItem.ios.js');
-const { BlurView, VibrancyView } = require('react-native-blur');
+var { BlurView, VibrancyView } = require('react-native-blur');
 
 var constants = require('./../../constants');
 var routes = require('./../../routes');
@@ -52,6 +52,8 @@ var TagModal = React.createClass({
           isFrontpage={this.props.activeBevy._id == -1}
           value={value}
           source={ source }
+          frontpageFilters={ this.props.frontpageFilters}
+          activeTags={ this.props.activeTags }
         />
       )
     }
@@ -76,6 +78,7 @@ var TagModal = React.createClass({
                     this.setState({
                       isVisible: false
                     });
+                    this.props.onHide();
                   }}
                 >
                   <Icon

@@ -14,7 +14,6 @@
 		00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302C01ABCB91800DB3ED1 /* libRCTImage.a */; };
 		00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302DC1ABCB9D200DB3ED1 /* libRCTNetwork.a */; };
 		00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */; };
-		00E356F31AD99517003FC87E /* bevyiosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* bevyiosTests.m */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139105C11AF99BAD00B5F7CC /* libRCTSettings.a */; };
 		139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 139FDEF41B06529B00C62182 /* libRCTWebSocket.a */; };
@@ -30,8 +29,8 @@
 		4D7765001B59810D005FE588 /* libRNStatusBarSize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D7764FF1B5980F7005FE588 /* libRNStatusBarSize.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		CE33A5571BBF746100D857FC /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE33A54B1BBF73C200D857FC /* Ionicons.ttf */; };
-		CE33A57A1BC3382100D857FC /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE33A5791BC3381200D857FC /* libRNBlur.a */; };
-		CEC226F31BBEF525005FAC9B /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC226F21BBEF50A005FAC9B /* libRNVectorIcons.a */; };
+		CE40001B1BC44A6900501FEB /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE40001A1BC44A0200501FEB /* libRNBlur.a */; };
+		CE5514051BC34A9700D1BB26 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC226F21BBEF50A005FAC9B /* libRNVectorIcons.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,9 +132,9 @@
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
 		};
-		CE33A5781BC3381200D857FC /* PBXContainerItemProxy */ = {
+		CE4000191BC44A0200501FEB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = CE33A5741BC3381100D857FC /* RNBlur.xcodeproj */;
+			containerPortal = CE4000151BC44A0200501FEB /* RNBlur.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = A68BD7BC1BC31318005F02DF;
 			remoteInfo = RNBlur;
@@ -158,8 +157,6 @@
 		00C302D31ABCB9D200DB3ED1 /* RCTNetwork.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTNetwork.xcodeproj; path = "node_modules/react-native/Libraries/Network/RCTNetwork.xcodeproj"; sourceTree = "<group>"; };
 		00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVibration.xcodeproj; path = "node_modules/react-native/Libraries/Vibration/RCTVibration.xcodeproj"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* bevyiosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = bevyiosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* bevyiosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = bevyiosTests.m; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* bevyios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bevyios.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -186,7 +183,7 @@
 		CE33A54C1BBF73C200D857FC /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		CE33A54D1BBF73C200D857FC /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Octicons.ttf; path = "node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		CE33A54E1BBF73C200D857FC /* Zocial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Zocial.ttf; path = "node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
-		CE33A5741BC3381100D857FC /* RNBlur.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
+		CE4000151BC44A0200501FEB /* RNBlur.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
 		CEC226ED1BBEF50A005FAC9B /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -203,16 +200,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
-				CEC226F31BBEF525005FAC9B /* libRNVectorIcons.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
-				CE33A57A1BC3382100D857FC /* libRNBlur.a in Frameworks */,
 				133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */,
 				4D0433DE1B475D7100CD5250 /* libRNKeyboardEvents.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E61ABCBA2D00DB3ED1 /* libRCTAdSupport.a in Frameworks */,
+				CE40001B1BC44A6900501FEB /* libRNBlur.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E91ABCBA2D00DB3ED1 /* libRCTNetwork.a in Frameworks */,
 				139105C61AF99C1200B5F7CC /* libRCTSettings.a in Frameworks */,
+				CE5514051BC34A9700D1BB26 /* libRNVectorIcons.a in Frameworks */,
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
@@ -269,23 +266,6 @@
 				00C302E41ABCB9EE00DB3ED1 /* libRCTVibration.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		00E356EF1AD99517003FC87E /* bevyiosTests */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F21AD99517003FC87E /* bevyiosTests.m */,
-				00E356F01AD99517003FC87E /* Supporting Files */,
-			);
-			path = bevyiosTests;
-			sourceTree = "<group>";
-		};
-		00E356F01AD99517003FC87E /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				00E356F11AD99517003FC87E /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
@@ -353,7 +333,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				CE33A5741BC3381100D857FC /* RNBlur.xcodeproj */,
+				CE4000151BC44A0200501FEB /* RNBlur.xcodeproj */,
 				CEC226ED1BBEF50A005FAC9B /* RNVectorIcons.xcodeproj */,
 				4D7764FA1B5980F6005FE588 /* RNStatusBarSize.xcodeproj */,
 				4D0433D81B475D6100CD5250 /* RNKeyboardEvents.xcodeproj */,
@@ -397,7 +377,6 @@
 				4D7764E81B57FA96005FE588 /* UIImagePickerManager.m */,
 				13B07FAE1A68108700A75B9A /* bevyios */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* bevyiosTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 			);
 			indentWidth = 2;
@@ -413,10 +392,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CE33A5751BC3381100D857FC /* Products */ = {
+		CE4000161BC44A0200501FEB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CE33A5791BC3381200D857FC /* libRNBlur.a */,
+				CE40001A1BC44A0200501FEB /* libRNBlur.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -542,8 +521,8 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
-					ProductGroup = CE33A5751BC3381100D857FC /* Products */;
-					ProjectRef = CE33A5741BC3381100D857FC /* RNBlur.xcodeproj */;
+					ProductGroup = CE4000161BC44A0200501FEB /* Products */;
+					ProjectRef = CE4000151BC44A0200501FEB /* RNBlur.xcodeproj */;
 				},
 				{
 					ProductGroup = 4D0433D91B475D6100CD5250 /* Products */;
@@ -658,11 +637,11 @@
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		CE33A5791BC3381200D857FC /* libRNBlur.a */ = {
+		CE40001A1BC44A0200501FEB /* libRNBlur.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRNBlur.a;
-			remoteRef = CE33A5781BC3381200D857FC /* PBXContainerItemProxy */;
+			remoteRef = CE4000191BC44A0200501FEB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		CEC226F21BBEF50A005FAC9B /* libRNVectorIcons.a */ = {
@@ -700,7 +679,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* bevyiosTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,11 +767,15 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/node_modules/react-native/React/**",
-					"$(SRCROOT)/node_modules/react-native/Libraries/LinkingIOS/**",
+					"$(SRCROOT)/node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/node_modules/react-native-blur/ios/build/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;
@@ -813,11 +795,15 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/node_modules/react-native/React/**",
-					"$(SRCROOT)/node_modules/react-native/Libraries/LinkingIOS/**",
+					"$(SRCROOT)/node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/node_modules/react-native-blur/ios/build/Debug-iphoneos",
+				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;

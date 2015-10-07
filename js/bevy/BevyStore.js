@@ -73,7 +73,7 @@ _.extend(BevyStore, {
                 name: 'Frontpage'
               });
               this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
-              this.frontpageFilters = _.filter(this.frontpageFilters, function(bevy_id){ return bevy_id == -1 });
+              this.frontpageFilters = _.reject(this.frontpageFilters, function(bevy_id){ return bevy_id == -1 });
 
               //this.trigger(APP.LOAD_PROGRESS, 0.1);
               this.trigger(BEVY.CHANGE_ALL);
@@ -237,14 +237,15 @@ _.extend(BevyStore, {
           this.activeTags = tags;
           this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.UPDATE_LIST);
         break;
 
         case BEVY.UPDATE_FRONT:
           var bevies = payload.bevies || [];
-          console.log(bevies);
           this.frontpageFilters = bevies;
           this.trigger(BEVY.CHANGE_ALL);
           this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.UPDATE_LIST);
         break;
     }
   },
