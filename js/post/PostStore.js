@@ -205,7 +205,7 @@ _.extend(PostStore, {
         var post_id = payload.post_id;
         var parent_id = payload.parent_id;
 
-        fetch(constants.apiurl + '/comments', {
+        /*fetch(constants.apiurl + '/comments', {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
@@ -219,24 +219,23 @@ _.extend(PostStore, {
           })
         })
         .then((res) => {
-          var response = JSON.parse(res._bodyText);
+          var response = JSON.parse(res._bodyText);*/
 
           // add comment to posts collection
-          /*var post = this.posts.get(post_id);
-          var comments = post.get('comments');
-          comments.push({
-            _id: response._id,
+          //var post = this.posts.get(post_id);
+          //var comments = post.get('comments');
+          var comment = new Backbone.Model({
             body: body,
-            author: UserStore.getUser(),
-            postId: post.toJSON(),
+            author: author_id,
+            postId: post_id,
             parentId: parent_id,
-            created: response.created,
-            updated: response.updated,
             comments: []
           });
-          this.trigger(POST.CHANGE_ALL); // custom event for this later?*/
-          this.trigger(POST.CHANGE_ONE + post_id);
-        });
+          comment.url = constants.apiurl + '/comments';
+          comment.save();
+          this.trigger(POST.CHANGE_ALL); // custom event for this later?
+          //this.trigger(POST.CHANGE_ONE + post_id);
+        //});
         break;
     }
   },

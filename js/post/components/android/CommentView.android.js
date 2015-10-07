@@ -23,19 +23,23 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
+var CommentActions = require('./../../CommentActions');
 
 var CommentView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
     post: React.PropTypes.object,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
     return {
       input: '',
-      replyToComment: {}
+      replyToComment: {},
+      comments: this.nestComments(this.props.post.comments)
     };
   },
 
@@ -81,15 +85,66 @@ var CommentView = React.createClass({
     return $comments;
   },
 
-  postComment() {
+  postReply() {
+    // gate this if not logged in
+    if(!this.props.loggedIn) {
+      //this.props.authModalActions.open('Log In To Comment');
+      return;
+    }
 
+    var text = this.state.input;
+    // dont post empty reply
+    if(_.isEmpty(text)) {
+      this.setState({
+        input: ''
+      });
+      return;
+    };
+    var user = this.props.user;
+
+    // call action
+    CommentActions.create(
+      text, // body
+      user._id, // author id
+      this.props.post._id, // post id
+      (_.isEmpty(this.state.replyToComment)) 
+        ? null 
+        : this.state.replyToComment._id // parent id
+    );
+
+    // optimistic update
+    var comment = {
+      _id: Date.now(), // temp id
+      author: user,
+      body: text,
+      postId: this.props.post,
+      parentId: (_.isEmpty(this.state.replyToComment)) 
+        ? null 
+        : this.state.replyToComment._id,
+      created: (new Date()).toString(),
+      comments: []
+    };
+    var comments = this.props.post.comments;
+    comments.push(comment);
+    comments = this.nestComments(comments);
+    this.setState({
+      input: '', // clear comment field
+      comments: comments
+    });
+
+    // blur reply input
+    // buffer delay it so it blurs only when the set state clears up
+    setTimeout(
+      () => this.refs.Input.blur(), // this also clears the replyToComment state field
+      100 
+    );
   },
 
   _renderCommentList() {
     return (
       <View style={{ flex: 1 }}>
         <CommentList
-          comments={ this.nestComments(this.props.post.comments) }
+          comments={ this.state.comments }
           onReply={ this.onReply }
           user={ UserStore.getUser() }
           mainNavigator={ this.props.mainNavigator }
@@ -142,7 +197,7 @@ var CommentView = React.createClass({
         />
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#CCC', false) }
-          onPress={ this.postComment }
+          onPress={ this.postReply }
         >
           <View style={ styles.sendButton }>
             <Text style={ styles.sendButtonText }>Send</Text>
