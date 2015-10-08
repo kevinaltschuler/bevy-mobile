@@ -115,8 +115,9 @@ var styles = StyleSheet.create({
     fontSize: 11
   },
   badges: {
+    height: 30,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingRight: 6
   },
   pinnedBadge: {
