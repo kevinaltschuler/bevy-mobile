@@ -15,6 +15,7 @@ var {
 } = React;
 var PostHeader = require('./PostHeader.android.js');
 var PostBody = require('./PostBody.android.js');
+var PostImages = require('./PostImages.android.js');
 var PostActions = require('./PostActions.android.js');
 
 var _ = require('underscore');
@@ -30,7 +31,6 @@ var Post = React.createClass({
 
   getDefaultProps() {
     return {
-      inCommentView: false,
       post: {},
       expandText: false
     };
@@ -38,43 +38,7 @@ var Post = React.createClass({
 
   getInitialState() {
     return {
-      post: this.props.post,
-      overlayVisible: false,
-      voted: this.props.post.voted
     };
-  },
-
-  _renderPostImage() {
-    if(_.isEmpty(this.state.post.images)) {
-      return <View />;
-    }
-    var imageCount = this.state.post.images.length;
-    var imageCountText = (imageCount > 1) 
-    ? (
-      <Text style={ styles.postImageCountText }>
-        + { imageCount - 1 } more
-      </Text>
-    )
-    : null;
-
-    return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.1)'
-        onPress={() => {
-          this.setState({
-            overlayVisible: true
-          });
-        }}
-      >
-        <Image
-          style={ styles.postImage }
-          source={{ uri: this.state.post.images[0] }}
-          resizeMode='cover'
-        >
-          { imageCountText }
-        </Image>
-      </TouchableHighlight>
-    );
   },
 
   render() {
@@ -87,7 +51,9 @@ var Post = React.createClass({
           mainRoute={ this.props.mainRoute }
           expandText={ this.props.expandText }
         />
-        { this._renderPostImage() }
+        <PostImages
+          post={ this.props.post }
+        />
         <PostActions 
           post={ this.props.post } 
           mainNavigator={ this.props.mainNavigator }
