@@ -51,6 +51,12 @@ var ImageModal = React.createClass({
         });
       },
       onPanResponderRelease: (evt, gestureState) => {
+        if(gestureState.dx == 0) {
+          this.setState({
+            visible: false
+          });
+          return;
+        }
         if(Math.abs(gestureState.dx) > (constants.width / 2)) {
           if(gestureState.dx > 0) {
             // prev img
