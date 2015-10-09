@@ -20,6 +20,7 @@ var InvertibleScrollView = require('react-native-invertible-scroll-view');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var CHAT = constants.CHAT;
 var ChatStore = require('./../../ChatStore');
 var ChatActions = require('./../../ChatActions');
 
@@ -42,14 +43,22 @@ var MessageView = React.createClass({
   },
 
   componentDidMount() {
-
+    ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
   },
   componentWillUnmount() {
-
+    ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
   },
 
   componentWillReceiveProps(nextProps) {
     var messages = ChatStore.getMessage(nextProps.activeThread._id)
+    this.setState({
+      messages: messages,
+      dataSource: this.state.dataSource.cloneWithRows(messages)
+    });
+  },
+
+  _onChatChange: function() {
+    var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       messages: messages,
       dataSource: this.state.dataSource.cloneWithRows(messages)
@@ -113,7 +122,7 @@ var MessageView = React.createClass({
           mainNavigator={ this.props.mainNavigator }
         />
         <ListView
-          renderScrollComponent={(props) => <InvertibleScrollView {...props} inverted />}
+          renderScrollComponent={(props) => <InvertibleScrollView {...props} />}
           dataSource={ this.state.dataSource }
           style={ styles.messageList }
           renderRow={(message) => {
