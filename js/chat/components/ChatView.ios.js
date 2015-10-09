@@ -111,7 +111,7 @@ var styles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: '#eee',
     top: 0,
-    flexDirection: 'column',
+    flexDirection: 'row',
     width: window.width
   },
 
