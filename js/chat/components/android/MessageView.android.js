@@ -116,7 +116,6 @@ var styles = StyleSheet.create({
     paddingTop: 10
   },
   inputContainer: {
-    marginBottom: 24,
     height: 48,
     width: constants.width,
     backgroundColor: '#FFF',
