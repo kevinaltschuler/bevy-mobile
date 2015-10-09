@@ -13,6 +13,8 @@ var {
   TouchableNativeFeedback,
   Image,
   Modal,
+  PanResponder,
+  Animated,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -30,10 +32,62 @@ var ImageModal = React.createClass({
     return {
       visible: false,
       imageIndex: 0,
-      images: []
+      images: [],
+      imageAnim: new Animated.ValueXY()
     };
   },
 
+  componentWillMount() {
+    this._panResponder = PanResponder.create({
+      // Ask to be the responder:
+      onStartShouldSetPanResponder: (evt, gestureState) => true,
+      onMoveShouldSetPanResponder: (evt, gestureState) => true,
+
+      onPanResponderGrant: (evt, gestureState) => {
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        this.state.imageAnim.setValue({
+          x: gestureState.dx
+        });
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        if(Math.abs(gestureState.dx) > (constants.width / 2)) {
+          if(gestureState.dx > 0) {
+            // prev img
+            this.setState({
+              imageIndex: (this.state.imageIndex == 0) 
+                ? this.state.images.length - 1
+                : this.state.imageIndex - 1,
+              imageAnim: new Animated.ValueXY()
+            });
+          } else {
+            // next img
+            /*Animated.spring(
+              this.state.imageAnim,
+              { toValue: { x: -constants.width, y: 0 } }
+            ).start();*/
+            
+            this.setState({
+              imageIndex: (this.state.imageIndex == this.state.images.length - 1)
+                ? 0
+                : this.state.imageIndex + 1,
+              imageAnim: new Animated.ValueXY()
+            });
+          }
+        }
+        // else {
+          Animated.spring(
+            this.state.imageAnim,
+            { toValue: { x: 0, y: 0 } }
+          ).start();
+        //}
+      },
+      onPanResponderTerminate: (evt, gestureState) => {
+        // Another component has become the responder, so this gesture
+        // should be cancelled
+      }
+    });
+  },
   componentDidMount() {
     var actions = {
       show: this.show,
@@ -60,14 +114,14 @@ var ImageModal = React.createClass({
     return (
       <View style={ styles.container }>
         <View style={ styles.backdrop } />
-        <Image
-          style={ styles.image }
-          source={{ uri: this.state.images[this.state.imageIndex] }}
-          resizeMode='contain'
-        />
-        <TouchableWithoutFeedback>
-          <View style={ styles.fill } />
-        </TouchableWithoutFeedback>
+        <Animated.View style={[ styles.imageContainer, this.state.imageAnim.getLayout() ]}>
+          <Image
+            style={ styles.image }
+            source={{ uri: this.state.images[this.state.imageIndex] }}
+            resizeMode='contain'
+          />
+        </Animated.View>
+        <View { ...this._panResponder.panHandlers } style={ styles.swipeMonkey } />
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#666', false) }
@@ -85,7 +139,7 @@ var ImageModal = React.createClass({
             { (this.state.imageIndex + 1) + ' of ' + this.state.images.length }
           </Text>
         </View>
-      </View>
+      </View>    
     );
   }
 });
@@ -109,9 +163,19 @@ var styles = StyleSheet.create({
     height: constants.height,
     opacity: 0.5
   },
+  imageContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: constants.width,
+    height: constants.height,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   image: {
     flex: 1,
-    width: constants.width * .85
+    width: constants.width
   },
   fill: {
     position: 'absolute',
@@ -140,6 +204,13 @@ var styles = StyleSheet.create({
   imageIndex: {
     color: '#FFF'
   },
+  swipeMonkey: {
+    flex: 1,
+    width: constants.width,
+    height: constants.height,
+    backgroundColor: '#F00',
+    opacity: 0
+  }
 });
 
 module.exports = ImageModal;
