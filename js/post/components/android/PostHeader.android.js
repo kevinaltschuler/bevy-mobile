@@ -23,6 +23,29 @@ var PostHeader = React.createClass({
     post: React.PropTypes.object
   },
 
+  _renderPinnedBadge() {
+    if(this.props.post.pinned) {
+      return (
+        <View style={ styles.pinnedBadge }>
+          <Text style={ styles.pinnedBadgeText }>Pinned</Text> 
+        </View>
+      );
+    } else {
+      return <View />;
+    }
+  },
+
+  _renderTagBadge() {
+    if(_.isEmpty(this.props.post.tag)) return <View />;
+    return (
+      <View style={[ styles.tagBadge, { backgroundColor: this.props.post.tag.color } ]}>
+        <Text style={ styles.tagBadgeText }>
+          { this.props.post.tag.name }
+        </Text>
+      </View>
+    );
+  },
+
   render() {
     var post = this.props.post;
     var author = post.author;
@@ -47,6 +70,8 @@ var PostHeader = React.createClass({
           <Text style={ styles.timeAgo }>{ timeAgo(new Date(post.created)) }</Text>
         </View>
         <View style={ styles.badges }>
+          { this._renderPinnedBadge() }
+          { this._renderTagBadge() }
         </View>
       </View>
     );
@@ -68,6 +93,7 @@ var styles = StyleSheet.create({
     marginRight: 8
   },
   details: {
+    flex: 1,
     flexDirection: 'column'
   },
   authorAndBevy: {
@@ -75,19 +101,45 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   },
   authorName: {
-
+    fontSize: 13,
+    color: '#666'
   },
   chevron: {
 
   },
   bevyName: {
-
+    fontSize: 13,
+    color: '#888'
   },
   timeAgo: {
-
+    fontSize: 11
   },
   badges: {
-
+    height: 30,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingRight: 6
+  },
+  pinnedBadge: {
+    backgroundColor: '#AAA',
+    marginRight: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8
+  },
+  pinnedBadgeText: {
+    fontSize: 11,
+    color: '#FFF'
+  },
+  tagBadge: {
+    backgroundColor: '#AAA',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8
+  },
+  tagBadgeText: {
+    fontSize: 11,
+    color: '#FFF'
   }
 });
 

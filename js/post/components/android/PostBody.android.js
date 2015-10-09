@@ -13,11 +13,16 @@ var {
   StyleSheet
 } = React;
 
+var _ = require('underscore');
+var routes = require('./../../../routes');
 var MAX_HEIGHT = 150;
 
 var PostBody = React.createClass({
   propTypes: {
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object,
+    expandText: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -40,7 +45,9 @@ var PostBody = React.createClass({
 
   _renderText() {
     var textStyle = {};
-    if(this.state.height != 0 && this.state.height > MAX_HEIGHT) {
+    if(this.state.height != 0 
+      && this.state.height > MAX_HEIGHT 
+      && !this.props.expandText) {
       textStyle.height = MAX_HEIGHT;
     };
 
@@ -52,11 +59,18 @@ var PostBody = React.createClass({
   },
 
   _renderExpandButton() {
-    if(this.state.height != 0 && this.state.height > MAX_HEIGHT) {
+    if(this.state.height != 0 
+      && this.state.height > MAX_HEIGHT
+      && !this.props.expandText) {
       return (
         <TouchableNativeFeedback
           onPress={() => {
-            // go to comment view
+            // dont navigate if already in comment view
+            if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+            // navigate to comments
+            var commentRoute = routes.MAIN.COMMENT;
+            commentRoute.post = this.props.post;
+            this.props.mainNavigator.push(commentRoute);
           }}
         >
           <View style={ styles.showMoreButton }>

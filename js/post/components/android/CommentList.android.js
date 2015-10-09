@@ -13,7 +13,6 @@ var {
   TouchableWithoutFeedback,
   StyleSheet
 } = React;
-//var CommentItem = require('./CommentItem.android.js');
 var Collapsible = require('react-native-collapsible');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
@@ -103,9 +102,10 @@ var CommentItem = React.createClass({
       (this.props.comment.depth == 0) 
       ? 0 
       : (this.props.comment.depth) * 5;
-    commentStyle.backgroundColor = (this.state.showActionBar) 
-    ? '#eee' 
-    : '#fff';
+    commentStyle.backgroundColor = 
+      (this.state.showActionBar) 
+      ? '#eee' 
+      : '#fff';
 
     if(this.state.isCompact) {
       return (
