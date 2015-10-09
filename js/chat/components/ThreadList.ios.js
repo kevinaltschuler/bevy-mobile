@@ -63,10 +63,10 @@ var ThreadList = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'row',
+    marginBottom: 48
   },
   list: {
-
   }
 });
 
