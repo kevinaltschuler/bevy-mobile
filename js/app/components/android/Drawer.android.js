@@ -21,6 +21,7 @@ var routes = require('./../../../routes');
 
 var Drawer = React.createClass({
   propTypes: {
+    drawerActions: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
