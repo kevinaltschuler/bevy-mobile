@@ -52,9 +52,7 @@ var ImageModal = React.createClass({
       },
       onPanResponderRelease: (evt, gestureState) => {
         if(gestureState.dx == 0) {
-          this.setState({
-            visible: false
-          });
+          this.dismiss();
           return;
         }
         if(Math.abs(gestureState.dx) > (constants.width / 2)) {
@@ -68,11 +66,6 @@ var ImageModal = React.createClass({
             });
           } else {
             // next img
-            /*Animated.spring(
-              this.state.imageAnim,
-              { toValue: { x: -constants.width, y: 0 } }
-            ).start();*/
-            
             this.setState({
               imageIndex: (this.state.imageIndex == this.state.images.length - 1)
                 ? 0
@@ -102,7 +95,6 @@ var ImageModal = React.createClass({
     constants.setImageModalActions(actions);
   },
   componentWillUnmount() {
-
   },
 
   show() {
@@ -112,7 +104,10 @@ var ImageModal = React.createClass({
   },
 
   dismiss() {
-    this.setState({ visible: false });
+    this.setState({ 
+      visible: false,
+      imageIndex: 0
+    });
   },
 
   render() {
@@ -143,6 +138,9 @@ var ImageModal = React.createClass({
           </TouchableNativeFeedback>
           <Text style={ styles.imageIndex }>
             { (this.state.imageIndex + 1) + ' of ' + this.state.images.length }
+          </Text>
+          <Text style={ styles.title }>
+            { this.state.images[this.state.imageIndex] }
           </Text>
         </View>
       </View>    
@@ -208,6 +206,11 @@ var styles = StyleSheet.create({
     marginRight: 8
   },
   imageIndex: {
+    color: '#FFF',
+    marginRight: 16
+  },
+  title: {
+    flex: 1,
     color: '#FFF'
   },
   swipeMonkey: {
