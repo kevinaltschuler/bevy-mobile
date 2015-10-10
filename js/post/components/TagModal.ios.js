@@ -161,8 +161,8 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 20,
-    width: constants.width * 2 / 3,
-    height: constants.height * .8,
+    width: 300,
+    height: 600,
   },
   panelHeaderText: {
     fontSize: 20,

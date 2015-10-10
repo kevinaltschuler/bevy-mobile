@@ -17,7 +17,9 @@ var {
 var Icon = require('react-native-vector-icons/Ionicons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
 var Accordion = require('react-native-accordion');
-var PostActionList = require('./PostActionList.ios.js')
+var PostActionList = require('./PostActionList.ios.js');
+
+var Collapsible = require('react-native-collapsible');
 
 var constants = require('./../../constants');
 var POST = constants.POST;
@@ -37,7 +39,7 @@ var Post = React.createClass({
   getDefaultProps() {
     return {
       inCommentView: false,
-      post: {}
+      post: {},
     };
   },
 
@@ -45,7 +47,8 @@ var Post = React.createClass({
     return {
       post: this.props.post,
       overlayVisible: false,
-      voted: this.props.post.voted
+      voted: this.props.post.voted,
+      collapsed: true
     };
   },
 
@@ -132,6 +135,14 @@ var Post = React.createClass({
   render: function() {
     var post = this.state.post;
 
+    var tagBadge = (post.tag)
+    ? <View style={{paddingTop: 2, paddingBottom: 2, paddingLeft: 4, paddingRight: 4, borderRadius: 8, backgroundColor: post.tag.color }}>
+        <Text style={{color: '#fff', fontSize: 10}}>
+          {post.tag.name}
+        </Text>
+      </View>
+    : <View/>;
+
     return (
       <View style={styles.postCard}>
         <View style={styles.titleRow}>
@@ -147,6 +158,7 @@ var Post = React.createClass({
               { timeAgo(Date.parse(post.created)) }
             </Text>
           </View>
+          { tagBadge }
         </View>
         
         { this._renderPostTitle() }
@@ -154,78 +166,74 @@ var Post = React.createClass({
         { this._renderImageOverlay() }
 
         { this._renderPostImage() }
-
-        <Accordion
-          ref={ (accordion) => this.optionsAccordion = accordion }
-          animationDuration={ 200 }
-          header={
-            <View style={styles.postActionsRow}>
-              <TouchableHighlight 
-                underlayColor='rgba(0,0,0,0.1)'
-                style={[ styles.actionTouchable, { flex: 2 } ]}
-                onPress={() => {
-                  PostActions.vote(post._id);
-                  this.setState({
-                    voted: !this.state.voted
-                  });
-                }}
-              >
-                <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-                  <Text style={ styles.pointCountText }>
-                    { this.countVotes() }
-                  </Text>
-                  <Icon
-                    name={ (this.state.voted) ? 'ios-heart' : 'ios-heart-outline' }
-                    size={20}
-                    color='#757d83'
-                    style={styles.actionIcon}
-                  />
-                </View>
-              </TouchableHighlight>
-              <TouchableHighlight 
-                underlayColor='rgba(0,0,0,0.1)'
-                style={[ styles.actionTouchable, { flex: 2 } ]}
-                onPress={() => {
-                  // go to comment view
-                  // return if we're already in comment view
-                  if(this.props.inCommentView) return;
-
-                  var commentRoute = routes.MAIN.COMMENT;
-                  commentRoute.postID = this.state.post._id;
-                  this.props.mainNavigator.push(commentRoute);
-                }}
-              >
-                <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-                  <Text style={ styles.commentCountText }>
-                    { post.comments.length }
-                  </Text>
-                  <Icon
-                    name='ios-chatbubble-outline'
-                    size={20}
-                    color='#757d83'
-                    style={styles.actionIcon}
-                  />
-                </View>
-              </TouchableHighlight>
-              <TouchableHighlight 
-                underlayColor='rgba(0,0,0,0.1)'
-                style={[ styles.actionTouchable, { flex: 1 } ]}
-                onPress={() => {
-                  this.optionsAccordion.toggle();
-                }}
-              >
-                <Icon
-                  name='ios-more'
-                  size={20}
-                  color='#757d83'
-                  style={styles.actionIcon}
-                />
-              </TouchableHighlight>
+        <View style={styles.postActionsRow}>
+          <TouchableHighlight 
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.actionTouchable, { flex: 2 } ]}
+            onPress={() => {
+              PostActions.vote(post._id);
+              this.setState({
+                voted: !this.state.voted
+              });
+            }}
+          >
+            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
+              <Text style={ styles.pointCountText }>
+                { this.countVotes() }
+              </Text>
+              <Icon
+                name={ (this.state.voted) ? 'ios-heart' : 'ios-heart-outline' }
+                size={20}
+                color='#757d83'
+                style={styles.actionIcon}
+              />
             </View>
-          }
-          content={ <PostActionList post={ this.state.post } { ...this.props } /> }
-        />
-        
+          </TouchableHighlight>
+          <TouchableHighlight 
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.actionTouchable, { flex: 2 } ]}
+            onPress={() => {
+              // go to comment view
+              // return if we're already in comment view
+              if(this.props.inCommentView) return;
+
+              var commentRoute = routes.MAIN.COMMENT;
+              commentRoute.postID = this.state.post._id;
+              this.props.mainNavigator.push(commentRoute);
+            }}
+          >
+            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
+              <Text style={ styles.commentCountText }>
+                { post.comments.length }
+              </Text>
+              <Icon
+                name='ios-chatbubble-outline'
+                size={20}
+                color='#757d83'
+                style={styles.actionIcon}
+              />
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight 
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.actionTouchable, { flex: 1 } ]}
+            onPress={() => {
+              this.setState({
+                collapsed: !this.state.collapsed
+              })
+            }}
+          >
+            <Icon
+              name='ios-more'
+              size={20}
+              color='#757d83'
+              style={styles.actionIcon}
+            />
+          </TouchableHighlight>
+        </View>
+        <Collapsible collapsed={this.state.collapsed} >
+          <PostActionList post={ this.state.post } { ...this.props } />
+        </Collapsible>
       </View>
     );
   },
@@ -238,7 +246,8 @@ var styles = StyleSheet.create({
   postCard: {
     flexDirection: 'column',
     width: cardWidth,
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 5,
     marginLeft: sideMargins,
     marginRight: sideMargins,
     paddingTop: 8,
