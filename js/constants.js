@@ -142,3 +142,19 @@ exports.setMainTabBar = function(theBar) {
 exports.getMainTabBar = function() {
   return mainTabBar;
 }
+
+var imageModalActions = {}
+var imageModalImages = [];
+exports.setImageModalActions = function(actions) {
+  imageModalActions = actions;
+};
+exports.getImageModalActions = function() {
+  return imageModalActions;
+}
+exports.setImageModalImages = function(images) {
+  imageModalImages = images;
+}
+exports.getImageModalImages = function() {
+  return imageModalImages
+}
+

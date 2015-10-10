@@ -14,6 +14,7 @@ var {
   Navigator
 } = React;
 var MainView = require('./js/app/components/android/MainView.android.js');
+var ImageModal = require('./js/post/components/android/ImageModal.android.js');
 var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
 
 var routes = require('./js/routes');
@@ -26,7 +27,6 @@ var USER = constants.USER;
 var Backbone = require('backbone');
 var _ = require('underscore');
 
-//constants.apiurl = 'http://joinbevy.com/api';
 
 // backbone shim
 Backbone.sync = function(method, model, options) {
@@ -240,6 +240,7 @@ var App = React.createClass({
             />
           }
         />
+        <ImageModal />
       </View>
     );
   }

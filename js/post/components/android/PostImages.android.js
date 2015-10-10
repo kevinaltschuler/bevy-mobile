@@ -18,6 +18,7 @@ var {
 } = React;
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 
 var PostImages = React.createClass({
   propTypes: {
@@ -30,10 +31,16 @@ var PostImages = React.createClass({
     };
   },
 
+  showImageModal() {
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages(this.props.post.images);
+    actions.show();
+  },
+
   _renderImageCount() {
     var imageCount = this.props.post.images.length;
 
-    if(imageCount < 1) return <View />;
+    if(imageCount < 2) return <View />;
     else return (
       <Text style={ styles.imageCount }>
         + { imageCount - 1 } more
@@ -49,7 +56,7 @@ var PostImages = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.8 }
-        onPress={() => {}}
+        onPress={ this.showImageModal }
       >
         <Image
           style={ styles.image }

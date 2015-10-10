@@ -33,3 +33,4 @@ android/.gradle/**/*.lock
 *.lock
 *.bin
 android/.gradle/2.4/taskArtifacts/cache.properties
+android/local.properties
