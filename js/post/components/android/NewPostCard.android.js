@@ -60,7 +60,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 5,
-    margin: 10,
+    marginLeft: 10,
+    marginRight: 10,
     paddingLeft: 10,
     paddingRight: 10
   },
