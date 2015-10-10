@@ -100,23 +100,34 @@ var PostList = React.createClass({
   },
 
   render() {
-    return (
-      <View style={ styles.container }>
-        <ListView
-          dataSource={ this.state.posts }
-          style={ styles.postList }
-          renderHeader={ this._renderHeader }
-          renderRow={(post) => 
-            <Post
-              key={ 'post:' + post._id }
-              post={ post }
-              mainNavigator={ this.props.mainNavigator }
-              mainRoute={ this.props.mainRoute }
-            />
-          }
-        />
-      </View>
-    );
+    if(_.isEmpty(this.props.allPosts)) {
+      return (
+        <View style={ styles.container }> 
+          { this._renderHeader() }     
+          <View style={ styles.noPostsContainer }>   
+            <Text style={ styles.noPosts }>No Posts</Text>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={ styles.container }>
+          <ListView
+            dataSource={ this.state.posts }
+            style={ styles.postList }
+            renderHeader={ this._renderHeader }
+            renderRow={(post) => 
+              <Post
+                key={ 'post:' + post._id }
+                post={ post }
+                mainNavigator={ this.props.mainNavigator }
+                mainRoute={ this.props.mainRoute }
+              />
+            }
+          />
+        </View>
+      );
+    }
   }
 });
 
@@ -173,6 +184,18 @@ var styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     color: '#FFF'
+  },
+  noPostsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noPosts: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 22,
+    color: '#AAA'
   }
 });
 
