@@ -776,6 +776,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/node_modules/react-native-blur/ios/build/Debug-iphoneos",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;

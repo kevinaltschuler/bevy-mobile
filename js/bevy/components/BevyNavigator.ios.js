@@ -83,23 +83,27 @@ var BevyView = React.createClass({
     var sortButton = (this.props.bevyRoute.name == routes.BEVY.POSTLIST.name)
     ? (
       <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0)'}
+        underlayColor={'rgba(0,0,0,0.1)'}
         onPress={() => {
           this.setState({
             showTags: true
           });
         }}
         style={{
-          marginRight: 15
+          marginRight: 10,
+          borderRadius: 17,
+          width: 35,
+          height: 35,
+          padding: 6
         }}
       >
         <Icon
           name='ios-pricetag'
-          size={20}
+          size={25}
           color='#666'
           style={{
-            width: 20,
-            height: 20
+            width: 25,
+            height: 25
           }}
         />
       </TouchableHighlight>

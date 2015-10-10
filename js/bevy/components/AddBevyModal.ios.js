@@ -10,6 +10,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
+var { BlurView, VibrancyView } = require('react-native-blur');
+
 var constants = require('./../../constants');
 var routes = require('./../../routes');
 
@@ -36,85 +38,85 @@ var AddBevyModal = React.createClass({
 
   render() {
     if(!this.state.isVisible) return null;
-    return <View/>;
-    /*return (
+    return (
       <Modal
-        forceToFront={ true }
-        backdropType="blur"
-        backdropBlur="dark"
         isVisible={ this.state.isVisible }
-        style={ styles }
-        onPressBackdrop={() => { this.props.onHide(); }}
-        customCloseButton={
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,0.1)'
-            style={ styles.closeButton }
-            onPress={() => { this.props.onHide(); }}
-          >
-            <View style={ styles.closeButtonContainer }>
-              <Text style={ styles.closeButtonText }>Close</Text>
-              <Icon
-                name='ios-close-empty'
-                size={ 30 }
-                color='#fff'
-                style={{ width: 30, height: 30 }}
-              />
-            </View>
-          </TouchableHighlight>
-        }
+        animated={ true }
+        transparent={ true }
       >
-        <View style={ styles.panel }>
-          <Text style={ styles.panelHeaderText }>Add a Bevy</Text>
-          <View style={ styles.actionRow }>
-            <View style={ styles.actionRowItem }>
-              <Text style={ styles.actionRowItemText }>Search</Text>
-              <TouchableHighlight
-                underlayColor='#eee'
-                style={ styles.actionRowItemButton }
-                onPress={() => {
-                  var searchNavigator = constants.getSearchNavigator();
-                  // go to search
-                  searchNavigator.push(routes.SEARCH.IN);
-                  // close self
-                  this.props.onHide();
-                  // close the side menu
-                  this.props.menuActions.close();
-                }}
-              >
-                <Icon
-                  name='ios-search'
-                  color='#aaa'
-                  size={ 80 }
-                  style={{ width: 80, height: 80, borderRadius: 15 }}
-                />
-              </TouchableHighlight>
-            </View>
-            <View style={ styles.actionRowItem }>
-              <Text style={ styles.actionRowItemText }>Create</Text>
-              <TouchableHighlight
-                underlayColor='#eee'
-                style={ styles.actionRowItemButton }
-                onPress={() => {
-                  // close self
-                  this.props.onHide();
-                  // close the side menu
-                  this.props.menuActions.close();
-                  // go to new bevy view
-                  this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-                }}
-              >
-                <Icon
-                  name='ios-plus-empty'
-                  color='#aaa'
-                  size={ 80 }
-                  style={{ width: 80, height: 80, borderRadius: 15 }}
-                />
-              </TouchableHighlight>
+        <BlurView blurType='dark' style={ styles.container}>
+          <View style={ styles.panel }>
+              <View style={ styles.topBar }>
+                <TouchableHighlight
+                  underlayColor='rgba(0,0,0,0.2)'
+                  style={ styles.closeButton }
+                  onPress={() => {
+                    this.setState({
+                      isVisible: false
+                    });
+                    this.props.onHide();
+                  }}
+                >
+                  <Icon
+                    name='ios-close-empty'
+                    size={ 30 }
+                    style={{ width: 30, height: 30 }}
+                    color='#333'
+                  />
+                </TouchableHighlight>
+                <Text style={ styles.panelHeaderText }>Add a Bevy</Text>
+              </View>
+            <View style={ styles.actionRow }>
+              <View style={ styles.actionRowItem }>
+                <Text style={ styles.actionRowItemText }>Search</Text>
+                <TouchableHighlight
+                  underlayColor='#eee'
+                  style={ styles.actionRowItemButton }
+                  onPress={() => {
+                    var searchNavigator = constants.getSearchNavigator();
+                    // go to search
+                    searchNavigator.push(routes.SEARCH.IN);
+                    // close self
+                    this.props.onHide();
+                    // close the side menu
+                    this.props.menuActions.close();
+                  }}
+                >
+                  <Icon
+                    name='ios-search'
+                    color='#aaa'
+                    size={ 80 }
+                    style={{ width: 80, height: 80, borderRadius: 15 }}
+                  />
+                </TouchableHighlight>
+              </View>
+              <View style={ styles.actionRowItem }>
+                <Text style={ styles.actionRowItemText }>Create</Text>
+                <TouchableHighlight
+                  underlayColor='#eee'
+                  style={ styles.actionRowItemButton }
+                  onPress={() => {
+                    // close self
+                    this.props.onHide();
+                    // close the side menu
+                    this.props.menuActions.close();
+                    // go to new bevy view
+                    this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+                  }}
+                >
+                  <Icon
+                    name='ios-plus-empty'
+                    color='#aaa'
+                    size={ 80 }
+                    style={{ width: 80, height: 80, borderRadius: 15 }}
+                  />
+                </TouchableHighlight>
+              </View>
             </View>
           </View>
-        </View>
+        </BlurView>
       </Modal>
-    );*/
+    );
   }
 });
 
@@ -139,22 +141,23 @@ var styles = StyleSheet.create({
     backgroundColor: '#000',
     opacity: 0.5
   },
+  topBar: {
+    height: 42,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 10
+  },
   modal: {
     flexDirection: 'row',
-    marginTop: constants.height / 4
   },
 
   closeButton: {
-    position: 'absolute',
-    borderColor: '#fff',
-    borderRadius: 2,
-    borderWidth: 1,
-    right: 20 - (constants.width * 1 / 6),
-    top: 20,
+    height: 48,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   closeButtonContainer: {
     flexDirection: 'row',
@@ -170,8 +173,9 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 10,
-    width: constants.width * 2 / 3,
-    height: constants.height / 3
+    width: 270,
+    height: 270,
+    marginTop: 100
   },
   panelHeaderText: {
     marginTop: 15,
@@ -201,7 +205,8 @@ var styles = StyleSheet.create({
   },
   actionRowItemButton: {
     flex: 1,
-    borderRadius: 15
+    borderRadius: 15,
+    paddingLeft: 20
   }
 });
 

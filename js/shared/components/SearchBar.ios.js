@@ -231,8 +231,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
+    borderBottomColor: '#fff',
+    borderBottomWidth: .5,
     marginRight: 20,
     marginLeft: 20
   },

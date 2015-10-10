@@ -72,10 +72,12 @@ var MessageView = React.createClass({
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
 
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
-      console.log(frames.end.height);
-      this.setState({
-        keyboardSpace: frames.end.height
-      });
+
+      if (frames.end) {
+        this.setState({keyboardSpace: frames.end.height});
+      } else {
+        this.setState({keyboardSpace: frames.endCoordinates.height});
+      }
     });
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
       this.setState({

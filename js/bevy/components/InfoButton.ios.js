@@ -29,8 +29,8 @@ var InfoButton = React.createClass({
         onPress={this.onPress}
       >
         <Icon
-          name='ios-information-empty'
-          size={35}
+          name='ios-information'
+          size={25}
           color='#666'
           style={styles.bevyListButton}
         />
@@ -41,11 +41,16 @@ var InfoButton = React.createClass({
 
 var styles = StyleSheet.create({
   bevyListButton: {
-    width: 35,
-    height: 35,
+    width: 25,
+    height: 25,
   },
   highlight: {
-    borderRadius: 17
+    marginRight: 10,
+    borderRadius: 17,
+    width: 35,
+    height: 35,
+    paddingTop: 5,
+    paddingLeft: 8
   }
 });
 

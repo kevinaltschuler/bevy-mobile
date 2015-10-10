@@ -8,7 +8,8 @@ var {
   TextInput,
   StyleSheet,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  DeviceEventEmitter
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
@@ -18,8 +19,6 @@ var Navbar = require('./../../shared/components/Navbar.ios.js');
 var CommentList = require('./CommentList.ios.js');
 
 var _ = require('underscore');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var constants = require('./../../constants');
 var PostStore = require('./../PostStore');
 var CommentActions = require('./../CommentActions');
@@ -36,8 +35,7 @@ var CommentView = React.createClass({
 
   getDefaultProps() {
     return {
-      postID: '-1',
-      keyboardSpace: 0
+      postID: '-1'
     };
   },
 
@@ -48,25 +46,32 @@ var CommentView = React.createClass({
       post: post,
       comments: comments,
       replyToComment: {},
-      replyText: ''
+      replyText: '',
+      keyboardSpace: 0
     };
   },
 
+  _onKeyboardShowed(ev) {
+    var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
+    this.setState({
+      keyboardSpace: height
+    });
+  },
+
+  _onKeyboardHid(ev) {
+    this.setState({
+      keyboardSpace: 0
+    });
+  },
+
   componentDidMount() {
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, (frames) => {
-      this.setState({
-        keyboardSpace: frames.end.height
-      });
-    });
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 0
-      });
-    });
+    DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShowed);
+    DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHid);
   },
   
   componentWillUnmount() {
-
+    //DeviceEventEmitter.removeListener('keyboardDidShow', this._onKeyboardShowed);
+    //DeviceEventEmitter.removeListener('keyboardDidHide', this._onKeyboardHid);
   },
 
   onReply(comment) {
@@ -156,7 +161,7 @@ var CommentView = React.createClass({
       return null;
     } 
     return (
-      <View style={{marginTop: -20}}>
+      <View style={{marginTop: 0}}>
         <Post
           inCommentView={ true }
           post={ this.state.post }
@@ -181,7 +186,7 @@ var CommentView = React.createClass({
   _renderReplyBar() {
 
     var replyInfo = (_.isEmpty(this.state.replyToComment))
-    ? null
+    ? <View />
     : (
       <View style={ styles.replyInfo }>
         <Text style={ styles.replyingTo }>
@@ -197,9 +202,12 @@ var CommentView = React.createClass({
     );
 
     return (
-      <View style={[ styles.reply, {
-        marginBottom: this.state.keyboardSpace
-      }]}>
+      <View 
+        style={{ position: 'absolute', 
+                  width: constants.width, 
+                  bottom: this.state.keyboardSpace
+              }}
+      >
         { replyInfo }
         <View style={ styles.replyBar }>
           <TextInput
@@ -254,7 +262,7 @@ var CommentView = React.createClass({
       )
     : (
       <View>
-        <ScrollView style={ styles.scrollView }>
+        <ScrollView style={ styles.scrollView}>
           { this._renderPost() }
           <View style={ styles.commentsCard }>
             <CommentList
@@ -265,8 +273,6 @@ var CommentView = React.createClass({
             { this._renderNoCommentsText() }
           </View>
         </ScrollView>
-
-        { this._renderReplyBar() }
       </View>
     );
     return (
@@ -312,6 +318,7 @@ var CommentView = React.createClass({
           }
         />
         {content}
+        { this._renderReplyBar() }
       </View>
     );
   }
@@ -321,7 +328,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
+    marginTop: 0
   },
 
   navButtonLeft: {
@@ -365,7 +373,7 @@ var styles = StyleSheet.create({
     shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
+    shadowOffset:  {width: 0, height: 0},
   },
 
   noCommentsText: {
@@ -422,15 +430,17 @@ var styles = StyleSheet.create({
   },
   replyButton: {
     flex: 1,
-    paddingTop: 10,
-    paddingBottom: 10
+    paddingTop: 0,
+    paddingBottom: 0
   },
   replyButtonText: {
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 20,
+    paddingRight: 5,
+    paddingTop: 10,
     fontSize: 17,
     color: '#2CB673',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginBottom: -10
   }
 });
 

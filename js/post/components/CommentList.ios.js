@@ -20,7 +20,7 @@ var colorMap = [
   '#E8A341'
 ]; // bleached rainbow for adobe color
 
-var Accordion = require('react-native-accordion');
+var Collapsible = require('react-native-collapsible');
 
 var CommentItem = React.createClass({
   propTypes: {
@@ -32,7 +32,7 @@ var CommentItem = React.createClass({
 
   getInitialState() {
     return {
-      selected: false
+      collapsed: true
     };
   },
 
@@ -50,16 +50,15 @@ var CommentItem = React.createClass({
   render() {
     return (
       <View>
-        <Accordion
-          ref='accordion'
-          underlayColor='rgba(0,0,0,0.1)'
-          animationDuration={ 200 }
-          onPress={() => {
-            this.setState({
-              selected: !this.state.selected
-            });
-          }}
-          header={
+        <View style={ styles.commentItemComments }>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            onPress={() => {
+              this.setState({
+                collapsed: !this.state.collapsed
+              });
+            }}
+          >
             <View style={[ styles.commentItem, { 
               //marginLeft: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth - 1) * 3,
               backgroundColor: (this.state.selected) ? '#eee' : '#fff',
@@ -80,19 +79,17 @@ var CommentItem = React.createClass({
                 </Text>
               </View>
             </View>
-          }
-          content={
+          </TouchableHighlight>
+          <Collapsible collapsed={this.state.collapsed} >
             <View style={ styles.commentItemActions }>
               <TouchableHighlight
                 underlayColor='rgba(0,0,0,0.1)'
                 onPress={() => {
                   // bubble this comment up
                   this.props.onReply(this.props.comment);
-                  // close the accordion
-                  this.refs.accordion.close();
                   // unselect self
                   this.setState({
-                    selected: false
+                    collapsed: true
                   });
                 }}
                 style={ styles.commentItemAction }
@@ -121,9 +118,9 @@ var CommentItem = React.createClass({
                 />
               </TouchableHighlight>
             </View>
-          }
-        />
-        <View style={ styles.commentItemComments }>
+          </Collapsible>
+        </View>
+        <View>
           { this._renderCommentList() }
         </View>
       </View>
@@ -194,7 +191,6 @@ var styles = StyleSheet.create({
   commentItemComments: {
 
   },
-
   commentItemActions: {
     flexDirection: 'row',
     height: 36,

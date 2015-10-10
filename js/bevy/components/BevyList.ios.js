@@ -45,6 +45,12 @@ var BevyList = React.createClass({
     };
   },
 
+  onHideModal() {
+    this.setState({
+      showAddBevyModal: false
+    })
+  },
+
   changeBevy: function(rowData) {
 
   },
@@ -108,8 +114,8 @@ var BevyList = React.createClass({
           />
         </TouchableHighlight>
         <AddBevyModal 
+          onHide={ this.onHideModal }
           isVisible={ this.state.showAddBevyModal }
-          onHide={() => { this.setState({ showAddBevyModal: false }); }}
           mainNavigator={ this.props.mainNavigator }
           menuActions={ this.props.menuActions }
         />

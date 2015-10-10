@@ -263,7 +263,7 @@ var InputView = React.createClass({
               style={ styles.toBevyPicker }
             >
               <Icon
-                name='ion|chevron-right'
+                name='chevron-right'
                 size={30}
                 color='#666'
                 style={{ width: 30, height: 30 }}
@@ -311,7 +311,7 @@ var InputView = React.createClass({
               style={ styles.contentBarItem }
             >
               <Icon
-                name='ion|image'
+                name='image'
                 size={30}
                 color='#666'
                 style={ styles.contentBarIcon }
@@ -336,7 +336,7 @@ var InputView = React.createClass({
               style={ styles.contentBarItem }
             >
               <Icon
-                name='ion|camera'
+                name='camera'
                 size={30}
                 color='#666'
                 style={ styles.contentBarIcon }
