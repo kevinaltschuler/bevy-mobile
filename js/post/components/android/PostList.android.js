@@ -165,7 +165,7 @@ var styles = StyleSheet.create({
     left: 0,
     width: constants.width,
     height: 48,
-    backgroundColor: '#2CB673'
+    backgroundColor: '#AAA'
   },
   bevyImage: {
     width: constants.width,

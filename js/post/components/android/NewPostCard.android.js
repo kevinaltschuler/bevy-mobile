@@ -36,7 +36,7 @@ var NewPostCard = React.createClass({
   render() {
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#000', false) }
+        background={ TouchableNativeFeedback.Ripple('#CCC', false) }
         onPress={ this.goToNewPost }
       >
         <View style={ styles.container }>
