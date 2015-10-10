@@ -246,7 +246,8 @@ var styles = StyleSheet.create({
   postCard: {
     flexDirection: 'column',
     width: cardWidth,
-    marginTop: 10,
+    marginTop: 5,
+    marginBottom: 5,
     marginLeft: sideMargins,
     marginRight: sideMargins,
     paddingTop: 8,

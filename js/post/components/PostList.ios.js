@@ -60,7 +60,7 @@ var PostList = React.createClass({
   getInitialState() {
     return {
       dataSource: new ListView.DataSource({
-        rowHasChanged: (r1, r2) => true
+        rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
     };
@@ -139,7 +139,8 @@ var PostList = React.createClass({
             dataSource={ this.state.dataSource }
             style={ styles.postContainer }
             onRefresh={this.onRefresh}
-            indicator={<LoadingBarIndicator position="fixed" />}
+            refreshOnRelease={true}
+            indicator={<LoadingBarIndicator position="fixed" style={{marginTop: -10}} />}
             scrollRenderAheadDistance={3}
             renderHeader={() => { 
               return this._renderHeader();
@@ -171,12 +172,14 @@ var PostList = React.createClass({
                   mainNavigator={ this.props.mainNavigator }
                 />
               else
-                return  <Post 
-                  key={ 'postlist:' + post._id } 
-                  post={ post } 
-                  mainRoute={ this.props.mainRoute }
-                  mainNavigator={ this.props.mainNavigator }
-                />
+                return <View style={{backgroundColor: '#eee'}}>
+                  <Post 
+                    key={ 'postlist:' + post._id } 
+                    post={ post } 
+                    mainRoute={ this.props.mainRoute }
+                    mainNavigator={ this.props.mainNavigator }
+                  />
+                </View>
             }}
           />
       </View>
