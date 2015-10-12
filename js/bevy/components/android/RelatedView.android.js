@@ -29,6 +29,13 @@ var RelatedView = React.createClass({
   _renderBevyItems() {
     var bevies = [];
     var relatedBevies = this.props.activeBevy.siblings;
+    if(_.isEmpty(relatedBevies)) {
+      return (
+        <View style={ styles.noBeviesContainer }>
+          <Text style={ styles.noBevies }>No Related Bevies!</Text>
+        </View>
+      );
+    }
     for(var key in relatedBevies) {
       var bevy = BevyStore.getBevy(relatedBevies[key]);
       bevies.push(
@@ -64,6 +71,18 @@ var styles = StyleSheet.create({
   },
   bevyList: {
     flex: 1
+  },
+  noBeviesContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noBevies: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 22,
+    color: '#AAA'
   }
 });
 
