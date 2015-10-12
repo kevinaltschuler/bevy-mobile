@@ -54,7 +54,8 @@ var BevyBar = React.createClass({
   },
 
   _renderBackButton() {
-    if(this.props.bevyRoute.name == routes.BEVY.INFO.name) {
+    if(this.props.bevyRoute.name == routes.BEVY.INFO.name
+      || this.props.bevyRoute.name == routes.BEVY.RELATED.name) {
       return (
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
@@ -74,7 +75,8 @@ var BevyBar = React.createClass({
 
   _renderInfoButton() {
     if(  this.props.activeBevy._id == -1 
-      || this.props.bevyRoute.name == routes.BEVY.INFO.name) 
+      || this.props.bevyRoute.name == routes.BEVY.INFO.name
+      || this.props.bevyRoute.name == routes.BEVY.RELATED.name) 
       return <View />;
     else return (
       <TouchableNativeFeedback

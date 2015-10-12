@@ -20,6 +20,7 @@ var BevyBar = require('./BevyBar.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
 var BevyActions = require('./../../BevyActions');
 
@@ -48,58 +49,78 @@ var BevyInfoView = React.createClass({
     }
   },
 
+  goToRelated() {
+    // go to related bevies view
+    this.props.bevyNavigator.push(routes.BEVY.RELATED);
+  },
+
   render() {
     return (
-      <ScrollView style={ styles.container }>
+      <View style={ styles.container }>
         <BevyBar
           activeBevy={ this.props.activeBevy }
           bevyNavigator={ this.props.bevyNavigator }
           bevyRoute={ this.props.bevyRoute }
         />
-        <View style={ styles.header }>
-          <Image
-            source={{ uri: this.props.activeBevy.image_url }}
-            style={ styles.bevyImage }
-          />
-          <View style={ styles.bevyDetails }>
-            <Text style={ styles.bevyName }>
-              { this.props.activeBevy.name.trim() }
-            </Text>
-            <Text style={ styles.bevyDescription }>
-              { this.props.activeBevy.description.trim() }
-            </Text>
-            <View style={ styles.bevyDetailsBottom }>
-              <Icon
-                name='public'
-                size={ 16 }
-                color='#AAA'
-              />
-              <Text style={ styles.publicOrPrivate }>
-                { (this.props.activeBevy.settings.privacy == 1)
-                    ? 'Private'
-                    : 'Public'
-                }
+        <ScrollView>
+          <View style={ styles.header }>
+            <Image
+              source={{ uri: this.props.activeBevy.image_url }}
+              style={ styles.bevyImage }
+            />
+            <View style={ styles.bevyDetails }>
+              <Text style={ styles.bevyName }>
+                { this.props.activeBevy.name.trim() }
               </Text>
-              <Icon
-                name='group'
-                size={ 16 }
-                color='#AAA'
-              />
-              <Text style={ styles.subCount }>
-                { this.props.activeBevy.subCount } Subscribers
+              <Text style={ styles.bevyDescription }>
+                { this.props.activeBevy.description.trim() }
               </Text>
+              <View style={ styles.bevyDetailsBottom }>
+                <Icon
+                  name='public'
+                  size={ 16 }
+                  color='#AAA'
+                />
+                <Text style={ styles.publicOrPrivate }>
+                  { (this.props.activeBevy.settings.privacy == 1)
+                      ? 'Private'
+                      : 'Public'
+                  }
+                </Text>
+                <Icon
+                  name='group'
+                  size={ 16 }
+                  color='#AAA'
+                />
+                <Text style={ styles.subCount }>
+                  { this.props.activeBevy.subCount } Subscribers
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        <Text style={ styles.settingTitle }>General</Text>
-        <View style={ styles.subscribe }>
-          <Text style={ styles.subscribeText }>Subscribed</Text>
-          <SwitchAndroid
-            value={ this.state.subscribed }
-            onValueChange={(value) => this.onToggleSubscribe(value)}
-          />
-        </View>
-      </ScrollView>
+          <Text style={ styles.settingTitle }>General</Text>
+          <View style={ styles.settingItem }>
+            <Text style={ styles.settingText }>Subscribed</Text>
+            <SwitchAndroid
+              value={ this.state.subscribed }
+              onValueChange={(value) => this.onToggleSubscribe(value)}
+            />
+          </View>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+            onPress={ this.goToRelated }
+          >
+            <View style={ styles.settingItem }>
+              <Text style={ styles.settingText }>Related Bevies</Text>
+              <Icon
+                name='arrow-forward'
+                size={ 30 }
+                color='#AAA'
+              />
+            </View>
+          </TouchableNativeFeedback>
+        </ScrollView>
+      </View>
     );
   }
 });
@@ -152,14 +173,14 @@ var styles = StyleSheet.create({
     marginBottom: 4,
     marginLeft: 10
   },
-  subscribe: {
+  settingItem: {
     backgroundColor: '#FFF',
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10
   },
-  subscribeText: {
+  settingText: {
     flex: 1,
     color: '#666'
   }
