@@ -13,6 +13,7 @@ var {
   Image,
   StyleSheet
 } = React;
+var BevyBar = require('./../../../bevy/components/android/BevyBar.android.js');
 var NewPostCard = require('./NewPostCard.android.js');
 var Post = require('./Post.android.js');
 
@@ -54,36 +55,12 @@ var PostList = React.createClass({
   _renderHeader() {
     return (
       <View style={ styles.header }>
-        { this._renderBevyHeader() }
+        <BevyBar
+          activeBevy={ this.props.activeBevy }
+          bevyNavigator={ this.props.bevyNavigator }
+          bevyRoute={ this.props.bevyRoute }
+        />
         { this._renderNewPostCard() }
-      </View>
-    );
-  },
-
-  _renderBevyHeaderImage() {
-    if(this.props.activeBevy._id == -1 || _.isEmpty(this.props.activeBevy.image_url)) {
-      return <View style={ styles.bevyImageWrapperDefault } />;
-    } else {
-      return (
-        <View style={ styles.bevyImageWrapper }>
-          <Image
-            source={{ uri: this.props.activeBevy.image_url }}
-            style={ styles.bevyImage }
-          />
-          <View style={ styles.imageDarkener } />
-        </View>
-      );
-    }
-  },
-
-  _renderBevyHeader() {
-    if(_.isEmpty(this.props.activeBevy)) return <View />;
-    else return (
-      <View style={ styles.bevyHeader }>
-        { this._renderBevyHeaderImage() }
-        <Text style={ styles.bevyName }>
-          { this.props.activeBevy.name }
-        </Text>
       </View>
     );
   },
@@ -142,48 +119,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     width: constants.width,
     marginBottom: 10
-  },
-  bevyHeader: {
-    height: 48,
-    width: constants.width,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    opacity: 1,
-    marginBottom: 8
-  },
-  bevyImageWrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: constants.width,
-    height: 48
-  },
-  bevyImageWrapperDefault: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: constants.width,
-    height: 48,
-    backgroundColor: '#AAA'
-  },
-  bevyImage: {
-    width: constants.width,
-    height: 48
-  },
-  imageDarkener: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: constants.width,
-    height: 48,
-    backgroundColor: '#000',
-    opacity: 0.5
-  },
-  bevyName: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#FFF'
   },
   noPostsContainer: {
     flex: 1,
