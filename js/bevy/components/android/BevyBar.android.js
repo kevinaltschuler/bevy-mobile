@@ -100,9 +100,12 @@ var BevyBar = React.createClass({
       <View style={ styles.container }>
         { this._renderImage() }
         { this._renderBackButton() }
-        <Text style={ styles.bevyName }>
-          { this.props.activeBevy.name }
-        </Text>
+        <View style={{ flex: 1 }}/>
+        <View style={ styles.bevyNameContainer }>
+          <Text style={ styles.bevyName }>
+            { this.props.activeBevy.name }
+          </Text>
+        </View>
         { this._renderInfoButton() }
       </View>
     );
@@ -146,6 +149,17 @@ var styles = StyleSheet.create({
     height: 48,
     backgroundColor: '#000',
     opacity: 0.5
+  },
+  bevyNameContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: constants.width,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 40
   },
   bevyName: {
     flex: 1,
