@@ -17,6 +17,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var BevyBar = require('./BevyBar.android.js');
+var BevyAdminItem = require('./BevyAdminItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -52,6 +53,25 @@ var BevyInfoView = React.createClass({
   goToRelated() {
     // go to related bevies view
     this.props.bevyNavigator.push(routes.BEVY.RELATED);
+  },
+
+  _renderAdmins() {
+    var bevyAdmins = this.props.activeBevy.admins;
+    var admins = [];
+    for(var key in bevyAdmins) {
+      var admin = bevyAdmins[key];
+      admins.push(
+        <BevyAdminItem
+          key={ 'bevyadminitem:' + admin._id }
+          admin={ admin }
+        />
+      );
+    }
+    if(_.isEmpty(admins)) {
+      return (
+        <Text style={ styles.noAdmins }>No Admins</Text>
+      );
+    } else return admins;
   },
 
   render() {
@@ -119,6 +139,8 @@ var BevyInfoView = React.createClass({
               />
             </View>
           </TouchableNativeFeedback>
+          <Text style={ styles.settingTitle }>Admins</Text>
+          { this._renderAdmins() }
         </ScrollView>
       </View>
     );
@@ -137,6 +159,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 10,
     margin: 10,
+    marginBottom: 0,
     borderRadius: 5
   },
   bevyImage: {
@@ -170,6 +193,7 @@ var styles = StyleSheet.create({
 
   settingTitle: {
     color: '#AAA',
+    marginTop: 10,
     marginBottom: 4,
     marginLeft: 10
   },

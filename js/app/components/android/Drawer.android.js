@@ -67,7 +67,7 @@ var Drawer = React.createClass({
         <View style={ styles.myBeviesHeader }>
           <Text style={ styles.myBeviesText }>My Bevies</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#FFF', false) } 
+            background={ TouchableNativeFeedback.Ripple('#888', false) } 
             onPress={ () => {}}
           >
             <View style={ styles.bevyAddButton }>
@@ -113,7 +113,7 @@ var styles = StyleSheet.create({
   },
   myBeviesText: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 15,
     color: '#FFF'
   },
   bevyAddButton: {
