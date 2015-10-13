@@ -108,7 +108,6 @@ var styles = StyleSheet.create({
     height: 40,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
     borderBottomColor: '#333',
     borderBottomWidth: 1
   },

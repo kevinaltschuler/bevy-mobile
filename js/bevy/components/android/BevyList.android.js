@@ -35,11 +35,16 @@ var BevyList = React.createClass({
     });
   },
 
+  _renderHeader() {
+    return <View />;
+  },
+
   render() {
     return (
       <ListView 
         dataSource={ this.state.bevies }
         style={ styles.container }
+        renderHeader={ this._renderHeader }
         renderRow={(bevy) => {
           return (
             <BevyListItem
