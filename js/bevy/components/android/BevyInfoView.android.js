@@ -55,6 +55,11 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.push(routes.BEVY.RELATED);
   },
 
+  goToTags() {
+    // go to tag view
+    this.props.bevyNavigator.push(routes.BEVY.TAGS);
+  },
+
   _renderAdmins() {
     var bevyAdmins = this.props.activeBevy.admins;
     var admins = [];
@@ -132,6 +137,19 @@ var BevyInfoView = React.createClass({
           >
             <View style={ styles.settingItem }>
               <Text style={ styles.settingText }>Related Bevies</Text>
+              <Icon
+                name='arrow-forward'
+                size={ 30 }
+                color='#AAA'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+            onPress={ this.goToTags }
+          >
+            <View style={ styles.settingItem }>
+              <Text style={ styles.settingText }>Bevy Tags</Text>
               <Icon
                 name='arrow-forward'
                 size={ 30 }
