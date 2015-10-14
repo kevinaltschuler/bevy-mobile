@@ -143,7 +143,8 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   settingButtonText: {
-    flex: 1
+    flex: 1,
+    color: '#000'
   },
   logInButton: {
     marginTop: 10,
