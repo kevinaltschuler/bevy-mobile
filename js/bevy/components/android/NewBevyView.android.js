@@ -21,6 +21,9 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var getSlug = require('speakingurl');
+var BevyActions = require('./../../BevyActions');
+var BevyStore = require('./../../BevyStore');
+var BEVY = constants.BEVY;
 
 var NewBevyView = React.createClass({
   propTypes: {
@@ -32,8 +35,27 @@ var NewBevyView = React.createClass({
       name: '',
       description: '',
       slug: '',
-      image: ''
+      image: '',
+      creating: false
     };
+  },
+
+  componentDidMount() {
+    BevyStore.on(BEVY.CREATED, (bevy) => {
+      // subscribe to the new bevy
+      BevyActions.subscribe(bevy._id);
+      // switch bevies
+      BevyActions.switchBevy(bevy._id);
+      // navigate back
+      this.props.mainNavigator.pop();
+
+      this.setState({
+        creating: false
+      });
+    });
+  },
+  componentWillUnmount() {
+    BevyStore.off(BEVY.CREATED);
   },
 
   createBevy() {
@@ -42,6 +64,25 @@ var NewBevyView = React.createClass({
       ToastAndroid.show('Please enter a name for your bevy', ToastAndroid.SHORT);
       return;
     }
+    // force blur url field to make sure the slug is valid
+    this.refs.Slug.blur();
+
+    // call action
+    BevyActions.create(
+      this.state.name, // bevy name
+      this.state.description, // bevy description
+      (_.isEmpty(this.state.image)) 
+        ? constants.siteurl + '/img/logo_100.png' 
+        : this.state.image, // bevy image
+      this.state.slug
+    );
+
+     // blur all text inputs
+    this.refs.Name.blur();
+    this.refs.Description.blur();
+    this.setState({
+      creating: true
+    });
   },
 
   addImage() {

@@ -146,6 +146,7 @@ _.extend(BevyStore, {
         var name = payload.name;
         var description = payload.description;
         var image_url = payload.image_url;
+        var slug = payload.slug;
 
         var user = UserStore.getUser();
 
@@ -153,17 +154,16 @@ _.extend(BevyStore, {
           name: name,
           description: description,
           image_url: image_url,
-          admins: [ user._id ]
+          admins: [ user._id ],
+          slug: slug
         });
-
-        //console.log(newBevy.toJSON());
 
         newBevy.save(null, {
           success: function(model, response, options) {
             // success
             newBevy.set('_id', model.id);
 
-            this.trigger(BEVY.CREATED, newBevy.toJSON());
+            this.trigger(BEVY.CREATED, model.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });

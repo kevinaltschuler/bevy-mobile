@@ -10,8 +10,8 @@
 
 // imports
 var dispatch = require('./../shared/helpers/dispatch');
-
 var BEVY = require('./../constants').BEVY;
+var getSlug = require('speakingurl');
 
 var BevyActions = {
 
@@ -25,11 +25,12 @@ var BevyActions = {
     dispatch(BEVY.FETCH_PUBLIC, {});
   },
 
-  create(name, description, image_url) {
+  create(name, description, image_url, slug) {
     dispatch(BEVY.CREATE, {
       name: (name == undefined) ? '' : name,
       description: (description == undefined) ? '' : description,
-      image_url: (image_url == undefined) ? '' : image_url
+      image_url: (image_url == undefined) ? '' : image_url,
+      slug: (slug == undefined) ? getSlug(name) : getSlug(slug) // force verification
     });
   },
 
