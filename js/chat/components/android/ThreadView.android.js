@@ -14,12 +14,15 @@ var {
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
 
+var _ = require('underscore');
+
 var ThreadView = React.createClass({
   propTypes: {
     allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -35,9 +38,25 @@ var ThreadView = React.createClass({
     });
   },
 
+  _renderNoThreadsText() {
+    if(_.isEmpty(this.props.allThreads)) {
+      var hintText = (this.props.loggedIn)
+        ? 'No Conversations'
+        : 'Please Log In to Chat';
+      return (
+        <View style={ styles.noThreadsContainer }>
+          <Text style={ styles.noThreads }>{ hintText }</Text>
+        </View>
+      );
+    } else return (
+      <View />
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
+        { this._renderNoThreadsText() }
         <ListView
           dataSource={ this.state.threads }
           style={ styles.list }
@@ -68,7 +87,18 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   list: {
-
+    flex: 1
+  },
+  noThreadsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noThreads: {
+    color: '#AAA',
+    fontSize: 22,
+    textAlign: 'center'
   }
 });
 
