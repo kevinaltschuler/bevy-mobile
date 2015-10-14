@@ -61,11 +61,18 @@ var SettingsView = React.createClass({
           }}
         >
           <View style={ styles.logInButton }>
-            <Text style={ styles.logInButtonText }></Text>
+            <Text style={ styles.logInButtonText }>Log In</Text>
           </View>
         </TouchableNativeFeedback>
       );
     }
+  },
+
+  _renderAccountsText() {
+    if(!this.props.loggedIn) return <View />;
+    else return (
+      <Text style={ styles.settingHeader }>Account</Text>
+    );
   },
 
   _renderLogOutButton() {
@@ -109,7 +116,7 @@ var SettingsView = React.createClass({
     return (
       <ScrollView style={ styles.container }>
         { this._renderProfile() }
-        <Text style={ styles.settingHeader }>Account</Text>
+        { this._renderAccountsText() }
         { this._renderLogOutButton() }
         { this._renderProfileButton() }
       </ScrollView>
@@ -139,6 +146,8 @@ var styles = StyleSheet.create({
     flex: 1
   },
   logInButton: {
+    marginTop: 10,
+    backgroundColor: '#FFF',
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
