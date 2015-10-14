@@ -53,13 +53,13 @@ var BevyListItem = React.createClass({
   render() {
     var activeStyle = (this.state.active)
     ? {
-      backgroundColor: '#444'
+      backgroundColor: '#333'
     } : {
       backgroundColor: '#222'
     };
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#666', false) }
+        background={ TouchableNativeFeedback.Ripple('#444', false) }
         onPress={() => {
           // if already in the bevy youre switching to, do nothing
           if(this.state.active) return;

@@ -13,8 +13,10 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserActions = require('./../../../user/UserActions');
@@ -25,6 +27,14 @@ var SettingsView = React.createClass({
     loggedIn: React.PropTypes.bool,
     user: React.PropTypes.object,
     tabActions: React.PropTypes.object
+  },
+
+  goToPublicProfile() {
+    // set the public profile user
+    var route = routes.MAIN.PROFILE;
+    route.user = this.props.user;
+    // go to public profile view
+    this.props.mainNavigator.push(route);
   },
 
   _renderProfile() {
@@ -75,11 +85,33 @@ var SettingsView = React.createClass({
     );
   },
 
+  _renderProfileButton() {
+    if(!this.props.loggedIn) return <View />;
+    else return (
+      <TouchableNativeFeedback
+        onPress={ this.goToPublicProfile }
+      >
+        <View style={ styles.settingButton }>
+          <Text style={ styles.settingButtonText }>
+            Go To Public Profile
+          </Text>
+          <Icon
+            name='arrow-forward'
+            size={ 30 }
+            color='#888'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   render() {
     return (
       <ScrollView style={ styles.container }>
         { this._renderProfile() }
+        <Text style={ styles.settingHeader }>Account</Text>
         { this._renderLogOutButton() }
+        { this._renderProfileButton() }
       </ScrollView>
     );
   }
@@ -89,6 +121,22 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column'
+  },
+  settingHeader: {
+    color: '#AAA',
+    marginLeft: 10,
+    marginBottom: 4
+  },
+  settingButton: {
+    backgroundColor: '#FFF',
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10
+  },
+  settingButtonText: {
+    flex: 1
   },
   logInButton: {
     height: 48,
