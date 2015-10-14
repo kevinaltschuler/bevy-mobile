@@ -87,7 +87,8 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   list: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   },
   noThreadsContainer: {
     flex: 1,
