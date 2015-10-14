@@ -206,7 +206,7 @@ var CommentItem = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <TouchableWithoutFeedback
+        <TouchableNativeFeedback
           onPress={() => {
             if(this.state.isCompact)
               this.setState({ isCompact: false });
@@ -217,7 +217,7 @@ var CommentItem = React.createClass({
           onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}
         >
           { this._renderComment() }
-        </TouchableWithoutFeedback>
+        </TouchableNativeFeedback>
         { this._renderActionBar() }
         { this._renderCommentList() }
       </View>
