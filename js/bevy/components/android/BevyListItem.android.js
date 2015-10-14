@@ -12,6 +12,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var BevyActions = require('./../../BevyActions');
@@ -35,18 +36,41 @@ var BevyListItem = React.createClass({
     });
   },
 
+  _renderActiveChevron() {
+    if(this.state.active) {
+      return (
+        <View style={ styles.activeChevron }>
+          <Icon
+            name='chevron-right'
+            size={ 30 }
+            color='#FFF'
+          />
+        </View>
+      );
+    } else return <View />;
+  },
+
   render() {
+    var activeStyle = (this.state.active)
+    ? {
+      backgroundColor: '#444'
+    } : {
+      backgroundColor: '#222'
+    };
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+        background={ TouchableNativeFeedback.Ripple('#666', false) }
         onPress={() => {
+          // if already in the bevy youre switching to, do nothing
           if(this.state.active) return;
+          // call the switch action
           BevyActions.switchBevy(this.props.bevy._id);
           // close the side menu
           this.props.drawerActions.close();
         }}
       >
-        <View style={ styles.container }>
+        <View style={[ styles.container, activeStyle ]}>
+          { this._renderActiveChevron() }
           <Text style={ styles.bevyNameText }>{ this.props.bevy.name }</Text>
         </View>
       </TouchableNativeFeedback>
@@ -62,7 +86,13 @@ var styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15
   },
+  activeChevron: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   bevyNameText: {
+    flex: 1,
     fontSize: 15,
     color: '#FFF'
   }
