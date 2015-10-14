@@ -69,10 +69,9 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: -10,
+    marginTop: -15,
     marginLeft: 10,
     marginRight: 10,
-    marginBottom: 5,
     padding: 10,
     borderRadius: 3
   },

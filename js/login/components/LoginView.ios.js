@@ -291,7 +291,9 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
-    height: 40
+    height: 40,
+    marginLeft: 10,
+    marginRight: 10
   },
   textButtonText: {
     textAlign: 'center',

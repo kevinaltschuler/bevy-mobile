@@ -20,6 +20,7 @@ var SideMenu = require('react-native-side-menu');
 var BevyListButton = require('./BevyListButton.ios.js');
 var BevyList = require('./../../bevy/components/BevyList.ios.js');
 
+var routes = require('./../../routes');
 var window = require('Dimensions').get('window');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
@@ -49,10 +50,6 @@ var Navbar = React.createClass({
         alignItems: 'center',
         borderBottomWidth: .5,
         borderBottomColor: '#ddd',
-        shadowColor: '#111',
-        shadowOpacity: .3,
-        shadowRadius: 3.5,
-        shadowOffset: { width: 0, height: 0 },
       },
       center: 'Default',
       left: <View />,
@@ -72,7 +69,7 @@ var Navbar = React.createClass({
   _renderCenter() {
     if(typeof this.props.center === 'string') {
       return (
-        <Text style={ styles.navbarText }>
+        <Text style={{textAlign: 'center', fontSize: 17, fontWeight: '500', color: this.props.fontColor}}>
           { this.props.center }
         </Text>
       );
@@ -88,10 +85,31 @@ var Navbar = React.createClass({
   },
 
   _renderBottom() {
+    if(this.props.activeBevy)
+      var image_url = _.isEmpty(this.props.activeBevy.image_url) ? '/img/default_group_img.png' : this.props.activeBevy.image_url;
     if(this.props.center == 'Settings' && this.props.loggedIn) {
       return (
         <View/>
       );
+    }
+    if(this.props.activeBevy) {
+      if(this.props.activeBevy._id != -1 && (this.props.route == routes.BEVY.POSTLIST.name)) {
+        return (
+          <Image source={{uri: image_url}} style={styles.imageBottom}>
+            <View style={styles.imageWrapper}>
+              <View style={ styles.left }>
+                { this._renderLeft() }
+              </View>
+              <View style={ styles.center }>
+                { this._renderCenter() }
+              </View>
+              <View style={ styles.right }>
+                { this._renderRight() }
+              </View>
+            </View>
+          </Image>
+        );
+      }
     }
     else {
       return (
@@ -125,10 +143,25 @@ var Navbar = React.createClass({
 
 var styles = StyleSheet.create({
   navbarText: {
-    color: '#666',
     textAlign: 'center',
     fontSize: 17,
     fontWeight: '500'
+  },
+  imageBottom: {
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  imageWrapper: {
+    backgroundColor: 'rgba(0,0,0,.3)',
+    flex: 1,
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: .5,
+    borderBottomColor: '#ddd',
   },
   settingItemContainer: {
     backgroundColor: '#fff',

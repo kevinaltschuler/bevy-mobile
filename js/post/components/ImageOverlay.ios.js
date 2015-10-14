@@ -11,6 +11,7 @@ var {
   Modal
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
+var { BlurView, VibrancyView } = require('react-native-blur');
 
 var constants = require('./../../constants');
 
@@ -113,68 +114,47 @@ var ImageOverlay = React.createClass({
           { this.state.imageIndex + 1 }/{ this.props.images.length }
         </Text>;
 
+
     return (
       <Modal
         animated={true}
         transparent={true}
         Visible={ this.state.isVisible }
       >
-        <View style={ styles.container }>
-            <View style={ styles.backdrop }>
+        <BlurView blurType='dark' style={ styles.container}>
+          <View style={styles.card}>
+           <View style={ styles.topBar }>
               <TouchableHighlight
+                underlayColor='rgba(0,0,0,0.2)'
+                style={ styles.closeButton }
                 onPress={() => {
                   this.setState({
                     isVisible: false
                   });
                 }}
               >
-                <View>
-                </View>
+                <Icon
+                  name='ios-close-empty'
+                  size={ 30 }
+                  style={{ width: 30, height: 30 }}
+                  color='#333'
+                />
               </TouchableHighlight>
-            </View>
-            <View style={ styles.card }>
-              <View style={ styles.topBar }>
-                <TouchableHighlight
-                  underlayColor='rgba(0,0,0,0.2)'
-                  style={ styles.closeButton }
-                  onPress={() => {
-                    this.setState({
-                      isVisible: false
-                    });
-                  }}
-                >
-                  <Icon
-                    name='ios-close-empty'
-                    size={ 30 }
-                    style={{ width: 30, height: 30 }}
-                    color='#333'
-                  />
-                </TouchableHighlight>
 
-                {imageCount}
-                {leftButton}
-                {rightButton}
-              </View>
-              <Image
-                style={ styles.image }
-                source={{ uri: this.props.images[this.state.imageIndex] }}
-                resizeMode='contain'
-              >
-              </Image>
-              {/*<View { ...this._panResponder.panHandlers } style={{
-                position: 'absolute',
-                top: 68,
-                left: 0,
-                width: constants.width,
-                height: constants.height - 48 - 10 - 10, // top bar plus padding
-                backgroundColor: 'rgba(255,0,0,0.2)'
-              }}/>*/}
-              <Text> </Text>
+              {imageCount}
+              {leftButton}
+              {rightButton}
             </View>
-        </View>
+            <Image
+              style={ styles.image }
+              source={{ uri: this.props.images[this.state.imageIndex] }}
+              resizeMode='contain'
+            >
+            </Image>
+          </View>
+        </BlurView>
       </Modal>
     );
-    // empty text ^^^ to stop some obscure context bug in native ios.
   }
 });
 
@@ -195,10 +175,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     shadowColor: '#000',
     borderRadius: 20,
-    shadowRadius: 80,
-    shadowOpacity: .5,
-    shadowOffset:  {width: 0, height: 0}
-
   },
   blur: {
     flex: 1

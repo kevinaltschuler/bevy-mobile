@@ -14,7 +14,8 @@ var Icon = require('react-native-vector-icons/Ionicons');
 var InfoButton = React.createClass({
 
   propTypes: {
-    onPress: React.PropTypes.func
+    onPress: React.PropTypes.func,
+    color: React.PropTypes.string
   },
 
   onPress: function() {
@@ -31,7 +32,7 @@ var InfoButton = React.createClass({
         <Icon
           name='ios-information'
           size={25}
-          color='#666'
+          color={this.props.color}
           style={styles.bevyListButton}
         />
       </TouchableHighlight>

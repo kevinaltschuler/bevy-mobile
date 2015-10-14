@@ -39,9 +39,19 @@ var BevyView = React.createClass({
   },
 
   getInitialState() {
+    var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#666' : '#fff';
     return {
-      showTags: false
+      showTags: false,
+      fontColor: color
     }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    var color = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#666' : '#fff';
+    console.log(this.props.bevyRoute.name, routes.BEVY.POSTLIST.name);
+    this.setState({
+      fontColor: color
+    })
   },
 
   onHideTags() {
@@ -100,7 +110,7 @@ var BevyView = React.createClass({
         <Icon
           name='ios-pricetag'
           size={25}
-          color='#666'
+          color={this.state.fontColor}
           style={{
             width: 25,
             height: 25
@@ -115,7 +125,9 @@ var BevyView = React.createClass({
       || this.props.bevyRoute.name == routes.BEVY.INFO.name 
       || this.props.bevyRoute.name == routes.BEVY.SETTINGS.name )
     ? <View />
-    : <InfoButton onPress={() => {
+    : <InfoButton
+      color={this.state.fontColor} 
+      onPress={() => {
       this.props.bevyNavigator.push(routes.BEVY.INFO)
     }} />;
 
@@ -133,7 +145,7 @@ var BevyView = React.createClass({
 
     var backButton = (this.props.bevyRoute.name == 'PostList')
     ? <View />
-    : <BackButton text='Posts' color='#888' onPress={() => {
+    : <BackButton text='Posts' color={color} onPress={() => {
       this.props.bevyNavigator.pop();
     }} />;
     
@@ -156,6 +168,9 @@ var BevyView = React.createClass({
           left={ backButton }
           center={ center }
           right={ right }
+          activeBevy={ this.props.activeBevy }
+          route={ this.props.bevyRoute.name }
+          fontColor={ this.state.fontColor }
           { ...this.props }
         />
         { view }

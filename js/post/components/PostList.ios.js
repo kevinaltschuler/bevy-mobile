@@ -11,13 +11,14 @@ var {
   Text,
   View,
   ListView,
-  TouchableHighlight
+  TouchableHighlight,
 } = React;
 
 var {
   RefresherListView,
   LoadingBarIndicator
 } = require('react-native-refresher');
+var RCTRefreshControl = require('react-refresh-control');
 
 var _ = require('underscore');
 var constants = require('./../../constants');
@@ -32,6 +33,9 @@ var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
 var TagModal = require('./TagModal.ios.js');
+
+var SCROLLVIEW = 'ScrollView';
+var LISTVIEW = 'ListView';
 
 var PostList = React.createClass({
 
@@ -69,6 +73,15 @@ var PostList = React.createClass({
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
+
+    RCTRefreshControl.configure({
+      node: this.refs[LISTVIEW]
+    }, () => {
+      this.onRefresh();
+      setTimeout(() => {
+        RCTRefreshControl.endRefreshing(this.refs[LISTVIEW]);
+      }, 2000);
+    });
   },
 
   componentWillUnmount() {
@@ -135,12 +148,10 @@ var PostList = React.createClass({
             activeTags={this.props.activeTags}
             myBevies={ this.props.myBevies }
           />
-          <RefresherListView 
+          <ListView 
+            ref={LISTVIEW}
             dataSource={ this.state.dataSource }
             style={ styles.postContainer }
-            onRefresh={this.onRefresh}
-            refreshOnRelease={true}
-            indicator={<LoadingBarIndicator position="fixed" style={{marginTop: -10}} />}
             scrollRenderAheadDistance={3}
             renderHeader={() => { 
               return this._renderHeader();
@@ -165,12 +176,14 @@ var PostList = React.createClass({
               }
               
               if(post.type == 'event')
-                return <Event 
-                  key={ 'postlist:' + post._id } 
-                  post={ post } 
-                  mainRoute={ this.props.mainRoute }
-                  mainNavigator={ this.props.mainNavigator }
-                />
+                return <View style={{backgroundColor: '#eee'}}> 
+                  <Event 
+                    key={ 'postlist:' + post._id } 
+                    post={ post } 
+                    mainRoute={ this.props.mainRoute }
+                    mainNavigator={ this.props.mainNavigator }
+                  />
+                </View>;
               else
                 return <View style={{backgroundColor: '#eee'}}>
                   <Post 
@@ -179,7 +192,7 @@ var PostList = React.createClass({
                     mainRoute={ this.props.mainRoute }
                     mainNavigator={ this.props.mainNavigator }
                   />
-                </View>
+                </View>;
             }}
           />
       </View>
@@ -193,6 +206,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#eee',
+    paddingTop: 1
   },
   postListHeader: {
     flex: 1,

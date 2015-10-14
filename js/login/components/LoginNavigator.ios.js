@@ -121,7 +121,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 20,
-    width: constants.width * 2 / 3
+    width: constants.width * 2 / 3,
   },
   topBar: {
     height: 42,
