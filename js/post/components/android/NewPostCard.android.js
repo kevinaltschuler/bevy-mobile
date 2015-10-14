@@ -11,6 +11,7 @@ var {
   Text,
   Image,
   TouchableNativeFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
 
@@ -29,7 +30,7 @@ var NewPostCard = React.createClass({
     if(this.props.loggedIn) {
       this.props.mainNavigator.push(routes.MAIN.NEWPOST);
     } else {
-      
+      ToastAndroid.show('Please Log In to Post', ToastAndroid.SHORT);
     }
   },
 
