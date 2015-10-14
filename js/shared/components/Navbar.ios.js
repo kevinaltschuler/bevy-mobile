@@ -111,21 +111,19 @@ var Navbar = React.createClass({
         );
       }
     }
-    else {
-      return (
-        <View style={ this.props.styleBottom }>
-          <View style={ styles.left }>
-            { this._renderLeft() }
-          </View>
-          <View style={ styles.center }>
-            { this._renderCenter() }
-          </View>
-          <View style={ styles.right }>
-            { this._renderRight() }
-          </View>
+    return (
+      <View style={ this.props.styleBottom }>
+        <View style={ styles.left }>
+          { this._renderLeft() }
         </View>
-      );
-    }
+        <View style={ styles.center }>
+          { this._renderCenter() }
+        </View>
+        <View style={ styles.right }>
+          { this._renderRight() }
+        </View>
+      </View>
+    );
   },
 
   render() {
