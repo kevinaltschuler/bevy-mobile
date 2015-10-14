@@ -123,7 +123,7 @@ var SettingsView = React.createClass({
           { ...this.props }
           profilePicture={ this.state.profilePicture }
         />
-        <ScrollView style={ styles.scrollView }>
+        <ScrollView style={{ flex: 1, marginTop: (this.props.loggedIn) ? -20 : 0 }}>
           { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>
@@ -146,10 +146,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     flex: 1,
     flexDirection: 'column'
-  },
-  scrollView: {
-    flex: 1,
-    marginTop: -20
   },
   settingItemContainer: {
     backgroundColor: '#fff',
