@@ -16,6 +16,7 @@ var LoginNavigator = require('./../../../login/components/android/LoginNavigator
 var MessageView = require('./../../../chat/components/android/MessageView.android.js');
 var NewPostView = require('./../../../post/components/android/NewPostView.android.js');
 var CommentView = require('./../../../post/components/android/CommentView.android.js');
+var NewBevyView = require('./../../../bevy/components/android/NewBevyView.android.js');
 
 var routes = require('./../../../routes');
 
@@ -56,6 +57,12 @@ var MainView = React.createClass({
         return (
           <CommentView post={ this.props.mainRoute.post } { ...this.props } />
         );
+        break;
+      case routes.MAIN.NEWBEVY.name:
+        return (
+          <NewBevyView { ...this.props }/>
+        );
+        break;
       default:
         return (
           <View style={ styles.container }>

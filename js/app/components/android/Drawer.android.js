@@ -28,7 +28,16 @@ var Drawer = React.createClass({
     user: React.PropTypes.object
   },
 
+  goToNewBevy() {
+    // dont allow non logged in users to create a bevy
+    // TODO: auth modal popup
+    if(!this.props.loggedIn) return;
+    // go to new bevy view
+    this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+  },
+
   _renderProfile() {
+    // render the user profile header
     if(!this.props.loggedIn) {
       return (
         <TouchableNativeFeedback
@@ -68,7 +77,7 @@ var Drawer = React.createClass({
           <Text style={ styles.myBeviesText }>My Bevies</Text>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#888', false) } 
-            onPress={ () => {}}
+            onPress={ this.goToNewBevy }
           >
             <View style={ styles.bevyAddButton }>
               <Icon name='add' size={ 24 } color='#FFF' />
