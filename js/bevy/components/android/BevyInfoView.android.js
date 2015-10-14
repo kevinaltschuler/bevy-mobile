@@ -109,8 +109,7 @@ var BevyInfoView = React.createClass({
                 <Text style={ styles.publicOrPrivate }>
                   { (this.props.activeBevy.settings.privacy == 1)
                       ? 'Private'
-                      : 'Public'
-                  }
+                      : 'Public' }
                 </Text>
                 <Icon
                   name='group'
