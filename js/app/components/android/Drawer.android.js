@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
   },
   logInButton: {
     flexDirection: 'row',
-    padding: 10
+    padding: 15
   },
   logInButtonText: {
     flex: 1,

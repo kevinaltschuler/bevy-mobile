@@ -14,6 +14,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -64,7 +65,11 @@ var LoginBar = React.createClass({
         onPress={ this.onBack }
       >
         <View style={ styles.backButton }>
-          <Text style={ styles.backButtonText }>Back</Text>
+          <Icon
+            name='arrow-back'
+            size={ 30 }
+            color='#666'
+          />
         </View>
       </TouchableNativeFeedback>
     );

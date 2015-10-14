@@ -34,6 +34,7 @@ var POST = constants.POST;
 var CONTACT = constants.CONTACT;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
+var USER = constants.USER;
 
 var BevyActions = require('./BevyActions');
 var UserStore = require('./../user/UserStore')
@@ -61,6 +62,8 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
+      case USER.LOGOUT:
+      case USER.LOGIN:
         var user = UserStore.getUser();
         if(user._id != undefined) {
           this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
@@ -95,7 +98,8 @@ _.extend(BevyStore, {
           }.bind(this)
         });
 
-
+        // trigger immediately anyways
+        this.trigger(BEVY.CHANGE_ALL);
 
         break;
 
