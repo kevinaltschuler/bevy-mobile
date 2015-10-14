@@ -16,8 +16,10 @@ var BevyListItem = require('./BevyListItem.android.js');
 
 var BevyList = React.createClass({
   propTypes: {
+    drawerActions: React.PropTypes.object,
     publicBevies: React.PropTypes.array,
-    myBevies: React.PropTypes.array
+    myBevies: React.PropTypes.array,
+    activeBevy: React.PropTypes.object
   },
 
   getInitialState() {
@@ -33,16 +35,23 @@ var BevyList = React.createClass({
     });
   },
 
+  _renderHeader() {
+    return <View />;
+  },
+
   render() {
     return (
       <ListView 
         dataSource={ this.state.bevies }
         style={ styles.container }
+        renderHeader={ this._renderHeader }
         renderRow={(bevy) => {
           return (
             <BevyListItem
               key={ 'bevylistitem:' + bevy._id }
               bevy={ bevy }
+              activeBevy={ this.props.activeBevy }
+              drawerActions={ this.props.drawerActions }
             />
           );
         }}

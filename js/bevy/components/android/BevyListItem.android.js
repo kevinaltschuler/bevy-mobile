@@ -13,9 +13,26 @@ var {
   StyleSheet
 } = React;
 
+var _ = require('underscore');
+var BevyActions = require('./../../BevyActions');
+
 var BevyListItem = React.createClass({
   propTypes: {
-    bevy: React.PropTypes.object
+    bevy: React.PropTypes.object,
+    activeBevy: React.PropTypes.object,
+    drawerActions: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      active: this.props.activeBevy._id == this.props.bevy._id
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      active: nextProps.activeBevy._id == nextProps.bevy._id
+    });
   },
 
   render() {
@@ -23,7 +40,10 @@ var BevyListItem = React.createClass({
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#AAA', false) }
         onPress={() => {
-
+          if(this.state.active) return;
+          BevyActions.switchBevy(this.props.bevy._id);
+          // close the side menu
+          this.props.drawerActions.close();
         }}
       >
         <View style={ styles.container }>

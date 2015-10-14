@@ -10,11 +10,15 @@ var {
   View,
   ListView,
   Text,
+  Image,
   StyleSheet
 } = React;
+var BevyBar = require('./../../../bevy/components/android/BevyBar.android.js');
 var NewPostCard = require('./NewPostCard.android.js');
 var Post = require('./Post.android.js');
 
+var _ = require('underscore');
+var constants = require('./../../../constants');
 
 var PostList = React.createClass({
   propTypes: {
@@ -23,13 +27,15 @@ var PostList = React.createClass({
     mainRoute: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    showNewPostCard: React.PropTypes.bool
+    showNewPostCard: React.PropTypes.bool,
+    activeBevy: React.PropTypes.object
   },
 
   getDefaultProps() {
     return {
       allPosts: [],
-      showNewPostCard: false
+      showNewPostCard: false,
+      activeBevy: {}
     }
   },
 
@@ -46,6 +52,19 @@ var PostList = React.createClass({
     });
   },
 
+  _renderHeader() {
+    return (
+      <View style={ styles.header }>
+        <BevyBar
+          activeBevy={ this.props.activeBevy }
+          bevyNavigator={ this.props.bevyNavigator }
+          bevyRoute={ this.props.bevyRoute }
+        />
+        { this._renderNewPostCard() }
+      </View>
+    );
+  },
+
   _renderNewPostCard() {
     if(!this.props.showNewPostCard) return <View />;
     else return (
@@ -58,23 +77,34 @@ var PostList = React.createClass({
   },
 
   render() {
-    return (
-      <View style={ styles.container }>
-        <ListView
-          dataSource={ this.state.posts }
-          style={ styles.postList }
-          renderHeader={ this._renderNewPostCard }
-          renderRow={(post) => 
-            <Post
-              key={ 'post:' + post._id }
-              post={ post }
-              mainNavigator={ this.props.mainNavigator }
-              mainRoute={ this.props.mainRoute }
-            />
-          }
-        />
-      </View>
-    );
+    if(_.isEmpty(this.props.allPosts)) {
+      return (
+        <View style={ styles.container }> 
+          { this._renderHeader() }     
+          <View style={ styles.noPostsContainer }>   
+            <Text style={ styles.noPosts }>No Posts</Text>
+          </View>
+        </View>
+      );
+    } else {
+      return (
+        <View style={ styles.container }>
+          <ListView
+            dataSource={ this.state.posts }
+            style={ styles.postList }
+            renderHeader={ this._renderHeader }
+            renderRow={(post) => 
+              <Post
+                key={ 'post:' + post._id }
+                post={ post }
+                mainNavigator={ this.props.mainNavigator }
+                mainRoute={ this.props.mainRoute }
+              />
+            }
+          />
+        </View>
+      );
+    }
   }
 });
 
@@ -84,6 +114,23 @@ var styles = StyleSheet.create({
   },
   postList: {
 
+  },
+  header: {
+    flexDirection: 'column',
+    width: constants.width,
+    marginBottom: 10
+  },
+  noPostsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noPosts: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 22,
+    color: '#AAA'
   }
 });
 

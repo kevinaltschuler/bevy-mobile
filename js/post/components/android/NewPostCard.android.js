@@ -36,7 +36,7 @@ var NewPostCard = React.createClass({
   render() {
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#000', false) }
+        background={ TouchableNativeFeedback.Ripple('#CCC', false) }
         onPress={ this.goToNewPost }
       >
         <View style={ styles.container }>
@@ -60,7 +60,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 5,
-    margin: 10,
+    marginLeft: 10,
+    marginRight: 10,
     paddingLeft: 10,
     paddingRight: 10
   },

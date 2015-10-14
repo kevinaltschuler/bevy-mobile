@@ -20,7 +20,8 @@ var PostView = React.createClass({
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool
+    loggedIn: React.PropTypes.bool,
+    activeBevy: React.PropTypes.object
   },
 
   render() {
@@ -33,6 +34,7 @@ var PostView = React.createClass({
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
           showNewPostCard={ true }
+          activeBevy={ this.props.activeBevy }
         />
       </View>
     );

@@ -246,6 +246,7 @@ var CommentView = React.createClass({
             expandText={ true }
           />
           { this._renderCommentList() }
+          <View style={{ height: 20 }} />
         </ScrollView>
         { this._renderReplyBar() }
         { this._renderInput() }
@@ -261,8 +262,7 @@ var styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    paddingTop: 10,
-    paddingBottom: 48
+    paddingTop: 10
   },
   topBar: {
     width: constants.width,

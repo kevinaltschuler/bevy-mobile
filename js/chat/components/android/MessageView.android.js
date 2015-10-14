@@ -20,7 +20,9 @@ var InvertibleScrollView = require('react-native-invertible-scroll-view');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var CHAT = constants.CHAT;
 var ChatStore = require('./../../ChatStore');
+var ChatActions = require('./../../ChatActions');
 
 var MessageView = React.createClass({
   propTypes: {
@@ -31,24 +33,59 @@ var MessageView = React.createClass({
   },
 
   getInitialState() {
-    var messages = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2});
+    var messages = ChatStore.getMessages(this.props.activeThread._id);
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      messages: messages.cloneWithRows(ChatStore.getMessages(this.props.activeThread._id)),
+      messages: messages,
+      dataSource: ds.cloneWithRows(messages),
       messageInput: ''
     };
   },
 
   componentDidMount() {
-
+    ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
   },
-
   componentWillUnmount() {
-
+    ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
   },
 
   componentWillReceiveProps(nextProps) {
+    var messages = ChatStore.getMessage(nextProps.activeThread._id)
     this.setState({
-      messages: this.state.messages.cloneWithRows(ChatStore.getMessage(nextProps.activeThread._id))
+      messages: messages,
+      dataSource: this.state.dataSource.cloneWithRows(messages)
+    });
+  },
+
+  _onChatChange: function() {
+    var messages = ChatStore.getMessages(this.props.activeThread._id);
+    this.setState({
+      messages: messages,
+      dataSource: this.state.dataSource.cloneWithRows(messages)
+    });
+  },
+
+  onSubmitEditing: function(ev) {
+    var text = this.state.messageInput;
+    if(_.isEmpty(text)) return;
+
+    var user = this.props.user;
+    ChatActions.postMessage(this.props.activeThread._id, user, text);
+    this.setState({
+      messageInput: ''
+    });
+
+    // instant gratification
+    var messages = this.state.messages;
+    messages.unshift({
+      _id: Date.now(),
+      author: user,
+      body: text,
+      created: Date.now()
+    });
+    this.setState({
+      messages: messages,
+      dataSource: this.state.dataSource.cloneWithRows(messages)
     });
   },
 
@@ -60,13 +97,14 @@ var MessageView = React.createClass({
           value={ this.state.messageInput }
           style={ styles.messageInput }
           onChangeText={(text) => this.setState({ messageInput: text })}
+          onSubmitEditing={ this.onSubmitEditing }
           placeholder='Chat'
           placeholderTextColor='#AAA'
           underlineColorAndroid='#AAA'
         />
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#888', false) }
-          onPress={() => {}}
+          onPress={ this.onSubmitEditing }
         >
           <View style={ styles.sendMessageButton }>
             <Text style={ styles.sendMessageButtonText }>Send</Text>
@@ -84,8 +122,8 @@ var MessageView = React.createClass({
           mainNavigator={ this.props.mainNavigator }
         />
         <ListView
-          renderScrollComponent={(props) => <InvertibleScrollView {...props} inverted />}
-          dataSource={ this.state.messages }
+          renderScrollComponent={(props) => <InvertibleScrollView {...props} />}
+          dataSource={ this.state.dataSource }
           style={ styles.messageList }
           renderRow={(message) => {
             return (

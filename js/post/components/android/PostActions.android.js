@@ -53,7 +53,7 @@ var PostActions = React.createClass({
     return (
       <View style={ styles.container }>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#CCC', false) }
+          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
           onPress={() => {
             $PostActions.vote(this.props.post._id);
             this.setState({
@@ -73,7 +73,7 @@ var PostActions = React.createClass({
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#CCC', false) }
+          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
           onPress={() => {
             // dont navigate if already in comment view
             if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
@@ -95,7 +95,7 @@ var PostActions = React.createClass({
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#CCC', false) }
+          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
           onPress={() => {
 
           }}

@@ -123,7 +123,7 @@ var InputView = React.createClass({
         <View style={ styles.postingToBar }>
           <Text style={ styles.postingTo }>Post To</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#FFF', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={() => this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER)}
           >
             <View style={ styles.bevyPickerButton }>
@@ -139,6 +139,7 @@ var InputView = React.createClass({
           multiline={ true }
           placeholder='Drop a Line'
           placeholderTextColor='#000'
+          underlineColorAndroid='#EEE'
           value={ this.state.postInput }
           onChangeText={(text) => this.setState({ postInput: text })}
           textAlignVertical='top'
@@ -276,7 +277,7 @@ var BevyPickerItem = React.createClass({
   render() {
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#666', false) }
+        background={ TouchableNativeFeedback.Ripple('#CCC', false) }
         onPress={() => {
           this.props.onSwitchBevy(this.props.bevy);
         }} 
@@ -297,7 +298,9 @@ var BevyPickerItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EEE'
+    backgroundColor: '#EEE',
+    flexDirection: 'column',
+    justifyContent: 'flex-end'
   },
   topBar: {
     backgroundColor: '#FFF',
@@ -357,13 +360,12 @@ var styles = StyleSheet.create({
   },
   bevyPickerButtonHintText: {
     textAlign: 'left',
-    color: '#EEE'
+    color: '#FFF'
   },
   postInput: {
     flex: 1
   },
   actionBar: {
-    marginBottom: 24,
     height: 48,
     width: constants.width,
     backgroundColor: '#FFF',
