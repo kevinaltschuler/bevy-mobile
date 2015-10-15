@@ -9,24 +9,28 @@
 'use strict';
 
 // imports
-var dispatch = require('./../shared/helpers/dispatch');
+var Dispatcher = require('./../shared/dispatcher');
 var BEVY = require('./../constants').BEVY;
 var getSlug = require('speakingurl');
 
 var BevyActions = {
 
   fetch(user) {
-    dispatch(BEVY.FETCH, {
+    Dispatcher.dispatch({
+      actionType: BEVY.FETCH,
       user: (user == undefined) ? {} : user
     });
   },
 
   fetchPublic() {
-    dispatch(BEVY.FETCH_PUBLIC, {});
+    Dispatcher.dispatch({
+      actionType: BEVY.FETCH_PUBLIC
+    });
   },
 
   create(name, description, image_url, slug) {
-    dispatch(BEVY.CREATE, {
+    Dispatcher.dispatch({
+      actionType: BEVY.CREATE,
       name: (name == undefined) ? '' : name,
       description: (description == undefined) ? '' : description,
       image_url: (image_url == undefined) ? '' : image_url,
@@ -41,7 +45,8 @@ var BevyActions = {
   },
 
   update(bevy_id, name, description, image_url, settings) {
-    dispatch(BEVY.UPDATE, {
+    Dispatcher.dispatch({
+      actionType: BEVY.UPDATE,
       bevy_id: (bevy_id == undefined) ? '' : bevy_id,
       name: (name == undefined) ? null : name,
       description: (description == undefined) ? null : description,
@@ -51,19 +56,22 @@ var BevyActions = {
   },
 
   subscribe(bevy_id) {
-    dispatch(BEVY.SUBSCRIBE, {
+    Dispatcher.dispatch({
+      actionType: BEVY.SUBSCRIBE,
       bevy_id: bevy_id
     })
   },
 
   unsubscribe(bevy_id) {
-    dispatch(BEVY.UNSUBSCRIBE, {
+    Dispatcher.dispatch({
+      actionType: BEVY.UNSUBSCRIBE,
       bevy_id: bevy_id
     });
   },
 
   search(query) {
-    dispatch(BEVY.SEARCH, {
+    Dispatcher.dispatch({
+      actionType: BEVY.SEARCH,
       query: (query == undefined) ? null : query
     });
   },
@@ -73,19 +81,22 @@ var BevyActions = {
    * @param  {int} id  id of bevy being switched to
    */
   switchBevy(bevy_id) {
-    dispatch(BEVY.SWITCH, {
+    Dispatcher.dispatch({
+      actionType: BEVY.SWITCH,
       bevy_id: (bevy_id == undefined) ? null : bevy_id
     });
   },
 
   updateTags(tags) {
-    dispatch(BEVY.UPDATE_TAGS,{
+    Dispatcher.dispatch({
+      actionType: BEVY.UPDATE_TAGS,
       tags: (tags == undefined) ? null : tags
     });
   },
 
   updateFront(bevies) {
-    dispatch(BEVY.UPDATE_FRONT,{
+    Dispatcher.dispatch({
+      actionType: BEVY.UPDATE_FRONT,
       bevies: (bevies == undefined) ? null : bevies
     });
   }

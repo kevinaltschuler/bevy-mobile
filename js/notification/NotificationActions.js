@@ -1,23 +1,29 @@
+/**
+ * NotificationActions.js
+ * @author albert
+ */
+
 'use strict';
 
-var dispatch = require('./../shared/helpers/dispatch');
-
+var Dispacther = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 
 var NotificationActions = {
   dismiss: function(id) {
-    dispatch(NOTIFICATION.DISMISS, {
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.DISMISS,
       id: id
     });
   },
   dismissAll: function() {
-    dispatch(NOTIFICATION.DISMISS_ALL, {
-
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.DISMISS_ALL
     });
   },
   read(id) {
-    dispatch(NOTIFICATION.READ, {
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.READ,
       id: (id == undefined) ? '0' : id
     });
   }

@@ -1,31 +1,35 @@
 'use strict';
 
-var dispatch = require('./../shared/helpers/dispatch');
+var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var USER = constants.USER;
 
 var UserActions = {
   update() {
-    dispatch(USER.UPDATE, {
-
+    Dispatcher.dispatch({
+      actionType: USER.UPDATE
     });
   },
 
   changeProfilePicture(uri: String) {
-    dispatch(USER.CHANGE_PROFILE_PICTURE, {
+    Dispatcher.dispatch({
+      actionType: USER.CHANGE_PROFILE_PICTURE,
       uri: uri
     });
   },
 
   logIn(username, password) {
-    dispatch(USER.LOGIN, {
+    Dispatcher.dispatch({
+      actionType: USER.LOGIN,
       username: username,
       password: password
     });
   },
 
   logOut() {
-    dispatch(USER.LOGOUT, {}); 
+    Dispatcher.dispatch({
+      actionType: USER.LOGOUT
+    }); 
   }
 };
 

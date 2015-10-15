@@ -7,27 +7,20 @@
 'use strict';
 
 // imports
-var dispatch = require('./../shared/helpers/dispatch');
+var Dispatcher = require('./../shared/dispatcher');
 
 var APP = require('./../constants').APP;
 
 var AppActions = {
-  load: function() {
-    dispatch(APP.LOAD, {
-
+  load() {
+    Dispatcher.dispatch({
+      actionType: APP.LOAD
     });
   },
-  unload: function() {
-    dispatch(APP.UNlOAD, {
-      
+  unload() {
+    Dispatcher.dispatch({
+      actionType: APP.UNLOAD
     });
   }
-
-  /*progress: function(progress, message) {
-    dispatch(APP.LOAD_PROGRESS, {
-      progress: progress,
-      message: message
-    });
-  }*/
 };
 module.exports = AppActions;

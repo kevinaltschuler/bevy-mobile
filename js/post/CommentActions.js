@@ -1,12 +1,19 @@
+/**
+ * CommentActions.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
-var dispatch = require('./../shared/helpers/dispatch');
+var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var COMMENT = constants.COMMENT;
 
 var CommentActions = {
   create(body, author_id, post_id, parent_id) {
-    dispatch(COMMENT.CREATE, {
+    Dispatcher.dispatch({
+      actionType: COMMENT.CREATE,
       body: body,
       author_id: author_id,
       post_id: post_id,
