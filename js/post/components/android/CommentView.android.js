@@ -144,12 +144,14 @@ var CommentView = React.createClass({
   _renderCommentList() {
     return (
       <View style={{ flex: 1 }}>
+        <Text style={ styles.commentHeader }>Comments</Text>
         <CommentList
           comments={ this.state.comments }
           onReply={ this.onReply }
           user={ UserStore.getUser() }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          root={ true }
         />
       </View>
     );
@@ -264,6 +266,11 @@ var styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     paddingTop: 10
+  },
+  commentHeader: {
+    marginBottom: 4,
+    marginLeft: 10,
+    color: '#AAA'
   },
   topBar: {
     width: constants.width,
