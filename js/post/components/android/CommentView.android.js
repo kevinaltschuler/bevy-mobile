@@ -247,6 +247,7 @@ var CommentView = React.createClass({
             mainNavigator={ this.props.mainNavigator }
             mainRoute={ this.props.mainRoute }
             expandText={ true }
+            card={ false }
           />
           { this._renderCommentList() }
           <View style={{ height: 20 }} />
@@ -297,7 +298,9 @@ var styles = StyleSheet.create({
     height: 48,
     width: constants.width,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#EEE'
   },
   textInput: {
     flex: 1,

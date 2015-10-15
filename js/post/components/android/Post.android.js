@@ -27,13 +27,15 @@ var Post = React.createClass({
     post: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
-    expandText: React.PropTypes.bool
+    expandText: React.PropTypes.bool,
+    card: React.PropTypes.bool // style like a card
   },
 
   getDefaultProps() {
     return {
       post: {},
-      expandText: false
+      expandText: false,
+      card: true
     };
   },
 
@@ -86,29 +88,49 @@ var Post = React.createClass({
     }
   },
 
-  render() {
-    return (
-      <View style={ styles.container }>
-        <PostHeader post={ this.props.post } />
-        { this._renderBody() }
-        { this._renderImages() }
+  _renderActions() {
+    if(this.props.expandText && this.props.post.type == 'event') {
+      // if its event in the comment view
+      // return nothing. the event body will render the action bar
+      return <View />;
+    } else {
+      return (
         <PostActions 
           post={ this.props.post } 
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
         />
+      );
+    }
+  },
+
+  render() {
+    var containerStyle = (this.props.card)
+      ? styles.containerCard
+      : styles.containerRow;
+    return (
+      <View style={ containerStyle }>
+        <PostHeader post={ this.props.post } />
+        { this._renderBody() }
+        { this._renderImages() }
+        { this._renderActions() }
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  container: {
+  containerCard: {
     flexDirection: 'column',
     backgroundColor: '#FFF',
     marginHorizontal: 10,
     marginBottom: 10,
     borderRadius: 3
+  },
+  containerRow: {
+    flexDirection: 'column',
+    backgroundColor: '#FFF',
+    marginBottom: 10
   }
 });
 
