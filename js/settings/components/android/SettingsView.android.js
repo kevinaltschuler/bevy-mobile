@@ -46,7 +46,6 @@ var SettingsView = React.createClass({
           emailColor='#000'
           style={{
             marginTop: 10,
-            marginBottom: 10,
             backgroundColor: '#FFF',
             borderBottomWidth: 1,
             borderBottomColor: '#DDD'
@@ -119,6 +118,14 @@ var SettingsView = React.createClass({
         { this._renderAccountsText() }
         { this._renderLogOutButton() }
         { this._renderProfileButton() }
+        <Text style={ styles.settingHeader }>
+          App Settings
+        </Text>
+        <View style={ styles.settingButton }>
+          <Text style={ styles.settingButtonText }>
+            Placeholder Setting
+          </Text>
+        </View>
       </ScrollView>
     );
   }
@@ -132,6 +139,7 @@ var styles = StyleSheet.create({
   },
   settingHeader: {
     color: '#AAA',
+    marginTop: 10,
     marginLeft: 10,
     marginBottom: 4
   },
