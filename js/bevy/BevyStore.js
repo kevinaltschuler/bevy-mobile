@@ -34,6 +34,7 @@ var POST = constants.POST;
 var CONTACT = constants.CONTACT;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
+var USER = constants.USER;
 
 var BevyActions = require('./BevyActions');
 var UserStore = require('./../user/UserStore')
@@ -61,6 +62,8 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
+      case USER.LOGOUT:
+      case USER.LOGIN:
         var user = UserStore.getUser();
         if(user._id != undefined) {
           this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
@@ -95,7 +98,8 @@ _.extend(BevyStore, {
           }.bind(this)
         });
 
-
+        // trigger immediately anyways
+        this.trigger(BEVY.CHANGE_ALL);
 
         break;
 
@@ -146,6 +150,7 @@ _.extend(BevyStore, {
         var name = payload.name;
         var description = payload.description;
         var image_url = payload.image_url;
+        var slug = payload.slug;
 
         var user = UserStore.getUser();
 
@@ -153,17 +158,16 @@ _.extend(BevyStore, {
           name: name,
           description: description,
           image_url: image_url,
-          admins: [ user._id ]
+          admins: [ user._id ],
+          slug: slug
         });
-
-        //console.log(newBevy.toJSON());
 
         newBevy.save(null, {
           success: function(model, response, options) {
             // success
             newBevy.set('_id', model.id);
 
-            this.trigger(BEVY.CREATED, newBevy.toJSON());
+            this.trigger(BEVY.CREATED, model.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });
@@ -307,6 +311,26 @@ _.extend(BevyStore, {
     } else {
       return bevy.toJSON();
     }
+  },
+
+  getBevyImage(bevy_id) {
+    if(bevy_id == -1) return '';
+    var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
+    if(bevy == undefined) return '';
+    var bevy_id = bevy.get('_id');
+    var default_bevies = [
+      '11sports',
+      '22gaming',
+      '3333pics',
+      '44videos',
+      '555music',
+      '6666news',
+      '777books'
+    ];
+    if(_.contains(default_bevies, bevy_id)) {
+      return constants.siteurl + bevy.get('image_url');
+    }
+    return bevy.get('image_url');
   },
 
   addBevy(bevy) {

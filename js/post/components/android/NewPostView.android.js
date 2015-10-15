@@ -21,6 +21,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var NewPostView = React.createClass({
   propTypes: {
@@ -107,7 +108,11 @@ var InputView = React.createClass({
             }}
           >
             <View style={ styles.backButton }>
-              <Text style={ styles.backButtonText }>Back</Text>
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#666'
+              />
             </View>
           </TouchableNativeFeedback>
           <Text style={ styles.topBarTitle }>New Post</Text>
@@ -127,8 +132,12 @@ var InputView = React.createClass({
             onPress={() => this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER)}
           >
             <View style={ styles.bevyPickerButton }>
-              <Text style={ styles.bevyPickerButtonText }>{ this.props.selectedBevy.name }</Text>
-              <Text sytle={ styles.bevyPickerButtonHintText }>Tap to Change</Text>
+              <Text style={ styles.bevyPickerButtonText }>
+                { this.props.selectedBevy.name }
+              </Text>
+              <Text style={ styles.bevyPickerButtonHintText }>
+                Tap to Change
+              </Text>
             </View>
           </TouchableNativeFeedback>
         </View>
@@ -214,7 +223,11 @@ var BevyPickerView = React.createClass({
             }}
           >
             <View style={ styles.backButton }>
-              <Text style={ styles.backButtonText }>Cancel</Text>
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#666'
+              />
             </View>
           </TouchableNativeFeedback>
           <Text style={ styles.topBarTitle }>Posting To...</Text>
@@ -275,6 +288,7 @@ var BevyPickerItem = React.createClass({
   },
 
   render() {
+    var image_url = BevyStore.getBevyImage(this.props.bevy._id);
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#CCC', false) }
@@ -286,7 +300,7 @@ var BevyPickerItem = React.createClass({
           { this._renderIcon() }
           <Image 
             style={ styles.bevyImage }
-            source={{ uri: this.props.bevy.image_url + '?w=50&h=50' }}
+            source={{ uri: image_url + '?w=50&h=50' }}
           />
           <Text style={ styles.bevyName }>{ this.props.bevy.name }</Text>
         </View>
@@ -360,10 +374,12 @@ var styles = StyleSheet.create({
   },
   bevyPickerButtonHintText: {
     textAlign: 'left',
-    color: '#FFF'
+    color: '#DDD'
   },
   postInput: {
-    flex: 1
+    flex: 1,
+    paddingHorizontal: 8,
+    marginHorizontal: 8
   },
   actionBar: {
     height: 48,

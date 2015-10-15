@@ -25,6 +25,7 @@ var CONTACT = constants.CONTACT;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
 var COMMENT = constants.COMMENT;
+var USER = constants.USER;
 
 var PostActions = require('./PostActions');
 var BevyStore = require('./../bevy/BevyStore');
@@ -49,7 +50,8 @@ _.extend(PostStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-
+      case USER.LOGOUT:
+      case USER.LOGIN:
         // frontpage posts
         this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         this.posts.comparator = this.sortByTop;
@@ -62,6 +64,9 @@ _.extend(PostStore, {
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
+
+        // trigger anyways
+        this.trigger(POST.CHANGE_ALL);
         
         break;
 

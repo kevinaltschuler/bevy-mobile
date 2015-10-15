@@ -121,10 +121,10 @@ exports.FILE = {
 }
 
 exports.NOTIFICATION = {
-    DISMISS: 'notification_dismiss',
-    DISMISS_ALL: 'notification_dismiss_all',
+  DISMISS: 'notification_dismiss',
+  DISMISS_ALL: 'notification_dismiss_all',
 
-    CHANGE_ALL: 'notification_change_all'
+  CHANGE_ALL: 'notification_change_all'
 };
 
 exports.setSearchNavigator = function(navigator) {

@@ -20,6 +20,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var BevyStore = require('./../../BevyStore');
 
 var BevyBar = React.createClass({
   propTypes: {
@@ -38,13 +39,14 @@ var BevyBar = React.createClass({
   },
 
   _renderImage() {
+    var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     if(this.props.activeBevy._id == -1 || _.isEmpty(this.props.activeBevy.image_url)) {
       return <View style={ styles.bevyImageWrapperDefault } />;
     } else {
       return (
         <View style={ styles.bevyImageWrapper }>
           <Image
-            source={{ uri: this.props.activeBevy.image_url }}
+            source={{ uri: image_url }}
             style={ styles.bevyImage }
           />
           <View style={ styles.imageDarkener } />

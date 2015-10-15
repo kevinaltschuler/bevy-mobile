@@ -28,6 +28,7 @@ var PostList = React.createClass({
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     showNewPostCard: React.PropTypes.bool,
+    renderHeader: React.PropTypes.bool,
     activeBevy: React.PropTypes.object
   },
 
@@ -35,6 +36,7 @@ var PostList = React.createClass({
     return {
       allPosts: [],
       showNewPostCard: false,
+      renderHeader: true,
       activeBevy: {}
     }
   },
@@ -53,7 +55,8 @@ var PostList = React.createClass({
   },
 
   _renderHeader() {
-    return (
+    if(!this.props.renderHeader) return <View />;
+    else return (
       <View style={ styles.header }>
         <BevyBar
           activeBevy={ this.props.activeBevy }

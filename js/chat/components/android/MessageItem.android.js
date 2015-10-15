@@ -68,9 +68,21 @@ var MessageItem = React.createClass({
     return created;
   },
 
-  render() {
-    var message = this.props.message;
-    var author = message.author;
+  _renderTriangle() {
+    var isMe = (this.props.user._id == this.props.message.author._id);
+    var triangleImage = (isMe) 
+      ? '/img/triangle_right.png' 
+      : '/img/triangle_left.png';
+    return (
+      <Image 
+        source={{ uri: constants.siteurl + triangleImage, tintColor: '#fff' }}
+        style={ styles.arrow } 
+      />
+    );
+  },
+
+  _renderMessageBody() {
+    var isMe = (this.props.user._id == this.props.message.author._id);
     var messageBodyStyle = {
       backgroundColor: '#fff',
       paddingTop: 5,
@@ -78,25 +90,41 @@ var MessageItem = React.createClass({
       paddingLeft: 5,
       paddingRight: 5
     };
+    var textAlign = (isMe) ? 'right' : 'left';
+    var authorName = (isMe) ? 'Me' : this.props.message.author.displayName;
     return (
-      <View style={ styles.container }>
+      <View style={ messageBodyStyle }>
+        <Text style={{ textAlign: textAlign }}>
+          { this.props.message.body }
+          { '\n' }
+          <Text style={ styles.authorName }>
+            { authorName } · { this._renderDate() }
+          </Text>
+        </Text>
+      </View>
+    );
+  },
+
+  render() {
+    var message = this.props.message;
+    var author = message.author;
+    
+    var isMe = (this.props.user._id == author._id);
+    var containerStyle = (isMe) ? styles.containerMe : styles.container;
+    
+    return (
+      <View style={ containerStyle }>
+        { (isMe) ? this._renderMessageBody() : <View /> }
+        { (isMe) ? this._renderTriangle() : <View /> }
         <Image 
-          source={{ uri: (_.isEmpty(author.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : author.image_url }}
+          source={{ uri: (_.isEmpty(author.image_url)) 
+            ? constants.siteurl + '/img/user-profile-icon.png' 
+            : author.image_url 
+          }}
           style={ styles.authorImage }
         />
-        <Image 
-          source={{ uri: constants.siteurl + '/img/triangle_left.png', tintColor: '#fff' }}
-          style={ styles.arrow } 
-        />
-        <View style={ messageBodyStyle }>
-          <Text style={{ textAlign: 'left' }}>
-            { message.body }
-            { '\n' }
-            <Text style={ styles.authorName }>
-              { author.displayName } · { this._renderDate() }
-            </Text>
-          </Text>
-        </View>
+        { (isMe) ? <View /> : this._renderTriangle() }
+        { (isMe) ? <View /> : this._renderMessageBody() }
       </View>
     );
   }
@@ -107,6 +135,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     paddingBottom: 5
   },
   containerMe: {

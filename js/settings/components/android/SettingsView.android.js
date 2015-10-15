@@ -13,8 +13,10 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserActions = require('./../../../user/UserActions');
@@ -27,6 +29,14 @@ var SettingsView = React.createClass({
     tabActions: React.PropTypes.object
   },
 
+  goToPublicProfile() {
+    // set the public profile user
+    var route = routes.MAIN.PROFILE;
+    route.user = this.props.user;
+    // go to public profile view
+    this.props.mainNavigator.push(route);
+  },
+
   _renderProfile() {
     if(this.props.loggedIn) {
       return (
@@ -36,7 +46,6 @@ var SettingsView = React.createClass({
           emailColor='#000'
           style={{
             marginTop: 10,
-            marginBottom: 10,
             backgroundColor: '#FFF',
             borderBottomWidth: 1,
             borderBottomColor: '#DDD'
@@ -51,11 +60,18 @@ var SettingsView = React.createClass({
           }}
         >
           <View style={ styles.logInButton }>
-            <Text style={ styles.logInButtonText }></Text>
+            <Text style={ styles.logInButtonText }>Log In</Text>
           </View>
         </TouchableNativeFeedback>
       );
     }
+  },
+
+  _renderAccountsText() {
+    if(!this.props.loggedIn) return <View />;
+    else return (
+      <Text style={ styles.settingHeader }>Account</Text>
+    );
   },
 
   _renderLogOutButton() {
@@ -75,11 +91,41 @@ var SettingsView = React.createClass({
     );
   },
 
+  _renderProfileButton() {
+    if(!this.props.loggedIn) return <View />;
+    else return (
+      <TouchableNativeFeedback
+        onPress={ this.goToPublicProfile }
+      >
+        <View style={ styles.settingButton }>
+          <Text style={ styles.settingButtonText }>
+            Go To Public Profile
+          </Text>
+          <Icon
+            name='arrow-forward'
+            size={ 30 }
+            color='#888'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   render() {
     return (
       <ScrollView style={ styles.container }>
         { this._renderProfile() }
+        { this._renderAccountsText() }
         { this._renderLogOutButton() }
+        { this._renderProfileButton() }
+        <Text style={ styles.settingHeader }>
+          App Settings
+        </Text>
+        <View style={ styles.settingButton }>
+          <Text style={ styles.settingButtonText }>
+            Placeholder Setting
+          </Text>
+        </View>
       </ScrollView>
     );
   }
@@ -88,9 +134,30 @@ var SettingsView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#EEE'
+  },
+  settingHeader: {
+    color: '#AAA',
+    marginTop: 10,
+    marginLeft: 10,
+    marginBottom: 4
+  },
+  settingButton: {
+    backgroundColor: '#FFF',
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10
+  },
+  settingButtonText: {
+    flex: 1,
+    color: '#000'
   },
   logInButton: {
+    marginTop: 10,
+    backgroundColor: '#FFF',
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',

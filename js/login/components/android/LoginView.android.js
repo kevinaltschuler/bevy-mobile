@@ -64,10 +64,10 @@ var LoginView = React.createClass({
       username: '',
       password: ''
     });
-    // go back to tabbar
-    this.props.mainNavigator.pop();
     // reload app
     AppActions.load();
+    // go back to tabbar
+    this.props.mainNavigator.pop();
   },
 
   _renderErrorText() {

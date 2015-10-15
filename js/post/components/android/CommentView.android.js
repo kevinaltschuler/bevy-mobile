@@ -13,6 +13,7 @@ var {
   TextInput,
   BackAndroid,
   TouchableNativeFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -88,7 +89,7 @@ var CommentView = React.createClass({
   postReply() {
     // gate this if not logged in
     if(!this.props.loggedIn) {
-      //this.props.authModalActions.open('Log In To Comment');
+      ToastAndroid.show('Please Log In to Comment', ToastAndroid.SHORT);
       return;
     }
 

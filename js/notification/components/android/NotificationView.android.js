@@ -50,7 +50,7 @@ var NotificationView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginBottom: 24
+    backgroundColor: '#EEE'
   },
   noneContainer: {
     flex: 1,

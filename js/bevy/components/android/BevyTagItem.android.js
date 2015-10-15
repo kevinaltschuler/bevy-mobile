@@ -16,7 +16,8 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var BevyTagItem = React.createClass({
   propTypes: {
-    tag: React.PropTypes.object
+    tag: React.PropTypes.object,
+    isAdmin: React.PropTypes.bool
   },
 
   remove() {
@@ -24,20 +25,22 @@ var BevyTagItem = React.createClass({
   },
 
   _renderRemoveButton() {
-    return (
-      <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-        onPress={ this.remove }
-      >
-        <View style={ styles.removeButton }>
-          <Icon
-            name='close'
-            size={ 30 }
-            color='#888'
-          />
-        </View>
-      </TouchableNativeFeedback>
-    );
+    if(this.props.isAdmin) {
+      return (
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+          onPress={ this.remove }
+        >
+          <View style={ styles.removeButton }>
+            <Icon
+              name='close'
+              size={ 30 }
+              color='#888'
+            />
+          </View>
+        </TouchableNativeFeedback>
+      );
+    } else return <View />;
   },
 
   render() {

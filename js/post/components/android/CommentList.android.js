@@ -17,6 +17,7 @@ var Collapsible = require('react-native-collapsible');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
+var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
 var colorMap = [
   '#97FF80',
@@ -143,7 +144,13 @@ var CommentItem = React.createClass({
         <View style={ styles.actionBar }>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-            onPress={() => {}}
+            onPress={() => {
+              // set route user
+              var route = routes.MAIN.PROFILE;
+              route.user = this.props.comment.author;
+              // go to profile page
+              this.props.mainNavigator.push(route);
+            }}
           >
             <View style={ styles.actionBarItem }>
               <Icon
@@ -199,7 +206,7 @@ var CommentItem = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <TouchableWithoutFeedback
+        <TouchableNativeFeedback
           onPress={() => {
             if(this.state.isCompact)
               this.setState({ isCompact: false });
@@ -210,7 +217,7 @@ var CommentItem = React.createClass({
           onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}
         >
           { this._renderComment() }
-        </TouchableWithoutFeedback>
+        </TouchableNativeFeedback>
         { this._renderActionBar() }
         { this._renderCommentList() }
       </View>
