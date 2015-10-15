@@ -14,7 +14,9 @@ var routes = {
 
   NEWPOST: {
     INPUT: { name: 'input' },
-    BEVYPICKER: { name: 'bevypicker' }
+    BEVYPICKER: { name: 'bevypicker' },
+    CREATEEVENT: { name: 'createevent' },
+    DATEPICKER: { name: 'datepicker' }
   },
 
   SEARCH: {

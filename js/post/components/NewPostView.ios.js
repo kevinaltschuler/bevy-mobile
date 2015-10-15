@@ -32,6 +32,7 @@ var Navbar = require('./../../shared/components/Navbar.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var BevyPickerView = require('./BevyPickerView.ios.js');
 var InputView = require('./InputView.ios.js');
+var CreateEventView = require('./CreateEventView.ios.js');
 
 var PostActions = require('./../PostActions');
 
@@ -53,7 +54,7 @@ var NewPostView = React.createClass({
       selected = this.props.myBevies[1];
     }
     return {
-      selected: selected
+      selected: selected,
     };
   },
 
@@ -93,6 +94,17 @@ var NewPostView = React.createClass({
                       selected: bevy
                     });
                   }}
+                  { ...this.props }
+                />
+              );
+              break;
+            case routes.NEWPOST.CREATEEVENT.name:
+              return (
+                <CreateEventView
+                  newPostRoute={ route }
+                  newPostNavigator={ navigator }
+                  selected={ this.state.selected }
+                  date={ this.state.date }
                   { ...this.props }
                 />
               );
