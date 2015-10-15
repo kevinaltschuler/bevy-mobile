@@ -12,7 +12,8 @@ var {
   StatusBarIOS,
   Navigator,
   TouchableHighlight,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  TouchableOpacity
 } = React;
 
 var Icon = require('react-native-vector-icons/Ionicons');
@@ -29,23 +30,28 @@ var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var window = require('Dimensions').get('window');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
+var DatePickerModal = require('./DatePickerModal.ios.js');
+var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var PostActions = require('./../PostActions');
 
-var InputView = React.createClass({
+var CreateEventView = React.createClass({
 
   propTypes: {
     selected: React.PropTypes.object, 
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    date: React.PropTypes.Date
   },
 
   getInitialState() {
     return {
       keyboardSpace: 0,
       title: '',
-      postImageURI: '',
-      placeholderText: 'Drop a Line'
+      postImageURI: 'http://api.joinbevy.com/img/default_event_img.png',
+      placeholderText: 'Drop a Line',
+      datePicker: false,
+      date: new Date(Date.now())
     };
   },
 
@@ -80,6 +86,12 @@ var InputView = React.createClass({
     FileStore.off(FILE.UPLOAD_COMPLETE);
   },
 
+  setDate(date) {
+    this.setState({
+      date: date
+    })
+  },
+
   uploadImage() {
     UIImagePickerManager.showImagePicker({
       title: 'Upload Picture',
@@ -98,17 +110,50 @@ var InputView = React.createClass({
     });
   },
 
+  hideDatePicker() {
+    this.setState({
+      datePicker: false
+    });
+
+  },
+
   _renderPostImage() {
     if(_.isEmpty(this.state.postImageURI)) return <View />;
     return (
-      <Image
-        source={{ uri: this.state.postImageURI }}
-        style={{
-          flex: 1,
-          width: window.width,
-          height: 300
-        }}
-      />
+        <Image
+          source={{ uri: this.state.postImageURI }}
+          style={{
+            flex: 1,
+            height: 150,
+            alignItems: 'flex-end',
+            justifyContent: 'flex-start'
+          }}
+        >
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,.2)'
+            style={{borderRadius: 25, width: 50, height: 50}}
+            onPress={() => {
+              UIImagePickerManager.showImagePicker({
+                  returnBase64Image: false,
+                  returnIsVertical: true
+                }, (type, response) => {
+                  if (type !== 'cancel') {
+                    //console.log(response);
+                    FileActions.upload(response);
+                  } else {
+                    //console.log('Cancel');
+                  }
+              });
+            }}
+          >
+            <Icon
+              name='edit'
+              size={30}
+              color='#fff'
+              style={{ padding: 10, width: 50, height: 50 }}
+            />
+          </TouchableHighlight>
+        </Image>
     );
   },
 
@@ -150,7 +195,7 @@ var InputView = React.createClass({
           center={ 
             <View style={ styles.navTitle }>
               <Text style={ styles.navTitleText }>
-                New Post
+                New Event
               </Text>
             </View>
           }
@@ -176,6 +221,17 @@ var InputView = React.createClass({
             </TouchableHighlight>
           }
         />
+        <DatePickerModal
+          date={ this.state.date }
+          onHide={ this.hideDatePicker }
+          isVisible={ this.state.datePicker }
+          onSetDate={(date) => {
+            this.setState({
+              date: date
+            });
+          }}
+          { ...this.props }
+        />
         <View style={ styles.body }>
           <View style={ styles.bevyPicker }>
             <Text style={ styles.postingTo }>Posting To:</Text>
@@ -195,11 +251,8 @@ var InputView = React.createClass({
               />
             </TouchableHighlight>
           </View>
-          <View style={ styles.input }>
-            <Image
-              style={ styles.inputProfileImage }
-              source={{ uri: user.image_url }}
-            />
+          <ScrollView style={ styles.input }>
+            { this._renderPostImage() }
             <TextInput 
               ref='input'
               multiline={ true }
@@ -208,80 +261,25 @@ var InputView = React.createClass({
                   title: ev.nativeEvent.text
                 });
               }}
-              placeholder={ this.state.placeholderText }
+              placeholder='title'
               style={ styles.textInput }
             />
-          </View>
-          <View style={ styles.image }>
-            { this._renderPostImage() }
-          </View>
+            <SettingsItem 
+              checked={false}
+              onPress={() => {
+                this.setState({
+                  datePicker: true
+                });
+              }}
+              title='date'
+            />
+            <SettingsItem 
+              checked={false}
+              onPress={() => {}}
+              title='location'
+            />
+          </ScrollView>
         </View>
-        <View style={ styles.contentBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                //this.uploadImage();
-                UIImagePickerManager.showLibrary({
-                  returnBase64Image: false,
-                  returnIsVertical: true
-                }, (type, response) => {
-                  if (type !== 'cancel') {
-                    //console.log(response);
-                    FileActions.upload(response);
-                  } else {
-                    //console.log('Cancel');
-                  }
-                });
-              }}
-              style={ styles.contentBarItem }
-            >
-              <Icon
-                name='image'
-                size={30}
-                color='#666'
-                style={ styles.contentBarIcon }
-              />
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                //this.uploadImage();
-                UIImagePickerManager.showCamera({
-                  returnBase64Image: false,
-                  returnIsVertical: true
-                }, (type, response) => {
-                  if (type !== 'cancel') {
-                    //console.log(response);
-                    FileActions.upload(response);
-                  } else {
-                    //console.log('Cancel');
-                  }
-                });
-              }}
-              style={ styles.contentBarItem }
-            >
-              <Icon
-                name='camera'
-                size={32}
-                color='#666'
-                style={ styles.contentBarIcon }
-              />
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
-              }}
-              style={ styles.contentBarItem }
-            >
-              <Icon
-                name='calendar'
-                size={30}
-                color='#666'
-                style={ styles.contentBarIcon }
-              />
-            </TouchableHighlight>
-          </View>
       </View>
     );
   }
@@ -344,9 +342,6 @@ var styles = StyleSheet.create({
     alignSelf: 'flex-end'
   },
   input: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: 10,
     flex: 1,
     marginBottom: 48,
     backgroundColor: '#fff'
@@ -359,7 +354,13 @@ var styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 15
+    fontSize: 17,
+    height: 40,
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd'
   },
   contentBar: {
     backgroundColor: '#fff',
@@ -415,4 +416,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = InputView;
+module.exports = CreateEventView;

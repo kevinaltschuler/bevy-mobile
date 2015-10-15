@@ -14,10 +14,6 @@ var {
   TouchableHighlight,
 } = React;
 
-var {
-  RefresherListView,
-  LoadingBarIndicator
-} = require('react-native-refresher');
 var RCTRefreshControl = require('react-refresh-control');
 
 var _ = require('underscore');
