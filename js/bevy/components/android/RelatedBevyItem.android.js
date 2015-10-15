@@ -17,6 +17,7 @@ var {
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var BevyActions = require('./../../BevyActions');
+var BevyStore = require('./../../BevyStore');
 
 var RelatedBevyItem = React.createClass({
   propTypes: {
@@ -32,6 +33,7 @@ var RelatedBevyItem = React.createClass({
   },
 
   render() {
+    var image_url = BevyStore.getBevyImage(this.props.bevy._id);
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#EEE', false) }
@@ -39,7 +41,7 @@ var RelatedBevyItem = React.createClass({
       >
         <View style={ styles.container }>
           <Image
-            source={{ uri: this.props.bevy.image_url }}
+            source={{ uri: image_url }}
             style={ styles.bevyImage }
           />
           <Text style={ styles.bevyName }>{ this.props.bevy.name }</Text>

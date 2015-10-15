@@ -313,6 +313,26 @@ _.extend(BevyStore, {
     }
   },
 
+  getBevyImage(bevy_id) {
+    if(bevy_id == -1) return '';
+    var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
+    if(bevy == undefined) return '';
+    var bevy_id = bevy.get('_id');
+    var default_bevies = [
+      '11sports',
+      '22gaming',
+      '3333pics',
+      '44videos',
+      '555music',
+      '6666news',
+      '777books'
+    ];
+    if(_.contains(default_bevies, bevy_id)) {
+      return constants.siteurl + bevy.get('image_url');
+    }
+    return bevy.get('image_url');
+  },
+
   addBevy(bevy) {
     this.myBevies.add(bevy);
   }

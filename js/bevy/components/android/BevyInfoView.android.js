@@ -24,6 +24,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
 var BevyActions = require('./../../BevyActions');
+var BevyStore = require('./../../BevyStore');
 
 var BevyInfoView = React.createClass({
   propTypes: {
@@ -80,6 +81,7 @@ var BevyInfoView = React.createClass({
   },
 
   render() {
+    var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     return (
       <View style={ styles.container }>
         <BevyBar
@@ -90,7 +92,7 @@ var BevyInfoView = React.createClass({
         <ScrollView>
           <View style={ styles.header }>
             <Image
-              source={{ uri: this.props.activeBevy.image_url }}
+              source={{ uri: image_url }}
               style={ styles.bevyImage }
             />
             <View style={ styles.bevyDetails }>

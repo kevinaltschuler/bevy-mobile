@@ -21,6 +21,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var NewPostView = React.createClass({
   propTypes: {
@@ -287,6 +288,7 @@ var BevyPickerItem = React.createClass({
   },
 
   render() {
+    var image_url = BevyStore.getBevyImage(this.props.bevy._id);
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#CCC', false) }
@@ -298,7 +300,7 @@ var BevyPickerItem = React.createClass({
           { this._renderIcon() }
           <Image 
             style={ styles.bevyImage }
-            source={{ uri: this.props.bevy.image_url + '?w=50&h=50' }}
+            source={{ uri: image_url + '?w=50&h=50' }}
           />
           <Text style={ styles.bevyName }>{ this.props.bevy.name }</Text>
         </View>
