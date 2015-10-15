@@ -26,22 +26,23 @@ _.extend(ChatStore, {
 	handleDispatch(payload) {
 		switch(payload.actionType) {
       case APP.LOAD:
-
-        this.threads.fetch({
-          reset: true,
-          success: function(collection, response, options) {
-            //console.log('threads fetched', this.threads.toJSON());
-            this.threads.forEach(function(thread) {
-              thread.messages.fetch({
-                reset: true,
-                success: function(collection, response, options) {
-                  thread.messages.sort();
-                  this.trigger(CHAT.CHANGE_ALL);
-                }.bind(this)
-              });
-            }.bind(this));
-          }.bind(this)
-        });
+        if(UserStore.loggedIn) {
+          this.threads.fetch({
+            reset: true,
+            success: function(collection, response, options) {
+              //console.log('threads fetched', this.threads.toJSON());
+              this.threads.forEach(function(thread) {
+                thread.messages.fetch({
+                  reset: true,
+                  success: function(collection, response, options) {
+                    thread.messages.sort();
+                    this.trigger(CHAT.CHANGE_ALL);
+                  }.bind(this)
+                });
+              }.bind(this));
+            }.bind(this)
+          });
+        }
 
         break;
 

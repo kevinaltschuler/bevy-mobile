@@ -64,6 +64,7 @@ var LoginView = React.createClass({
       username: '',
       password: ''
     });
+    UserStore.setUser(user);
     // reload app
     AppActions.load();
     // go back to tabbar

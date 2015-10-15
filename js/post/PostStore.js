@@ -50,8 +50,9 @@ _.extend(PostStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-      case USER.LOGOUT:
-      case USER.LOGIN:
+        if(!UserStore.loggedIn) {
+          break;
+        }
         // frontpage posts
         this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         this.posts.comparator = this.sortByTop;
@@ -59,15 +60,13 @@ _.extend(PostStore, {
         this.posts.fetch({
           reset: true,
           success: function(posts, response, options) {
-            //this.trigger(APP.LOAD_PROGRESS, 0.5);
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
 
         // trigger anyways
-        this.trigger(POST.CHANGE_ALL);
-        
+        this.trigger(POST.CHANGE_ALL); 
         break;
 
       case POST.FETCH:

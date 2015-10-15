@@ -19,19 +19,26 @@ var BevyList = React.createClass({
     drawerActions: React.PropTypes.object,
     publicBevies: React.PropTypes.array,
     myBevies: React.PropTypes.array,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
     var bevyData = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var bevies = (this.props.loggedIn) 
+      ? this.props.myBevies 
+      : this.props.publicBevies;
     return {
-      bevies: bevyData.cloneWithRows(this.props.myBevies)
+      bevies: bevyData.cloneWithRows(bevies)
     };
   },
 
   componentWillReceiveProps(nextProps) {
+    var bevies = (nextProps.loggedIn) 
+      ? nextProps.myBevies 
+      : nextProps.publicBevies;
     this.setState({
-      bevies: this.state.bevies.cloneWithRows(nextProps.myBevies)
+      bevies: this.state.bevies.cloneWithRows(bevies)
     });
   },
 

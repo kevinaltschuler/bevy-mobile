@@ -62,23 +62,19 @@ _.extend(BevyStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-      case USER.LOGOUT:
-      case USER.LOGIN:
         var user = UserStore.getUser();
-        if(user._id != undefined) {
+        if(!_.isEmpty(user._id)) {
           this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
           this.myBevies.fetch({
             reset: true,
             success: function(bevies, response, options) {
-              //console.log('got bevies', bevies.toJSON());
               this.myBevies.unshift({
                 _id: '-1',
                 name: 'Frontpage'
               });
-              this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
-              this.frontpageFilters = _.reject(this.frontpageFilters, function(bevy_id){ return bevy_id == -1 });
+              //this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
+              //this.frontpageFilters = _.reject(this.frontpageFilters, function(bevy_id){ return bevy_id == -1 });
 
-              //this.trigger(APP.LOAD_PROGRESS, 0.1);
               this.trigger(BEVY.CHANGE_ALL);
             }.bind(this)
           });
@@ -89,11 +85,10 @@ _.extend(BevyStore, {
             name: 'Frontpage'
           });
         }
-
         this.publicBevies.url = constants.apiurl + '/bevies';
         this.publicBevies.fetch({
+          reset: true,
           success: function(bevies, response, options) {
-            //console.log('got public bevies', bevies.toJSON());
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
         });
@@ -101,6 +96,9 @@ _.extend(BevyStore, {
         // trigger immediately anyways
         this.trigger(BEVY.CHANGE_ALL);
 
+        break;
+      case USER.LOGOUT:
+        this.myBevies.reset();
         break;
 
       /*case BEVY.FETCH_PUBLIC:

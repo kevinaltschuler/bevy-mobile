@@ -9,6 +9,7 @@ var BEVY = constants.BEVY;
 var APP = constants.APP;
 var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
+var Fletcher = require('./../shared/components/android/Fletcher.android.js');
 
 var {
   AsyncStorage
@@ -31,22 +32,47 @@ _.extend(UserStore, {
     switch(payload.actionType) {
       case APP.LOAD:
         // fetch user from server if its been updated?
-        this.user.fetch({
-          success: function(model, response, options) {
-            //console.log('user fetched from server');
-            // update local storage user
-            AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
+        if(this.loggedIn) {
+            this.user.fetch({
+            success: function(model, response, options) {
+              //console.log('user fetched from server');
+              // update local storage user
+              AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
 
-            this.trigger(USER.LOADED);
-          }.bind(this)
-        });
+              this.trigger(USER.LOADED);
+            }.bind(this)
+          });
+        }
         break;
 
       case USER.LOGIN:
         var username = payload.username;
         var password = payload.password;
+        console.log('logging in');
 
-        fetch(constants.siteurl + '/login',
+        Fletcher.fletch(constants.siteurl + '/login', {
+          method: 'POST',
+          headers: {},
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        }, function(error) {
+          console.error(error);
+          this.trigger(USER.LOGIN_ERROR, error);
+        }.bind(this), function(response) {
+          response = JSON.parse(response);
+          console.log('logged in', response);
+
+          AsyncStorage.setItem('user', JSON.stringify(response))
+            .then((err, result) => {
+            });
+
+          this.setUser(response);
+          this.trigger(USER.LOGIN_SUCCESS, response);
+        }.bind(this));
+
+        /*fetch(constants.siteurl + '/login',
         {
           method: 'post',
           headers: {
@@ -69,14 +95,14 @@ _.extend(UserStore, {
             .then((err, result) => {
             });
 
-            this.trigger(USER.LOGIN_SUCCESS, res);
             this.setUser(res);
+            this.trigger(USER.LOGIN_SUCCESS, res);
           } else {
             console.log('error', res);
             // error
             this.trigger(USER.LOGIN_ERROR, res.message);
           }
-        });
+        });*/
 
         break;
 
@@ -173,6 +199,7 @@ _.extend(UserStore, {
   },
 
   getUser() {
+    if(!this.loggedIn) return {};
     return this.user.toJSON();
   }
 });

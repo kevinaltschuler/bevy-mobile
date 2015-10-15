@@ -70,7 +70,6 @@ var BevyListItem = React.createClass({
         }}
       >
         <View style={[ styles.container, activeStyle ]}>
-          { this._renderActiveChevron() }
           <Text style={ styles.bevyNameText }>{ this.props.bevy.name }</Text>
         </View>
       </TouchableNativeFeedback>
