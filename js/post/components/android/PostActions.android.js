@@ -97,7 +97,12 @@ var PostActions = React.createClass({
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
           onPress={() => {
-
+            constants.getActionSheetActions().show(
+              ['foo', 'bar'],
+              function(key) {
+                console.log(key);
+              }.bind(this)
+            );
           }}
         >
           <View style={ styles.moreButton }>

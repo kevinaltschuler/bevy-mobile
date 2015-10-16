@@ -16,6 +16,7 @@ var {
 var MainView = require('./js/app/components/android/MainView.android.js');
 var ImageModal = require('./js/post/components/android/ImageModal.android.js');
 var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
+var ActionSheet = require('./js/shared/components/android/ActionSheet.android.js');
 
 var routes = require('./js/routes');
 var constants = require('./js/constants');
@@ -114,7 +115,8 @@ var change_all_events = [
 var App = React.createClass({
 
   getInitialState() {
-    return _.extend({},
+    return _.extend({
+    },
       this.getBevyState(),
       this.getPostState(),
       this.getChatState(),
@@ -241,6 +243,7 @@ var App = React.createClass({
           }
         />
         <ImageModal />
+        <ActionSheet />
       </View>
     );
   }
