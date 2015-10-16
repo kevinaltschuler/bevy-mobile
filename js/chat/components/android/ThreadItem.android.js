@@ -119,20 +119,10 @@ var ThreadItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 7,
-    paddingRight: 7,
-    paddingTop: 5,
-    paddingBottom: 5,
+    height: 60,
+    paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'center',
-    height: 60
-  },
-  titleImage: {
-    width: 36,
-    height: 36,
-    backgroundColor: 'white',
-    borderRadius: 18,
-    marginRight: 7
+    alignItems: 'center'
   },
   titleTextColumn: {
     flex: 1,

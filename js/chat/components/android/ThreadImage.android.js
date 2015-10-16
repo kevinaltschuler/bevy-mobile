@@ -138,12 +138,10 @@ var ThreadImage = React.createClass({
         
         return (
           <View style={{
-            position: 'relative',
             width: 40,
             height: 40,
             borderRadius: 20,
-            marginRight: 10,
-            marginLeft: 10
+            marginRight: 10
           }}>
             { users }
           </View>
