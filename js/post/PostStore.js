@@ -180,6 +180,26 @@ _.extend(PostStore, {
 
         break;
 
+      case POST.SORT:
+        var by = payload.by;
+        var direction = payload.direction;
+
+        by = by.trim(); // trim whitespace - it sometimes makes it in there
+        switch(by) {
+          case 'new':
+            this.sortType = 'new';
+            this.posts.comparator = this.sortByNew;
+            break;
+          case 'top':
+            this.sortType = 'top';
+            this.posts.comparator = this.sortByTop;
+            break;
+        }
+        this.posts.sort();
+
+        this.trigger(POST.CHANGE_ALL);
+        break;
+
       case BEVY.SWITCH:
         Dispatcher.waitFor([BevyStore.dispatchToken]);
         var bevy_id = BevyStore.active;

@@ -101,19 +101,6 @@ _.extend(BevyStore, {
         this.myBevies.reset();
         break;
 
-      /*case BEVY.FETCH_PUBLIC:
-        // get list of public bevies
-
-        this.publicBevies.url = constants.apiurl + '/bevies';
-        this.publicBevies.fetch({
-          success: function(bevies, response, options) {
-            console.log('got public bevies', bevies.toJSON());
-            this.trigger(BEVY.CHANGE_ALL);
-          }.bind(this)
-        });
-
-        break;*/
-
       case BEVY.SWITCH:
         var bevy_id = payload.bevy_id;
 

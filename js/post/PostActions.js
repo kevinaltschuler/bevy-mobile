@@ -69,7 +69,7 @@ var PostActions = {
 
 	/**
 	 * sort the list of posts
-	 * @param  {string} by        the sorting method ('top', 'new')
+	 * @param  {string} by the sorting method ('top', 'new')
 	 * @param  {string} direction either 'asc' or 'desc'
 	 */
 	sort(by, direction) {

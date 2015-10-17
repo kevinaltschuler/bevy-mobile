@@ -21,6 +21,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyStore = require('./../../BevyStore');
+var PostActions = require('./../../../post/PostActions');
 
 var BevyBar = React.createClass({
   propTypes: {
@@ -36,6 +37,25 @@ var BevyBar = React.createClass({
   goToInfoView() {
     // go to the info view
     this.props.bevyNavigator.push(routes.BEVY.INFO);
+  },
+
+  openSortSheet() {
+    constants.getActionSheetActions().show(
+      [
+        'Top',
+        'New'
+      ],
+      function(key) {
+        switch(key) {
+          case '0':
+            PostActions.sort('top');
+            break;
+          case '1':
+            PostActions.sort('new');
+            break;
+        }
+      }.bind(this)
+    );
   },
 
   _renderImage() {
@@ -98,6 +118,27 @@ var BevyBar = React.createClass({
     );
   },
 
+  _renderSortButton() {
+    if(  this.props.bevyRoute.name == routes.BEVY.INFO.name
+      || this.props.bevyRoute.name == routes.BEVY.RELATED.name
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
+      return <View />;
+    else return (
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+        onPress={ this.openSortSheet }
+      >
+        <View style={ styles.infoButton }>
+          <Icon
+            name='sort'
+            size={ 30 }
+            color='#FFF'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   render() {
     if(_.isEmpty(this.props.activeBevy)) return <View />;
     else return (
@@ -110,6 +151,7 @@ var BevyBar = React.createClass({
             { this.props.activeBevy.name }
           </Text>
         </View>
+        { this._renderSortButton() }
         { this._renderInfoButton() }
       </View>
     );
