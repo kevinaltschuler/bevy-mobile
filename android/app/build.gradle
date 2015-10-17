@@ -40,4 +40,5 @@ dependencies {
     compile project(':react-native-vector-icons')
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'cz.msebera.android:httpclient:4.3.6'
+    compile project(':ReactNativeDropdownAndroid')
 }

@@ -1,6 +1,8 @@
 package com.bevyios;
 
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.chymtt.reactnativedropdown.DropdownPackage;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -31,6 +33,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .addPackage(new MainReactPackage())
                 .addPackage(new VectorIconsPackage())
                 .addPackage(new FletcherPackage())
+                .addPackage(new DropdownPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
                 .build();
