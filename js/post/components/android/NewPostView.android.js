@@ -121,7 +121,11 @@ var InputView = React.createClass({
             onPress={ this.submitPost }
           >
             <View style={ styles.postButton }>
-              <Text style={ styles.postButtonText }>Post</Text>
+              <Icon
+                name='send'
+                size={ 30 }
+                color='#2CB673'
+              />
             </View>
           </TouchableNativeFeedback>
         </View>
@@ -344,9 +348,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 12,
     paddingRight: 12
-  },
-  postButtonText: {
-    color: '#000'
   },
   postingToBar:{
     height: 40,
