@@ -18,7 +18,7 @@ var constants = require('./../../../constants');
 
 var ActionSheetItem = React.createClass({
   propTypes: {
-    index: React.PropTypes.number,
+    index: React.PropTypes.string,
     option: React.PropTypes.string,
     onSelect: React.PropTypes.func
   },
