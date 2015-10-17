@@ -13,15 +13,15 @@
 'use strict';
 
 // imports
-var dispatch = require('./../shared/helpers/dispatch');
-
-var POST = require('./../constants').POST;
+var Dispatcher = require('./../shared/dispatcher');
+var constants = require('./../constants');
+var POST = constants.POST;
 
 
 var PostActions = {
-
 	fetch(bevy, user_id) {
-		dispatch(POST.FETCH, {
+		Dispatcher.dispatch({
+			actionType: POST.FETCH,
 			bevy: (bevy == undefined) ? null : bevy,
 			user_id: (user_id == undefined) ? null: user_id
 		});
@@ -36,7 +36,8 @@ var PostActions = {
 	* @param  {string} bevy
 	*/
 	create(title, images, author, bevy, type, event, tag) {
-		dispatch(POST.CREATE, {
+		Dispatcher.dispatch({
+		  actionType: POST.CREATE,
 		  title: (title == undefined) ? 'untitled' : title,
 		  images: (images == undefined) ? null : images,
 		  author: (author == undefined) ? null : author, // grab the current, logged in user?
@@ -48,50 +49,58 @@ var PostActions = {
 	},
 
 	destroy(post_id) {
-		dispatch(POST.DESTROY, {
+		Dispatcher.dispatch({
+			actionType: POST.DESTROY,
 			post_id: (post_id == undefined) ? '0' : post_id
 		});
 	},
 
 	update(post_id, postTitle) {
-		dispatch(POST.UPDATE, {
+		Dispatcher.dispatch({
+			actionType: POST.UPDATE,
 			post_id: (post_id == undefined) ? '0' : post_id,
 			postTitle: (postTitle == undefined) ? '' : postTitle
 		});
 	},
 
 	vote(post_id) {
-		dispatch(POST.VOTE, {
+		Dispatcher.dispatch({
+			actionType: POST.VOTE,
 			post_id: (post_id == undefined) ? '' : post_id
 		});
 	},
 
 	/**
 	 * sort the list of posts
-	 * @param  {string} by        the sorting method ('top', 'new')
+	 * @param  {string} by the sorting method ('top', 'new')
 	 * @param  {string} direction either 'asc' or 'desc'
 	 */
 	sort(by, direction) {
-		dispatch(POST.SORT, {
+		Dispatcher.dispatch({
+			actionType: POST.SORT,
 			by: (by == undefined) ? 'new' : by,
 			direction: (direction == undefined) ? 'asc' : direction
 		});
 	},
 
 	pin(post_id) {
-		dispatch(POST.PIN, {
+		Dispatcher.dispatch({
+			actionType: POST.PIN,
 			post_id: (post_id == undefined) ? '' : post_id
 		});
 	},
 
 	mute(post_id) {
-		dispatch(POST.MUTE, {
+		Dispatcher.dispatch({
+			actionType: POST.MUTE,
 			post_id: (post_id == undefined) ? '' : post_id
 		});
 	},
 
 	cancel() {
-		dispatch(POST.CANCEL, {});
+		Dispatcher.dispatch({
+			actionType: POST.CANCEL
+		});
 	}
 };
 

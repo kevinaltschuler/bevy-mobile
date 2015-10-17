@@ -60,8 +60,6 @@ var ThreadView = React.createClass({
         <ListView
           dataSource={ this.state.threads }
           style={ styles.list }
-          //renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          //renderFooter={() => (<View style={{marginBottom: -20}}/>)}
           renderRow={(thread) => {
             var active = false;
             if(thread._id == this.props.activeThread._id) active = true;

@@ -146,8 +146,8 @@ var InputView = React.createClass({
           style={ styles.postInput }
           autoCorrect={ false }
           multiline={ true }
-          placeholder='Drop a Line'
-          placeholderTextColor='#000'
+          placeholder='Drop a Line...'
+          placeholderTextColor='#888'
           underlineColorAndroid='#EEE'
           value={ this.state.postInput }
           onChangeText={(text) => this.setState({ postInput: text })}
@@ -379,7 +379,8 @@ var styles = StyleSheet.create({
   postInput: {
     flex: 1,
     paddingHorizontal: 8,
-    marginHorizontal: 8
+    marginHorizontal: 8,
+    color: '#333'
   },
   actionBar: {
     height: 48,

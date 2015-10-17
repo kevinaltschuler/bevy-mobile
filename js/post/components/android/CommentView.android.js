@@ -144,12 +144,14 @@ var CommentView = React.createClass({
   _renderCommentList() {
     return (
       <View style={{ flex: 1 }}>
+        <Text style={ styles.commentHeader }>Comments</Text>
         <CommentList
           comments={ this.state.comments }
           onReply={ this.onReply }
           user={ UserStore.getUser() }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          root={ true }
         />
       </View>
     );
@@ -245,6 +247,7 @@ var CommentView = React.createClass({
             mainNavigator={ this.props.mainNavigator }
             mainRoute={ this.props.mainRoute }
             expandText={ true }
+            card={ false }
           />
           { this._renderCommentList() }
           <View style={{ height: 20 }} />
@@ -264,6 +267,11 @@ var styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     paddingTop: 10
+  },
+  commentHeader: {
+    marginBottom: 4,
+    marginLeft: 10,
+    color: '#AAA'
   },
   topBar: {
     width: constants.width,
@@ -290,7 +298,9 @@ var styles = StyleSheet.create({
     height: 48,
     width: constants.width,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#EEE'
   },
   textInput: {
     flex: 1,

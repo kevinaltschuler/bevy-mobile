@@ -27,6 +27,9 @@ _.extend(NotificationStore, {
   handleDispatch: function(payload) {
     switch(payload.actionType) {
       case APP.LOAD:
+        if(!UserStore.loggedIn) {
+          break;
+        }
 
         this.notifications.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/notifications';
 

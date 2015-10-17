@@ -33,7 +33,9 @@ var CommentList = React.createClass({
     user: React.PropTypes.object,
     onReply: React.PropTypes.func,
     mainNavigator: React.PropTypes.object,
-    mainRoute: React.PropTypes.object
+    mainRoute: React.PropTypes.object,
+    root: React.PropTypes.bool // if its the root comment list 
+                               // being rendered by the comment view
   },
 
   getDefaultProps() {
@@ -62,6 +64,15 @@ var CommentList = React.createClass({
   },
 
   render() {
+    if(_.isEmpty(this.props.comments) && this.props.root) {
+      return (
+        <View style={ styles.container }>
+          <Text style={ styles.noComments }>
+            No Comments
+          </Text>
+        </View>
+      );
+    }
     return (
       <View style={ styles.container }>
         { this._renderComments() }
@@ -227,6 +238,11 @@ var CommentItem = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
+  },
+  noComments: {
+    flex: 1,
+    color: '#AAA',
+    textAlign: 'center'
   },
   comment: {
     backgroundColor: '#FFF',

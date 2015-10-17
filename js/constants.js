@@ -150,11 +150,20 @@ exports.setImageModalActions = function(actions) {
 };
 exports.getImageModalActions = function() {
   return imageModalActions;
-}
+};
 exports.setImageModalImages = function(images) {
   imageModalImages = images;
-}
+};
 exports.getImageModalImages = function() {
   return imageModalImages
-}
+};
+
+var actionSheetActions = {};
+var actionSheetOptions = [];
+exports.setActionSheetActions = function(actions) {
+  actionSheetActions = actions;
+};
+exports.getActionSheetActions = function() {
+  return actionSheetActions;
+};
 

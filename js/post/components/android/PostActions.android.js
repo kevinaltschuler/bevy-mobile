@@ -35,6 +35,12 @@ var PostActions = React.createClass({
     };
   },
 
+  goToAuthorProfile() {
+    var profileRoute = routes.MAIN.PROFILE;
+    profileRoute.user = this.props.post.author;
+    this.props.mainNavigator.push(profileRoute);
+  },
+
   getLikeCountText() {
     var likeCount = PostStore.getPostVoteCount(this.props.post._id);
     return (likeCount > 1 || likeCount == 0) 
@@ -97,7 +103,21 @@ var PostActions = React.createClass({
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
           onPress={() => {
-
+            constants.getActionSheetActions().show(
+              [
+                "Go To Author's Profile",
+                //"Edit Post",
+                //"Delete Post"
+               ],
+              function(key) {
+                //console.log(key);
+                switch(key) {
+                  case '0':
+                    this.goToAuthorProfile();
+                    break;
+                }
+              }.bind(this)
+            );
           }}
         >
           <View style={ styles.moreButton }>
