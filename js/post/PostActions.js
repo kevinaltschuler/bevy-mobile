@@ -29,18 +29,21 @@ var PostActions = {
 
 
 	/**
-	 * create a post
-	 * @param  {string} title
-	 * @param  {string} image_url
-	 * @param  {string} author
-	 * @param  {string} bevy
-	 */
-	create(title: String, images: Array, author: Object, bevy: Object) {
+	* create a post
+	* @param  {string} title
+	* @param  {string} image_url
+	* @param  {string} author
+	* @param  {string} bevy
+	*/
+	create(title, images, author, bevy, type, event, tag) {
 		dispatch(POST.CREATE, {
-			title: (title == undefined) ? 'untitled' : title,
-			images: (images == undefined) ? [] : images,
-			author: (author == undefined) ? null : author, // grab the current, logged in user?
-			bevy: (bevy == undefined) ? null : bevy, // grab the current, active bevy,
+		  title: (title == undefined) ? 'untitled' : title,
+		  images: (images == undefined) ? null : images,
+		  author: (author == undefined) ? null : author, // grab the current, logged in user?
+		  bevy: (bevy == undefined) ? null : bevy, // grab the current, active bevy
+		  type: (type == undefined) ? 'default' : type,
+		  event: (event == undefined) ? null : event,
+		  tag: (tag == undefined) ? null: tag
 		});
 	},
 

@@ -101,15 +101,31 @@ _.extend(PostStore, {
         var images = payload.images;
         var author = payload.author;
         var bevy = payload.bevy;
+        var type = payload.type;
+        var event = payload.event;
+        var tag = payload.tag;
 
-        console.log(payload);
+        var posts_expire_in;
+        if(bevy.settings.posts_expire_in && bevy.settings.posts_expire_in > 0) {
+          posts_expire_in = bevy.settings.posts_expire_in // in days
+          posts_expire_in *= (1000 * 60 * 60 * 24); // convert to seconds
+          posts_expire_in += Date.now(); // add now
+        } else {
+          // by default, dont expire
+          posts_expire_in = new Date('2035', '1', '1');
+        }
 
         var newPost = this.posts.add({
           title: title,
           comments: [],
           images: images,
           author: author._id,
-          bevy: bevy._id
+          bevy: bevy._id,
+          created: Date.now(),
+          expires: posts_expire_in,
+          type: type,
+          event: event,
+          tag: tag
         });
 
         newPost.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
@@ -118,15 +134,25 @@ _.extend(PostStore, {
         newPost.save(null, {
           success: function(post, response, options) {
             // success
+            newPost.set('_id', post.id);
+            newPost.set('images', post.get('images'));
+            newPost.set('links', post.get('links'));
             newPost.set('author', author);
-            newPost.set('bevy', tempBevy);
+            newPost.set('bevy', bevy);
+            newPost.set('type', type);
+            newPost.set('event', event);
             newPost.set('commentCount', 0);
+
+            console.log(response);
 
             this.posts.sort();
 
-            this.trigger(POST.CHANGE_ALL);
             this.trigger(POST.POSTED_POST);
-          }.bind(this)
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this),
+          error: function(err) {
+            console.log(err);
+          }
         });
 
         break;

@@ -11,7 +11,7 @@
 // imports
 var dispatch = require('./../shared/helpers/dispatch');
 var BEVY = require('./../constants').BEVY;
-var getSlug = require('speakingurl');
+//var getSlug = require('speakingurl');
 
 var BevyActions = {
 

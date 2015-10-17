@@ -16,7 +16,8 @@ var routes = {
     INPUT: { name: 'input' },
     BEVYPICKER: { name: 'bevypicker' },
     CREATEEVENT: { name: 'createevent' },
-    DATEPICKER: { name: 'datepicker' }
+    DATEPICKER: { name: 'datepicker' },
+    TAGPICKER: { name: 'tagpicker' }
   },
 
   SEARCH: {
