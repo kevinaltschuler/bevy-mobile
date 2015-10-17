@@ -24,6 +24,8 @@ var BevyStore = require('./../../../bevy/BevyStore');
 var BevyActions = require('./../../../bevy/BevyActions');
 var BEVY = constants.BEVY;
 
+var SubSwitch = require('./SubSwitch.android.js');
+
 var SearchView = React.createClass({
 
   // get proptypes
@@ -67,6 +69,22 @@ var SearchView = React.createClass({
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(bevies)
     });
   },
+_renderSubSwitch(bevy) {
+    var user = this.props.user;
+    var subbed = _.find(this.props.user.bevies, function(bevyId){ return bevyId == bevy._id }) != undefined;
+    // dont render this if you're an admin
+    if(_.contains(bevy.admins, user._id)) return <View/>;
+    return (
+        <SubSwitch
+          subbed={subbed}
+          loggedIn={ this.props.loggedIn }
+          authModalActions={ this.props.authModalActions }
+          bevy={bevy}
+          user={user}
+        />
+    );
+  },
+  
   render() {
     return (
       <View style={ styles.container }>
@@ -84,7 +102,8 @@ var SearchView = React.createClass({
                   style={styles.bevyButton}
                   onPress={() => {
                     // switch bevy
-                    
+                    BevyActions.switchBevy(bevy._id);
+                    this.props.searchNavigator.jumpTo(routes.SEARCH.OUT);
                     
                   }}
                 >
@@ -98,7 +117,7 @@ var SearchView = React.createClass({
                     </Text>
                   </View>
                 </TouchableHighlight>
-                
+                { this._renderSubSwitch(bevy) }
               </View>
             );
           }}
