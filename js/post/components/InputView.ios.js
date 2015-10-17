@@ -163,7 +163,10 @@ var InputView = React.createClass({
                   this.state.title,
                   (_.isEmpty(this.state.postImageURI)) ? [] : [this.state.postImageURI],
                   this.props.user,
-                  this.props.selected
+                  this.props.selected,
+                  null,
+                  null,
+                  this.props.tag
                 );
                 this.refs.input.setNativeProps({ text: '' }); // clear text
                 this.refs.input.blur(); // unfocus text field
@@ -178,8 +181,18 @@ var InputView = React.createClass({
         />
         <View style={ styles.body }>
           <View style={ styles.bevyPicker }>
-            <Text style={ styles.postingTo }>Posting To:</Text>
-            <Text style={ styles.bevyName }>{ this.props.selected.name }</Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0)'
+              onPress={() => {
+                this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
+              }}
+              style={ styles.toBevyPicker }
+            >
+              <View style={styles.bevyPickerButton}>
+                <Text style={ styles.postingTo }>Tag: </Text>
+                <Text style={{ flex: 1, fontSize: 15, fontWeight: 'bold', color: this.props.tag.color} }>{ this.props.tag.name }</Text>
+              </View>
+            </TouchableHighlight>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
@@ -187,12 +200,10 @@ var InputView = React.createClass({
               }}
               style={ styles.toBevyPicker }
             >
-              <Icon
-                name='chevron-right'
-                size={30}
-                color='#666'
-                style={{ width: 30, height: 30 }}
-              />
+              <View style={styles.bevyPickerButton}>
+                <Text style={ styles.postingTo }>Posting To:</Text>
+                <Text style={ styles.bevyName }>{ this.props.selected.name }</Text>
+              </View>
             </TouchableHighlight>
           </View>
           <View style={ styles.input }>
@@ -324,24 +335,30 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   bevyPicker: {
-    backgroundColor: '#eee',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    padding: 10
+    padding: 10,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1
+  },
+  bevyPickerButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
   postingTo: {
     fontSize: 15,
     marginRight: 10
   },
   bevyName: {
-    flex: 1,
     color: '#2CB673',
     fontSize: 15,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    flex: 1
   },
   toBevyPicker: {
-    alignSelf: 'flex-end'
+    flex: 1,
   },
   input: {
     flexDirection: 'row',
@@ -385,7 +402,9 @@ var styles = StyleSheet.create({
     width: 30,
     height: 30
   },
-
+  bevyPickerButton: {
+    flexDirection: 'row'
+  },
 
   bevyPickerList: {
     backgroundColor: '#fff',

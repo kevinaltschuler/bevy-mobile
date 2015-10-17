@@ -23,7 +23,8 @@ var SettingsItem = React.createClass({
   propTypes: {
     checked: React.PropTypes.bool,
     onPress: React.PropTypes.func,
-    title: React.PropTypes.string
+    title: React.PropTypes.string,
+    icon: React.PropTypes.element
   },
 
   getDefaultProps() {
@@ -49,6 +50,10 @@ var SettingsItem = React.createClass({
     )
     : <View />;
 
+    var icon = (this.props.icon)
+    ? this.props.icon
+    : <View/>;
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,0.1)'
@@ -58,6 +63,7 @@ var SettingsItem = React.createClass({
         }}
       >
         <View style={ styles.settingItem}>
+          { icon }
           <Text style={ styles.settingTitle }>
             { this.props.title }
           </Text>

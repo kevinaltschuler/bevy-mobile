@@ -33,6 +33,8 @@ var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var BevyPickerView = require('./BevyPickerView.ios.js');
 var InputView = require('./InputView.ios.js');
 var CreateEventView = require('./CreateEventView.ios.js');
+var DatePickerView = require('./DatePickerView.ios.js');
+var TagPickerView = require('./TagPickerView.ios.js')
 
 var PostActions = require('./../PostActions');
 
@@ -53,8 +55,16 @@ var NewPostView = React.createClass({
       // else, get the first non-frontpage bevy
       selected = this.props.myBevies[1];
     }
+    console.log(selected);
+    var tag = selected.tags[0];
+
     return {
       selected: selected,
+      datePicker: false,
+      date: new Date(),
+      time: new Date(),
+      location: '',
+      tag: tag
     };
   },
 
@@ -89,9 +99,48 @@ var NewPostView = React.createClass({
                   newPostNavigator={ navigator }
                   selected={ this.state.selected }
                   onSwitchBevy={(bevy) => {
-                    navigator.jumpTo(routes.NEWPOST.INPUT);
+                    navigator.pop();
                     this.setState({
-                      selected: bevy
+                      selected: bevy,
+                      tag: bevy.tags[0]
+                    });
+                  }}
+                  { ...this.props }
+                />
+              );
+              break;
+            case routes.NEWPOST.TAGPICKER.name:
+              return (
+                <TagPickerView
+                  newPostRoute={ route }
+                  newPostNavigator={ navigator }
+                  tag={ this.state.tag }
+                  selected={ this.state.selected }
+                  onSelectTag={(tag) => {
+                    navigator.pop();
+                    this.setState({
+                      tag: tag
+                    });
+                  }}
+                  { ...this.props }
+                />
+              );
+              break;
+            case routes.NEWPOST.DATEPICKER.name:
+              return (
+                <DatePickerView
+                  newPostRoute={ route }
+                  newPostNavigator={ navigator }
+                  date={ this.state.date }
+                  time={ this.state.time }
+                  onSetDate={(date) => {
+                    this.setState({
+                      date: date
+                    });
+                  }}
+                  onSetTime={(time) => {
+                    this.setState({
+                      time: time
                     });
                   }}
                   { ...this.props }
@@ -104,7 +153,9 @@ var NewPostView = React.createClass({
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
                   selected={ this.state.selected }
+                  tag={ this.state.tag }
                   date={ this.state.date }
+                  time={ this.state.time }
                   { ...this.props }
                 />
               );
@@ -116,6 +167,7 @@ var NewPostView = React.createClass({
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
                   selected={ this.state.selected }
+                  tag={ this.state.tag }
                   { ...this.props }
                 />
               );

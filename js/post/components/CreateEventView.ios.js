@@ -30,7 +30,6 @@ var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var window = require('Dimensions').get('window');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
-var DatePickerModal = require('./DatePickerModal.ios.js');
 var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
@@ -41,7 +40,6 @@ var CreateEventView = React.createClass({
   propTypes: {
     selected: React.PropTypes.object, 
     user: React.PropTypes.object,
-    date: React.PropTypes.Date
   },
 
   getInitialState() {
@@ -50,8 +48,8 @@ var CreateEventView = React.createClass({
       title: '',
       postImageURI: 'http://api.joinbevy.com/img/default_event_img.png',
       placeholderText: 'Drop a Line',
-      datePicker: false,
-      date: new Date(Date.now())
+      location: '',
+      info: ''
     };
   },
 
@@ -86,12 +84,6 @@ var CreateEventView = React.createClass({
     FileStore.off(FILE.UPLOAD_COMPLETE);
   },
 
-  setDate(date) {
-    this.setState({
-      date: date
-    })
-  },
-
   uploadImage() {
     UIImagePickerManager.showImagePicker({
       title: 'Upload Picture',
@@ -110,49 +102,112 @@ var CreateEventView = React.createClass({
     });
   },
 
-  hideDatePicker() {
-    this.setState({
-      datePicker: false
-    });
+  submit() {
 
+    if(!this.state.title || !this.state.location) 
+      return;
+
+    var date = new Date(this.props.date);
+    var time = new Date(this.props.time);
+    var dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 
+               time.getHours(), time.getMinutes(), time.getSeconds());
+
+    var description = this.state.info || '';
+
+    var tag = this.props.tag;
+
+    var event = {
+        date: dateTime,
+        location: this.state.location,
+        description: description,
+        attendees: []
+      };
+
+    // send the create action
+    PostActions.create(
+      this.state.title, // title
+      [this.state.postImageURI], // image_url
+      this.props.user, // author
+      this.props.selected, // bevy
+      'event', //type
+      event, // event
+      tag
+    );
+
+    // reset fields
+    this.refs.title.setNativeProps({ text: '' }); // clear text
+    this.refs.info.setNativeProps({ text: '' }); // clear text
+    this.refs.location.setNativeProps({ text: '' }); // clear text
+    this.refs.title.blur(); // unfocus text field
+    this.refs.info.blur(); // unfocus text field
+    this.refs.location.blur(); // unfocus text field
+    this.props.mainNavigator.pop(); // navigate back to main tab bar
   },
 
   _renderPostImage() {
-    if(_.isEmpty(this.state.postImageURI)) return <View />;
+    var image_url = (this.state.postImageURI) ? this.state.postImageURI : 'http://api.joinbevy.com/img/default_event_img.png';
     return (
         <Image
           source={{ uri: this.state.postImageURI }}
           style={{
             flex: 1,
             height: 150,
-            alignItems: 'flex-end',
-            justifyContent: 'flex-start'
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            flexDirection: 'column'
           }}
         >
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,.2)'
-            style={{borderRadius: 25, width: 50, height: 50}}
-            onPress={() => {
-              UIImagePickerManager.showImagePicker({
-                  returnBase64Image: false,
-                  returnIsVertical: true
-                }, (type, response) => {
-                  if (type !== 'cancel') {
-                    //console.log(response);
-                    FileActions.upload(response);
-                  } else {
-                    //console.log('Cancel');
-                  }
-              });
-            }}
-          >
-            <Icon
-              name='edit'
-              size={30}
-              color='#fff'
-              style={{ padding: 10, width: 50, height: 50 }}
+          <View style={{flex: 2, backgroundColor: 'rgba(0,0,0,.2)', width: constants.width}}/>
+          <View style={styles.imageOverlay}>
+            <TextInput 
+              ref='title'
+              multiline={ true }
+              onChange={(ev) => {
+                this.setState({
+                  title: ev.nativeEvent.text
+                });
+              }}
+              placeholder='Event Title'
+              style={ styles.titleInput }
             />
-          </TouchableHighlight>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,.2)'
+              style={{
+                  borderRadius: 20, 
+                  width: 40, height: 40, 
+                  backgroundColor: '#999', 
+                  padding: 5, 
+                  margin: 10,                  
+                  shadowColor: 'rgba(0,0,0,.3)',
+                  shadowOffset: {width: 2, height: 2},
+                  shadowOpacity: 1,
+                  shadowRadius: 5 }}
+              onPress={() => {
+                UIImagePickerManager.showImagePicker({
+                    returnBase64Image: false,
+                    returnIsVertical: true
+                  }, (type, response) => {
+                    if (type !== 'cancel') {
+                      //console.log(response);
+                      FileActions.upload(response);
+                    } else {
+                      //console.log('Cancel');
+                    }
+                });
+              }}
+            >
+              <Icon
+                name='camera'
+                size={25}
+                color='#fff'
+                style={{ 
+                  padding: 5, 
+                  width: 30, 
+                  height: 30, 
+                }}
+              />
+            </TouchableHighlight>
+          </View>
         </Image>
     );
   },
@@ -203,16 +258,7 @@ var CreateEventView = React.createClass({
             <TouchableHighlight
               underlayColor={'rgba(0,0,0,0)'}
               onPress={() => {
-                if(this.state.title.length <= 0) return; // dont post if text is empty
-                PostActions.create( // send action
-                  this.state.title,
-                  (_.isEmpty(this.state.postImageURI)) ? [] : [this.state.postImageURI],
-                  this.props.user,
-                  this.props.selected
-                );
-                this.refs.input.setNativeProps({ text: '' }); // clear text
-                this.refs.input.blur(); // unfocus text field
-                this.props.mainNavigator.pop(); // navigate back to main tab bar
+                this.submit();
               }}
               style={ styles.navButtonRight }>
               <Text style={ styles.navButtonTextRight }>
@@ -221,21 +267,20 @@ var CreateEventView = React.createClass({
             </TouchableHighlight>
           }
         />
-        <DatePickerModal
-          date={ this.state.date }
-          onHide={ this.hideDatePicker }
-          isVisible={ this.state.datePicker }
-          onSetDate={(date) => {
-            this.setState({
-              date: date
-            });
-          }}
-          { ...this.props }
-        />
         <View style={ styles.body }>
           <View style={ styles.bevyPicker }>
-            <Text style={ styles.postingTo }>Posting To:</Text>
-            <Text style={ styles.bevyName }>{ this.props.selected.name }</Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0)'
+              onPress={() => {
+                this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
+              }}
+              style={ styles.toBevyPicker }
+            >
+              <View style={styles.bevyPickerButton}>
+                <Text style={ styles.postingTo }>Tag: </Text>
+                <Text style={{ flex: 1, fontSize: 15, fontWeight: 'bold', color: this.props.tag.color} }>{ this.props.tag.name }</Text>
+              </View>
+            </TouchableHighlight>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
@@ -243,41 +288,49 @@ var CreateEventView = React.createClass({
               }}
               style={ styles.toBevyPicker }
             >
-              <Icon
-                name='chevron-right'
-                size={30}
-                color='#666'
-                style={{ width: 30, height: 30 }}
-              />
+              <View style={styles.bevyPickerButton}>
+                <Text style={ styles.postingTo }>Posting To:</Text>
+                <Text style={ styles.bevyName }>{ this.props.selected.name }</Text>
+              </View>
             </TouchableHighlight>
           </View>
           <ScrollView style={ styles.input }>
             { this._renderPostImage() }
-            <TextInput 
-              ref='input'
-              multiline={ true }
-              onChange={(ev) => {
-                this.setState({
-                  title: ev.nativeEvent.text
-                });
-              }}
-              placeholder='title'
-              style={ styles.textInput }
-            />
             <SettingsItem 
+              icon={<Icon name='clock' size={18} color='#666' style={{width: 18, height: 18, marginLeft: -6, marginRight: 5}}/>}
               checked={false}
               onPress={() => {
-                this.setState({
-                  datePicker: true
-                });
+                this.props.newPostNavigator.push(routes.NEWPOST.DATEPICKER);
               }}
-              title='date'
+              title={this.props.date.toLocaleDateString() + ' at ' + this.props.time.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}).replace(/(:\d{2}| )$/, "")}
             />
-            <SettingsItem 
-              checked={false}
-              onPress={() => {}}
-              title='location'
-            />
+            <View style={styles.location}>
+              <Icon name='location' size={20} color='#666' style={{width: 20, height: 20, marginLeft: -3}}/>
+              <TextInput 
+                ref='location'
+                style={styles.locationInput}
+                placeholder='Location'
+                onChange={(ev) => {
+                  this.setState({
+                    location: ev.nativeEvent.text
+                  });
+                }}
+              />
+            </View>
+            <View style={styles.moreInfo}>
+              <Icon name='information-circled' size={16} color='#666' style={{width: 16, height: 16, marginTop: 12, marginLeft: -5}}/>
+              <TextInput 
+                ref='info'
+                style={styles.moreInfoInput}
+                placeholder='More Info'
+                multiline={true}
+                onChange={(ev) => {
+                  this.setState({
+                    info: ev.nativeEvent.text
+                  });
+                }}
+              />
+            </View>
           </ScrollView>
         </View>
       </View>
@@ -322,24 +375,30 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   bevyPicker: {
-    backgroundColor: '#eee',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    padding: 10
+    padding: 10,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1
+  },
+  bevyPickerButton: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
   postingTo: {
     fontSize: 15,
     marginRight: 10
   },
   bevyName: {
-    flex: 1,
     color: '#2CB673',
     fontSize: 15,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    flex: 1
   },
   toBevyPicker: {
-    alignSelf: 'flex-end'
+    flex: 1,
   },
   input: {
     flex: 1,
@@ -354,6 +413,7 @@ var styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
+    flexDirection: 'row', 
     fontSize: 17,
     height: 40,
     paddingLeft: 15,
@@ -361,6 +421,15 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
+  },
+  titleInput: {
+    flex: 1,
+    fontSize: 26,
+    color: '#fff',
+    height: 48,
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   contentBar: {
     backgroundColor: '#fff',
@@ -386,8 +455,14 @@ var styles = StyleSheet.create({
     width: 30,
     height: 30
   },
-
-
+  imageOverlay: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    backgroundColor: 'rgba(0,0,0,.2)',
+    width: constants.width,
+    height: 50
+  },
   bevyPickerList: {
     backgroundColor: '#fff',
     flex: 1,
@@ -413,6 +488,47 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 17,
     paddingLeft: 15
+  },
+  bevyPickerButton: {
+    flexDirection: 'row'
+  },
+  location: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    height: 48,
+    alignItems: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd'
+  },
+  locationInput: {
+    flex: 1,
+    flexDirection: 'row', 
+    fontSize: 17,
+    height: 40,
+    paddingLeft: 0,
+    paddingTop: 5
+  },
+  moreInfo: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    flex: 1,
+    alignItems: 'flex-start'
+
+  },
+  moreInfoInput: {
+    flex: 1,
+    flexDirection: 'row', 
+    fontSize: 17,
+    paddingLeft: 5,
+    paddingTop: 5,
+    height: 250
   }
 });
 

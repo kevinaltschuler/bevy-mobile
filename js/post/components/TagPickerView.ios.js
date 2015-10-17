@@ -33,25 +33,25 @@ var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var PostActions = require('./../PostActions');
 
-var BevyPickerView = React.createClass({
+var TagPickerView = React.createClass({
 
   propTypes: {
-    onSwitchBevy: React.PropTypes.func,
+    onSelectTag: React.PropTypes.func,
     selected: React.PropTypes.object
   },
 
   getInitialState() {
-    var bevies = this.props.myBevies;
+    var tags = this.props.selected.tags;
     return {
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(bevies),
-      selected: this.props.selected
+      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(tags),
+      tag: this.props.tag
     };
   },
 
   componentWillReceiveProps(nextProps) {
-    var bevies = nextProps.myBevies;
+    var tags = nextProps.selected.tags;
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(bevies)
+      dataSource: this.state.dataSource.cloneWithRows(tags)
     });
   },
 
@@ -86,7 +86,7 @@ var BevyPickerView = React.createClass({
             center={ 
               <View style={ styles.navTitle }>
                 <Text style={ styles.navTitleText }>
-                  Posting To...
+                  Tag: {this.state.tag.name}
                 </Text>
               </View>
             }
@@ -97,23 +97,23 @@ var BevyPickerView = React.createClass({
         <ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
-          renderRow={(bevy) => {
-            var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
-            if(bevy._id == -1) return <View />; // disallow posting to frontpage
+          renderRow={(tag) => {
             return (
               <TouchableHighlight
                 underlayColor='rgba(0,0,0,.1)'
                 onPress={() => {
-                  this.props.onSwitchBevy(bevy);
+                  this.props.onSelectTag(tag);
                 }.bind(this)}
               >
                 <View style={ styles.bevyPickerItem }>
-                  <Image
-                    style={ styles.bevyPickerImage }
-                    source={{ uri: imageUri }}
-                  />
+                  <View style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 18,
+                    backgroundColor: tag.color
+                  }}/>
                   <Text style={ styles.bevyPickerName }>
-                    { bevy.name }
+                    { tag.name }
                   </Text>
                 </View>
               </TouchableHighlight>
@@ -206,4 +206,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = BevyPickerView;
+module.exports = TagPickerView;

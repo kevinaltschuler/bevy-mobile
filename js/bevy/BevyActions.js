@@ -11,7 +11,7 @@
 // imports
 var Dispatcher = require('./../shared/dispatcher');
 var BEVY = require('./../constants').BEVY;
-var getSlug = require('speakingurl');
+//var getSlug = require('speakingurl');
 
 var BevyActions = {
 
