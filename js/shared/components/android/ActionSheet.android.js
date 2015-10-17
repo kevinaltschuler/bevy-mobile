@@ -46,7 +46,7 @@ var ActionSheet = React.createClass({
 
   select(key) {
     this.state.callback(key);
-    this.cancel();
+    setTimeout(this.cancel, 500);
   },
 
   cancel() {
