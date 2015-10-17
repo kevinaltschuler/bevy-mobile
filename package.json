@@ -12,6 +12,7 @@
     "react-native": "^0.12.0",
     "react-native-blur": "^0.7.3",
     "react-native-collapsible": "^0.4.0",
+    "react-native-dropdown": "^0.0.4",
     "react-native-image-picker": "https://github.com/kevtastic/react-native-image-picker.git#master",
     "react-native-keyboardevents": "^0.4.4",
     "react-native-side-menu": "^0.9",
