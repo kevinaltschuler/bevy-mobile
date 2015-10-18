@@ -13,6 +13,7 @@ var {
   View,
   Navigator,
   TouchableHighlight,
+  ActionSheetIOS
 } = React;
 
 var BackButton = require('./../../shared/components/BackButton.ios.js');
@@ -21,7 +22,7 @@ var Navbar = require('./../../shared/components/Navbar.ios.js');
 var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
-
+var PostActions = require('./../../post/PostActions');
 
 var _ = require('underscore');
 var window = require('Dimensions').get('window');
@@ -140,8 +141,20 @@ var BevyView = React.createClass({
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0.1)'}
         onPress={() => {
-          this.setState({
-            showSort: true
+          ActionSheetIOS.showActionSheetWithOptions({
+            options: ['top', 'new', 'cancel'],
+            cancelButtonIndex: 2
+          },
+          (buttonIndex) => {
+            switch(buttonIndex) {
+              case 0:
+                var sortType = 'top';
+                break;
+              case 1:
+                var sortType = 'new';
+                break;
+            }
+            PostActions.sort(sortType);
           });
         }}
         style={{

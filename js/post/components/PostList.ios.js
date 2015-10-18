@@ -29,7 +29,6 @@ var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
 var TagModal = require('./TagModal.ios.js');
-var SortModal = require('./SortModal.ios.js');
 
 var SCROLLVIEW = 'ScrollView';
 var LISTVIEW = 'ListView';
@@ -144,11 +143,6 @@ var PostList = React.createClass({
             frontpageFilters={ this.props.frontpageFilters }
             activeTags={this.props.activeTags}
             myBevies={ this.props.myBevies }
-          />
-          <SortModal 
-            isVisible={this.props.showSort} 
-            mainNavigator={this.props.mainNavigator}
-            onHide={this.props.onHideSort}
           />
           <ListView 
             ref={LISTVIEW}
