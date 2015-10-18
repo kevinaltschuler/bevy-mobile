@@ -84,6 +84,9 @@ exports.BEVY = {
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
 
+  LOADING: 'bevy_loading',
+  LOADED: 'bevy_loaded',
+
   SEARCHING: 'bevy_searching',
   SEARCH_COMPLETE: 'bevy_search_complete',
   CHANGE_ALL: 'bevy_change_all',

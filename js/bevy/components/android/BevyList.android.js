@@ -10,9 +10,15 @@ var {
   ListView,
   View,
   Text,
-  StyleSheet
+  StyleSheet,
+  ProgressBarAndroid
 } = React;
 var BevyListItem = require('./BevyListItem.android.js');
+
+var _ = require('underscore');
+var constants = require('./../../../constants');
+var BEVY = constants.BEVY;
+var BevyStore = require('./../../BevyStore');
 
 var BevyList = React.createClass({
   propTypes: {
@@ -24,13 +30,24 @@ var BevyList = React.createClass({
   },
 
   getInitialState() {
-    var bevyData = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var bevies = (this.props.loggedIn) 
       ? this.props.myBevies 
       : this.props.publicBevies;
     return {
-      bevies: bevyData.cloneWithRows(bevies)
+      ds: ds.cloneWithRows(bevies),
+      bevies: bevies,
+      loading: true // set to loading by default
     };
+  },
+
+  componentDidMount() {
+    BevyStore.on(BEVY.LOADING, this._onBevyLoading);
+    BevyStore.on(BEVY.LOADED, this._onBevyLoaded);
+  },
+  componentWillUnmount() {
+    BevyStore.off(BEVY.LOADING, this._onBevyLoading);
+    BevyStore.off(BEVY.LOADED, this._onBevyLoaded);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -38,20 +55,37 @@ var BevyList = React.createClass({
       ? nextProps.myBevies 
       : nextProps.publicBevies;
     this.setState({
-      bevies: this.state.bevies.cloneWithRows(bevies)
+      bevies: bevies,
+      ds: this.state.ds.cloneWithRows(bevies)
     });
   },
 
-  _renderHeader() {
-    return <View />;
+  _onBevyLoading() {
+    this.setState({
+      loading: true
+    });
+  },
+
+  _onBevyLoaded() {
+    this.setState({
+      loading: false
+    });
   },
 
   render() {
+    if(this.state.loading) {
+      return (
+        <ProgressBarAndroid />
+      );
+    } else if (_.isEmpty(this.state.bevies)) {
+      return (
+        <Text style={ styles.noBevies }>No Bevies</Text>
+      );
+    }
     return (
       <ListView 
-        dataSource={ this.state.bevies }
+        dataSource={ this.state.ds }
         style={ styles.container }
-        renderHeader={ this._renderHeader }
         renderRow={(bevy) => {
           return (
             <BevyListItem
@@ -71,7 +105,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column'
-  }
+  },
+  no
 });
 
 module.exports = BevyList;

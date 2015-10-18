@@ -64,18 +64,33 @@ _.extend(BevyStore, {
       case APP.LOAD:
         var user = UserStore.getUser();
         if(!_.isEmpty(user._id)) {
+          // explicitly set the collection url for the user
           this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
+
+          // trigger loading event
+          this.trigger(BEVY.LOADING);
+
           this.myBevies.fetch({
             reset: true,
             success: function(bevies, response, options) {
+              // add the dummy frontpage bevy to the collection - for ui purposes
               this.myBevies.unshift({
                 _id: '-1',
                 name: 'Frontpage'
               });
-              //this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
-              //this.frontpageFilters = _.reject(this.frontpageFilters, function(bevy_id){ return bevy_id == -1 });
+              // set frontpage filters - for filtering by bevy on the frontpage
+              this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
+              // exclude the frontpage in the filter list
+              this.frontpageFilters = _.reject(
+                this.frontpageFilters, 
+                function(bevy_id){ 
+                  return bevy_id == -1;
+                }
+              );
 
+              // trigger finished events
               this.trigger(BEVY.CHANGE_ALL);
+              this.trigger(BEVY.LOADED);
             }.bind(this)
           });
         } else {
@@ -85,14 +100,18 @@ _.extend(BevyStore, {
             name: 'Frontpage'
           });
         }
+        // load public bevies
         this.publicBevies.url = constants.apiurl + '/bevies';
+        // trigger loading event
+        this.trigger(BEVY.LOADING);
+
         this.publicBevies.fetch({
           reset: true,
           success: function(bevies, response, options) {
             this.trigger(BEVY.CHANGE_ALL);
+            this.trigger(BEVY.LOADED);
           }.bind(this)
         });
-
         // trigger immediately anyways
         this.trigger(BEVY.CHANGE_ALL);
 
