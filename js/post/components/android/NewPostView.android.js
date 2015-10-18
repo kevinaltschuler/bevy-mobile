@@ -132,7 +132,7 @@ var InputView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => {
               // go back
               this.props.mainNavigator.pop();
@@ -148,7 +148,7 @@ var InputView = React.createClass({
           </TouchableNativeFeedback>
           <Text style={ styles.topBarTitle }>New Post</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={ this.submitPost }
           >
             <View style={ styles.postButton }>
@@ -206,7 +206,7 @@ var InputView = React.createClass({
         />
         <View style={ styles.actionBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => {}}
           >
             <View style={ styles.addMediaButton }>
@@ -218,7 +218,7 @@ var InputView = React.createClass({
             </View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => {}}
           >
             <View style={ styles.addMediaButton }>
@@ -267,7 +267,7 @@ var BevyPickerView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => {
               // go back
               this.props.newPostNavigator.pop();
@@ -283,7 +283,7 @@ var BevyPickerView = React.createClass({
           </TouchableNativeFeedback>
           <Text style={ styles.topBarTitle }>Posting To...</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#AAA', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => {
               // go back
               this.props.newPostNavigator.pop();
@@ -342,7 +342,7 @@ var BevyPickerItem = React.createClass({
     var image_url = BevyStore.getBevyImage(this.props.bevy._id);
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#CCC', false) }
+        background={ TouchableNativeFeedback.Ripple('#DDD', false) }
         onPress={() => {
           this.props.onSwitchBevy(this.props.bevy);
         }} 
@@ -351,7 +351,7 @@ var BevyPickerItem = React.createClass({
           { this._renderIcon() }
           <Image 
             style={ styles.bevyImage }
-            source={{ uri: image_url + '?w=50&h=50' }}
+            source={{ uri: image_url }}
           />
           <Text style={ styles.bevyName }>{ this.props.bevy.name }</Text>
         </View>
@@ -395,6 +395,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 12,
     paddingRight: 12
+  },
+  postButtonText: {
+    color: '#2CB673'
   },
   postingToBar:{
     height: 40,
