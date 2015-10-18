@@ -13,6 +13,7 @@ var {
   View,
   Navigator,
   TouchableHighlight,
+  ActionSheetIOS
 } = React;
 
 var BackButton = require('./../../shared/components/BackButton.ios.js');
@@ -21,7 +22,7 @@ var Navbar = require('./../../shared/components/Navbar.ios.js');
 var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
-
+var PostActions = require('./../../post/PostActions');
 
 var _ = require('underscore');
 var window = require('Dimensions').get('window');
@@ -42,7 +43,8 @@ var BevyView = React.createClass({
     var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#666' : '#fff';
     return {
       showTags: false,
-      fontColor: color
+      fontColor: color,
+      showSort: false
     }
   },
 
@@ -51,12 +53,6 @@ var BevyView = React.createClass({
     console.log(this.props.bevyRoute.name, routes.BEVY.POSTLIST.name);
     this.setState({
       fontColor: color
-    })
-  },
-
-  onHideTags() {
-    this.setState({
-      showTags: false
     })
   },
 
@@ -84,13 +80,23 @@ var BevyView = React.createClass({
           <PostList
             { ...this.props }
             showTags={ this.state.showTags }
-            onHideTags={ this.onHideTags}
+            onHideTags={() => {
+              this.setState({
+                showTags: false
+              })
+            }}
+            showSort={ this.state.showSort }
+            onHideSort={()=>{
+              this.setState({
+                showSort: false
+              })
+            }}
           />
         );
         break;
     }
     
-    var sortButton = (this.props.bevyRoute.name == routes.BEVY.POSTLIST.name)
+    var tagButton = (this.props.bevyRoute.name == routes.BEVY.POSTLIST.name)
     ? (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0.1)'}
@@ -131,6 +137,46 @@ var BevyView = React.createClass({
       this.props.bevyNavigator.push(routes.BEVY.INFO)
     }} />;
 
+    var sortButton = (
+      <TouchableHighlight
+        underlayColor={'rgba(0,0,0,0.1)'}
+        onPress={() => {
+          ActionSheetIOS.showActionSheetWithOptions({
+            options: ['top', 'new', 'cancel'],
+            cancelButtonIndex: 2
+          },
+          (buttonIndex) => {
+            switch(buttonIndex) {
+              case 0:
+                var sortType = 'top';
+                break;
+              case 1:
+                var sortType = 'new';
+                break;
+            }
+            PostActions.sort(sortType);
+          });
+        }}
+        style={{
+          marginRight: 10,
+          borderRadius: 17,
+          width: 35,
+          height: 35,
+          padding: 6
+        }}
+      >
+        <Icon
+          name='android-funnel'
+          size={25}
+          color={this.state.fontColor}
+          style={{
+            width: 25,
+            height: 25
+          }}
+        />
+      </TouchableHighlight>
+    );
+
     var right = (
       <View style={{
         flex: 1,
@@ -139,6 +185,7 @@ var BevyView = React.createClass({
         justifyContent: 'flex-end'
       }}>
         { sortButton }
+        { tagButton }
         { infoButton }
       </View>
     );
@@ -173,7 +220,7 @@ var BevyView = React.createClass({
           fontColor={ this.state.fontColor }
           { ...this.props }
         />
-        { view }
+          { view }
       </View>
     );
   }

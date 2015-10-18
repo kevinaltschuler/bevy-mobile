@@ -27,7 +27,6 @@ var PostActions = {
 		});
 	},
 
-
 	/**
 	* create a post
 	* @param  {string} title
