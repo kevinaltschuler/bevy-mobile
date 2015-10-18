@@ -78,7 +78,6 @@ var TagModal = React.createClass({
     this.setState({
       activeTags: activeTags
     });
-    console.log('tag modal', activeTags);
     BevyActions.updateTags(activeTags);
   },
 

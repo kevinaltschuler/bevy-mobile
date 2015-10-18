@@ -57,16 +57,17 @@ _.extend(PostStore, {
         this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         this.posts.comparator = this.sortByTop;
 
+        // trigger loading event so frontend can respond
+        this.trigger(POST.LOADING);
+
         this.posts.fetch({
           reset: true,
           success: function(posts, response, options) {
+            // trigger events to let frontend knows that data is available
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
-        // trigger anyways
-        this.trigger(POST.CHANGE_ALL); 
         break;
 
       case POST.FETCH:
@@ -80,22 +81,22 @@ _.extend(PostStore, {
         } else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
         }
-        // reset all posts first
+        // reset all posts first, and trigger loading
         this.posts.reset();
+        this.trigger(POST.LOADING);
         this.trigger(POST.CHANGE_ALL);
         
         // then fetch
         this.posts.fetch({
           success: function(posts, response, options) {
+            // trigger loaded so frontend knows that data is available
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
         break;
 
       case POST.CREATE:
-        // collect payload vars
         var title = payload.title;
         var images = payload.images;
         var author = payload.author;
@@ -106,6 +107,7 @@ _.extend(PostStore, {
 
         var posts_expire_in;
         if(bevy.settings.posts_expire_in && bevy.settings.posts_expire_in > 0) {
+          // if the bevy has a posts_expire_in setting, then apply it
           posts_expire_in = bevy.settings.posts_expire_in // in days
           posts_expire_in *= (1000 * 60 * 60 * 24); // convert to seconds
           posts_expire_in += Date.now(); // add now
@@ -114,6 +116,7 @@ _.extend(PostStore, {
           posts_expire_in = new Date('2035', '1', '1');
         }
 
+        // create new backbone model
         var newPost = this.posts.add({
           title: title,
           comments: [],
@@ -127,12 +130,13 @@ _.extend(PostStore, {
           tag: tag
         });
 
+        // explicitly set url for safety
         newPost.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
 
         // save to server
         newPost.save(null, {
           success: function(post, response, options) {
-            // success
+            // repopulate the model
             newPost.set('_id', post.id);
             newPost.set('images', post.get('images'));
             newPost.set('links', post.get('links'));
@@ -142,10 +146,10 @@ _.extend(PostStore, {
             newPost.set('event', event);
             newPost.set('commentCount', 0);
 
-            console.log(response);
-
+            // resort the posts to accomodate for the new post
             this.posts.sort();
 
+            // trigger events
             this.trigger(POST.POSTED_POST);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this),
@@ -153,7 +157,6 @@ _.extend(PostStore, {
             console.log(err);
           }
         });
-
         break;
 
       case POST.VOTE:
@@ -236,9 +239,12 @@ _.extend(PostStore, {
           this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         }
 
+        this.trigger(POST.LOADING);
+
         this.posts.fetch({
           reset: true,
           success: function(posts, response, options) {
+            this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
@@ -246,7 +252,7 @@ _.extend(PostStore, {
         // clear posts immediately
         this.posts.reset();
         this.trigger(POST.CHANGE_ALL);
-        this.trigger(POST.LOADED);
+        //this.trigger(POST.LOADED);
 
         break;
 

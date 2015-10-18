@@ -11,7 +11,8 @@ var {
   ListView,
   Text,
   Image,
-  StyleSheet
+  StyleSheet,
+  ProgressBarAndroid
 } = React;
 var BevyBar = require('./../../../bevy/components/android/BevyBar.android.js');
 var NewPostCard = require('./NewPostCard.android.js');
@@ -19,6 +20,8 @@ var Post = require('./Post.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var POST = constants.POST;
+var PostStore = require('./../../PostStore');
 
 var PostList = React.createClass({
   propTypes: {
@@ -48,16 +51,36 @@ var PostList = React.createClass({
     var posts = this.props.allPosts;
     posts = this.prunePosts(posts);
     return {
-      posts: ds.cloneWithRows(posts)
+      posts: ds.cloneWithRows(posts),
+      loading: true // at first, posts will still be loading on the store
     };
+  },
+
+  componentDidMount() {
+    PostStore.on(POST.LOADING, this._onPostsLoading);
+    PostStore.on(POST.LOADED, this._onPostsLoaded);
+  },
+  componentWillUnmount() {
+    PostStore.off(POST.LOADING, this._onPostsLoading);
+    PostStore.off(POST.LOADED, this._onPostsLoaded);
   },
 
   componentWillReceiveProps(nextProps) {
     var posts = nextProps.allPosts;
     posts = this.prunePosts(posts);
-    console.log(nextProps.activeTags);
     this.setState({
       posts: this.state.posts.cloneWithRows(posts)
+    });
+  },
+
+  _onPostsLoading() {
+    this.setState({
+      loading: true
+    });
+  },
+  _onPostsLoaded() {
+    this.setState({
+      loading: false
     });
   },
 
@@ -96,7 +119,16 @@ var PostList = React.createClass({
   },
 
   render() {
-    if(_.isEmpty(this.props.allPosts)) {
+    if(this.state.loading) {
+      return (
+        <View style={ styles.container }> 
+          { this._renderHeader() }     
+          <View style={ styles.noPostsContainer }>   
+            <ProgressBarAndroid styleAttr="Inverse" />
+          </View>
+        </View>
+      );
+    } else if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
       return (
         <View style={ styles.container }> 
           { this._renderHeader() }     

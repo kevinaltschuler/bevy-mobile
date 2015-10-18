@@ -54,6 +54,7 @@ exports.POST = {
 
   FETCH: 'post_fetch',
 
+  LOADING: 'post_loading',
   LOADED: 'post_loaded',
   CHANGE_ALL: 'post_change_all',
   CHANGE_ONE: 'post_change_one:'
