@@ -159,7 +159,6 @@ exports.getImageModalImages = function() {
 };
 
 var actionSheetActions = {};
-var actionSheetOptions = [];
 exports.setActionSheetActions = function(actions) {
   actionSheetActions = actions;
 };
@@ -167,3 +166,10 @@ exports.getActionSheetActions = function() {
   return actionSheetActions;
 };
 
+var tagModalActions = {};
+exports.setTagModalActions = function(actions) {
+  tagModalActions = actions;
+};
+exports.getTagModalActions = function() {
+  return tagModalActions;
+};

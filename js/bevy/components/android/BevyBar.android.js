@@ -59,7 +59,8 @@ var BevyBar = React.createClass({
   },
 
   openTagModal() {
-
+    var actions = constants.getTagModalActions();
+    actions.show(this.props.activeBevy.tags);
   },
 
   _renderImage() {
@@ -190,8 +191,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     opacity: 1,
-    marginBottom: 8,
-    paddingLeft: 20
+    marginBottom: 8
   },
   bevyImageWrapper: {
     position: 'absolute',
@@ -225,7 +225,8 @@ var styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     textAlign: 'left',
-    color: '#FFF'
+    color: '#FFF',
+    marginLeft: 20
   },
   infoButton: {
     height: 48,
