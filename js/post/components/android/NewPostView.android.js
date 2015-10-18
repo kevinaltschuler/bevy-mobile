@@ -17,6 +17,7 @@ var {
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
+var Dropdown = require('react-native-dropdown-android');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -92,11 +93,17 @@ var InputView = React.createClass({
 
   getInitialState() {
     return {
+      selectedTag: 0,
       postInput: ''
     };
   },
 
+  submitPost() {
+
+  },
+
   render() {
+    var tags = _.pluck(this.props.selectedBevy.tags, 'name');
     return (
       <View style={ styles.container }>
         <View style={ styles.topBar }>
@@ -121,7 +128,11 @@ var InputView = React.createClass({
             onPress={ this.submitPost }
           >
             <View style={ styles.postButton }>
-              <Text style={ styles.postButtonText }>Post</Text>
+              <Icon
+                name='send'
+                size={ 30 }
+                color='#2CB673'
+              />
             </View>
           </TouchableNativeFeedback>
         </View>
@@ -140,6 +151,22 @@ var InputView = React.createClass({
               </Text>
             </View>
           </TouchableNativeFeedback>
+        </View>
+        <View style={ styles.tagBar }>
+          <View style={[ styles.tagCircle, { 
+            backgroundColor: this.props.selectedBevy.tags[this.state.selectedTag].color
+          }]}>
+          </View>
+          <Dropdown
+            style={{ height: 20, width: 200}}
+            values={ tags } 
+            selected={ this.state.selectedTag } 
+            onChange={(data) => {
+              this.setState({
+                selectedTag: data.selected
+              });
+            }} 
+          />
         </View>
         <TextInput
           ref='Input'
@@ -345,9 +372,6 @@ var styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12
   },
-  postButtonText: {
-    color: '#000'
-  },
   postingToBar:{
     height: 40,
     width: constants.width,
@@ -375,6 +399,23 @@ var styles = StyleSheet.create({
   bevyPickerButtonHintText: {
     textAlign: 'left',
     color: '#DDD'
+  },
+  tagBar: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    paddingHorizontal: 10
+  },
+  tagTitle: {
+    color: '#333'
+  },
+  tagCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#F00',
+    marginRight: 10
   },
   postInput: {
     flex: 1,

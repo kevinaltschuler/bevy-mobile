@@ -203,7 +203,11 @@ var CommentView = React.createClass({
           onPress={ this.postReply }
         >
           <View style={ styles.sendButton }>
-            <Text style={ styles.sendButtonText }>Send</Text>
+            <Icon
+              name='send'
+              size={ 30 }
+              color='#2CB673'
+            />
           </View>
         </TouchableNativeFeedback>
       </View>
@@ -312,9 +316,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 8,
     paddingRight: 8
-  },
-  sendButtonText: {
-    color: '#2CB673'
   },
   replyBar: {
     backgroundColor: '#2CB673',

@@ -17,6 +17,7 @@ var {
 var ChatBar = require('./ChatBar.android.js');
 var MessageItem = require('./MessageItem.android.js');
 var InvertibleScrollView = require('react-native-invertible-scroll-view');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -107,7 +108,11 @@ var MessageView = React.createClass({
           onPress={ this.onSubmitEditing }
         >
           <View style={ styles.sendMessageButton }>
-            <Text style={ styles.sendMessageButtonText }>Send</Text>
+            <Icon
+              name='send'
+              size={ 30 }
+              color='#2CB673'
+            />
           </View>
         </TouchableNativeFeedback>
       </View>
@@ -173,9 +178,6 @@ var styles = StyleSheet.create({
     marginLeft: 8,
     paddingLeft: 12,
     paddingRight: 12
-  },
-  sendMessageButtonText: {
-    color: '#2CB673'
   }
 });
 
