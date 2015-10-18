@@ -22,16 +22,31 @@ var TagModalItem = React.createClass({
     onSelect: React.PropTypes.func
   },
 
+  getInitialState() {
+    return {
+      selected: this.props.selected
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      selected: nextProps.selected
+    });
+  },
+
   onSelect() {
+    this.setState({
+      selected: !this.state.selected
+    });
     this.props.onSelect(this.props.tag, this.props.index);
   },
 
   _renderCheckedIcon() {
     var name = '';
-    if(!this.props.selected) {
-      name = 'check-box';
+    if(this.state.selected) {
+      name = 'radio-button-checked';
     } else {
-      name = 'check-box-outline-blank';
+      name = 'radio-button-unchecked';
     }
     return (
       <TouchableNativeFeedback

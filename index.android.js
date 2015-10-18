@@ -245,7 +245,7 @@ var App = React.createClass({
         />
         <ImageModal />
         <ActionSheet />
-        <TagModal />
+        <TagModal activeTags={ this.state.activeTags }/>
       </View>
     );
   }

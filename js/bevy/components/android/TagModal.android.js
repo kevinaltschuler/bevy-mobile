@@ -17,8 +17,13 @@ var TagModalItem = require('./TagModalItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var BevyActions = require('./../../BevyActions');
 
 var TagModal = React.createClass({
+  propTypes: {
+    activeTags: React.PropTypes.array
+  },
+
   getInitialState() {
     return {
       visible: false,
@@ -35,16 +40,21 @@ var TagModal = React.createClass({
     constants.setTagModalActions(actions);
   },
   componentWillUnmount() {
+    this.hide();
+  },
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      activeTags: nextProps.activeTags
+    });
   },
 
   show(tags) {
     this.setState({
       visible: true,
       tags: tags,
-      activeTags: _.map(tags, (tag, index) => index)
+      activeTags: this.props.activeTags
     });
-    console.log(this.state.activeTags);
   },
 
   hide() {
@@ -55,21 +65,21 @@ var TagModal = React.createClass({
     });
   },
 
-  onTagSelect(tag, index) {
+  onTagSelect(tag) {
     var activeTags = this.state.activeTags;
-    if(_.contains(this.state.activeTags, index)) {
+    if(_.contains(this.state.activeTags, tag)) {
       // if its already selected, deselect it
-      activeTags = _.reject(activeTags, ($index) => $index == index);
+      activeTags = _.reject(activeTags, ($tag) => $tag.name == tag.name);
     } else {
       // if its not selected, select it
-      activeTags.push(index);
+      activeTags.push(tag);
     }
-    // resort by ascending order
-    _.sortBy(activeTags, ($index) => $index);
     // set the state
     this.setState({
       activeTags: activeTags
     });
+    console.log('tag modal', activeTags);
+    BevyActions.updateTags(activeTags);
   },
 
   _renderTags() {
@@ -81,7 +91,7 @@ var TagModal = React.createClass({
           key={ 'tagmodalitem:' + key }
           tag={ tag }
           index={ key }
-          selected={ _.contains(this.state.activeTags, key) }
+          selected={ _.contains(this.state.activeTags, tag) }
           onSelect={ this.onTagSelect }
         />
       );
@@ -129,7 +139,6 @@ var styles = StyleSheet.create({
   },
   modal: {
     width: constants.width * (2/3),
-    //height: constants.height * (2/3),
     backgroundColor: '#FFF',
     paddingVertical: 10,
     borderRadius: 5

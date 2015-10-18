@@ -21,13 +21,7 @@ var BevyActions = {
       user: (user == undefined) ? {} : user
     });
   },
-
-  fetchPublic() {
-    Dispatcher.dispatch({
-      actionType: BEVY.FETCH_PUBLIC
-    });
-  },
-
+  
   create(name, description, image_url, slug) {
     Dispatcher.dispatch({
       actionType: BEVY.CREATE,

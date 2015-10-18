@@ -143,6 +143,9 @@ exports.getMainTabBar = function() {
   return mainTabBar;
 }
 
+// ANDROID STUFF
+// DONT TOUCH THIS KEVIN OR ELSE
+
 var imageModalActions = {}
 var imageModalImages = [];
 exports.setImageModalActions = function(actions) {

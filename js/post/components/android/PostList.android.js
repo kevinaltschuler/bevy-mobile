@@ -29,7 +29,8 @@ var PostList = React.createClass({
     loggedIn: React.PropTypes.bool,
     showNewPostCard: React.PropTypes.bool,
     renderHeader: React.PropTypes.bool,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    activeTags: React.PropTypes.array
   },
 
   getDefaultProps() {
@@ -37,21 +38,36 @@ var PostList = React.createClass({
       allPosts: [],
       showNewPostCard: false,
       renderHeader: true,
-      activeBevy: {}
+      activeBevy: {},
+      activeTags: ['-1'] // default is -1, which means show all posts
     }
   },
 
   getInitialState() {
-    var posts = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    var posts = this.props.allPosts;
+    posts = this.prunePosts(posts);
     return {
-      posts: posts.cloneWithRows(this.props.allPosts)
+      posts: ds.cloneWithRows(posts)
     };
   },
 
   componentWillReceiveProps(nextProps) {
+    var posts = nextProps.allPosts;
+    posts = this.prunePosts(posts);
+    console.log(nextProps.activeTags);
     this.setState({
-      posts: this.state.posts.cloneWithRows(nextProps.allPosts)
+      posts: this.state.posts.cloneWithRows(posts)
     });
+  },
+
+  prunePosts(posts) {
+    posts = _.filter(posts, (post) => {
+      if(this.props.activeBevy._id == '-1') return true;
+      if(post.tag == undefined) return false;
+      return _.findWhere(this.props.activeTags, { name: post.tag.name }) != undefined;
+    });
+    return posts;
   },
 
   _renderHeader() {
