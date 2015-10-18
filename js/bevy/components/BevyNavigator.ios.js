@@ -90,7 +90,7 @@ var BevyView = React.createClass({
         break;
     }
     
-    var sortButton = (this.props.bevyRoute.name == routes.BEVY.POSTLIST.name)
+    var tagButton = (this.props.bevyRoute.name == routes.BEVY.POSTLIST.name)
     ? (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0.1)'}
@@ -139,6 +139,7 @@ var BevyView = React.createClass({
         justifyContent: 'flex-end'
       }}>
         { sortButton }
+        { tagButton }
         { infoButton }
       </View>
     );
