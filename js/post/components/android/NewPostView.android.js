@@ -23,6 +23,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyStore = require('./../../../bevy/BevyStore');
+var PostActions = require('./../../PostActions');
 
 var NewPostView = React.createClass({
   propTypes: {
@@ -88,7 +89,8 @@ var InputView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
     newPostNavigator: React.PropTypes.object,
-    selectedBevy: React.PropTypes.object
+    selectedBevy: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -99,7 +101,29 @@ var InputView = React.createClass({
   },
 
   submitPost() {
+    // disallow empty post - for now
+    if(_.isEmpty(this.state.postInput)) return;
 
+    // send action
+    PostActions.create(
+      this.state.postInput, // title
+      [], // images
+      this.props.user, // author
+      this.props.selectedBevy, // bevy to post to
+      'default', // post type - this is just a normal post
+      {}, // event - keep this empty
+      this.props.selectedBevy.tags[this.state.selectedTag] // tag to post to
+    );
+
+    // clear state
+    this.setState({
+      selectedTag: 0,
+      postInput: ''
+    });
+
+    // navigate back 
+    // TODO: navigate to comment view?
+    this.props.mainNavigator.pop();
   },
 
   render() {

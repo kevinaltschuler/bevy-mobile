@@ -23,11 +23,6 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 
 var ImageModal = React.createClass({
-  propTypes: {
-    visible: React.PropTypes.bool,
-    onDismiss: React.PropTypes.func
-  },
-
   getInitialState() {
     return {
       visible: false,

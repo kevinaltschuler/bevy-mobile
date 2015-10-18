@@ -17,6 +17,7 @@ var MainView = require('./js/app/components/android/MainView.android.js');
 var ImageModal = require('./js/post/components/android/ImageModal.android.js');
 var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
 var ActionSheet = require('./js/shared/components/android/ActionSheet.android.js');
+var TagModal = require('./js/bevy/components/android/TagModal.android.js');
 
 var routes = require('./js/routes');
 var constants = require('./js/constants');
@@ -244,6 +245,7 @@ var App = React.createClass({
         />
         <ImageModal />
         <ActionSheet />
+        <TagModal />
       </View>
     );
   }

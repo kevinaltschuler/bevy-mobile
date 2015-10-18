@@ -58,6 +58,11 @@ var BevyBar = React.createClass({
     );
   },
 
+  openTagModal() {
+    var actions = constants.getTagModalActions();
+    actions.show(this.props.activeBevy.tags);
+  },
+
   _renderImage() {
     var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     if(this.props.activeBevy._id == -1 || _.isEmpty(this.props.activeBevy.image_url)) {
@@ -139,18 +144,38 @@ var BevyBar = React.createClass({
     );
   },
 
+  _renderTagButton() {
+    if(  this.props.activeBevy._id == -1 
+      || this.props.bevyRoute.name == routes.BEVY.INFO.name
+      || this.props.bevyRoute.name == routes.BEVY.RELATED.name
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
+      return <View />;
+    else return (
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+        onPress={ this.openTagModal }
+      >
+        <View style={ styles.infoButton }>
+          <Icon
+            name='label'
+            size={ 30 }
+            color='#FFF'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   render() {
     if(_.isEmpty(this.props.activeBevy)) return <View />;
     else return (
       <View style={ styles.container }>
         { this._renderImage() }
         { this._renderBackButton() }
-        <View style={{ flex: 1 }}/>
-        <View style={ styles.bevyNameContainer }>
-          <Text style={ styles.bevyName }>
-            { this.props.activeBevy.name }
-          </Text>
-        </View>
+        <Text style={ styles.bevyName }>
+          { this.props.activeBevy.name }
+        </Text>
+        { this._renderTagButton() }
         { this._renderSortButton() }
         { this._renderInfoButton() }
       </View>
@@ -196,22 +221,12 @@ var styles = StyleSheet.create({
     backgroundColor: '#000',
     opacity: 0.5
   },
-  bevyNameContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: constants.width,
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 40
-  },
   bevyName: {
     flex: 1,
     fontSize: 16,
-    textAlign: 'center',
-    color: '#FFF'
+    textAlign: 'left',
+    color: '#FFF',
+    marginLeft: 20
   },
   infoButton: {
     height: 48,
