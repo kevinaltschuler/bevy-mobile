@@ -30,6 +30,18 @@ var BevyBar = React.createClass({
     bevyRoute: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      iconColor: '#FFF'
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      iconColor: (nextProps.activeBevy._id == -1) ? '#888' : '#FFF'
+    });
+  },
+
   goBack() {
     this.props.bevyNavigator.pop();
   },
@@ -66,7 +78,12 @@ var BevyBar = React.createClass({
   _renderImage() {
     var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     if(this.props.activeBevy._id == -1 || _.isEmpty(this.props.activeBevy.image_url)) {
-      return <View style={ styles.bevyImageWrapperDefault } />;
+      var bgColor = (this.props.activeBevy._id == -1)
+        ? '#FFF'
+        : '#AAA';
+      return <View style={[ styles.bevyImageWrapperDefault, { 
+        backgroundColor: bgColor
+      }]} />;
     } else {
       return (
         <View style={ styles.bevyImageWrapper }>
@@ -93,7 +110,7 @@ var BevyBar = React.createClass({
             <Icon
               name='arrow-back'
               size={ 30 }
-              color='#FFF'
+              color={ this.state.iconColor }
             />
           </View>
         </TouchableNativeFeedback>
@@ -116,7 +133,7 @@ var BevyBar = React.createClass({
           <Icon
             name='info'
             size={ 30 }
-            color='#FFF'
+            color={ this.state.iconColor }
           />
         </View>
       </TouchableNativeFeedback>
@@ -137,7 +154,7 @@ var BevyBar = React.createClass({
           <Icon
             name='sort'
             size={ 30 }
-            color='#FFF'
+            color={ this.state.iconColor }
           />
         </View>
       </TouchableNativeFeedback>
@@ -159,7 +176,7 @@ var BevyBar = React.createClass({
           <Icon
             name='label'
             size={ 30 }
-            color='#FFF'
+            color={ this.state.iconColor }
           />
         </View>
       </TouchableNativeFeedback>
@@ -172,7 +189,7 @@ var BevyBar = React.createClass({
       <View style={ styles.container }>
         { this._renderImage() }
         { this._renderBackButton() }
-        <Text style={ styles.bevyName }>
+        <Text style={[ styles.bevyName, { color: this.state.iconColor } ]}>
           { this.props.activeBevy.name }
         </Text>
         { this._renderTagButton() }
@@ -206,7 +223,9 @@ var styles = StyleSheet.create({
     left: 0,
     width: constants.width,
     height: 48,
-    backgroundColor: '#AAA'
+    backgroundColor: '#AAA',
+    borderTopColor: '#EEE',
+    borderTopWidth: 1
   },
   bevyImage: {
     width: constants.width,
