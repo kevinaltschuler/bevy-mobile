@@ -37,9 +37,29 @@ var SettingsView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
-  _renderProfile() {
-    if(this.props.loggedIn) {
+  goToAccounts() {
+
+  },
+
+  render() {
+    if(!this.props.loggedIn) {
       return (
+        <ScrollView style={ styles.container }>
+          <TouchableNativeFeedback 
+            onPress={() => {
+              this.props.mainNavigator.push(routes.MAIN.LOGIN);
+            }}
+          >
+            <View style={ styles.logInButton }>
+              <Text style={ styles.logInButtonText }>Log In</Text>
+            </View>
+          </TouchableNativeFeedback>
+        </ScrollView>
+      );
+    }
+
+    return (
+      <ScrollView style={ styles.container }>
         <ProfileRow 
           user={ this.props.user }
           nameColor='#000'
@@ -51,73 +71,73 @@ var SettingsView = React.createClass({
             borderBottomColor: '#DDD'
           }}
         />
-      );
-    } else {
-      return (
-        <TouchableNativeFeedback 
+        <Text style={ styles.settingHeader }>Account</Text>
+        <TouchableNativeFeedback
           onPress={() => {
-            this.props.mainNavigator.push(routes.MAIN.LOGIN);
+            UserActions.logOut();
+            // switch back to posts tab
+            this.props.tabActions.switchTab('POSTS');
           }}
         >
-          <View style={ styles.logInButton }>
-            <Text style={ styles.logInButtonText }>Log In</Text>
+          <View style={ styles.settingButton }>
+            <Icon
+              name='exit-to-app'
+              size={ 30 }
+              color='#AAA'
+            />
+            <Text style={ styles.settingButtonText }>Log Out</Text>
           </View>
         </TouchableNativeFeedback>
-      );
-    }
-  },
-
-  _renderAccountsText() {
-    if(!this.props.loggedIn) return <View />;
-    else return (
-      <Text style={ styles.settingHeader }>Account</Text>
-    );
-  },
-
-  _renderLogOutButton() {
-    if(!this.props.loggedIn) return <View />;
-    return (
-      <TouchableNativeFeedback
-        onPress={() => {
-          UserActions.logOut();
-          // switch back to posts tab
-          this.props.tabActions.switchTab('POSTS');
-        }}
-      >
-        <View style={ styles.logOutButton }>
-          <Text style={ styles.logOutButtonText }>Log Out</Text>
-        </View>
-      </TouchableNativeFeedback>
-    );
-  },
-
-  _renderProfileButton() {
-    if(!this.props.loggedIn) return <View />;
-    else return (
-      <TouchableNativeFeedback
-        onPress={ this.goToPublicProfile }
-      >
-        <View style={ styles.settingButton }>
-          <Text style={ styles.settingButtonText }>
-            Go To Public Profile
-          </Text>
-          <Icon
-            name='arrow-forward'
-            size={ 30 }
-            color='#888'
-          />
-        </View>
-      </TouchableNativeFeedback>
-    );
-  },
-
-  render() {
-    return (
-      <ScrollView style={ styles.container }>
-        { this._renderProfile() }
-        { this._renderAccountsText() }
-        { this._renderLogOutButton() }
-        { this._renderProfileButton() }
+        <TouchableNativeFeedback
+          onPress={ this.changePicture }
+        >
+          <View style={ styles.settingButton }>
+            <Icon
+              name='insert-photo'
+              size={ 30 }
+              color='#AAA'
+            />
+            <Text style={ styles.settingButtonText }>Change Profile Picture</Text>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={ this.goToAccounts }
+        >
+          <View style={ styles.settingButton }>
+            <Icon
+              name='swap-horiz'
+              size={ 30 }
+              color='#AAA'
+            />
+            <Text style={ styles.settingButtonText }>
+              Switch Accounts
+            </Text>
+            <Icon
+              name='arrow-forward'
+              size={ 30 }
+              color='#888'
+            />
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={ this.goToPublicProfile }
+        >
+          <View style={ styles.settingButton }>
+            <Icon 
+              name='person'
+              size={ 30 }
+              color='#AAA'
+            />
+            <Text style={ styles.settingButtonText }>
+              Go To Public Profile
+            </Text>
+            <Icon
+              name='arrow-forward'
+              size={ 30 }
+              color='#888'
+            />
+          </View>
+        </TouchableNativeFeedback>
         <Text style={ styles.settingHeader }>
           App Settings
         </Text>
@@ -153,7 +173,8 @@ var styles = StyleSheet.create({
   },
   settingButtonText: {
     flex: 1,
-    color: '#000'
+    color: '#000',
+    marginLeft: 10
   },
   logInButton: {
     marginTop: 10,
