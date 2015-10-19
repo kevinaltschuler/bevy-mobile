@@ -104,11 +104,10 @@ var SearchBar = React.createClass({
         >
           <View style={ styles.backButton }>
             <Icon 
-              name='chevron-left' 
-              color='#fff' 
+              name='arrow-back' 
+              color='#FFF' 
               size={ 30 } 
               style={{
-
               }}
             />
           </View>
