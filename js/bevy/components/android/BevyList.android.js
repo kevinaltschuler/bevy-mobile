@@ -106,7 +106,9 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  no
+  noBevies: {
+    
+  }
 });
 
 module.exports = BevyList;

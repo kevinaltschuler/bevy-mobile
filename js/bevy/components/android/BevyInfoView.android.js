@@ -61,6 +61,12 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.push(routes.BEVY.TAGS);
   },
 
+  deleteBevy() {
+    // delete bevy
+    // check if admin
+    // call action
+  },
+
   _renderAdmins() {
     var bevyAdmins = this.props.activeBevy.admins;
     var admins = [];
@@ -99,7 +105,7 @@ var BevyInfoView = React.createClass({
               <Text style={ styles.bevyName }>
                 { this.props.activeBevy.name.trim() }
               </Text>
-              <Text style={ styles.bevyDescription }>
+              <Text style={ styles.bevyDescription } numberOfLines={ 3 }>
                 { this.props.activeBevy.description.trim() }
               </Text>
               <View style={ styles.bevyDetailsBottom }>
@@ -160,6 +166,16 @@ var BevyInfoView = React.createClass({
           </TouchableNativeFeedback>
           <Text style={ styles.settingTitle }>Admins</Text>
           { this._renderAdmins() }
+          <Text style={ styles.settingTitle }>Danger Zone</Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#ED8372') }
+            onPress={ this.deleteBevy }
+          >
+            <View style={[ styles.settingItem, { backgroundColor: '#DF4A32' } ]}>
+              <Text style={[ styles.settingText, { color: '#FFF' } ]}>Delete Bevy</Text>
+            </View>
+          </TouchableNativeFeedback>
+          <View style={{ height: 15 }} />
         </ScrollView>
       </View>
     );
@@ -189,9 +205,11 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   bevyDetails: {
+    height: 100,
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    justifyContent: 'center'
   },
   bevyName: {
     fontSize: 22,
