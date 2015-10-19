@@ -52,7 +52,7 @@ var SearchBar = React.createClass({
   },
 
   componentWillUnmount() {
-    this.props.navigator.navigationContext.removeListener('willfocus');
+    //this.props.navigator.navigationContext.removeListener('willfocus');
   },
 
   onSearchBlur() {
