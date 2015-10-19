@@ -33,7 +33,7 @@ var BevyBar = React.createClass({
   getInitialState() {
     return {
       iconColor: '#FFF'
-    }
+    };
   },
 
   componentWillReceiveProps(nextProps) {

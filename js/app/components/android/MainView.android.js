@@ -18,6 +18,7 @@ var NewPostView = require('./../../../post/components/android/NewPostView.androi
 var CommentView = require('./../../../post/components/android/CommentView.android.js');
 var NewBevyView = require('./../../../bevy/components/android/NewBevyView.android.js');
 var PublicProfileView = require('./../../../user/components/android/PublicProfileView.android.js');
+var MapView = require('./../../../post/components/android/Map.android.js');
 
 var routes = require('./../../../routes');
 
@@ -69,6 +70,13 @@ var MainView = React.createClass({
           <PublicProfileView routeUser={ this.props.mainRoute.user } { ...this.props }/>
         );
         break;
+      case routes.MAIN.MAP.name:
+        return (
+          <MapView
+            location={ this.props.mainRoute.location }
+            { ...this.props }
+          />
+        );
       default:
         return (
           <View style={ styles.container }>

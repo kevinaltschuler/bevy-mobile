@@ -12,6 +12,7 @@ var {
   Image,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -49,6 +50,13 @@ var EventBody = React.createClass({
 
   addToCalendar() {
 
+  },
+
+  goToMap() {
+    //var mapRoute = routes.MAIN.MAP;
+    //mapRoute.location = this.props.post.event.location;
+    //this.props.mainNavigator.push(mapRoute);
+    ToastAndroid.show('This feature is not supported yet :(', ToastAndroid.SHORT);
   },
 
   getMonthText() {
@@ -188,16 +196,21 @@ var EventBody = React.createClass({
             </Text>
           </View>
         </View>
-        <View style={ expandedStyles.locationRow }>
-          <Icon
-            name='room'
-            size={ 30 }
-            color='#888'
-          />
-          <Text style={ expandedStyles.locationText }>
-            { this.props.post.event.location }
-          </Text>
-        </View>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ this.goToMap }
+        >
+          <View style={ expandedStyles.locationRow }>
+            <Icon
+              name='room'
+              size={ 30 }
+              color='#888'
+            />
+            <Text style={ expandedStyles.locationText }>
+              { this.props.post.event.location }
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
         <View style={ expandedStyles.divider } />
         <View style={ expandedStyles.descriptionRow }>
           <Text style={ expandedStyles.descriptionTitle }>
