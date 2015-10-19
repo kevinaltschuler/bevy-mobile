@@ -28,7 +28,8 @@ var Post = React.createClass({
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
     expandText: React.PropTypes.bool,
-    card: React.PropTypes.bool // style like a card
+    card: React.PropTypes.bool, // style like a card
+    user: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -99,6 +100,7 @@ var Post = React.createClass({
           post={ this.props.post } 
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          user={ this.props.user }
         />
       );
     }

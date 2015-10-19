@@ -150,6 +150,7 @@ var PostList = React.createClass({
                 post={ post }
                 mainNavigator={ this.props.mainNavigator }
                 mainRoute={ this.props.mainRoute }
+                user={ this.props.user }
               />
             }
           />

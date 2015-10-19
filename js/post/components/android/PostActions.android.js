@@ -10,6 +10,7 @@ var {
   View,
   Text,
   TouchableNativeFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -24,12 +25,12 @@ var UserStore = require('./../../../user/UserStore');
 var PostActions = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
-    var user = UserStore.getUser();
-    var vote = _.findWhere(this.props.post.votes, { voter: user._id });
+    var vote = _.findWhere(this.props.post.votes, { voter: this.props.user._id });
     return {
       voted: (vote != undefined && vote.score > 0)
     };
@@ -39,6 +40,16 @@ var PostActions = React.createClass({
     var profileRoute = routes.MAIN.PROFILE;
     profileRoute.user = this.props.post.author;
     this.props.mainNavigator.push(profileRoute);
+  },
+
+  deletePost() {
+    if(this.props.user._id == this.props.post.author._id // if the original author
+      || _.contains(this.props.post.bevy.admins, this.props.user._id) // if an admin of the bevy
+    ) {
+      $PostActions.destroy(this.props.post._id);
+    } else {
+      ToastAndroid.show('You do not have the permissions to do that', ToastAndroid.SHORT);
+    }
   },
 
   getLikeCountText() {
@@ -107,13 +118,16 @@ var PostActions = React.createClass({
               [
                 "Go To Author's Profile",
                 //"Edit Post",
-                //"Delete Post"
+                "Delete Post"
                ],
-              function(key) {
+              function(key, option) {
                 //console.log(key);
-                switch(key) {
-                  case '0':
+                switch(option) {
+                  case "Go To Author's Profile":
                     this.goToAuthorProfile();
+                    break;
+                  case "Delete Post":
+                    this.deletePost();
                     break;
                 }
               }.bind(this)

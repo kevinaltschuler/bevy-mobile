@@ -28,7 +28,7 @@ var ActionSheetItem = React.createClass({
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#EEE', false) }
         onPress={() => {
-          this.props.onSelect(this.props.index);
+          this.props.onSelect(this.props.index, this.props.option);
         }}
       >
         <View style={ styles.optionItem }>
