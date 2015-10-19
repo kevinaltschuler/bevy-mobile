@@ -63,20 +63,23 @@ var PostBody = React.createClass({
       && this.state.height > MAX_HEIGHT
       && !this.props.expandText) {
       return (
-        <TouchableNativeFeedback
-          onPress={() => {
-            // dont navigate if already in comment view
-            if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
-            // navigate to comments
-            var commentRoute = routes.MAIN.COMMENT;
-            commentRoute.post = this.props.post;
-            this.props.mainNavigator.push(commentRoute);
-          }}
-        >
-          <View style={ styles.showMoreButton }>
-            <Text style={ styles.showMoreButtonText }>Show More</Text>
-          </View>
-        </TouchableNativeFeedback>
+        <View style={ styles.showMoreRow }>
+          <TouchableNativeFeedback
+            onPress={() => {
+              // dont navigate if already in comment view
+              if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+              // navigate to comments
+              var commentRoute = routes.MAIN.COMMENT;
+              commentRoute.post = this.props.post;
+              this.props.mainNavigator.push(commentRoute);
+            }}
+          >
+            <View style={ styles.showMoreButton }>
+              <Text style={ styles.showMoreButtonText }>Show More</Text>
+            </View>
+          </TouchableNativeFeedback>
+          <View style={{ flex: 1 }} />
+        </View>
       );
     } else {
       return <View />;
@@ -107,6 +110,17 @@ var styles = StyleSheet.create({
     flex: 1,
     color: '#333',
     textAlign: 'left'
+  },
+  showMoreRow: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  showMoreButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 6
+  },
+  showMoreButtonText: {
+    flex: 1
   }
 });
 
