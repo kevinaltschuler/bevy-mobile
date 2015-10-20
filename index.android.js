@@ -158,7 +158,8 @@ var App = React.createClass({
   getUserState() {
     return {
       user: UserStore.getUser(),
-      loggedIn: UserStore.loggedIn
+      loggedIn: UserStore.loggedIn,
+      linkedAccounts: UserStore.getLinkedAccounts()
     };
   },
 

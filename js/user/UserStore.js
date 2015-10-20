@@ -22,18 +22,31 @@ var User = Backbone.Model.extend({
   _idAttribute: '_id'
 });
 
+var Users = Backbone.Collection.extend({
+  model: User
+});
+
 var UserStore = _.extend({}, Backbone.Events);
 _.extend(UserStore, {
 
   loggedIn: false, // simple flag to see if user is logged in or not
   user: new User,
 
+  linkedAccounts: new Users,
+
   handleDispatch(payload) {
     switch(payload.actionType) {
       case APP.LOAD:
         // fetch user from server if its been updated?
         if(this.loggedIn) {
-            this.user.fetch({
+          this.linkedAccounts.url = 
+            constants.apiurl + '/users/' + this.user.get('_id') + '/linkedaccounts';
+          this.linkedAccounts.fetch({
+            success: function(collection, response, options) {
+              this.trigger(USER.LOADED);
+            }.bind(this)
+          });
+          this.user.fetch({
             success: function(model, response, options) {
               //console.log('user fetched from server');
               // update local storage user
@@ -201,6 +214,10 @@ _.extend(UserStore, {
   getUser() {
     if(!this.loggedIn) return {};
     return this.user.toJSON();
+  },
+
+  getLinkedAccounts() {
+    return this.linkedAccounts.toJSON();
   }
 });
 var dispatchToken = Dispatcher.register(UserStore.handleDispatch.bind(UserStore));

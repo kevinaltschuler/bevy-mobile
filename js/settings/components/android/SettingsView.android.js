@@ -11,6 +11,7 @@ var {
   View,
   Text,
   TouchableNativeFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -37,8 +38,12 @@ var SettingsView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
-  goToAccounts() {
+  changePicture() {
+    ToastAndroid.show('Feature Not Yet Implemented :(', ToastAndroid.SHORT);
+  },
 
+  goToAccounts() {
+    this.props.mainNavigator.push(routes.MAIN.SWITCHACCOUNT);
   },
 
   render() {

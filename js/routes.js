@@ -9,7 +9,8 @@ var routes = {
     PROFILE: { name: 'Profile' },
     MAP: { name: 'Map' },
     LOGIN: { name: 'Login' },
-    MESSAGEVIEW: { name: 'Messages' }
+    MESSAGEVIEW: { name: 'Messages' },
+    SWITCHACCOUNT: { name: 'SwitchAccount' }
   },
 
   NEWPOST: {
