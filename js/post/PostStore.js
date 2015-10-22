@@ -68,16 +68,11 @@ _.extend(PostStore, {
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-<<<<<<< HEAD
-=======
 
         this.sortType = 'new';
 
-
-
         // trigger anyways
         this.trigger(POST.CHANGE_ALL); 
->>>>>>> 2dab991... event comment view
         break;
 
       case POST.FETCH:

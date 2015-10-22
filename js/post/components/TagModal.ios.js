@@ -162,14 +162,10 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     width: 300,
-<<<<<<< HEAD
-    height: 600,
-=======
     height: 400,
     paddingBottom: 20,
     paddingLeft: 0,
     paddingRight: 0
->>>>>>> 2dab991... event comment view
   },
   panelHeaderText: {
     fontSize: 20,
