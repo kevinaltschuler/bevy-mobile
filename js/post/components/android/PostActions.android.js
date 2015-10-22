@@ -30,6 +30,9 @@ var PostActions = React.createClass({
   },
 
   getInitialState() {
+    if(_.isEmpty(this.props.user)) return {
+      voted: false
+    };
     var vote = _.findWhere(this.props.post.votes, { voter: this.props.user._id });
     return {
       voted: (vote != undefined && vote.score > 0)
