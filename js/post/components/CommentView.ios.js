@@ -14,6 +14,7 @@ var {
 var Icon = require('react-native-vector-icons/Ionicons');
 
 var Post = require('./Post.ios.js');
+var Event = require('./Event.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 
 var CommentList = require('./CommentList.ios.js');
@@ -160,6 +161,16 @@ var CommentView = React.createClass({
     if(_.isEmpty(this.state.post)) {
       return null;
     } 
+    if(this.state.post.type == 'event') {
+      return (
+        <View style={{marginTop: 0}}>
+          <Event
+            inCommentView={ true }
+            post={ this.state.post }
+          />
+        </View>
+      )
+    }
     return (
       <View style={{marginTop: 0}}>
         <Post
@@ -361,7 +372,7 @@ var styles = StyleSheet.create({
 
   scrollView: {
     flex: 1,
-    flexDirection: 'column'
+    height: constants.height - 110
   },
   commentsCard: {
     flexDirection: 'column',

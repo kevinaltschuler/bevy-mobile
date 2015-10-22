@@ -93,7 +93,8 @@ var styles = StyleSheet.create({
   settingTitle: {
     flex: 1,
     fontSize: 17,
-    color: '#222'
+    color: '#222',
+    marginLeft: 10
   },
   settingValue: {
     alignSelf: 'flex-end',

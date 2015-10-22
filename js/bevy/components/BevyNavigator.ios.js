@@ -40,7 +40,12 @@ var BevyView = React.createClass({
   },
 
   getInitialState() {
+<<<<<<< HEAD
     var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#666' : '#fff';
+=======
+    var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#777' : '#fff';
+    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : '#777';
+>>>>>>> 2dab991... event comment view
     return {
       showTags: false,
       fontColor: color,
@@ -49,8 +54,13 @@ var BevyView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
+<<<<<<< HEAD
     var color = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#666' : '#fff';
     console.log(this.props.bevyRoute.name, routes.BEVY.POSTLIST.name);
+=======
+    var color = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#777' : '#fff';
+    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : '#777';
+>>>>>>> 2dab991... event comment view
     this.setState({
       fontColor: color
     })

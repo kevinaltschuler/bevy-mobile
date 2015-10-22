@@ -349,7 +349,8 @@ var styles = StyleSheet.create({
   },
   postingTo: {
     fontSize: 15,
-    marginRight: 10
+    marginRight: 10,
+    color: '#fff'
   },
   bevyName: {
     color: '#2CB673',
@@ -359,6 +360,10 @@ var styles = StyleSheet.create({
   },
   toBevyPicker: {
     flex: 1,
+    backgroundColor: 'rgba(0,0,0,.25)',
+    padding: 5,
+    marginRight: 10,
+    borderRadius: 3
   },
   input: {
     flexDirection: 'row',

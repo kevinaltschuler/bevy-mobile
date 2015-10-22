@@ -19,7 +19,8 @@ var ImageOverlay = require('./ImageOverlay.ios.js');
 var PostActionList = require('./PostActionList.ios.js');
 var Collapsible = require('react-native-collapsible');
 
-var FullEventBody = require('./FullEventBody.ios.js');
+var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
+
 var constants = require('./../../constants');
 var POST = constants.POST;
 var routes = require('./../../routes');
@@ -27,7 +28,7 @@ var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostActions = require('./../PostActions');
 var PostStore = require('./../PostStore');
 
-var FullEventBody = React.createClass({
+var Event = React.createClass({
   propTypes: {
     mainRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
@@ -83,23 +84,29 @@ var FullEventBody = React.createClass({
     return (
       <View style={styles.body}>
 
-        <View style={styles.dateText}>
-          <Text style={styles.dayText}>
-            { date.toLocaleDateString("en", {day: "numeric"}) }
-          </Text>
-          <Text style={styles.monthText}>
-            { date.toLocaleDateString("en", {month: "short"}) }
-          </Text>
-        </View>
-
         <View style={styles.titleTextColumn}>
-          <Text style={styles.bodyText}>
-            { this.state.post.title }
-          </Text>
           <Text style={styles.descriptionText}>
             { this.state.post.event.description }
           </Text>
         </View>
+
+        <SettingsItem 
+          title={ 
+            date.toLocaleDateString("en", {month: "short"}) + ", " + 
+            date.toLocaleDateString("en", {day: "numeric"}) + ' ' + 
+            date.toLocaleTimeString()
+          }
+          icon={<Icon size={30} name='calendar' />}
+        />
+        <SettingsItem 
+          title={ this.state.post.event.location }
+          icon={<Icon size={30} name='ios-location'/>}
+          onPress={() => {
+            var mapRoute = routes.MAIN.MAP;
+            mapRoute.location = this.state.post.event.location;
+            this.props.mainNavigator.push(mapRoute);
+          }}
+        />
 
         {/*<TouchableHighlight
           underlayColor='rgba(0,0,0,0.1)'
@@ -117,117 +124,29 @@ var FullEventBody = React.createClass({
   },
 
   _renderPostImage() {
-    var imageURL = (_.isEmpty(this.state.post.images[0]))? 'http://api.joinbevy.com/img/default_event_img.png' : this.state.post.images[0];
+    var imageURL = (_.isEmpty(this.state.post.images[0])) ? 'http://api.joinbevy.com/img/default_event_img.png' : this.state.post.images[0];
     return (
       <View style={{borderTopLeftRadius: 5, borderTopRightRadius: 5}}>
         <Image
           style={ styles.postImage }
           source={{ uri: imageURL }}
           resizeMode='cover'
-        />
+        >
+          <Text style={styles.titleText}>
+            { this.state.post.title }
+          </Text>
+        </Image>
       </View>
     );
   },
 
-  render() {
+  render: function() {
     var post = this.state.post;
 
-    var body = (this.props.inCommentView)
-    ? <FullEventBody 
-        mainRoute={this.props.mainRoute}
-        mainNavigator={this.props.mainNavigator}
-        inCommentView={this.props.inCommentView}
-        post={this.state.post}
-      />
-    : <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
-        onPress={() => {
-          // go to comment view
-          // return if we're already in comment view
-          if(this.props.inCommentView) return;
-
-          var commentRoute = routes.MAIN.COMMENT;
-          commentRoute.postID = this.state.post._id;
-          this.props.mainNavigator.push(commentRoute);
-        }}
-      >
-        <View style={ styles.eventCard}>
-          { this._renderPostImage() }
-          { this._renderPostTitle() }
-        </View>
-      </TouchableHighlight>;
-
     return (
-      <View style={[styles.postCard, {marginTop: (this.props.inCommentView) ? 10 : 0}]}>
-        {body}
-        <View style={styles.postActionsRow}>
-          <TouchableHighlight 
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={() => {
-              PostActions.vote(post._id);
-              this.setState({
-                voted: !this.state.voted
-              });
-            }}
-          >
-            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-              <Text style={ styles.pointCountText }>
-                { this.countVotes() }
-              </Text>
-              <Icon
-                name={ (this.state.voted) ? 'ios-heart' : 'ios-heart-outline' }
-                size={20}
-                color='#2cb673'
-                style={styles.actionIcon}
-              />
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight 
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={() => {
-              // go to comment view
-              // return if we're already in comment view
-              if(this.props.inCommentView) return;
-
-              var commentRoute = routes.MAIN.COMMENT;
-              commentRoute.postID = this.state.post._id;
-              this.props.mainNavigator.push(commentRoute);
-            }}
-          >
-            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-              <Text style={ styles.commentCountText }>
-                { post.comments.length }
-              </Text>
-              <Icon
-                name='ios-chatbubble-outline'
-                size={20}
-                color='#757d83'
-                style={styles.actionIcon}
-              />
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight 
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 1 } ]}
-            onPress={() => {
-              this.setState({
-                collapsed: !this.state.collapsed
-              });
-            }}
-          >
-            <Icon
-              name='ios-more'
-              size={20}
-              color='#757d83'
-              style={styles.actionIcon}
-            />
-          </TouchableHighlight>
-        </View>
-        <Collapsible collapsed={this.state.collapsed} >
-          <PostActionList post={ this.state.post } { ...this.props } />
-        </Collapsible>
+      <View style={ styles.eventCard}>
+        { this._renderPostImage() }
+        { this._renderPostTitle() }
       </View>
     );
   },
@@ -237,27 +156,7 @@ var sideMargins = 10;
 var cardWidth = constants.width - sideMargins * 2;
 
 var styles = StyleSheet.create({
-  postCard: {
-    flexDirection: 'column',
-    width: cardWidth,
-    marginTop: 5,
-    marginBottom: 5,
-    marginLeft: sideMargins,
-    marginRight: sideMargins,
-    paddingTop: 0,
-    backgroundColor: 'white',
-    borderRadius: 2,
-    shadowColor: '#000',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
-  },
-
   eventCard: {
-    margin: 5,
-    borderWidth: 0,
-    borderColor: 'rgba(0,0,0,.1)',
-    borderRadius: 5,
     shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
@@ -299,15 +198,14 @@ var styles = StyleSheet.create({
 
   body: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginBottom: 5,
     paddingTop: 5,
     fontSize: 20
   },
-  bodyText: {
-    fontSize: 20,
-    color: '#393939',
-    fontWeight: 'bold'
+  titleText: {
+    fontSize: 24,
+    color: '#fff',
   },
   descriptionText: {
     color: '#777',
@@ -327,10 +225,10 @@ var styles = StyleSheet.create({
   },
 
   postImage: {
-    height: 65,
+    height: 100,
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
 
   },
   postImageCountText: {

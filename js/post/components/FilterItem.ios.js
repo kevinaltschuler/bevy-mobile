@@ -46,6 +46,27 @@ var FilterItem = React.createClass({
 
   render() {
 
+<<<<<<< HEAD
+=======
+    var color = (this.props.isFrontpage)
+    ? '#333'
+    : this.props.filter.color;
+
+    var icon = (this.state.value)
+    ? <Icon
+        name='ios-checkmark'
+        size={ 30 }
+        style={{ width: 30, height: 30 }}
+        color={color}
+      />
+    : <Icon
+        name='ios-circle-outline'
+        size={ 30 }
+        style={{ width: 30, height: 30 }}
+        color={color}
+      />;
+
+>>>>>>> 2dab991... event comment view
     return (
 	    <View style={styles.container}>     
 	      <SwitchIOS
