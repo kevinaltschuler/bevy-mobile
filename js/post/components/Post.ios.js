@@ -132,7 +132,7 @@ var Post = React.createClass({
     );
   },
 
-  render: function() {
+  render() {
     var post = this.state.post;
 
     var tagBadge = (post.tag)

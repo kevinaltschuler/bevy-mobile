@@ -26,6 +26,8 @@ var UserStore = require('./../../user/UserStore');
 var BevyActions = require('./../../bevy/BevyActions');
 var BEVY = constants.BEVY;
 
+var Icon = require('react-native-vector-icons/Ionicons');
+
 var FilterItem = React.createClass({
   propTypes: {
     filter: React.PropTypes.object,

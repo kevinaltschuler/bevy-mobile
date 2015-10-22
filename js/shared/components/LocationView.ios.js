@@ -20,6 +20,8 @@ var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
 var ProfileView = require('./../../user/components/ProfileView.ios.js');
 
+var constants = require('./../../constants');
+
 var routes = require('./../../routes');
 
 var LocationView = React.createClass({
@@ -87,7 +89,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
+    height: 500
   },
   navButtonLeft: {
     flex: 1,
@@ -121,7 +124,7 @@ var styles = StyleSheet.create({
   },
   map: {
   	flex: 1,
-  	height: window.height
+  	height: 500
   }
 });
 

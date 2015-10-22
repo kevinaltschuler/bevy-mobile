@@ -27,10 +27,10 @@ var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostActions = require('./../PostActions');
 var PostStore = require('./../PostStore');
 
-var FullEventBody = React.createClass({
+var Event = React.createClass({
   propTypes: {
     mainRoute: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object.isRequired,
     inCommentView: React.PropTypes.bool,
     post: React.PropTypes.object
   },
@@ -214,7 +214,7 @@ var FullEventBody = React.createClass({
             onPress={() => {
               this.setState({
                 collapsed: !this.state.collapsed
-              });
+              })
             }}
           >
             <Icon
@@ -230,7 +230,8 @@ var FullEventBody = React.createClass({
         </Collapsible>
       </View>
     );
-  },
+  }
+
 });
 
 var sideMargins = 10;

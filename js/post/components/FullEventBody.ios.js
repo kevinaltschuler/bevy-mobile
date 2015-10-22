@@ -28,10 +28,10 @@ var timeAgo = require('./../../shared/helpers/timeAgo');
 var PostActions = require('./../PostActions');
 var PostStore = require('./../PostStore');
 
-var Event = React.createClass({
+var FullEventBody = React.createClass({
   propTypes: {
     mainRoute: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object.isRequired,
     inCommentView: React.PropTypes.bool,
     post: React.PropTypes.object
   },
@@ -96,29 +96,17 @@ var Event = React.createClass({
             date.toLocaleDateString("en", {day: "numeric"}) + ' ' + 
             date.toLocaleTimeString()
           }
-          icon={<Icon size={30} name='calendar' />}
+          icon={<Icon size={30} name='calendar' style={{color: '#999'}}/>}
         />
         <SettingsItem 
           title={ this.state.post.event.location }
-          icon={<Icon size={30} name='ios-location'/>}
+          icon={<Icon size={30} name='ios-location' style={{color: '#999'}}/>}
           onPress={() => {
             var mapRoute = routes.MAIN.MAP;
             mapRoute.location = this.state.post.event.location;
             this.props.mainNavigator.push(mapRoute);
-          }}
+          }.bind(this)}
         />
-
-        {/*<TouchableHighlight
-          underlayColor='rgba(0,0,0,0.1)'
-          onPress={() => {
-            var mapRoute = routes.MAIN.MAP;
-            mapRoute.location = this.state.post.event.location;
-            this.props.mainNavigator.push(mapRoute);
-        }}>
-          <Text style={styles.eventDetail}>
-            { this.state.post.event.location }
-          </Text>
-        </TouchableHighlight>*/}
       </View>
     );
   },
@@ -180,11 +168,12 @@ var styles = StyleSheet.create({
     marginLeft: 0
   },
   titleTextColumn: {
-    flex: 2,
-    width: cardWidth - 40 - 10 - 16 - 100,
+    flex: 1,
     flexDirection: 'column',
-    height: 26,
-    marginLeft: 5
+    marginLeft: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    padding: 15,
   },
   titleText: {
     width: cardWidth - 40 - 10 - 16,
@@ -209,7 +198,7 @@ var styles = StyleSheet.create({
   },
   descriptionText: {
     color: '#777',
-    fontSize: 12
+    fontSize: 14
   },
   dateText: {
     flexDirection: 'column',
@@ -269,4 +258,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = Event;
+module.exports = FullEventBody;

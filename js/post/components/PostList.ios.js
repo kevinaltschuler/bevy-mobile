@@ -189,7 +189,7 @@ var PostList = React.createClass({
                     mainNavigator={ this.props.mainNavigator }
                   />
                 </View>;
-            }}
+            }.bind(this)}
           />
       </View>
     );
