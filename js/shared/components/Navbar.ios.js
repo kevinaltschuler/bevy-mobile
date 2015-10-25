@@ -58,7 +58,9 @@ var Navbar = React.createClass({
   },
 
   getInitialState() {
-    return {}
+    return {
+      bottomHeight: 40
+    }
   },
 
   _renderLeft() {
@@ -95,7 +97,7 @@ var Navbar = React.createClass({
     if(this.props.activeBevy) {
       if(this.props.activeBevy._id != -1 && (this.props.route == routes.BEVY.POSTLIST.name)) {
         return (
-          <Image source={{uri: image_url}} style={styles.imageBottom}>
+          <Image source={{uri: image_url}} style={[styles.imageBottom, {height: this.state.bottomHeight}]}>
             <View style={styles.imageWrapper}>
               <View style={ styles.left }>
                 { this._renderLeft() }
@@ -146,7 +148,6 @@ var styles = StyleSheet.create({
     fontWeight: '500'
   },
   imageBottom: {
-    height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

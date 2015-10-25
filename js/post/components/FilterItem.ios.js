@@ -66,15 +66,14 @@ var FilterItem = React.createClass({
         color={color}
       />;
     return (
-	    <View style={styles.container}>     
-	      <SwitchIOS
-	        value={this.state.value}
-	        style={styles.switch}
-	        onValueChange={(value) => {
+	    <TouchableHighlight 
+        style={{flex: 1, height: 48,}}
+        underlayColor='rgba(0,0,0,.1)'
+        onPress={() => {
 
-	          this.setState({
-	            value: value
-	          });
+            this.setState({
+              value: !this.state.value
+            });
 
             if(this.props.isFrontpage) {
               // if filtering by bevy
@@ -106,12 +105,19 @@ var FilterItem = React.createClass({
 
               BevyActions.updateTags(filters);
             } 
-	        }}
-	      />
-	      <Text style={ styles.label }>
-	      	{this.state.filter.name}
-	      </Text>
-	    </View>
+
+        }}
+      >     
+        <View style={styles.container}>
+          <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: 20, height: 20, borderRadius: 10, backgroundColor: color, margin: 5}}/>
+    	      <Text style={ styles.label }>
+    	      	{this.state.filter.name}
+    	      </Text>
+          </View>
+          {icon}
+        </View>
+	    </TouchableHighlight>
 
     );
   }
@@ -122,9 +128,10 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15
+    marginBottom: 15,
+    paddingHorizontal: 10
   },
   label: {
     marginLeft: 10

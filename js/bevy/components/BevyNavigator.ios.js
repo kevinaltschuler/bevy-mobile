@@ -23,6 +23,7 @@ var PostList = require('./../../post/components/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
 var PostActions = require('./../../post/PostActions');
+var PostStore = require('./../../post/PostStore');
 
 var _ = require('underscore');
 var window = require('Dimensions').get('window');
@@ -40,20 +41,26 @@ var BevyView = React.createClass({
   },
 
   getInitialState() {
-    var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#777' : '#fff';
-    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : '#777';
+    var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.3)' : '#fff';
+    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : 'rgba(0,0,0,.6)';
+    var titleColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.6)' : '#fff';
     return {
       showTags: false,
       fontColor: color,
-      showSort: false
+      inverseColor: inverse,
+      showSort: false,
+      titleColor: titleColor
     }
   },
 
   componentWillReceiveProps(nextProps) {
-    var color = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#777' : '#fff';
-    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : '#777';
+    var color = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.3)' : '#fff';
+    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : 'rgba(0,0,0,.6)';
+    var titleColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.6)' : '#fff';
     this.setState({
-      fontColor: color
+      fontColor: color,
+      inverseColor: inverse,
+      titleColor: titleColor
     })
   },
 
@@ -108,24 +115,21 @@ var BevyView = React.createClass({
         }}
         style={{
           marginRight: 10,
-          borderRadius: 17,
-          width: 35,
-          height: 35,
-          padding: 6
+          borderRadius: 2,
+          paddingHorizontal: 4,
+          paddingVertical: 2,
+          backgroundColor: this.state.fontColor
         }}
       >
-        <Icon
-          name='ios-pricetag'
-          size={25}
-          color={this.state.fontColor}
-          style={{
-            width: 25,
-            height: 25
-          }}
-        />
+        <Text style={{ color: this.state.inverseColor }}>
+          {'tags'}
+        </Text>
       </TouchableHighlight>
     )
     : <View />;
+
+    if(this.props.activeBevy._id == -1)
+      tagButton = <View/>;
 
     var infoButton = (_.isEmpty(this.props.activeBevy) 
       || this.props.activeBevy.name == 'Frontpage' 
@@ -160,21 +164,15 @@ var BevyView = React.createClass({
         }}
         style={{
           marginRight: 10,
-          borderRadius: 17,
-          width: 35,
-          height: 35,
-          padding: 6
+          borderRadius: 2,
+          paddingHorizontal: 4,
+          paddingVertical: 2,
+          backgroundColor: this.state.fontColor
         }}
       >
-        <Icon
-          name='android-funnel'
-          size={25}
-          color={this.state.fontColor}
-          style={{
-            width: 25,
-            height: 25
-          }}
-        />
+        <Text style={{ color: this.state.inverseColor }}>
+          {PostStore.sortType}
+        </Text>
       </TouchableHighlight>
     );
 
@@ -191,13 +189,7 @@ var BevyView = React.createClass({
       </View>
     );
 
-    var backButton = (this.props.bevyRoute.name == 'PostList')
-    ? <View />
-    : <BackButton text='Posts' color={color} onPress={() => {
-      this.props.bevyNavigator.pop();
-    }} />;
-    
-    var center = this.props.activeBevy.name || 'Frontpage';
+    var center = <View/>;
     if(this.props.bevyRoute.setting) {
       switch(this.props.bevyRoute.setting) {
         case 'posts_expire_in':
@@ -208,12 +200,20 @@ var BevyView = React.createClass({
       }
     }
 
+    var title = this.props.activeBevy.name || 'Frontpage';
+
+    var left = (this.props.bevyRoute.name == 'PostList')
+    ? <Text style={{color: this.state.titleColor, fontSize: 18, marginLeft: 10}}>{title}</Text>
+    : <BackButton text='Posts' color={color} onPress={() => {
+      this.props.bevyNavigator.pop();
+    }} />;
+
     return (
       <View style={{ flex: 1 }}>
         <Navbar
           bevyRoute={ this.props.bevyRoute }
           bevyNavigator={ this.props.bevyNavigator }
-          left={ backButton }
+          left={ left }
           center={ center }
           right={ right }
           activeBevy={ this.props.activeBevy }
