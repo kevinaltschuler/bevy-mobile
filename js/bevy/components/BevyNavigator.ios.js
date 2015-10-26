@@ -49,7 +49,9 @@ var BevyView = React.createClass({
       fontColor: color,
       inverseColor: inverse,
       showSort: false,
-      titleColor: titleColor
+      titleColor: titleColor,
+      scrollY: null,
+      navHeight: 0
     }
   },
 
@@ -61,6 +63,30 @@ var BevyView = React.createClass({
       fontColor: color,
       inverseColor: inverse,
       titleColor: titleColor
+    })
+  },
+
+  onScroll(y) {
+    // if theres nothing to compare it to yet, just set it and return
+    if(this.state.scrollY == null || y < 0) {
+      this.setState({
+        scrollY: y,
+        navHeight: 0
+      });
+      return;
+    }
+    //get the change in scroll
+    var diff = (this.state.scrollY - y);
+    //modify the navheight based on that
+    var navHeight = (this.state.navHeight - diff);
+    //set bounds
+    if(navHeight < 0) navHeight = 0;
+    if(navHeight > 40) navHeight = 40;
+    console.log(navHeight);
+    //update data
+    this.setState({
+      scrollY: y,
+      navHeight: navHeight
     })
   },
 
@@ -93,6 +119,7 @@ var BevyView = React.createClass({
                 showTags: false
               })
             }}
+            onScroll={this.onScroll}
             showSort={ this.state.showSort }
             onHideSort={()=>{
               this.setState({
@@ -232,6 +259,16 @@ var BevyView = React.createClass({
           route={ this.props.bevyRoute.name }
           fontColor={ this.state.fontColor }
           { ...this.props }
+          styleBottom={{
+            backgroundColor: '#fff',
+            height: 40,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottomWidth: .5,
+            borderBottomColor: '#ddd',
+            marginTop: 0 - this.state.navHeight
+          }}
         />
           { view }
       </View>

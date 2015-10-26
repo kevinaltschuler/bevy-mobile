@@ -32,12 +32,13 @@ var CommentItem = React.createClass({
 
   getInitialState() {
     return {
-      collapsed: true
+      collapsed: true,
+      isCompact: false
     };
   },
 
   _renderCommentList() {
-    if(_.isEmpty(this.props.comment.comments)) return null;
+    if(_.isEmpty(this.props.comment.comments) || this.state.isCompact) return <View />;
     return (
       <CommentList
         comments={ this.props.comment.comments }
@@ -47,38 +48,83 @@ var CommentItem = React.createClass({
     );
   },
 
+  _renderCommentBody() {
+    var commentStyle = {};
+    commentStyle.borderLeftColor = 
+      (this.props.comment.depth == 0)
+       ? 'transparent' 
+       : colorMap[(this.props.comment.depth - 1) % colorMap.length];
+    commentStyle.borderLeftWidth = 
+      (this.props.comment.depth == 0) 
+      ? 0 
+      : (this.props.comment.depth) * 5;
+    commentStyle.backgroundColor = 
+      (this.state.showActionBar) 
+      ? '#eee' 
+      : '#fff';
+    
+    if (this.state.isCompact) {
+      return (
+        <View style={[ styles.comment, commentStyle ]}>
+            <View style={ styles.header }>
+              <Icon
+                name='add'
+                size={ 20 }
+                color='#AAA'
+                style={ styles.plusIcon }
+              />
+              <Text style={ styles.author }>{ this.props.comment.author.displayName }</Text>
+              <Text style={ styles.timeAgo }>{ timeAgo(Date.parse(this.props.comment.created)) }</Text>
+            </View>
+          </View>
+        );
+      }
+    else {
+      return (
+        <View style={[ styles.commentItem, { 
+          //marginLeft: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth - 1) * 3,
+          backgroundColor: (this.state.selected) ? '#eee' : '#fff',
+          borderLeftColor: (this.props.comment.depth == 0) ? 'transparent' : colorMap[(this.props.comment.depth - 1) % colorMap.length],
+          borderLeftWidth: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth) * 5
+        }]}>
+          <View style={ styles.commentItemTop }>
+            <Text style={ styles.commentItemAuthor }>
+              { this.props.comment.author.displayName }
+            </Text>
+            <Text style={ styles.commentItemDetails }>
+              { timeAgo(Date.parse(this.props.comment.created)) }
+            </Text>
+          </View>
+          <View style={ styles.commentItemBody }>
+            <Text style={ styles.commentItemBodyText }>
+              { this.props.comment.body.trim() }
+            </Text>
+          </View>
+        </View>
+      );
+    }
+  },
+
   render() {
+
+
     return (
       <View>
         <View style={ styles.commentItemComments }>
           <TouchableHighlight
             underlayColor='rgba(0,0,0,0.1)'
             onPress={() => {
-              this.setState({
-                collapsed: !this.state.collapsed
-              });
+                if(this.state.isCompact)
+                  this.setState({ isCompact: false });
+                else
+                  this.setState({
+                    collapsed: !this.state.collapsed
+                  });
             }}
+            delayLongPress={ 750 }
+            onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}
           >
-            <View style={[ styles.commentItem, { 
-              //marginLeft: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth - 1) * 3,
-              backgroundColor: (this.state.selected) ? '#eee' : '#fff',
-              borderLeftColor: (this.props.comment.depth == 0) ? 'transparent' : colorMap[(this.props.comment.depth - 1) % colorMap.length],
-              borderLeftWidth: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth) * 5
-            }]}>
-              <View style={ styles.commentItemTop }>
-                <Text style={ styles.commentItemAuthor }>
-                  { this.props.comment.author.displayName }
-                </Text>
-                <Text style={ styles.commentItemDetails }>
-                  { timeAgo(Date.parse(this.props.comment.created)) }
-                </Text>
-              </View>
-              <View style={ styles.commentItemBody }>
-                <Text style={ styles.commentItemBodyText }>
-                  { this.props.comment.body.trim() }
-                </Text>
-              </View>
-            </View>
+            {this._renderCommentBody()}
           </TouchableHighlight>
           <Collapsible collapsed={this.state.collapsed} >
             <View style={ styles.commentItemActions }>

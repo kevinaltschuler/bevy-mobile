@@ -117,7 +117,7 @@ var Event = React.createClass({
   },
 
   _renderPostImage() {
-    var imageURL = (_.isEmpty(this.state.post.images[0]))? 'http://api.joinbevy.com/img/default_event_img.png' : this.state.post.images[0];
+    var imageURL = (_.isEmpty(this.state.post.images[0]) || this.state.post.images[0] == '/img/default_event_img.png')? 'http://api.joinbevy.com/img/default_event_img.png' : this.state.post.images[0];
     return (
       <View style={{borderTopLeftRadius: 5, borderTopRightRadius: 5}}>
         <Image

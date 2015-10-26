@@ -8,6 +8,7 @@ var {
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
+var constants = require('./../../constants');
 
 var ThreadItem = require('./ThreadItem.ios.js');
 
@@ -39,7 +40,7 @@ var ThreadList = React.createClass({
           dataSource={ this.state.threads }
           style={ styles.list }
           renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          renderFooter={() => (<View style={{marginBottom: -20}}/>)}
+          renderFooter={() => (<View style={{marginBottom: 0}}/>)}
           renderRow={(thread) => {
 
             var active = false;

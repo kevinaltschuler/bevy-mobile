@@ -112,7 +112,7 @@ var FullEventBody = React.createClass({
   },
 
   _renderPostImage() {
-    var imageURL = (_.isEmpty(this.state.post.images[0])) ? 'http://api.joinbevy.com/img/default_event_img.png' : this.state.post.images[0];
+    var imageURL = (_.isEmpty(this.state.post.images[0]) || this.state.post.images[0] == '/img/default_event_img.png')? 'http://api.joinbevy.com/img/default_event_img.png' : this.state.post.images[0];
     return (
       <View style={{borderTopLeftRadius: 5, borderTopRightRadius: 5}}>
         <Image
@@ -175,11 +175,6 @@ var styles = StyleSheet.create({
     borderBottomColor: '#ddd',
     padding: 15,
   },
-  titleText: {
-    width: cardWidth - 40 - 10 - 16,
-    color: '#282929',
-    fontSize: 12
-  },
   subTitleText: {
     fontSize: 9,
     color: '#282929'
@@ -188,13 +183,20 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    marginBottom: 5,
+    marginBottom: 0,
     paddingTop: 5,
     fontSize: 20
   },
   titleText: {
     fontSize: 24,
     color: '#fff',
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginLeft: 10,
+    marginBottom: 10,
+    shadowColor: 'black',
+    shadowRadius: 10,
+    shadowOpacity: .5,
+    shadowOffset:  {width: 0, height: 0}
   },
   descriptionText: {
     color: '#777',

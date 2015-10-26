@@ -114,7 +114,6 @@ var PostList = React.createClass({
   },
 
   _onPostsLoaded() {
-    console.log('posts loaded');
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
       loading: false
@@ -126,6 +125,12 @@ var PostList = React.createClass({
       this.props.activeBevy, 
       (this.props.profileUser) ? this.props.profileUser._id : null
     );
+  },
+
+  handleScroll(y) {
+    this.setState({
+      scrollY: y
+    })
   },
 
   _renderHeader() {
@@ -163,6 +168,9 @@ var PostList = React.createClass({
             ref={LISTVIEW}
             dataSource={ this.state.dataSource }
             style={ styles.postContainer }
+            onScroll={(data) => {
+              this.props.onScroll(data.nativeEvent.contentOffset.y);
+            }}
             scrollRenderAheadDistance={3}
             renderHeader={() => { 
               return this._renderHeader();

@@ -55,7 +55,8 @@ _.extend(PostStore, {
         }
         // frontpage posts
         this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
-        this.posts.comparator = this.sortByTop;
+        this.posts.comparator = this.sortByNew;
+        this.sortType = 'new';
 
         // trigger loading event so frontend can respond
         this.trigger(POST.LOADING);
@@ -68,8 +69,6 @@ _.extend(PostStore, {
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
-        this.sortType = 'new';
 
         // trigger anyways
         this.trigger(POST.CHANGE_ALL); 
