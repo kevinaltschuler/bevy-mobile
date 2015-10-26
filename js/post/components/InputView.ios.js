@@ -360,7 +360,7 @@ var styles = StyleSheet.create({
   },
   toBevyPicker: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.25)',
+    backgroundColor: 'rgba(0,0,0,.15)',
     padding: 5,
     marginRight: 10,
     borderRadius: 3

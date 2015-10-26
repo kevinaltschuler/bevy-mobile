@@ -136,11 +136,23 @@ var BevyView = React.createClass({
       || this.props.bevyRoute.name == routes.BEVY.INFO.name 
       || this.props.bevyRoute.name == routes.BEVY.SETTINGS.name )
     ? <View />
-    : <InfoButton
-      color={this.state.fontColor} 
-      onPress={() => {
-      this.props.bevyNavigator.push(routes.BEVY.INFO)
-    }} />;
+    : <TouchableHighlight
+        underlayColor={'rgba(0,0,0,0.1)'}
+        onPress={() => {
+          this.props.bevyNavigator.push(routes.BEVY.INFO)
+        }} 
+        style={{
+          marginRight: 10,
+          borderRadius: 2,
+          paddingHorizontal: 4,
+          paddingVertical: 2,
+          backgroundColor: this.state.fontColor
+        }}
+      >
+        <Text style={{ color: this.state.inverseColor }}>
+          info
+        </Text>
+      </TouchableHighlight>;
 
     var sortButton = (
       <TouchableHighlight

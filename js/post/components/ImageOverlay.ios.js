@@ -8,10 +8,13 @@ var {
   StyleSheet,
   TouchableHighlight,
   PanResponder,
-  Modal
+  Modal,
+  TouchableWithoutFeedback,
+  TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var { BlurView, VibrancyView } = require('react-native-blur');
+var Swiper = require('react-native-swiper-fork');
 
 var constants = require('./../../constants');
 
@@ -114,6 +117,31 @@ var ImageOverlay = React.createClass({
           { this.state.imageIndex + 1 }/{ this.props.images.length }
         </Text>;
 
+      var imageCards = [];
+      for (var key in this.props.images) {
+        var image = this.props.images[key];
+        imageCards.push(
+          <View style={styles.card}>
+            <Image
+              style={ styles.image }
+              source={{ uri: image }}
+              resizeMode='contain'
+            >
+            </Image>
+            <TouchableWithoutFeedback
+              style={{width: constants.width, height: constants.height}}
+              onPress={() => {
+                this.setState({
+                  isVisible: false
+                });
+              }}
+            >
+              <View/>
+            </TouchableWithoutFeedback>
+          </View>
+        );
+      }
+
 
     return (
       <Modal
@@ -121,36 +149,36 @@ var ImageOverlay = React.createClass({
         transparent={true}
         Visible={ this.state.isVisible }
       >
-        <BlurView blurType='dark' style={ styles.container}>
-          <View style={styles.card}>
-           <View style={ styles.topBar }>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.2)'
-                style={ styles.closeButton }
-                onPress={() => {
-                  this.setState({
-                    isVisible: false
-                  });
-                }}
-              >
-                <Icon
-                  name='ios-close-empty'
-                  size={ 30 }
-                  style={{ width: 30, height: 30 }}
-                  color='#333'
-                />
-              </TouchableHighlight>
-
-              {imageCount}
-              {leftButton}
-              {rightButton}
-            </View>
-            <Image
-              style={ styles.image }
-              source={{ uri: this.props.images[this.state.imageIndex] }}
-              resizeMode='contain'
+        <BlurView blurType='dark' style={styles.container}>
+          <View>
+           <TouchableOpacity
+              activeOpacity={.6}
+              style={ styles.closeButton }
+              onPress={() => {
+                this.setState({
+                  isVisible: false
+                });
+              }}
             >
-            </Image>
+              <Icon
+                name='ios-close-empty'
+                size={ 40 }
+                style={{ width: 40, height: 40, fontSize: 'bold' }}
+                color='#fff'
+              />
+            </TouchableOpacity>
+            <Swiper 
+              contentContainerStyle={styles.container} 
+              showsButtons={false}            
+              dot={<View style={{backgroundColor:'rgba(255,255,255,.3)', width: 13, height: 13,borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
+              activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+              paginationStyle={{
+                bottom: 70,
+              }}
+              loop={true}
+            >
+              {imageCards}
+            </Swiper>
           </View>
         </BlurView>
       </Modal>
@@ -169,9 +197,9 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   },
   card: {
-    backgroundColor: '#fff',
-    height: constants.height * .8,
-    width: constants.width * .8,
+    backgroundColor: 'rgba(0,0,0,0)',
+    height: constants.height,
+    width: constants.width,
     flexDirection: 'column',
     shadowColor: '#000',
     borderRadius: 20,
@@ -198,11 +226,15 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   closeButton: {
-    height: 48,
+    height: 68,
     paddingLeft: 10,
     paddingRight: 10,
+    paddingTop: 40,
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 20,
+    marginTop: 50,
+    color: 'white',
   },
   imageCountText: {
     flex: 1,
@@ -226,9 +258,9 @@ var styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: constants.width * .8,
+    width: constants.width,
     height: constants.height - 48 - 10 - 10 // top bar plus padding
-  }
+  },
 });
 
 module.exports = ImageOverlay;

@@ -12,8 +12,9 @@ var {
   View,
   ListView,
   TouchableHighlight,
+  ActivityIndicatorIOS
 } = React;
-
+var Spinner = require('react-native-spinkit');
 var RCTRefreshControl = require('react-refresh-control');
 
 var _ = require('underscore');
@@ -63,15 +64,25 @@ var PostList = React.createClass({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
+      loading: false
     };
+  },
+
+  setLoading() {
+    this.setState({
+      loading: true,
+      dataSource: this.state.dataSource.cloneWithRows(['loading']),
+    });
   },
 
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
+    BevyStore.on(POST.LOADING, this.setLoading);
+    PostStore.on(POST.LOADING, this.setLoading);
 
     RCTRefreshControl.configure({
-      node: this.refs[LISTVIEW]
+      node: this.refs[LISTVIEW],
     }, () => {
       this.onRefresh();
       setTimeout(() => {
@@ -83,13 +94,16 @@ var PostList = React.createClass({
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
     BevyStore.off(POST.LOADED, this._rerender);
+    BevyStore.off(POST.LOADING, this.setLoading);
+    PostStore.off(POST.LOADING, this.setLoading);
   },
 
   _rerender() {
     console.log('rerender');
     var allPosts = JSON.parse(JSON.stringify(PostStore.getAll()));
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(allPosts)
+      dataSource: this.state.dataSource.cloneWithRows(allPosts),
+      loading: false
     });
   },
 
@@ -102,7 +116,8 @@ var PostList = React.createClass({
   _onPostsLoaded() {
     console.log('posts loaded');
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll())
+      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
+      loading: false
     });
   },
 
@@ -153,6 +168,18 @@ var PostList = React.createClass({
               return this._renderHeader();
             }}
             renderRow={(post) => {
+              if(this.state.loading) {
+                return (
+                <View style={styles.spinnerContainer}>
+                  <Spinner 
+                    isVisible={true} 
+                    size={40} 
+                    type={'Arc'} 
+                    color={'#2cb673'}
+                  />
+                </View>
+                );
+              }
               if(_.isEmpty(post.bevy)) {
                 return <View/>
               }
@@ -170,7 +197,6 @@ var PostList = React.createClass({
                   return <View/>;
                 }
               }
-              
               if(post.type == 'event')
                 return <View style={{backgroundColor: '#eee'}}> 
                   <Event 
@@ -191,7 +217,7 @@ var PostList = React.createClass({
                 </View>;
             }.bind(this)}
           />
-      </View>
+        </View>
     );
   }
 });
@@ -210,6 +236,15 @@ var styles = StyleSheet.create({
   },
   tagOverlay: {
 
+  },
+  spinnerContainer: {
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: '#eee',
+    paddingTop: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: constants.height - 300
   },
   cardContainer: {
     height: 50,
