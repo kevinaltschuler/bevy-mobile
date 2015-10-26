@@ -17,6 +17,7 @@ var {
 } = React;
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var ChatStore = require('./../../ChatStore');
 var UserStore = require('./../../../user/UserStore');
 
@@ -27,6 +28,11 @@ var ThreadImage = React.createClass({
 
   _renderSingleImage() {
     var image_url = ChatStore.getThreadImageURL(this.props.thread._id);
+    if(image_url == constants.siteurl + '/img/user-profile-icon.png') {
+
+    } else {
+      image_url += '?w=50&h=50';
+    }
     var imageStyle = {
       width: 40,
       height: 40,
@@ -36,7 +42,7 @@ var ThreadImage = React.createClass({
       borderRadius: 20,
     };
     return (
-      <Image style={ imageStyle } source={{ uri: image_url + '?w=50&h=50' }}/>
+      <Image style={ imageStyle } source={{ uri: image_url }}/>
     );
   },
 
