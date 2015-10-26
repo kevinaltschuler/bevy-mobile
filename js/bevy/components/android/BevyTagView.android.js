@@ -94,7 +94,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
+    marginTop: 10
   },
   title: {
     flex: 1,
