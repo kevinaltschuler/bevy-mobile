@@ -62,13 +62,13 @@ var CommentItem = React.createClass({
       (this.state.showActionBar) 
       ? '#eee' 
       : '#fff';
-    
+
     if (this.state.isCompact) {
       return (
-        <View style={[ styles.comment, commentStyle ]}>
+        <View style={[ styles.commentItem, commentStyle ]}>
             <View style={ styles.header }>
               <Icon
-                name='add'
+                name='ios-plus-empty'
                 size={ 20 }
                 color='#AAA'
                 style={ styles.plusIcon }
@@ -249,7 +249,24 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  plusIcon: {
+    marginRight: 8
+  },
+  author: {
+    fontWeight: 'bold',
+    marginRight: 4,
+    color: '#888'
+  },
+  timeAgo: {
+    color: '#AAA'
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 12,
+    paddingRight: 12
+  },
 });
 
 module.exports = CommentList;

@@ -184,16 +184,12 @@ var CommentView = React.createClass({
   },
 
   _renderNoCommentsText() {
-    if(_.isEmpty(this.state.comments)) return;
-    if(this.state.comments.length <= 0) {
-      return (
-        <Text style={ styles.noCommentsText }>
-          No Comments Yet!
-        </Text>
-      );
-    } else {
-      return null;
-    }
+    var text = <Text style={ styles.noCommentsText }> No Comments Yet! </Text>;
+    if(_.isEmpty(this.state.comments)) 
+      return text;
+    if(this.state.comments.length <= 0) 
+      return text;
+    return null;
   },
 
   _renderReplyBar() {
