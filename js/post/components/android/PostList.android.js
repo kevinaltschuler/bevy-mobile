@@ -52,7 +52,8 @@ var PostList = React.createClass({
     posts = this.prunePosts(posts);
     return {
       posts: ds.cloneWithRows(posts),
-      loading: true // at first, posts will still be loading on the store
+      loading: _.isEmpty(posts) // if there are no posts to display, 
+                                // then they're probably loading at first
     };
   },
 

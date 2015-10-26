@@ -47,6 +47,15 @@ var SettingsView = React.createClass({
     this.props.mainNavigator.push(routes.MAIN.SWITCHACCOUNT);
   },
 
+  logOut() {
+    // go back to posts page
+    this.props.tabActions.switchTab('POSTS');
+    // clear user
+    UserActions.logOut();
+    // log out of google too just to be safe
+    GoogleAuth.logout();
+  },
+
   render() {
     if(!this.props.loggedIn) {
       return (
@@ -59,17 +68,6 @@ var SettingsView = React.createClass({
             <View style={ styles.logInButton }>
               <Text style={ styles.logInButtonText }>Log In</Text>
             </View>
-          </TouchableNativeFeedback>
-          <TouchableNativeFeedback
-            onPress={() => {
-              GoogleAuth.logout();
-            }}
-          >
-              <View style={ styles.settingButton }>
-                <Text style={ styles.settingButtonText }>
-                  log out of google
-                </Text>
-              </View>
           </TouchableNativeFeedback>
         </ScrollView>
       );
@@ -90,11 +88,7 @@ var SettingsView = React.createClass({
         />
         <Text style={ styles.settingHeader }>Account</Text>
         <TouchableNativeFeedback
-          onPress={() => {
-            UserActions.logOut();
-            // switch back to posts tab
-            this.props.tabActions.switchTab('POSTS');
-          }}
+          onPress={ this.logOut }
         >
           <View style={ styles.settingButton }>
             <Icon
@@ -165,7 +159,7 @@ var SettingsView = React.createClass({
                 PlaceholderSetting
               </Text>
             </View>
-        </TouchableNativeFeedback>]
+        </TouchableNativeFeedback>
       </ScrollView>
     );
   }

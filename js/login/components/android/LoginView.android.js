@@ -21,6 +21,7 @@ var USER = constants.USER;
 var UserStore = require('./../../../user/UserStore');
 var UserActions = require('./../../../user/UserActions');
 var AppActions = require('./../../../app/AppActions');
+var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
 
 var LoginView = React.createClass({
   propTypes: {
