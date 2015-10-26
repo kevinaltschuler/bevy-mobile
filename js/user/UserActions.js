@@ -26,6 +26,13 @@ var UserActions = {
     });
   },
 
+  logInGoogle(google_id) {
+    Dispatcher.dispatch({
+      actionType: USER.LOGIN_GOOGLE,
+      google_id: google_id
+    });
+  },
+
   logOut() {
     Dispatcher.dispatch({
       actionType: USER.LOGOUT

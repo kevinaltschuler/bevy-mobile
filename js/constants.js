@@ -109,6 +109,7 @@ exports.CHAT = {
 exports.USER = {
   UPDATE: 'user_update',
   LOGIN: 'user_login',
+  LOGIN_GOOGLE: 'user_login_google',
   LOGOUT: 'user_logout',
   CHANGE_PROFILE_PICTURE: 'user_change_profile_picture',
 

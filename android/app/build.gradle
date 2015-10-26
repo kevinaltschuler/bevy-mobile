@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
-<<<<<<< HEAD
-=======
 apply plugin: 'com.google.gms.google-services'
->>>>>>> cfda600... GOOGLE LOGIN BITCHES
 
 android {
     compileSdkVersion 23
@@ -39,13 +36,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-<<<<<<< HEAD
-    compile 'com.android.support:appcompat-v7:23.0.0'
-=======
     compile 'com.google.android.gms:play-services-identity:8.1.0'
     compile 'com.google.android.gms:play-services-plus:8.1.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
->>>>>>> cfda600... GOOGLE LOGIN BITCHES
     compile 'com.facebook.react:react-native:0.12.+'
     compile project(':react-native-vector-icons')
     compile 'com.loopj.android:android-async-http:1.4.9'

@@ -16,7 +16,10 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
+<<<<<<< HEAD
 var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
+=======
+>>>>>>> 321edf3c881840b3c196215405731dd0ed1b15ec
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -59,6 +62,17 @@ var SettingsView = React.createClass({
             <View style={ styles.logInButton }>
               <Text style={ styles.logInButtonText }>Log In</Text>
             </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={() => {
+              GoogleAuth.logout();
+            }}
+          >
+              <View style={ styles.settingButton }>
+                <Text style={ styles.settingButtonText }>
+                  log out of google
+                </Text>
+              </View>
           </TouchableNativeFeedback>
         </ScrollView>
       );
@@ -147,11 +161,7 @@ var SettingsView = React.createClass({
         <Text style={ styles.settingHeader }>
           App Settings
         </Text>
-        <View style={ styles.settingButton }>
-          <Text style={ styles.settingButtonText }>
-            Placeholder Setting
-          </Text>
-        </View>]
+<<<<<<< HEAD
         <TouchableNativeFeedback
         >
             <View style={ styles.settingButton }>
@@ -159,7 +169,14 @@ var SettingsView = React.createClass({
                 PlaceholderSetting
               </Text>
             </View>
-        </TouchableNativeFeedback>]
+        </TouchableNativeFeedback>
+=======
+        <View style={ styles.settingButton }>
+          <Text style={ styles.settingButtonText }>
+            Placeholder Setting
+          </Text>
+        </View>
+>>>>>>> 321edf3c881840b3c196215405731dd0ed1b15ec
       </ScrollView>
     );
   }
