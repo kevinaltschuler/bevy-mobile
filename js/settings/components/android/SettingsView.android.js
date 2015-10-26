@@ -16,10 +16,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
-<<<<<<< HEAD
 var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
-=======
->>>>>>> 321edf3c881840b3c196215405731dd0ed1b15ec
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -161,7 +158,6 @@ var SettingsView = React.createClass({
         <Text style={ styles.settingHeader }>
           App Settings
         </Text>
-<<<<<<< HEAD
         <TouchableNativeFeedback
         >
             <View style={ styles.settingButton }>
@@ -169,14 +165,7 @@ var SettingsView = React.createClass({
                 PlaceholderSetting
               </Text>
             </View>
-        </TouchableNativeFeedback>
-=======
-        <View style={ styles.settingButton }>
-          <Text style={ styles.settingButtonText }>
-            Placeholder Setting
-          </Text>
-        </View>
->>>>>>> 321edf3c881840b3c196215405731dd0ed1b15ec
+        </TouchableNativeFeedback>]
       </ScrollView>
     );
   }
