@@ -13,6 +13,9 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
+var Subscribable = require('Subscribable');
+var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes')
@@ -22,7 +25,9 @@ var UserStore = require('./../../../user/UserStore');
 var UserActions = require('./../../../user/UserActions');
 var AppActions = require('./../../../app/AppActions');
 
+
 var LoginView = React.createClass({
+
   propTypes: {
     mainRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
@@ -48,6 +53,20 @@ var LoginView = React.createClass({
     UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
   },
 
+  onGoogleLogin() {
+    GoogleAuth.start(
+      function(error) {
+        // error
+        console.log('error', error)
+      },
+      function(data) {
+        // success
+        console.log('success', data);
+        UserActions.logInGoogle(data.id);
+      }
+    );
+  },
+  
   logIn() {
     UserActions.logIn(this.state.username, this.state.password);
   },

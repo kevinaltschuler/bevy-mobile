@@ -36,3 +36,4 @@ android/.gradle/2.4/taskArtifacts/cache.properties
 android/local.properties
 .gradle/*
 android/.gradle/*
+android/app/src/main/assets/index.android.bundle

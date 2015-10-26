@@ -15,6 +15,10 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
 import com.bevyios.FletcherPackage;
+<<<<<<< HEAD
+=======
+import com.bevyios.GoogleAuthPackage;
+>>>>>>> cfda600... GOOGLE LOGIN BITCHES
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
 
@@ -33,6 +37,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
                 .addPackage(new MainReactPackage())
                 .addPackage(new VectorIconsPackage())
                 .addPackage(new FletcherPackage())
+                .addPackage(new GoogleAuthPackage(this))]
                 .addPackage(new DropdownPackage())
                 .setUseDeveloperSupport(BuildConfig.DEBUG)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
