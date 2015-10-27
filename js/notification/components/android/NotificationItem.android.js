@@ -265,12 +265,13 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   titleTextColumn: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    height: 40
+    height: 60
   },
   titleText: {
-    color: '#282929'
+    color: '#282929',
   },
   subTitleText: {
     fontSize: 10,
