@@ -17,7 +17,8 @@ var NotificationItem = require('./NotificationItem.android.js');
 
 var NotificationList = React.createClass({
   propTypes: {
-    allNotifications: React.PropTypes.array
+    allNotifications: React.PropTypes.array,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -38,11 +39,13 @@ var NotificationList = React.createClass({
       <View style={ styles.container }>
         <ListView
           dataSource={ this.state.notifications }
+          style={ styles.notificationList }
           renderRow={(notification) => {
             return (
               <NotificationItem
                 key={ 'notification:' + notification._id }
                 notification={ notification }
+                mainNavigator={ this.props.mainNavigator }
               />
             );
           }}
@@ -55,6 +58,9 @@ var NotificationList = React.createClass({
 var styles = StyleSheet.create({
   container: {
 
+  },
+  notificationList: {
+    paddingTop: 10
   }
 });
 
