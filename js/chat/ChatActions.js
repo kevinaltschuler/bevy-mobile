@@ -1,3 +1,9 @@
+/**
+ * ChatActions.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var Dispatcher = require('./../shared/dispatcher');
@@ -5,7 +11,6 @@ var constants = require('./../constants');
 var CHAT = constants.CHAT;
 
 var ChatActions = {
-
   switchThread(thread_id: String) {
     Dispatcher.dispatch({
       actionType: CHAT.SWITCH,
