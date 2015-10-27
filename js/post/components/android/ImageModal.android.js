@@ -50,7 +50,8 @@ var ImageModal = React.createClass({
           this.dismiss();
           return;
         }
-        if(Math.abs(gestureState.dx) > (constants.width / 2)) {
+        if(Math.abs(gestureState.dx) > (constants.width / 2) 
+          && this.state.images.length > 1) {
           if(gestureState.dx > 0) {
             // prev img
             this.setState({
