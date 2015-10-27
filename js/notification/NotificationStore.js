@@ -36,9 +36,10 @@ _.extend(NotificationStore, {
         this.notifications.fetch({
           reset: true,
           success: function(collection, response, options) {
-            this.trigger(NOTIFICATION.CHANGE_ALL);
-            this.unread = this.notifications.filter(function(notification){ return notification.read == false; })
+            this.unread = this.notifications.filter(
+              (notification) => notification.read == false)
             .length; // count all notifications that are unread
+            this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
         });
 
@@ -164,8 +165,12 @@ _.extend(NotificationStore, {
     }
   },
 
-  getAll: function() {
+  getAll() {
     return this.notifications.toJSON();
+  },
+
+  getUnread() {
+    return this.unread;
   }
 });
 

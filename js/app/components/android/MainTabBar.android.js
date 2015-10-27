@@ -33,7 +33,7 @@ var iconSize = 24;
 
 var MainTabBar = React.createClass({
   propTypes: {
-
+    unreadCount: React.PropTypes.number
   },
 
   getInitialState() {
@@ -92,6 +92,7 @@ var MainTabBar = React.createClass({
           <TabBarItem 
             tab={ tabs.notifications }
             activeTab={ this.state.activeTab }
+            unreadCount={ this.props.unreadCount }
             onPress={() => this.setState({ activeTab: tabs.notifications }) } 
             icon={<Icon name='notifications' size={ iconSize } color={ unselectedColor } />}
             selectedIcon={<Icon name='notifications' size={ iconSize } color={ selectedColor } />}
