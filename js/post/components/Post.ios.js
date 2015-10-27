@@ -232,7 +232,7 @@ var Post = React.createClass({
             </TouchableHighlight>
           </View>
           <Collapsible collapsed={this.state.collapsed} >
-            <PostActionList post={ this.state.post } { ...this.props } />
+            <PostActionList post={ this.state.post } { ...this.props } user={this.props.user} />
           </Collapsible>
         </View>
     );

@@ -51,7 +51,8 @@ var MessageView = React.createClass({
       keyboardSpace: 0,
       messageValue: '',
       messages: messages,
-      dataSource: ds.cloneWithRows(messages)
+      dataSource: ds.cloneWithRows(messages),
+      scrollY: 0
     };
   },
   
@@ -102,6 +103,12 @@ var MessageView = React.createClass({
   handleScroll: function(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
     //console.log(scrollY);
+    if(this.state.scrollY == null) {
+      this.setState({
+        scrollY: scrollY
+      });
+      return;
+    }
     if(this.isTouching) {
       if(scrollY < -40) {
         if(!this.state.isRefreshing) {
@@ -112,6 +119,17 @@ var MessageView = React.createClass({
         }
       }
     }
+    if((this.state.scrollY - scrollY) > 3 && this.state.scrollY < -5) {
+      //console.log('blurring');
+      this.refs.MessageInput.blur();
+    }
+    if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
+      //console.log('focusing');
+      this.refs.MessageInput.focus();
+    }
+    this.setState({
+      scrollY: scrollY
+    })
   },
 
   handleResponderGrant: function() {
@@ -163,6 +181,14 @@ var MessageView = React.createClass({
       return null;
   },
 
+  clearAndRetainFocus: function(evt, elem) {
+    this.setState({messageValue: elem.text});
+    setTimeout(function() {
+      this.setState({messageValue: this.getInitialState().messageValue});
+      this.refs.MessageInput.focus();
+    }.bind(this), 0);
+  },
+
   render: function () {
 
     return (
@@ -184,12 +210,14 @@ var MessageView = React.createClass({
         />
         <TextInput
           style={[ styles.textInput ]}
+          ref='MessageInput'
           placeholder={ 'Chat' }
           value={ this.state.messageValue }
           returnKeyType={ 'send' }
           onChange={ this.onChange }
           onSubmitEditing={ this.onSubmitEditing }
           clearButtonMode={ 'while-editing' }
+          onEndEditing={this.clearAndRetainFocus}
         />
       </View>
     );

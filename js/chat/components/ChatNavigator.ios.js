@@ -20,6 +20,7 @@ var ChatView = require('./ChatView.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 var ThreadList = require('./ThreadList.ios.js');
+var ChatStore = require('./../ChatStore');
 
 var _ = require('underscore');
 var routes = require('./../../routes');
@@ -29,6 +30,18 @@ var ChatNavigator = React.createClass({
   propTypes: {
     allThread: React.PropTypes.array,
     activeThread: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      navbarText: 'Chat'
+    }
+  },
+
+  setNavbarText(text) {
+    this.setState({
+      navbarText: text
+    });
   },
 
   render() {
@@ -68,14 +81,18 @@ var ChatNavigator = React.createClass({
               navbarText = this.props.activeThread.bevy.name + "'s Chat";
             } else {
               // PM
+              navbarText = ChatStore.getThreadName(this.props.activeThread._id);
             }
+          }
+          if(route.name == routes.CHAT.LISTVIEW.name) {
+            navbarText = 'Chat'
           }
 
           var backButton = (route.name != routes.CHAT.CHATVIEW.name)
           ? <View />
           : <BackButton onPress={() => {
             navigator.pop();
-          }} />;
+          }.bind(this)} />;
 
           return (
             <View style={{ flex: 1, backgroundColor: '#eee'}}>

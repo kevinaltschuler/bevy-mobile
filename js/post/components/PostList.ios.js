@@ -212,6 +212,7 @@ var PostList = React.createClass({
                     post={ post } 
                     mainRoute={ this.props.mainRoute }
                     mainNavigator={ this.props.mainNavigator }
+                    user={ this.props.user }
                   />
                 </View>;
               else
@@ -221,6 +222,7 @@ var PostList = React.createClass({
                     post={ post } 
                     mainRoute={ this.props.mainRoute }
                     mainNavigator={ this.props.mainNavigator }
+                    user={ this.props.user }
                   />
                 </View>;
             }.bind(this)}

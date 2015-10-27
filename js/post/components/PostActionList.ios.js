@@ -14,7 +14,8 @@ var routes = require('./../../routes');
 var PostActionList = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   _renderShareButton() {
@@ -36,6 +37,35 @@ var PostActionList = React.createClass({
           />
           <Text style={ styles.postOptionsText}>
             Share
+          </Text>
+        </View>
+      </TouchableHighlight>
+    );
+  },
+
+  _renderEditButton() {
+    if(this.props.user._id != this.props.post.author._id) {
+      return <View/>
+    }
+    return (
+      <TouchableHighlight
+        underlayColor='rgba(44,182,105,0.8)'
+        style={ styles.postOptionsButtonContainer }
+        onPress={() => {
+          var route = routes.MAIN.EDITPOST;
+          route.post = this.props.post;
+          this.props.mainNavigator.push(route);
+        }}
+      >
+        <View style={ styles.postOptionsButton }>
+          <Icon
+            name='edit'
+            color='#fff'
+            size={ 30 }
+            style={ styles.postOptionsIcon }
+          />
+          <Text style={ styles.postOptionsText}>
+            Edit
           </Text>
         </View>
       </TouchableHighlight>
@@ -124,6 +154,7 @@ var PostActionList = React.createClass({
       <View style={ styles.postOptions }>
         { this._renderShareButton() }
         { this._renderPinButton() }
+        { this._renderEditButton() }
         { this._renderAuthorButton() }
         { this._renderDeleteButton() }
       </View>
@@ -147,7 +178,8 @@ var styles = StyleSheet.create({
   postOptionsIcon: {
     width: 30,
     height: 30,
-    marginRight: 10
+    marginRight: 10,
+    marginLeft: 10
   },
   postOptionsText: {
     color: '#fff', 

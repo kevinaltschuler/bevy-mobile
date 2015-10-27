@@ -6,7 +6,8 @@ var {
   Image,
   Text,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } = React;
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
@@ -87,26 +88,65 @@ var ProfileView = React.createClass({
           right={ <View /> }
         />
 
-        <View style={ styles.body }>
+        <ScrollView>
 
-          <View style={ styles.profileCard }>
-            <Image 
-              source={{ uri: this.props.profileUser.image_url }}
-              style={ styles.profileImage }
-            />
-            <View style={ styles.profileDetails }>
-              <Text style={ styles.profileName }>{ this.props.profileUser.displayName }</Text>
-              <Text style={ styles.profileEmail }>{ this.props.profileUser.email }</Text>
+          <View style={ styles.body }>
+
+            <View style={ styles.profileCard }>
+              <Image 
+                source={{ uri: this.props.profileUser.image_url }}
+                style={ styles.profileImage }
+              />
+              <View style={ styles.profileDetails }>
+                <Text style={ styles.profileName }>{ this.props.profileUser.displayName }</Text>
+                <Text style={ styles.profileEmail }>{ this.props.profileUser.email }</Text>
+              </View>
             </View>
+
+            <Text style={styles.sectionTitle}>
+              General
+            </Text>
+
+            <View style={styles.generalItem}>
+              <Text style={styles.generalTitle}>
+                points
+              </Text>
+              <Text style={styles.generalText}>
+                {this.props.user.points}
+              </Text>
+            </View>  
+
+            <View style={styles.generalItem}>
+              <Text style={styles.generalTitle}>
+                comments
+              </Text>
+              <Text style={styles.generalText}>
+                {this.props.user.commentCount}
+              </Text>
+            </View>
+
+            <View style={styles.generalItem}>
+              <Text style={styles.generalTitle}>
+                posts
+              </Text>
+              <Text style={styles.generalText}>
+                {this.props.user.postCount}
+              </Text>
+            </View>
+
+            <Text style={styles.sectionTitle}>
+              Posts
+            </Text>
+
+            <PostList 
+              showNewPostCard={ false }
+              profileUser={ this.props.profileUser }
+              onScroll={() => {}}
+              { ...this.props } 
+            />
+
           </View>
-
-          <PostList 
-            showNewPostCard={ false }
-            profileUser={ this.props.profileUser }
-            { ...this.props } 
-          />
-
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -171,6 +211,28 @@ var styles = StyleSheet.create({
     color: '#666', 
     fontSize: 12
   },
+  generalItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    height: 48,
+    borderWidth: .5,
+    borderColor: 'rgba(0,0,0,.2)',
+    backgroundColor: '#fff'
+  },
+  generalTitle: {
+    color: '#666'
+  },
+  generalText: {
+    color: '#666'
+  },
+  sectionTitle: {
+    color: '#666',
+    marginLeft: 15,
+    marginVertical: 10,
+    fontWeight: 'bold'
+  }
 });
 
 module.exports = ProfileView;
