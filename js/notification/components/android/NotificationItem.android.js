@@ -12,6 +12,7 @@ var {
   Image,
   TouchableHighlight,
   TouchableNativeFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -37,12 +38,13 @@ var NotificationItem = React.createClass({
   },
 
   goToPost() {
-    this.markRead();
+    /*this.markRead();
     //if(this.props.inCommentView) return;
     var commentRoute = routes.MAIN.COMMENT;
     commentRoute.postID = this.props.notification.data.post_id;
     console.log(commentRoute);
-    this.props.mainNavigator.push(commentRoute);
+    this.props.mainNavigator.push(commentRoute);*/
+    ToastAndroid.show('Feature coming soon', ToastAndroid.SHORT);
   },
 
   acceptJoinRequest() {
