@@ -33,7 +33,6 @@ var NotificationItem = React.createClass({
   },
 
   dismiss: function() {
-    console.log('dismiss');
     NotificationActions.dismiss(this.props.notification._id);
   },
 

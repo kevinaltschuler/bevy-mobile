@@ -71,7 +71,8 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE'
   },
   bevyList: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   },
   noBeviesContainer: {
     flex: 1,

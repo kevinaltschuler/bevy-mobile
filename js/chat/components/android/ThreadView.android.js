@@ -9,12 +9,17 @@ var React = require('react-native');
 var {
   View,
   ListView,
+  ScrollView,
+  TouchableNativeFeedback,
   Text,
   StyleSheet
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
+var Collapsible = require('react-native-collapsible');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 
 var ThreadView = React.createClass({
   propTypes: {
@@ -26,15 +31,22 @@ var ThreadView = React.createClass({
   },
 
   getInitialState() {
-    var threadData = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    var threads = this.props.allThreads;
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      threads: threadData.cloneWithRows(this.props.allThreads)
+      ds: ds.cloneWithRows(threads),
+      threads: threads,
+      bevyPanelOpen: true,
+      groupPanelOpen: true,
+      pmPanelOpen: true
     };
   },
 
   componentWillReceiveProps(nextProps) {
+    var threads = nextProps.allThreads;
     this.setState({
-      threads: this.state.threads.cloneWithRows(nextProps.allThreads)
+      ds: this.state.ds.cloneWithRows(threads),
+      threads: threads
     });
   },
 
@@ -53,27 +65,117 @@ var ThreadView = React.createClass({
     );
   },
 
+  _renderBevyThreads() {
+    var bevyThreads = [];
+    var threads = _.filter(this.state.threads, (thread) => !_.isEmpty(thread.bevy));
+    for(var key in threads) {
+      var thread = threads[key];
+      bevyThreads.push(this._renderThreadItem(thread));
+    }
+    if(_.isEmpty(bevyThreads)) {
+      bevyThreads = <Text style={ styles.noThreadsText }>No Bevy Chats</Text>;
+    }
+    return (
+      <Collapsible duration={ 1000 } collapsed={ !this.state.bevyPanelOpen }>
+        { bevyThreads }
+      </Collapsible>
+    );
+  },
+  _renderGroupThreads() {
+    var groupThreads = [];
+    var threads = _.filter(this.state.threads, (thread) => thread.type == 'group');
+    for(var key in threads) {
+      var thread = threads[key];
+      groupThreads.push(this._renderThreadItem(thread));
+    }
+    if(_.isEmpty(groupThreads)) {
+      groupThreads = <Text style={ styles.noThreadsText }>No Group Chats</Text>;
+    }
+    return (
+      <Collapsible duration={ 1000 } collapsed={ !this.state.groupPanelOpen }>
+        { groupThreads }
+      </Collapsible>
+    );
+  },
+  _renderPMThreads() {
+    var pmThreads = [];
+    var threads = _.filter(this.state.threads, (thread) => thread.type == 'pm');
+    for(var key in threads) {
+      var thread = threads[key];
+      pmThreads.push(this._renderThreadItem(thread));
+    }
+    if(_.isEmpty(pmThreads)) {
+      pmThreads = <Text style={ styles.noThreadsText }>No Private Chats</Text>;
+    }
+    return (
+      <Collapsible duration={ 1000 } collapsed={ !this.state.pmPanelOpen }>
+        { pmThreads }
+      </Collapsible>
+    );
+  },
+  _renderThreadItem(thread) {
+    var active = false;
+    if(thread._id == this.props.activeThread._id) active = true;
+    return (
+      <ThreadItem 
+        thread={ thread }
+        user={ this.props.user }
+        active={ active }
+        chatNavigator={ this.props.chatNavigator }
+        chatRoute={ this.props.chatRoute }
+        mainNavigator={ this.props.mainNavigator }
+      />
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
-        <ListView
-          dataSource={ this.state.threads }
-          style={ styles.list }
-          renderRow={(thread) => {
-            var active = false;
-            if(thread._id == this.props.activeThread._id) active = true;
-            return (
-              <ThreadItem 
-                thread={ thread }
-                user={ this.props.user }
-                active={ active }
-                chatNavigator={ this.props.chatNavigator }
-                mainNavigator={ this.props.mainNavigator }
+        <ScrollView style={ styles.threadList }>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={() => this.setState({ bevyPanelOpen: !this.state.bevyPanelOpen })}
+          >
+            <View style={ styles.panelHeader }>
+              <Text style={ styles.panelHeaderText }>Bevy Chats</Text>
+              <Icon style={ styles.panelHeaderChevron }
+                name={ (this.state.bevyPanelOpen) ? 'expand-more' : 'chevron-right' }
+                size={ 24 }
+                color='#AAA'
               />
-            );
-          }}
-        />
+            </View>
+          </TouchableNativeFeedback>
+          { this._renderBevyThreads() }
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={() => this.setState({ groupPanelOpen: !this.state.groupPanelOpen })}
+          >
+            <View style={ styles.panelHeader }>
+              <Text style={ styles.panelHeaderText }>Group Chats</Text>
+              <Icon style={ styles.panelHeaderChevron }
+                name={ (this.state.groupPanelOpen) ? 'expand-more' : 'chevron-right' }
+                size={ 24 }
+                color='#AAA'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          { this._renderGroupThreads() }
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={() => this.setState({ pmPanelOpen: !this.state.pmPanelOpen })}
+          >
+            <View style={ styles.panelHeader }>
+              <Text style={ styles.panelHeaderText }>Private Chats</Text>
+              <Icon style={ styles.panelHeaderChevron }
+                name={ (this.state.pmPanelOpen) ? 'expand-more' : 'chevron-right' }
+                size={ 24 }
+                color='#AAA'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          { this._renderPMThreads() }
+        </ScrollView>
       </View>
     );
   }
@@ -82,22 +184,21 @@ var ThreadView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    borderTopColor: '#EEE',
+    borderTopWidth: 1
   },
-  list: {
-    flex: 1,
-    paddingTop: 10
+  threadList: {
+
   },
-  noThreadsContainer: {
-    flex: 1,
+  panelHeader: {
+    height: 30,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    paddingHorizontal: 10
   },
-  noThreads: {
-    color: '#AAA',
-    fontSize: 22,
-    textAlign: 'center'
+  panelHeaderText: {
+    color: '#AAA'
   }
 });
 

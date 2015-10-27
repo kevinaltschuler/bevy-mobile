@@ -119,6 +119,23 @@ _.extend(UserStore, {
 
         break;
 
+      case USER.LOGIN_GOOGLE:
+        var google_id = payload.google_id;
+
+        fetch(constants.apiurl + '/users/google/' + google_id)
+        .then((res) => res.json())
+        .then((user) => {
+          console.log('logged in google', user);
+
+          AsyncStorage.setItem('user', JSON.stringify(user))
+            .then((err, result) => {
+            });
+
+          this.setUser(user);
+          this.trigger(USER.LOGIN_SUCCESS, user);
+        });
+
+        break;
       case USER.LOGOUT:
         // remove google token
         AsyncStorage.removeItem('google_id');

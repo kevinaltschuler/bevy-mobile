@@ -27,6 +27,7 @@ var ThreadItem = React.createClass({
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
     thread: React.PropTypes.object,
     user: React.PropTypes.object,
     active: React.PropTypes.bool // is this thread being displayed currently
@@ -89,6 +90,9 @@ var ThreadItem = React.createClass({
     var thread = this.props.thread;
     var threadName = this.state.threadName;
     var threadImage = this.state.threadImage;
+
+    if(_.isEmpty(threadName)) return <View />;
+
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#FFF', false) }

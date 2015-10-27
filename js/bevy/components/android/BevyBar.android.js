@@ -207,8 +207,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    opacity: 1,
-    marginBottom: 8
+    opacity: 1
   },
   bevyImageWrapper: {
     position: 'absolute',

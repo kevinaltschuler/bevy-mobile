@@ -18,7 +18,8 @@ var _ = require('underscore');
 
 var NotificationView = React.createClass({
   propTypes: {
-    allNotifications: React.PropTypes.array
+    allNotifications: React.PropTypes.array,
+    mainNavigator: React.PropTypes.object
   },
 
   _renderNone() {
@@ -34,6 +35,7 @@ var NotificationView = React.createClass({
     return (
       <NotificationList
         allNotifications={ this.props.allNotifications }
+        mainNavigator={ this.props.mainNavigator }
       />
     );
   },

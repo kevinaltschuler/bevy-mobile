@@ -17,6 +17,7 @@ var {
 } = React;
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var ChatStore = require('./../../ChatStore');
 var UserStore = require('./../../../user/UserStore');
 
@@ -25,8 +26,20 @@ var ThreadImage = React.createClass({
     thread: React.PropTypes.object.isRequired
   },
 
-  _renderSingleImage() {
+  getInitialState() {
     var image_url = ChatStore.getThreadImageURL(this.props.thread._id);
+    if(image_url == (constants.siteurl + '/img/user-profile-icon.png')) {
+    } else if(image_url == '/img/user-profile-icon.png') {
+      image_url = constants.siteurl + '/img/user-profile-icon.png';
+    } else {
+      //image_url += '?w=50&h=50';
+    }
+    return {
+      image_url: image_url
+    };
+  },
+
+  _renderSingleImage() {
     var imageStyle = {
       width: 40,
       height: 40,
@@ -35,8 +48,12 @@ var ThreadImage = React.createClass({
       marginRight: 10,
       borderRadius: 20,
     };
+    console.log(this.state.image_url);
     return (
-      <Image style={ imageStyle } source={{ uri: image_url + '?w=50&h=50' }}/>
+      <Image 
+        style={ imageStyle } 
+        source={{ uri: this.state.image_url }}
+      />
     );
   },
 
@@ -58,7 +75,6 @@ var ThreadImage = React.createClass({
         for(var key in threadUsers) {
           if(key > 3) continue; // limit these icons to 4
           var user = threadUsers[key];
-          var image_url = _.isEmpty(user.image_url) ? '/img/user-profile-icon.png' : user.image_url;
           var iconStyle = {
             flex: 1,
             padding: 0,
@@ -132,7 +148,11 @@ var ThreadImage = React.createClass({
               break;
           }
           users.push(
-            <Image key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id } style={ iconStyle } source={{ uri: image_url }}/>
+            <Image 
+              key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id } 
+              style={ iconStyle } 
+              source={{ uri: this.state.image_url }}
+            />
           );
         }
         

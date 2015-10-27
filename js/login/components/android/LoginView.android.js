@@ -21,6 +21,7 @@ var USER = constants.USER;
 var UserStore = require('./../../../user/UserStore');
 var UserActions = require('./../../../user/UserActions');
 var AppActions = require('./../../../app/AppActions');
+var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
 
 var LoginView = React.createClass({
   propTypes: {
@@ -48,6 +49,19 @@ var LoginView = React.createClass({
     UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
   },
 
+  onGoogleLogin() {
+    GoogleAuth.start(
+      function(error) {
+        // error
+        console.log('error', error)
+      },
+      function(data) {
+        // success
+        console.log('success', data);
+        UserActions.logInGoogle(data.id);
+      }
+    );
+  },
   logIn() {
     UserActions.logIn(this.state.username, this.state.password);
   },
@@ -115,7 +129,7 @@ var LoginView = React.createClass({
           </View>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          onPress={() => {}}
+          onPress={ this.onGoogleLogin }
         >
           <View style={ styles.googleLogInButton }>
             <Text style={ styles.googleLogInButtonText }>Sign In With Google</Text>

@@ -16,6 +16,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
+var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -44,6 +45,15 @@ var SettingsView = React.createClass({
 
   goToAccounts() {
     this.props.mainNavigator.push(routes.MAIN.SWITCHACCOUNT);
+  },
+
+  logOut() {
+    // go back to posts page
+    this.props.tabActions.switchTab('POSTS');
+    // clear user
+    UserActions.logOut();
+    // log out of google too just to be safe
+    GoogleAuth.logout();
   },
 
   render() {
@@ -78,11 +88,7 @@ var SettingsView = React.createClass({
         />
         <Text style={ styles.settingHeader }>Account</Text>
         <TouchableNativeFeedback
-          onPress={() => {
-            UserActions.logOut();
-            // switch back to posts tab
-            this.props.tabActions.switchTab('POSTS');
-          }}
+          onPress={ this.logOut }
         >
           <View style={ styles.settingButton }>
             <Icon
@@ -146,11 +152,14 @@ var SettingsView = React.createClass({
         <Text style={ styles.settingHeader }>
           App Settings
         </Text>
-        <View style={ styles.settingButton }>
-          <Text style={ styles.settingButtonText }>
-            Placeholder Setting
-          </Text>
-        </View>
+        <TouchableNativeFeedback
+        >
+            <View style={ styles.settingButton }>
+              <Text style={ styles.settingButtonText }>
+                PlaceholderSetting
+              </Text>
+            </View>
+        </TouchableNativeFeedback>
       </ScrollView>
     );
   }

@@ -63,6 +63,13 @@ _.extend(BevyStore, {
 
       case APP.LOAD:
         var user = UserStore.getUser();
+        // push the frontpage first to reduce UI lag
+        // dont worry this wont create dupes. the fetch calls
+        // should reset the store anyways
+        this.myBevies.unshift({
+          _id: '-1',
+          name: 'Frontpage'
+        });
         if(!_.isEmpty(user._id)) {
           // explicitly set the collection url for the user
           this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
