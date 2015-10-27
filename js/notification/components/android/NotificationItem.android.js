@@ -40,7 +40,7 @@ var NotificationItem = React.createClass({
     this.markRead();
     //if(this.props.inCommentView) return;
     var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = post_id;
+    commentRoute.postID = this.props.notification.data.post_id;
     console.log(commentRoute);
     this.props.mainNavigator.push(commentRoute);
   },

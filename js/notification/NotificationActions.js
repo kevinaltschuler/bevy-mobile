@@ -1,22 +1,23 @@
 /**
  * NotificationActions.js
  * @author albert
+ * @flow
  */
 
 'use strict';
 
-var Dispacther = require('./../shared/dispatcher');
+var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 
 var NotificationActions = {
-  dismiss: function(id) {
+  dismiss(id) {
     Dispatcher.dispatch({
       actionType: NOTIFICATION.DISMISS,
       id: id
     });
   },
-  dismissAll: function() {
+  dismissAll() {
     Dispatcher.dispatch({
       actionType: NOTIFICATION.DISMISS_ALL
     });
