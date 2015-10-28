@@ -11,6 +11,7 @@ var {
   Text,
   TextInput,
   TouchableNativeFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 
@@ -21,6 +22,18 @@ var RegisterView = React.createClass({
   propTypes: {
     loginRoute: React.PropTypes.object,
     loginNavigator: React.PropTypes.object
+  },
+
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    this.props.loginNavigator.pop();
+    return true;
   },
 
   render() {

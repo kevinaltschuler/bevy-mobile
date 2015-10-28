@@ -12,6 +12,7 @@ var {
   Text,
   ListView,
   TouchableNativeFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -36,10 +37,22 @@ var BevyPickerView = React.createClass({
     };
   },
 
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       bevies: this.state.bevies.cloneWithRows(nextProps.myBevies)
     });
+  },
+
+  onBackButton() {
+    this.props.newPostNavigator.pop();
+    return true;
   },
 
   onSwitchBevy(bevy) {

@@ -69,7 +69,6 @@ var TabBarItem = React.createClass({
     var buttonStyles = (this.state.active)
       ? [styles.tabBarItem, { backgroundColor: '#FFF' }]
       : [styles.tabBarItem, { backgroundColor: '#FFF' }];
-    console.log(this.props.unreadCount);
     return (
       <TouchableNativeFeedback
         onPress={ this.props.onPress }

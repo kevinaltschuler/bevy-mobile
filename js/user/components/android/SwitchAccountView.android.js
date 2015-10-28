@@ -13,6 +13,7 @@ var {
   Text,
   TouchableNativeFeedback,
   ToastAndroid,
+  BackAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -23,6 +24,18 @@ var SwitchAccountView = React.createClass({
     mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
     linkedAccounts: React.PropTypes.array
+  },
+
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    this.props.mainNavigator.pop();
+    return true;
   },
 
   goBack() {

@@ -11,6 +11,7 @@ var {
   View,
   TextInput,
   TouchableNativeFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 
@@ -42,11 +43,17 @@ var LoginView = React.createClass({
   componentDidMount() {
     UserStore.on(USER.LOGIN_ERROR, this.onLoginError);
     UserStore.on(USER.LOGIN_SUCCESS, this.onLoginSuccess);
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
-
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_ERROR, this.onLoginError);
     UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    this.props.mainNavigator.pop();
+    return true;
   },
 
   onGoogleLogin() {

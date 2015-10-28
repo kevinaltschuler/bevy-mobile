@@ -10,6 +10,7 @@ var {
   View,
   Text,
   ListView,
+  BackAndroid,
   StyleSheet
 } = React;
 var BevyBar = require('./BevyBar.android.js');
@@ -38,6 +39,13 @@ var BevyTagView = React.createClass({
     };
   },
 
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
   componentWillReceiveProps(nextProps) {
     var isAdmin = 
       _.findWhere(nextProps.activeBevy.admins, { _id: nextProps.user._id }) == undefined;
@@ -46,6 +54,11 @@ var BevyTagView = React.createClass({
       tags: nextProps.activeBevy.tags,
       isAdmin: isAdmin
     });
+  },
+
+  onBackButton() {
+    this.props.bevyNavigator.pop();
+    return true;
   },
 
   _renderHeader() {
