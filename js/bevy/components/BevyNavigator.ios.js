@@ -82,7 +82,7 @@ var BevyView = React.createClass({
     //set bounds
     if(navHeight < 0) navHeight = 0;
     if(navHeight > 40) navHeight = 40;
-    console.log(navHeight);
+    //console.log(navHeight);
     //update data
     this.setState({
       scrollY: y,

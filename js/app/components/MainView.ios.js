@@ -15,6 +15,7 @@ var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../shared/components/SearchBar.ios.js');
 var LocationView = require('./../../shared/components/LocationView.ios.js');
 var NewPostView = require('./../../post/components/NewPostView.ios.js');
+var PostEditView = require('./../../post/components/PostEditView.ios.js');
 var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
 var ProfileView = require('./../../user/components/ProfileView.ios.js');
@@ -72,6 +73,14 @@ var MainView = React.createClass({
                 location={this.props.mainRoute.location || 'no location'}
                 { ...this.props }
                />
+        break;
+
+      case routes.MAIN.EDITPOST.name:
+        console.log(this.props.mainRoute);
+        return <PostEditView
+                post={this.props.mainRoute.post}
+                { ...this.props }
+              />
         break;
 
       case routes.MAIN.TABBAR.name:

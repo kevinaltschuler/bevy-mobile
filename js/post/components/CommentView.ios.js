@@ -178,6 +178,8 @@ var CommentView = React.createClass({
         <Post
           inCommentView={ true }
           post={ this.state.post }
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
         />
       </View>
     );
