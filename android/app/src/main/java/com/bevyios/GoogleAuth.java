@@ -68,13 +68,13 @@ public class GoogleAuth extends ReactContextBaseJavaModule implements
   /* Should we automatically resolve ConnectionResults when possible? */
   private boolean mShouldResolve = false;
 
-    private Activity mActivity;
-    private ReactApplicationContext mContext;
+  private Activity mActivity;
+  private ReactApplicationContext mContext;
 
   private GoogleApiClient mGoogleApiClient;
 
-    private Callback errorCallback;
-    private Callback successCallback;
+  private Callback errorCallback;
+  private Callback successCallback;
 
   public GoogleAuth(ReactApplicationContext reactContext, Activity activity) {
     super(reactContext);
@@ -89,8 +89,6 @@ public class GoogleAuth extends ReactContextBaseJavaModule implements
         .addScope(new Scope(Scopes.PROFILE))
         .addScope(new Scope(Scopes.EMAIL))
         .build();
-    //mGoogleApiClient.connect();
-    Log.d(TAG, "nuts google auth package");
   }
 
   @Override
@@ -107,119 +105,100 @@ public class GoogleAuth extends ReactContextBaseJavaModule implements
 
   @ReactMethod
   public void start(Callback error, Callback success) {
-      mShouldResolve = true;
+    mShouldResolve = true;
     mGoogleApiClient.connect();
     Log.d(TAG, Boolean.toString(mGoogleApiClient.isConnected()));
 
-      errorCallback = error;
-      successCallback = success;
+    errorCallback = error;
+    successCallback = success;
   }
 
-    @ReactMethod
-    public void logout() {
-        if (mGoogleApiClient.isConnected()) {
-            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-            Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
-            mGoogleApiClient.disconnect();
-        }
-    }
-
-  /*@Override
-  protected void onStart() {
-      super.onStart();
-      mGoogleApiClient.connect();
-  }
-
-  @Override
-  protected void onStop() {
-      super.onStop();
+  @ReactMethod
+  public void logout() {
+    if (mGoogleApiClient.isConnected()) {
+      Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+      Plus.AccountApi.revokeAccessAndDisconnect(mGoogleApiClient);
       mGoogleApiClient.disconnect();
-  }*/
+    }
+  }
 
   @Override
   public void onConnectionSuspended(int i) {
-      // The connection to Google Play services was lost. The GoogleApiClient will automatically
-      // attempt to re-connect. Any UI elements that depend on connection to Google APIs should
-      // be hidden or disabled until onConnected is called again.
-      Log.w(TAG, "onConnectionSuspended:" + i);
+    // The connection to Google Play services was lost. The GoogleApiClient will automatically
+    // attempt to re-connect. Any UI elements that depend on connection to Google APIs should
+    // be hidden or disabled until onConnected is called again.
+    Log.w(TAG, "onConnectionSuspended:" + i);
   }
 
   @Override
   public void onConnected(Bundle bundle) {
-      // onConnected indicates that an account was selected on the device, that the selected
-      // account has granted any requested permissions to our app and that we were able to
-      // establish a service connection to Google Play services.
+    // onConnected indicates that an account was selected on the device, that the selected
+    // account has granted any requested permissions to our app and that we were able to
+    // establish a service connection to Google Play services.
     Log.d(TAG, "onConnected:" + bundle);
-      mShouldResolve = false;
-
-          // trigger signed in
-          WritableMap params = Arguments.createMap();
-        String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
-          params.putString("email", accountName);
-          Log.d(TAG, accountName);
-      new GetIdTask().execute();
-      //params.putString("id", accountId);
-      //      successCallback.invoke(params);
+    mShouldResolve = false;
+    // trigger signed in
+    WritableMap params = Arguments.createMap();
+    String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+    params.putString("email", accountName);
   }
 
   @Override
   public void onConnectionFailed(ConnectionResult connectionResult) {
-      // Could not connect to Google Play Services.  The user needs to select an account,
-      // grant permissions or resolve an error in order to sign in. Refer to the javadoc for
-      // ConnectionResult to see possible error codes.
-      Log.d(TAG, "onConnectionFailed:" + connectionResult);
+    // Could not connect to Google Play Services.  The user needs to select an account,
+    // grant permissions or resolve an error in order to sign in. Refer to the javadoc for
+    // ConnectionResult to see possible error codes.
+    Log.d(TAG, "onConnectionFailed:" + connectionResult);
 
-      if (!mIsResolving && mShouldResolve) {
-          if (connectionResult.hasResolution()) {
-              try {
-                  connectionResult.startResolutionForResult(mActivity, RC_SIGN_IN);
-                  mIsResolving = true;
-              } catch (IntentSender.SendIntentException e) {
-                  Log.e(TAG, "Could not resolve ConnectionResult.", e);
-                  mIsResolving = false;
-                  mGoogleApiClient.connect();
-              }
-          } else {
-              // Could not resolve the connection result, show the user an
-              // error dialog.
-              // showErrorDialog(connectionResult);
-              Toast.makeText(mContext, connectionResult.toString(), Toast.LENGTH_SHORT).show();
-
-          }
+    if (!mIsResolving && mShouldResolve) {
+      if (connectionResult.hasResolution()) {
+        try {
+          connectionResult.startResolutionForResult(mActivity, RC_SIGN_IN);
+          mIsResolving = true;
+        } catch (IntentSender.SendIntentException e) {
+          Log.e(TAG, "Could not resolve ConnectionResult.", e);
+          mIsResolving = false;
+          mGoogleApiClient.connect();
+        }
       } else {
-          // Show the signed-out UI
-          //showSignedOutUI();
+        // Could not resolve the connection result, show the user an
+        // error dialog.
+        // showErrorDialog(connectionResult);
+        Toast.makeText(mContext, connectionResult.toString(), Toast.LENGTH_SHORT).show();
       }
+    } else {
+      // Show the signed-out UI
+      //showSignedOutUI();
+    }
   }
 
-    private class GetIdTask extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
-            try {
-                return GoogleAuthUtil.getAccountId(mContext, accountName);
-            } catch (IOException e) {
-                Log.e(TAG, "Error retrieving ID.", e);
-                return null;
-            } catch (GoogleAuthException e) {
-                Log.e(TAG, "Error retrieving ID.", e);
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i(TAG, "ID token: " + result);
-            if (result != null) {
-                // Successfully retrieved ID Token
-                // ...
-                WritableMap params = Arguments.createMap();
-                params.putString("id", result);
-                successCallback.invoke(params);
-            } else {
-                // There was some error getting the ID Token
-                // ...
-            }
-        }
+  private class GetIdTask extends AsyncTask<Void, Void, String> {
+    @Override
+    protected String doInBackground(Void... params) {
+      String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
+      try {
+        return GoogleAuthUtil.getAccountId(mContext, accountName);
+      } catch (IOException e) {
+        Log.e(TAG, "Error retrieving ID.", e);
+        return null;
+      } catch (GoogleAuthException e) {
+        Log.e(TAG, "Error retrieving ID.", e);
+        return null;
+      }
     }
+    @Override
+    protected void onPostExecute(String result) {
+      Log.i(TAG, "ID token: " + result);
+      if (result != null) {
+        // Successfully retrieved ID Token
+        // ...
+        WritableMap params = Arguments.createMap();
+        params.putString("id", result);
+        successCallback.invoke(params);
+      } else {
+        // There was some error getting the ID Token
+        // ...
+      }
+    }
+  }
 }

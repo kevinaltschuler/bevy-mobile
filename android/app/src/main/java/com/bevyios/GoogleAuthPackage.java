@@ -15,10 +15,10 @@ import java.util.List;
 
 public class GoogleAuthPackage implements ReactPackage {
 
-    private Activity mActivity;
+  private Activity mActivity;
 
   public GoogleAuthPackage(Activity activity) {
-      mActivity = activity;
+    mActivity = activity;
   }
 
   @Override
@@ -31,11 +31,11 @@ public class GoogleAuthPackage implements ReactPackage {
 
   @Override
   public List<Class<? extends JavaScriptModule>> createJSModules() {
-      return Collections.emptyList();
+    return Collections.emptyList();
   }
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-      return Arrays.asList();
+    return Arrays.asList();
   }
 }
