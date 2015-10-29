@@ -190,7 +190,11 @@ var BevyBar = React.createClass({
         { this._renderImage() }
         { this._renderBackButton() }
         <Text style={[ styles.bevyName, { color: this.state.iconColor } ]}>
-          { this.props.activeBevy.name }
+          { 
+            _.isEmpty(this.props.activeBevy.name)
+            ? 'Loading...'
+            : this.props.activeBevy.name 
+          }
         </Text>
         { this._renderTagButton() }
         { this._renderSortButton() }
