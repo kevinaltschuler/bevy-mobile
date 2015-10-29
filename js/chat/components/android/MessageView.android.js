@@ -12,6 +12,7 @@ var {
   Text,
   TextInput,
   TouchableNativeFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 var ChatBar = require('./ChatBar.android.js');
@@ -45,9 +46,11 @@ var MessageView = React.createClass({
 
   componentDidMount() {
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
     ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -56,6 +59,11 @@ var MessageView = React.createClass({
       messages: messages,
       dataSource: this.state.dataSource.cloneWithRows(messages)
     });
+  },
+
+  onBackButton() {
+    this.props.mainNavigator.pop();
+    return true;
   },
 
   _onChatChange: function() {

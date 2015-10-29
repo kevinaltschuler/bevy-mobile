@@ -11,9 +11,9 @@ var {
   ScrollView,
   Text,
   TextInput,
-  BackAndroid,
   TouchableNativeFeedback,
   ToastAndroid,
+  BackAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -45,14 +45,14 @@ var CommentView = React.createClass({
   },
 
   componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress', this.onBack);
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
-    BackAndroid.removeEventListener('hardwareBackPress', this.onBack);
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
-  onBack() {
-    this.refs.Input.blur();
+  onBackButton() {
+    this.props.mainNavigator.pop();
     return true;
   },
 

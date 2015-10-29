@@ -10,6 +10,7 @@ var {
   View,
   ScrollView,
   Text,
+  BackAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -24,6 +25,18 @@ var RelatedView = React.createClass({
     activeBevy: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
     bevyRoute: React.PropTypes.object
+  },
+
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    this.props.bevyNavigator.pop();
+    return true;
   },
 
   _renderBevyItems() {

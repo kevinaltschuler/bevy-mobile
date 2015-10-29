@@ -11,7 +11,8 @@ var {
   AsyncStorage,
   Text,
   View,
-  Navigator
+  Navigator,
+  BackAndroid
 } = React;
 var MainView = require('./js/app/components/android/MainView.android.js');
 var ImageModal = require('./js/post/components/android/ImageModal.android.js');
@@ -151,7 +152,8 @@ var App = React.createClass({
 
   getNotificationState() {
     return {
-      allNotifications: NotificationStore.getAll()
+      allNotifications: NotificationStore.getAll(),
+      unreadCount: NotificationStore.getUnread()
     };
   },
 
@@ -250,6 +252,11 @@ var App = React.createClass({
       </View>
     );
   }
+});
+
+BackAndroid.addEventListener('hardwareBackPress', function() {
+  console.log('BACK BUTTON PRESSED FAM');
+  return true;
 });
 
 var styles = StyleSheet.create({

@@ -11,6 +11,7 @@ var {
   ScrollView,
   Text,
   TouchableNativeFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -35,6 +36,7 @@ var PublicProfileView = React.createClass({
       this.props.activeBevy, 
       this.props.routeUser._id
     );
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
     // reset posts
@@ -42,6 +44,12 @@ var PublicProfileView = React.createClass({
       this.props.activeBevy, 
       null
     );
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    this.props.mainNavigator.pop();
+    return true;
   },
 
   goBack() {

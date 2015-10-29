@@ -14,6 +14,7 @@ var {
   TouchableNativeFeedback,
   Image,
   ToastAndroid,
+  BackAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -53,9 +54,16 @@ var NewBevyView = React.createClass({
         creating: false
       });
     });
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
     BevyStore.off(BEVY.CREATED);
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    this.props.mainNavigator.pop();
+    return true;
   },
 
   createBevy() {

@@ -13,6 +13,7 @@ var {
   Text,
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 var ActionSheetItem = require('./ActionSheetItem.android.js');
@@ -29,11 +30,23 @@ var ActionSheet = React.createClass({
       callback: noop
     };
   },
+
   componentDidMount() {
     constants.setActionSheetActions({
       show: this.show,
       onSelect: this.onSelect
     });
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+  },
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    if(this.state.visible) {
+      this.setState({ visible: false });
+      return true;
+    } else return false;
   },
 
   show(options, callback) {

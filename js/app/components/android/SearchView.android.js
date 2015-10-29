@@ -7,24 +7,23 @@
 'use strict';
 
 var React = require('react-native');
-var _ = require('underscore');
-
 var {
   View,
   Text,
   ListView,
   Image,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  BackAndroid
 } = React;
+var SubSwitch = require('./SubSwitch.android.js');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BevyActions = require('./../../../bevy/BevyActions');
 var BEVY = constants.BEVY;
-
-var SubSwitch = require('./SubSwitch.android.js');
 
 var SearchView = React.createClass({
 
@@ -33,7 +32,6 @@ var SearchView = React.createClass({
     searchRoute: React.PropTypes.object,
     searchNavigator: React.PropTypes.object,
   },
-
   
   getInitialState() {
     var bevies = BevyStore.getPublicBevies();
@@ -46,12 +44,20 @@ var SearchView = React.createClass({
   componentDidMount() {
     BevyStore.on(BEVY.SEARCHING, this.handleSearching);
     BevyStore.on(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
 
   componentWillUnmount() {
     BevyStore.off(BEVY.SEARCHING, this.handleSearching);
     BevyStore.off(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
+
+  onBackButton() {
+    this.props.searchNavigator.pop();
+    return true;
+  },
+
   handleSearching() {
     this.setState({
       fetching: true,
@@ -69,7 +75,8 @@ var SearchView = React.createClass({
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(bevies)
     });
   },
-_renderSubSwitch(bevy) {
+
+  _renderSubSwitch(bevy) {
     var user = this.props.user;
     var subbed = _.find(this.props.user.bevies, function(bevyId){ return bevyId == bevy._id }) != undefined;
     // dont render this if you're an admin
@@ -88,7 +95,6 @@ _renderSubSwitch(bevy) {
   render() {
     return (
       <View style={ styles.container }>
-        
       	<ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
@@ -122,7 +128,6 @@ _renderSubSwitch(bevy) {
             );
           }}
         />
-      
       </View>
     );
   }

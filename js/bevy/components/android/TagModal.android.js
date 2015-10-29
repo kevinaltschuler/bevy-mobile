@@ -11,6 +11,7 @@ var {
   ScrollView,
   Text,
   TouchableWithoutFeedback,
+  BackAndroid,
   StyleSheet
 } = React;
 var TagModalItem = require('./TagModalItem.android.js');
@@ -38,15 +39,24 @@ var TagModal = React.createClass({
       hide: this.hide
     };
     constants.setTagModalActions(actions);
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
     this.hide();
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       activeTags: nextProps.activeTags
     });
+  },
+
+  onBackButton() {
+    if(this.state.visible) {
+      this.setState({ visible: false });
+      return true;
+    } else return false;
   },
 
   show(tags) {

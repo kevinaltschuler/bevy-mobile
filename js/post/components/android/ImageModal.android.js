@@ -12,8 +12,8 @@ var {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   Image,
-  Modal,
   PanResponder,
+  BackAndroid,
   Animated,
   StyleSheet
 } = React;
@@ -89,8 +89,19 @@ var ImageModal = React.createClass({
       dismiss: this.dismiss
     };
     constants.setImageModalActions(actions);
+    BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  onBackButton() {
+    if(this.state.visible) {
+      this.setState({
+        visible: false
+      });
+      return true;
+    } else return false;
   },
 
   show() {
