@@ -104,6 +104,8 @@ _.extend(NotificationStore, {
       case NOTIFICATION.READ:
         var id = payload.id;
         var notification = this.notifications.get(id);
+        if(notification == null) 
+          break;
         notification.read = true;
         this.unread -= 1;
         notification.save({read: true}, {patch: true});

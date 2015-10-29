@@ -211,6 +211,23 @@ _.extend(PostStore, {
 
       case POST.UPDATE:
 
+        var post_id = payload.post_id;
+        var title = payload.postTitle;
+
+        var post = this.posts.get(post_id);
+
+        post.set('title', title);
+
+        post.save({
+          title: title,
+          updated: Date.now()
+        }, {
+          patch: true,
+          success: function($post, response, options) {
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+
         break;
 
       case POST.SORT:
