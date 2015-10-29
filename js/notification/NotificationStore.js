@@ -1,24 +1,32 @@
+/**
+ * NotificationStore.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
+
+var React = require('react-native');
+var {
+  VibrationIOS,
+  Platform
+} = React;
 
 var Backbone = require('backbone');
 var _ = require('underscore');
-var {
-  VibrationIOS
-} = require('react-native');
-
 var Dispatcher = require('./../shared/dispatcher');
-
 var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 var APP = constants.APP;
-
 var ChatStore = require('./../chat/ChatStore');
 var UserStore = require('./../user/UserStore');
-
 var Notifications = require('./NotificationCollection');
 
-var NotificationStore = _.extend({}, Backbone.Events);
+// polyfill for socket.io
+window.navigator.userAgent = "react-native";
+var io = require('socket.io-client/socket.io');
 
+var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
 
   notifications: new Notifications,
@@ -30,8 +38,10 @@ _.extend(NotificationStore, {
         if(!UserStore.loggedIn) {
           break;
         }
+        var user = UserStore.getUser();
 
-        this.notifications.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/notifications';
+        this.notifications.url = 
+          constants.apiurl + '/users/' + user._id + '/notifications';
 
         this.notifications.fetch({
           reset: true,
@@ -43,91 +53,55 @@ _.extend(NotificationStore, {
           }.bind(this)
         });
 
-        /*--- LONG POLL  --*/
+        //var ws_url = 'ws://' + constants.hostname + '/socket.io/';
+        //console.log('ws connecting to', ws_url);
+        //var ws = new WebSocket(ws_url);
+        var ws = io(constants.siteurl);
+        ws.on('connect', function() {
+          console.log('websocket client connected');
+          ws.send('set_user_id', user._id);
+        });
+        ws.on('open', function() {
+          console.log('websocket client connected');
+          ws.send('set_user_id', user._id);
+        });
 
-        this.MAX_WAITING_TIME = 15000;// in ms
+        ws.on('kitty cats', function(data) {
+          console.log(data);
+        });
 
-        var getJSON = function(params) {
-          //console.log('start long poll');
+        ws.on('message', function(e) {
+          // a message was received
+          console.log(e.data);
+        });
 
-          var wrappedPromise = {};
-          var promise = new Promise(function (resolve, reject) {
-            wrappedPromise.resolve = resolve;
-            wrappedPromise.reject = reject;
-          });
-          wrappedPromise.then = promise.then.bind(promise);
-          wrappedPromise.catch = promise.catch.bind(promise);
-          wrappedPromise.promise = promise;// e.g. if you want to provide somewhere only promise, without .resolve/.reject/.catch methods
+        ws.on('chat:' + user._id, function(message) {
+          message = JSON.parse(message);
+          console.log('ws got message', message);
 
-          fetch(params.url, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json'
-            }
-          })
-          .then(function(response) {
-            wrappedPromise.resolve(response);
-          }, function(error) {
-            wrappedPromise.reject(error);
-          })
-          .catch(function(error) {
-            wrappedPromise.catch(error);
-          });
+          if(message.author._id == user._id) return;
 
-          this.timeoutId = setTimeout(function () {
-            //console.log('timeout');
-            // reject on timeout
-            wrappedPromise.reject(new Error('Load timeout for resource: ' + params.url)); 
-          }, this.MAX_WAITING_TIME);
+          // play audio
+          // or vibrate
+          
+          ChatStore.addMessage(message);
+        }.bind(this));
 
-          return wrappedPromise.promise
-            .then(function(response) {
-              clearTimeout(this.timeoutId);
-              return response;
-            }.bind(this))
-            .then(function(response) {
-              if (response.status === 200 || response.status === 0) {
-                return Promise.resolve(response)
-              } else {
-                return Promise.reject(new Error(response.statusText))
-              }
-            })
-            .then(function(response) {
-              return response.json();
-            });
-        }.bind(this);
+        ws.on('notification:' + user._id, function(notification) {
+          console.log('ws got notification', notification);
+          this.notifications.add(notification);
+          this.trigger(NOTIFICATION.CHANGE_ALL);
+        }.bind(this));
 
-        (function poll() {
-          getJSON({
-            url: constants.apiurl + '/users/' + UserStore.getUser()._id + '/notifications/poll'
-          }).then(function(response) {
-            // on success
-            poll();
-            //console.log('JSON parsed successfully!');
-            console.log(response);
+        ws.on('error', function(e) {
+          // an error occurred
+          console.log(e.message);
+        });
 
-            // play audio/vibrate phone
-            switch(response.type) {
-              case 'message':
-                ChatStore.addMessage(response.data);
-                VibrationIOS.vibrate();
-                break;
-              case 'notification':
-                this.notifications.add(response.data);
-                this.trigger(NOTIFICATION.CHANGE_ALL);
-                break;
-              default:
-                break;
-            }
-
-          }.bind(this), function(error) {
-            // on reject
-            poll();
-            //console.error('An error occured!');
-            //console.error(error.message ? error.message : error);
-          });
-        })();
-
+        ws.on('close', function(e) {
+          // connection closed
+          console.log(e.code, e.reason);
+        });
         break;
 
       case APP.UNLOAD:
