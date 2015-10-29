@@ -12,6 +12,7 @@ var {
   Platform
 } = React;
 var VibrationAndroid = require('react-native-vibration');
+var AudioPlayer = require('react-native-audioplayer');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -74,7 +75,11 @@ _.extend(NotificationStore, {
           if(message.author._id == user._id) return;
 
           // TODO: play audio
-          
+          if(Platform.OS == 'android') {
+            AudioPlayer.play('notification.mp3');
+          } else if (Platform.OS == 'ios') {
+
+          }
 
           // vibrate
           if(Platform.OS == 'android') {

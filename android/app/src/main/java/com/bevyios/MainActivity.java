@@ -3,6 +3,7 @@ package com.bevyios;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.chymtt.reactnativedropdown.DropdownPackage;
 import com.eguma.vibration.Vibration;
+import com.sh3rawi.RNAudioPlayer.*;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
         .addPackage(new GoogleAuthPackage(this))
         .addPackage(new DropdownPackage())
         .addPackage(new Vibration())
+        .addPackage(new RNAudioPlayer())
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
