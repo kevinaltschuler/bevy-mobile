@@ -11,6 +11,7 @@ var {
   VibrationIOS,
   Platform
 } = React;
+var VibrationAndroid = require('react-native-vibration');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -72,8 +73,15 @@ _.extend(NotificationStore, {
 
           if(message.author._id == user._id) return;
 
-          // play audio
-          // or vibrate
+          // TODO: play audio
+          
+
+          // vibrate
+          if(Platform.OS == 'android') {
+            VibrationAndroid.vibrate(500);
+          } else if (Platform.OS == 'ios') {
+            VibrationIOS.vibrate();
+          }
           
           ChatStore.addMessage(message);
         }.bind(this));
