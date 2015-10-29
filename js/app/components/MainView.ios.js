@@ -15,7 +15,6 @@ var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../shared/components/SearchBar.ios.js');
 var LocationView = require('./../../shared/components/LocationView.ios.js');
 var NewPostView = require('./../../post/components/NewPostView.ios.js');
-var PostEditView = require('./../../post/components/PostEditView.ios.js');
 var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
 var ProfileView = require('./../../user/components/ProfileView.ios.js');
