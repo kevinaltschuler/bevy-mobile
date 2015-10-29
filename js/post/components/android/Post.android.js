@@ -110,6 +110,14 @@ var Post = React.createClass({
     var containerStyle = (this.props.card)
       ? styles.containerCard
       : styles.containerRow;
+
+    // if the post is from a private bevy
+    // and the user is not a part of that bevy,
+    // then hide the post
+    if(this.props.post.bevy.settings.privacy == 1 
+      && !_.contains(this.props.user.bevies, this.props.post.bevy._id))
+      return <View />;
+
     return (
       <View style={ containerStyle }>
         <PostHeader post={ this.props.post } />
