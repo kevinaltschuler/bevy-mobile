@@ -52,9 +52,8 @@ var PostActionList = React.createClass({
         underlayColor='rgba(44,182,105,0.8)'
         style={ styles.postOptionsButtonContainer }
         onPress={() => {
-          var route = routes.MAIN.EDITPOST;
-          route.post = this.props.post;
-          this.props.mainNavigator.push(route);
+          this.props.onEdit();
+          this.props.toggleCollapsed();
         }}
       >
         <View style={ styles.postOptionsButton }>

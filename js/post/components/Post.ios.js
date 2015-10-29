@@ -13,7 +13,8 @@ var {
   View,
   Image,
   TouchableHighlight,
-  Animated
+  Animated,
+  TextInput
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
@@ -40,6 +41,7 @@ var Post = React.createClass({
     return {
       inCommentView: false,
       post: {},
+      isEditing: false
     };
   },
 
@@ -49,6 +51,7 @@ var Post = React.createClass({
       overlayVisible: false,
       voted: this.props.post.voted,
       collapsed: true,
+      editTitle: this.props.post.title
     };
   },
 
@@ -78,12 +81,76 @@ var Post = React.createClass({
     return sum;
   },
 
+  onEdit() {
+    this.setState({
+      isEditing: true
+    });
+  },
+
   _renderPostTitle() {
     if(_.isEmpty(this.state.post.title)) return null;
+    if(this.state.isEditing) {
+      return (
+        <View style={styles.body}>
+          <TextInput
+            value={ this.state.editTitle }
+            onChangeText={(text) => {
+              this.setState({ editTitle: text})
+            }}
+            defaultValue={ this.state.editTitle}
+            autoFocus={true}
+            multiline={true}
+            clearButtonMode={'always'}
+            style={{
+              height: 100, 
+              flex: 1, 
+              borderWidth: 1,
+              borderColor: 'rgba(0,0,0,.1)',
+              borderRadius: 4,
+              marginBottom: 10,
+              padding: 10
+            }}
+          >
+          </TextInput>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
+
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,.1)'
+              onPress={() => {
+                this.setState({
+                  editTitle: this.props.post.title,
+                  isEditing: false
+                });
+              }}
+              style={{marginRight: 10}}
+            >
+              <Text style={styles.cancelButton}>
+                cancel
+              </Text>
+            </TouchableHighlight>
+
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,.1)'
+              onPress={() => {
+                PostActions.update(this.props.post._id, this.state.editTitle); 
+                this.setState({
+                  isEditing: false
+                });
+              }}
+            >
+              <Text style={styles.acceptButton}>
+                accept
+              </Text>
+            </TouchableHighlight>
+
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={styles.body}>
         <Text style={styles.bodyText}>
-          { this.state.post.title }
+          { this.state.editTitle }
         </Text>
       </View>
     );
@@ -232,7 +299,17 @@ var Post = React.createClass({
             </TouchableHighlight>
           </View>
           <Collapsible collapsed={this.state.collapsed} >
-            <PostActionList post={ this.state.post } { ...this.props } user={this.props.user} />
+            <PostActionList 
+              post={ this.state.post } 
+              { ...this.props } 
+              user={this.props.user} 
+              onEdit={this.onEdit}
+              toggleCollapsed={() => {
+                this.setState({
+                  collapsed: !this.state.collapsed
+                })
+              }.bind(this)}
+            />
           </Collapsible>
         </View>
     );
@@ -343,6 +420,24 @@ var styles = StyleSheet.create({
   actionIcon: {
     width: 20,
     height: 36
+  },
+  cancelButton: {
+    padding: 5,
+    borderRadius: 4,
+    backgroundColor: '#fff',
+    color: 'rgba(0,0,0,.3)',
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,.3)',
+    fontWeight: 'bold'
+  },
+  acceptButton: {
+    padding: 5,
+    borderRadius: 4,
+    backgroundColor: '#fff',
+    color: '#2cb673',
+    borderColor: '#2cb673',
+    borderWidth: 1,
+    fontWeight: 'bold'
   }
 });
 
