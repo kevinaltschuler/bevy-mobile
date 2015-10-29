@@ -61,18 +61,9 @@ _.extend(NotificationStore, {
           console.log('websocket client connected');
           ws.send('set_user_id', user._id);
         });
-        ws.on('open', function() {
-          console.log('websocket client connected');
-          ws.send('set_user_id', user._id);
-        });
 
         ws.on('kitty cats', function(data) {
           console.log(data);
-        });
-
-        ws.on('message', function(e) {
-          // a message was received
-          console.log(e.data);
         });
 
         ws.on('chat:' + user._id, function(message) {
@@ -92,16 +83,7 @@ _.extend(NotificationStore, {
           this.notifications.add(notification);
           this.trigger(NOTIFICATION.CHANGE_ALL);
         }.bind(this));
-
-        ws.on('error', function(e) {
-          // an error occurred
-          console.log(e.message);
-        });
-
-        ws.on('close', function(e) {
-          // connection closed
-          console.log(e.code, e.reason);
-        });
+        
         break;
 
       case APP.UNLOAD:
