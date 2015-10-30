@@ -32,9 +32,9 @@ var BevyActions = {
     });
   },
 
-  destroy(id) {
+  destroy(bevy_id) {
     dispatch(BEVY.DESTROY, {
-      id: (id == undefined) ? '0' : id
+      bevy_id: bevy_id
     });
   },
 

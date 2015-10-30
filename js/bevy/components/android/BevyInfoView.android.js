@@ -86,9 +86,10 @@ var BevyInfoView = React.createClass({
   },
 
   deleteBevy() {
-    // delete bevy
-    // check if admin
-    // call action
+    // delete bevy action
+    BevyActions.destroy(this.props.activeBevy._id);
+    // go back to frontpage
+    BevyActions.switchBevy('-1');
   },
 
   _renderAdmins() {

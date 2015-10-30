@@ -191,6 +191,19 @@ _.extend(BevyStore, {
 
         break;
 
+      case BEVY.DESTROY:
+        var bevy_id = payload.bevy_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        bevy.destroy({
+          success: function(model, response, options) {
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
       case BEVY.SUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevy = this.publicBevies.get(bevy_id);
