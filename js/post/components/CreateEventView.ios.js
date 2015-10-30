@@ -494,9 +494,6 @@ var styles = StyleSheet.create({
     fontSize: 17,
     paddingLeft: 15
   },
-  bevyPickerButton: {
-    flexDirection: 'row'
-  },
   location: {
     backgroundColor: '#fff',
     flexDirection: 'row',
@@ -524,7 +521,6 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     flex: 1,
-    alignItems: 'flex-start'
 
   },
   moreInfoInput: {

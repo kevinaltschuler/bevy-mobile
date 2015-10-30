@@ -127,7 +127,7 @@ var styles = StyleSheet.create({
     width: 250,
     backgroundColor: '#fff',
     flexDirection: 'column',
-    borderRadius: 5,
+    borderRadius: 20,
     paddingTop: 15,
     paddingBottom: 5
   },
@@ -157,7 +157,8 @@ var styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#2CB673',
     marginBottom: 10,
-    borderRadius: 20
+    borderRadius: 20,
+    marginHorizontal: 10
   },
   registerButtonText: {
     flex: 1,

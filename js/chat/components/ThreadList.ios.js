@@ -34,6 +34,17 @@ var ThreadList = React.createClass({
   },
 
   render() {
+    if(!this.props.loggedIn) {
+      return (
+        <View style={ styles.container }>
+          <View style={ styles.noThreadsContainer }>
+            <Text style={ styles.noThreadsText }>
+              Please log in
+            </Text>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={ styles.container }>
         <ListView
@@ -64,10 +75,20 @@ var ThreadList = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
-    marginBottom: 48
+    flexDirection: 'row'
   },
   list: {
+  },
+  noThreadsContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noThreadsText: {
+    fontSize: 22,
+    color: '#aaa'
   }
 });
 

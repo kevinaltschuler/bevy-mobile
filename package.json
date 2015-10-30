@@ -14,7 +14,7 @@
     "react-native-dropdown-android": "^0.0.4",
     "react-native-image-picker": "https://github.com/kevtastic/react-native-image-picker.git#master",
     "react-native-keyboardevents": "^0.4.4",
-    "react-native-side-menu": "^0.9",
+    "react-native-side-menu": "^0.14.0",
     "react-native-status-bar-size": "^0.1.0",
     "react-refresh-control": "^2.0.5",
     "react-native-file-transfer": "^0.0.3",

@@ -146,6 +146,7 @@ _.extend(UserStore, {
         this.loggedIn = false;
 
         this.trigger(USER.LOADED);
+        this.trigger(BEVY.CHANGE_ALL);
         break;
 
       case USER.UPDATE:

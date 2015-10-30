@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
     width: 250,
     backgroundColor: '#fff',
     flexDirection: 'column',
-    borderRadius: 5,
+    borderRadius: 20,
     paddingTop: 15,
     paddingBottom: 5
   },
@@ -136,7 +136,8 @@ var styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#2CB673',
     marginBottom: 10,
-    borderRadius: 20
+    borderRadius: 20,
+    marginHorizontal: 10
   },
   loginButtonText: {
     flex: 1,
@@ -150,12 +151,14 @@ var styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginHorizontal: 10
   },
   textButtonText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#666'
+    color: '#666',
+    borderRadius: 20
   }
 });
 

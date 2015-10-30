@@ -57,19 +57,22 @@ var BevyList = React.createClass({
 
   _renderProfileHeader() {
     if(!this.props.loggedIn) {
-      return (
-        <View style={ styles.profileActions }>
-          <TouchableHighlight
+      return ( <View/> );
+          {/*<TouchableHighlight
             underlayColor='#333'
-            style={ styles.profileAction }
+            style={{ 
+              height: 48, 
+              borderBottomWidth: 1, 
+              borderBottomColor: 'rgba(255,255,255,.4)', 
+              padding: 10,
+            }}
             onPress={() => {
               this.props.authModalActions.open('Log In');
             }}
           >
-            <Text style={ styles.profileActionText }>Log In</Text>
+            <Text style={{ color: '#fff', fontSize: 16, marginLeft: 2}}>Log In</Text>
           </TouchableHighlight>
-        </View>
-      );
+      );*/}
     }
 
     var image_url = (_.isEmpty(this.props.user.image_url))
@@ -93,7 +96,7 @@ var BevyList = React.createClass({
   _renderPublicHeader() {
     if(!this.props.loggedIn) return (
       <Text style={ styles.publicHeader }>
-        Public Bevies
+        All Bevies
       </Text>
     );
     return (
@@ -191,7 +194,7 @@ var styles = StyleSheet.create({
   },
 
   publicHeader: {
-    fontSize: 15,
+    fontSize: 18,
     color: '#999',
     paddingLeft: 10,
     marginBottom: 10,

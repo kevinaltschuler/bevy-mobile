@@ -226,9 +226,9 @@ var styles = StyleSheet.create({
     width: 250,
     backgroundColor: '#fff',
     flexDirection: 'column',
-    borderRadius: 5,
+    borderRadius: 20,
     paddingTop: 15,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   logInTitle: {
     flex: 1,
@@ -259,7 +259,8 @@ var styles = StyleSheet.create({
     height: 40,
     flexDirection: 'column',
     borderRadius: 20,
-    marginBottom: 10
+    marginBottom: 10,
+    marginHorizontal: 20
   },
   loginButtonText: {
     flex: 1,
@@ -274,7 +275,8 @@ var styles = StyleSheet.create({
     marginBottom: 10,
     flexDirection: 'column',
     height: 40,
-    borderRadius: 20
+    borderRadius: 20,
+    marginHorizontal: 20
   },
   loginButtonTextGoogle: {
     flex: 1,

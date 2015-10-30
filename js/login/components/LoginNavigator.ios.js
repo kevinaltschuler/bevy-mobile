@@ -129,7 +129,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginTop: 10,
-    flex: 1
+    flex: 1,
+    width: constants.width * 2 / 4
   },
   closeButton: {
     height: 48,
@@ -149,7 +150,9 @@ var styles = StyleSheet.create({
   },
   panelHeaderText: {
     fontSize: 20,
-    color: '#666'
+    color: '#666',
+    flex: 2,
+    marginLeft: 20
   },
 });
 

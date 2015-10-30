@@ -43,6 +43,7 @@ var PostStore = _.extend({}, Backbone.Events);
 _.extend(PostStore, {
 
   posts: new Posts,
+  sortType: 'new',
 
   // handle calls from the dispatcher
   // these are created from BevyActions.js
