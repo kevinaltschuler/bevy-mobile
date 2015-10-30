@@ -146,6 +146,7 @@ var PostList = React.createClass({
             activeBevy={ this.props.activeBevy }
             bevyNavigator={ this.props.bevyNavigator }
             bevyRoute={ this.props.bevyRoute }
+            showActions={ false }
           />
           <Image
             style={ styles.privateImage }

@@ -27,7 +27,14 @@ var BevyBar = React.createClass({
   propTypes: {
     activeBevy: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
-    bevyRoute: React.PropTypes.object
+    bevyRoute: React.PropTypes.object,
+    showActions: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      showActions: true
+    };
   },
 
   getInitialState() {
@@ -119,6 +126,7 @@ var BevyBar = React.createClass({
   },
 
   _renderInfoButton() {
+    if(!this.props.showActions) return <View />;
     if(  this.props.activeBevy._id == -1 
       || this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
@@ -141,6 +149,7 @@ var BevyBar = React.createClass({
   },
 
   _renderSortButton() {
+    if(!this.props.showActions) return <View />;
     if(  this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
       || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
@@ -162,6 +171,7 @@ var BevyBar = React.createClass({
   },
 
   _renderTagButton() {
+    if(!this.props.showActions) return <View />;
     if(  this.props.activeBevy._id == -1 
       || this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
