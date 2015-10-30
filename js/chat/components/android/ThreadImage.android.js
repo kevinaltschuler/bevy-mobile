@@ -31,9 +31,11 @@ var ThreadImage = React.createClass({
     if(image_url == (constants.siteurl + '/img/user-profile-icon.png')) {
     } else if(image_url == '/img/user-profile-icon.png') {
       image_url = constants.siteurl + '/img/user-profile-icon.png';
-    } else {
-      //image_url += '?w=50&h=50';
+    } else if(image_url.slice(7, 23) == 'api.joinbevy.com'
+      && this.props.thread.type == 'bevy') {
+      image_url += '?w=50&h=50';
     }
+    console.log(image_url);
     return {
       image_url: image_url
     };
@@ -48,7 +50,6 @@ var ThreadImage = React.createClass({
       marginRight: 10,
       borderRadius: 20,
     };
-    console.log(this.state.image_url);
     return (
       <Image 
         style={ imageStyle } 

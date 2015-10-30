@@ -117,7 +117,8 @@ var ThreadView = React.createClass({
     var active = false;
     if(thread._id == this.props.activeThread._id) active = true;
     return (
-      <ThreadItem 
+      <ThreadItem
+        key={ thread._id }
         thread={ thread }
         user={ this.props.user }
         active={ active }
@@ -132,50 +133,14 @@ var ThreadView = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
-        <ScrollView style={ styles.threadList }>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.setState({ bevyPanelOpen: !this.state.bevyPanelOpen })}
-          >
-            <View style={ styles.panelHeader }>
-              <Text style={ styles.panelHeaderText }>Bevy Chats</Text>
-              <Icon style={ styles.panelHeaderChevron }
-                name={ (this.state.bevyPanelOpen) ? 'expand-more' : 'chevron-right' }
-                size={ 24 }
-                color='#AAA'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderBevyThreads() }
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.setState({ groupPanelOpen: !this.state.groupPanelOpen })}
-          >
-            <View style={ styles.panelHeader }>
-              <Text style={ styles.panelHeaderText }>Group Chats</Text>
-              <Icon style={ styles.panelHeaderChevron }
-                name={ (this.state.groupPanelOpen) ? 'expand-more' : 'chevron-right' }
-                size={ 24 }
-                color='#AAA'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderGroupThreads() }
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.setState({ pmPanelOpen: !this.state.pmPanelOpen })}
-          >
-            <View style={ styles.panelHeader }>
-              <Text style={ styles.panelHeaderText }>Private Chats</Text>
-              <Icon style={ styles.panelHeaderChevron }
-                name={ (this.state.pmPanelOpen) ? 'expand-more' : 'chevron-right' }
-                size={ 24 }
-                color='#AAA'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderPMThreads() }
-        </ScrollView>
+        <ListView
+          dataSource={ this.state.ds }
+          renderRow={ this._renderThreadItem }
+          scrollRenderAheadDistance={ 300 }
+          removeClippedSubviews={ true }
+          initialListSize={ 10 }
+          pageSize={ 10 }
+        />
       </View>
     );
   }
