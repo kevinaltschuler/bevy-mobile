@@ -12,6 +12,12 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var Dispatcher = require('./../shared/dispatcher');
+var React = require('react-native');
+var {
+  Platform,
+  ToastAndroid
+} = React;
+var Fletcher = require('./../shared/components/android/Fletcher.android.js');
 
 //var Bevy = require('./BevyModel');
 //var Bevies = require('./BevyCollection');
@@ -37,7 +43,7 @@ var APP = constants.APP;
 var USER = constants.USER;
 
 var BevyActions = require('./BevyActions');
-var UserStore = require('./../user/UserStore')
+var UserStore = require('./../user/UserStore');
 
 // inherit event class first
 // VERY IMPORTANT, as the PostContainer view binds functions
@@ -185,6 +191,19 @@ _.extend(BevyStore, {
 
         break;
 
+      case BEVY.DESTROY:
+        var bevy_id = payload.bevy_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        bevy.destroy({
+          success: function(model, response, options) {
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
       case BEVY.SUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevy = this.publicBevies.get(bevy_id);
@@ -231,6 +250,37 @@ _.extend(BevyStore, {
 
         this.trigger(BEVY.CHANGE_ALL);
 
+        break;
+
+      case BEVY.REQUEST_JOIN:
+        var bevy = payload.bevy;
+        var user = payload.user;
+
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(constants.apiurl + '/notifications', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Content-Encoding': 'gzip'
+            },
+            body: JSON.stringify({
+              event: 'bevy:requestjoin',
+              bevy_id: bevy._id,
+              bevy_name: bevy.name,
+              user_id: user._id,
+              user_name: user.displayName,
+              user_image: user.image_url,
+              user_email: user.email
+            })
+          }, function(error) {
+            console.error(error);
+          }, function(response) {
+            ToastAndroid.show('Request Sent', ToastAndroid.SHORT);
+          }.bind(this));
+        } else {
+
+        }
         break;
 
       case BEVY.SEARCH:

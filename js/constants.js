@@ -80,6 +80,7 @@ exports.BEVY = {
   UNSUBSCRIBE: 'bevy_unsubscribe',
   UPDATE_FRONT: 'bevy_updatefront',
   UPDATE_TAGS: 'bevy_updatetags',
+  REQUEST_JOIN: 'bevy_request_join',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',

@@ -11,6 +11,7 @@ var {
   Text,
   StyleSheet,
   BackAndroid,
+  Animated,
   TouchableNativeFeedback
 } = React;
 var TabBarItem = require('./TabBarItem.android.js');
@@ -41,9 +42,10 @@ var MainTabBar = React.createClass({
   getInitialState() {
     return {
       activeTab: tabs.posts,
-      tabHistory: [tabs.posts] // keep track of tab switches so
-                               // we can use the back button to switch
-                               // to previous ones 
+      tabHistory: [tabs.posts], // keep track of tab switches so
+                                // we can use the back button to switch
+                                // to previous ones 
+      barAnim: new Animated.ValueXY() // animated green bar that follows tabs
     };
   },
 
@@ -76,6 +78,31 @@ var MainTabBar = React.createClass({
       activeTab: tab,
       tabHistory: history
     });
+
+    var x = 0;
+    switch(tab) {
+      case tabs.posts:
+        x = 0;
+        break;
+      case tabs.chat:
+        x = (constants.width / 4);
+        break;
+      case tabs.notifications:
+        x = (constants.width / 4) * 2;
+        break;
+      case tabs.more:
+        x = (constants.width / 4) * 3;
+        break;
+    }
+
+    // animate bar
+    Animated.timing(
+      this.state.barAnim,
+      { 
+        toValue: { x: x, y: 43 },
+        duration: 150
+      }
+    ).start();
   },
 
   _renderTabContent() {
@@ -134,6 +161,9 @@ var MainTabBar = React.createClass({
             icon={<Icon name='more-horiz' size={ iconSize } color={ unselectedColor } />}
             selectedIcon={<Icon name='more-horiz' size={ iconSize } color={ selectedColor } />}
           />
+          <Animated.View style={[ styles.animBar, this.state.barAnim.getLayout(), {
+            top: 43
+          } ]} />
         </View>
         { this._renderTabContent() }
       </View>
@@ -153,7 +183,15 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: '#fff'
-  }
+  },
+  animBar: {
+    position: 'absolute',
+    top: 43,
+    left: 0,
+    width: (constants.width / 4),
+    height: 5,
+    backgroundColor: '#2CB673'
+  },
 });
 
 module.exports = MainTabBar;

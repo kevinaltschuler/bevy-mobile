@@ -32,9 +32,9 @@ var BevyActions = {
     });
   },
 
-  destroy(id) {
+  destroy(bevy_id) {
     dispatch(BEVY.DESTROY, {
-      id: (id == undefined) ? '0' : id
+      bevy_id: bevy_id
     });
   },
 
@@ -93,7 +93,15 @@ var BevyActions = {
       actionType: BEVY.UPDATE_FRONT,
       bevies: (bevies == undefined) ? null : bevies
     });
-  }
+  },
+
+  requestJoin(bevy, user) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REQUEST_JOIN,
+      bevy: bevy,
+      user: user
+    });
+  },
 };
 
 module.exports = BevyActions;

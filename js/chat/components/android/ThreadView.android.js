@@ -15,7 +15,6 @@ var {
   StyleSheet
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
-var Collapsible = require('react-native-collapsible');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
@@ -35,10 +34,7 @@ var ThreadView = React.createClass({
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       ds: ds.cloneWithRows(threads),
-      threads: threads,
-      bevyPanelOpen: true,
-      groupPanelOpen: true,
-      pmPanelOpen: true
+      threads: threads
     };
   },
 
@@ -65,59 +61,12 @@ var ThreadView = React.createClass({
     );
   },
 
-  _renderBevyThreads() {
-    var bevyThreads = [];
-    var threads = _.filter(this.state.threads, (thread) => !_.isEmpty(thread.bevy));
-    for(var key in threads) {
-      var thread = threads[key];
-      bevyThreads.push(this._renderThreadItem(thread));
-    }
-    if(_.isEmpty(bevyThreads)) {
-      bevyThreads = <Text style={ styles.noThreadsText }>No Bevy Chats</Text>;
-    }
-    return (
-      <Collapsible duration={ 1000 } collapsed={ !this.state.bevyPanelOpen }>
-        { bevyThreads }
-      </Collapsible>
-    );
-  },
-  _renderGroupThreads() {
-    var groupThreads = [];
-    var threads = _.filter(this.state.threads, (thread) => thread.type == 'group');
-    for(var key in threads) {
-      var thread = threads[key];
-      groupThreads.push(this._renderThreadItem(thread));
-    }
-    if(_.isEmpty(groupThreads)) {
-      groupThreads = <Text style={ styles.noThreadsText }>No Group Chats</Text>;
-    }
-    return (
-      <Collapsible duration={ 1000 } collapsed={ !this.state.groupPanelOpen }>
-        { groupThreads }
-      </Collapsible>
-    );
-  },
-  _renderPMThreads() {
-    var pmThreads = [];
-    var threads = _.filter(this.state.threads, (thread) => thread.type == 'pm');
-    for(var key in threads) {
-      var thread = threads[key];
-      pmThreads.push(this._renderThreadItem(thread));
-    }
-    if(_.isEmpty(pmThreads)) {
-      pmThreads = <Text style={ styles.noThreadsText }>No Private Chats</Text>;
-    }
-    return (
-      <Collapsible duration={ 1000 } collapsed={ !this.state.pmPanelOpen }>
-        { pmThreads }
-      </Collapsible>
-    );
-  },
   _renderThreadItem(thread) {
     var active = false;
     if(thread._id == this.props.activeThread._id) active = true;
     return (
-      <ThreadItem 
+      <ThreadItem
+        key={ thread._id }
         thread={ thread }
         user={ this.props.user }
         active={ active }
@@ -132,50 +81,14 @@ var ThreadView = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
-        <ScrollView style={ styles.threadList }>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.setState({ bevyPanelOpen: !this.state.bevyPanelOpen })}
-          >
-            <View style={ styles.panelHeader }>
-              <Text style={ styles.panelHeaderText }>Bevy Chats</Text>
-              <Icon style={ styles.panelHeaderChevron }
-                name={ (this.state.bevyPanelOpen) ? 'expand-more' : 'chevron-right' }
-                size={ 24 }
-                color='#AAA'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderBevyThreads() }
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.setState({ groupPanelOpen: !this.state.groupPanelOpen })}
-          >
-            <View style={ styles.panelHeader }>
-              <Text style={ styles.panelHeaderText }>Group Chats</Text>
-              <Icon style={ styles.panelHeaderChevron }
-                name={ (this.state.groupPanelOpen) ? 'expand-more' : 'chevron-right' }
-                size={ 24 }
-                color='#AAA'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderGroupThreads() }
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.setState({ pmPanelOpen: !this.state.pmPanelOpen })}
-          >
-            <View style={ styles.panelHeader }>
-              <Text style={ styles.panelHeaderText }>Private Chats</Text>
-              <Icon style={ styles.panelHeaderChevron }
-                name={ (this.state.pmPanelOpen) ? 'expand-more' : 'chevron-right' }
-                size={ 24 }
-                color='#AAA'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderPMThreads() }
-        </ScrollView>
+        <ListView
+          dataSource={ this.state.ds }
+          renderRow={ this._renderThreadItem }
+          scrollRenderAheadDistance={ 300 }
+          removeClippedSubviews={ true }
+          initialListSize={ 10 }
+          pageSize={ 10 }
+        />
       </View>
     );
   }

@@ -21,8 +21,6 @@ var routes = require('./../../../routes');
 var ChatActions = require('./../../ChatActions');
 var ChatStore = require('./../../ChatStore');
 
-
-
 var ThreadItem = React.createClass({
   propTypes: {
     chatRoute: React.PropTypes.object,
@@ -129,9 +127,12 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   },
   titleTextColumn: {
+    height: 60,
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderBottomColor: '#EEE',
+    borderBottomWidth: 1
   },
   titleText: {
     color: '#282929'
