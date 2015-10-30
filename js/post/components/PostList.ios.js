@@ -75,11 +75,23 @@ var PostList = React.createClass({
     });
   },
 
+  toComments(id) {
+    if(_.isEmpty(id)) {
+      return;
+    }
+    var commentRoute = routes.MAIN.COMMENT;
+    commentRoute.postID = id;
+    console.log(id);
+    this.props.mainNavigator.push(commentRoute);
+  },
+
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
     BevyStore.on(POST.LOADING, this.setLoading);
     PostStore.on(POST.LOADING, this.setLoading);
+
+    PostStore.on(POST.POST_CREATED, this.toComments);
 
     RCTRefreshControl.configure({
       node: this.refs[LISTVIEW],
@@ -96,6 +108,7 @@ var PostList = React.createClass({
     BevyStore.off(POST.LOADED, this._rerender);
     BevyStore.off(POST.LOADING, this.setLoading);
     PostStore.off(POST.LOADING, this.setLoading);
+    PostStore.off(POST.POST_CREATED, this.toComments);
   },
 
   _rerender() {
@@ -192,7 +205,7 @@ var PostList = React.createClass({
                 return <View/>
               }
               if(this.props.activeBevy._id == -1) {
-                if(!_.contains(this.props.frontpageFilters, post.bevy._id)) { 
+                if(!_.contains(this.props.frontpageFilters, post.bevy._id) && this.props.loggedIn) { 
                   //console.log("filtering by bevy", this.props.frontpageFilters, post.bevy._id);
                   return <View/>;
                 }
@@ -200,7 +213,7 @@ var PostList = React.createClass({
               if(this.props.activeBevy._id != -1) {
                 if(post.tag == undefined)
                   return <View />;
-                if(!_.contains(_.pluck(this.props.activeTags, 'name'), post.tag.name)) {
+                if(!_.contains(_.pluck(this.props.activeTags, 'name'), post.tag.name) && this.props.loggedIn) {
                   //console.log("filtering by tag", _.pluck(this.props.activeTags, 'name'), post.tag.name);
                   return <View/>;
                 }

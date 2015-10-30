@@ -81,8 +81,10 @@ _.extend(PostStore, {
 
         if(user_id) {
           this.posts.url = constants.apiurl + '/users/' + user_id + '/posts';
-        } else if(bevy._id == -1) {
+        } else if(bevy._id == -1 && user_id) {
           this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
+        } else if(bevy._id == -1 && !user_id) {
+          this.posts.url = constants.apiurl + '/frontpage';
         } else {
           this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
         }
@@ -94,11 +96,13 @@ _.extend(PostStore, {
         // then fetch
         this.posts.fetch({
           success: function(posts, response, options) {
-            // trigger loaded so frontend knows that data is available
-            this.trigger(POST.LOADED);
-            this.trigger(POST.CHANGE_ALL);
+            // trigger sort which will trigger loaded and change all
+            PostActions.sort(this.sortType, 'asc');
           }.bind(this)
         });
+
+        
+        
         break;
 
       case POST.CREATE:
@@ -157,6 +161,8 @@ _.extend(PostStore, {
             // trigger events
             this.trigger(POST.POSTED_POST);
             this.trigger(POST.CHANGE_ALL);
+
+            this.trigger(POST.POST_CREATED, post.id);
           }.bind(this),
           error: function(err) {
             console.log(err);
@@ -249,6 +255,7 @@ _.extend(PostStore, {
         this.posts.sort();
 
         this.trigger(POST.CHANGE_ALL);
+        this.trigger(POST.LOADED);
         break;
 
       case BEVY.SWITCH:
