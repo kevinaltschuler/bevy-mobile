@@ -129,12 +129,12 @@ var SettingsView = React.createClass({
           <Text style={ styles.settingsTitle }>Account</Text>
           { this._renderAccountSettings() }
 
-          <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>Settings</Text>
+          {/*<Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>Settings</Text>
           <SettingsItem
             title='Placeholder Setting'
             onPress={() => {}}
             checked={ true }
-          />
+          />*/}
         </ScrollView>
       </View>
     );

@@ -407,10 +407,6 @@ var styles = StyleSheet.create({
     width: 30,
     height: 30
   },
-  bevyPickerButton: {
-    flexDirection: 'row'
-  },
-
   bevyPickerList: {
     backgroundColor: '#fff',
     flex: 1,

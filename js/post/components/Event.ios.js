@@ -47,7 +47,8 @@ var Event = React.createClass({
       post: this.props.post,
       overlayVisible: false,
       voted: this.props.post.voted,
-      collapsed: true
+      collapsed: true,
+      date: new Date(this.props.post.event.date)
     };
   },
 
@@ -77,6 +78,55 @@ var Event = React.createClass({
     return sum;
   },
 
+  getMonthText() {
+    var monthNum = this.state.date.getMonth();
+    var monthMap = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return monthMap[monthNum];
+  },
+  getWeekdayText() {
+    var weekdayNum = this.state.date.getDay();
+    var weekdayMap = [
+      'Sun',
+      'Mon',
+      'Tue',
+      'Wed',
+      'Thu',
+      'Fri',
+      'Sat'
+    ];
+    return weekdayMap[weekdayNum];
+  },
+  getHoursText() {
+    var hours = this.state.date.getHours();
+    if(hours == 0) return '12'; // 12 AM
+    if(hours > 11) return hours - 12 + 1; // sometime in the PM
+    else return hours - 1; // sometime in the AM
+  },
+  getMinutesText() {
+    var minutes = String(this.state.date.getMinutes());
+    if(minutes.length < 2) minutes = '0' + minutes;
+    return minutes;
+  },
+  getAMorPM() {
+    var hours = this.state.date.getHours();
+    if(hours < 11) return 'AM';
+    if(hours == 23) return 'AM' // 12 AM
+    else return 'PM';
+  },
+
   _renderPostTitle() {
     var date = new Date(this.state.post.event.date);
     if(_.isEmpty(this.state.post.title)) return null;
@@ -85,10 +135,10 @@ var Event = React.createClass({
 
         <View style={styles.dateText}>
           <Text style={styles.dayText}>
-            { date.toLocaleDateString("en", {day: "numeric"}) }
+            { this.getMonthText() }
           </Text>
           <Text style={styles.monthText}>
-            { date.toLocaleDateString("en", {month: "short"}) }
+            { this.state.date.getDate() }
           </Text>
         </View>
 
@@ -226,7 +276,7 @@ var Event = React.createClass({
           </TouchableHighlight>
         </View>
         <Collapsible collapsed={this.state.collapsed} >
-          <PostActionList post={ this.state.post } { ...this.props } />
+          <PostActionList post={ this.state.post } { ...this.props } user={this.props.user} />
         </Collapsible>
       </View>
     );
@@ -321,10 +371,11 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   dayText: {
-    fontSize: 28,
+    fontSize: 20,
   },
   monthText: {
     color: '#2cb673',
+    fontSize: 16
   },
 
   postImage: {
@@ -368,7 +419,7 @@ var styles = StyleSheet.create({
   },
   actionIcon: {
     width: 20,
-    height: 36
+    height: 20
   }
 });
 

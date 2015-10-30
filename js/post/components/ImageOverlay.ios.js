@@ -163,7 +163,7 @@ var ImageOverlay = React.createClass({
               <Icon
                 name='ios-close-empty'
                 size={ 40 }
-                style={{ width: 40, height: 40, fontSize: 'bold' }}
+                style={{ width: 40, height: 40, fontWeight: 'bold' }}
                 color='#fff'
               />
             </TouchableOpacity>

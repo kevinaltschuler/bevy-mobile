@@ -106,7 +106,7 @@ var SearchBar = React.createClass({
       leftButton = (
         <BevyListButton 
           onPress={() => {
-            this.props.menuActions.toggle();
+            this.context.menuActions.toggle();
           }}
         />
       );
@@ -200,7 +200,10 @@ var SearchBarWrapper = React.createClass({
   render() {
     return (
       <SideMenu
-        menu={<BevyList { ...this.props }/>}
+        menu={
+          <BevyList 
+            {...this.props}
+          />}
         ref='menu'
         touchToClose={ true }
         openMenuOffset={ constants.sideMenuWidth }
@@ -256,5 +259,9 @@ var styles = StyleSheet.create({
     paddingLeft: 20
   }
 });
+
+SearchBar.contextTypes = {
+  menuActions: React.PropTypes.object.isRequired
+};
 
 module.exports = SearchBarWrapper;

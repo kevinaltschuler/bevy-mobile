@@ -128,7 +128,7 @@ var styles = StyleSheet.create({
     marginBottom: 15,
     marginLeft: 50,
     marginTop: 120
-  }
+  },
 })
 
 module.exports = ChatView;

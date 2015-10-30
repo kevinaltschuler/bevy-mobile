@@ -169,6 +169,7 @@ var CommentView = React.createClass({
             post={ this.state.post }
             mainNavigator={ this.props.mainNavigator }
             mainRoute={ this.props.mainRoute }
+            user={ this.props.user }
           />
         </View>
       )
@@ -180,6 +181,7 @@ var CommentView = React.createClass({
           post={ this.state.post }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          user={ this.props.user }
         />
       </View>
     );

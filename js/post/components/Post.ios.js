@@ -203,7 +203,7 @@ var Post = React.createClass({
     var post = this.state.post;
 
     var tagBadge = (post.tag)
-    ? <View style={{paddingTop: 2, paddingBottom: 2, paddingLeft: 4, paddingRight: 4, borderRadius: 8, backgroundColor: post.tag.color }}>
+    ? <View style={{paddingTop: 2, height: 18, paddingBottom: 2, paddingLeft: 4, paddingRight: 4, borderRadius: 8, backgroundColor: post.tag.color }}>
         <Text style={{color: '#fff', fontSize: 10}}>
           {post.tag.name}
         </Text>
@@ -419,7 +419,7 @@ var styles = StyleSheet.create({
   },
   actionIcon: {
     width: 20,
-    height: 36
+    height: 20
   },
   cancelButton: {
     padding: 5,
