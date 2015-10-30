@@ -195,6 +195,7 @@ var PostList = React.createClass({
             scrollRenderAheadDistance={ 300 }
             removeClippedSubviews={ true }
             initialListSize={ 3 }
+            pageSize={ 3 }
             renderHeader={ this._renderHeader }
             renderRow={(post) => 
               <Post
