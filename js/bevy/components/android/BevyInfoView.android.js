@@ -31,7 +31,8 @@ var BevyInfoView = React.createClass({
   propTypes: {
     activeBevy: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
-    bevyRoute: React.PropTypes.object
+    bevyRoute: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -89,6 +90,7 @@ var BevyInfoView = React.createClass({
         <BevyAdminItem
           key={ 'bevyadminitem:' + admin._id }
           admin={ admin }
+          mainNavigator={ this.props.mainNavigator }
         />
       );
     }

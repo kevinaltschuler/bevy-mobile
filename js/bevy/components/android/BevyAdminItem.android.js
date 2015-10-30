@@ -10,37 +10,99 @@ var {
   View,
   Text,
   Image,
+  TouchableNativeFeedback,
+  ToastAndroid,
   StyleSheet
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
+var Collapsible = require('react-native-collapsible');
+
+var _ = require('underscore');
+var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 
 var BevyAdminItem = React.createClass({
   propTypes: {
-    admin: React.PropTypes.object
+    admin: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-
+      actionBarOpen: false
     };
+  },
+
+  toggleActionBar() {
+    this.setState({
+      actionBarOpen: !this.state.actionBarOpen
+    });
+  },
+
+  goToProfile() {
+    // set route user
+    var route = routes.MAIN.PROFILE;
+    route.user = this.props.admin;
+    // go to profile page
+    this.props.mainNavigator.push(route);
+  },
+
+  removeAdmin() {
+
   },
 
   render() {
     return (
       <View style={ styles.container }>
-        <Image
-          source={{ uri: this.props.admin.image_url }}
-          style={ styles.image }
-        />
-        <View style={ styles.details }>
-          <Text style={ styles.name }>{ this.props.admin.displayName }</Text>
-        </View>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ this.toggleActionBar }
+        >
+          <View style={ styles.item }>
+            <Image
+              source={{ uri: this.props.admin.image_url }}
+              style={ styles.image }
+            />
+            <View style={ styles.details }>
+              <Text style={ styles.name }>{ this.props.admin.displayName }</Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+        <Collapsible duration={ 1000 } collapsed={ !this.state.actionBarOpen }>
+          <View style={ styles.actionBar }>
+            <TouchableNativeFeedback
+              background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+              onPress={ this.goToProfile }
+            >
+              <View style={ styles.actionBarItem }>
+                <Icon
+                  name='person'
+                  size={ 24 }
+                  color='#FFF'
+                />
+              </View>
+            </TouchableNativeFeedback>
+            <TouchableNativeFeedback
+              background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+              onPress={() => {}}
+            >
+              <View style={ styles.actionBarItem }>
+                <Icon
+                  name='more-vert'
+                  size={ 24 }
+                  color='#FFF'
+                />
+              </View>
+            </TouchableNativeFeedback>
+          </View>
+        </Collapsible>
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  container: {
+  item: {
     backgroundColor: '#FFF',
     height: 48,
     flexDirection: 'row',
@@ -63,6 +125,19 @@ var styles = StyleSheet.create({
   name: {
     color: '#AAA',
     textAlign: 'left'
+  },
+  actionBar: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2CB673'
+  },
+  actionBarItem: {
+    height: 40,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
