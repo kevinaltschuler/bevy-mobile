@@ -98,8 +98,12 @@ var SearchView = React.createClass({
       	<ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
+          scrollRenderAheadDistance={ 300 }
+          removeClippedSubviews={ true }
+          initialListSize={ 10 }
+          pageSize={ 10 }
           renderRow={(bevy) => {
-            var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
+            var imageUri = bevy.image_url + '?w=50&h=50';
             if(bevy._id == -1) return <View />; // disallow posting to frontpage
             return (
               <View style={ styles.bevyRow }> 
@@ -114,10 +118,10 @@ var SearchView = React.createClass({
                   }}
                 >
                   <View style={ styles.bevyPickerItem }>
-                    {/*<Image
+                    <Image
                       style={ styles.bevyPickerImage }
                       source={{ uri: imageUri }}
-                    />*/}
+                    />
                     <Text style={ styles.bevyPickerName }>
                       { bevy.name }
                     </Text>
