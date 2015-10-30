@@ -22,6 +22,7 @@ var BevyActions = require('./../../BevyActions');
 
 var TagModal = React.createClass({
   propTypes: {
+    activeBevy: React.PropTypes.object,
     activeTags: React.PropTypes.array
   },
 
@@ -118,6 +119,9 @@ var TagModal = React.createClass({
           <View style={ styles.backdrop } />
         </TouchableWithoutFeedback>
         <View style={ styles.modal }>
+          <Text style={ styles.title }>
+            Tags of { this.props.activeBevy.name }
+          </Text>
           <ScrollView style={ styles.tagList }>
             { this._renderTags() }
           </ScrollView>
@@ -151,6 +155,10 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     paddingVertical: 10,
     borderRadius: 5
+  },
+  title: {
+    color: '#AAA',
+    textAlign: 'center'
   },
   tagList: {
 
