@@ -32,13 +32,15 @@ var BevyInfoView = React.createClass({
     activeBevy: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
     bevyRoute: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
-    var user = UserStore.getUser();
     return {
-      subscribed: _.contains(user.bevies, this.props.activeBevy._id)
+      subscribed: _.contains(this.props.user.bevies, this.props.activeBevy._id),
+      isAdmin: _.findWhere(this.props.activeBevy.admins, 
+        { _id: this.props.user._id }) != undefined
     };
   },
 
@@ -47,6 +49,14 @@ var BevyInfoView = React.createClass({
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      subscribed: _.contains(nextProps.user.bevies, nextProps.activeBevy._id),
+      isAdmin: _.findWhere(nextProps.activeBevy.admins, 
+        { _id: nextProps.user._id }) != undefined     
+    });
   },
 
   onBackButton() {
@@ -99,6 +109,23 @@ var BevyInfoView = React.createClass({
         <Text style={ styles.noAdmins }>No Admins</Text>
       );
     } else return admins;
+  },
+
+  _renderDangerZone() {
+    if(!this.state.isAdmin) return <View />;
+    return (
+      <View style={{ flex: 1 }}>
+        <Text style={ styles.settingTitle }>Danger Zone</Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#ED8372') }
+          onPress={ this.deleteBevy }
+        >
+          <View style={[ styles.settingItem, { backgroundColor: '#DF4A32' } ]}>
+            <Text style={[ styles.settingText, { color: '#FFF' } ]}>Delete Bevy</Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    );
   },
 
   render() {
@@ -181,15 +208,8 @@ var BevyInfoView = React.createClass({
           </TouchableNativeFeedback>
           <Text style={ styles.settingTitle }>Admins</Text>
           { this._renderAdmins() }
-          <Text style={ styles.settingTitle }>Danger Zone</Text>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#ED8372') }
-            onPress={ this.deleteBevy }
-          >
-            <View style={[ styles.settingItem, { backgroundColor: '#DF4A32' } ]}>
-              <Text style={[ styles.settingText, { color: '#FFF' } ]}>Delete Bevy</Text>
-            </View>
-          </TouchableNativeFeedback>
+          { this._renderDangerZone() }
+          
           <View style={{ height: 15 }} />
         </ScrollView>
       </View>
