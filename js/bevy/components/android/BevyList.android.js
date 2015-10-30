@@ -87,6 +87,8 @@ var BevyList = React.createClass({
         dataSource={ this.state.ds }
         style={ styles.container }
         renderRow={(bevy) => {
+          // dont show frontpage
+          if(bevy._id == '-1') return <View />;
           return (
             <BevyListItem
               key={ 'bevylistitem:' + bevy._id }
