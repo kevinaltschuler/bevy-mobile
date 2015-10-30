@@ -12,6 +12,8 @@ var {
   Text,
   Image,
   StyleSheet,
+  TouchableNativeFeedback,
+  ToastAndroid,
   ProgressBarAndroid
 } = React;
 var BevyBar = require('./../../../bevy/components/android/BevyBar.android.js');
@@ -22,12 +24,15 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var POST = constants.POST;
 var PostStore = require('./../../PostStore');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var PostList = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
+    bevyNavigator: React.PropTypes.object,
+    bevyRoute: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     showNewPostCard: React.PropTypes.bool,
@@ -72,6 +77,16 @@ var PostList = React.createClass({
     this.setState({
       posts: this.state.posts.cloneWithRows(posts)
     });
+  },
+
+  requestJoin() {
+    // dont allow this for non logged in users
+    if(!this.props.loggedIn) {
+      ToastAndroid.show('Please Log In to Join a Bevy', ToastAndroid.SHORT);
+      return;
+    }
+    // send action
+    BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },
 
   _onPostsLoading() {
@@ -120,6 +135,38 @@ var PostList = React.createClass({
   },
 
   render() {
+    if(this.props.activeBevy._id != -1 // if not the frontpage
+      && this.props.activeBevy.settings.privacy == 1
+      && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+      // if this is a private bevy that the user is not a part of
+      // dont show any posts. only show a request join view
+      return (
+        <View style={ styles.privateContainer }>
+          <BevyBar
+            activeBevy={ this.props.activeBevy }
+            bevyNavigator={ this.props.bevyNavigator }
+            bevyRoute={ this.props.bevyRoute }
+          />
+          <Image
+            style={ styles.privateImage }
+            source={{ uri: constants.siteurl + '/img/private.png' }}
+          />
+          <Text style={ styles.privateText }>
+            This Bevy is Private
+          </Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={ this.requestJoin }
+          >
+            <View style={ styles.requestJoinButton }>
+              <Text style={ styles.requestJoinButtonText }>
+                Request to Join this Bevy
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      );
+    }
     if(this.state.loading) {
       return (
         <View style={ styles.container }> 
@@ -184,6 +231,32 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 22,
     color: '#AAA'
+  },
+  privateContainer: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  privateImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 20,
+    marginBottom: 15
+  },
+  privateText: {
+    textAlign: 'center',
+    color: '#AAA',
+    fontSize: 22,
+    marginBottom: 15
+  },
+  requestJoinButton: {
+    backgroundColor: '#2CB673',
+    borderRadius: 3,
+    paddingVertical: 5,
+    paddingHorizontal: 10
+  },
+  requestJoinButtonText: {
+    color: '#FFF'
   }
 });
 

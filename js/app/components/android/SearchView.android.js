@@ -114,10 +114,10 @@ var SearchView = React.createClass({
                   }}
                 >
                   <View style={ styles.bevyPickerItem }>
-                    <Image
+                    {/*<Image
                       style={ styles.bevyPickerImage }
                       source={{ uri: imageUri }}
-                    />
+                    />*/}
                     <Text style={ styles.bevyPickerName }>
                       { bevy.name }
                     </Text>

@@ -93,7 +93,15 @@ var BevyActions = {
       actionType: BEVY.UPDATE_FRONT,
       bevies: (bevies == undefined) ? null : bevies
     });
-  }
+  },
+
+  requestJoin(bevy, user) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REQUEST_JOIN,
+      bevy: bevy,
+      user: user
+    });
+  },
 };
 
 module.exports = BevyActions;
