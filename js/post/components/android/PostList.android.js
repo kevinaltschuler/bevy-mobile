@@ -192,6 +192,9 @@ var PostList = React.createClass({
           <ListView
             dataSource={ this.state.posts }
             style={ styles.postList }
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 3 }
             renderHeader={ this._renderHeader }
             renderRow={(post) => 
               <Post
