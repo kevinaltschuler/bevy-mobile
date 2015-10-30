@@ -45,19 +45,12 @@ var MainTabBar = React.createClass({
       tabHistory: [tabs.posts], // keep track of tab switches so
                                 // we can use the back button to switch
                                 // to previous ones 
-      barAnim: new Animated.ValueXY(0, 43) // animated green bar that follows tabs
+      barAnim: new Animated.ValueXY() // animated green bar that follows tabs
     };
   },
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
-    Animated.timing(
-      this.state.barAnim,
-      { 
-        toValue: { x: 0, y: 43 },
-        duration: 1
-      }
-    ).start();
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
@@ -168,7 +161,9 @@ var MainTabBar = React.createClass({
             icon={<Icon name='more-horiz' size={ iconSize } color={ unselectedColor } />}
             selectedIcon={<Icon name='more-horiz' size={ iconSize } color={ selectedColor } />}
           />
-          <Animated.View style={[ styles.animBar, this.state.barAnim.getLayout() ]} />
+          <Animated.View style={[ styles.animBar, this.state.barAnim.getLayout(), {
+            top: 43
+          } ]} />
         </View>
         { this._renderTabContent() }
       </View>
