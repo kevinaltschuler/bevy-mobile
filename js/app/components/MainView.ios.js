@@ -44,6 +44,8 @@ var MainView = React.createClass({
 
   render: function() {
 
+    console.log(this.props.mainRoute);
+
     switch(this.props.mainRoute.name) {
 
       case routes.MAIN.NEWPOST.name:
