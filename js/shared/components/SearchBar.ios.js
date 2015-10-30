@@ -204,6 +204,7 @@ var SearchBarWrapper = React.createClass({
         ref='menu'
         touchToClose={ true }
         openMenuOffset={ constants.sideMenuWidth }
+        disableGestures={ true }
       >
         <SearchNavigator { ...this.props }/>
       </SideMenu>
