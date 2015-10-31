@@ -29,7 +29,8 @@ var Post = React.createClass({
     mainRoute: React.PropTypes.object,
     expandText: React.PropTypes.bool,
     card: React.PropTypes.bool, // style like a card
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    activeBevy: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -101,6 +102,7 @@ var Post = React.createClass({
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
           user={ this.props.user }
+          activeBevy={ this.props.activeBevy }
         />
       );
     }

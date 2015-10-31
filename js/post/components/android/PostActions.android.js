@@ -21,12 +21,14 @@ var routes = require('./../../../routes');
 var PostStore = require('./../../PostStore');
 var $PostActions = require('./../../PostActions');
 var UserStore = require('./../../../user/UserStore');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var PostActions = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    activeBevy: React.PropTypes.object
   },
 
   getInitialState() {
@@ -43,6 +45,13 @@ var PostActions = React.createClass({
     var profileRoute = routes.MAIN.PROFILE;
     profileRoute.user = this.props.post.author;
     this.props.mainNavigator.push(profileRoute);
+  },
+
+  goToBevy() {
+    // already in the bevy
+    if(this.props.post.bevy._id == this.props.activeBevy._id) return;
+    // call action
+    BevyActions.switchBevy(this.props.post.bevy._id);
   },
 
   deletePost() {
@@ -120,6 +129,7 @@ var PostActions = React.createClass({
             constants.getActionSheetActions().show(
               [
                 "Go To Author's Profile",
+                "Go To Bevy",
                 //"Edit Post",
                 "Delete Post"
                ],
@@ -128,6 +138,9 @@ var PostActions = React.createClass({
                 switch(option) {
                   case "Go To Author's Profile":
                     this.goToAuthorProfile();
+                    break;
+                  case "Go To Bevy":
+                    this.goToBevy();
                     break;
                   case "Delete Post":
                     this.deletePost();
