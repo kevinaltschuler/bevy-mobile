@@ -80,9 +80,6 @@ var MessageView = React.createClass({
 
     var user = this.props.user;
     ChatActions.postMessage(this.props.activeThread._id, user, text);
-    this.setState({
-      messageInput: ''
-    });
 
     // instant gratification
     var messages = this.state.messages;
@@ -94,7 +91,8 @@ var MessageView = React.createClass({
     });
     this.setState({
       messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages)
+      dataSource: this.state.dataSource.cloneWithRows(messages),
+      messageInput: '' // clear text field
     });
   },
 
@@ -135,9 +133,15 @@ var MessageView = React.createClass({
           mainNavigator={ this.props.mainNavigator }
         />
         <ListView
-          renderScrollComponent={(props) => <InvertibleScrollView {...props} />}
+          renderScrollComponent={
+            (props) => <InvertibleScrollView {...props} { ...this.state } />
+          }
           dataSource={ this.state.dataSource }
           style={ styles.messageList }
+          scrollRenderAheadDistance={ 300 }
+          removeClippedSubviews={ true }
+          initialListSize={ 10 }
+          pageSize={ 10 }
           renderRow={(message) => {
             return (
               <MessageItem

@@ -140,10 +140,9 @@ _.extend(ChatStore, {
             message.set('_id', model.get('_id'));
             message.set('author', model.get('author'));
             message.set('created', model.get('created'));
-            //this.trigger(CHAT.CHANGE_ONE + thread_id);
+            this.trigger(CHAT.CHANGE_ONE + thread_id);
           }.bind(this)
         });
-
         break;
     }
 	},
