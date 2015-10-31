@@ -9,6 +9,7 @@ var React = require('react-native');
 var {
   Text,
   View,
+  Image,
   TextInput,
   TouchableNativeFeedback,
   BackAndroid,
@@ -135,7 +136,10 @@ var LoginView = React.createClass({
   render() {
     return(
       <View style={ styles.container }>
-        <Text style={ styles.titleText }>Bevy</Text>
+        <Image
+          source={ require('image!logo_512') }
+          style={ styles.bevyLogo }
+        />
         { this._renderErrorText() }
         { this._renderLoginProgress() }
         <TextInput 
@@ -205,7 +209,13 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#2CB673',
   },
-
+  bevyLogo: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    //borderColor: '#FFF',
+    //borderWidth: 1
+  },
   titleText: {
     color: '#FFF',
     fontSize: 24,
