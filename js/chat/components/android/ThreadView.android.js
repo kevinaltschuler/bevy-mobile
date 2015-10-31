@@ -112,6 +112,17 @@ var styles = StyleSheet.create({
   },
   panelHeaderText: {
     color: '#AAA'
+  },
+  noThreadsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noThreads: {
+    color: '#AAA',
+    fontSize: 22,
+    textAlign: 'center'
   }
 });
 
