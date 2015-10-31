@@ -28,6 +28,7 @@ var PostActions = React.createClass({
     post: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
     activeBevy: React.PropTypes.object
   },
 
@@ -47,11 +48,30 @@ var PostActions = React.createClass({
     this.props.mainNavigator.push(profileRoute);
   },
 
+  goToCommentView() {
+    // dont navigate if already in comment view
+    if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+    // navigate to comments
+    var commentRoute = routes.MAIN.COMMENT;
+    commentRoute.post = this.props.post;
+    this.props.mainNavigator.push(commentRoute);
+  },
+
   goToBevy() {
     // already in the bevy
     if(this.props.post.bevy._id == this.props.activeBevy._id) return;
     // call action
     BevyActions.switchBevy(this.props.post.bevy._id);
+  },
+
+  vote() {
+    if(!this.props.loggedIn) {
+      ToastAndroid.show('Please Log In To Vote', ToastAndroid.SHORT);
+    }
+    $PostActions.vote(this.props.post._id);
+    this.setState({
+      voted: !this.state.voted
+    });
   },
 
   deletePost() {
@@ -83,12 +103,7 @@ var PostActions = React.createClass({
       <View style={ styles.container }>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-          onPress={() => {
-            $PostActions.vote(this.props.post._id);
-            this.setState({
-              voted: !this.state.voted
-            });
-          }}
+          onPress={ this.vote }
         >
           <View style={ styles.likeButton }>
             <Icon
@@ -103,14 +118,7 @@ var PostActions = React.createClass({
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-          onPress={() => {
-            // dont navigate if already in comment view
-            if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
-            // navigate to comments
-            var commentRoute = routes.MAIN.COMMENT;
-            commentRoute.post = this.props.post;
-            this.props.mainNavigator.push(commentRoute);
-          }}
+          onPress={ this.goToCommentView }
         >
           <View style={ styles.commentButton }>
             <Icon

@@ -204,6 +204,7 @@ var PostList = React.createClass({
                 mainNavigator={ this.props.mainNavigator }
                 mainRoute={ this.props.mainRoute }
                 user={ this.props.user }
+                loggedIn={ this.props.loggedIn }
                 activeBevy={ this.props.activeBevy }
               />
             }
