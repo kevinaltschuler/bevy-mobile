@@ -218,6 +218,9 @@ var PostList = React.createClass({
                   return <View/>;
                 }
               }
+              if(post.pinned && this.props.activeBevy._id == -1) {
+                return <View/>;
+              }
               if(post.type == 'event')
                 return <View style={{backgroundColor: '#eee'}}> 
                   <Event 
