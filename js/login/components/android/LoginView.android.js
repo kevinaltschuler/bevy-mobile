@@ -36,7 +36,8 @@ var LoginView = React.createClass({
     return {
       errorText: '',
       username: '',
-      password: ''
+      password: '',
+      loggingIn: true
     };
   },
 
@@ -99,6 +100,10 @@ var LoginView = React.createClass({
         <Text style={ styles.errorText }>{ this.state.errorText }</Text>
       </View>
     );
+  },
+
+  _renderLoginProgress() {
+    if(!this.state.loggingIn) return <View />;
   },
 
   render() {
