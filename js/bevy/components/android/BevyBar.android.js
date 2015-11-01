@@ -28,12 +28,14 @@ var BevyBar = React.createClass({
     activeBevy: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
     bevyRoute: React.PropTypes.object,
-    showActions: React.PropTypes.bool
+    showActions: React.PropTypes.bool,
+    height: React.PropTypes.number
   },
 
   getDefaultProps() {
     return {
-      showActions: true
+      showActions: true,
+      height: 48
     };
   },
 
@@ -194,9 +196,10 @@ var BevyBar = React.createClass({
   },
 
   render() {
+    console.log(this.props.height)
     if(_.isEmpty(this.props.activeBevy)) return <View />;
     else return (
-      <View style={ styles.container }>
+      <View style={[styles.container, {marginTop: (this.props.height * -1)} ]}>
         { this._renderImage() }
         { this._renderBackButton() }
         <Text style={[ styles.bevyName, { color: this.state.iconColor } ]}>
@@ -216,12 +219,15 @@ var BevyBar = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    height: 48,
     width: constants.width,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    opacity: 1
+    opacity: 1,
+    position: 'absolute',
+    top: 0,
+    borderBottomColor: '#EEE',
+    borderBottomWidth: 1
   },
   bevyImageWrapper: {
     position: 'absolute',
