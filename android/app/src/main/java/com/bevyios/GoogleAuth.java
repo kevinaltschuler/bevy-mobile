@@ -80,7 +80,7 @@ public class GoogleAuth extends ReactContextBaseJavaModule implements
     super(reactContext);
 
     mActivity = activity;
-      mContext = reactContext;
+    mContext = reactContext;
 
     mGoogleApiClient = new GoogleApiClient.Builder(reactContext)
         .addConnectionCallbacks(this)
@@ -105,12 +105,15 @@ public class GoogleAuth extends ReactContextBaseJavaModule implements
 
   @ReactMethod
   public void start(Callback error, Callback success) {
-    mShouldResolve = true;
-    mGoogleApiClient.connect();
-    Log.d(TAG, Boolean.toString(mGoogleApiClient.isConnected()));
-
     errorCallback = error;
     successCallback = success;
+
+    if(mGoogleApiClient.isConnected()) {
+      new GetIdTask().execute();
+    } else {
+      mShouldResolve = true;
+      mGoogleApiClient.connect();
+    }
   }
 
   @ReactMethod
@@ -138,9 +141,7 @@ public class GoogleAuth extends ReactContextBaseJavaModule implements
     Log.d(TAG, "onConnected:" + bundle);
     mShouldResolve = false;
     // trigger signed in
-    WritableMap params = Arguments.createMap();
-    String accountName = Plus.AccountApi.getAccountName(mGoogleApiClient);
-    params.putString("email", accountName);
+    new GetIdTask().execute();
   }
 
   @Override

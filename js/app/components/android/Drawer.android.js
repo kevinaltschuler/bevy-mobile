@@ -18,6 +18,7 @@ var BevyList = require('./../../../bevy/components/android/BevyList.android.js')
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var routes = require('./../../../routes');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var Drawer = React.createClass({
   propTypes: {
@@ -34,6 +35,11 @@ var Drawer = React.createClass({
     if(!this.props.loggedIn) return;
     // go to new bevy view
     this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+  },
+
+  switchToFrontpage() {
+    BevyActions.switchBevy('-1');
+    this.props.drawerActions.close();
   },
 
   _renderProfile() {
@@ -64,6 +70,22 @@ var Drawer = React.createClass({
     }
   },
 
+  _renderFrontpageButton() {
+    var activeStyle = (this.props.activeBevy._id == '-1')
+      ? { backgroundColor: '#2A2A2A' }
+      : { backgroundColor: '#222' };
+    return (
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#333', false) }
+        onPress={ this.switchToFrontpage }
+      >
+        <View style={[ styles.logInButton, activeStyle ]}>
+          <Text style={ styles.logInButtonText }>Frontpage</Text>
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   _renderBeviesHeader() {
     if(!this.props.loggedIn) {
       return (
@@ -92,6 +114,7 @@ var Drawer = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderProfile() }
+        { this._renderFrontpageButton() }
         { this._renderBeviesHeader() }
         <BevyList { ...this.props } />
       </View>
@@ -107,7 +130,11 @@ var styles = StyleSheet.create({
   },
   logInButton: {
     flexDirection: 'row',
-    padding: 15
+    alignItems: 'center',
+    height: 40,
+    paddingHorizontal: 15,
+    borderBottomColor: '#333',
+    borderBottomWidth: 1
   },
   logInButtonText: {
     flex: 1,

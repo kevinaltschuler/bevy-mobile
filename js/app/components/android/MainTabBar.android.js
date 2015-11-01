@@ -12,6 +12,7 @@ var {
   StyleSheet,
   BackAndroid,
   Animated,
+  ViewPagerAndroid,
   TouchableNativeFeedback
 } = React;
 var TabBarItem = require('./TabBarItem.android.js');
@@ -71,6 +72,26 @@ var MainTabBar = React.createClass({
     return true;
   },
 
+  onPageSelected(ev) {
+    var index = ev.nativeEvent.position;
+    var tab = '';
+    switch(index) {
+      case 0:
+        tab = tabs.posts;
+        break;
+      case 1:
+        tab = tabs.chat;
+        break;
+      case 2:
+        tab = tabs.notifications;
+        break;
+      case 3:
+        tab = tabs.more;
+        break;
+    }
+    this.switchTab(tab);
+  },
+
   switchTab(tab) {
     var history = this.state.tabHistory || [];
     history.push(tab);
@@ -82,15 +103,19 @@ var MainTabBar = React.createClass({
     var x = 0;
     switch(tab) {
       case tabs.posts:
+        this.refs.Pager.setPage(0);
         x = 0;
         break;
       case tabs.chat:
+        this.refs.Pager.setPage(1);
         x = (constants.width / 4);
         break;
       case tabs.notifications:
+        this.refs.Pager.setPage(2);
         x = (constants.width / 4) * 2;
         break;
       case tabs.more:
+        this.refs.Pager.setPage(3);
         x = (constants.width / 4) * 3;
         break;
     }
@@ -109,23 +134,29 @@ var MainTabBar = React.createClass({
     var tabActions = {
       switchTab: this.switchTab
     };
-    switch(this.state.activeTab) {
-      case tabs.posts:
-        return <BevyNavigator tabActions={ tabActions } { ...this.props } />;
-        break;
-      case tabs.chat:
-        return <ChatNavigator tabActions={ tabActions } { ...this.props } />;
-        break;
-      case tabs.notifications:
-        return <NotificationView tabActions={ tabActions } { ...this.props } />;
-        break;
-      case tabs.more:
-        return <SettingsView tabActions={ tabActions } { ...this.props } />;
-        break;
-      default:
-        break;
-    }
-    return <Text>Some Tab Content</Text>
+    return (
+      <ViewPagerAndroid
+        ref='Pager'
+        style={ styles.viewPager }
+        initialPage={ 0 }
+        keyboardDismissMode='on-drag'
+        onPageScroll={() => {}}
+        onPageSelected={ this.onPageSelected }
+      >
+        <View style={ styles.page }>
+          <BevyNavigator tabActions={ tabActions } { ...this.props } />
+        </View>
+        <View style={ styles.page }>
+          <ChatNavigator tabActions={ tabActions } { ...this.props } />
+        </View>
+        <View style={ styles.page }>
+          <NotificationView tabActions={ tabActions } { ...this.props } />
+        </View>
+        <View style={ styles.page }>
+          <SettingsView tabActions={ tabActions } { ...this.props } />
+        </View>
+      </ViewPagerAndroid>
+    );
   },
 
   render() {
@@ -192,6 +223,12 @@ var styles = StyleSheet.create({
     height: 5,
     backgroundColor: '#2CB673'
   },
+  viewPager: {
+    flex: 1
+  },
+  page: {
+    flex: 1
+  }
 });
 
 module.exports = MainTabBar;

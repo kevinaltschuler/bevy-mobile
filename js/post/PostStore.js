@@ -51,11 +51,14 @@ _.extend(PostStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-        if(!UserStore.loggedIn) {
-          break;
+        if(UserStore.loggedIn) {
+          this.posts.url = 
+            constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
+        } else {
+          this.posts.url =
+            constants.apiurl + '/frontpage';
         }
         // frontpage posts
-        this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         this.posts.comparator = this.sortByNew;
         this.sortType = 'new';
 

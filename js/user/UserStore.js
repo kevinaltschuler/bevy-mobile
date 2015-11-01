@@ -11,9 +11,11 @@ var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
 var Fletcher = require('./../shared/components/android/Fletcher.android.js');
 
+var React = require('react-native');
 var {
-  AsyncStorage
-} = require('react-native');
+  AsyncStorage,
+  Platform
+} = React;
 
 var User = Backbone.Model.extend({
   defaults: {
@@ -63,59 +65,61 @@ _.extend(UserStore, {
         var password = payload.password;
         console.log('logging in');
 
-        Fletcher.fletch(constants.siteurl + '/login', {
-          method: 'POST',
-          headers: {},
-          body: JSON.stringify({
-            username: username,
-            password: password
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(constants.siteurl + '/login', {
+            method: 'POST',
+            headers: {},
+            body: JSON.stringify({
+              username: username,
+              password: password
+            })
+          }, function(error) {
+            console.error(error);
+            this.trigger(USER.LOGIN_ERROR, JSON.parse(error).message);
+          }.bind(this), function(response) {
+            response = JSON.parse(response);
+            console.log('logged in', response);
+
+            AsyncStorage.setItem('user', JSON.stringify(response))
+              .then((err, result) => {
+              });
+
+            this.setUser(response);
+            this.trigger(USER.LOGIN_SUCCESS, response);
+          }.bind(this));
+        } else {
+          fetch(constants.siteurl + '/login',
+          {
+            method: 'post',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password
+            })
           })
-        }, function(error) {
-          console.error(error);
-          this.trigger(USER.LOGIN_ERROR, error);
-        }.bind(this), function(response) {
-          response = JSON.parse(response);
-          console.log('logged in', response);
+          // on fetch
+          .then((res) => (res.json()))
+          .then((res) => {
+            if(res.object == undefined) {
+              // success
+              console.log('logged in', res);
+              
+              AsyncStorage.setItem('user', JSON.stringify(res))
+              .then((err, result) => {
+              });
 
-          AsyncStorage.setItem('user', JSON.stringify(response))
-            .then((err, result) => {
-            });
-
-          this.setUser(response);
-          this.trigger(USER.LOGIN_SUCCESS, response);
-        }.bind(this));
-
-        /*fetch(constants.siteurl + '/login',
-        {
-          method: 'post',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password
-          })
-        })
-        // on fetch
-        .then((res) => (res.json()))
-        .then((res) => {
-          if(res.object == undefined) {
-            // success
-            console.log('logged in', res);
-            
-            AsyncStorage.setItem('user', JSON.stringify(res))
-            .then((err, result) => {
-            });
-
-            this.setUser(res);
-            this.trigger(USER.LOGIN_SUCCESS, res);
-          } else {
-            console.log('error', res);
-            // error
-            this.trigger(USER.LOGIN_ERROR, res.message);
-          }
-        });*/
+              this.setUser(res);
+              this.trigger(USER.LOGIN_SUCCESS, res);
+            } else {
+              console.log('error', res);
+              // error
+              this.trigger(USER.LOGIN_ERROR, res.message);
+            }
+          });
+        }
 
         break;
 

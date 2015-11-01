@@ -47,7 +47,7 @@ var PostList = React.createClass({
       showNewPostCard: false,
       renderHeader: true,
       activeBevy: {},
-      activeTags: ['-1'] // default is -1, which means show all posts
+      activeTags: ['-1'] // default is -1, which means show all posts,
     }
   },
 
@@ -57,8 +57,10 @@ var PostList = React.createClass({
     posts = this.prunePosts(posts);
     return {
       posts: ds.cloneWithRows(posts),
-      loading: _.isEmpty(posts) // if there are no posts to display, 
+      loading: _.isEmpty(posts), // if there are no posts to display, 
                                 // then they're probably loading at first
+      navHeight: 0,
+      scrollY: 0
     };
   },
 
@@ -109,6 +111,34 @@ var PostList = React.createClass({
     return posts;
   },
 
+  onScroll(y) {
+    //console.log('new', y);
+    //console.log('old', this.state.scrollY);
+    //console.log('navHeight', this.state.navHeight);
+    // if theres nothing to compare it to yet, just set it and return
+    if(this.state.scrollY == null || y < 0) {
+      this.setState({
+        scrollY: y,
+        navHeight: 0
+      });
+      return;
+    }
+    //get the change in scroll
+    var diff = (this.state.scrollY - y);
+    //console.log('diff', diff);
+    //modify the navheight based on that
+    var navHeight = (this.state.navHeight - diff);
+    //set bounds
+    if(navHeight < 0) navHeight = 0;
+    if(navHeight > 45) navHeight = 45;
+    //console.log(navHeight);
+    //update data
+    this.setState({
+      scrollY: y,
+      navHeight: navHeight
+    })
+  },
+
   _renderHeader() {
     if(!this.props.renderHeader) return <View />;
     else return (
@@ -117,8 +147,8 @@ var PostList = React.createClass({
           activeBevy={ this.props.activeBevy }
           bevyNavigator={ this.props.bevyNavigator }
           bevyRoute={ this.props.bevyRoute }
+          height={ this.state.navHeight }
         />
-        { this._renderNewPostCard() }
       </View>
     );
   },
@@ -126,11 +156,13 @@ var PostList = React.createClass({
   _renderNewPostCard() {
     if(!this.props.showNewPostCard) return <View />;
     else return (
-      <NewPostCard
-        user={ this.props.user }
-        loggedIn={ this.props.loggedIn }
-        mainNavigator={ this.props.mainNavigator }
-      />
+      <View style={{marginBottom: 10, marginTop: 45}}>
+        <NewPostCard
+          user={ this.props.user }
+          loggedIn={ this.props.loggedIn }
+          mainNavigator={ this.props.mainNavigator }
+        />
+      </View>
     );
   },
 
@@ -147,6 +179,7 @@ var PostList = React.createClass({
             bevyNavigator={ this.props.bevyNavigator }
             bevyRoute={ this.props.bevyRoute }
             showActions={ false }
+            height={ this.state.navheight }
           />
           <Image
             style={ styles.privateImage }
@@ -195,8 +228,11 @@ var PostList = React.createClass({
             scrollRenderAheadDistance={ 300 }
             removeClippedSubviews={ true }
             initialListSize={ 3 }
+            onScroll={(data) => {
+              this.onScroll(data.nativeEvent.contentOffset.y);
+            }}
+            renderHeader={ this._renderNewPostCard }
             pageSize={ 3 }
-            renderHeader={ this._renderHeader }
             renderRow={(post) => 
               <Post
                 key={ 'post:' + post._id }
@@ -204,9 +240,12 @@ var PostList = React.createClass({
                 mainNavigator={ this.props.mainNavigator }
                 mainRoute={ this.props.mainRoute }
                 user={ this.props.user }
+                loggedIn={ this.props.loggedIn }
+                activeBevy={ this.props.activeBevy }
               />
             }
           />
+          { this._renderHeader() }
         </View>
       );
     }
@@ -223,7 +262,8 @@ var styles = StyleSheet.create({
   header: {
     flexDirection: 'column',
     width: constants.width,
-    marginBottom: 10
+    position: 'absolute',
+    top: 0
   },
   noPostsContainer: {
     flex: 1,

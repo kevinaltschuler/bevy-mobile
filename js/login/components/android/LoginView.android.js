@@ -9,9 +9,11 @@ var React = require('react-native');
 var {
   Text,
   View,
+  Image,
   TextInput,
   TouchableNativeFeedback,
   BackAndroid,
+  ProgressBarAndroid,
   StyleSheet
 } = React;
 
@@ -36,7 +38,8 @@ var LoginView = React.createClass({
     return {
       errorText: '',
       username: '',
-      password: ''
+      password: '',
+      loggingIn: false
     };
   },
 
@@ -60,7 +63,11 @@ var LoginView = React.createClass({
     GoogleAuth.start(
       function(error) {
         // error
-        console.log('error', error)
+        console.log('error', error);
+        // clear loading flag
+        this.setState({
+          loggingIn: false
+        });
       },
       function(data) {
         // success
@@ -68,14 +75,26 @@ var LoginView = React.createClass({
         UserActions.logInGoogle(data.id);
       }
     );
+    // set loading flag
+    this.setState({
+      loggingIn: true
+    });
   },
   logIn() {
+    // prevent logging in when were waiting for a response
+    if(this.state.loggingIn) return;
+    // call action
     UserActions.logIn(this.state.username, this.state.password);
+    // set loading flag
+    this.setState({
+      loggingIn: true
+    });
   },
 
   onLoginError(message) {
     this.setState({
-      errorText: message
+      errorText: message,
+      loggingIn: false
     });
   },
 
@@ -83,7 +102,8 @@ var LoginView = React.createClass({
     this.setState({
       errorText: '',
       username: '',
-      password: ''
+      password: '',
+      loggingIn: false
     });
     UserStore.setUser(user);
     // reload app
@@ -101,11 +121,27 @@ var LoginView = React.createClass({
     );
   },
 
+  _renderLoginProgress() {
+    if(!this.state.loggingIn) return <View />;
+    return (
+      <View style={ styles.progressContainer }>
+        <ProgressBarAndroid styleAttr='SmallInverse' />
+        <Text style={ styles.progressText }>
+          Logging In...
+        </Text>
+      </View>
+    );
+  },
+
   render() {
     return(
       <View style={ styles.container }>
-        <Text style={ styles.titleText }>Bevy</Text>
+        <Image
+          source={ require('image!logo_512') }
+          style={ styles.bevyLogo }
+        />
         { this._renderErrorText() }
+        { this._renderLoginProgress() }
         <TextInput 
           ref='Username'
           style={ styles.usernameInput }
@@ -173,7 +209,13 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#2CB673',
   },
-
+  bevyLogo: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    //borderColor: '#FFF',
+    //borderWidth: 1
+  },
   titleText: {
     color: '#FFF',
     fontSize: 24,
@@ -192,6 +234,15 @@ var styles = StyleSheet.create({
   errorText: {
     color: '#FFF',
     fontSize: 15
+  },
+
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressText: {
+    marginLeft: 10,
+    color: '#FFF'
   },
 
   usernameInput: {

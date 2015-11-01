@@ -21,12 +21,15 @@ var routes = require('./../../../routes');
 var PostStore = require('./../../PostStore');
 var $PostActions = require('./../../PostActions');
 var UserStore = require('./../../../user/UserStore');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var PostActions = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool,
+    activeBevy: React.PropTypes.object
   },
 
   getInitialState() {
@@ -43,6 +46,32 @@ var PostActions = React.createClass({
     var profileRoute = routes.MAIN.PROFILE;
     profileRoute.user = this.props.post.author;
     this.props.mainNavigator.push(profileRoute);
+  },
+
+  goToCommentView() {
+    // dont navigate if already in comment view
+    if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+    // navigate to comments
+    var commentRoute = routes.MAIN.COMMENT;
+    commentRoute.post = this.props.post;
+    this.props.mainNavigator.push(commentRoute);
+  },
+
+  goToBevy() {
+    // already in the bevy
+    if(this.props.post.bevy._id == this.props.activeBevy._id) return;
+    // call action
+    BevyActions.switchBevy(this.props.post.bevy._id);
+  },
+
+  vote() {
+    if(!this.props.loggedIn) {
+      ToastAndroid.show('Please Log In To Vote', ToastAndroid.SHORT);
+    }
+    $PostActions.vote(this.props.post._id);
+    this.setState({
+      voted: !this.state.voted
+    });
   },
 
   deletePost() {
@@ -74,12 +103,7 @@ var PostActions = React.createClass({
       <View style={ styles.container }>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-          onPress={() => {
-            $PostActions.vote(this.props.post._id);
-            this.setState({
-              voted: !this.state.voted
-            });
-          }}
+          onPress={ this.vote }
         >
           <View style={ styles.likeButton }>
             <Icon
@@ -94,14 +118,7 @@ var PostActions = React.createClass({
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-          onPress={() => {
-            // dont navigate if already in comment view
-            if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
-            // navigate to comments
-            var commentRoute = routes.MAIN.COMMENT;
-            commentRoute.post = this.props.post;
-            this.props.mainNavigator.push(commentRoute);
-          }}
+          onPress={ this.goToCommentView }
         >
           <View style={ styles.commentButton }>
             <Icon
@@ -120,6 +137,7 @@ var PostActions = React.createClass({
             constants.getActionSheetActions().show(
               [
                 "Go To Author's Profile",
+                "Go To Bevy",
                 //"Edit Post",
                 "Delete Post"
                ],
@@ -128,6 +146,9 @@ var PostActions = React.createClass({
                 switch(option) {
                   case "Go To Author's Profile":
                     this.goToAuthorProfile();
+                    break;
+                  case "Go To Bevy":
+                    this.goToBevy();
                     break;
                   case "Delete Post":
                     this.deletePost();

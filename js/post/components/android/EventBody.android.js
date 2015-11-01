@@ -49,7 +49,7 @@ var EventBody = React.createClass({
   },
 
   addToCalendar() {
-
+    ToastAndroid.show('Feature Not Yet Implemented', ToastAndroid.SHORT);
   },
 
   goToMap() {
@@ -137,7 +137,7 @@ var EventBody = React.createClass({
             </View>
             <TouchableNativeFeedback
               background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-              onPress={ compactStyles.addToCalendar }
+              onPress={ this.addToCalendar }
             >
               <View style={ compactStyles.eventButton }>
                 <Icon

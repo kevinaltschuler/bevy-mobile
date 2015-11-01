@@ -50,8 +50,8 @@ var ProfileRow = React.createClass({
     return (
       <View style={[ styles.container, { height: this.props.height }, this.props.style ]}>
         <Image
-          //source={{ uri: this.props.user.image_url }}
-          source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
+          source={{ uri: this.props.user.image_url }}
+          //source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
           style={[ styles.profileImage, { width: this.props.imageSize, height: this.props.imageSize, borderRadius: this.props.imageSize / 2 } ]}
         />
         <View style={ styles.profileDetails }>
