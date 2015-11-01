@@ -12,9 +12,8 @@ var {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   Image,
-  PanResponder,
   BackAndroid,
-  Animated,
+  ViewPagerAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -27,61 +26,11 @@ var ImageModal = React.createClass({
     return {
       visible: false,
       imageIndex: 0,
-      images: [],
-      imageAnim: new Animated.ValueXY()
+      images: []
     };
   },
 
   componentWillMount() {
-    this._panResponder = PanResponder.create({
-      // Ask to be the responder:
-      onStartShouldSetPanResponder: (evt, gestureState) => true,
-      onMoveShouldSetPanResponder: (evt, gestureState) => true,
-
-      onPanResponderGrant: (evt, gestureState) => {
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        this.state.imageAnim.setValue({
-          x: gestureState.dx
-        });
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        if(gestureState.dx == 0) {
-          this.dismiss();
-          return;
-        }
-        if(Math.abs(gestureState.dx) > (constants.width / 2) 
-          && this.state.images.length > 1) {
-          if(gestureState.dx > 0) {
-            // prev img
-            this.setState({
-              imageIndex: (this.state.imageIndex == 0) 
-                ? this.state.images.length - 1
-                : this.state.imageIndex - 1,
-              imageAnim: new Animated.ValueXY()
-            });
-          } else {
-            // next img
-            this.setState({
-              imageIndex: (this.state.imageIndex == this.state.images.length - 1)
-                ? 0
-                : this.state.imageIndex + 1,
-              imageAnim: new Animated.ValueXY()
-            });
-          }
-        }
-        // else {
-          Animated.spring(
-            this.state.imageAnim,
-            { toValue: { x: 0, y: 0 } }
-          ).start();
-        //}
-      },
-      onPanResponderTerminate: (evt, gestureState) => {
-        // Another component has become the responder, so this gesture
-        // should be cancelled
-      }
-    });
   },
   componentDidMount() {
     var actions = {
@@ -117,39 +66,73 @@ var ImageModal = React.createClass({
     });
   },
 
+  onPageSelected(ev) {
+    var index = ev.nativeEvent.position;
+    this.setState({
+      imageIndex: index
+    });
+  },
+
+  _renderTopBar() {
+    return (
+      <View style={ styles.topBar }>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#666', false) }
+          onPress={ this.dismiss }
+        >
+          <View style={ styles.closeButton }>
+            <Icon
+              name='close'
+              size={ 30 }
+              color='#FFF'
+            />
+          </View>
+        </TouchableNativeFeedback>
+        <Text style={ styles.imageIndex }>
+          { (this.state.imageIndex + 1) + ' of ' + this.state.images.length }
+        </Text>
+        <Text style={ styles.title }>
+          { this.state.images[this.state.imageIndex] }
+        </Text>
+      </View>
+    );
+  },
+
+  _renderImages() {
+    var images = [];
+    for(var key in this.state.images) {
+      var image_url = this.state.images[key];
+      images.push(
+        <View style={ styles.image }>
+          <Image
+            style={ styles.image }
+            source={{ uri: image_url }}
+            resizeMode='contain'
+          />
+        </View>
+      );
+    }
+    return images;
+  },
+
   render() {
     if(!this.state.visible) return <View />;
     return (
       <View style={ styles.container }>
+        <TouchableWithoutFeedback onPress={ this.dismiss }>
         <View style={ styles.backdrop } />
-        <Animated.View style={[ styles.imageContainer, this.state.imageAnim.getLayout() ]}>
-          <Image
-            style={ styles.image }
-            source={{ uri: this.state.images[this.state.imageIndex] }}
-            resizeMode='contain'
-          />
-        </Animated.View>
-        <View { ...this._panResponder.panHandlers } style={ styles.swipeMonkey } />
-        <View style={ styles.topBar }>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#666', false) }
-            onPress={ this.dismiss }
-          >
-            <View style={ styles.closeButton }>
-              <Icon
-                name='close'
-                size={ 30 }
-                color='#FFF'
-              />
-            </View>
-          </TouchableNativeFeedback>
-          <Text style={ styles.imageIndex }>
-            { (this.state.imageIndex + 1) + ' of ' + this.state.images.length }
-          </Text>
-          <Text style={ styles.title }>
-            { this.state.images[this.state.imageIndex] }
-          </Text>
-        </View>
+        </TouchableWithoutFeedback>
+        <ViewPagerAndroid
+          ref='Pager'
+          style={ styles.imageContainer }
+          initialPage={ 0 }
+          keyboardDismissMode='on-drag'
+          onPageScroll={() => {}}
+          onPageSelected={ this.onPageSelected }
+        >
+          { this._renderImages() }
+        </ViewPagerAndroid>
+        { this._renderTopBar() }
       </View>    
     );
   }
@@ -219,13 +202,6 @@ var styles = StyleSheet.create({
   title: {
     flex: 1,
     color: '#FFF'
-  },
-  swipeMonkey: {
-    flex: 1,
-    width: constants.width,
-    height: constants.height,
-    backgroundColor: '#F00',
-    opacity: 0
   }
 });
 
