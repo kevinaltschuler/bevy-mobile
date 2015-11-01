@@ -17,6 +17,7 @@ var {
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
+var ImageModalItem = require('./ImageModalItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -103,11 +104,12 @@ var ImageModal = React.createClass({
     for(var key in this.state.images) {
       var image_url = this.state.images[key];
       images.push(
-        <View style={ styles.image }>
-          <Image
-            style={ styles.image }
-            source={{ uri: image_url }}
-            resizeMode='contain'
+        <View 
+          key={ 'image:' + key }
+          style={{ flex: 1 }}
+        >
+          <ImageModalItem
+            url={ image_url }
           />
         </View>
       );

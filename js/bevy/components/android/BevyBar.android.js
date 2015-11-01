@@ -196,7 +196,6 @@ var BevyBar = React.createClass({
   },
 
   render() {
-    console.log(this.props.height)
     if(_.isEmpty(this.props.activeBevy)) return <View />;
     else return (
       <View style={[styles.container, {marginTop: (this.props.height * -1)} ]}>

@@ -112,9 +112,6 @@ var PostList = React.createClass({
   },
 
   onScroll(y) {
-    //console.log('new', y);
-    //console.log('old', this.state.scrollY);
-    //console.log('navHeight', this.state.navHeight);
     // if theres nothing to compare it to yet, just set it and return
     if(this.state.scrollY == null || y < 0) {
       this.setState({
@@ -125,13 +122,11 @@ var PostList = React.createClass({
     }
     //get the change in scroll
     var diff = (this.state.scrollY - y);
-    //console.log('diff', diff);
     //modify the navheight based on that
     var navHeight = (this.state.navHeight - diff);
     //set bounds
     if(navHeight < 0) navHeight = 0;
     if(navHeight > 45) navHeight = 45;
-    //console.log(navHeight);
     //update data
     this.setState({
       scrollY: y,
