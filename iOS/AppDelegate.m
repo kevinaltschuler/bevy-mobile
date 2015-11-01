@@ -10,8 +10,13 @@
 #import "AppDelegate.h"
 
 #import "RCTRootView.h"
+#import "RCTLinkingManager.h"
 
 @implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication: (NSString *)sourceApplication annotation: (id)annotation {
+    return [RCTLinkingManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+  }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -31,7 +36,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  //jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
   // ALBERTS HOUSE
   //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.19:8081/index.ios.bundle"];
   // KEVINS HOUSE
@@ -46,7 +51,7 @@
    * see http://facebook.github.io/react-native/docs/runningondevice.html
    */
 
-   //jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"bevyios"
