@@ -11,8 +11,12 @@ var {
   VibrationIOS,
   Platform
 } = React;
-var VibrationAndroid = require('react-native-vibration');
-var AudioPlayer = require('react-native-audioplayer');
+//var VibrationAndroid = (Platform.OS == 'android')
+//  ? require('react-native-vibration')
+//  : {};
+//var AudioPlayer = (Platform.OS == 'android')
+//  ? require('react-native-audioplayer')
+//  : {};
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -76,14 +80,14 @@ _.extend(NotificationStore, {
 
           // TODO: play audio
           if(Platform.OS == 'android') {
-            AudioPlayer.play('notification.mp3');
+            //AudioPlayer.play('notification.mp3');
           } else if (Platform.OS == 'ios') {
 
           }
 
           // vibrate
           if(Platform.OS == 'android') {
-            VibrationAndroid.vibrate(500);
+            //VibrationAndroid.vibrate(500);
           } else if (Platform.OS == 'ios') {
             VibrationIOS.vibrate();
           }
