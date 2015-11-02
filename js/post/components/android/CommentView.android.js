@@ -252,6 +252,9 @@ var CommentView = React.createClass({
             mainRoute={ this.props.mainRoute }
             expandText={ true }
             card={ false }
+            user={ this.props.user }
+            loggedIn={ this.props.loggedIn }
+            activeBevy={ this.props.activeBevy }
           />
           { this._renderCommentList() }
           <View style={{ height: 20 }} />

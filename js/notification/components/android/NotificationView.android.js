@@ -61,9 +61,8 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   noneText: {
-    fontSize: 20,
-    color: '#AAA',
-    fontWeight: 'bold'
+    fontSize: 22,
+    color: '#AAA'
   }
 });
 

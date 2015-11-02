@@ -124,7 +124,10 @@ var Post = React.createClass({
 
     return (
       <View style={ containerStyle }>
-        <PostHeader post={ this.props.post } />
+        <PostHeader 
+          post={ this.props.post } 
+          mainNavigator={ this.props.mainNavigator }
+        />
         { this._renderBody() }
         { this._renderImages() }
         { this._renderActions() }

@@ -175,6 +175,7 @@ var PostList = React.createClass({
             bevyRoute={ this.props.bevyRoute }
             showActions={ false }
             height={ this.state.navheight }
+            disappearing={ true }
           />
           <Image
             style={ styles.privateImage }

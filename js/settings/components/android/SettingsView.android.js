@@ -138,7 +138,7 @@ var SettingsView = React.createClass({
               color='#AAA'
             />
             <Text style={ styles.settingButtonText }>
-              Go To Public Profile
+              View Public Profile
             </Text>
             <Icon
               name='arrow-forward'
@@ -194,10 +194,11 @@ var styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 10
   },
   logInButtonText: {
-    textAlign: 'center',
+    textAlign: 'left',
     color: '#000'
   },
   logOutButton: {

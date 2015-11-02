@@ -12,6 +12,7 @@ var {
   StyleSheet,
   TouchableNativeFeedback
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -40,7 +41,11 @@ var ChatBar = React.createClass({
         onPress={ this.onBack }
       >
         <View style={ styles.backButton }>
-          <Text style={ styles.backButtonText }>Back</Text>
+          <Icon
+            name='arrow-back'
+            size={ 30 }
+            color='#888'
+          />
         </View>
       </TouchableNativeFeedback>
     );
