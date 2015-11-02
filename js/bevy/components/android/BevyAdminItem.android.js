@@ -117,10 +117,13 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   details: {
+    height: 48,
     flex: 1,
     flexDirection: 'column',
     alignItems: 'flex-start',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    //borderBottomColor: '#EEE',
+    //borderBottomWidth: 1
   },
   name: {
     color: '#AAA',

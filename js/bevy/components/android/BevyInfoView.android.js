@@ -164,7 +164,7 @@ var BevyInfoView = React.createClass({
               // if nothing has changed, dont send the action
               if(settings.privacy == this.props.activeBevy.settings.privacy)
                 return;
-              
+
               this.updateBevySettings(settings);
             }} 
           />
@@ -207,6 +207,22 @@ var BevyInfoView = React.createClass({
               if(posts_expire_in == this.props.activeBevy.settings.posts_expire_in) 
                 return;
 
+              this.updateBevySettings(settings);
+            }}
+          />
+        </View>
+        <View style={ styles.settingItem }>
+          <Text style={ styles.settingText }>Enable Group Chat</Text>
+          <SwitchAndroid
+            value={ this.props.activeBevy.settings.group_chat }
+            onValueChange={value => {
+              var settings = this.props.activeBevy.settings;
+              settings.group_chat = value;
+
+              // if nothing has changed, dont send the action
+              if(settings.group_chat == this.props.activeBevy.settings.group_chat)
+                  return;
+              
               this.updateBevySettings(settings);
             }}
           />
@@ -269,6 +285,7 @@ var BevyInfoView = React.createClass({
                   name='group'
                   size={ 16 }
                   color='#AAA'
+                  style={{ marginLeft: 6 }}
                 />
                 <Text style={ styles.subCount }>
                   { this.props.activeBevy.subCount } Subscribers
@@ -357,14 +374,15 @@ var styles = StyleSheet.create({
     color: '#888'
   },
   bevyDescription: {
-    color: '#AAA'
+    color: '#AAA',
+    marginBottom: 5
   },
   bevyDetailsBottom: {
     flexDirection: 'row',
     alignItems: 'center'
   },
   publicOrPrivate: {
-    marginHorizontal: 4
+    marginHorizontal: 4,
   },
   subCount: {
     marginHorizontal: 4
