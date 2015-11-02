@@ -81,9 +81,7 @@ var SettingsView = React.createClass({
           emailColor='#000'
           style={{
             marginTop: 10,
-            backgroundColor: '#FFF',
-            borderBottomWidth: 1,
-            borderBottomColor: '#DDD'
+            backgroundColor: '#FFF'
           }}
         />
         <Text style={ styles.settingHeader }>Account</Text>
