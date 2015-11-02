@@ -104,9 +104,7 @@ _.extend(BevyStore, {
                   return bevy_id == -1;
                 }
               );
-              var collection = this.myBevies;
-              collection.comparator = this.sortByAbc;
-              collection.sort();
+              this.myBevies.sort();
 
               // trigger finished events
               this.trigger(BEVY.CHANGE_ALL);

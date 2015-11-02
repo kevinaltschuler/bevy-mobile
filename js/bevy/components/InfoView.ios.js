@@ -291,7 +291,7 @@ var styles = StyleSheet.create({
     padding: 8,
     margin: 10,
     marginBottom: 20,
-    marginTop: -10,
+    marginTop: 10,
     borderRadius: 2,
     shadowColor: '#000',
     shadowRadius: 1,

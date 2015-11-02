@@ -64,11 +64,13 @@ var styles = StyleSheet.create({
   backButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48
+    height: 48,
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   backButton: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   backButtonIcon: {
     paddingLeft: 5,

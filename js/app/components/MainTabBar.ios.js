@@ -109,7 +109,7 @@ var MainTabBar = React.createClass({
         >
           <Icon.TabBarItem
             title='Posts'
-            iconName='ios-list'
+            iconName='ios-list-outline'
             selectedIconName='ios-list'
             color='rgba(0,0,0,.3)'
             size={ 28 }
@@ -125,7 +125,7 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Chat'
-            iconName='ios-chatbubble'
+            iconName='ios-chatbubble-outline'
             selectedIconName='ios-chatbubble'
             color='rgba(0,0,0,.3)'
             size={ 28 }
@@ -141,7 +141,7 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Notifications'
-            iconName='ios-bell'
+            iconName='ios-bell-outline'
             selectedIconName='ios-bell'
             color='rgba(0,0,0,.3)'
             size={ 28 }
@@ -157,7 +157,7 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='More'
-            iconName='ios-more'
+            iconName='ios-more-outline'
             selectedIconName='ios-more'
             size={ 28 }
             color='rgba(0,0,0,.3)'
