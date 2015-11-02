@@ -135,7 +135,7 @@ var PostList = React.createClass({
 
   onRefresh() {
     PostActions.fetch(
-      this.props.activeBevy, 
+      this.props.activeBevy._id, 
       (this.props.profileUser) ? this.props.profileUser._id : null
     );
   },

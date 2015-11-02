@@ -79,17 +79,25 @@ _.extend(PostStore, {
         break;
 
       case POST.FETCH:
-        var bevy = payload.bevy;
-        var user_id = payload.user_id;
+        var bevy_id = payload.bevy_id;
+        var profile_user_id = payload.user_id;
+        var user = UserStore.getUser()._id;
+        var loggedIn = UserStore.loggedIn;
 
-        if(user_id) {
-          this.posts.url = constants.apiurl + '/users/' + user_id + '/posts';
-        } else if(bevy._id == -1 && user_id) {
-          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
-        } else if(bevy._id == -1 && !user_id) {
+        if(bevy_id == null && profile_user_id) {
+          // fetch user profile posts
+          this.posts.url = 
+            constants.apiurl + '/users/' + profile_user_id + '/posts';
+        } else if(bevy_id == -1 && loggedIn) {
+          // fetch user frontpage posts
+          this.posts.url = 
+            constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
+        } else if(bevy_id == -1 && !loggedIn) {
+          // fetch public frontpage posts
           this.posts.url = constants.apiurl + '/frontpage';
         } else {
-          this.posts.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
+          // fetch bevy posts
+          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         }
         // reset all posts first, and trigger loading
         this.posts.reset();
@@ -100,12 +108,11 @@ _.extend(PostStore, {
         this.posts.fetch({
           success: function(posts, response, options) {
             // trigger sort which will trigger loaded and change all
-            PostActions.sort(this.sortType, 'asc');
+            this.posts.sort();
+            this.trigger(POST.LOADED);
+            this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
-        
-        
         break;
 
       case POST.CREATE:

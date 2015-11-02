@@ -37,7 +37,7 @@ var ProfileView = React.createClass({
   componentDidMount() {
     // get user posts
     PostActions.fetch(
-      this.props.activeBevy, 
+      this.props.activeBevy._id, 
       this.props.profileUser._id
     );
   },

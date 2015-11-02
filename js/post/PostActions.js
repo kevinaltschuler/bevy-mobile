@@ -19,10 +19,10 @@ var POST = constants.POST;
 
 
 var PostActions = {
-	fetch(bevy, user_id) {
+	fetch(bevy_id, user_id) {
 		Dispatcher.dispatch({
 			actionType: POST.FETCH,
-			bevy: (bevy == undefined) ? null : bevy,
+			bevy_id: (bevy_id == undefined) ? null : bevy_id,
 			user_id: (user_id == undefined) ? null: user_id
 		});
 	},

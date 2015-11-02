@@ -86,6 +86,10 @@ var BevyBar = React.createClass({
     actions.show(this.props.activeBevy.tags);
   },
 
+  refreshPosts() {
+    PostActions.fetch(this.props.activeBevy._id);
+  },
+
   _renderImage() {
     var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     if(this.props.activeBevy._id == -1 || _.isEmpty(this.props.activeBevy.image_url)) {
@@ -197,6 +201,28 @@ var BevyBar = React.createClass({
     );
   },
 
+  _renderRefreshButton() {
+    if(!this.props.showActions) return <View />;
+    if(this.props.bevyRoute.name == routes.BEVY.INFO.name
+      || this.props.bevyRoute.name == routes.BEVY.RELATED.name
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
+      return <View />; 
+    else return (
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+        onPress={ this.refreshPosts }
+      >
+        <View style={ styles.infoButton }>
+          <Icon
+            name='refresh'
+            size={ 30 }
+            color={ this.state.iconColor }
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   render() {
     var disappearingStyle = (this.props.disappearing)
     ? {
@@ -219,6 +245,7 @@ var BevyBar = React.createClass({
         </Text>
         { this._renderTagButton() }
         { this._renderSortButton() }
+        { this._renderRefreshButton() }
         { this._renderInfoButton() }
       </View>
     );
