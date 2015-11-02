@@ -1,7 +1,8 @@
 /**
- * entry point of android app
- * https://github.com/facebook/react-native
+ * index.android.js
+ * @author albert
  */
+
 'use strict';
 
 var React = require('react-native');
@@ -279,4 +280,4 @@ var styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('bevyios', () => App);
+AppRegistry.registerComponent('bevy', () => App);

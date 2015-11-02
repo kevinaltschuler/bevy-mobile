@@ -1,4 +1,4 @@
-rootProject.name = 'bevyios'
+rootProject.name = 'bevy'
 
 include ':app'
 

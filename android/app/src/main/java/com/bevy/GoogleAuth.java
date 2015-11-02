@@ -1,4 +1,4 @@
-package com.bevyios;
+package com.bevy;
 
 import android.accounts.Account;
 import android.content.Context;
