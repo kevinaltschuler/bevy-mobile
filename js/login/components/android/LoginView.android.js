@@ -60,6 +60,14 @@ var LoginView = React.createClass({
   },
 
   onGoogleLogin() {
+    // retry every 2.5 seconds
+    this.googleLoginInterval = setInterval(this.logInGoogle, 2500);
+    // set login flag
+    this.setState({
+      loggingIn: true
+    });
+  },
+  logInGoogle() {
     GoogleAuth.start(
       function(error) {
         // error
@@ -68,17 +76,22 @@ var LoginView = React.createClass({
         this.setState({
           loggingIn: false
         });
-      },
+        if(this.googleLoginInterval) {
+          clearInterval(this.googleLoginInterval);
+        }
+      }.bind(this),
       function(data) {
         // success
         console.log('success', data);
         UserActions.logInGoogle(data.id);
-      }
+        if(this.googleLoginInterval) {
+          clearInterval(this.googleLoginInterval);
+        }
+        this.setState({
+          loggingIn: false
+        });
+      }.bind(this)
     );
-    // set loading flag
-    this.setState({
-      loggingIn: true
-    });
   },
   logIn() {
     // prevent logging in when were waiting for a response

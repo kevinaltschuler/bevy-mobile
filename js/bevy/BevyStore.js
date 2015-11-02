@@ -357,12 +357,6 @@ _.extend(BevyStore, {
     else return bevy;
   },
 
-  sortByAbc(bevy) {
-    var name = bevy.attributes.name.toLowerCase();
-    var nameValue = name.charCodeAt(0);
-    return nameValue;
-  },
-
   getBevy(bevy_id) {
     // try to get from myBevies first
     if(bevy_id == -1) {
