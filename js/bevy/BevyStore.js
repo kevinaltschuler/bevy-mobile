@@ -104,6 +104,9 @@ _.extend(BevyStore, {
                   return bevy_id == -1;
                 }
               );
+              var collection = this.myBevies;
+              collection.comparator = this.sortByAbc;
+              collection.sort();
 
               // trigger finished events
               this.trigger(BEVY.CHANGE_ALL);
@@ -355,6 +358,12 @@ _.extend(BevyStore, {
     var bevy = this.getBevy(this.active);
     if(bevy == undefined) return {};
     else return bevy;
+  },
+
+  sortByAbc(bevy) {
+    var name = bevy.attributes.name.toLowerCase();
+    var nameValue = name.charCodeAt(0);
+    return nameValue;
   },
 
   getBevy(bevy_id) {

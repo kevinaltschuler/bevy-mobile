@@ -57,7 +57,6 @@ var LoginModal = React.createClass({
         visible={ this.state.isOpen }
         animated={true}
         transparent={true}
-        onDismiss={ this.close }
       >
           <LoginNavigator 
             close={ this.close }

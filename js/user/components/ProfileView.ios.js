@@ -134,7 +134,7 @@ var ProfileView = React.createClass({
               </Text>
             </View>
 
-            <Text style={styles.sectionTitle}>
+            <Text style={styles.postsTitle}>
               Posts
             </Text>
 
@@ -215,7 +215,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     height: 48,
     borderWidth: .5,
     borderColor: 'rgba(0,0,0,.2)',
@@ -231,6 +231,13 @@ var styles = StyleSheet.create({
     color: '#666',
     marginLeft: 15,
     marginVertical: 10,
+    fontWeight: 'bold'
+  },
+  postsTitle: {
+    color: '#666',
+    marginLeft: 15,
+    marginTop: 15,
+    marginBottom: 5,
     fontWeight: 'bold'
   }
 });

@@ -61,6 +61,7 @@ var RegisterView = React.createClass({
           error: ''
         });
         this.props.authModalActions.close();
+        this.props.close();
       } else {
         // error
         this.setState({ error: res.message });
@@ -124,7 +125,7 @@ var RegisterView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 250,
+    width: constants.width * 2 / 3,
     backgroundColor: '#fff',
     flexDirection: 'column',
     borderRadius: 20,

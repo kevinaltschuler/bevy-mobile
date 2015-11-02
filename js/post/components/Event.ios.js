@@ -142,14 +142,14 @@ var Event = React.createClass({
           </Text>
         </View>
 
-        <View style={styles.titleTextColumn}>
+        {/*<View style={styles.titleTextColumn}>
           <Text style={styles.bodyText}>
             { this.state.post.title }
           </Text>
           <Text style={styles.descriptionText}>
             { this.state.post.event.description }
           </Text>
-        </View>
+        </View>*/}
 
         {/*<TouchableHighlight
           underlayColor='rgba(0,0,0,0.1)'
@@ -215,10 +215,14 @@ var Event = React.createClass({
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
             onPress={() => {
-              PostActions.vote(post._id);
-              this.setState({
-                voted: !this.state.voted
-              });
+                if(this.props.loggedIn) {
+                  PostActions.vote(post._id);
+                  this.setState({
+                    voted: !this.state.voted
+                  });
+                } else {
+                  this.props.authModalActions.open('Log In To Post');
+                }
             }}
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>
@@ -251,9 +255,9 @@ var Event = React.createClass({
                 { post.comments.length }
               </Text>
               <Icon
-                name='ios-chatbubble-outline'
+                name='ios-chatbubble'
                 size={20}
-                color='#757d83'
+                color='rgba(0,0,0,.3)'
                 style={styles.actionIcon}
               />
             </View>
@@ -298,10 +302,6 @@ var styles = StyleSheet.create({
     paddingTop: 0,
     backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: '#000',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
   },
 
   eventCard: {
@@ -352,8 +352,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginBottom: 5,
-    paddingTop: 5,
-    fontSize: 20
+    paddingTop: 5
   },
   bodyText: {
     fontSize: 20,

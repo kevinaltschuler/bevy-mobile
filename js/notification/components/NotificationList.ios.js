@@ -71,7 +71,7 @@ var NotificationList = React.createClass({
           dataSource={ this.state.dataSource }
 
           renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          renderFooter={() => (<View style={{marginBottom: 0, borderBottomColor: '#AAA', borderBottomWidth: 0}}/>)}
+          renderFooter={() => (<View style={{marginBottom: 48, borderBottomColor: '#AAA', borderBottomWidth: 0}}/>)}
           renderRow={(notification) => 
             <NotificationItem 
               mainNavigator={ this.props.mainNavigator }

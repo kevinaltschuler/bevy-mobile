@@ -75,23 +75,11 @@ var PostList = React.createClass({
     });
   },
 
-  toComments(id) {
-    if(_.isEmpty(id)) {
-      return;
-    }
-    var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = id;
-    console.log(id);
-    this.props.mainNavigator.push(commentRoute);
-  },
-
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
     BevyStore.on(POST.LOADING, this.setLoading);
     PostStore.on(POST.LOADING, this.setLoading);
-
-    PostStore.on(POST.POST_CREATED, this.toComments);
 
     RCTRefreshControl.configure({
       node: this.refs[LISTVIEW],
@@ -229,6 +217,8 @@ var PostList = React.createClass({
                     mainRoute={ this.props.mainRoute }
                     mainNavigator={ this.props.mainNavigator }
                     user={ this.props.user }
+                    authModalActions={ this.props.authModalActions }
+                    loggedIn={ this.props.loggedIn }
                   />
                 </View>;
               else
@@ -239,6 +229,8 @@ var PostList = React.createClass({
                     mainRoute={ this.props.mainRoute }
                     mainNavigator={ this.props.mainNavigator }
                     user={ this.props.user }
+                    authModalActions={ this.props.authModalActions }
+                    loggedIn={ this.props.loggedIn }
                   />
                 </View>;
             }.bind(this)}

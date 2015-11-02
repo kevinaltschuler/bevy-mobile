@@ -171,7 +171,6 @@ _.extend(PostStore, {
             // trigger events
             this.trigger(POST.POSTED_POST);
             this.trigger(POST.CHANGE_ALL);
-
             this.trigger(POST.POST_CREATED, post.id);
           }.bind(this),
           error: function(err) {

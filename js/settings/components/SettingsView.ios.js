@@ -47,9 +47,6 @@ var SettingsView = React.createClass({
         underlayColor='rgba(200,200,200,1)'
         style={[ styles.settingItemContainer ]}
         onPress={() => {
-          var route = routes.MAIN.PROFILE;
-          route.profileUser = this.props.user;
-          this.props.mainNavigator.push(route);
         }}
       >
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -63,9 +60,6 @@ var SettingsView = React.createClass({
               <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
             </View>
           </View>
-          <Text style={{color: '#888', fontSize: 12}}>
-            View Public Profile
-          </Text>
         </View>
       </TouchableHighlight>
     );
@@ -87,6 +81,13 @@ var SettingsView = React.createClass({
       <View style={{ flexDirection: 'column' }}>
         <SettingsItem
           title='Change Profile Picture'
+          icon={
+            <Icon
+              name={'ios-camera'}
+              size={30}
+              color='rgba(0,0,0,.3)'
+            />
+          }
           onPress={() => {
             UIImagePickerManager.showImagePicker({
               title: 'Change Profile Picture',
@@ -106,7 +107,25 @@ var SettingsView = React.createClass({
           }}
         />
         <SettingsItem
+          title='View Public Profile'
+          icon= {<Icon
+              name={'ios-person'}
+              size={30}
+              color='rgba(0,0,0,.3)'
+            />}
+          onPress={() => {
+            var route = routes.MAIN.PROFILE;
+            route.profileUser = this.props.user;
+            this.props.mainNavigator.push(route);
+          }}
+        />
+        <SettingsItem
           title='Sign Out'
+          icon= {<Icon
+              name={'ios-undo'}
+              size={30}
+              color='rgba(0,0,0,.3)'
+            />}
           onPress={() => {
             UserActions.logOut();
           }}

@@ -51,6 +51,7 @@ exports.POST = {
   VOTE: 'post_vote',
   SORT: 'post_sort',
   UPDATE_LIST: 'post_update_list',
+  POST_CREATED: 'post_created',
 
   FETCH: 'post_fetch',
 

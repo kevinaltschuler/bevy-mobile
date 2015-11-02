@@ -215,6 +215,7 @@ var App = React.createClass({
     });
   },
   closeAuthModal() {
+    console.log('closing');
     this.setState({
       authModalOpen: false
     });

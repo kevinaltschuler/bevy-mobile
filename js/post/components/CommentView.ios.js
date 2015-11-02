@@ -16,6 +16,7 @@ var Icon = require('react-native-vector-icons/Ionicons');
 var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
+var BackButton = require('./../../shared/components/BackButton.ios.js');
 
 var CommentList = require('./CommentList.ios.js');
 
@@ -42,6 +43,7 @@ var CommentView = React.createClass({
 
   getInitialState() {
     var post = PostStore.getPost(this.props.postID);
+    console.log(post);
     var comments = this.nestComments(post.comments);
     return {
       post: post,
@@ -175,7 +177,7 @@ var CommentView = React.createClass({
       )
     }
     return (
-      <View style={{marginTop: 0}}>
+      <View style={{marginTop: 5}}>
         <Post
           inCommentView={ true }
           post={ this.state.post }
@@ -304,25 +306,18 @@ var CommentView = React.createClass({
             alignItems: 'center',
           }}
           left={
-            <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                
-                // blur all text inputs
-                
-                // go back
+            <BackButton
+              color='#fff'
+              text='back'
+              onPress={()=>{
                 this.props.mainNavigator.pop();
               }}
-              style={ styles.navButtonLeft }>
-              <Text style={ styles.navButtonTextLeft }>
-                Cancel
-              </Text>
-            </TouchableHighlight>
+            />
           }
           center={
             <View style={ styles.navTitle }>
               <Text style={ styles.navTitleText }>
-                Comments For...
+                
               </Text>
             </View>
           }
@@ -383,10 +378,6 @@ var styles = StyleSheet.create({
     paddingBottom: 8,
     backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: '#000',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0},
   },
 
   noCommentsText: {

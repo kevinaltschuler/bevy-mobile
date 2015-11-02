@@ -60,7 +60,7 @@ var ForgotView = React.createClass({
           subTitle: res.message
         });
       }
-    })
+    });
   },
 
   render: function() {
@@ -104,7 +104,7 @@ var ForgotView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 250,
+    width: constants.width * 2 / 3,
     backgroundColor: '#fff',
     flexDirection: 'column',
     borderRadius: 20,
