@@ -35,6 +35,10 @@ var ChatBar = React.createClass({
     this.props.mainNavigator.pop();
   },
 
+  loadMessages() {
+
+  },
+
   _renderBackButton() {
     return (
       <TouchableNativeFeedback
@@ -43,6 +47,22 @@ var ChatBar = React.createClass({
         <View style={ styles.backButton }>
           <Icon
             name='arrow-back'
+            size={ 30 }
+            color='#888'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
+  _renderRefreshButton() {
+    return (
+      <TouchableNativeFeedback
+        onPress={ this.loadMessages }
+      >
+        <View style={ styles.backButton }>
+          <Icon
+            name='refresh'
             size={ 30 }
             color='#888'
           />
@@ -62,10 +82,10 @@ var ChatBar = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
+        { this._renderBackButton() }
         <View style={ styles.title }>
           <Text style={ styles.titleText }>{ this._renderTitle() }</Text>
         </View>
-        { this._renderBackButton() }
       </View>
     );
   }
@@ -94,11 +114,8 @@ var styles = StyleSheet.create({
   },
 
   title: {
-    position: 'absolute',
-    width: constants.width,
+    flex: 1,
     height: 48,
-    top: 0,
-    left: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'

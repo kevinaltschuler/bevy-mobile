@@ -13,6 +13,7 @@ var {
   TextInput,
   TouchableNativeFeedback,
   BackAndroid,
+  ProgressBarAndroid,
   StyleSheet
 } = React;
 var ChatBar = require('./ChatBar.android.js');
@@ -40,7 +41,8 @@ var MessageView = React.createClass({
     return {
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
-      messageInput: ''
+      messageInput: '',
+      loading: false
     };
   },
 
@@ -66,11 +68,19 @@ var MessageView = React.createClass({
     return true;
   },
 
+  loadMessages() {
+    this.setState({
+      loading: true
+    });
+    ChatActions.fetchMore(this.props.activeThread._id);
+  },
+
   _onChatChange: function() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages)
+      dataSource: this.state.dataSource.cloneWithRows(messages),
+      loading: false
     });
   },
 
@@ -125,6 +135,34 @@ var MessageView = React.createClass({
     );
   },
 
+  _renderListHeader() {
+    // disable load more if theres no more messages
+    if(_.isEmpty(this.state.messages)) return <View />;
+    if(!this.state.loading) {
+      return (
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ this.loadMessages }
+        >
+          <View style={ styles.loadMoreButton }>
+            <Text style={ styles.loadMoreButtonText }>
+              Load More Messages
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    } else {
+      return (
+        <View style={ styles.loading }>
+          <ProgressBarAndroid styleAttr='Small' />
+          <Text style={ styles.loadingText }>
+            Loading...
+          </Text>
+        </View>
+      );
+    }
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -136,12 +174,16 @@ var MessageView = React.createClass({
           renderScrollComponent={
             (props) => <InvertibleScrollView {...props} { ...this.state } />
           }
+          contentContainerStyle={{
+            paddingBottom: 20
+          }}
           dataSource={ this.state.dataSource }
           style={ styles.messageList }
           scrollRenderAheadDistance={ 300 }
           removeClippedSubviews={ true }
           initialListSize={ 10 }
           pageSize={ 10 }
+          renderHeader={ this._renderListHeader }
           renderRow={(message) => {
             return (
               <MessageItem
@@ -165,11 +207,37 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end',
     backgroundColor: '#EEE'
   },
+  loadMoreButton: {
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF',
+    paddingHorizontal: 10,
+    borderRadius: 3,
+    marginBottom: 10
+  },
+  loadMoreButtonText: {
+    flex: 1,
+    textAlign: 'center'
+  },
+  loading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 10
+  },
+  loadingText: {
+    color: '#AAA',
+    marginLeft: 10
+  },
   messageList: {
     flexDirection: 'column',
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 10
+    paddingTop: 10,
+    paddingBottom: 20
   },
   inputContainer: {
     height: 48,
