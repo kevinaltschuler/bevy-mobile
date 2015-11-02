@@ -51,7 +51,7 @@ var ThreadList = React.createClass({
           dataSource={ this.state.threads }
           style={ styles.list }
           renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          renderFooter={() => (<View style={{marginBottom: 0}}/>)}
+          renderFooter={() => (<View style={{marginBottom: 48}}/>)}
           renderRow={(thread) => {
 
             var active = false;

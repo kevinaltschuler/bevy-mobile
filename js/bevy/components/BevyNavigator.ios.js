@@ -41,13 +41,13 @@ var BevyView = React.createClass({
   },
 
   getInitialState() {
-    var color = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.3)' : '#fff';
-    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : 'rgba(0,0,0,.6)';
-    var titleColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.6)' : '#fff';
+    var btnColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.2)' : '#fff';
+    var btnTextColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : 'rgba(0,0,0,.6)';
+    var titleColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.3)' : '#fff';
     return {
       showTags: false,
-      fontColor: color,
-      inverseColor: inverse,
+      fontColor: btnColor,
+      inverseColor: btnTextColor,
       showSort: false,
       titleColor: titleColor,
       scrollY: null,
@@ -56,12 +56,12 @@ var BevyView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    var color = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.3)' : '#fff';
-    var inverse = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : 'rgba(0,0,0,.6)';
-    var titleColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.6)' : '#fff';
+    var btnColor = (nextProps.activeBevy._id == -1 && nextProps.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.2)' : '#fff';
+    var btnTextColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? '#fff' : 'rgba(0,0,0,.6)';
+    var titleColor = (this.props.activeBevy._id == -1 && this.props.bevyRoute.name == routes.BEVY.POSTLIST.name) ? 'rgba(0,0,0,.3)' : '#fff';
     this.setState({
-      fontColor: color,
-      inverseColor: inverse,
+      fontColor: btnColor,
+      inverseColor: btnTextColor,
       titleColor: titleColor
     })
   },
@@ -77,6 +77,8 @@ var BevyView = React.createClass({
     }
     //get the change in scroll
     var diff = (this.state.scrollY - y);
+    if(diff > 15) diff = 15;
+    if(diff < -15) diff = -15;
     //modify the navheight based on that
     var navHeight = (this.state.navHeight - diff);
     //set bounds
@@ -143,13 +145,13 @@ var BevyView = React.createClass({
         style={{
           marginRight: 10,
           borderRadius: 2,
-          paddingHorizontal: 4,
-          paddingVertical: 2,
+          paddingHorizontal: 5,
+          paddingVertical: 5,
           backgroundColor: this.state.fontColor
         }}
       >
-        <Text style={{ color: this.state.inverseColor }}>
-          {'tags'}
+        <Text style={{ fontSize: 12, color: this.state.inverseColor }}>
+          Tags
         </Text>
       </TouchableHighlight>
     )
@@ -171,13 +173,13 @@ var BevyView = React.createClass({
         style={{
           marginRight: 10,
           borderRadius: 2,
-          paddingHorizontal: 4,
-          paddingVertical: 2,
+          paddingHorizontal: 5,
+          paddingVertical: 5,
           backgroundColor: this.state.fontColor
         }}
       >
-        <Text style={{ color: this.state.inverseColor }}>
-          info
+        <Text style={{ fontSize: 12, color: this.state.inverseColor }}>
+          Info
         </Text>
       </TouchableHighlight>;
 
@@ -186,7 +188,7 @@ var BevyView = React.createClass({
         underlayColor={'rgba(0,0,0,0.1)'}
         onPress={() => {
           ActionSheetIOS.showActionSheetWithOptions({
-            options: ['top', 'new', 'cancel'],
+            options: ['Top', 'New', 'cancel'],
             cancelButtonIndex: 2
           },
           (buttonIndex) => {
@@ -204,13 +206,13 @@ var BevyView = React.createClass({
         style={{
           marginRight: 10,
           borderRadius: 2,
-          paddingHorizontal: 4,
-          paddingVertical: 2,
+          paddingHorizontal: 5,
+          paddingVertical: 5,
           backgroundColor: this.state.fontColor
         }}
       >
-        <Text style={{ color: this.state.inverseColor }}>
-          {PostStore.sortType}
+        <Text style={{ fontSize: 12, color: this.state.inverseColor }}>
+          {PostStore.sortType.charAt(0).toUpperCase() + PostStore.sortType.slice(1)}
         </Text>
       </TouchableHighlight>
     );

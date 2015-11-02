@@ -19,6 +19,10 @@ var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
 var ProfileView = require('./../../user/components/ProfileView.ios.js');
 
+var constants = require('./../../constants');
+var PostStore = require('./../../post/PostStore');
+var POST = constants.POST;
+
 var routes = require('./../../routes');
 
 var styles = StyleSheet.create({
@@ -43,8 +47,6 @@ var MainView = React.createClass({
   },
 
   render: function() {
-
-    console.log(this.props.mainRoute);
 
     switch(this.props.mainRoute.name) {
 

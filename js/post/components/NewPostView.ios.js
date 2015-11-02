@@ -20,6 +20,7 @@ var Icon = require('react-native-vector-icons/Ionicons');
 var _ = require('underscore');
 var routes = require('./../../routes');
 var constants = require('./../../constants');
+var POST = constants.POST;
 var FILE = constants.FILE;
 var FileStore = require('./../../file/FileStore');
 var FileActions = require('./../../file/FileActions');
@@ -37,6 +38,7 @@ var DatePickerView = require('./DatePickerView.ios.js');
 var TagPickerView = require('./TagPickerView.ios.js')
 
 var PostActions = require('./../PostActions');
+var PostStore = require('./../PostStore');
 
 var NewPostView = React.createClass({
 
@@ -68,6 +70,14 @@ var NewPostView = React.createClass({
     };
   },
 
+  componentDidMount() {
+    PostStore.on(POST.POST_CREATED, this.toNewPost);
+  },
+
+  componentWillUnmount() {
+    PostStore.off(POST.POST_CREATED, this.toNewPost);
+  },
+
   componentWillReceiveProps(nextProps) {
     var selected;
     if(nextProps.activeBevy._id != -1) {
@@ -80,6 +90,22 @@ var NewPostView = React.createClass({
     this.setState({
       selected: selected
     });
+  },
+
+  toNewPost(id) {
+    /*if(_.isEmpty(id)) {
+      console.log('returning no comments');
+      //return;
+    }
+    if(this.props.mainRoute == routes.MAIN.COMMENT) {
+      console.log('returning already in commentView');
+      //return;
+    }*/
+    console.log('ey');
+    var commentRoute = routes.MAIN.COMMENT;
+    commentRoute.postID = id;
+    console.log(id);
+    this.props.mainNavigator.replace(commentRoute);
   },
 
   render() {

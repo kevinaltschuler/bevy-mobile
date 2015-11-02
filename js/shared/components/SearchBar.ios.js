@@ -137,7 +137,7 @@ var SearchBar = React.createClass({
                 onFocus={ this.onSearchFocus }
                 onChangeText={ this.onSearch }
                 placeholder='Search'
-                placeholderTextColor='#fff'
+                placeholderTextColor='rgba(255,255,255,.7)'
                 returnKeyType='search'
                 textAlignVertical='bottom'
               />

@@ -57,6 +57,7 @@ var LoginNavigator = React.createClass({
         title = 'register';
         content = <RegisterView 
           { ...this.props } 
+          close={ this.props.close }
           loginNavigator={ navigator } 
           authModalActions={ this.props.authModalActions }
         />;
@@ -65,6 +66,7 @@ var LoginNavigator = React.createClass({
         title = 'forgot my password'; 
         content = <ForgotView 
           { ...this.props } 
+          close={this.props.close}
           loginNavigator={ navigator }
           authModalActions={ this.props.authModalActions }
         />;
@@ -73,7 +75,8 @@ var LoginNavigator = React.createClass({
       default:
         title = 'login';
         content = <LoginView 
-          { ...this.props } 
+          { ...this.props }
+          close={ this.props.close } 
           loginNavigator={ navigator }
           authModalActions={ this.props.authModalActions }
         />;

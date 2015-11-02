@@ -58,10 +58,6 @@ var NewPostCard = React.createClass({
 
 var styles = StyleSheet.create({
   touchContainer: {
-    shadowColor: '#000',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
   },
   container: {
     flex: 1,

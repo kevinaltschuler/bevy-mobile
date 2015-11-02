@@ -238,10 +238,14 @@ var Post = React.createClass({
               underlayColor='rgba(0,0,0,0.1)'
               style={[ styles.actionTouchable, { flex: 2 } ]}
               onPress={() => {
-                PostActions.vote(post._id);
-                this.setState({
-                  voted: !this.state.voted
-                });
+                if(this.props.loggedIn) {
+                  PostActions.vote(post._id);
+                  this.setState({
+                    voted: !this.state.voted
+                  });
+                } else {
+                  this.props.authModalActions.open('Log In To Post');
+                }
               }}
             >
               <View style={[ styles.actionTouchable, { flex: 1 } ]}>
@@ -276,7 +280,7 @@ var Post = React.createClass({
                 <Icon
                   name='ios-chatbubble'
                   size={20}
-                  color='#999'
+                  color='rgba(0,0,0,.3)'
                   style={styles.actionIcon}
                 />
               </View>
@@ -330,10 +334,6 @@ var styles = StyleSheet.create({
     paddingTop: 8,
     backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: 'black',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
   },
   titleRow: {
     flexDirection: 'row',

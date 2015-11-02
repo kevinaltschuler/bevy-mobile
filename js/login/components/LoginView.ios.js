@@ -133,6 +133,7 @@ var LoginView = React.createClass({
 
   onLoginSuccess(user) {
     console.log('success', user);
+    this.props.authModalActions.close();
 
     UserStore.setUser(user);
     AppActions.load();
@@ -142,7 +143,6 @@ var LoginView = React.createClass({
       pass: '',
       error: ''
     });
-    this.props.authModalActions.close();
   },
 
   _renderError() {
@@ -223,7 +223,7 @@ var LoginView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: 250,
+    width: constants.width * 2 / 3,
     backgroundColor: '#fff',
     flexDirection: 'column',
     borderRadius: 20,

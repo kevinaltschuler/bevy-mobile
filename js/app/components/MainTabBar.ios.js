@@ -109,9 +109,9 @@ var MainTabBar = React.createClass({
         >
           <Icon.TabBarItem
             title='Posts'
-            iconName='ios-list-outline'
+            iconName='ios-list'
             selectedIconName='ios-list'
-            color='#666'
+            color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Posts }
             style={ styles.tabIcon }
@@ -125,9 +125,9 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Chat'
-            iconName='ios-chatbubble-outline'
+            iconName='ios-chatbubble'
             selectedIconName='ios-chatbubble'
-            color='#666'
+            color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Chat }
             style={ styles.tabIcon }
@@ -141,9 +141,9 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Notifications'
-            iconName='ios-bell-outline'
+            iconName='ios-bell'
             selectedIconName='ios-bell'
-            color='#666'
+            color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Notifications }
             style={ styles.tabIcon }
@@ -157,10 +157,10 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='More'
-            iconName='ios-more-outline'
+            iconName='ios-more'
             selectedIconName='ios-more'
             size={ 28 }
-            color='#666'
+            color='rgba(0,0,0,.3)'
             selected={ this.state.selectedTab === tabs.More }
             onPress={() => {
               this.setState({

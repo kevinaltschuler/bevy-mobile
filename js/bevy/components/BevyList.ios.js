@@ -146,6 +146,7 @@ var BevyList = React.createClass({
           return (
             <TouchableHighlight 
               key={ 'bevylist:' + bevy._id }
+              underlayColor='rgba(255,255,255,.5)'
               style={ (active) ? styles.bevyItemActive : styles.bevyItem }
               onPress={() => {
                 if(active) return;

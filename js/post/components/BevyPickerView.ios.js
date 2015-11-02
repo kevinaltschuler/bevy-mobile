@@ -99,6 +99,10 @@ var BevyPickerView = React.createClass({
           style={ styles.bevyPickerList }
           renderRow={(bevy) => {
             var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
+            var defaultBevies=['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
+            if(_.contains(defaultBevies, bevy._id)) {
+              imageUri = constants.apiurl + bevy.image_url;
+            }
             if(bevy._id == -1) return <View />; // disallow posting to frontpage
             return (
               <TouchableHighlight
