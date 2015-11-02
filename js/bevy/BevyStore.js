@@ -62,7 +62,6 @@ _.extend(BevyStore, {
   searchQuery: '',
   searchList: new Bevies,
   active: -1, // id of active bevy
-  subBevies: new Bevies, // sub bevies of the active bevy
   activeTags: [],
   frontpageFilters: [],
 
