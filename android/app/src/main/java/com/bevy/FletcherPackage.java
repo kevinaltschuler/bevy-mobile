@@ -1,6 +1,4 @@
-package com.bevyios;
-
-import android.app.Activity;
+package com.bevy;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -13,29 +11,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class GoogleAuthPackage implements ReactPackage {
-
-  private Activity mActivity;
-
-  public GoogleAuthPackage(Activity activity) {
-    mActivity = activity;
-  }
+public class FletcherPackage implements ReactPackage {
+  public FletcherPackage() {}
 
   @Override
   public List<NativeModule> createNativeModules(
       ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
-    modules.add(new GoogleAuth(reactContext, mActivity));
+    modules.add(new Fletcher(reactContext));
     return modules;
   }
 
   @Override
   public List<Class<? extends JavaScriptModule>> createJSModules() {
-    return Collections.emptyList();
+      return Collections.emptyList();
   }
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Arrays.asList();
+      return Arrays.asList();
   }
 }

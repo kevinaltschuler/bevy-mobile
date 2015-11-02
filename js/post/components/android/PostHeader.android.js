@@ -10,17 +10,26 @@ var {
   View,
   Text,
   Image,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
 
 var PostHeader = React.createClass({
   propTypes: {
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
+  },
+
+  goToAuthorProfile() {
+    var route = routes.MAIN.PROFILE;
+    route.user = this.props.post.author;
+    this.props.mainNavigator.push(route);
   },
 
   _renderPinnedBadge() {
@@ -52,13 +61,29 @@ var PostHeader = React.createClass({
 
     return (
       <View style={ styles.container }>
-        <Image 
-          source={{ uri: _.isEmpty(author.image_url) ? constants.siteurl + '/img/user-profile-icon.png' : author.image_url }}
-          style={ styles.authorImage }
-        />
+        <TouchableWithoutFeedback
+          onPress={ this.goToAuthorProfile }
+        >
+          <View>
+            <Image 
+              source={{ uri: _.isEmpty(author.image_url) 
+                ? constants.siteurl + '/img/user-profile-icon.png' 
+                : author.image_url }}
+              style={ styles.authorImage }
+            />
+          </View>
+        </TouchableWithoutFeedback>
         <View style={ styles.details }>
           <View style={ styles.authorAndBevy }>
-            <Text style={ styles.authorName }>{ author.displayName }</Text>
+            <TouchableWithoutFeedback
+              onPress={ this.goToAuthorProfile }
+            >
+              <View>
+                <Text style={ styles.authorName }>
+                  { author.displayName }
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
             <Icon
               name='chevron-right'
               size={ 20 }

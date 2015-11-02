@@ -116,8 +116,8 @@ var CommentItem = React.createClass({
       : (this.props.comment.depth) * 5;
     commentStyle.backgroundColor = 
       (this.state.showActionBar) 
-      ? '#eee' 
-      : '#fff';
+      ? '#F8F8F8' 
+      : '#FFF';
 
     if(this.state.isCompact) {
       return (

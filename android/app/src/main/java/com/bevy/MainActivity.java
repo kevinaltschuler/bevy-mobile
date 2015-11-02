@@ -1,4 +1,4 @@
-package com.bevyios;
+package com.bevy;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.chymtt.reactnativedropdown.DropdownPackage;
@@ -16,8 +16,8 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import com.bevyios.FletcherPackage;
-import com.bevyios.GoogleAuthPackage;
+import com.bevy.FletcherPackage;
+import com.bevy.GoogleAuthPackage;
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
 
@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
 
-      mReactRootView.startReactApplication(mReactInstanceManager, "bevyios", null);
+      mReactRootView.startReactApplication(mReactInstanceManager, "bevy", null);
 
       setContentView(mReactRootView);
   }

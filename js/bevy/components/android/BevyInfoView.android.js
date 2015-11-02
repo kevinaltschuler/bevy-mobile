@@ -19,6 +19,7 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var BevyBar = require('./BevyBar.android.js');
 var BevyAdminItem = require('./BevyAdminItem.android.js');
+var Dropdown = require('react-native-dropdown-android');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -85,11 +86,41 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.push(routes.BEVY.TAGS);
   },
 
+  updateBevySettings(settings) {
+    BevyActions.update(
+      this.props.activeBevy._id,
+      this.props.activeBevy.name,
+      this.props.activeBevy.description,
+      this.props.activeBevy.image_url,
+      settings
+    );
+  },
+
   deleteBevy() {
     // delete bevy action
     BevyActions.destroy(this.props.activeBevy._id);
     // go back to frontpage
     BevyActions.switchBevy('-1');
+  },
+
+  getPostsExpireInIndex() {
+    switch(this.props.activeBevy.settings.posts_expire_in) {
+      case -1:
+        return 0;
+        break;
+      case 1:
+        return 1;
+        break;
+      case 2:
+        return 2;
+        break;
+      case 5:
+        return 3;
+        break;
+      case 7:
+        return 4;
+        break;
+    }
   },
 
   _renderAdmins() {
@@ -110,6 +141,78 @@ var BevyInfoView = React.createClass({
         <Text style={ styles.noAdmins }>No Admins</Text>
       );
     } else return admins;
+  },
+
+  _renderBevySettings() {
+    if(!this.state.isAdmin) return <View />;
+    return (
+      <View>
+        <Text style={ styles.settingTitle }>Bevy Settings</Text>
+        <View style={ styles.settingItem }>
+          <Text style={ styles.settingText }>Privacy</Text>
+          <Dropdown
+            style={{ height: 20, width: 200}}
+            values={[
+              'Public',
+              'Private'
+            ]} 
+            selected={ this.props.activeBevy.settings.privacy } 
+            onChange={data => {
+              var settings = this.props.activeBevy.settings;
+              settings.privacy = data.selected;
+
+              // if nothing has changed, dont send the action
+              if(settings.privacy == this.props.activeBevy.settings.privacy)
+                return;
+              
+              this.updateBevySettings(settings);
+            }} 
+          />
+        </View>
+        <View style={ styles.settingItem }>
+          <Text style={ styles.settingText }>Posts Expire In</Text>
+          <Dropdown
+            style={{ height: 20, width: 200 }}
+            values={[
+              'Never',
+              '1 Day',
+              '2 Days',
+              '5 Days',
+              '7 Days'
+            ]}
+            selected={ this.getPostsExpireInIndex() }
+            onChange={data => {
+              var posts_expire_in = data.selected;
+              var settings = this.props.activeBevy.settings;
+              switch(data.selected) {
+                case 0:
+                  posts_expire_in = -1
+                  break;
+                case 1:
+                  posts_expire_in = 1;
+                  break;
+                case 2:
+                  posts_expire_in = 2;
+                  break;
+                case 3:
+                  posts_expire_in = 5;
+                  break;
+                case 4:
+                  posts_expire_in = 7;
+                  break;
+              }
+              settings.posts_expire_in = posts_expire_in;
+
+              // dont do anything if nothing has changed
+              if(posts_expire_in == this.props.activeBevy.settings.posts_expire_in) 
+                return;
+
+              this.updateBevySettings(settings);
+            }}
+          />
+        </View>
+      </View>
+    );
   },
 
   _renderDangerZone() {
@@ -209,6 +312,8 @@ var BevyInfoView = React.createClass({
           </TouchableNativeFeedback>
           <Text style={ styles.settingTitle }>Admins</Text>
           { this._renderAdmins() }
+
+          { this._renderBevySettings() }
           { this._renderDangerZone() }
           
           <View style={{ height: 15 }} />

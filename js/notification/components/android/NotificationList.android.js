@@ -64,7 +64,6 @@ var styles = StyleSheet.create({
 
   },
   notificationList: {
-    paddingTop: 10
   }
 });
 

@@ -71,7 +71,7 @@ var PublicProfileView = React.createClass({
             <Icon
               name='arrow-back'
               size={ 30 }
-              color='#000'
+              color='#888'
             />
           </View>
         </TouchableNativeFeedback>

@@ -17,7 +17,9 @@ var {
   Platform,
   ToastAndroid
 } = React;
-var Fletcher = require('./../shared/components/android/Fletcher.android.js');
+var Fletcher = (Platform.OS == 'android')
+  ? require('./../shared/components/android/Fletcher.android.js')
+  : {};
 
 //var Bevy = require('./BevyModel');
 //var Bevies = require('./BevyCollection');
@@ -31,7 +33,9 @@ var Bevy = Backbone.Model.extend({
 
 // backbone collection
 var Bevies = Backbone.Collection.extend({
-  model: Bevy
+  model: Bevy,
+  comparator: bevy => bevy.get('name').toLowerCase() // sort alphabetically and
+                                                     // ignore case
 });
 
 var constants = require('./../constants');
