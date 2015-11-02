@@ -183,7 +183,8 @@ var BevyView = React.createClass({
         </Text>
       </TouchableHighlight>;
 
-    var sortButton = (
+    var sortButton = (this.props.bevyRoute.name == routes.BEVY.POSTLIST.name)
+      ? (
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0.1)'}
         onPress={() => {
@@ -215,7 +216,8 @@ var BevyView = React.createClass({
           {PostStore.sortType.charAt(0).toUpperCase() + PostStore.sortType.slice(1)}
         </Text>
       </TouchableHighlight>
-    );
+    )
+    : <View/>;
 
     var right = (
       <View style={{
@@ -245,7 +247,7 @@ var BevyView = React.createClass({
 
     var left = (this.props.bevyRoute.name == 'PostList')
     ? <Text style={{color: this.state.titleColor, fontSize: 18, marginLeft: 10}}>{title}</Text>
-    : <BackButton text='Posts' color={color} onPress={() => {
+    : <BackButton text='Posts' color={'rgba(0,0,0,.5)'} onPress={() => {
       this.props.bevyNavigator.pop();
     }} />;
 
