@@ -22,6 +22,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserActions = require('./../../../user/UserActions');
+var AppActions = require('./../../../app/AppActions');
 
 var SettingsView = React.createClass({
   propTypes: {
@@ -54,6 +55,8 @@ var SettingsView = React.createClass({
     UserActions.logOut();
     // log out of google too just to be safe
     GoogleAuth.logout();
+    // reload app
+    AppActions.load();
   },
 
   render() {
