@@ -46,7 +46,6 @@ var ThreadImage = React.createClass({
       width: 40,
       height: 40,
       padding: 0,
-      marginLeft: 10,
       marginRight: 10,
       borderRadius: 20,
     };
@@ -163,7 +162,6 @@ var ThreadImage = React.createClass({
             height: 40,
             borderRadius: 20,
             marginRight: 10,
-            marginLeft: 10,
             padding: 0
           }}>
             { users }
