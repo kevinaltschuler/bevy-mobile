@@ -84,7 +84,7 @@ _.extend(PostStore, {
         var user = UserStore.getUser()._id;
         var loggedIn = UserStore.loggedIn;
 
-        if(bevy_id == null && profile_user_id) {
+        if(bevy_id == null) {
           // fetch user profile posts
           this.posts.url = 
             constants.apiurl + '/users/' + profile_user_id + '/posts';

@@ -33,17 +33,14 @@ var PublicProfileView = React.createClass({
   componentDidMount() {
     // get user posts
     PostActions.fetch(
-      this.props.activeBevy, 
+      null,
       this.props.routeUser._id
     );
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
     // reset posts
-    PostActions.fetch(
-      this.props.activeBevy, 
-      null
-    );
+    PostActions.fetch(this.props.activeBevy._id);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
