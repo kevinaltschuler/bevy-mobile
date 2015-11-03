@@ -176,7 +176,10 @@ var CreateEventView = React.createClass({
                   borderRadius: 20, 
                   width: 40, height: 40, 
                   backgroundColor: '#999', 
-                  padding: 5, 
+                  paddingLeft: 5,
+                  paddingRight: 5,
+                  paddingBottom: 5,
+                  paddingTop: 2, 
                   margin: 10,                  
                   shadowColor: 'rgba(0,0,0,.3)',
                   shadowOffset: {width: 2, height: 2},
@@ -202,8 +205,9 @@ var CreateEventView = React.createClass({
                 color='#fff'
                 style={{ 
                   padding: 5, 
-                  width: 30, 
-                  height: 30, 
+                  width: 28, 
+                  height: 28, 
+                  backgroundColor: 'rgba(0,0,0,0)'
                 }}
               />
             </TouchableHighlight>
@@ -219,6 +223,11 @@ var CreateEventView = React.createClass({
       flexDirection: 'column',
       marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace,
     };
+    var bevyImageUrl = this.props.selected.image_url || constants.apiurl + '/img/logo_100.png';
+    var defaultBevies = ['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
+    if(_.contains(defaultBevies, this.props.selected._id)) {
+      bevyImageUrl = constants.apiurl + this.props.selected.image_url;
+    }
     return (
       <View style={ containerStyle }>
         <Navbar
@@ -238,7 +247,12 @@ var CreateEventView = React.createClass({
             <TouchableHighlight
               underlayColor={'rgba(0,0,0,0)'}
               onPress={() => {
-                this.refs.input.blur();
+                this.refs.title.setNativeProps({ text: '' }); // clear text
+                this.refs.info.setNativeProps({ text: '' }); // clear text
+                this.refs.location.setNativeProps({ text: '' }); // clear text
+                this.refs.title.blur(); // unfocus text field
+                this.refs.info.blur(); // unfocus text field
+                this.refs.location.blur(); // unfocus text field
                 this.props.mainNavigator.pop();
               }}
               style={ styles.navButtonLeft }>
@@ -269,30 +283,20 @@ var CreateEventView = React.createClass({
         />
         <View style={ styles.body }>
           <View style={ styles.bevyPicker }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
-              }}
-              style={ styles.toBevyPicker }
-            >
-              <View style={styles.bevyPickerButton}>
-                <Text style={ styles.postingTo }>Tag: </Text>
-                <Text style={{ flex: 1, fontSize: 15, fontWeight: 'bold', color: this.props.tag.color} }>{ this.props.tag.name }</Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
+            <SettingsItem
+              icon={<Image source={{uri: bevyImageUrl}} style={{borderRadius: 15, width: 30, height: 30}}/>}
               onPress={() => {
                 this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER);
               }}
-              style={ styles.toBevyPicker }
-            >
-              <View style={styles.bevyPickerButton}>
-                <Text style={ styles.postingTo }>Posting To:</Text>
-                <Text style={ styles.bevyName }>{ this.props.selected.name }</Text>
-              </View>
-            </TouchableHighlight>
+              title={'Posting to: ' +  this.props.selected.name }
+            />
+            <SettingsItem
+              icon={<View style={{backgroundColor: this.props.tag.color, borderRadius: 15, width: 30, height: 30}}/>}
+              onPress={() => {
+                this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
+              }}
+              title={'Tag: ' + this.props.tag.name}
+            />
           </View>
           <ScrollView style={ styles.input }>
             { this._renderPostImage() }
@@ -376,12 +380,9 @@ var styles = StyleSheet.create({
   },
   bevyPicker: {
     backgroundColor: '#fff',
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 48,
-    padding: 10,
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1
+    flexDirection: 'column',
+    height: 96,
+    padding: 0
   },
   bevyPickerButton: {
     flexDirection: 'row',
@@ -400,10 +401,14 @@ var styles = StyleSheet.create({
   },
   toBevyPicker: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.25)',
+    backgroundColor: '#fff',
     padding: 5,
     marginRight: 10,
-    borderRadius: 3
+    borderRadius: 3,
+    height: 84,
+    width: constants.width,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee'
   },
   input: {
     flex: 1,

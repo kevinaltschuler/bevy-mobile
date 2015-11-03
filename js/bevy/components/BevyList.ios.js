@@ -143,6 +143,10 @@ var BevyList = React.createClass({
         { _.map(bevies, function(bevy) {
           var active = (bevy._id == this.props.activeBevy._id);
 
+          if(bevy._id == -1) {
+            return <View/>;
+          }
+
           return (
             <TouchableHighlight 
               key={ 'bevylist:' + bevy._id }
@@ -175,6 +179,22 @@ var BevyList = React.createClass({
 
         { this._renderProfileHeader() }
 
+        <TouchableHighlight 
+          key={ 'bevylist:' + -1 }
+          underlayColor='rgba(255,255,255,.5)'
+          style={ (this.props.activeBevy._id == -1) ? styles.bevyItemActive : styles.bevyItem }
+          onPress={() => {
+            if(this.props.activeBevy._id == -1) return;
+            BevyActions.switchBevy(-1);
+            // close the side menu
+            this.context.menuActions.close();
+          }}
+        >
+          <Text style={ (this.props.activeBevy._id == -1) ? styles.bevyItemActiveText : styles.bevyItemText }>
+            Frontpage
+          </Text>
+        </TouchableHighlight>
+
         { this._renderPublicHeader() }
 
         { this._renderBevyList() }
@@ -203,7 +223,11 @@ var styles = StyleSheet.create({
   },
   myBeviesHeader: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderTopWidth: .5,
+    borderBottomWidth: .5,
+    borderTopColor: 'rgba(255,255,255,.5)',
+    borderBottomColor: 'rgba(255,255,255,.5)'
   },
   myBeviesHeaderText: {
     flex: 1,
