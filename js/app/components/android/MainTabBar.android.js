@@ -69,6 +69,36 @@ var MainTabBar = React.createClass({
       activeTab: prevTab,
       tabHistory: history
     });
+
+    var x = 0;
+    switch(prevTab) {
+      case tabs.posts:
+        this.refs.Pager.setPage(0);
+        x = 0;
+        break;
+      case tabs.chat:
+        this.refs.Pager.setPage(1);
+        x = (constants.width / 4);
+        break;
+      case tabs.notifications:
+        this.refs.Pager.setPage(2);
+        x = (constants.width / 4) * 2;
+        break;
+      case tabs.more:
+        this.refs.Pager.setPage(3);
+        x = (constants.width / 4) * 3;
+        break;
+    }
+
+    // animate bar
+    Animated.timing(
+      this.state.barAnim,
+      { 
+        toValue: { x: x, y: 43 },
+        duration: 150
+      }
+    ).start();
+
     return true;
   },
 
