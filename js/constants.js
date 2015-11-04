@@ -19,6 +19,8 @@ var api_version = '';
 var hostname = 'joinbevy.com';
 var protocol = 'http:';
 
+exports.android_version = '1.0.4';
+
 exports.siteurl = protocol + slashes + hostname;
 exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
 
@@ -100,12 +102,20 @@ exports.BEVY = {
 
 exports.CHAT = {
   SWITCH: 'chat_switch',
-
   THREAD_OPEN: 'chat_thread_open',
   FETCH_MORE: 'chat_fetch_more',
   POST_MESSAGE: 'chat_post_message',
+  CREATE_THREAD_AND_MESSAGE: 'chat_create_thread_and_message',
+  ADD_USERS: 'chat_add_users',
+  REMOVE_USER: 'chat_remove_user',
+  DELETE_THREAD: 'chat_delete_thread',
+  EDIT_THREAD: 'chat_edit_thread',
+  START_PM: 'chat_start_pm',
+
   CHANGE_ALL: 'chat_change_all',
-  CHANGE_ONE: 'chat_change_one:'
+  CHANGE_ONE: 'chat_change_one:',
+  THREAD_CREATED: 'chat_thread_created',
+  SWITCH_TO_THREAD: 'chat_switch_to_thread'
 };
 
 exports.USER = {
@@ -114,11 +124,19 @@ exports.USER = {
   LOGIN_GOOGLE: 'user_login_google',
   LOGOUT: 'user_logout',
   CHANGE_PROFILE_PICTURE: 'user_change_profile_picture',
+  SWITCH_USER: 'user_switch_user',
+  LINK_ACCOUNT: 'user_link_account',
+  UNLINK_ACCOUNT: 'user_unlink_account',
 
   LOGIN_ERROR: 'user_login_error',
   LOGIN_SUCCESS: 'user_login_success',
   CHANGE_ALL: 'user_change_all',
-  LOADED: 'user_loaded'
+  LOADED: 'user_loaded',
+
+  SEARCH: 'user_search',
+  SEARCHING: 'user_searching',
+  SEARCH_COMPLETE: 'user_search_complete',
+  SEARCH_ERROR: 'user_search_error'
 };
 
 exports.FILE = {

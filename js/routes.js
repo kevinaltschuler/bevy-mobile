@@ -11,7 +11,8 @@ var routes = {
     LOGIN: { name: 'Login' },
     MESSAGEVIEW: { name: 'Messages' },
     SWITCHACCOUNT: { name: 'SwitchAccount' },
-    EDITPOST: {name: 'EditPost'}
+    EDITPOST: {name: 'EditPost'},
+    NEWTHREAD: { name: 'NewThread' }
   },
 
   NEWPOST: {

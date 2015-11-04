@@ -20,6 +20,7 @@ var NewBevyView = require('./../../../bevy/components/android/NewBevyView.androi
 var PublicProfileView = require('./../../../user/components/android/PublicProfileView.android.js');
 var MapView = require('./../../../post/components/android/Map.android.js');
 var SwitchAccountView = require('./../../../user/components/android/SwitchAccountView.android.js');
+var NewThreadView = require('./../../../chat/components/android/NewThreadView.android.js');
 
 var routes = require('./../../../routes');
 
@@ -80,6 +81,9 @@ var MainView = React.createClass({
         );
       case routes.MAIN.SWITCHACCOUNT.name:
         return <SwitchAccountView { ...this.props } />;
+        break;
+      case routes.MAIN.NEWTHREAD.name:
+        return <NewThreadView { ...this.props } />;
         break;
       default:
         return (

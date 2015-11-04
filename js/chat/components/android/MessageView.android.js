@@ -20,6 +20,7 @@ var ChatBar = require('./ChatBar.android.js');
 var MessageItem = require('./MessageItem.android.js');
 var InvertibleScrollView = require('react-native-invertible-scroll-view');
 var Icon = require('react-native-vector-icons/MaterialIcons');
+var MessageInput = require('./MessageInput.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -35,13 +36,18 @@ var MessageView = React.createClass({
     loggedIn: React.PropTypes.bool
   },
 
+  getDefaultProps() {
+    return {
+      activeThread: {}
+    };
+  },
+
   getInitialState() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
-      messageInput: '',
       loading: false
     };
   },
@@ -75,7 +81,7 @@ var MessageView = React.createClass({
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
-  _onChatChange: function() {
+  _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       messages: messages,
@@ -84,8 +90,7 @@ var MessageView = React.createClass({
     });
   },
 
-  onSubmitEditing: function(ev) {
-    var text = this.state.messageInput;
+  onSubmitEditing(text) {
     if(_.isEmpty(text)) return;
 
     var user = this.props.user;
@@ -101,38 +106,8 @@ var MessageView = React.createClass({
     });
     this.setState({
       messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages),
-      messageInput: '' // clear text field
+      dataSource: this.state.dataSource.cloneWithRows(messages)
     });
-  },
-
-  _renderInput() {
-    return (
-      <View style={ styles.inputContainer }>
-        <TextInput
-          ref='MessageInput'
-          value={ this.state.messageInput }
-          style={ styles.messageInput }
-          onChangeText={(text) => this.setState({ messageInput: text })}
-          onSubmitEditing={ this.onSubmitEditing }
-          placeholder='Chat'
-          placeholderTextColor='#AAA'
-          underlineColorAndroid='#AAA'
-        />
-        <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#888', false) }
-          onPress={ this.onSubmitEditing }
-        >
-          <View style={ styles.sendMessageButton }>
-            <Icon
-              name='send'
-              size={ 30 }
-              color='#2CB673'
-            />
-          </View>
-        </TouchableNativeFeedback>
-      </View>
-    );
   },
 
   _renderListHeader() {
@@ -194,7 +169,9 @@ var MessageView = React.createClass({
             );
           }}
         />
-        { this._renderInput() }
+        <MessageInput
+          onSubmitEditing={ this.onSubmitEditing }
+        />
       </View>
     );
   }
@@ -238,26 +215,6 @@ var styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 20
-  },
-  inputContainer: {
-    height: 48,
-    width: constants.width,
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: 8,
-  },
-  messageInput: {
-    flex: 1
-  },
-  sendMessageButton: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 8,
-    paddingLeft: 12,
-    paddingRight: 12
   }
 });
 

@@ -162,7 +162,9 @@ var App = React.createClass({
     return {
       user: UserStore.getUser(),
       loggedIn: UserStore.loggedIn,
-      linkedAccounts: UserStore.getLinkedAccounts()
+      linkedAccounts: UserStore.getLinkedAccounts(),
+      userSearchQuery: UserStore.getUserSearchQuery(),
+      userSearchResults: UserStore.getUserSearchResults()
     };
   },
 
