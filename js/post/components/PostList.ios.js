@@ -229,6 +229,9 @@ var PostList = React.createClass({
             renderHeader={() => { 
               return this._renderHeader();
             }}
+            renderFooter={() => {
+              return <View style={{height: 52}}/>
+            }}
             renderRow={(post) => {
               if(this.state.loading) {
                 return (
@@ -320,7 +323,7 @@ var styles = StyleSheet.create({
   cardContainer: {
     height: 50,
     backgroundColor: '#eee',
-    marginTop: 0,
+    marginTop: 2,
     marginBottom: -10
   },
   listContainer: {

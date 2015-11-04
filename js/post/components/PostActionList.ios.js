@@ -11,6 +11,8 @@ var Icon = require('react-native-vector-icons/Ionicons');
 
 var routes = require('./../../routes');
 
+var PostActions = require('./../PostActions');
+
 var PostActionList = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
@@ -123,28 +125,32 @@ var PostActionList = React.createClass({
   },
 
   _renderDeleteButton() {
-    return <View />; // not ready for this yet
-    return (
-      <TouchableHighlight
-        underlayColor='rgba(44,182,105,0.8)'
-        style={ styles.postOptionsButtonContainer }
-        onPress={() => {
-          
-        }}
-      >
-        <View style={ styles.postOptionsButton }>
-          <Icon
-            name='ios-trash'
-            color='#fff'
-            size={ 30 }
-            style={ styles.postOptionsIcon }
-          />
-          <Text style={ styles.postOptionsText}>
-            Delete Post
-          </Text>
-        </View>
-      </TouchableHighlight>
-    );
+    if(this.props.user._id != this.props.post.author._id) {
+      return <View/>;
+    }
+    else {
+      return (
+        <TouchableHighlight
+          underlayColor='rgba(44,182,105,0.8)'
+          style={ styles.postOptionsButtonContainer }
+          onPress={() => {
+            PostActions.destroy(this.props.post._id);
+          }}
+        >
+          <View style={ styles.postOptionsButton }>
+            <Icon
+              name='ios-trash'
+              color='#fff'
+              size={ 30 }
+              style={ styles.postOptionsIcon }
+            />
+            <Text style={ styles.postOptionsText}>
+              Delete Post
+            </Text>
+          </View>
+        </TouchableHighlight>
+      );
+    }
   },
 
   render() {

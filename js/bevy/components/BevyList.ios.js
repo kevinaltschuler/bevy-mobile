@@ -226,6 +226,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     borderTopWidth: .5,
     borderBottomWidth: .5,
+    height: 48,
     borderTopColor: 'rgba(255,255,255,.5)',
     borderBottomColor: 'rgba(255,255,255,.5)'
   },
