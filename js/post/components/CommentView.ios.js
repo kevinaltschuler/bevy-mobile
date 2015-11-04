@@ -438,13 +438,14 @@ var styles = StyleSheet.create({
     paddingBottom: 0
   },
   replyButtonText: {
-    paddingLeft: 20,
-    paddingRight: 5,
-    paddingTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 0,
     fontSize: 17,
     color: '#2CB673',
     fontWeight: 'bold',
-    marginBottom: -10
+    marginBottom: 0,
+    marginLeft: 5
   }
 });
 

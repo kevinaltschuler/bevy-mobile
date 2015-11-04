@@ -149,38 +149,40 @@ var ImageOverlay = React.createClass({
         transparent={true}
         Visible={ this.state.isVisible }
       >
-        <BlurView blurType='dark' style={styles.container}>
-          <View>
-           <TouchableOpacity
-              activeOpacity={.6}
-              style={ styles.closeButton }
-              onPress={() => {
-                this.setState({
-                  isVisible: false
-                });
-              }}
-            >
-              <Icon
-                name='ios-close-empty'
-                size={ 40 }
-                style={{ width: 40, height: 40, fontWeight: 'bold' }}
-                color='#fff'
-              />
-            </TouchableOpacity>
-            <Swiper 
-              contentContainerStyle={styles.container} 
-              showsButtons={false}            
-              dot={<View style={{backgroundColor:'rgba(255,255,255,.3)', width: 13, height: 13,borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
-              activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-              paginationStyle={{
-                bottom: 70,
-              }}
-              loop={true}
-            >
-              {imageCards}
-            </Swiper>
-          </View>
-        </BlurView>
+        <View>
+          <BlurView blurType='dark' style={styles.container}>
+            <View>
+              <Swiper 
+                contentContainerStyle={styles.container} 
+                showsButtons={false}            
+                dot={<View style={{backgroundColor:'rgba(255,255,255,.3)', width: 13, height: 13,borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
+                activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+                paginationStyle={{
+                  bottom: 70,
+                }}
+                loop={true}
+              >
+                {imageCards}
+              </Swiper>
+            </View>
+          </BlurView>
+          <TouchableOpacity
+            activeOpacity={.6}
+            style={ styles.closeButton }
+            onPress={() => {
+              this.setState({
+                isVisible: false
+              });
+            }}
+          >
+            <Icon
+              name='ios-close-empty'
+              size={ 40 }
+              style={{ width: 40, height: 40, fontWeight: 'bold' }}
+              color='#fff'
+            />
+          </TouchableOpacity>
+        </View>
       </Modal>
     );
   }
@@ -229,12 +231,13 @@ var styles = StyleSheet.create({
     height: 68,
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 40,
+    paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 20,
-    marginTop: 50,
+    marginTop: 20,
     color: 'white',
+    position: 'absolute'
   },
   imageCountText: {
     flex: 1,

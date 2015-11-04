@@ -236,7 +236,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     borderBottomColor: '#fff',
-    borderBottomWidth: .5,
+    borderBottomWidth: 1,
     marginRight: 20,
     marginLeft: 20
   },

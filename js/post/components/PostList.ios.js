@@ -12,7 +12,8 @@ var {
   View,
   ListView,
   TouchableHighlight,
-  ActivityIndicatorIOS
+  ActivityIndicatorIOS,
+  Image
 } = React;
 var Spinner = require('react-native-spinkit');
 var RCTRefreshControl = require('react-refresh-control');
@@ -134,6 +135,16 @@ var PostList = React.createClass({
     })
   },
 
+  requestJoin() {
+    // dont allow this for non logged in users
+    if(!this.props.loggedIn) {
+      this.props.authModalActions.open('Log In To join');
+      return;
+    }
+    // send action
+    BevyActions.requestJoin(this.props.activeBevy, this.props.user);
+  },
+
   _renderHeader() {
     var newPostCard = (!this.props.showNewPostCard || _.isEmpty(this.props.activeBevy))
     ? <View style={{height: 0}} />
@@ -153,6 +164,48 @@ var PostList = React.createClass({
   },
 
   render() {
+
+    if(this.props.activeBevy._id != -1 // if not the frontpage
+      && this.props.activeBevy.settings.privacy == 1
+      && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+      // if this is a private bevy that the user is not a part of
+      // dont show any posts. only show a request join view
+      return (
+        <View style={ styles.privateContainer }>
+          <Image
+            style={ styles.privateImage }
+            source={{ uri: constants.siteurl + '/img/private.png' }}
+          />
+          <Text style={ styles.privateText }>
+            This Bevy is Private
+          </Text>
+          <TouchableHighlight
+            onPress={ this.requestJoin }
+          >
+            <View style={ styles.requestJoinButton }>
+              <Text style={ styles.requestJoinButtonText }>
+                Request to Join this Bevy
+              </Text>
+            </View>
+          </TouchableHighlight>
+          <ListView
+            ref={LISTVIEW}
+            dataSource={ this.state.dataSource }
+            style={ styles.postContainer }
+            onScroll={(data) => {
+              this.props.onScroll(data.nativeEvent.contentOffset.y);
+            }}
+            scrollRenderAheadDistance={3}
+            renderHeader={() => { 
+              return <View/>
+            }}
+            renderRow={(post) => {
+              return <View/>
+            }}
+          />
+        </View>
+      );
+    }
 
     return (
       <View style={ styles.postContainer }>
@@ -175,6 +228,9 @@ var PostList = React.createClass({
             scrollRenderAheadDistance={3}
             renderHeader={() => { 
               return this._renderHeader();
+            }}
+            renderFooter={() => {
+              return <View style={{height: 52}}/>
             }}
             renderRow={(post) => {
               if(this.state.loading) {
@@ -267,11 +323,39 @@ var styles = StyleSheet.create({
   cardContainer: {
     height: 50,
     backgroundColor: '#eee',
-    marginTop: 0,
+    marginTop: 2,
     marginBottom: -10
   },
   listContainer: {
     flex: 1,
+  },
+  privateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#eee'
+  },
+  privateImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginTop: 20,
+    marginBottom: 15
+  },
+  privateText: {
+    textAlign: 'center',
+    color: '#AAA',
+    fontSize: 22,
+    marginBottom: 15
+  },
+  requestJoinButton: {
+    borderColor: '#2cb673',
+    borderWidth: 1,
+    borderRadius: 3,
+    paddingVertical: 5,
+    paddingHorizontal: 10
+  },
+  requestJoinButtonText: {
+    color: '#2cb673'
   }
 })
 

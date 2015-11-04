@@ -142,14 +142,14 @@ var Event = React.createClass({
           </Text>
         </View>
 
-        {/*<View style={styles.titleTextColumn}>
+        <View style={styles.titleTextColumn}>
           <Text style={styles.bodyText}>
             { this.state.post.title }
           </Text>
-          <Text style={styles.descriptionText}>
+          {/*<Text style={styles.descriptionText}>
             { this.state.post.event.description }
-          </Text>
-        </View>*/}
+          </Text>*/}
+        </View>
 
         {/*<TouchableHighlight
           underlayColor='rgba(0,0,0,0.1)'
@@ -333,15 +333,18 @@ var styles = StyleSheet.create({
   },
   titleTextColumn: {
     flex: 2,
+    height: 48,
     width: cardWidth - 40 - 10 - 16 - 100,
     flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0)',
     height: 26,
-    marginLeft: 5
+    marginLeft: 5,
+    paddingTop: 10
   },
   titleText: {
-    width: cardWidth - 40 - 10 - 16,
     color: '#282929',
-    fontSize: 12
+    fontSize: 12,
   },
   subTitleText: {
     fontSize: 9,

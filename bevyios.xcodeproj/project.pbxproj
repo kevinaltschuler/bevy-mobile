@@ -32,7 +32,7 @@
 		CE5514051BC34A9700D1BB26 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC226F21BBEF50A005FAC9B /* libRNVectorIcons.a */; };
 		CE6822FD1BC6CB9100BE5DE5 /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3874141BC6C5F800C7BCD6 /* libRNBlur.a */; };
 		CE76683B1BC9AFF300DDDD50 /* libRCTRefreshControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7668311BC9AFB900DDDD50 /* libRCTRefreshControl.a */; };
-		CEF188B81BCFFD8F00808FB2 /* UIImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF188B71BCFFD8F00808FB2 /* UIImagePickerManager.m */; settings = {ASSET_TAGS = (); }; };
+		CEF188B81BCFFD8F00808FB2 /* UIImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEF188B71BCFFD8F00808FB2 /* UIImagePickerManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

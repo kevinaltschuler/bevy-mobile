@@ -119,7 +119,7 @@ var DatePickerModal = React.createClass({
                 {this.state.date.toLocaleDateString()} at {this.state.time.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}).replace(/(:\d{2}| )$/, "")}
               </Text> 
             </View>
-            <View style={{height: 20, width: constants.width, backgroundColor: 'rgba(247,247,247,1)'}}/>
+            <View style={{height: 5, width: constants.width, backgroundColor: 'rgba(247,247,247,1)'}}/>
             <Calendar
               eventDates={[]}   
               showControls={true}
@@ -230,6 +230,7 @@ var styles = StyleSheet.create({
 var calendarStyles = {
   calendarContainer: {
     backgroundColor: '#f7f7f7',
+    marginBottom: -50
   },
   calendarControls: {
     flex: 1,
