@@ -72,12 +72,9 @@ var PublicProfileView = React.createClass({
             />
           </View>
         </TouchableNativeFeedback>
-        <View style={{ flex: 1 }} />
-        <View style={ styles.titleContainer }>
-          <Text style={ styles.titleText }>
-            { userName } Public Profile
-          </Text>
-        </View>
+        <Text style={ styles.titleText }>
+          { userName } Public Profile
+        </Text>
       </View>
     );
   },
@@ -93,7 +90,9 @@ var PublicProfileView = React.createClass({
             emailColor='#666'
             style={ styles.profileRow }
           />
-          <Text style={ styles.sectionTitle }>General</Text>
+          <Text style={ styles.sectionTitle }>
+            General
+          </Text>
           <View style={ styles.detailItem }>
             <Text style={ styles.detailItemKey }>
               Points
@@ -151,21 +150,13 @@ var styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8
-  },
-  titleContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: constants.width,
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 30
+    paddingHorizontal: 8,
+    marginRight: 10
   },
   titleText: {
-    color: '#666'
+    flex: 1,
+    color: '#000',
+    textAlign: 'left'
   },
   list: {
     flex: 1
@@ -185,7 +176,9 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
-    paddingHorizontal: 10
+    paddingHorizontal: 12,
+    borderBottomColor: '#EEE',
+    borderBottomWidth: 1
   },
   detailItemKey: {
     flex: 1
