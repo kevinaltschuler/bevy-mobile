@@ -23,7 +23,7 @@ var UserStore = require('./../../../user/UserStore');
 
 var ThreadImage = React.createClass({
   propTypes: {
-    thread: React.PropTypes.object.isRequired
+    thread: React.PropTypes.object
   },
 
   getInitialState() {
@@ -58,6 +58,7 @@ var ThreadImage = React.createClass({
   },
 
   render() {
+    if(_.isEmpty(this.props.thread)) return <View />;
     switch(this.props.thread.type) {
       case 'bevy':
       case 'pm':

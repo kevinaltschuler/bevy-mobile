@@ -16,7 +16,6 @@ var {
   ProgressBarAndroid,
   StyleSheet
 } = React;
-var ChatBar = require('./ChatBar.android.js');
 var MessageItem = require('./MessageItem.android.js');
 var InvertibleScrollView = require('react-native-invertible-scroll-view');
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -24,6 +23,7 @@ var MessageInput = require('./MessageInput.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var CHAT = constants.CHAT;
 var ChatStore = require('./../../ChatStore');
 var ChatActions = require('./../../ChatActions');
@@ -62,11 +62,19 @@ var MessageView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    var messages = ChatStore.getMessage(nextProps.activeThread._id)
-    this.setState({
-      messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages)
-    });
+    //var messages = ChatStore.getMessage(nextProps.activeThread._id)
+    //this.setState({
+    //  messages: messages,
+    //  dataSource: this.state.dataSource.cloneWithRows(messages)
+    //});
+  },
+
+  goBack() {
+    this.props.mainNavigator.pop();
+  },
+
+  goToInfoView() {
+    this.props.mainNavigator.push(routes.MAIN.THREADSETTINGS);
   },
 
   onBackButton() {
@@ -110,6 +118,24 @@ var MessageView = React.createClass({
     });
   },
 
+  _renderInfoButton() {
+    if(this.props.activeThread.type == 'bevy') return <View />; 
+    return (
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+        onPress={ this.goToInfoView }
+      >
+        <View style={ styles.infoButton }>
+          <Icon
+            name='info-outline'
+            size={ 30 }
+            color='#888'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
   _renderListHeader() {
     // disable load more if theres no more messages
     if(_.isEmpty(this.state.messages)) return <View />;
@@ -141,10 +167,26 @@ var MessageView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <ChatBar
-          activeThread={ this.props.activeThread }
-          mainNavigator={ this.props.mainNavigator }
-        />
+        <View style={ styles.topBar }>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={ this.goBack }
+          >
+            <View style={ styles.backButton }>
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#888'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <View style={ styles.title }>
+            <Text style={ styles.titleText }>
+              { ChatStore.getThreadName(this.props.activeThread._id) }
+            </Text>
+          </View>
+          { this._renderInfoButton() }
+        </View>
         <ListView
           renderScrollComponent={
             (props) => <InvertibleScrollView {...props} { ...this.state } />
@@ -183,6 +225,40 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     backgroundColor: '#EEE'
+  },
+  topBar: {
+    width: constants.width,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff'
+  },
+  backButton: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10
+  },
+  infoButton: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10
+  },
+  title: {
+    flex: 1,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  titleText: {
+    flex: 1,
+    color: '#000',
+    fontSize: 15,
+    flexWrap: 'wrap'
   },
   loadMoreButton: {
     height: 40,

@@ -21,6 +21,8 @@ var PublicProfileView = require('./../../../user/components/android/PublicProfil
 var MapView = require('./../../../post/components/android/Map.android.js');
 var SwitchAccountView = require('./../../../user/components/android/SwitchAccountView.android.js');
 var NewThreadView = require('./../../../chat/components/android/NewThreadView.android.js');
+var ThreadSettingsView
+   = require('./../../../chat/components/android/ThreadSettingsView.android.js');
 
 var routes = require('./../../../routes');
 
@@ -84,6 +86,9 @@ var MainView = React.createClass({
         break;
       case routes.MAIN.NEWTHREAD.name:
         return <NewThreadView { ...this.props } />;
+        break;
+      case routes.MAIN.THREADSETTINGS.name:
+        return <ThreadSettingsView { ...this.props } />;
         break;
       default:
         return (

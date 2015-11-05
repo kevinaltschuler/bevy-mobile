@@ -131,6 +131,8 @@ var ThreadView = React.createClass({
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
         <ListView
+          style={ styles.threadList }
+          contentContainerStyle={ styles.threadList }
           dataSource={ this.state.ds }
           renderRow={ this._renderThreadItem }
           scrollRenderAheadDistance={ 300 }
@@ -152,7 +154,7 @@ var styles = StyleSheet.create({
     borderTopWidth: 1
   },
   threadList: {
-
+    paddingBottom: 36
   },
   panelHeader: {
     height: 30,

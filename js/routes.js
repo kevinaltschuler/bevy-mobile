@@ -12,7 +12,8 @@ var routes = {
     MESSAGEVIEW: { name: 'Messages' },
     SWITCHACCOUNT: { name: 'SwitchAccount' },
     EDITPOST: {name: 'EditPost'},
-    NEWTHREAD: { name: 'NewThread' }
+    NEWTHREAD: { name: 'NewThread' },
+    THREADSETTINGS: { name: 'ThreadSettings' }
   },
 
   NEWPOST: {

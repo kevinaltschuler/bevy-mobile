@@ -200,7 +200,7 @@ _.extend(ChatStore, {
             success: function(model, response, options) {
               //self populate
               thread.set('_id', model.get('_id'));
-              thread.set('users', thread_users);\
+              thread.set('users', thread_users);
               // set the urls
               thread.url = constants.apiurl + '/threads/' + thread.get('_id');
               thread.messages.url = 
@@ -276,8 +276,6 @@ _.extend(ChatStore, {
         if(user_id == user._id) {
           // if you're removing yourself, then remove the thread from our list
           this.threads.remove(thread_id);
-          // switch active thread to first one just in case
-          this.active = this.threads.at[0]._id;
         }
         this.trigger(CHAT.CHANGE_ALL);
         break;
@@ -291,8 +289,6 @@ _.extend(ChatStore, {
         thread.url = constants.apiurl + '/threads/' + thread.get('_id');
         thread.destroy({
           success: function(model, response, options) {
-            // switch active thread to first one just in case
-            this.active = this.threads.at[0]._id;
             this.trigger(CHAT.CHANGE_ALL);
           }.bind(this)
         });
