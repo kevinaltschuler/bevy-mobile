@@ -158,7 +158,7 @@ var SettingsView = React.createClass({
             Version
           </Text>
           <Text style={ styles.settingButtonTextRight }>
-            { constants.android_version }
+            { constants.android_version + ' ' + constants.android_phase }
           </Text>
         </View>
       </ScrollView>
