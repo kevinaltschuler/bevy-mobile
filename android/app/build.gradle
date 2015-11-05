@@ -34,6 +34,10 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://jitpack.io" }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.google.android.gms:play-services-identity:8.1.0'
@@ -47,4 +51,5 @@ dependencies {
     compile project(':ReactNativeDropdownAndroid')
     compile project(':ReactNativeVibration')
     compile project(':RNAudioPlayer')
+    compile project(':react-native-dialogs')
 }
