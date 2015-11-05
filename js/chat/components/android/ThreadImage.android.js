@@ -35,7 +35,6 @@ var ThreadImage = React.createClass({
       && this.props.thread.type == 'bevy') {
       image_url += '?w=50&h=50';
     }
-    console.log(image_url);
     return {
       image_url: image_url
     };

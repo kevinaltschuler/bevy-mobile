@@ -46,6 +46,9 @@ var BevyPickerItem = React.createClass({
 
   render() {
     var image_url = BevyStore.getBevyImage(this.props.bevy._id);
+    if(image_url.slice(7, 23) == 'api.joinbevy.com') {
+      image_url += '?w=50&h=50';
+    }
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
