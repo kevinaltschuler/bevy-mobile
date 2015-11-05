@@ -235,6 +235,7 @@ var App = React.createClass({
     return (
       <View style={styles.container}>
         <Navigator
+          configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
           initialRouteStack={[
             routes.MAIN.TABBAR
           ]}

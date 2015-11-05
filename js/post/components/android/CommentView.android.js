@@ -196,7 +196,7 @@ var CommentView = React.createClass({
           onBlur={() => this.setState({ replyToComment: {} })}
           placeholder='Comment'
           placeholderTextColor='#AAA'
-          underlineColorAndroid='#AAA'
+          underlineColorAndroid='#FFF'
         />
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#CCC', false) }
@@ -307,7 +307,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#EEE'
+    borderTopColor: '#EEE',
+    paddingLeft: 10
   },
   textInput: {
     flex: 1,

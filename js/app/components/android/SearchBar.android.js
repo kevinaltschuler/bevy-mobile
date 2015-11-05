@@ -152,6 +152,7 @@ var SearchNavigator = React.createClass({
   render() {
     return (
       <Navigator
+        configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.mainNavigator }
         navigationBar={ 
           <SearchBar { ...this.props }/> 
