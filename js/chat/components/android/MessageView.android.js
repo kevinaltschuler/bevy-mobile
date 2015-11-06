@@ -207,6 +207,7 @@ var MessageView = React.createClass({
                 key={ 'message:' + message._id }
                 message={ message }
                 user={ this.props.user }
+                mainNavigator={ this.props.mainNavigator }
               />
             );
           }}

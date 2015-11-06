@@ -10,16 +10,29 @@ var {
   View,
   Text,
   Image,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 
 var _ = require('underscore');
+var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 
 var MessageItem = React.createClass({
   propTypes: {
     message: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
+  },
+
+  goToPublicProfile() {
+    if(this.props.message.author._id == this.props.user._id) {
+      // dont do this for yourself
+      return;
+    }
+    var route = routes.MAIN.PROFILE;
+    route.user = this.props.message.author;
+    this.props.mainNavigator.push(route);
   },
 
   _renderDate() {
@@ -116,13 +129,17 @@ var MessageItem = React.createClass({
       <View style={ containerStyle }>
         { (isMe) ? this._renderMessageBody() : <View /> }
         { (isMe) ? this._renderTriangle() : <View /> }
-        <Image 
-          source={{ uri: (_.isEmpty(author.image_url)) 
-            ? constants.siteurl + '/img/user-profile-icon.png' 
-            : author.image_url 
-          }}
-          style={ styles.authorImage }
-        />
+        <TouchableWithoutFeedback
+          onPress={ this.goToPublicProfile }
+        >
+          <Image 
+            source={{ uri: (_.isEmpty(author.image_url)) 
+              ? constants.siteurl + '/img/user-profile-icon.png' 
+              : author.image_url 
+            }}
+            style={ styles.authorImage }
+          />
+        </TouchableWithoutFeedback>
         { (isMe) ? <View /> : this._renderTriangle() }
         { (isMe) ? <View /> : this._renderMessageBody() }
       </View>
