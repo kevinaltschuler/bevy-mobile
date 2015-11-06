@@ -23,7 +23,7 @@
     "react-native-swiper-fork": "https://github.com/manandmoon/react-native-swiper#master",
     "react-native-spinkit": "^0.0.5",
     "react-native-timer-mixin": "^0.11.0",
-    "react-native-collapsible": "^0.5.1",
+    "react-native-collapsible": "^0.5.2",
     "react-native-vibration": "^0.1.1",
     "react-native-audioplayer": "^0.2.0",
     "react-native-dialogs": "^0.0.5",
