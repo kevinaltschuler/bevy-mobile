@@ -157,7 +157,7 @@ var styles = StyleSheet.create({
     left: 0,
     width: constants.width,
     height: constants.height,
-    opacity: 0.5
+    opacity: 0.75
   },
   imageContainer: {
     position: 'absolute',
