@@ -19,6 +19,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var PostHeader = React.createClass({
   propTypes: {
@@ -30,6 +31,13 @@ var PostHeader = React.createClass({
     var route = routes.MAIN.PROFILE;
     route.user = this.props.post.author;
     this.props.mainNavigator.push(route);
+  },
+
+  goToBevy() {
+    // go back to the top view
+    this.props.mainNavigator.popToTop();
+    // switch bevies
+    BevyActions.switchBevy(this.props.post.bevy._id);
   },
 
   _renderPinnedBadge() {
@@ -90,7 +98,11 @@ var PostHeader = React.createClass({
               color='#999'
               style={ styles.chevron }
             />
-            <Text style={ styles.bevyName }>{ post.bevy.name }</Text>
+            <TouchableWithoutFeedback
+              onPress={ this.goToBevy }
+            >
+              <Text style={ styles.bevyName }>{ post.bevy.name }</Text>
+            </TouchableWithoutFeedback>
           </View>
           <Text style={ styles.timeAgo }>{ timeAgo(new Date(post.created)) }</Text>
         </View>
