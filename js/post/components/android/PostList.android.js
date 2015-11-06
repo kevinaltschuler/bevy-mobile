@@ -230,17 +230,21 @@ var PostList = React.createClass({
             }}
             renderHeader={ this._renderNewPostCard }
             pageSize={ 3 }
-            renderRow={(post) => 
-              <Post
-                key={ 'post:' + post._id }
-                post={ post }
-                mainNavigator={ this.props.mainNavigator }
-                mainRoute={ this.props.mainRoute }
-                user={ this.props.user }
-                loggedIn={ this.props.loggedIn }
-                activeBevy={ this.props.activeBevy }
-              />
-            }
+            renderRow={(post) => {
+              if(this.props.activeBevy._id == -1 &&
+                post.pinned) return <View />;
+              return (
+                <Post
+                  key={ 'post:' + post._id }
+                  post={ post }
+                  mainNavigator={ this.props.mainNavigator }
+                  mainRoute={ this.props.mainRoute }
+                  user={ this.props.user }
+                  loggedIn={ this.props.loggedIn }
+                  activeBevy={ this.props.activeBevy }
+                />
+              );
+            }}
           />
           { this._renderHeader() }
         </View>
