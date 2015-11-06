@@ -24,13 +24,15 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
+var UserActions = require('./../../../user/UserActions');
 
 var SearchBar = React.createClass({
   propTypes: {
     navState: React.PropTypes.object,
     navigator: React.PropTypes.object,
     drawerOpen: React.PropTypes.bool,
-    drawerActions: React.PropTypes.object
+    drawerActions: React.PropTypes.object,
+    searchType: React.PropTypes.string
   },
 
   getInitialState() {
@@ -69,16 +71,26 @@ var SearchBar = React.createClass({
   },
 
   onSearch(query) {
+    this.setState({
+      query: query
+    });
     if(this.searchDelay != undefined) {
       clearTimeout(this.searchDelay);
       delete this.searchDelay;
     }
-    this.searchDelay = setTimeout(function() {
-      this.setState({
-        query: query
-      });
-      BevyActions.search(this.state.query);
-    }.bind(this), 500);
+    this.searchDelay = setTimeout(this.search, 500);
+  },
+
+  search() {
+    switch(this.props.searchType) {
+      case 'user':
+        UserActions.search(this.state.query);
+        break;
+      case 'bevy':
+      default:
+        BevyActions.search(this.state.query);
+        break;
+    }
   },
 
   goBack() {

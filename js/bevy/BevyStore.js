@@ -355,7 +355,9 @@ _.extend(BevyStore, {
   },
 
   getSearchList() {
-    return this.searchList.toJSON();
+    return (_.isEmpty(this.searchQuery))
+      ? this.publicBevies.toJSON()
+      : this.searchList.toJSON();
   },
 
   getSearchQuery() {

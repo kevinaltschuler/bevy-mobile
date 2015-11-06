@@ -44,8 +44,9 @@ exports.sideMenuWidth = ((window.width * (2/3)) >= 300) ? 300 : (window.width * 
 exports.APP = {
   LOAD: 'app_load',
   UNLOAD: 'app_unload',
+  SWITCH_SEARCH_TYPE: 'app_switch_search_type',
 
-  LOAD_PROGRESS: 'app_load_progress'
+  CHANGE_ALL: 'app_change_all'
 };
 
 exports.POST = {

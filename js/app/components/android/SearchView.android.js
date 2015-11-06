@@ -17,31 +17,38 @@ var {
   ViewPagerAndroid,
   BackAndroid
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var SubSwitch = require('./SubSwitch.android.js');
 var BevySearchItem 
   = require('./../../../bevy/components/android/BevySearchItem.android.js');
+var UserSearchItem
+  = require('./../../../user/components/android/UserSearchItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BevyActions = require('./../../../bevy/BevyActions');
+var AppActions = require('./../../../app/AppActions');
+var UserStore = require('./../../../user/UserStore');
+var UserActions = require('./../../../user/UserActions');
 var BEVY = constants.BEVY;
+var USER = constants.USER;
 
 var SearchView = React.createClass({
   propTypes: {
     searchRoute: React.PropTypes.object,
     searchNavigator: React.PropTypes.object,
+    searchType: React.PropTypes.string,
+    mainNavigator: React.PropTypes.object
   },
   
   getInitialState() {
-    var bevies = BevyStore.getPublicBevies();
+    var bevies = BevyStore.getSearchList();
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       ds: ds.cloneWithRows(bevies),
-      bevies: bevies,
       searching: false,
-      searchQuery: BevyStore.getSearchQuery(),
       activeTab: 0
     };
   },
@@ -49,6 +56,11 @@ var SearchView = React.createClass({
     BevyStore.on(BEVY.SEARCHING, this.handleSearching);
     BevyStore.on(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
     BevyStore.on(BEVY.SEARCH_ERROR, this.handleSearchError);
+
+    UserStore.on(USER.SEARCHING, this.handleSearching);
+    UserStore.on(USER.SEARCH_COMPLETE, this.handleSearchComplete);
+    UserStore.on(USER.SEARCH_ERROR, this.handleSearchError);
+
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
 
@@ -56,6 +68,11 @@ var SearchView = React.createClass({
     BevyStore.off(BEVY.SEARCHING, this.handleSearching);
     BevyStore.off(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
     BevyStore.off(BEVY.SEARCH_ERROR, this.handleSearchError);
+
+    UserStore.off(USER.SEARCHING, this.handleSearching);
+    UserStore.off(USER.SEARCH_COMPLETE, this.handleSearchComplete);
+    UserStore.off(USER.SEARCH_ERROR, this.handleSearchError);
+
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
@@ -66,25 +83,29 @@ var SearchView = React.createClass({
 
   handleSearching() {
     this.setState({
-      searching: true,
-      searchQuery: BevyStore.getSearchQuery(),
-      //dataSource: []
+      searching: true
     });
   },
 
   handleSearchComplete() {
-    var bevies = BevyStore.getSearchList();
+    var data;
+    switch(this.props.searchType) {
+      case 'bevy':
+        data = BevyStore.getSearchList();
+        break;
+      case 'user':
+        data = UserStore.getUserSearchResults();
+        break;
+    }
     this.setState({
       searching: false,
-      ds: this.state.ds.cloneWithRows(bevies),
-      bevies: bevies
+      ds: this.state.ds.cloneWithRows(data)
     });
   },
 
   handeSearchError() {
     this.setState({
       searching: false,
-      bevies: [],
       ds: this.state.ds.cloneWithRows([])
     });
   },
@@ -94,6 +115,7 @@ var SearchView = React.createClass({
       activeTab: index
     });
     this.pager.setPage(index);
+    this.switchSearchType(index);
   },
 
   onPageSelected(ev) {
@@ -101,6 +123,38 @@ var SearchView = React.createClass({
     this.setState({
       activeTab: index
     });
+    this.switchSearchType(index);
+  },
+
+  switchSearchType(index) {
+    var data;
+    switch(index) {
+      case 0:
+        // bevy
+        AppActions.switchSearchType('bevy');
+        data = BevyStore.getSearchList();
+        break;
+      case 1:
+        // user
+        AppActions.switchSearchType('user');
+        data = UserStore.getUserSearchResults();
+        if(_.isEmpty(data)) {
+          // no users have been searched for yet
+          // so we'll trigger it when we switch to that search type
+          UserActions.search('');
+        }
+        break;
+    }
+    // repopulate data store with proper results
+    this.setState({
+      ds: this.state.ds.cloneWithRows(data)
+    });
+  },
+
+  goToProfilePage(user) {
+    var route = routes.MAIN.PROFILE;
+    route.user = user;
+    this.props.mainNavigator.push(route);
   },
 
   _renderTabBar() {
@@ -110,7 +164,10 @@ var SearchView = React.createClass({
           background={ TouchableNativeFeedback.Ripple('#DDD', false) }
           onPress={ () => { this.switchTab(0) }}
         >
-          <View style={ styles.searchTab }>
+          <View style={[ styles.searchTab, {
+            borderRightColor: '#EEE',
+            borderRightWidth: 1
+          }]}>
             <Text style={ (this.state.activeTab == 0)
               ? styles.searchTabTextActive
               : styles.searchTabText }>
@@ -155,27 +212,33 @@ var SearchView = React.createClass({
               removeClippedSubviews={ true }
               initialListSize={ 10 }
               pageSize={ 10 }
-              renderHeader={() => 
-                <View style={ styles.sectionHeader }>
-                  <Image
-                    style={ styles.sectionIcon }
-                    source={{ uri: constants.siteurl + '/img/logo_100.png' }}
-                  />
-                  <Text style={ styles.sectionTitle }>
-                    Bevies
-                  </Text>
-                </View>
-              }
               renderRow={ bevy => 
                 <BevySearchItem
                   key={ 'bevysearchitem:' + bevy._id }
                   bevy={ bevy }
+                  searchNavigator={ this.props.searchNavigator }
                 />
               }
             />
           </View>
           <View style={ styles.searchPage }>
-
+            <ListView
+              dataSource={ this.state.ds }
+              style={ styles.searchItemList }
+              contentContainerStyle={{ paddingBottom: 10 }}
+              scrollRenderAheadDistance={ 300 }
+              removeClippedSubviews={ true }
+              initialListSize={ 10 }
+              pageSize={ 10 }
+              renderRow={ user => 
+                <UserSearchItem
+                  key={ 'searchuser:' + user._id }
+                  searchUser={ user }
+                  onSelect={ this.goToProfilePage }
+                  showIcon={ false }
+                />
+              }
+            />
           </View>
         </ViewPagerAndroid>
       </View>
@@ -194,7 +257,9 @@ var styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#FFF',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderBottomColor: '#EEE',
+    borderBottomWidth: 1
   },
   searchTab: {
     flex: 1,
@@ -215,26 +280,9 @@ var styles = StyleSheet.create({
   searchPage: {
     flex: 1
   },
-  sectionHeader: {
-    backgroundColor: '#FFF',
-    height: 36,
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  sectionIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    marginRight: 10
-  },
-  sectionTitle: {
-    color: '#AAA'
-  },
   searchItemList: {
     flex: 1,
-    flexDirection: 'column',
-    paddingTop: 10
+    flexDirection: 'column'
   }
 });
 

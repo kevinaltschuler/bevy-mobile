@@ -21,6 +21,12 @@ var AppActions = {
     Dispatcher.dispatch({
       actionType: APP.UNLOAD
     });
+  },
+  switchSearchType(type) {
+    Dispatcher.dispatch({
+      actionType: APP.SWITCH_SEARCH_TYPE,
+      type: type
+    });
   }
 };
 module.exports = AppActions;

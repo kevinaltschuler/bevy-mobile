@@ -23,13 +23,16 @@ var UserSearchItem = React.createClass({
   propTypes: {
     searchUser: React.PropTypes.object,
     onSelect: React.PropTypes.func,
-    selected: React.PropTypes.bool
+    selected: React.PropTypes.bool,
+    showIcon: React.PropTypes.bool
   },
 
   getDefaultProps() {
     return {
       searchUser: {},
-      onSelect: _.noop
+      onSelect: _.noop,
+      selected: false,
+      showIcon: true
     };
   },
 
@@ -52,7 +55,23 @@ var UserSearchItem = React.createClass({
     });
   },
 
+  _renderIcon() {
+    if(!this.props.showIcon) return <View />;
+    return (
+      <Icon
+        name='add'
+        //name={ (this.state.selected) ? 'check-box' : 'check-box-outline-blank' }
+        size={ 30 }
+        color='#2CB673'
+      />
+    );
+  },
+
   render() {
+    var image_url = this.props.searchUser.image_url;
+    if(_.isEmpty(image_url)) {
+      image_url = constants.siteurl + '/img/user-profile-icon.png';
+    }
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
@@ -61,18 +80,13 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: this.props.searchUser.image_url }}
+            source={{ uri: image_url }}
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>
               { this.props.searchUser.displayName }
             </Text>
-            <Icon
-              name='add'
-              //name={ (this.state.selected) ? 'check-box' : 'check-box-outline-blank' }
-              size={ 30 }
-              color='#2CB673'
-            />
+            { this._renderIcon() }
           </View>
         </View>
       </TouchableNativeFeedback>

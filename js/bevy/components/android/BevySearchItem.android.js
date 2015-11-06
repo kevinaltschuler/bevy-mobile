@@ -23,7 +23,8 @@ var BevyStore = require('./../../../bevy/BevyStore');
 
 var BevySearchItem = React.createClass({
   propTypes: {
-    bevy: React.PropTypes.object
+    bevy: React.PropTypes.object,
+    searchNavigator: React.PropTypes.object
   },
 
   onPress() {
