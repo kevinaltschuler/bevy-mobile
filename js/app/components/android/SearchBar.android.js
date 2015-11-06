@@ -282,7 +282,7 @@ var styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 48,
-    color: 'white'
+    color: '#FFF'
   },
 });
 

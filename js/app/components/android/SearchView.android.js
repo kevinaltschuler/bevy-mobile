@@ -13,10 +13,13 @@ var {
   ListView,
   Image,
   StyleSheet,
-  TouchableHighlight,
+  TouchableNativeFeedback,
+  ViewPagerAndroid,
   BackAndroid
 } = React;
 var SubSwitch = require('./SubSwitch.android.js');
+var BevySearchItem 
+  = require('./../../../bevy/components/android/BevySearchItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -26,8 +29,6 @@ var BevyActions = require('./../../../bevy/BevyActions');
 var BEVY = constants.BEVY;
 
 var SearchView = React.createClass({
-
-  // get proptypes
   propTypes: {
     searchRoute: React.PropTypes.object,
     searchNavigator: React.PropTypes.object,
@@ -35,21 +36,26 @@ var SearchView = React.createClass({
   
   getInitialState() {
     var bevies = BevyStore.getPublicBevies();
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(bevies),
-      fetching: false,
-      searchQuery: BevyStore.getSearchQuery()
+      ds: ds.cloneWithRows(bevies),
+      bevies: bevies,
+      searching: false,
+      searchQuery: BevyStore.getSearchQuery(),
+      activeTab: 0
     };
   },
   componentDidMount() {
     BevyStore.on(BEVY.SEARCHING, this.handleSearching);
     BevyStore.on(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+    BevyStore.on(BEVY.SEARCH_ERROR, this.handleSearchError);
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
 
   componentWillUnmount() {
     BevyStore.off(BEVY.SEARCHING, this.handleSearching);
     BevyStore.off(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+    BevyStore.off(BEVY.SEARCH_ERROR, this.handleSearchError);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
@@ -60,78 +66,118 @@ var SearchView = React.createClass({
 
   handleSearching() {
     this.setState({
-      fetching: true,
+      searching: true,
       searchQuery: BevyStore.getSearchQuery(),
       //dataSource: []
     });
   },
 
   handleSearchComplete() {
-    console.log('search done for', this.state.searchQuery);
-    //console.log(BevyStore.getSearchList());
     var bevies = BevyStore.getSearchList();
     this.setState({
-      fetching: false,
-      dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(bevies)
+      searching: false,
+      ds: this.state.ds.cloneWithRows(bevies),
+      bevies: bevies
     });
   },
 
-  _renderSubSwitch(bevy) {
-    var user = this.props.user;
-    var subbed = _.find(this.props.user.bevies, function(bevyId){ return bevyId == bevy._id }) != undefined;
-    // dont render this if you're an admin
-    if(_.contains(bevy.admins, user._id)) return <View/>;
+  handeSearchError() {
+    this.setState({
+      searching: false,
+      bevies: [],
+      ds: this.state.ds.cloneWithRows([])
+    });
+  },
+
+  switchTab(index) {
+    this.setState({
+      activeTab: index
+    });
+    this.pager.setPage(index);
+  },
+
+  onPageSelected(ev) {
+    var index = ev.nativeEvent.position;
+    this.setState({
+      activeTab: index
+    });
+  },
+
+  _renderTabBar() {
     return (
-        <SubSwitch
-          subbed={subbed}
-          loggedIn={ this.props.loggedIn }
-          authModalActions={ this.props.authModalActions }
-          bevy={bevy}
-          user={user}
-        />
+      <View style={ styles.tabbar }>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ () => { this.switchTab(0) }}
+        >
+          <View style={ styles.searchTab }>
+            <Text style={ (this.state.activeTab == 0)
+              ? styles.searchTabTextActive
+              : styles.searchTabText }>
+              Bevies
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ () => { this.switchTab(1) }}
+        >
+          <View style={ styles.searchTab }>
+            <Text style={ (this.state.activeTab == 1)
+              ? styles.searchTabTextActive
+              : styles.searchTabText }>
+              Users
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
     );
   },
   
   render() {
     return (
       <View style={ styles.container }>
-      	<ListView
-          dataSource={ this.state.dataSource }
-          style={ styles.bevyPickerList }
-          scrollRenderAheadDistance={ 300 }
-          removeClippedSubviews={ true }
-          initialListSize={ 10 }
-          pageSize={ 10 }
-          renderRow={(bevy) => {
-            var imageUri = bevy.image_url + '?w=50&h=50';
-            if(bevy._id == -1) return <View />; // disallow posting to frontpage
-            return (
-              <View style={ styles.bevyRow }> 
-                <TouchableHighlight
-                  underlayColor='rgba(0,0,0,.1)'
-                  style={styles.bevyButton}
-                  onPress={() => {
-                    // switch bevy
-                    BevyActions.switchBevy(bevy._id);
-                    this.props.searchNavigator.jumpTo(routes.SEARCH.OUT);
-                    
-                  }}
-                >
-                  <View style={ styles.bevyPickerItem }>
-                    <Image
-                      style={ styles.bevyPickerImage }
-                      source={{ uri: imageUri }}
-                    />
-                    <Text style={ styles.bevyPickerName }>
-                      { bevy.name }
-                    </Text>
-                  </View>
-                </TouchableHighlight>
-                { this._renderSubSwitch(bevy) }
-              </View>
-            );
-          }}
-        />
+        { this._renderTabBar() }
+        <ViewPagerAndroid
+          ref={(pager) => this.pager = pager }
+          style={ styles.viewPager }
+          initialPage={ 0 }
+          keyboardDismissMode='on-drag'
+          onPageScroll={() => {}}
+          onPageSelected={ this.onPageSelected }
+        >
+          <View style={ styles.searchPage }>
+            <ListView
+              dataSource={ this.state.ds }
+              style={ styles.searchItemList }
+              contentContainerStyle={{ paddingBottom: 10 }}
+              scrollRenderAheadDistance={ 300 }
+              removeClippedSubviews={ true }
+              initialListSize={ 10 }
+              pageSize={ 10 }
+              renderHeader={() => 
+                <View style={ styles.sectionHeader }>
+                  <Image
+                    style={ styles.sectionIcon }
+                    source={{ uri: constants.siteurl + '/img/logo_100.png' }}
+                  />
+                  <Text style={ styles.sectionTitle }>
+                    Bevies
+                  </Text>
+                </View>
+              }
+              renderRow={ bevy => 
+                <BevySearchItem
+                  key={ 'bevysearchitem:' + bevy._id }
+                  bevy={ bevy }
+                />
+              }
+            />
+          </View>
+          <View style={ styles.searchPage }>
+
+          </View>
+        </ViewPagerAndroid>
       </View>
     );
   }
@@ -140,48 +186,55 @@ var SearchView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 48
+    paddingTop: 48,
+    backgroundColor: '#EEE'
   },
-  bevyRow: {
+  tabbar: {
+    width: constants.width,
+    height: 40,
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  searchTab: {
     flex: 1,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
-    justifyContent: 'space-between',
-    paddingRight: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    justifyContent: 'center'
   },
-  publicBevyTitle: {
-    fontSize: 17,
-    textAlign: 'center'
+  searchTabText: {
+    color: '#AAA'
   },
-  bevyPickerList: {
-    backgroundColor: '#fff',
-    flex: 1,
-    flexDirection: 'column'
+  searchTabTextActive: {
+    color: '#2CB673'
   },
-  bevyPickerItem: {
-    backgroundColor: '#fff',
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 47,
-    padding: 10,
+  viewPager: {
+    flex: 1
   },
-  bevyPickerImage: {
-    width: 36,
+  searchPage: {
+    flex: 1
+  },
+  sectionHeader: {
+    backgroundColor: '#FFF',
     height: 36,
-    borderRadius: 18
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  bevyPickerName: {
+  sectionIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    marginRight: 10
+  },
+  sectionTitle: {
+    color: '#AAA'
+  },
+  searchItemList: {
     flex: 1,
-    textAlign: 'left',
-    fontSize: 17,
-    paddingLeft: 15
-  },
-  bevyButton: {
-    flex: 2
+    flexDirection: 'column',
+    paddingTop: 10
   }
 });
 

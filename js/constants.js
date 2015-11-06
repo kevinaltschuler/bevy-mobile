@@ -94,6 +94,7 @@ exports.BEVY = {
 
   SEARCHING: 'bevy_searching',
   SEARCH_COMPLETE: 'bevy_search_complete',
+  SEARCH_ERROR: 'bevy_search_error',
   CHANGE_ALL: 'bevy_change_all',
   CHANGE_ONE: 'bevy_change_one',
   SWITCHED: 'bevy_switched',
