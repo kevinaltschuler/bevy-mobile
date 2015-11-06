@@ -81,7 +81,8 @@ var BevyBar = React.createClass({
             PostActions.sort('new');
             break;
         }
-      }.bind(this)
+      }.bind(this),
+      'Sort Posts By:'
     );
   },
 
