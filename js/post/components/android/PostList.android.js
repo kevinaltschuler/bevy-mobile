@@ -143,6 +143,7 @@ var PostList = React.createClass({
           bevyNavigator={ this.props.bevyNavigator }
           bevyRoute={ this.props.bevyRoute }
           height={ this.state.navHeight }
+          disappearing={ true }
         />
       </View>
     );
