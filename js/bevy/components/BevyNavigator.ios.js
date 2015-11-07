@@ -189,7 +189,7 @@ var BevyView = React.createClass({
         underlayColor={'rgba(0,0,0,0.1)'}
         onPress={() => {
           ActionSheetIOS.showActionSheetWithOptions({
-            options: ['Top', 'New', 'cancel'],
+            options: ['Top', 'New', 'Cancel'],
             cancelButtonIndex: 2
           },
           (buttonIndex) => {

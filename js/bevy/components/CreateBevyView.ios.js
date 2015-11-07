@@ -269,18 +269,20 @@ var styles = StyleSheet.create({
   },
 
   navButtonLeft: {
-    flex: 1
+    flex: 1,
+    marginLeft: 10
   },
   navButtonRight: {
     flex: 1,
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    marginRight: 10
   },
   navButtonTextLeft: {
-    color: '#ddd',
+    color: '#fff',
     fontSize: 17
   },
   navButtonTextRight: {
-    color: '#ddd',
+    color: '#fff',
     fontSize: 17,
     textAlign: 'right'
   },

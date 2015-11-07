@@ -94,7 +94,7 @@ var FullEventBody = React.createClass({
           title={ 
             date.toLocaleDateString("en", {month: "short"}) + ", " + 
             date.toLocaleDateString("en", {day: "numeric"}) + ' ' + 
-            date.toLocaleTimeString()
+            date.toLocaleTimeString("en", {hour: "numeric", minute: "numeric"})
           }
           icon={<Icon size={30} name='calendar' style={{color: '#999'}}/>}
         />

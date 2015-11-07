@@ -162,6 +162,7 @@ var Post = React.createClass({
       <ImageOverlay 
         images={ this.state.post.images }
         isVisible={ this.state.overlayVisible } 
+        post={ this.state.post }
       />
     );
   },

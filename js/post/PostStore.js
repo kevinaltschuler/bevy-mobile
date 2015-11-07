@@ -222,6 +222,24 @@ _.extend(PostStore, {
         break;
 
       case POST.DESTROY:
+        var post_id = payload.post_id;
+        var post = this.posts.get(post_id);
+        if(_.isEmpty(post)) {
+          console.log('nothing to destroy');
+          break;
+        }
+
+        post.url = constants.apiurl + '/bevies/' + post.bevy + '/posts/' + post_id;
+
+        post.destroy({
+          success: function(model, response) {
+            this.trigger(POST.CHANGE_ALL);
+            this.trigger(POST.REFRESH);
+          }.bind(this),
+          error: function(err) {
+            console.log(err);
+          }
+        });
 
         break;
 

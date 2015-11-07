@@ -64,7 +64,7 @@ var TagModal = React.createClass({
   },
 
   render() {
-    var title = (this.props.activeBevy._id == -1) ? 'filter posts by bevy' : 'filter posts by tag';
+    var title = (this.props.activeBevy._id == -1) ? 'Filter posts by bevy' : 'Filter posts by tag';
     if(!this.state.isVisible) return null;
     return (
       <Modal

@@ -52,6 +52,8 @@ exports.POST = {
   SORT: 'post_sort',
   UPDATE_LIST: 'post_update_list',
   POST_CREATED: 'post_created',
+  REFRESH: 'post_refresh',
+  UPDATE: 'post_update',
 
   FETCH: 'post_fetch',
 
@@ -114,6 +116,7 @@ exports.USER = {
   LOGIN_GOOGLE: 'user_login_google',
   LOGOUT: 'user_logout',
   CHANGE_PROFILE_PICTURE: 'user_change_profile_picture',
+  SWITCH_USER: 'user_switch_user',
 
   LOGIN_ERROR: 'user_login_error',
   LOGIN_SUCCESS: 'user_login_success',

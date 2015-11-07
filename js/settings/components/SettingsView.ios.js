@@ -35,8 +35,15 @@ var SettingsView = React.createClass({
 
   getInitialState() {
     return {
-      profilePicture: (_.isEmpty(this.props.user.image_url)) ? '/img/user-profile-icon.png' : this.props.user.image_url
+      profilePicture: (_.isEmpty(this.props.user.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : this.props.user.image_url
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    this.setState({
+      profilePicture: (_.isEmpty(nextProps.user.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : nextProps.user.image_url
+    });
   },
 
   _renderUserHeader() {
@@ -57,7 +64,7 @@ var SettingsView = React.createClass({
             />
             <View style={ styles.profileDetails }>
               <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-              <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
+              <Text style={ styles.profileEmail }>{ this.props.user.email || 'no email' }</Text>
             </View>
           </View>
         </View>
@@ -120,6 +127,19 @@ var SettingsView = React.createClass({
           }}
         />
         <SettingsItem
+          title='Switch Account'
+          icon= {<Icon
+              name={'ios-shuffle-strong'}
+              size={30}
+              color='rgba(0,0,0,.3)'
+            />}
+          onPress={() => {
+            var route = routes.PROFILE.SWITCH_USER;
+            route.profileUser = this.props.user;
+            this.props.mainNavigator.push(route);
+          }}
+        />
+        <SettingsItem
           title='Sign Out'
           icon= {<Icon
               name={'ios-undo'}
@@ -148,12 +168,16 @@ var SettingsView = React.createClass({
           <Text style={ styles.settingsTitle }>Account</Text>
           { this._renderAccountSettings() }
 
-          {/*<Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>Settings</Text>
-          <SettingsItem
-            title='Placeholder Setting'
-            onPress={() => {}}
-            checked={ true }
-          />*/}
+          <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>About</Text>
+          <View style={ styles.settingItem}>
+            <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
+              { icon }
+            </View>
+            <Text style={ styles.settingTitle }>
+              { this.props.title }
+            </Text>
+            { check }
+          </View>
         </ScrollView>
       </View>
     );

@@ -12,8 +12,11 @@ var {
   Navigator,
   ScrollView,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
+
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var SideMenu = require('react-native-side-menu');
 var ChatView = require('./ChatView.ios.js');
@@ -87,12 +90,43 @@ var ChatNavigator = React.createClass({
           if(route.name == routes.CHAT.LISTVIEW.name) {
             navbarText = 'Chat'
           }
+          if(navbarText.length > 30) {
+            navbarText = navbarText.substr(0,30);
+            navbarText = navbarText.concat('...');
+          }
 
           var backButton = (route.name != routes.CHAT.CHATVIEW.name)
           ? <View />
-          : <BackButton onPress={() => {
-            navigator.pop();
-          }.bind(this)} />;
+          : <TouchableOpacity
+              activeOpacity={ 0.5 }
+              onPress={() => {
+                navigator.pop();
+              }} 
+              style={ styles.backButtonContainer } 
+            >
+              <View style={ styles.backButton }>
+                <Icon
+                  name='ios-arrow-left'
+                  size={ 30 }
+                  color={ 'rgba(0,0,0,.3)' }
+                  style={ styles.backButtonIcon }
+                />
+              </View>
+            </TouchableOpacity>;
+
+          var infoButton = (route.name != routes.CHAT.CHATVIEW.name)
+          ? <View/>
+          : <TouchableOpacity
+              activeOpacity={.5}
+              onPress={{}}
+              style={{marginRight: 10, height: 39, width: 39, alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Icon
+                name='ios-information'
+                size={30}
+                color="rgba(0,0,0,0.3)"
+              />
+            </TouchableOpacity>;
 
           return (
             <View style={{ flex: 1, backgroundColor: '#eee'}}>
@@ -101,6 +135,7 @@ var ChatNavigator = React.createClass({
                 chatNavigator={ navigator }
                 left={ backButton }
                 center={ navbarText }
+                right={infoButton}
                 { ...this.props }
               />
               { view }
@@ -120,6 +155,27 @@ var styles = StyleSheet.create({
   headerStyle: {
     backgroundColor: '#2CB673',
     flex: 1
+  },
+  backButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 39,
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginLeft: 5
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
+  backButtonIcon: {
+    paddingLeft: 5,
+    paddingRight: 5,
+    width: 30,
+    height: 30
+  },
+  backButtonText: {
+    fontSize: 15
   }
 });
 

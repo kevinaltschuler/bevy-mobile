@@ -196,7 +196,8 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   profileHeader: {
     flexDirection: 'row',

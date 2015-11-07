@@ -81,6 +81,7 @@ var PostList = React.createClass({
     BevyStore.on(POST.LOADED, this._rerender);
     BevyStore.on(POST.LOADING, this.setLoading);
     PostStore.on(POST.LOADING, this.setLoading);
+    PostStore.on(POST.REFRESH, this.onRefresh);
 
     RCTRefreshControl.configure({
       node: this.refs[LISTVIEW],
@@ -98,6 +99,7 @@ var PostList = React.createClass({
     BevyStore.off(POST.LOADING, this.setLoading);
     PostStore.off(POST.LOADING, this.setLoading);
     PostStore.off(POST.POST_CREATED, this.toComments);
+    PostStore.off(POST.REFRESH, this.onRefresh);
   },
 
   _rerender() {

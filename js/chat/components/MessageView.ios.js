@@ -16,9 +16,11 @@ var {
   ListView,
   TextInput,
   Image,
-  createElement
+  createElement,
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
-
+var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
@@ -52,7 +54,8 @@ var MessageView = React.createClass({
       messageValue: '',
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
-      scrollY: 0
+      scrollY: 0,
+      end: false
     };
   },
   
@@ -110,7 +113,7 @@ var MessageView = React.createClass({
       return;
     }
     if(this.isTouching) {
-      if(scrollY < -40) {
+      if(scrollY < -60) {
         if(!this.state.isRefreshing) {
           this.setState({
             isRefreshing: true
@@ -121,7 +124,7 @@ var MessageView = React.createClass({
     }
     if((this.state.scrollY - scrollY) > 3 && this.state.scrollY < -5) {
       //console.log('blurring');
-      this.refs.MessageInput.blur();
+      //this.refs.MessageInput.blur();
     }
     if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
       //console.log('focusing');
@@ -141,6 +144,9 @@ var MessageView = React.createClass({
   },
 
   onRefresh: function() {
+    this.setState({
+      isRefreshing: true
+    });
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
@@ -173,12 +179,40 @@ var MessageView = React.createClass({
     });
   },
 
+  onEndReached() {
+    this.setState({
+      end: true
+    })
+  },
+
   renderHeader: function() {
-    var refreshingIndicator = createElement(RefreshingIndicator, { description: 'Loading...' });
-    if(this.state.isRefreshing)
-      return refreshingIndicator;
-    else
-      return null;
+    if(_.isEmpty(this.state.messages)) return <View />;
+    if(!this.state.isRefreshing) {
+      return (
+        <TouchableOpacity
+          activeOpacity={.5}
+          style={{backgroundColor: 'rgba(0,0,0,.1)', borderRadius: 2, paddingHorizontal: 10, paddingVertical: 5, justifyContent: 'center', alignItems: 'center', marginVertical: 10}}
+          onPress={() => {
+            this.onRefresh();
+          }}
+        >
+          <Text style={{color: '#fff', fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={ styles.loading }>
+          <Spinner 
+            isVisible={true} 
+            size={40} 
+            type={'Arc'} 
+            color={'#2cb673'}
+          />
+        </View>
+      );
+    }
   },
 
   clearAndRetainFocus: function(evt, elem) {
@@ -192,9 +226,17 @@ var MessageView = React.createClass({
   render: function () {
 
     return (
-      <View style={[ styles.container, {
-        marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace - 48 // tab bar height
-      } ]} >
+      <View 
+        style={[ styles.container, {
+          marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace - 48 // tab bar height
+        } ]} 
+        onStartShouldSetResponder={() => {
+          this.refs.MessageInput.blur();
+          this.setState({
+            keyboardSpace: 0
+          });
+        }}
+      >
         <ListView
           ref='messageList'
           style={ styles.scrollContainer }
@@ -202,11 +244,30 @@ var MessageView = React.createClass({
           onResponderGrant={ this.handleResponderGrant }
           onResponderRelease={ this.handleResponderRelease }
           decelerationRate={ 0.9 }
+          scrollRenderAheadDistance={500}
           dataSource={ this.state.dataSource }
-          renderRow={ (message) => (
-            <MessageItem key={ message._id } message={ message } user={ this.props.user }/>
-          )}
+          showsVerticalScrollIndicator={true}
+          onEndReached={ this.onEndReached }
+          renderRow={ (message, sectionID, rowID, highlightRow) => {
+            //console.log('message', message);
+            //console.log(this.state.dataSource._dataBlob.s1[rowID]);
+            var hidePic = false;
+            if(rowID > 0) {
+              if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id == message.author._id) {
+                var hidePic = true;
+              }
+            }
+            return (
+              <MessageItem 
+                key={ message._id } 
+                message={ message } 
+                user={ this.props.user } 
+                hidePic={hidePic}
+              />
+            )
+          }}
           renderHeader={ this.renderHeader }
+          renderFooter={() => { return <View style={{height: 20}}/>}}
         />
         <TextInput
           style={[ styles.textInput ]}
@@ -217,7 +278,7 @@ var MessageView = React.createClass({
           onChange={ this.onChange }
           onSubmitEditing={ this.onSubmitEditing }
           clearButtonMode={ 'while-editing' }
-          onEndEditing={this.clearAndRetainFocus}
+          onSubmitEditing={this.clearAndRetainFocus}
         />
       </View>
     );
@@ -245,6 +306,12 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     color: '#000'
   },
+  loading: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 })
 
 module.exports = MessageView;
