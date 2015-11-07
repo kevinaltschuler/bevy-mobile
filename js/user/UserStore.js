@@ -122,7 +122,6 @@ _.extend(UserStore, {
             }
           });
         }
-
         break;
 
       case USER.LOGIN_GOOGLE:
@@ -176,6 +175,7 @@ _.extend(UserStore, {
             })
           },
           function(error) {
+            error = JSON.parse(error);
             console.error(error);
             this.trigger(USER.LOGIN_ERROR, error.message);
           }.bind(this),
@@ -190,6 +190,33 @@ _.extend(UserStore, {
           }.bind(this));
         } else {
           // ios
+        }
+        break;
+
+      case USER.RESET_PASSWORD:
+        var email = payload.email;
+
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(constants.siteurl + '/forgot', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: email
+            })
+          },
+          function(error) {
+            error = JSON.parse(error);
+            console.error(error);
+            this.trigger(USER.RESET_PASSWORD_ERROR, error.message);
+          }.bind(this),
+          function(data) {
+            this.trigger(USER.RESET_PASSWORD_SUCCESS);
+          }.bind(this));
+        } else {
+
         }
         break;
 

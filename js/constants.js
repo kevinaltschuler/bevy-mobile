@@ -131,9 +131,12 @@ exports.USER = {
   LINK_ACCOUNT: 'user_link_account',
   UNLINK_ACCOUNT: 'user_unlink_account',
   REGISTER: 'user_register',
+  RESET_PASSWORD: 'user_reset_password',
 
   LOGIN_ERROR: 'user_login_error',
   LOGIN_SUCCESS: 'user_login_success',
+  RESET_PASSWORD_SUCCESS: 'user_reset_password_success',
+  RESET_PASSWORD_ERROR: 'user_reset_password_error',
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded',
 

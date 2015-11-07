@@ -48,6 +48,13 @@ var UserActions = {
     });
   },
 
+  resetPassword(email) {
+    Dispatcher.dispatch({
+      actionType: USER.RESET_PASSWORD,
+      email: email
+    });
+  },
+
   search(query) {
     Dispatcher.dispatch({
       actionType: USER.SEARCH,

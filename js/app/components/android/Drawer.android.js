@@ -90,7 +90,7 @@ var Drawer = React.createClass({
     if(!this.props.loggedIn) {
       return (
         <View style={ styles.myBeviesHeader }>
-          <Text style={ styles.myBeviesText }>Public Bevies</Text>
+          <Text style={ styles.myBeviesText }>Bevies</Text>
         </View>
       );
     } else {
