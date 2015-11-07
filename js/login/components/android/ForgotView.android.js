@@ -39,7 +39,6 @@ var ForgotView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <Text style={ styles.title }>Forgot Password</Text>
         <TextInput
           style={ styles.emailInput }
           autoCorrect={ false }
@@ -68,12 +67,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#2CB673'
   },
-  title: {
-    color: '#FFF',
-    fontSize: 24,
-    textAlign: 'center',
-    marginTop: 20
-  },
   emailInput: {
     width: (constants.width / 3) * 2,
     color: '#FFF',
@@ -86,7 +79,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF',
-    borderRadius: 24,
     marginBottom: 10
   },
   requestButtonText: {

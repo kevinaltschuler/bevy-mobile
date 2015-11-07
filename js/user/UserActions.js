@@ -39,6 +39,15 @@ var UserActions = {
     }); 
   },
 
+  register(username, password, email) {
+    Dispatcher.dispatch({
+      actionType: USER.REGISTER,
+      username: username,
+      password: password,
+      email: (email == undefined) ? '' : email
+    });
+  },
+
   search(query) {
     Dispatcher.dispatch({
       actionType: USER.SEARCH,

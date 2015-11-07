@@ -68,7 +68,7 @@ var LoginBar = React.createClass({
           <Icon
             name='arrow-back'
             size={ 30 }
-            color='#666'
+            color='#FFF'
           />
         </View>
       </TouchableNativeFeedback>
@@ -112,7 +112,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#fff'
+    backgroundColor: '#2CB673'
   },
   backButton: {
     height: 48,
@@ -122,11 +122,6 @@ var styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8
   },
-  backButtonText: {
-    color: '#000',
-    fontSize: 15
-  },
-
   title: {
     position: 'absolute',
     width: constants.width,
@@ -139,7 +134,7 @@ var styles = StyleSheet.create({
   },
   titleText: {
     flex: 1,
-    color: '#000',
+    color: '#FFF',
     fontSize: 15,
     textAlign: 'center'
   }

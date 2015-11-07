@@ -130,6 +130,7 @@ exports.USER = {
   SWITCH_USER: 'user_switch_user',
   LINK_ACCOUNT: 'user_link_account',
   UNLINK_ACCOUNT: 'user_unlink_account',
+  REGISTER: 'user_register',
 
   LOGIN_ERROR: 'user_login_error',
   LOGIN_SUCCESS: 'user_login_success',

@@ -142,6 +142,7 @@ _.extend(UserStore, {
         });
 
         break;
+      
       case USER.LOGOUT:
         // remove google token
         AsyncStorage.removeItem('google_id');
@@ -155,8 +156,44 @@ _.extend(UserStore, {
         this.trigger(BEVY.CHANGE_ALL);
         break;
 
-      case USER.UPDATE:
+      case USER.REGISTER:
+        var username = payload.username;
+        var password = payload.password;
+        var email = payload.email;
 
+        // create user and switch to it directly on success
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(constants.apiurl + '/users', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: username,
+              password: password,
+              email: email
+            })
+          },
+          function(error) {
+            console.error(error);
+            this.trigger(USER.LOGIN_ERROR, error.message);
+          }.bind(this),
+          function(data) {
+            // success
+            var user = JSON.parse(data);
+            this.setUser(user);
+            AsyncStorage.setItem('user', JSON.stringify(user))
+            .then((err, result) => {
+            });
+            this.trigger(USER.LOGIN_SUCCESS, user);
+          }.bind(this));
+        } else {
+          // ios
+        }
+        break;
+
+      case USER.UPDATE:
         break;
 
       case USER.CHANGE_PROFILE_PICTURE:
