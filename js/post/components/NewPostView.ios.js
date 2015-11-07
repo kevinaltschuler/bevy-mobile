@@ -58,7 +58,7 @@ var NewPostView = React.createClass({
       selected = this.props.myBevies[1];
     }
     console.log(selected);
-    var tag = selected.tags[0];
+    var tag = (_.isEmpty(selected)) ? {name: 'tags loading', color: '#fff'} : selected.tags[0];
 
     return {
       selected: selected,

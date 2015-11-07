@@ -308,7 +308,7 @@ var CommentView = React.createClass({
           left={
             <BackButton
               color='#fff'
-              text='back'
+              text='Back'
               onPress={()=>{
                 this.props.mainNavigator.pop();
               }}

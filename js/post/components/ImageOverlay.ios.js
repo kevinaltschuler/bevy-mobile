@@ -25,7 +25,8 @@ var ImageOverlay = React.createClass({
 
   propTypes: {
     isVisible: React.PropTypes.bool,
-    images: React.PropTypes.array
+    images: React.PropTypes.array,
+    post: React.PropTypes.object
   },
 
   getInitialState() {
@@ -152,6 +153,11 @@ var ImageOverlay = React.createClass({
         <View>
           <BlurView blurType='dark' style={styles.container}>
             <View>
+              <View style={styles.topBar}>
+                <Text style={styles.title}>
+                  {this.props.post.title}
+                </Text>
+              </View>
               <Swiper 
                 contentContainerStyle={styles.container} 
                 showsButtons={false}            
@@ -264,6 +270,21 @@ var styles = StyleSheet.create({
     width: constants.width,
     height: constants.height - 48 - 10 - 10 // top bar plus padding
   },
+  topBar: {
+    position: 'absolute', 
+    top: 0, 
+    height: 96, 
+    flexDirection: 'row', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#333',
+    width: constants.width
+  },
+  title: {
+    color: '#fff',
+    fontSize: 20,
+    marginTop: 8
+  }
 });
 
 module.exports = ImageOverlay;

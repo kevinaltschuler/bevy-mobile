@@ -6,7 +6,9 @@ var {
   Text,
   TouchableHighlight,
   StyleSheet,
-  Modal
+  Modal,
+  TouchableOpacity,
+  TouchableWithoutFeedback
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
@@ -44,77 +46,86 @@ var AddBevyModal = React.createClass({
         animated={ true }
         transparent={ true }
       >
-        <BlurView blurType='dark' style={ styles.container}>
-          <View style={ styles.panel }>
-              <View style={ styles.topBar }>
-                <TouchableHighlight
-                  underlayColor='rgba(0,0,0,0.2)'
-                  style={ styles.closeButton }
-                  onPress={() => {
-                    this.setState({
-                      isVisible: false
-                    });
-                    this.props.onHide();
-                  }}
-                >
-                  <Icon
-                    name='ios-close-empty'
-                    size={ 30 }
-                    style={{ width: 30, height: 30 }}
-                    color='#333'
-                  />
-                </TouchableHighlight>
-                <Text style={ styles.panelHeaderText }>Add a Bevy</Text>
-              </View>
-            <View style={ styles.actionRow }>
-              <View style={ styles.actionRowItem }>
-                <Text style={ styles.actionRowItemText }>Search</Text>
-                <TouchableHighlight
-                  underlayColor='#eee'
-                  style={ styles.actionRowItemButton }
-                  onPress={() => {
-                    var searchNavigator = constants.getSearchNavigator();
-                    // go to search
-                    searchNavigator.push(routes.SEARCH.IN);
-                    // close self
-                    this.props.onHide();
-                    // close the side menu
-                    this.props.menuActions.close();
-                  }}
-                >
-                  <Icon
-                    name='ios-search'
-                    color='#aaa'
-                    size={ 80 }
-                    style={{ width: 80, height: 80, borderRadius: 15 }}
-                  />
-                </TouchableHighlight>
-              </View>
-              <View style={ styles.actionRowItem }>
-                <Text style={ styles.actionRowItemText }>Create</Text>
-                <TouchableHighlight
-                  underlayColor='#eee'
-                  style={ styles.actionRowItemButton }
-                  onPress={() => {
-                    // close self
-                    this.props.onHide();
-                    // close the side menu
-                    this.props.menuActions.close();
-                    // go to new bevy view
-                    this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-                  }}
-                >
-                  <Icon
-                    name='ios-plus-empty'
-                    color='#aaa'
-                    size={ 80 }
-                    style={{ width: 80, height: 80, borderRadius: 15 }}
-                  />
-                </TouchableHighlight>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            this.setState({
+              isVisible: false
+            });
+            this.props.onHide();
+          }}
+          style={styles.container}
+        >
+          <BlurView blurType='dark' style={ styles.container}>
+            <View style={ styles.panel }>
+                <View style={ styles.topBar }>
+                  <TouchableOpacity
+                    activeOpacity={.5}
+                    style={ styles.closeButton }
+                    onPress={() => {
+                      this.setState({
+                        isVisible: false
+                      });
+                      this.props.onHide();
+                    }}
+                  >
+                    <Icon
+                      name='ios-close-empty'
+                      size={ 48 }
+                      color='#555'
+                    />
+                  </TouchableOpacity>
+                  <View style={{flex: 2, width: 210, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={ styles.panelHeaderText }>Add a Bevy</Text>
+                  </View>
+                </View>
+              <View style={ styles.actionRow }>
+                <View style={ styles.actionRowItem }>
+                  <Text style={ styles.actionRowItemText }>Search</Text>
+                  <TouchableHighlight
+                    underlayColor='#eee'
+                    style={ styles.actionRowItemButton }
+                    onPress={() => {
+                      var searchNavigator = constants.getSearchNavigator();
+                      // go to search
+                      searchNavigator.push(routes.SEARCH.IN);
+                      // close self
+                      this.props.onHide();
+                      // close the side menu
+                      this.props.menuActions.close();
+                    }}
+                  >
+                    <Icon
+                      name='ios-search'
+                      color='#aaa'
+                      size={ 80 }
+                    />
+                  </TouchableHighlight>
+                </View>
+                <View style={ styles.actionRowItem }>
+                  <Text style={ styles.actionRowItemText }>Create</Text>
+                  <TouchableHighlight
+                    underlayColor='#eee'
+                    style={[styles.actionRowItemButton, {paddingHorizontal: 30}]}
+                    onPress={() => {
+                      // close self
+                      this.props.onHide();
+                      // close the side menu
+                      this.props.menuActions.close();
+                      // go to new bevy view
+                      this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+                    }}
+                  >
+                    <Icon
+                      name='ios-plus-empty'
+                      color='#aaa'
+                      size={ 80 }
+                    />
+                  </TouchableHighlight>
+                </View>
               </View>
             </View>
-          </View>
-        </BlurView>
+          </BlurView>
+        </TouchableWithoutFeedback>
       </Modal>
     );
   }
@@ -154,10 +165,11 @@ var styles = StyleSheet.create({
 
   closeButton: {
     height: 48,
-    paddingLeft: 10,
-    paddingRight: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    padding: 5,
+    marginLeft: 20,
+    marginTop: 20
   },
   closeButtonContainer: {
     flexDirection: 'row',
@@ -180,7 +192,8 @@ var styles = StyleSheet.create({
   panelHeaderText: {
     marginTop: 15,
     fontSize: 22,
-    color: '#666'
+    color: '#666',
+    marginLeft: -20
   },
   actionRow: {
     flex: 1,
@@ -194,6 +207,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingLeft: 6,
     paddingRight: 6
   },
@@ -206,7 +220,9 @@ var styles = StyleSheet.create({
   actionRowItemButton: {
     flex: 1,
     borderRadius: 15,
-    paddingLeft: 20
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 

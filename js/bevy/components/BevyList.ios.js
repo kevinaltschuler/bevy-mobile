@@ -101,9 +101,11 @@ var BevyList = React.createClass({
     );
     return (
       <View style={ styles.myBeviesHeader }>
-        <Text style={ styles.myBeviesHeaderText }>
-          My Bevies
-        </Text>
+        <View style={styles.myBeviesHeaderTextWrapper}>
+          <Text style={ styles.myBeviesHeaderText }>
+            My Bevies
+          </Text>
+        </View>
         <TouchableHighlight
           underlayColor='#333'
           style={ styles.bevyAddButton }
@@ -120,7 +122,7 @@ var BevyList = React.createClass({
           onHide={ this.onHideModal }
           isVisible={ this.state.showAddBevyModal }
           mainNavigator={ this.props.mainNavigator }
-          menuActions={ this.props.menuActions }
+          menuActions={ this.context.menuActions }
         />
       </View>
     );
@@ -228,10 +230,19 @@ var styles = StyleSheet.create({
     borderBottomWidth: .5,
     height: 48,
     borderTopColor: 'rgba(255,255,255,.5)',
-    borderBottomColor: 'rgba(255,255,255,.5)'
+    borderBottomColor: 'rgba(255,255,255,.5)',
+    backgroundColor: '#333'
+  },
+  myBeviesHeaderTextWrapper: {
+    justifyContent: 'center',
+    borderTopWidth: .5,
+    borderBottomWidth: .5,
+    height: 48,
+    borderTopColor: 'rgba(255,255,255,.5)',
+    borderBottomColor: 'rgba(255,255,255,.5)',
+    flex: 1
   },
   myBeviesHeaderText: {
-    flex: 1,
     fontSize: 15,
     color: '#999',
     paddingLeft: 10
@@ -240,7 +251,7 @@ var styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
   },
 
   profileHeader: {

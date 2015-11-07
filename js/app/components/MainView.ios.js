@@ -18,9 +18,11 @@ var NewPostView = require('./../../post/components/NewPostView.ios.js');
 var CreateBevyView = require('./../../bevy/components/CreateBevyView.ios.js');
 var CommentView = require('./../../post/components/CommentView.ios.js');
 var ProfileView = require('./../../user/components/ProfileView.ios.js');
+var SwitchUserView = require('./../../user/components/SwitchUserView.ios.js');
 
 var constants = require('./../../constants');
 var PostStore = require('./../../post/PostStore');
+var UserStore = require('./../../user/UserStore');
 var POST = constants.POST;
 
 var routes = require('./../../routes');
@@ -85,6 +87,13 @@ var MainView = React.createClass({
                 { ...this.props }
               />
         break;
+
+      case routes.PROFILE.SWITCH_USER.name: 
+        return <SwitchUserView
+                user={this.props.mainRoute.profileUser }
+                linkedAccounts={UserStore.getLinkedAccounts()}
+                { ...this.props }
+               />
 
       case routes.MAIN.TABBAR.name:
       default:

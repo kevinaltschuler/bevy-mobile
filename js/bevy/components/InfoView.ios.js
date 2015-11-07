@@ -160,7 +160,7 @@ var InfoView = React.createClass({
             </Text>
           </View>
         </TouchableHighlight>
-        <View style={[ styles.switchContainer ]}>
+        <View style={ styles.switchContainer }>
             <Text style={ styles.switchDescription }>Public</Text>
             <SwitchIOS
               value={ this.state.public }
@@ -218,7 +218,53 @@ var InfoView = React.createClass({
     );
   },
 
+  _renderAdmins() {
+    var admins = this.props.activeBevy.admins;
+    var adminList = <View/>;
+    if(!_.isEmpty(admins)) {
+      adminList = [];
+      for(var key in admins) {
+        var admin = admins[key];
+        adminList.push(
+          <TouchableHighlight 
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.switchContainer, {
+              borderTopWidth: .5,
+              borderTopColor: '#ddd'
+            }]}
+            onPress={() => {
+                var route = routes.MAIN.PROFILE;
+                route.profileUser = admin;
+                this.props.mainNavigator.push(route);
+              }
+            }
+          >
+            <View style={styles.settingContainer}>
+              <Image 
+                style={styles.relatedImage}
+                source={{ uri: admin.image_url }}
+              />
+              <Text style={styles.settingValue}>
+                { admin.displayName }
+              </Text>
+            </View>
+          </TouchableHighlight>
+          );
+      }
+    }
+    return (
+      <View style={[ styles.actionRow, {
+        marginTop: 15
+      }]}>
+        <Text style={ styles.settingsTitle }>Admins</Text>
+        { adminList }
+      </View>
+    );
+  },
+
   _renderCard() {
+    var privacy = (this.props.activeBevy.settings.privacy == 0) ? 'Public' : 'Private';
+    var privacyLogo = (this.props.activeBevy.settings.privacy == 0) ? 'earth' : 'locked';
     return (
         <View style={styles.infoRow} >
           <View style={styles.picButton}>
@@ -244,14 +290,14 @@ var InfoView = React.createClass({
                 color='#888'
                 style={{ width: 15, height: 15 }}
               />
-              <Text style={ styles.detailText }> Public  </Text>
+              <Text style={ styles.detailText }> {privacy}  </Text>
               <Icon
                 name='ios-people'
                 size={ 15 }
                 color='#888'
                 style={{ width: 15, height: 15 }}
               />
-              <Text style={ styles.detailText }> 18 Subscribers</Text>
+              <Text style={ styles.detailText }> {this.props.activeBevy.subCount} Subscribers</Text>
             </View>
           </View>
         </View>
@@ -265,8 +311,9 @@ var InfoView = React.createClass({
         <ScrollView style={styles.actionRow}>
           { this._renderCard() }
           { this._renderSubSwitch() }
-          { this._renderAdminSettings() }
+          { this._renderAdmins() }
           { this._renderRelatedBevies() }
+          { this._renderAdminSettings() }
         </ScrollView>
       </View>
     );
@@ -366,7 +413,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    backgroundColor: '#fff'
   },
   settingsTitle: {
     color: '#888',
@@ -388,8 +436,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: 8,
+    height: 48,
     paddingLeft: 16,
     paddingRight: 16,
     borderBottomWidth: 1,

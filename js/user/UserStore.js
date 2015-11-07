@@ -243,6 +243,37 @@ _.extend(UserStore, {
 
         break;
 
+      case USER.SWITCH_USER:
+        var account_id = payload.account_id;
+        console.log('switch account', account_id);
+
+        fetch(constants.siteurl + '/switch', 
+        {
+          method: 'post',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: 'dummy',
+            password: 'dummy',
+            user_id: this.user.get('_id'),
+            switch_to_id: account_id
+          })
+        })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log('switched');
+          AsyncStorage.setItem('user', JSON.stringify(res))
+          .then((err, result) => {
+          });
+
+          this.setUser(res);
+          //this.trigger(USER.LOGIN_SUCCESS, res);
+          AppActions.load();
+        });
+        break;
+
       case BEVY.SUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevies = this.user.get('bevies');
@@ -402,7 +433,7 @@ _.extend(UserStore, {
     this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
     //console.log(this.user.toJSON());
-    this.trigger(USER.LOADED)
+    this.trigger(USER.LOADED);
   },
 
   getUser() {

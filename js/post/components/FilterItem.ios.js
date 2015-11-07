@@ -130,11 +130,12 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
-    paddingHorizontal: 10
+    marginBottom: 0,
+    paddingHorizontal: 10,
+    height: 48
   },
   label: {
-    marginLeft: 10
+    marginLeft: 10,
   }
 });
 module.exports = FilterItem;

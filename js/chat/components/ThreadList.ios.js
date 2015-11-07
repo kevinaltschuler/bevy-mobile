@@ -9,8 +9,9 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var constants = require('./../../constants');
-
+var ChatStore = require('./../../chat/ChatStore');
 var ThreadItem = require('./ThreadItem.ios.js');
+var _ = require('underscore');
 
 var ThreadList = React.createClass({
 
@@ -56,6 +57,9 @@ var ThreadList = React.createClass({
 
             var active = false;
             if(thread._id == this.props.activeThread._id) active = true;
+
+            if(_.isEmpty(ChatStore.getThreadName(thread._id)))
+              return <View/>;
 
             return (
               <ThreadItem 

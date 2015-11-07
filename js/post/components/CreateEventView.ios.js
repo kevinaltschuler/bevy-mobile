@@ -223,11 +223,15 @@ var CreateEventView = React.createClass({
       flexDirection: 'column',
       marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace,
     };
-    var bevyImageUrl = this.props.selected.image_url || constants.apiurl + '/img/logo_100.png';
-    var defaultBevies = ['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
-    if(_.contains(defaultBevies, this.props.selected._id)) {
-      bevyImageUrl = constants.apiurl + this.props.selected.image_url;
+    if(this.props.selected) {
+      var bevyImageUrl = this.props.selected.image_url || constants.apiurl + '/img/logo_100.png';
+      var defaultBevies = ['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
+      if(_.contains(defaultBevies, this.props.selected._id)) {
+        bevyImageUrl = constants.apiurl + this.props.selected.image_url;
+      }
     }
+    var bevyName = (this.props.selected) ? this.props.selected.name : ''; 
+    var tagName = (this.props.selected) ? this.props.tag.name : '';
     return (
       <View style={ containerStyle }>
         <Navbar
@@ -288,14 +292,14 @@ var CreateEventView = React.createClass({
               onPress={() => {
                 this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER);
               }}
-              title={'Posting to: ' +  this.props.selected.name }
+              title={'Posting to: ' +  bevyName }
             />
             <SettingsItem
               icon={<View style={{backgroundColor: this.props.tag.color, borderRadius: 15, width: 30, height: 30}}/>}
               onPress={() => {
                 this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
               }}
-              title={'Tag: ' + this.props.tag.name}
+              title={'Tag: ' + tagName}
             />
           </View>
           <ScrollView style={ styles.input }>
@@ -322,7 +326,7 @@ var CreateEventView = React.createClass({
               />
             </View>
             <View style={styles.moreInfo}>
-              <Icon name='information-circled' size={16} color='#666' style={{width: 16, height: 16, marginTop: 12, marginLeft: -5}}/>
+              <Icon name='information-circled' size={16} color='#666' style={{width: 16, height: 16, marginTop: 12, marginLeft: -5, alignSelf: 'flex-start'}}/>
               <TextInput 
                 ref='info'
                 style={styles.moreInfoInput}
@@ -526,7 +530,6 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     flex: 1,
-
   },
   moreInfoInput: {
     flex: 1,

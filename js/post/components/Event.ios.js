@@ -174,7 +174,9 @@ var Event = React.createClass({
           style={ styles.postImage }
           source={{ uri: imageURL }}
           resizeMode='cover'
-        />
+        >
+          <View style={{flex: 2, backgroundColor: 'rgba(0,0,0,.2)', width: constants.width}}/>
+        </Image>
       </View>
     );
   },
@@ -209,6 +211,20 @@ var Event = React.createClass({
 
     return (
       <View style={[styles.postCard, {marginTop: (this.props.inCommentView) ? 10 : 0}]}>
+        <View style={styles.titleRow}>
+          <Image 
+            style={styles.titleImage}
+            source={{ uri: post.author.image_url }}
+          />
+          <View style={styles.titleTextColumn}>
+            <Text numberOfLines={ 1 } style={styles.titleText}>
+              { post.author.displayName } • { post.bevy.name }
+            </Text>
+            <Text style={styles.subTitleText}>
+              { timeAgo(Date.parse(post.created)) }
+            </Text>
+          </View>
+        </View>
         {body}
         <View style={styles.postActionsRow}>
           <TouchableHighlight 
@@ -321,35 +337,33 @@ var styles = StyleSheet.create({
     width: cardWidth,
     paddingLeft: 8,
     paddingRight: 8,
-    marginTop: 8,
-    marginBottom: 0
+    marginVertical: 5
   },
   titleImage: {
-    width: 25,
-    height: 25,
+    width: 30,
+    height: 30,
     backgroundColor: '#000',
-    borderRadius: 12.5,
+    borderRadius: 15,
     marginLeft: 0
   },
   titleTextColumn: {
-    flex: 2,
-    height: 48,
-    width: cardWidth - 40 - 10 - 16 - 100,
+    flex: 1,
+    width: cardWidth - 40 - 10 - 16,
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0)',
     height: 26,
-    marginLeft: 5,
-    paddingTop: 10
+    marginLeft: 10
   },
   titleText: {
+    width: cardWidth - 40 - 10 - 16,
     color: '#282929',
-    fontSize: 12,
+    fontSize: 12
   },
   subTitleText: {
     fontSize: 9,
     color: '#282929'
   },
+
 
   body: {
     flex: 1,

@@ -65,7 +65,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginLeft: 5
   },
   backButton: {
     flexDirection: 'row',

@@ -63,7 +63,9 @@ var SettingsItem = React.createClass({
         }}
       >
         <View style={ styles.settingItem}>
-          { icon }
+          <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
+            { icon }
+          </View>
           <Text style={ styles.settingTitle }>
             { this.props.title }
           </Text>
