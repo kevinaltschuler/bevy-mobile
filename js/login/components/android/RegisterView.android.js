@@ -13,6 +13,7 @@ var {
   TouchableNativeFeedback,
   BackAndroid,
   ToastAndroid,
+  ProgressBarAndroid,
   StyleSheet
 } = React;
 
@@ -36,7 +37,8 @@ var RegisterView = React.createClass({
       username: '',
       password: '',
       email: '',
-      error: ''
+      error: '',
+      loading: false
     };
   },
 
@@ -53,7 +55,9 @@ var RegisterView = React.createClass({
 
   onLoginSuccess(user) {
     // user was created and set in the store
-    // reload the app and pop back to the main tab bar
+    // clear state
+    this.setState(this.getInitialState());
+    // reload the app
     AppActions.load();
     // go back to tab bar
     this.props.mainNavigator.pop();
@@ -62,7 +66,8 @@ var RegisterView = React.createClass({
   },
   onLoginError(error) {
     this.setState({
-      error: error
+      error: error,
+      loading: false
     });
   },
 
@@ -85,15 +90,34 @@ var RegisterView = React.createClass({
       return;
     }
 
+    // send action
     UserActions.register(
       this.state.username,
       this.state.password,
       this.state.email
     );
+
+    // set loading flag
+    this.setState({
+      error: '',
+      loading: true
+    });
   },
 
   registerGoogle() {
     ToastAndroid.show('Feature Not Supported Yet', ToastAndroid.SHORT);
+  },
+
+  _renderLoading() {
+    if(!this.state.loading) return <View />;
+    return (
+      <View style={ styles.progressContainer }>
+        <ProgressBarAndroid styleAttr='SmallInverse' />
+        <Text style={ styles.progressText }>
+          Registering...
+        </Text>
+      </View>
+    );
   },
 
   _renderError() {
@@ -111,6 +135,7 @@ var RegisterView = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderError() }
+        { this._renderLoading() }
         <TextInput
           style={ styles.usernameInput }
           value={ this.state.username }
@@ -185,6 +210,14 @@ var styles = StyleSheet.create({
     marginVertical: 10
   },
   errorText: {
+    color: '#FFF'
+  },
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressText: {
+    marginLeft: 10,
     color: '#FFF'
   },
   usernameInput: {
