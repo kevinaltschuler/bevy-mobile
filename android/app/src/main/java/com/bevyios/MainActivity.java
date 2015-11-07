@@ -1,13 +1,15 @@
-package com.bevy;
+package com.bevyios;
 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.chymtt.reactnativedropdown.DropdownPackage;
 import com.eguma.vibration.Vibration;
 import com.sh3rawi.RNAudioPlayer.*;
+import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.support.v4.app.FragmentActivity;
 
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
@@ -16,10 +18,10 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import com.bevy.FletcherPackage;
-import com.bevy.GoogleAuthPackage;
+import com.bevyios.FletcherPackage;
+import com.bevyios.GoogleAuthPackage;
 
-public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
   private ReactInstanceManager mReactInstanceManager;
   private ReactRootView mReactRootView;
@@ -40,6 +42,7 @@ public class MainActivity extends Activity implements DefaultHardwareBackBtnHand
         .addPackage(new DropdownPackage())
         .addPackage(new Vibration())
         .addPackage(new RNAudioPlayer())
+        .addPackage(new ReactNativeDialogsPackage(this))
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();

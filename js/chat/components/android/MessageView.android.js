@@ -16,13 +16,14 @@ var {
   ProgressBarAndroid,
   StyleSheet
 } = React;
-var ChatBar = require('./ChatBar.android.js');
 var MessageItem = require('./MessageItem.android.js');
 var InvertibleScrollView = require('react-native-invertible-scroll-view');
 var Icon = require('react-native-vector-icons/MaterialIcons');
+var MessageInput = require('./MessageInput.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var CHAT = constants.CHAT;
 var ChatStore = require('./../../ChatStore');
 var ChatActions = require('./../../ChatActions');
@@ -35,13 +36,18 @@ var MessageView = React.createClass({
     loggedIn: React.PropTypes.bool
   },
 
+  getDefaultProps() {
+    return {
+      activeThread: {}
+    };
+  },
+
   getInitialState() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
-      messageInput: '',
       loading: false
     };
   },
@@ -56,11 +62,19 @@ var MessageView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    var messages = ChatStore.getMessage(nextProps.activeThread._id)
-    this.setState({
-      messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages)
-    });
+    //var messages = ChatStore.getMessage(nextProps.activeThread._id)
+    //this.setState({
+    //  messages: messages,
+    //  dataSource: this.state.dataSource.cloneWithRows(messages)
+    //});
+  },
+
+  goBack() {
+    this.props.mainNavigator.pop();
+  },
+
+  goToInfoView() {
+    this.props.mainNavigator.push(routes.MAIN.THREADSETTINGS);
   },
 
   onBackButton() {
@@ -75,7 +89,7 @@ var MessageView = React.createClass({
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
-  _onChatChange: function() {
+  _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       messages: messages,
@@ -84,8 +98,7 @@ var MessageView = React.createClass({
     });
   },
 
-  onSubmitEditing: function(ev) {
-    var text = this.state.messageInput;
+  onSubmitEditing(text) {
     if(_.isEmpty(text)) return;
 
     var user = this.props.user;
@@ -101,37 +114,25 @@ var MessageView = React.createClass({
     });
     this.setState({
       messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages),
-      messageInput: '' // clear text field
+      dataSource: this.state.dataSource.cloneWithRows(messages)
     });
   },
 
-  _renderInput() {
+  _renderInfoButton() {
+    if(this.props.activeThread.type == 'bevy') return <View />; 
     return (
-      <View style={ styles.inputContainer }>
-        <TextInput
-          ref='MessageInput'
-          value={ this.state.messageInput }
-          style={ styles.messageInput }
-          onChangeText={(text) => this.setState({ messageInput: text })}
-          onSubmitEditing={ this.onSubmitEditing }
-          placeholder='Chat'
-          placeholderTextColor='#AAA'
-          underlineColorAndroid='#AAA'
-        />
-        <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#888', false) }
-          onPress={ this.onSubmitEditing }
-        >
-          <View style={ styles.sendMessageButton }>
-            <Icon
-              name='send'
-              size={ 30 }
-              color='#2CB673'
-            />
-          </View>
-        </TouchableNativeFeedback>
-      </View>
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+        onPress={ this.goToInfoView }
+      >
+        <View style={ styles.infoButton }>
+          <Icon
+            name='info-outline'
+            size={ 30 }
+            color='#888'
+          />
+        </View>
+      </TouchableNativeFeedback>
     );
   },
 
@@ -166,10 +167,26 @@ var MessageView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <ChatBar
-          activeThread={ this.props.activeThread }
-          mainNavigator={ this.props.mainNavigator }
-        />
+        <View style={ styles.topBar }>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={ this.goBack }
+          >
+            <View style={ styles.backButton }>
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#888'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <View style={ styles.title }>
+            <Text style={ styles.titleText }>
+              { ChatStore.getThreadName(this.props.activeThread._id) }
+            </Text>
+          </View>
+          { this._renderInfoButton() }
+        </View>
         <ListView
           renderScrollComponent={
             (props) => <InvertibleScrollView {...props} { ...this.state } />
@@ -190,11 +207,14 @@ var MessageView = React.createClass({
                 key={ 'message:' + message._id }
                 message={ message }
                 user={ this.props.user }
+                mainNavigator={ this.props.mainNavigator }
               />
             );
           }}
         />
-        { this._renderInput() }
+        <MessageInput
+          onSubmitEditing={ this.onSubmitEditing }
+        />
       </View>
     );
   }
@@ -206,6 +226,40 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     backgroundColor: '#EEE'
+  },
+  topBar: {
+    width: constants.width,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff'
+  },
+  backButton: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10
+  },
+  infoButton: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 10
+  },
+  title: {
+    flex: 1,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  titleText: {
+    flex: 1,
+    color: '#000',
+    fontSize: 15,
+    flexWrap: 'wrap'
   },
   loadMoreButton: {
     height: 40,
@@ -238,26 +292,6 @@ var styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 10,
     paddingBottom: 20
-  },
-  inputContainer: {
-    height: 48,
-    width: constants.width,
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingLeft: 8,
-  },
-  messageInput: {
-    flex: 1
-  },
-  sendMessageButton: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 8,
-    paddingLeft: 12,
-    paddingRight: 12
   }
 });
 

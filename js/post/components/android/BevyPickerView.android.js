@@ -96,6 +96,10 @@ var BevyPickerView = React.createClass({
         <ListView
           dataSource={ this.state.bevies }
           style={ styles.bevyPickerList }
+          scrollRenderAheadDistance={ 300 }
+          removeClippedSubviews={ true }
+          initialListSize={ 10 }
+          pageSize={ 10 }
           renderRow={(bevy) => {
             if(bevy._id == -1) return <View />;
             return (

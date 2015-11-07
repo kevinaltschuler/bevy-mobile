@@ -19,6 +19,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 
 var ThreadView = React.createClass({
   propTypes: {
@@ -34,8 +35,12 @@ var ThreadView = React.createClass({
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
       ds: ds.cloneWithRows(threads),
-      threads: threads
+      threads: threads,
+      floatingActionOpen: false
     };
+  },
+
+  componentDidMount() {
   },
 
   componentWillReceiveProps(nextProps) {
@@ -44,6 +49,10 @@ var ThreadView = React.createClass({
       ds: this.state.ds.cloneWithRows(threads),
       threads: threads
     });
+  },
+
+  openNewThreadView() {
+    this.props.mainNavigator.push(routes.MAIN.NEWTHREAD);
   },
 
   _renderNoThreadsText() {
@@ -77,11 +86,53 @@ var ThreadView = React.createClass({
     );
   },
 
+  _renderActionBar() {
+    return (
+      <View style={ styles.actionBar }>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+          onPress={ this.openNewThreadView }
+        >
+          <View style={[ styles.actionButton, {
+            borderRightColor: '#62D487',
+            borderRightWidth: 1
+          }]}>
+            <Icon
+              name='create'
+              size={ 20 }
+              color='#FFF'
+            />
+            <Text style={ styles.actionButtonText }>
+              Message
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+          onPress={ this.openNewThreadView }
+        >
+          <View style={ styles.actionButton }>
+            <Icon
+              name='group'
+              size={ 20 }
+              color='#FFF'
+            />
+            <Text style={ styles.actionButtonText }>
+              Group
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
         <ListView
+          style={ styles.threadList }
+          contentContainerStyle={ styles.threadList }
           dataSource={ this.state.ds }
           renderRow={ this._renderThreadItem }
           scrollRenderAheadDistance={ 300 }
@@ -89,6 +140,7 @@ var ThreadView = React.createClass({
           initialListSize={ 10 }
           pageSize={ 10 }
         />
+        { this._renderActionBar() }
       </View>
     );
   }
@@ -102,7 +154,7 @@ var styles = StyleSheet.create({
     borderTopWidth: 1
   },
   threadList: {
-
+    paddingBottom: 36
   },
   panelHeader: {
     height: 30,
@@ -123,6 +175,29 @@ var styles = StyleSheet.create({
     color: '#AAA',
     fontSize: 22,
     textAlign: 'center'
+  },
+  actionBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    width: constants.width,
+    height: 36,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2CB673',
+    opacity: 0.95
+  },
+  actionButton: {
+    flex: 1,
+    height: 36,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  actionButtonText: {
+    color: '#FFF',
+    fontSize: 12,
+    marginLeft: 6
   }
 });
 

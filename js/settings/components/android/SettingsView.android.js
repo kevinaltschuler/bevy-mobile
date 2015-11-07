@@ -151,16 +151,16 @@ var SettingsView = React.createClass({
           </View>
         </TouchableNativeFeedback>
         <Text style={ styles.settingHeader }>
-          App Settings
+          About
         </Text>
-        <TouchableNativeFeedback
-        >
-            <View style={ styles.settingButton }>
-              <Text style={ styles.settingButtonText }>
-                PlaceholderSetting
-              </Text>
-            </View>
-        </TouchableNativeFeedback>
+        <View style={ styles.settingButton }>
+          <Text style={ styles.settingButtonText }>
+            Version
+          </Text>
+          <Text style={ styles.settingButtonTextRight }>
+            { constants.android_version + ' ' + constants.android_phase }
+          </Text>
+        </View>
       </ScrollView>
     );
   }
@@ -190,6 +190,10 @@ var styles = StyleSheet.create({
     flex: 1,
     color: '#000',
     marginLeft: 10
+  },
+  settingButtonTextRight: {
+    color: '#000',
+    marginRight: 10
   },
   logInButton: {
     marginTop: 10,

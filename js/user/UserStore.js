@@ -33,6 +33,8 @@ _.extend(UserStore, {
 
   loggedIn: false, // simple flag to see if user is logged in or not
   user: new User,
+  userSearchQuery: '',
+  userSearchResults: new Users,
 
   linkedAccounts: new Users,
 
@@ -253,6 +255,112 @@ _.extend(UserStore, {
           }.bind(this)
         });
         break;
+
+      case USER.LINK_ACCOUNT:
+        var account = payload.account;
+
+        var linkedAccounts = this.user.get('linkedAccounts');
+        if(_.isEmpty(linkedAccounts)) linkedAccounts = [];
+
+        linkedAccounts.push(account._id);
+        _.uniq(linkedAccounts); // remove dupes
+
+        /*$.ajax({
+          url: constants.apiurl + '/users/' + this.user.get('_id') + '/linkedaccounts',
+          method: 'POST',
+          data: {
+            account_id: account._id
+          },
+          success: function(data) {
+
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });*/
+
+        // add to collection
+        this.linkedAccounts.push(account);
+        this.trigger(USER.CHANGE_ALL);
+        break;
+
+      case USER.UNLINK_ACCOUNT:
+        var account = payload.account;
+
+        var linkedAccounts = this.user.get('linkedAccounts');
+        if(_.isEmpty(linkedAccounts)) linkedAccounts = [];
+
+        linkedAccounts = _.without(linkedAccounts, account._id);
+        _.uniq(linkedAccounts); // remove dupes
+
+        /*$.ajax({
+          url: constants.apiurl + '/users/' + this.user.get('_id') + '/linkedaccounts/' + account._id,
+          method: 'DELETE',
+          success: function(data) {
+
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });*/
+
+        // remove from collection
+        this.linkedAccounts.remove(account._id);
+        this.trigger(USER.CHANGE_ALL);
+        break;
+
+      case USER.SWITCH_USER:
+        var account_id = payload.account_id;
+        console.log('switch account', account_id);
+
+        /*$.ajax({
+          url: constants.siteurl + '/switch',
+          method: 'POST',
+          data: {
+            username: 'dummy',
+            password: 'dummy',
+            user_id: this.user.get('_id'),
+            switch_to_id: account_id
+          },
+          success: function(data) {
+            window.location.reload();
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });*/
+        break;
+
+      case USER.SEARCH:
+        this.trigger(USER.SEARCHING);
+        var query = payload.query;
+
+        var url = (_.isEmpty(query))
+          ? constants.apiurl + '/users'
+          : constants.apiurl + '/users/search/' + query;
+
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: ''
+          }, function(error) {
+            console.error(error);
+            this.trigger(USER.SEARCH_ERROR);
+          }.bind(this), function(data) {
+            data = JSON.parse(data);
+            this.userSearchQuery = query;
+            this.userSearchResults.reset(data);
+            if(this.loggedIn)
+              this.userSearchResults.remove(this.user._id); // remove self from search results
+            this.trigger(USER.SEARCH_COMPLETE);
+          }.bind(this));
+        } else {
+
+        }
+        break;
     }
   },
 
@@ -271,6 +379,14 @@ _.extend(UserStore, {
 
   getLinkedAccounts() {
     return this.linkedAccounts.toJSON();
+  },
+
+  getUserSearchQuery() {
+    return this.userSearchQuery;
+  },
+
+  getUserSearchResults() {
+    return this.userSearchResults.toJSON();
   }
 });
 var dispatchToken = Dispatcher.register(UserStore.handleDispatch.bind(UserStore));

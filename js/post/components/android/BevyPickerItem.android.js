@@ -17,6 +17,7 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var BevyStore = require('./../../../bevy/BevyStore');
 
 var BevyPickerItem = React.createClass({
@@ -30,21 +31,21 @@ var BevyPickerItem = React.createClass({
     if(!this.props.isSelected) return (
       <Icon
         name='check-box-outline-blank'
-        size={ 30 }
+        size={ 40 }
         color='#2CB673'
       />
     );
     return (
       <Icon
         name='check-box'
-        size={ 30 }
+        size={ 40 }
         color='#2CB673'
       />
     );
   },
 
   render() {
-    var image_url = BevyStore.getBevyImage(this.props.bevy._id);
+    var image_url = BevyStore.getBevyImage(this.props.bevy._id, 50, 50);
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
@@ -56,7 +57,9 @@ var BevyPickerItem = React.createClass({
           { this._renderIcon() }
           <Image 
             style={ styles.bevyImage }
-            source={{ uri: image_url }}
+            source={{ uri: _.isEmpty(image_url)
+              ? constants.siteurl + '/img/logo_100.png'
+              : image_url }}
           />
           <Text style={ styles.bevyName }>{ this.props.bevy.name }</Text>
         </View>
@@ -67,16 +70,16 @@ var BevyPickerItem = React.createClass({
 
 var styles = StyleSheet.create({
   bevyPickerItem: {
-    height: 40,
+    height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 12,
     paddingRight: 12
   },
   bevyImage: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
     marginRight: 10,
     marginLeft: 10
   },

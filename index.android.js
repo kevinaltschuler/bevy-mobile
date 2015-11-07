@@ -23,6 +23,7 @@ var TagModal = require('./js/bevy/components/android/TagModal.android.js');
 
 var routes = require('./js/routes');
 var constants = require('./js/constants');
+var APP = constants.APP;
 var BEVY = constants.BEVY;
 var POST = constants.POST;
 var CHAT = constants.CHAT;
@@ -105,6 +106,7 @@ var ChatStore = require('./js/chat/ChatStore');
 var FileStore = require('./js/file/FileStore');
 var NotificationStore = require('./js/notification/NotificationStore');
 var UserStore = require('./js/user/UserStore');
+var AppStore = require('./js/app/AppStore');
 
 var AppActions = require('./js/app/AppActions');
 
@@ -120,6 +122,7 @@ var App = React.createClass({
   getInitialState() {
     return _.extend({
     },
+      this.getAppState(),
       this.getBevyState(),
       this.getPostState(),
       this.getChatState(),
@@ -128,6 +131,11 @@ var App = React.createClass({
     );
   },
 
+  getAppState() {
+    return {
+      searchType: AppStore.getSearchType()
+    };
+  },
   getBevyState() {
     return {
       myBevies: BevyStore.getMyBevies(),
@@ -137,36 +145,35 @@ var App = React.createClass({
       activeTags: BevyStore.getActiveTags()
     };
   },
-
   getPostState() {
     return {
       allPosts: PostStore.getAll()
     };
   },
-
   getChatState() {
     return {
       allThreads: ChatStore.getAll(),
       activeThread: ChatStore.getActive()
     };
   },
-
   getNotificationState() {
     return {
       allNotifications: NotificationStore.getAll(),
       unreadCount: NotificationStore.getUnread()
     };
   },
-
   getUserState() {
     return {
       user: UserStore.getUser(),
       loggedIn: UserStore.loggedIn,
-      linkedAccounts: UserStore.getLinkedAccounts()
+      linkedAccounts: UserStore.getLinkedAccounts(),
+      userSearchQuery: UserStore.getUserSearchQuery(),
+      userSearchResults: UserStore.getUserSearchResults()
     };
   },
 
   componentDidMount() {
+    AppStore.on(APP.CHANGE_ALL, this._onAppChange);
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
     BevyStore.on(CHAT.CHANGE_ALL, this._onChatChange);
@@ -205,6 +212,7 @@ var App = React.createClass({
   },
 
   componentWillUnmount() {
+    AppStore.off(APP.CHANGE_ALL);
     BevyStore.off(change_all_events);
     PostStore.off(change_all_events);
     ChatStore.off(change_all_events);
@@ -213,6 +221,9 @@ var App = React.createClass({
     AppActions.unload();
   },
 
+  _onAppChange() {
+    this.setState(_.extend(this.state, this.getAppState()));
+  },
   _onBevyChange() {
     this.setState(_.extend(this.state, this.getBevyState()));
   },
@@ -233,6 +244,7 @@ var App = React.createClass({
     return (
       <View style={styles.container}>
         <Navigator
+          configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
           initialRouteStack={[
             routes.MAIN.TABBAR
           ]}

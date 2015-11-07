@@ -289,14 +289,27 @@ _.extend(BevyStore, {
 
       case BEVY.SEARCH:
         var query = payload.query;
+        query = encodeURIComponent(query);
         this.searchQuery = query;
         this.searchList.reset();
         this.trigger(BEVY.SEARCHING);
+
+        if(_.isEmpty(query)) {
+          // if theres no query
+          // then just return public bevies
+          this.searchList.reset(this.publicBevies.models);
+          this.trigger(BEVY.SEARCH_COMPLETE);
+          break;
+        }
+
         this.searchList.url = constants.apiurl + '/bevies/search/' + query;
         this.searchList.fetch({
           reset: true,
           success: function(collection, response, options) {
             this.trigger(BEVY.SEARCH_COMPLETE);
+          }.bind(this),
+          error: function(error) {
+            this.trigger(BEVY.SEARCH_ERROR, error);
           }.bind(this)
         });
         break;
@@ -342,9 +355,9 @@ _.extend(BevyStore, {
   },
 
   getSearchList() {
-    return (this.searchList.models.length <= 0)
-    ? []
-    : this.searchList.toJSON();
+    return (_.isEmpty(this.searchQuery))
+      ? this.publicBevies.toJSON()
+      : this.searchList.toJSON();
   },
 
   getSearchQuery() {
@@ -378,7 +391,7 @@ _.extend(BevyStore, {
     }
   },
 
-  getBevyImage(bevy_id) {
+  getBevyImage(bevy_id, width, height) {
     if(bevy_id == -1) return '';
     var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
     if(bevy == undefined) return '';
@@ -395,7 +408,16 @@ _.extend(BevyStore, {
     if(_.contains(default_bevies, bevy_id)) {
       return constants.siteurl + bevy.get('image_url');
     }
-    return bevy.get('image_url');
+    var image_url = bevy.get('image_url')
+    if(image_url.slice(7, 23) == 'api.joinbevy.com'
+      && width != undefined
+      && height != undefined) {
+      image_url += '?w=' + width + '&h=' + height;
+    }
+    if(_.isEmpty(image_url)) {
+      image_url = constants.siteurl + '/img/logo_100.png';
+    }
+    return image_url;
   },
 
   addBevy(bevy) {

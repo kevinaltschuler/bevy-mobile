@@ -20,10 +20,11 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var ChatStore = require('./../../ChatStore');
 var UserStore = require('./../../../user/UserStore');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var ThreadImage = React.createClass({
   propTypes: {
-    thread: React.PropTypes.object.isRequired
+    thread: React.PropTypes.object
   },
 
   getInitialState() {
@@ -31,11 +32,10 @@ var ThreadImage = React.createClass({
     if(image_url == (constants.siteurl + '/img/user-profile-icon.png')) {
     } else if(image_url == '/img/user-profile-icon.png') {
       image_url = constants.siteurl + '/img/user-profile-icon.png';
-    } else if(image_url.slice(7, 23) == 'api.joinbevy.com'
-      && this.props.thread.type == 'bevy') {
-      image_url += '?w=50&h=50';
     }
-    console.log(image_url);
+    if(this.props.thread.type == 'bevy') {
+      image_url = BevyStore.getBevyImage(this.props.thread.bevy._id, 50, 50);
+    }
     return {
       image_url: image_url
     };
@@ -58,6 +58,7 @@ var ThreadImage = React.createClass({
   },
 
   render() {
+    if(_.isEmpty(this.props.thread)) return <View />;
     switch(this.props.thread.type) {
       case 'bevy':
       case 'pm':

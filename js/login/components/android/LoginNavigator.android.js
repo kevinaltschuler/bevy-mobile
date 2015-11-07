@@ -29,6 +29,7 @@ var LoginNavigator = React.createClass({
   render() {
     return (
       <Navigator
+        configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.navigator }
         navigationBar={ <LoginBar { ...this.props } /> }
         initialRouteStack={[

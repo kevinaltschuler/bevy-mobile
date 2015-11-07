@@ -61,7 +61,7 @@ var NotificationList = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-
+    paddingTop: 1
   },
   notificationList: {
   }

@@ -1,6 +1,7 @@
 /**
  * NotificationItem.android.js
  * @author albert
+ * @flow
  */
 
 'use strict';
@@ -56,8 +57,8 @@ var NotificationItem = React.createClass({
     var event = notification.event;
     var data = notification.data;
     var unreadStyle = (!notification.read)
-      ? {backgroundColor: '#EDFAF4'}
-      : {};
+      ? { backgroundColor: '#EDFAF4' }
+      : { backgroundColor: '#FFF' };
 
     var body;
 

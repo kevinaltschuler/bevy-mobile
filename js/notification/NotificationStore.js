@@ -66,7 +66,8 @@ _.extend(NotificationStore, {
         var ws = io(constants.siteurl);
         ws.on('connect', function() {
           console.log('websocket client connected');
-          ws.send('set_user_id', user._id);
+          console.log('setting user id', user._id);
+          ws.emit('set_user_id', user._id);
         });
 
         ws.on('kitty cats', function(data) {

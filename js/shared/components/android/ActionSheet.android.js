@@ -27,7 +27,8 @@ var ActionSheet = React.createClass({
     return {
       visible: false,
       options: [],
-      callback: noop
+      callback: noop,
+      title: ''
     };
   },
 
@@ -49,11 +50,12 @@ var ActionSheet = React.createClass({
     } else return false;
   },
 
-  show(options, callback) {
+  show(options, callback, title) {
     this.setState({ 
       visible: true,
       options: options,
-      callback: callback
+      callback: callback,
+      title: (title == undefined) ? '' : title
     });
   },
 
@@ -68,6 +70,15 @@ var ActionSheet = React.createClass({
       visible: false,
       options: []
     });
+  },
+
+  _renderTitle() {
+    if(_.isEmpty(this.state.title)) return <View />;
+    return (
+      <View style={ styles.titleContainer }>
+        <Text style={ styles.title }>{ this.state.title }</Text>
+      </View>
+    );
   },
 
   _renderOptions() {
@@ -96,6 +107,7 @@ var ActionSheet = React.createClass({
           <View style={ styles.backdrop } />
         </TouchableWithoutFeedback>
         <View style={ styles.optionList }>
+          { this._renderTitle() }
           { this._renderOptions() }
         </View>
       </View>
@@ -123,6 +135,15 @@ var styles = StyleSheet.create({
     height: constants.height,
     backgroundColor: '#000',
     opacity: 0.5
+  },
+  titleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 5,
+    paddingHorizontal: 10
+  },
+  title: {
+    textAlign: 'center'
   },
   optionList: {
     backgroundColor: '#FFF',

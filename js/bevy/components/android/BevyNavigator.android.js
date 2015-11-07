@@ -23,12 +23,14 @@ var constants = require('./../../../constants');
 
 var BevyNavigator = React.createClass({
   propTypes: {
-
+    mainNavigator: React.PropTypes.object
   },
 
   render() {
     return (
       <Navigator
+        configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
+        navigator={ this.props.mainNavigator }
         initialRouteStack={[
           routes.BEVY.POSTLIST
         ]}

@@ -43,6 +43,7 @@ var NewPostView = React.createClass({
   render() {
     return (
       <Navigator
+        configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.mainNavigator }
         initialRouteStack={[
           routes.NEWPOST.INPUT
