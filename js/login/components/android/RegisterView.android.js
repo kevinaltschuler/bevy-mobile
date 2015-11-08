@@ -1,6 +1,7 @@
 /**
  * RegisterView.android.js
  * @author albert
+ * @flow 
  */
 
 'use strict';
@@ -16,6 +17,7 @@ var {
   ProgressBarAndroid,
   StyleSheet
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -38,18 +40,24 @@ var RegisterView = React.createClass({
       password: '',
       email: '',
       error: '',
-      loading: false
+      loading: false,
+      verified: false,
+      verifying: false
     };
   },
 
   componentDidMount() {
     UserStore.on(USER.LOGIN_SUCCESS, this.onLoginSuccess);
     UserStore.on(USER.LOGIN_ERROR, this.onLoginError);
+    UserStore.on(USER.VERIFY_SUCCESS, this.onVerifySuccess);
+    UserStore.on(USER.VERIFY_ERROR, this.onVerifyError);
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
     UserStore.off(USER.LOGIN_ERROR, this.onLoginError);
+    UserStore.off(USER.VERIFY_SUCCESS, this.onVerifySuccess);
+    UserStore.off(USER.VERIFY_ERROR, this.onVerifyError);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
@@ -71,9 +79,51 @@ var RegisterView = React.createClass({
     });
   },
 
+  onVerifySuccess(res) {
+    this.setState({
+      verified: !res.found,
+      verifying: false,
+      error: (res.found)
+        ? 'Username taken. Please enter another one'
+        : ''
+    });
+  },
+  onVerifyError(error) {
+    this.setState({
+      verified: false,
+      verifying: false
+    });
+  },
+
   onBackButton() {
     this.props.loginNavigator.pop();
     return true;
+  },
+
+  onChangeUsername(text) {
+    this.setState({
+      username: text,
+      verifying: true
+    });
+    if(this.verifyTimeout != undefined) {
+      clearTimeout(this.verifyTimeout);
+      delete this.verifyTimeout;
+    }
+    this.verifyTimeout = setTimeout(this.verifyUsername, 500)
+  },
+
+  verifyUsername() {
+    if(_.isEmpty(this.state.username)) {
+      this.setState({
+        verified: false
+      });
+      return;
+    }
+    UserActions.verifyUsername(this.state.username);
+    this.setState({
+      verified: false,
+      verifying: true
+    });
   },
 
   register() {
@@ -86,6 +136,11 @@ var RegisterView = React.createClass({
     } else if (_.isEmpty(this.state.password)) {
       this.setState({
         error: 'Please Enter A Password'
+      });
+      return;
+    } else if (!this.state.verified) {
+      this.setState({
+        error: 'Username taken. Please enter another one'
       });
       return;
     }
@@ -131,20 +186,48 @@ var RegisterView = React.createClass({
     );
   },
 
+  _renderVerified() {
+    if(_.isEmpty(this.state.username)) return <View />;
+    if(this.state.verifying) {
+      return (
+        <ProgressBarAndroid styleAttr='SmallInverse' />
+      );
+    } else if(this.state.verified) {
+      return (
+        <Icon
+          name='check'
+          size={ 30 }
+          color='#FFF'
+        />
+      );
+    } else if (!this.state.verified) {
+      return (
+        <Icon
+          name='close'
+          size={ 30 }
+          color='#DF4A32'
+        />
+      );
+    }
+  },
+
   render() {
     return (
       <View style={ styles.container }>
         { this._renderError() }
         { this._renderLoading() }
-        <TextInput
-          style={ styles.usernameInput }
-          value={ this.state.username }
-          autoCorrect={ false }
-          placeholder='Username'
-          placeholderTextColor='#EEE'
-          underlineColorAndroid='#FFF'
-          onChangeText={text => this.setState({ username: text })}
-        />
+        <View style={ styles.usernameContainer }> 
+          <TextInput
+            style={ styles.usernameInput }
+            value={ this.state.username }
+            autoCorrect={ false }
+            placeholder='Username'
+            placeholderTextColor='#EEE'
+            underlineColorAndroid='#FFF'
+            onChangeText={ this.onChangeUsername }
+          />
+          { this._renderVerified() }
+        </View>
         <TextInput
           style={ styles.passwordInput }
           value={ this.state.password }
@@ -220,10 +303,15 @@ var styles = StyleSheet.create({
     marginLeft: 10,
     color: '#FFF'
   },
-  usernameInput: {
-    width: (constants.width / 3) * 2,
-    color: '#FFF',
+  usernameContainer: {
+    width: constants.width * 2 / 3,
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10
+  },
+  usernameInput: {
+    flex: 1,
+    color: '#FFF',
   },
   passwordInput: {
     width: (constants.width / 3) * 2,

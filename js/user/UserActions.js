@@ -81,6 +81,13 @@ var UserActions = {
       actionType: USER.SWITCH_USER,
       account_id: account_id
     });
+  },
+
+  verifyUsername(username) {
+    Dispatcher.dispatch({
+      actionType: USER.VERIFY_USERNAME,
+      username: username
+    });
   }
 };
 
