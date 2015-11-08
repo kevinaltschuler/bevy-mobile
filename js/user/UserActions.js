@@ -11,13 +11,6 @@ var UserActions = {
     });
   },
 
-  switchUser(account_id) {
-    Dispatcher.dispatch({
-      actionType: USER.SWITCH_USER,
-      account_id: account_id
-    });
-  },
-
   changeProfilePicture(uri: String) {
     Dispatcher.dispatch({
       actionType: USER.CHANGE_PROFILE_PICTURE,
