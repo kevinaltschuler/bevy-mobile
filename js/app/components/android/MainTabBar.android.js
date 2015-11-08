@@ -18,7 +18,7 @@ var {
 var TabBarItem = require('./TabBarItem.android.js');
 var SettingsView = require('./../../../settings/components/android/SettingsView');
 var ChatNavigator = require('./../../../chat/components/android/ChatNavigator.android.js');
-var NotificationView = require('./../../../notification/components/android/NotificationView.android.js');
+var NotificationList = require('./../../../notification/components/android/NotificationList.android.js');
 var BevyNavigator = require('./../../../bevy/components/android/BevyNavigator.android.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
@@ -180,7 +180,7 @@ var MainTabBar = React.createClass({
           <ChatNavigator tabActions={ tabActions } { ...this.props } />
         </View>
         <View style={ styles.page }>
-          <NotificationView tabActions={ tabActions } { ...this.props } />
+          <NotificationList tabActions={ tabActions } { ...this.props } />
         </View>
         <View style={ styles.page }>
           <SettingsView tabActions={ tabActions } { ...this.props } />
