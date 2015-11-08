@@ -34,29 +34,34 @@ var ProfileRow = React.createClass({
       height: 48,
       imageSize: 30,
       nameColor: '#FFF',
-      emailColor: '#FFF',
+      emailColor: '#AAA',
       style: {}
     };
   },
 
-  _renderEmail() {
-    if(_.isEmpty(this.props.user.email)) return <View />;
-    else return (
-      <Text style={[ styles.email, { color: this.props.emailColor } ]}>{ this.props.user.email }</Text>
-    );
-  },
-
   render() {
     return (
-      <View style={[ styles.container, { height: this.props.height }, this.props.style ]}>
+      <View style={[ styles.container, { 
+        height: this.props.height 
+      }, this.props.style ]}>
         <Image
           source={{ uri: this.props.user.image_url }}
           //source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
-          style={[ styles.profileImage, { width: this.props.imageSize, height: this.props.imageSize, borderRadius: this.props.imageSize / 2 } ]}
+          style={[ styles.profileImage, { 
+            width: this.props.imageSize, 
+            height: this.props.imageSize, 
+            borderRadius: this.props.imageSize / 2 } 
+          ]}
         />
         <View style={ styles.profileDetails }>
-          <Text style={[ styles.displayName, { color: this.props.nameColor } ]}>{ this.props.user.displayName }</Text>
-          { this._renderEmail() }
+          <Text style={[ styles.displayName, { color: this.props.nameColor } ]}>
+            { this.props.user.displayName }
+          </Text>
+          <Text style={[ styles.email, { color: this.props.emailColor } ]}>
+            { (_.isEmpty(this.props.user.email))
+              ? 'No Email'
+              : this.props.user.email }
+          </Text>
         </View>
       </View>
     );
