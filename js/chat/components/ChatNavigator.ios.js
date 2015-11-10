@@ -20,10 +20,12 @@ var Icon = require('react-native-vector-icons/Ionicons');
 
 var SideMenu = require('react-native-side-menu');
 var ChatView = require('./ChatView.ios.js');
+var ThreadSettingsView = require('./ThreadSettingsView.ios.js');
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 var ThreadList = require('./ThreadList.ios.js');
 var ChatStore = require('./../ChatStore');
+var NewThreadView = require('./NewThreadView.ios.js')
 
 var _ = require('underscore');
 var routes = require('./../../routes');
@@ -75,6 +77,22 @@ var ChatNavigator = React.createClass({
                 />
               )
               break;
+            case routes.MAIN.THREADSETTINGS.name:
+              view = (
+                <ThreadSettingsView
+                  { ...this.props }
+                  mainNavigator={ navigator }
+                />
+              );
+              break;
+            case routes.MAIN.NEWTHREAD.name:
+              view = (
+                <NewThreadView
+                  { ...this.props }
+                  mainNavigator={ navigator }
+                />
+              );
+              break;
           }
 
           var navbarText = 'Chat';
@@ -95,7 +113,7 @@ var ChatNavigator = React.createClass({
             navbarText = navbarText.concat('...');
           }
 
-          var backButton = (route.name != routes.CHAT.CHATVIEW.name)
+          var backButton = (route.name == routes.CHAT.LISTVIEW.name)
           ? <View />
           : <TouchableOpacity
               activeOpacity={ 0.5 }
@@ -114,11 +132,13 @@ var ChatNavigator = React.createClass({
               </View>
             </TouchableOpacity>;
 
-          var infoButton = (route.name != routes.CHAT.CHATVIEW.name)
+          var infoButton = (route.name != routes.CHAT.CHATVIEW.name || this.props.activeThread.type == 'bevy')
           ? <View/>
           : <TouchableOpacity
               activeOpacity={.5}
-              onPress={{}}
+              onPress={() => {
+                navigator.push(routes.MAIN.THREADSETTINGS);
+              }}
               style={{marginRight: 10, height: 39, width: 39, alignItems: 'center', justifyContent: 'center'}}
             >
               <Icon
@@ -128,6 +148,26 @@ var ChatNavigator = React.createClass({
               />
             </TouchableOpacity>;
 
+          var newMessage = (
+            <TouchableOpacity
+              activeOpacity={.5}
+              onPress={() => {
+                navigator.push(routes.MAIN.NEWTHREAD);
+              }}
+              style={{marginRight: 10, height: 39, width: 39, alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Icon
+                name='ios-compose'
+                size={30}
+                color="rgba(0,0,0,0.3)"
+              />
+            </TouchableOpacity>
+          );
+
+          var right = (route.name == routes.CHAT.LISTVIEW.name)
+          ? newMessage
+          : infoButton;
+
           return (
             <View style={{ flex: 1, backgroundColor: '#eee'}}>
               <Navbar 
@@ -135,7 +175,7 @@ var ChatNavigator = React.createClass({
                 chatNavigator={ navigator }
                 left={ backButton }
                 center={ navbarText }
-                right={infoButton}
+                right={ right }
                 { ...this.props }
               />
               { view }

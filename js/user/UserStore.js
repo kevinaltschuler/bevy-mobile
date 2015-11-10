@@ -358,6 +358,25 @@ _.extend(UserStore, {
             this.trigger(USER.SEARCH_COMPLETE);
           }.bind(this));
         } else {
+          
+          fetch(url,
+          {
+            method: 'get',
+            headers: {
+              'Accept': 'application/json',
+            },
+            body: ''
+          })
+          // on fetch
+          .then((res) => (res.json()))
+          .then((res) => {
+            console.log(res);
+            this.userSearchQuery = query;
+            this.userSearchResults.reset(res);
+            if(this.loggedIn)
+              this.userSearchResults.remove(this.user._id); // remove self from search results
+            this.trigger(USER.SEARCH_COMPLETE);
+          });
 
         }
         break;
