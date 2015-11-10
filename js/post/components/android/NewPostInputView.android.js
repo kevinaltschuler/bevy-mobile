@@ -13,6 +13,7 @@ var {
   TouchableNativeFeedback,
   TextInput,
   BackAndroid,
+  ProgressBarAndroid,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -21,7 +22,9 @@ var Dropdown = require('react-native-dropdown-android');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var PostActions = require('./../../PostActions');
+var PostActions = require('./../../../post/PostActions');
+var PostStore = require('./../../../post/PostStore');
+var POST = constants.POST;
 
 var NewPostInputView = React.createClass({
   propTypes: {
@@ -34,20 +37,33 @@ var NewPostInputView = React.createClass({
   getInitialState() {
     return {
       selectedTag: 0,
-      postInput: ''
+      postInput: '',
+      loading: false
     };
   },
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    PostStore.on(POST.POST_CREATED, this.onPostCreated);
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    PostStore.off(POST.POST_CREATED, this.onPostCreated);
   },
 
   onBackButton() {
     this.props.mainNavigator.pop();
     return true;
+  },
+
+  onPostCreated(post) {
+    // switch to comment view of new post
+    var route = routes.MAIN.COMMENT;
+    route.post = post;
+    this.props.mainNavigator.replace(route);
+
+    // clear state
+    this.setState(this.getInitialState());
   },
 
   submitPost() {
@@ -68,12 +84,21 @@ var NewPostInputView = React.createClass({
     // clear state
     this.setState({
       selectedTag: 0,
-      postInput: ''
+      postInput: '',
+      loading: true // flip loading flag
     });
+  },
 
-    // navigate back 
-    // TODO: navigate to comment view?
-    this.props.mainNavigator.pop();
+  _renderLoading() {
+    if(!this.state.loading) return <View />;
+    return (
+      <View style={ styles.loadingContainer }>
+        <ProgressBarAndroid styleAttr='SmallInverse' />
+        <Text style={ styles.loadingText }>
+          Creating...
+        </Text>
+      </View>
+    );
   },
 
   render() {
@@ -120,11 +145,9 @@ var NewPostInputView = React.createClass({
               <Text style={ styles.bevyPickerButtonText }>
                 { this.props.selectedBevy.name }
               </Text>
-              <Text style={ styles.bevyPickerButtonHintText }>
-                Tap to Change
-              </Text>
             </View>
           </TouchableNativeFeedback>
+          { this._renderLoading() }
         </View>
         <View style={ styles.tagBar }>
           <View style={[ styles.tagCircle, { 
@@ -248,9 +271,16 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     color: '#FFF'
   },
-  bevyPickerButtonHintText: {
-    textAlign: 'left',
-    color: '#DDD'
+  loadingContainer: {
+    flex: 1,
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  loadingText: {
+    marginLeft: 10,
+    color: '#FFF'
   },
   tagBar: {
     height: 48,
