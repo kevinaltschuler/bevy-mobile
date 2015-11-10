@@ -109,14 +109,14 @@ var SwitchAccountView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={ this.goBack }
           >
             <View style={ styles.backButton }>
               <Icon
                 name='arrow-back'
                 size={ 30 }
-                color='#888'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
@@ -124,14 +124,14 @@ var SwitchAccountView = React.createClass({
             Switch Accounts
           </Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={ this.addAccount }
           >
             <View style={ styles.addAccountButton }>
               <Icon
                 name='person-add'
                 size={ 30 }
-                color='#888'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
@@ -159,7 +159,7 @@ var styles = StyleSheet.create({
   },
   topBar: {
     height: 48,
-    backgroundColor: '#FFF',
+    backgroundColor: '#2CB673',
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#EEE',
@@ -170,12 +170,13 @@ var styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8
+    paddingHorizontal: 10,
+    marginRight: 10
   },
   title: {
     flex: 1,
-    color: '#333',
-    textAlign: 'center'
+    color: '#FFF',
+    fontSize: 18
   },
   loadingContainer: {
     height: 30,

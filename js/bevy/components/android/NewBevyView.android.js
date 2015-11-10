@@ -258,7 +258,8 @@ var styles = StyleSheet.create({
   topBarTitle: {
     flex: 1,
     textAlign: 'center',
-    color: '#FFF'
+    color: '#FFF',
+    fontSize: 18
   },
   createButton: {
     height: 48,

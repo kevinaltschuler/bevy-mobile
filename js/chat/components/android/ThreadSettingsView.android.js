@@ -101,14 +101,14 @@ var ThreadSettingsView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={ this.goBack }
           >
             <View style={ styles.backButton }>
               <Icon
                 name='arrow-back'
                 size={ 30 }
-                color='#888'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
@@ -211,8 +211,8 @@ var styles = StyleSheet.create({
   topBar: {
     width: constants.width,
     height: 48,
-    backgroundColor: '#FFF',
-    borderBottomColor: '#DDD',
+    backgroundColor: '#2CB673',
+    borderBottomColor: '#EEE',
     borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center'
@@ -221,12 +221,14 @@ var styles = StyleSheet.create({
     height: 48,
     paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight: 10
   },
   title: {
-    color: '#000',
+    color: '#FFF',
     textAlign: 'left',
-    flex: 1
+    flex: 1,
+    fontSize: 18
   },
   contentContainer: {
     flex: 1

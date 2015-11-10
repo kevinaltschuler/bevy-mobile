@@ -299,10 +299,10 @@ var styles = StyleSheet.create({
   },
   bevyName: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'left',
     color: '#FFF',
-    marginLeft: 20
+    marginLeft: 15
   },
   infoButton: {
     height: 48,

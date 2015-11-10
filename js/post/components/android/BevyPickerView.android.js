@@ -66,7 +66,7 @@ var BevyPickerView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={() => {
               // go back
               this.props.newPostNavigator.pop();
@@ -76,13 +76,13 @@ var BevyPickerView = React.createClass({
               <Icon
                 name='arrow-back'
                 size={ 30 }
-                color='#666'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
           <Text style={ styles.topBarTitle }>Posting To...</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={() => {
               // go back
               this.props.newPostNavigator.pop();
@@ -125,7 +125,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   topBar: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#2CB673',
     height: 48,
     width: constants.width,
     flexDirection: 'row',
@@ -135,16 +135,14 @@ var styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 12,
-    paddingRight: 12
-  },
-  backButtonText: {
-    color: '#000'
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginRight: 10
   },
   topBarTitle: {
     flex: 1,
-    textAlign: 'center',
-    color: '#000'
+    color: '#FFF',
+    fontSize: 18
   },
   postButton: {
     height: 48,
@@ -154,7 +152,7 @@ var styles = StyleSheet.create({
     paddingRight: 12
   },
   postButtonText: {
-    color: '#2CB673'
+    color: '#FFF'
   },
   bevyPickerList: {
     flex: 1,

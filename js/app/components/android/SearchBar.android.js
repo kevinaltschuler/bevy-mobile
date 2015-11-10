@@ -294,7 +294,8 @@ var styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 48,
-    color: '#FFF'
+    color: '#FFF',
+    fontSize: 16
   },
 });
 

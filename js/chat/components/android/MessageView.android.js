@@ -122,14 +122,14 @@ var MessageView = React.createClass({
     if(this.props.activeThread.type == 'bevy') return <View />; 
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+        background={ TouchableNativeFeedback.Ripple('#62D487', false) }
         onPress={ this.goToInfoView }
       >
         <View style={ styles.infoButton }>
           <Icon
             name='info-outline'
             size={ 30 }
-            color='#888'
+            color='#FFF'
           />
         </View>
       </TouchableNativeFeedback>
@@ -169,14 +169,14 @@ var MessageView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={ this.goBack }
           >
             <View style={ styles.backButton }>
               <Icon
                 name='arrow-back'
                 size={ 30 }
-                color='#888'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
@@ -233,7 +233,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    backgroundColor: '#fff'
+    backgroundColor: '#2CB673'
   },
   backButton: {
     height: 48,
@@ -257,8 +257,8 @@ var styles = StyleSheet.create({
   },
   titleText: {
     flex: 1,
-    color: '#000',
-    fontSize: 15,
+    color: '#FFF',
+    fontSize: 18,
     flexWrap: 'wrap'
   },
   loadMoreButton: {
