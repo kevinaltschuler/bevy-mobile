@@ -37,27 +37,17 @@ var NewBevyView = React.createClass({
       description: '',
       slug: '',
       image: '',
-      creating: false
+      creating: false,
+      error: ''
     };
   },
 
   componentDidMount() {
-    BevyStore.on(BEVY.CREATED, (bevy) => {
-      // subscribe to the new bevy
-      BevyActions.subscribe(bevy._id);
-      // switch bevies
-      BevyActions.switchBevy(bevy._id);
-      // navigate back
-      this.props.mainNavigator.pop();
-
-      this.setState({
-        creating: false
-      });
-    });
+    BevyStore.on(BEVY.CREATED, this.onBevyCreated);
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
   },
   componentWillUnmount() {
-    BevyStore.off(BEVY.CREATED);
+    BevyStore.off(BEVY.CREATED, this.onBevyCreated);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
   },
 
@@ -66,10 +56,22 @@ var NewBevyView = React.createClass({
     return true;
   },
 
+  onBevyCreated(bevy) {
+    // subscribe to the new bevy
+    BevyActions.subscribe(bevy._id);
+    // switch bevies
+    BevyActions.switchBevy(bevy._id);
+    // navigate back
+    this.props.mainNavigator.pop();
+    // reset state
+    this.setState(this.getInitialState());
+  },
+
   createBevy() {
     if(_.isEmpty(this.state.name)) {
-      // dont let users create a bevy without a name
-      ToastAndroid.show('Please enter a name for your bevy', ToastAndroid.SHORT);
+      this.setState({
+        error: 'Please Enter A Name For Your Bevy'
+      });
       return;
     }
     // force blur url field to make sure the slug is valid
@@ -89,6 +91,7 @@ var NewBevyView = React.createClass({
     this.refs.Name.blur();
     this.refs.Description.blur();
     this.setState({
+      error: '',
       creating: true
     });
   },
@@ -101,7 +104,7 @@ var NewBevyView = React.createClass({
     return (
       <View style={ styles.topBar }>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
           onPress={() => {
             // go back
             this.props.mainNavigator.pop();
@@ -111,13 +114,13 @@ var NewBevyView = React.createClass({
             <Icon
               name='arrow-back'
               size={ 30 }
-              color='#000'
+              color='#FFF'
             />
           </View>
         </TouchableNativeFeedback>
         <Text style={ styles.topBarTitle }>Create New Bevy</Text>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
           onPress={ this.createBevy }
         >
           <View style={ styles.createButton }>
@@ -129,6 +132,8 @@ var NewBevyView = React.createClass({
   },
 
   _renderImageButton() {
+    // disable for now
+    return <View />;
     if(_.isEmpty(this.state.image)) {
       return (
         <TouchableNativeFeedback
@@ -154,11 +159,23 @@ var NewBevyView = React.createClass({
     }
   },
 
+  _renderError() {
+    if(_.isEmpty(this.state.error)) return <View />;
+    return (
+      <View style={ styles.error }>
+        <Text style={ styles.errorText }>
+          { this.state.error }
+        </Text>
+      </View>
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
         { this._renderTopBar() }
         <ScrollView style={ styles.list }>
+          { this._renderError() }
           <Text style={ styles.general }>General</Text>
           <View style={ styles.generalContainer }>
             <TextInput
@@ -209,7 +226,7 @@ var NewBevyView = React.createClass({
               underlineColorAndroid='#AAA'
             />
           </View>
-          <Text style={ styles.addImage }>Bevy Image</Text>
+          {/*<Text style={ styles.addImage }>Bevy Image</Text>*/}
           { this._renderImageButton() }
         </ScrollView>
       </View>
@@ -225,7 +242,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   topBar: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#2CB673',
     height: 48,
     width: constants.width,
     flexDirection: 'row',
@@ -241,7 +258,7 @@ var styles = StyleSheet.create({
   topBarTitle: {
     flex: 1,
     textAlign: 'center',
-    color: '#000'
+    color: '#FFF'
   },
   createButton: {
     height: 48,
@@ -251,11 +268,23 @@ var styles = StyleSheet.create({
     paddingRight: 12
   },
   createButtonText: {
-    color: '#2CB673'
+    color: '#FFF'
   },
   list: {
     flex: 1,
     paddingTop: 10
+  },
+  error: {
+    backgroundColor: '#DF4A32',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginBottom: 10
+  },
+  errorText: {
+    color: '#FFF'
   },
   general: {
     color: '#AAA',

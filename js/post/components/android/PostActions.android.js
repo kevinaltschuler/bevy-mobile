@@ -154,7 +154,8 @@ var PostActions = React.createClass({
                     this.deletePost();
                     break;
                 }
-              }.bind(this)
+              }.bind(this),
+              'Post Actions'
             );
           }}
         >

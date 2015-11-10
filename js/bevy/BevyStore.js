@@ -172,27 +172,28 @@ _.extend(BevyStore, {
         var description = payload.description;
         var image_url = payload.image_url;
         var slug = payload.slug;
-
         var user = UserStore.getUser();
 
+        // create and add to my bevies list
         var newBevy = this.myBevies.add({
           name: name,
           description: description,
           image_url: image_url,
-          admins: [ user._id ],
+          admins: [ user._id ], // add self as admin
           slug: slug
         });
 
+        // save to server
         newBevy.save(null, {
           success: function(model, response, options) {
-            // success
-            newBevy.set('_id', model.id);
-
-            this.trigger(BEVY.CREATED, model.toJSON());
+            // success - populate fields
+            newBevy.set('_id', model.get('_id'));
+            newBevy.set('admins', [ user ]);
+            // trigger changes for front-end
             this.trigger(BEVY.CHANGE_ALL);
+            this.trigger(BEVY.CREATED, newBevy.toJSON());
           }.bind(this)
         });
-
         break;
 
       case BEVY.DESTROY:

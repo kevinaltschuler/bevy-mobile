@@ -443,6 +443,8 @@ _.extend(UserStore, {
       case USER.SEARCH:
         this.trigger(USER.SEARCHING);
         var query = payload.query;
+        // make the query url friendly
+        query = encodeURIComponent(query);
 
         var url = (_.isEmpty(query))
           ? constants.apiurl + '/users'
@@ -467,7 +469,7 @@ _.extend(UserStore, {
             this.trigger(USER.SEARCH_COMPLETE);
           }.bind(this));
         } else {
-
+          
         }
         break;
     }
