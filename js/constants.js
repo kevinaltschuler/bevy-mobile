@@ -213,3 +213,11 @@ exports.setTagModalActions = function(actions) {
 exports.getTagModalActions = function() {
   return tagModalActions;
 };
+
+var tabBarActions = {};
+exports.setTabBarActions = function(actions) {
+  tabBarActions = actions;
+};
+exports.getTabBarActions = function() {
+  return tabBarActions;
+};

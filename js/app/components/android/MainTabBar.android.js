@@ -52,6 +52,10 @@ var MainTabBar = React.createClass({
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    constants.setTabBarActions({
+      switchTab: this.switchTab,
+      clearTabHistory: this.clearTabHistory
+    });
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
@@ -160,9 +164,16 @@ var MainTabBar = React.createClass({
     ).start();
   },
 
+  clearTabHistory() {
+    this.setState({
+      tabHistory: [tabs.posts]
+    });
+  },
+
   _renderTabContent() {
     var tabActions = {
-      switchTab: this.switchTab
+      switchTab: this.switchTab,
+      clearTabHistory: this.clearTabHistory
     };
     return (
       <ViewPagerAndroid

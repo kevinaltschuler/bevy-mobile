@@ -245,33 +245,61 @@ _.extend(UserStore, {
 
       case USER.SWITCH_USER:
         var account_id = payload.account_id;
-        console.log('switch account', account_id);
+        var url = constants.siteurl + '/switch';
 
-        fetch(constants.siteurl + '/switch', 
-        {
-          method: 'post',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              username: 'dummy',
+              password: 'dummy',
+              user_id: this.user.get('_id'),
+              switch_to_id: account_id
+            })
           },
-          body: JSON.stringify({
-            username: 'dummy',
-            password: 'dummy',
-            user_id: this.user.get('_id'),
-            switch_to_id: account_id
-          })
-        })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log('switched');
-          AsyncStorage.setItem('user', JSON.stringify(res))
-          .then((err, result) => {
-          });
+          function(error) {
+            error = JSON.parse(error);
+            console.error(error);
+          }.bind(this), function(res) {
+            res = JSON.parse(res);
+            AsyncStorage.setItem('user', JSON.stringify(res))
+            .then((err, result) => {
+            });
 
-          this.setUser(res);
-          //this.trigger(USER.LOGIN_SUCCESS, res);
-          AppActions.load();
-        });
+            this.setUser(res);
+            //this.trigger(USER.LOGIN_SUCCESS, res);
+            AppActions.load();
+          }.bind(this))
+        } else {
+          fetch(url, {
+            method: 'post',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: 'dummy',
+              password: 'dummy',
+              user_id: this.user.get('_id'),
+              switch_to_id: account_id
+            })
+          })
+          .then((res) => res.json())
+          .then((res) => {
+            console.log('switched');
+            AsyncStorage.setItem('user', JSON.stringify(res))
+            .then((err, result) => {
+            });
+
+            this.setUser(res);
+            //this.trigger(USER.LOGIN_SUCCESS, res);
+            AppActions.load();
+          });
+        }
         break;
 
       case BEVY.SUBSCRIBE:

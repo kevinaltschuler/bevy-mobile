@@ -20,7 +20,11 @@ var ProfileRow = require('./ProfileRow.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
+var ChatActions = require('./../../../chat/ChatActions');
+var ChatStore = require('./../../../chat/ChatStore');
+var CHAT = constants.CHAT;
 
 var PublicProfileView = React.createClass({
   propTypes: {
@@ -37,11 +41,13 @@ var PublicProfileView = React.createClass({
       this.props.routeUser._id
     );
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
   },
   componentWillUnmount() {
     // reset posts
     PostActions.fetch(this.props.activeBevy._id);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
   },
 
   onBackButton() {
@@ -52,6 +58,14 @@ var PublicProfileView = React.createClass({
   goBack() {
     // go back
     this.props.mainNavigator.pop();
+  },
+
+  onSwitchToThread(thread_id) {
+    this.props.mainNavigator.replace(routes.MAIN.MESSAGEVIEW);
+  },
+
+  messageUser() {
+    ChatActions.startPM(this.props.routeUser._id);
   },
 
   _renderTopBar() {
@@ -75,6 +89,35 @@ var PublicProfileView = React.createClass({
         <Text style={ styles.titleText }>
           { userName } Public Profile
         </Text>
+      </View>
+    );
+  },
+
+  _renderActions() {
+    // dont render this for yourself
+    if(this.props.user._id == this.props.routeUser._id) return <View />;
+    return (
+      <View>
+        <Text style={ styles.sectionTitle }>
+          Actions
+        </Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ this.messageUser }
+        >
+          <View style={ styles.detailItem }>
+            <Icon
+              name='chat'
+              size={ 30 }
+              color='#AAA'
+            />
+            <Text style={[ styles.detailItemKey, {
+              marginLeft: 10
+            }]}>
+              Message { this.props.routeUser.displayName }
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   },
@@ -117,6 +160,7 @@ var PublicProfileView = React.createClass({
               { this.props.routeUser.commentCount }
             </Text>
           </View>
+          { this._renderActions() }
           <Text style={ styles.sectionTitle }>Posts</Text>
           <PostList
             allPosts={ this.props.allPosts }
