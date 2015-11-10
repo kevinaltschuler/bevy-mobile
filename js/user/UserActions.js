@@ -11,13 +11,6 @@ var UserActions = {
     });
   },
 
-  switchUser(account_id) {
-    Dispatcher.dispatch({
-      actionType: USER.SWITCH_USER,
-      account_id: account_id
-    });
-  },
-
   changeProfilePicture(uri: String) {
     Dispatcher.dispatch({
       actionType: USER.CHANGE_PROFILE_PICTURE,
@@ -46,6 +39,22 @@ var UserActions = {
     }); 
   },
 
+  register(username, password, email) {
+    Dispatcher.dispatch({
+      actionType: USER.REGISTER,
+      username: username,
+      password: password,
+      email: (email == undefined) ? '' : email
+    });
+  },
+
+  resetPassword(email) {
+    Dispatcher.dispatch({
+      actionType: USER.RESET_PASSWORD,
+      email: email
+    });
+  },
+
   search(query) {
     Dispatcher.dispatch({
       actionType: USER.SEARCH,
@@ -71,6 +80,13 @@ var UserActions = {
     Dispatcher.dispatch({
       actionType: USER.SWITCH_USER,
       account_id: account_id
+    });
+  },
+
+  verifyUsername(username) {
+    Dispatcher.dispatch({
+      actionType: USER.VERIFY_USERNAME,
+      username: username
     });
   }
 };

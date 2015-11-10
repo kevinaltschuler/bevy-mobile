@@ -169,13 +169,9 @@ _.extend(PostStore, {
             this.posts.sort();
 
             // trigger events
-            this.trigger(POST.POSTED_POST);
             this.trigger(POST.CHANGE_ALL);
-            this.trigger(POST.POST_CREATED, post.id);
-          }.bind(this),
-          error: function(err) {
-            console.log(err);
-          }
+            this.trigger(POST.POST_CREATED, newPost.toJSON());
+          }.bind(this)
         });
         break;
 

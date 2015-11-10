@@ -12,7 +12,10 @@ var UserStore = require('./../user/UserStore');
 var ThreadCollection = Backbone.Collection.extend({
   model: Thread, 
   // sort alphabetically by name
-  comparator: thread => thread.getName().toLowerCase(),
+  comparator: thread => {
+    if(_.isEmpty(thread.getName())) return '';
+    return thread.getName().toLowerCase();
+  },
   url: function() {
     var user = UserStore.getUser();
     return constants.apiurl + '/users/' + user._id + '/threads';

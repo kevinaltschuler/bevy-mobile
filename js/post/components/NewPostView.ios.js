@@ -92,19 +92,9 @@ var NewPostView = React.createClass({
     });
   },
 
-  toNewPost(id) {
-    /*if(_.isEmpty(id)) {
-      console.log('returning no comments');
-      //return;
-    }
-    if(this.props.mainRoute == routes.MAIN.COMMENT) {
-      console.log('returning already in commentView');
-      //return;
-    }*/
-    console.log('ey');
+  toNewPost(post) {
     var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = id;
-    console.log(id);
+    commentRoute.postID = post._id;
     this.props.mainNavigator.replace(commentRoute);
   },
 

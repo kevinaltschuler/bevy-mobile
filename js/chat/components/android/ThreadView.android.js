@@ -12,6 +12,7 @@ var {
   ScrollView,
   TouchableNativeFeedback,
   Text,
+  ToastAndroid,
   StyleSheet
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
@@ -52,6 +53,10 @@ var ThreadView = React.createClass({
   },
 
   openNewThreadView() {
+    if(!this.props.loggedIn) {
+      ToastAndroid.show('Please Log In To Chat', ToastAndroid.SHORT);
+      return;
+    }
     this.props.mainNavigator.push(routes.MAIN.NEWTHREAD);
   },
 

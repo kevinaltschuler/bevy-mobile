@@ -49,7 +49,9 @@ var ForgotView = React.createClass({
     .then((res) => {
       if(res.object == undefined) {
         // success
-        AlertIOS.alert('Forgot Password', 'Email Sent! Please check your email and go to the link provided to reset your password.');
+        AlertIOS.alert('Forgot Password', 
+          'Email Sent! Please check your email and go to' 
+          + 'the link provided to reset your password.');
         // clear text field
         this.setState({
           email: ''

@@ -120,7 +120,8 @@ exports.CHAT = {
   CHANGE_ALL: 'chat_change_all',
   CHANGE_ONE: 'chat_change_one:',
   THREAD_CREATED: 'chat_thread_created',
-  SWITCH_TO_THREAD: 'chat_switch_to_thread'
+  SWITCH_TO_THREAD: 'chat_switch_to_thread',
+  STARTED_PM: 'chat_started_pm'
 };
 
 exports.USER = {
@@ -132,9 +133,16 @@ exports.USER = {
   SWITCH_USER: 'user_switch_user',
   LINK_ACCOUNT: 'user_link_account',
   UNLINK_ACCOUNT: 'user_unlink_account',
+  REGISTER: 'user_register',
+  RESET_PASSWORD: 'user_reset_password',
+  VERIFY_USERNAME: 'user_verify_username',
 
   LOGIN_ERROR: 'user_login_error',
   LOGIN_SUCCESS: 'user_login_success',
+  RESET_PASSWORD_SUCCESS: 'user_reset_password_success',
+  RESET_PASSWORD_ERROR: 'user_reset_password_error',
+  VERIFY_SUCCESS: 'user_verify_success',
+  VERIFY_ERROR: 'user_verify_error',
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded',
 
@@ -205,4 +213,12 @@ exports.setTagModalActions = function(actions) {
 };
 exports.getTagModalActions = function() {
   return tagModalActions;
+};
+
+var tabBarActions = {};
+exports.setTabBarActions = function(actions) {
+  tabBarActions = actions;
+};
+exports.getTabBarActions = function() {
+  return tabBarActions;
 };
