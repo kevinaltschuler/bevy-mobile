@@ -44,10 +44,10 @@ var PublicProfileView = React.createClass({
     ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
   },
   componentWillUnmount() {
-    // reset posts
-    PostActions.fetch(this.props.activeBevy._id);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
     ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
+    // reset posts
+    PostActions.fetch(this.props.activeBevy._id);
   },
 
   onBackButton() {
@@ -61,7 +61,7 @@ var PublicProfileView = React.createClass({
   },
 
   onSwitchToThread(thread_id) {
-    this.props.mainNavigator.replace(routes.MAIN.MESSAGEVIEW);
+    this.props.mainNavigator.push(routes.MAIN.MESSAGEVIEW);
   },
 
   messageUser() {

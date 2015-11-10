@@ -337,6 +337,7 @@ _.extend(ChatStore, {
 
         // if it doesnt exist yet
         if(thread == undefined) {
+          console.log('existing thread does not exist. creating new one...');
           // create thread
           thread = this.threads.add({
             type: 'pm',
@@ -346,17 +347,19 @@ _.extend(ChatStore, {
           thread.url = constants.apiurl + '/threads';
           thread.save(null, {
             success: function(model, response, options) {
+              console.log('created new pm thread', model.get('_id'));
               thread.set('_id', model.id);
               // set the messages url
               thread.messages.url
-                 = constants.apiurl + '/threads/' + thread.get('_id') + '/messages';
+                 = constants.apiurl + '/threads/' + model.get('_id') + '/messages';
               // set to active and go to thread
-              this.active = thread.get('_id');
+              this.active = model.get('_id');
               this.trigger(CHAT.CHANGE_ALL);
-              this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
+              this.trigger(CHAT.SWITCH_TO_THREAD, model.get('_id'));
             }.bind(this)
           });
         } else {
+          console.log('found existing thread', thread.get('_id'));
           // set it to active and switch to it
           this.active = thread.get('_id');
           this.trigger(CHAT.CHANGE_ALL);
