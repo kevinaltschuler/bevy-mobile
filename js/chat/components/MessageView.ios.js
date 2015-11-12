@@ -294,14 +294,14 @@ var styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee',
+    backgroundColor: '#fff',
     paddingLeft: 10,
     paddingRight: 10,
   },
   textInput: {
     height: 40,
-    borderTopWidth: 1,
-    borderTopColor: '#111',
+    borderTopWidth: 2,
+    borderTopColor: '#333',
     paddingLeft: 16,
     backgroundColor: '#fff',
     color: '#000'

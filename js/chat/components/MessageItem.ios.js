@@ -77,10 +77,10 @@ var MessageItem = React.createClass({
 
     var messageBodyStyle = {
       backgroundColor: '#rgba(0,0,0,.2)',
-      paddingTop: 6,
-      paddingBottom: 6,
-      paddingLeft: 6,
-      paddingRight: 6,
+      paddingTop: 5,
+      paddingBottom: 5,
+      paddingLeft: 8,
+      paddingRight: 8,
       borderRadius: 14,
     };
     if(message.body.length >= 32) {
@@ -141,7 +141,7 @@ var MessageItem = React.createClass({
                 <View style={[styles.container, {marginTop: space}]}>
                   { image }
                   <View style={{width: 5}}/>
-                  <View style={[messageBodyStyle, {backgroundColor: 'rgba(0,0,0,.05)'} ]}>
+                  <View style={[messageBodyStyle, {backgroundColor: '#eee'} ]}>
                     <Text style={{ textAlign: 'right', color: '#333' }}>
                       { message.body }
                     </Text>
