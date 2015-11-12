@@ -44,7 +44,11 @@ var MessageItem = React.createClass({
     if(diff <= ( 1000 * 60 * 60 * 24)) {
       // within a day - only display hours and minutes
       created = 
-        ((createDate.getHours() > 12 ) ? createDate.getHours() - 12 : createDate.getHours()) // 12 hr format
+        ((createDate.getHours() > 12 ) 
+          ? createDate.getHours() - 12 
+          : (createDate.getHours() == 0)
+            ? '12'
+            : createDate.getHours()) 
         + ':'
         + createDate.getMinutes()
         + ((createDate.getHours() > 11) ? ' PM' : ' AM');
