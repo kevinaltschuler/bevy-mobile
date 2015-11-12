@@ -66,8 +66,8 @@ var SwitchAccountView = React.createClass({
 
   onUserLoaded() {
     // switch back to posts tab
-    var tabActions = constants.getTabBarActions();
-    tabActions.switchTab('POSTS');
+    //var tabActions = constants.getTabBarActions();
+    //tabActions.switchTab('POSTS');
     // pop back to tab bar view
     this.props.mainNavigator.pop();
     // reset loading flag
