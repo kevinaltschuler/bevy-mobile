@@ -15,6 +15,8 @@ var {
   StyleSheet
 } = React;
 
+var UserStore = require('./../../../user/UserStore');
+
 var AccountItem = React.createClass({
   propTypes: {
     account: React.PropTypes.object,
@@ -34,7 +36,7 @@ var AccountItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: this.props.account.image_url }}
+            source={ UserStore.getUserImage(this.props.account) }
           />
           <Text style={ styles.name }>
             { this.props.account.displayName }

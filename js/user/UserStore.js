@@ -514,6 +514,17 @@ _.extend(UserStore, {
 
   getUserSearchResults() {
     return this.userSearchResults.toJSON();
+  },
+
+  getUserImage(user) {
+    var img_default = require('./../images/user-profile-icon.png');
+    var source = { uri: user.image_url };
+    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
+      source = img_default;
+    } else if(source.uri == '/img/user-profile-icon.png') {
+      source = img_default;
+    }
+    return source;
   }
 });
 var dispatchToken = Dispatcher.register(UserStore.handleDispatch.bind(UserStore));

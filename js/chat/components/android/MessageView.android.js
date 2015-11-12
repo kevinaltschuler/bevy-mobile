@@ -240,7 +240,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginRight: 10
   },
   infoButton: {
     height: 48,

@@ -20,6 +20,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
 var BevyActions = require('./../../../bevy/BevyActions');
+var UserStore = require('./../../../user/UserStore');
 
 var PostHeader = React.createClass({
   propTypes: {
@@ -74,9 +75,7 @@ var PostHeader = React.createClass({
         >
           <View>
             <Image 
-              source={{ uri: _.isEmpty(author.image_url) 
-                ? constants.siteurl + '/img/user-profile-icon.png' 
-                : author.image_url }}
+              source={ UserStore.getUserImage(author) }
               style={ styles.authorImage }
             />
           </View>

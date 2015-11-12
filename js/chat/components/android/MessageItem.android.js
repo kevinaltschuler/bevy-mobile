@@ -17,6 +17,7 @@ var {
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
+var UserStore = require('./../../../user/UserStore');
 
 var MessageItem = React.createClass({
   propTypes: {
@@ -137,10 +138,7 @@ var MessageItem = React.createClass({
           onPress={ this.goToPublicProfile }
         >
           <Image 
-            source={{ uri: (_.isEmpty(author.image_url)) 
-              ? constants.siteurl + '/img/user-profile-icon.png' 
-              : author.image_url 
-            }}
+            source={ UserStore.getUserImage(author) }
             style={ styles.authorImage }
           />
         </TouchableWithoutFeedback>
