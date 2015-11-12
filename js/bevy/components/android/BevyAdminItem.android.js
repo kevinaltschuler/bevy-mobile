@@ -68,7 +68,7 @@ var BevyAdminItem = React.createClass({
             </View>
           </View>
         </TouchableNativeFeedback>
-        <Collapsible duration={ 1000 } collapsed={ !this.state.actionBarOpen }>
+        <Collapsible duration={ 250 } collapsed={ !this.state.actionBarOpen }>
           <View style={ styles.actionBar }>
             <TouchableNativeFeedback
               background={ TouchableNativeFeedback.Ripple('#62D487', false) }

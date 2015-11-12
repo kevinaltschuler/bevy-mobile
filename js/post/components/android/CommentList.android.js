@@ -18,6 +18,8 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
+var constants = require('./../../../constants');
+var CommentActions = require('./../../../post/CommentActions');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
 var colorMap = [
   '#97FF80',
@@ -34,6 +36,9 @@ var CommentList = React.createClass({
     onReply: React.PropTypes.func,
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
+    post: React.PropTypes.object,
+    onSelect: React.PropTypes.func,
+    selectedComment: React.PropTypes.string,
     root: React.PropTypes.bool // if its the root comment list 
                                // being rendered by the comment view
   },
@@ -57,6 +62,9 @@ var CommentList = React.createClass({
           user={ this.props.user }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          post={ this.props.post }
+          onSelect={ this.props.onSelect }
+          selectedComment={ this.props.selectedComment }
         />
       );
     }
@@ -87,7 +95,10 @@ var CommentItem = React.createClass({
     onReply: React.PropTypes.func,
     user: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    mainRoute: React.PropTypes.object
+    mainRoute: React.PropTypes.object,
+    post: React.PropTypes.object,
+    onSelect: React.PropTypes.func,
+    selectedComment: React.PropTypes.string
   },
 
   getInitialState() {
@@ -97,11 +108,62 @@ var CommentItem = React.createClass({
     };
   },
 
-  reply() {
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      showActionBar: nextProps.selectedComment == this.props.comment._id
+    })
+  },
+
+  replyToComment() {
     this.props.onReply(this.props.comment);
     this.setState({
       showActionBar: false
     });
+  },
+
+  deleteComment() {
+    CommentActions.destroy(this.props.comment.postId, this.props.comment._id)
+  },
+
+  goToAuthorProfile() {
+    // set route user
+    var route = routes.MAIN.PROFILE;
+    route.user = this.props.comment.author;
+    // go to profile page
+    this.props.mainNavigator.push(route);
+  },
+
+  showActionSheet() {
+    var actions = [];
+    // only allow deletion if the user is the author of the comment
+    // or if the user is an admin of the active bevy
+    if(this.props.user._id == this.props.comment.author._id
+      || _.contains(this.props.post.bevy.admins, this.props.user._id)) {
+      actions.push("Delete Comment");
+    }
+    actions.push("Reply To Comment");
+    actions.push("Go To Author's Profile");
+
+    // if no actions to show, then dont show the action sheet
+    if(_.isEmpty(actions)) return;
+
+    constants.getActionSheetActions().show(
+      actions,
+      function(key, option) {
+        switch(option) {
+          case "Delete Comment":
+            this.deleteComment();
+            break;
+          case "Reply To Comment":
+            this.replyToComment();
+            break;
+          case "Go To Author's Profile":
+            this.goToAuthorProfile();
+            break;
+        }
+      }.bind(this),
+      'Comment Actions'
+    );
   },
 
   _renderComment() {
@@ -151,17 +213,11 @@ var CommentItem = React.createClass({
 
   _renderActionBar() {
     return (
-      <Collapsible duration={ 1000 } collapsed={ !this.state.showActionBar }>
+      <Collapsible duration={ 250 } collapsed={ !this.state.showActionBar }>
         <View style={ styles.actionBar }>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-            onPress={() => {
-              // set route user
-              var route = routes.MAIN.PROFILE;
-              route.user = this.props.comment.author;
-              // go to profile page
-              this.props.mainNavigator.push(route);
-            }}
+            onPress={ this.goToAuthorProfile }
           >
             <View style={ styles.actionBarItem }>
               <Icon
@@ -173,7 +229,7 @@ var CommentItem = React.createClass({
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-            onPress={ this.reply }
+            onPress={ this.replyToComment }
           >
             <View style={ styles.actionBarItem }>
               <Icon
@@ -185,7 +241,7 @@ var CommentItem = React.createClass({
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-            onPress={() => {}}
+            onPress={ this.showActionSheet }
           >
             <View style={ styles.actionBarItem }>
               <Icon
@@ -209,6 +265,9 @@ var CommentItem = React.createClass({
         onReply={ this.props.onReply }
         mainNavigator={ this.props.mainNavigator }
         mainRoute={ this.props.mainRoute }
+        post={ this.props.post }
+        onSelect={ this.props.onSelect }
+        selectedComment={ this.props.selectedComment }
       />
     );
   },
@@ -221,8 +280,9 @@ var CommentItem = React.createClass({
           onPress={() => {
             if(this.state.isCompact)
               this.setState({ isCompact: false });
-            else
-              this.setState({ showActionBar: !this.state.showActionBar });
+            //else
+              //this.setState({ showActionBar: !this.state.showActionBar });
+            this.props.onSelect(this.props.comment._id);
           }}
           delayLongPress={ 750 }
           onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}

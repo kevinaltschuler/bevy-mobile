@@ -25,6 +25,8 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
 var CommentActions = require('./../../CommentActions');
+var PostStore = require('./../../../post/PostStore');
+var POST = constants.POST;
 
 var CommentView = React.createClass({
   propTypes: {
@@ -40,15 +42,24 @@ var CommentView = React.createClass({
     return {
       input: '',
       replyToComment: {},
-      comments: this.nestComments(this.props.post.comments)
+      comments: this.nestComments(this.props.post.comments),
+      selectedComment: ''
     };
   },
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    PostStore.on(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    PostStore.off(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
+  },
+
+  onPostChange() {
+    this.setState({
+      comments: this.nestComments(PostStore.getPost(this.props.post._id).comments)
+    });
   },
 
   onBackButton() {
@@ -62,6 +73,14 @@ var CommentView = React.createClass({
     });
     // focus the input
     this.refs.Input.focus();
+  },
+
+  onCommentSelect(comment_id) {
+    this.setState({
+      selectedComment: (this.state.selectedComment == comment_id)
+        ? ''
+        : comment_id
+    });
   },
 
   nestComments(comments, parentId, depth) {
@@ -151,7 +170,10 @@ var CommentView = React.createClass({
           user={ UserStore.getUser() }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          post={ this.props.post }
           root={ true }
+          onSelect={ this.onCommentSelect }
+          selectedComment={ this.state.selectedComment }
         />
       </View>
     );

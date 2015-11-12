@@ -12,6 +12,11 @@
 // imports
 var Backbone = require('backbone');
 var _ = require('underscore');
+var React = require('react-native');
+var {
+  Platform
+} = React;
+var Fletcher = require('./../shared/components/android/Fletcher.android.js');
 
 var Dispatcher = require('./../shared/dispatcher');
 
@@ -304,8 +309,6 @@ _.extend(PostStore, {
         // clear posts immediately
         this.posts.reset();
         this.trigger(POST.CHANGE_ALL);
-        //this.trigger(POST.LOADED);
-
         break;
 
       case COMMENT.CREATE:
@@ -313,6 +316,9 @@ _.extend(PostStore, {
         var author_id = payload.author_id;
         var post_id = payload.post_id;
         var parent_id = payload.parent_id;
+
+        var post = this.posts.get(post_id);
+        if(post == undefined) break;
 
         var comment = new Backbone.Model({
           body: body,
@@ -322,11 +328,100 @@ _.extend(PostStore, {
           comments: []
         });
         comment.url = constants.apiurl + '/comments';
-        comment.save();
-        this.trigger(POST.CHANGE_ALL); // custom event for this later?
-        //this.trigger(POST.CHANGE_ONE + post_id);
+        comment.save(null, {
+          success: function(model, response, options) {
+            // populate
+            comment.set('_id', model.get('_id'));
+            comment.set('created', model.get('created'));
+            // add to post
+            post.get('comments').push(comment);
+            // trigger updates
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
+      case COMMENT.DESTROY:
+        var post_id = payload.post_id;
+        var comment_id = payload.comment_id;
+        var url = constants.apiurl + '/comments/' + comment_id;
+
+        // send server request
+        if(Platform.OS == 'android') {
+          Fletcher.fletch(url, {
+            method: 'DELETE',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: ''
+          },
+          function(error) {
+            error = JSON.parse(error);
+            console.error(error);
+          }.bind(this), function(res) {
+            res = JSON.parse(res);
+            //this.trigger(POST.CHANGE_ALL);
+            //this.trigger(POST.CHANGE_ONE + post_id);
+          }.bind(this))
+        } else {
+          // ios
+          fetch(url, {
+            method: 'delete',
+          })
+          .then(res => res.json())
+          .then(res => {
+            //this.trigger(POST.CHANGE_ALL);
+            //this.trigger(POST.CHANGE_ONE + post_id);
+          });
+        }
+
+        var post = this.posts.get(post_id);
+        var comments = post.get('comments');
+
+        if(_.findWhere(comments, { _id: comment_id })) {
+          // delete from post
+          comments = _.reject(comments, function(comment) {
+            return comment._id == comment_id;
+          });
+          post.set('comments', comments);
+        } else {
+          // delete from comment
+          this.removeComment(comments, comment_id);
+        }
+
+        var commentCount = post.get('commentCount');
+        post.set('commentCount', --commentCount);
+        //this.postsNestComment(post);
+
+        this.trigger(POST.CHANGE_ALL);
+        this.trigger(POST.CHANGE_ONE + post_id);
+
         break;
     }
+  },
+
+  /**
+   * recursively remove a comment
+   */
+  removeComment(comments, comment_id) {
+    // use every so we can break out if we need
+    return comments.every(function(comment, index) {
+      if(comment._id == comment_id) {
+        // it's a match. remove the comment and collapse
+        comments.splice(index, 1);
+        return false;
+      }
+      if(_.isEmpty(comment.comments)) {
+        // end of the line. collapse
+        return false;
+      }
+      else {
+        // there's more. keep going
+        return this.removeComment(comment.comments, comment_id);
+      }
+      // continue the every loop
+      return true;
+    }.bind(this));
   },
 
   sortByTop(post) {
