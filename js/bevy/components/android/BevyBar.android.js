@@ -96,7 +96,6 @@ var BevyBar = React.createClass({
   },
 
   _renderImage() {
-    var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     if(this.props.activeBevy._id == -1 || _.isEmpty(this.props.activeBevy.image_url)) {
       var bgColor = (this.props.activeBevy._id == -1)
         ? '#FFF'
@@ -108,7 +107,7 @@ var BevyBar = React.createClass({
       return (
         <View style={ styles.bevyImageWrapper }>
           <Image
-            source={{ uri: image_url }}
+            source={ BevyStore.getBevyImage(this.props.activeBevy._id) }
             style={ styles.bevyImage }
           />
           <View style={ styles.imageDarkener } />

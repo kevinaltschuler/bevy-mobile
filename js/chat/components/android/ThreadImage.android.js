@@ -37,7 +37,7 @@ var ThreadImage = React.createClass({
       source = img_default;
     }
     if(this.props.thread.type == 'bevy') {
-      source.uri = BevyStore.getBevyImage(this.props.thread.bevy._id, 50, 50);
+      source = BevyStore.getBevyImage(this.props.thread.bevy._id, 50, 50);
     }
     return {
       source: source

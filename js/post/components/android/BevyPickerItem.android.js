@@ -45,7 +45,6 @@ var BevyPickerItem = React.createClass({
   },
 
   render() {
-    var image_url = BevyStore.getBevyImage(this.props.bevy._id, 50, 50);
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
@@ -57,9 +56,7 @@ var BevyPickerItem = React.createClass({
           { this._renderIcon() }
           <Image 
             style={ styles.bevyImage }
-            source={{ uri: _.isEmpty(image_url)
-              ? constants.siteurl + '/img/logo_100.png'
-              : image_url }}
+            source={ BevyStore.getBevyImage(this.props.bevy._id, 50, 50) }
           />
           <Text style={ styles.bevyName }>{ this.props.bevy.name }</Text>
         </View>
