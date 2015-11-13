@@ -191,8 +191,12 @@ var CommentItem = React.createClass({
               color='#AAA'
               style={ styles.plusIcon }
             />
-            <Text style={ styles.author }>{ this.props.comment.author.displayName }</Text>
-            <Text style={ styles.timeAgo }>{ timeAgo(Date.parse(this.props.comment.created)) }</Text>
+            <Text style={ styles.author }>
+              { this.props.comment.author.displayName }
+            </Text>
+            <Text style={ styles.timeAgo }>
+              { timeAgo(Date.parse(this.props.comment.created)) }
+            </Text>
           </View>
         </View>
       );
@@ -200,11 +204,17 @@ var CommentItem = React.createClass({
       return (
         <View style={[ styles.comment, commentStyle ]}>
           <View style={ styles.header }>
-            <Text style={ styles.author }>{ this.props.comment.author.displayName }</Text>
-            <Text style={ styles.timeAgo }>{ timeAgo(Date.parse(this.props.comment.created)) }</Text>
+            <Text style={ styles.author }>
+              { this.props.comment.author.displayName }
+            </Text>
+            <Text style={ styles.timeAgo }>
+              { timeAgo(Date.parse(this.props.comment.created)) }
+            </Text>
           </View>
-          <View style={ styles.body }>
-            <Text style={ styles.bodyText }>{ this.props.comment.body.trim() }</Text>
+          <View style={ styles.body } accessible={ true }>
+            <Text style={ styles.bodyText }>
+              { this.props.comment.body.trim() }
+            </Text>
           </View> 
         </View>
       );
@@ -280,9 +290,8 @@ var CommentItem = React.createClass({
           onPress={() => {
             if(this.state.isCompact)
               this.setState({ isCompact: false });
-            //else
-              //this.setState({ showActionBar: !this.state.showActionBar });
-            this.props.onSelect(this.props.comment._id);
+            else
+              this.props.onSelect(this.props.comment._id);
           }}
           delayLongPress={ 750 }
           onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}
