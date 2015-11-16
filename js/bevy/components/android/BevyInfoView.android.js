@@ -249,7 +249,6 @@ var BevyInfoView = React.createClass({
   },
 
   render() {
-    var image_url = BevyStore.getBevyImage(this.props.activeBevy._id);
     return (
       <View style={ styles.container }>
         <BevyBar
@@ -260,7 +259,7 @@ var BevyInfoView = React.createClass({
         <ScrollView>
           <View style={ styles.header }>
             <Image
-              source={{ uri: image_url }}
+              source={ BevyStore.getBevyImage(this.props.activeBevy._id) }
               style={ styles.bevyImage }
             />
             <View style={ styles.bevyDetails }>

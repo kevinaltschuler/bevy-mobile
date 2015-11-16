@@ -20,6 +20,7 @@ var Collapsible = require('react-native-collapsible');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var UserStore = require('./../../../user/UserStore');
 
 var BevyAdminItem = React.createClass({
   propTypes: {
@@ -60,7 +61,7 @@ var BevyAdminItem = React.createClass({
         >
           <View style={ styles.item }>
             <Image
-              source={{ uri: this.props.admin.image_url }}
+              source={ UserStore.getUserImage(this.props.admin) }
               style={ styles.image }
             />
             <View style={ styles.details }>
@@ -68,7 +69,7 @@ var BevyAdminItem = React.createClass({
             </View>
           </View>
         </TouchableNativeFeedback>
-        <Collapsible duration={ 1000 } collapsed={ !this.state.actionBarOpen }>
+        <Collapsible duration={ 250 } collapsed={ !this.state.actionBarOpen }>
           <View style={ styles.actionBar }>
             <TouchableNativeFeedback
               background={ TouchableNativeFeedback.Ripple('#62D487', false) }

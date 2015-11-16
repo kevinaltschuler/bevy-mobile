@@ -19,6 +19,14 @@ var CommentActions = {
       post_id: post_id,
       parent_id: (parent_id == undefined) ? null : parent_id
     });
+  },
+
+  destroy(post_id, comment_id) {
+    Dispatcher.dispatch({
+      actionType: COMMENT.DESTROY,
+      post_id: post_id,
+      comment_id: comment_id
+    });
   }
 };
 

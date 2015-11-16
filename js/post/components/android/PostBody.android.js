@@ -52,7 +52,8 @@ var PostBody = React.createClass({
     };
 
     return (
-      <Text style={[ styles.postText, textStyle ]}>
+      <Text
+        style={[ styles.postText, textStyle ]}>
         { this.props.post.title }
       </Text>
     );
@@ -91,6 +92,7 @@ var PostBody = React.createClass({
       <View 
         style={ styles.container }
         onLayout={ this.onLayout }
+        accessible={ true }
       >
         { this._renderText() } 
         { this._renderExpandButton() }

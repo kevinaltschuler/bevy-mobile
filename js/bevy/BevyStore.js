@@ -172,27 +172,28 @@ _.extend(BevyStore, {
         var description = payload.description;
         var image_url = payload.image_url;
         var slug = payload.slug;
-
         var user = UserStore.getUser();
 
+        // create and add to my bevies list
         var newBevy = this.myBevies.add({
           name: name,
           description: description,
           image_url: image_url,
-          admins: [ user._id ],
+          admins: [ user._id ], // add self as admin
           slug: slug
         });
 
+        // save to server
         newBevy.save(null, {
           success: function(model, response, options) {
-            // success
-            newBevy.set('_id', model.id);
-
-            this.trigger(BEVY.CREATED, model.toJSON());
+            // success - populate fields
+            newBevy.set('_id', model.get('_id'));
+            newBevy.set('admins', [ user ]);
+            // trigger changes for front-end
             this.trigger(BEVY.CHANGE_ALL);
+            this.trigger(BEVY.CREATED, newBevy.toJSON());
           }.bind(this)
         });
-
         break;
 
       case BEVY.DESTROY:
@@ -395,7 +396,6 @@ _.extend(BevyStore, {
     if(bevy_id == -1) return '';
     var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
     if(bevy == undefined) return '';
-    var bevy_id = bevy.get('_id');
     var default_bevies = [
       '11sports',
       '22gaming',
@@ -405,19 +405,44 @@ _.extend(BevyStore, {
       '6666news',
       '777books'
     ];
-    if(_.contains(default_bevies, bevy_id)) {
-      return constants.siteurl + bevy.get('image_url');
-    }
-    var image_url = bevy.get('image_url')
-    if(image_url.slice(7, 23) == 'api.joinbevy.com'
+
+    var source = { uri: bevy.get('image_url') };
+    var default_bevy_index = default_bevies.indexOf(bevy_id);
+
+    if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
       && height != undefined) {
-      image_url += '?w=' + width + '&h=' + height;
+      source.uri += '?w=' + width + '&h=' + height;
     }
-    if(_.isEmpty(image_url)) {
-      image_url = constants.siteurl + '/img/logo_100.png';
+    if(_.isEmpty(source.uri)) {
+      source = require('./../images/logo_200.png');
     }
-    return image_url;
+    if(default_bevy_index > -1) {
+      switch(default_bevy_index) {
+        case 0:
+          source = require('./../images/default_groups/sports.png');
+          break;
+        case 1:
+          source = require('./../images/default_groups/gaming.png');
+          break;
+        case 2:
+          source = require('./../images/default_groups/pictures.png');
+          break;
+        case 3:
+          source = require('./../images/default_groups/videos.png');
+          break;
+        case 4:
+          source = require('./../images/default_groups/music.png');
+          break;
+        case 5:
+          source = require('./../images/default_groups/news.png');
+          break;
+        case 6:
+          source = require('./../images/default_groups/books.png');
+          break;
+      }
+    }
+    return source;
   },
 
   addBevy(bevy) {

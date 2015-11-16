@@ -14,6 +14,7 @@ var {
 } = React;
 
 var _ = require('underscore');
+var UserStore = require('./../../../user/UserStore');
 
 var ProfileRow = React.createClass({
   propTypes: {
@@ -45,7 +46,7 @@ var ProfileRow = React.createClass({
         height: this.props.height 
       }, this.props.style ]}>
         <Image
-          source={{ uri: this.props.user.image_url }}
+          source={ UserStore.getUserImage(this.props.user) }
           //source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
           style={[ styles.profileImage, { 
             width: this.props.imageSize, 

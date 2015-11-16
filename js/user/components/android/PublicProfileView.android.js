@@ -75,14 +75,14 @@ var PublicProfileView = React.createClass({
     return (
       <View style={ styles.topBar }>
         <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
           onPress={ this.goBack }
         >
           <View style={ styles.backButton }>
             <Icon
               name='arrow-back'
               size={ 30 }
-              color='#888'
+              color='#FFF'
             />
           </View>
         </TouchableNativeFeedback>
@@ -184,7 +184,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE'
   },
   topBar: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#2CB673',
     height: 48,
     width: constants.width,
     flexDirection: 'row',
@@ -194,13 +194,14 @@ var styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     marginRight: 10
   },
   titleText: {
     flex: 1,
-    color: '#000',
-    textAlign: 'left'
+    color: '#FFF',
+    textAlign: 'left',
+    fontSize: 18
   },
   list: {
     flex: 1

@@ -15,7 +15,9 @@ var {
   TouchableNativeFeedback
 } = React;
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
+var UserStore = require('./../../../user/UserStore');
 
 var PersonItem = React.createClass({
   propTypes: {
@@ -31,7 +33,7 @@ var PersonItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: this.props.user.image_url }}
+            source={ UserStore.getUserImage(this.props.user) }
           />
           <Text style={ styles.name }>
             { this.props.user.displayName }

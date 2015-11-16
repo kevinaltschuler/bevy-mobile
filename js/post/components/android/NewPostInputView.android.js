@@ -107,7 +107,7 @@ var NewPostInputView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={() => {
               // go back
               this.props.mainNavigator.pop();
@@ -117,20 +117,20 @@ var NewPostInputView = React.createClass({
               <Icon
                 name='arrow-back'
                 size={ 30 }
-                color='#666'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
           <Text style={ styles.topBarTitle }>New Post</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={ this.submitPost }
           >
             <View style={ styles.postButton }>
               <Icon
                 name='send'
                 size={ 30 }
-                color='#2CB673'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
@@ -138,7 +138,7 @@ var NewPostInputView = React.createClass({
         <View style={ styles.postingToBar }>
           <Text style={ styles.postingTo }>Post To</Text>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER)}
           >
             <View style={ styles.bevyPickerButton }>
@@ -155,7 +155,7 @@ var NewPostInputView = React.createClass({
           }]}>
           </View>
           <Dropdown
-            style={{ height: 20, width: 200}}
+            style={{ height: 30, width: 200}}
             values={ tags } 
             selected={ this.state.selectedTag } 
             onChange={(data) => {
@@ -216,7 +216,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-end'
   },
   topBar: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#2CB673',
     height: 48,
     width: constants.width,
     flexDirection: 'row',
@@ -226,16 +226,17 @@ var styles = StyleSheet.create({
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 12,
-    paddingRight: 12
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginRight: 10
   },
   backButtonText: {
     color: '#000'
   },
   topBarTitle: {
     flex: 1,
-    textAlign: 'center',
-    color: '#000'
+    color: '#FFF',
+    fontSize: 18
   },
   postButton: {
     height: 48,
@@ -252,24 +253,28 @@ var styles = StyleSheet.create({
     width: constants.width,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2CB673',
+    backgroundColor: '#FFF',
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+    borderBottomColor: '#EEE',
+    borderBottomWidth: 1
   },
   postingTo: {
-    color: '#FFF',
-    marginRight: 10
+    color: '#AAA',
+    marginRight: 10,
+    fontSize: 16
   },
   bevyPickerButton: {
     height: 40,
     flexDirection: 'column',
     justifyContent: 'center',
-    paddingLeft: 12,
-    paddingRight: 12
+    paddingLeft: 10,
+    paddingRight: 10
   },
   bevyPickerButtonText: {
     textAlign: 'left',
-    color: '#FFF'
+    color: '#666',
+    fontSize: 16
   },
   loadingContainer: {
     flex: 1,
@@ -283,7 +288,7 @@ var styles = StyleSheet.create({
     color: '#FFF'
   },
   tagBar: {
-    height: 48,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
@@ -293,9 +298,9 @@ var styles = StyleSheet.create({
     color: '#333'
   },
   tagCircle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
     backgroundColor: '#F00',
     marginRight: 10
   },

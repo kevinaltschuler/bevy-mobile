@@ -22,22 +22,25 @@ var ChatStore = require('./../../ChatStore');
 var UserStore = require('./../../../user/UserStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 
+var img_default = require('./../../../images/user-profile-icon.png');
+
 var ThreadImage = React.createClass({
   propTypes: {
     thread: React.PropTypes.object
   },
 
   getInitialState() {
-    var image_url = ChatStore.getThreadImageURL(this.props.thread._id);
-    if(image_url == (constants.siteurl + '/img/user-profile-icon.png')) {
-    } else if(image_url == '/img/user-profile-icon.png') {
-      image_url = constants.siteurl + '/img/user-profile-icon.png';
+    var source = { uri: ChatStore.getThreadImageURL(this.props.thread._id) };
+    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
+      source = img_default;
+    } else if(source.uri == '/img/user-profile-icon.png') {
+      source = img_default;
     }
     if(this.props.thread.type == 'bevy') {
-      image_url = BevyStore.getBevyImage(this.props.thread.bevy._id, 50, 50);
+      source = BevyStore.getBevyImage(this.props.thread.bevy._id, 50, 50);
     }
     return {
-      image_url: image_url
+      source: source
     };
   },
 
@@ -52,7 +55,7 @@ var ThreadImage = React.createClass({
     return (
       <Image 
         style={ imageStyle } 
-        source={{ uri: this.state.image_url }}
+        source={ this.state.source }
       />
     );
   },
@@ -152,7 +155,7 @@ var ThreadImage = React.createClass({
             <Image 
               key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id } 
               style={ iconStyle } 
-              source={{ uri: this.state.image_url }}
+              source={ UserStore.getUserImage(user) }
             />
           );
         }

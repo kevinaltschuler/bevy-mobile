@@ -17,6 +17,7 @@ var {
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
+var UserStore = require('./../../../user/UserStore');
 
 var MessageItem = React.createClass({
   propTypes: {
@@ -44,7 +45,11 @@ var MessageItem = React.createClass({
     if(diff <= ( 1000 * 60 * 60 * 24)) {
       // within a day - only display hours and minutes
       created = 
-        ((createDate.getHours() > 12 ) ? createDate.getHours() - 12 : createDate.getHours()) // 12 hr format
+        ((createDate.getHours() > 12 ) 
+          ? createDate.getHours() - 12 
+          : (createDate.getHours() == 0)
+            ? '12'
+            : createDate.getHours()) 
         + ':'
         + createDate.getMinutes()
         + ((createDate.getHours() > 11) ? ' PM' : ' AM');
@@ -133,10 +138,7 @@ var MessageItem = React.createClass({
           onPress={ this.goToPublicProfile }
         >
           <Image 
-            source={{ uri: (_.isEmpty(author.image_url)) 
-              ? constants.siteurl + '/img/user-profile-icon.png' 
-              : author.image_url 
-            }}
+            source={ UserStore.getUserImage(author) }
             style={ styles.authorImage }
           />
         </TouchableWithoutFeedback>

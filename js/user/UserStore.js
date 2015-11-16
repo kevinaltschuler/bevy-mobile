@@ -443,6 +443,8 @@ _.extend(UserStore, {
       case USER.SEARCH:
         this.trigger(USER.SEARCHING);
         var query = payload.query;
+        // make the query url friendly
+        query = encodeURIComponent(query);
 
         var url = (_.isEmpty(query))
           ? constants.apiurl + '/users'
@@ -467,7 +469,6 @@ _.extend(UserStore, {
             this.trigger(USER.SEARCH_COMPLETE);
           }.bind(this));
         } else {
-          
           fetch(url,
           {
             method: 'get',
@@ -479,14 +480,12 @@ _.extend(UserStore, {
           // on fetch
           .then((res) => (res.json()))
           .then((res) => {
-            console.log(res);
             this.userSearchQuery = query;
             this.userSearchResults.reset(res);
             if(this.loggedIn)
               this.userSearchResults.remove(this.user._id); // remove self from search results
             this.trigger(USER.SEARCH_COMPLETE);
           });
-
         }
         break;
     }
@@ -515,6 +514,17 @@ _.extend(UserStore, {
 
   getUserSearchResults() {
     return this.userSearchResults.toJSON();
+  },
+
+  getUserImage(user) {
+    var img_default = require('./../images/user-profile-icon.png');
+    var source = { uri: user.image_url };
+    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
+      source = img_default;
+    } else if(source.uri == '/img/user-profile-icon.png') {
+      source = img_default;
+    }
+    return source;
   }
 });
 var dispatchToken = Dispatcher.register(UserStore.handleDispatch.bind(UserStore));

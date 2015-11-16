@@ -32,9 +32,9 @@ var EventBody = React.createClass({
 
   getInitialState() {
     return {
-      image_url: (this.props.post.images[0] == '/img/default_event_img.png')
-        ? constants.siteurl + this.props.post.images[0]
-        : this.props.post.images[0],
+      source: (this.props.post.images[0] == '/img/default_event_img.png')
+        ? require('./../../../images/default_event_img.png')
+        : { uri: this.props.post.images[0] },
       date: new Date(this.props.post.event.date)
     };
   },
@@ -116,7 +116,7 @@ var EventBody = React.createClass({
         <View style={ compactStyles.container }>
           <Image 
             style={ compactStyles.image }
-            source={{ uri: this.state.image_url }}
+            source={ this.state.source }
           />
           <View style={ compactStyles.details }>
             <View style={ compactStyles.dateContainer }>
@@ -159,7 +159,7 @@ var EventBody = React.createClass({
         <View style={ expandedStyles.header }>
           <Image
             style={ expandedStyles.headerImage }
-            source={{ uri: this.state.image_url }}
+            source={ this.state.source }
           />
           <View style={ expandedStyles.darkener } />
           <Text style={ expandedStyles.title }>

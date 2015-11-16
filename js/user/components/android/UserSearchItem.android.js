@@ -18,6 +18,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var UserStore = require('./../../../user/UserStore');
 
 var UserSearchItem = React.createClass({
   propTypes: {
@@ -68,10 +69,6 @@ var UserSearchItem = React.createClass({
   },
 
   render() {
-    var image_url = this.props.searchUser.image_url;
-    if(_.isEmpty(image_url)) {
-      image_url = constants.siteurl + '/img/user-profile-icon.png';
-    }
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
@@ -80,7 +77,7 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: image_url }}
+            source={ UserStore.getUserImage(this.props.searchUser) }
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>

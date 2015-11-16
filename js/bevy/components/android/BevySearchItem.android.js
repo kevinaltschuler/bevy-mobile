@@ -34,7 +34,6 @@ var BevySearchItem = React.createClass({
   },
 
   render() {
-    var image_url = BevyStore.getBevyImage(this.props.bevy._id, 50, 50);
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
@@ -43,7 +42,7 @@ var BevySearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: image_url }}
+            source={ BevyStore.getBevyImage(this.props.bevy._id, 50, 50) }
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>

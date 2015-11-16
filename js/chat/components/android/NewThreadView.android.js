@@ -246,14 +246,14 @@ var NewThreadView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.navBar }>
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
             onPress={ this.goBack }
           >
             <View style={ styles.backButton }>
               <Icon
                 name='arrow-back'
                 size={ 30 }
-                color='#888'
+                color='#FFF'
               />
             </View>
           </TouchableNativeFeedback>
@@ -296,19 +296,21 @@ var styles = StyleSheet.create({
     width: constants.width,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
-    borderBottomColor: '#DDD',
+    backgroundColor: '#2CB673',
+    borderBottomColor: '#EEE',
     borderBottomWidth: 1
   },
   backButton: {
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginRight: 10
   },
   title: {
     flex: 1,
-    color: '#000'
+    color: '#FFF',
+    fontSize: 18
   },
   toBar: {
     width: constants.width,

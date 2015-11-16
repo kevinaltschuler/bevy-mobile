@@ -180,7 +180,7 @@ var PostList = React.createClass({
           />
           <Image
             style={ styles.privateImage }
-            source={{ uri: constants.siteurl + '/img/private.png' }}
+            source={ require('./../../../images/private.png') }
           />
           <Text style={ styles.privateText }>
             This Bevy is Private
