@@ -8,11 +8,22 @@
  */
 
 #import "AppDelegate.h"
-
+#import "RCTPushNotificationManager.h"
 #import "RCTRootView.h"
 #import "RCTLinkingManager.h"
 
 @implementation AppDelegate
+
+  // Required for the register event.
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+    {
+     [RCTPushNotificationManager application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    }
+  // Required for the notification event.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
+    {
+       [RCTPushNotificationManager application:application didReceiveRemoteNotification:notification];
+    }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication: (NSString *)sourceApplication annotation: (id)annotation {
     return [RCTLinkingManager application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
@@ -20,8 +31,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
   NSURL *jsCodeLocation;
-
   /**
    * Loading JavaScript code - uncomment the one you want.
    *

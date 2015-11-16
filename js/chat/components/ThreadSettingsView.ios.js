@@ -101,6 +101,10 @@ var ThreadSettingsView = React.createClass({
     ChatActions.editThread(this.props.activeThread._id, this.state.threadName);
   },
 
+  addPeople() {
+    
+  },
+
   _renderName() {
     if(this.state.editingName) {
       return (

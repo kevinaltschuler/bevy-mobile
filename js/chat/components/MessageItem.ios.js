@@ -22,6 +22,12 @@ var MessageItem = React.createClass({
     hidePic: React.PropTypes.bool
   },
 
+  getDefaultProps() {
+    return {
+      message: ''
+    }
+  },
+
   getInitialState() {
     return {
       collapsed: true

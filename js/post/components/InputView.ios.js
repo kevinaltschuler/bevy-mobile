@@ -238,10 +238,10 @@ var InputView = React.createClass({
                   returnIsVertical: true
                 }, (type, response) => {
                   if (type !== 'cancel') {
-                    //console.log(response);
+                    console.log(response);
                     FileActions.upload(response);
                   } else {
-                    //console.log('Cancel');
+                    console.log('Cancel');
                   }
                 });
               }}
@@ -263,10 +263,10 @@ var InputView = React.createClass({
                   returnIsVertical: true
                 }, (type, response) => {
                   if (type !== 'cancel') {
-                    //console.log(response);
+                    console.log(response);
                     FileActions.upload(response);
                   } else {
-                    //console.log('Cancel');
+                    console.log('Cancel');
                   }
                 });
               }}

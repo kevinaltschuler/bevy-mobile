@@ -9,7 +9,9 @@
 var React = require('react-native');
 var {
   VibrationIOS,
-  Platform
+  Platform,
+  Push,
+  PushNotificationIOS
 } = React;
 //var VibrationAndroid = (Platform.OS == 'android')
 //  ? require('react-native-vibration')
@@ -17,6 +19,7 @@ var {
 //var AudioPlayer = (Platform.OS == 'android')
 //  ? require('react-native-audioplayer')
 //  : {};
+//  
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -30,7 +33,7 @@ var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
 //if(Platform.OS == 'android')
-window.navigator.userAgent = "react-native";
+//window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);

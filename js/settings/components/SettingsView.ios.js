@@ -12,13 +12,16 @@ var {
   Text,
   Image,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
 var Navbar = require('./../../shared/components/Navbar.ios.js');
 var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+
+var constants = require('./../../constants');
 
 var _ = require('underscore');
 var routes = require('./../../routes');
@@ -40,7 +43,6 @@ var SettingsView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     this.setState({
       profilePicture: (_.isEmpty(nextProps.user.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : nextProps.user.image_url
     });
@@ -115,7 +117,7 @@ var SettingsView = React.createClass({
         />
         <SettingsItem
           title='View Public Profile'
-          icon= {<Icon
+          icon={<Icon
               name={'ios-person'}
               size={30}
               color='rgba(0,0,0,.3)'
@@ -128,7 +130,7 @@ var SettingsView = React.createClass({
         />
         <SettingsItem
           title='Switch Account'
-          icon= {<Icon
+          icon={<Icon
               name={'ios-shuffle-strong'}
               size={30}
               color='rgba(0,0,0,.3)'
@@ -169,15 +171,15 @@ var SettingsView = React.createClass({
           { this._renderAccountSettings() }
 
           <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>About</Text>
-          <View style={ styles.settingItem}>
-            <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
-              { icon }
-            </View>
-            <Text style={ styles.settingTitle }>
-              { this.props.title }
-            </Text>
-            { check }
-          </View>
+          <SettingsItem 
+            title={'Version: Beta 1.0'} 
+            onPress={() => {}} 
+            icon={<Icon
+              name={'ios-flag'}
+              size={30}
+              color='rgba(0,0,0,.3)'
+            />}
+            />
         </ScrollView>
       </View>
     );
