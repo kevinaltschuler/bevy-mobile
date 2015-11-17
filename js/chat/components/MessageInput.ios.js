@@ -21,7 +21,8 @@ var constants = require('./../../constants');
 
 var MessageInput = React.createClass({
   propTypes: {
-    onSubmitEditing: React.PropTypes.func
+    onSubmitEditing: React.PropTypes.func,
+    marginBottom: React.PropTypes.number
   },
 
   getDefaultProps() {
@@ -45,7 +46,7 @@ var MessageInput = React.createClass({
 
   render() {
     return (
-      <View style={ styles.container }>
+      <View style={[styles.container, {marginBottom: this.props.marginBottom} ]}>
         <TextInput
           ref='MessageInput'
           value={ this.state.messageInput }
@@ -79,8 +80,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 8,
     borderTopColor: '#EEE',
-    borderTopWidth: 1,
-    marginBottom: 48
+    borderTopWidth: 1
   },
   messageInput: {
     flex: 1,

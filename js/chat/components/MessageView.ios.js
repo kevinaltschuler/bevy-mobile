@@ -50,7 +50,7 @@ var MessageView = React.createClass({
 
     return {
       isRefreshing: false,
-      keyboardSpace: 0,
+      keyboardSpace: 48,
       messageValue: '',
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
@@ -85,13 +85,26 @@ var MessageView = React.createClass({
     });
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
       this.setState({
-        keyboardSpace: 0
+        keyboardSpace: 48
       });
     });
   },
 
   componentWillUnmount: function() {
     ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
+
+      if (frames.end) {
+        this.setState({keyboardSpace: frames.end.height});
+      } else {
+        this.setState({keyboardSpace: frames.endCoordinates.height});
+      }
+    });
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({
+        keyboardSpace: 48
+      });
+    });
   },
 
   _onChatChange: function() {
@@ -150,15 +163,15 @@ var MessageView = React.createClass({
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
-  onChange: function(ev) {
-    var text = ev.nativeEvent.text;
+  onChange: function(text) {
     this.setState({
       messageValue: text
     });
   },
 
-  onSubmitEditing: function(ev) {
-    var text = ev.nativeEvent.text;
+  onSubmitEditing: function() {
+    var text = this.state.messageValue;
+    console.log(text);
     var user = this.props.user;
     ChatActions.postMessage(this.props.activeThread._id, user, text);
     this.setState({
@@ -177,6 +190,7 @@ var MessageView = React.createClass({
       messages: messages,
       dataSource: this.state.dataSource.cloneWithRows(messages)
     });
+    this.clearAndRetainFocus();
   },
 
   onEndReached() {
@@ -215,8 +229,8 @@ var MessageView = React.createClass({
     }
   },
 
-  clearAndRetainFocus: function(evt, elem) {
-    this.setState({messageValue: elem.text});
+  clearAndRetainFocus: function() {
+    this.setState({messageValue: ''});
     setTimeout(function() {
       this.setState({messageValue: this.getInitialState().messageValue});
       this.refs.MessageInput.focus();
@@ -227,9 +241,7 @@ var MessageView = React.createClass({
 
     return (
       <View 
-        style={[ styles.container, {
-          marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace - 48 // tab bar height
-        } ]} 
+        style={styles.container} 
         onStartShouldSetResponder={() => {
           this.refs.MessageInput.blur();
           this.setState({
@@ -269,17 +281,27 @@ var MessageView = React.createClass({
           renderHeader={ this.renderHeader }
           renderFooter={() => { return <View style={{height: 20}}/>}}
         />
-        <TextInput
-          style={[ styles.textInput ]}
-          ref='MessageInput'
-          placeholder={ 'Chat' }
-          value={ this.state.messageValue }
-          returnKeyType={ 'send' }
-          onChange={ this.onChange }
-          onSubmitEditing={ this.onSubmitEditing }
-          clearButtonMode={ 'while-editing' }
-          onSubmitEditing={this.clearAndRetainFocus}
-        />
+        <View style={[styles.inputContainer, {marginBottom: this.state.keyboardSpace - 48} ]}>
+          <TextInput
+            ref='MessageInput'
+            value={ this.state.messageValue }
+            style={ styles.messageInput }
+            onChangeText={(text) => { this.onChange(text); }}
+            onSubmitEditing={(ev) => { this.onSubmitEditing(); }}
+            clearButtonMode={ 'while-editing' }
+            placeholder='Chat'
+            placeholderTextColor='#AAA'
+            returnKeyType={ 'send' }
+          />
+          <TouchableOpacity
+            activeOpacity={.5}
+            onPress={ this.onSubmitEditing }
+          >
+            <Text style={ styles.sendMessageButton }>
+              Send
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -300,17 +322,45 @@ var styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     borderTopColor: '#333',
     paddingLeft: 16,
     backgroundColor: '#fff',
-    color: '#000'
+    color: '#000',
+    marginBottom: 0
   },
   loading: {
     paddingHorizontal: 20,
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  inputContainer: {
+    height: 48,
+    width: constants.width,
+    backgroundColor: '#FFF',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 8,
+    borderTopColor: '#EEE',
+    borderTopWidth: 1
+  },
+  messageInput: {
+    flex: 1,
+    paddingLeft: 10
+  },
+  sendMessageButton: {
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 8,
+    paddingLeft: 12,
+    paddingRight: 12,
+    paddingVertical: 12,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2cb673'
   }
 })
 

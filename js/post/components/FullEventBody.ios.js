@@ -96,6 +96,7 @@ var FullEventBody = React.createClass({
             date.toLocaleDateString("en", {day: "numeric"}) + ' ' + 
             date.toLocaleTimeString("en", {hour: "numeric", minute: "numeric"})
           }
+          onPress={() => {}}
           icon={<Icon size={30} name='calendar' style={{color: '#999'}}/>}
         />
         <SettingsItem 

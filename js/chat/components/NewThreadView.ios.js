@@ -20,6 +20,8 @@ var MessageInput = require('./MessageInput.ios.js');
 var UserSearchItem = require('./../../user/components/UserSearchItem.ios.js');
 var AddedUserItem = require('./../../user/components/AddedUserItem.ios.js');
 var Spinner = require('react-native-spinkit');
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var _ = require('underscore');
 var constants = require('./../../constants');
@@ -43,7 +45,8 @@ var NewThreadView = React.createClass({
       searching: false,
       searchUsers: [],
       ds: ds.cloneWithRows([]),
-      addedUsers: []
+      addedUsers: [],
+      keyboardSpace: 48
     };
   },
 
@@ -56,11 +59,39 @@ var NewThreadView = React.createClass({
     ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     // populate list with random users for now
     UserActions.search('');
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
+
+      console.log(frames);
+
+      if (frames.end) {
+        this.setState({keyboardSpace: frames.end.height});
+      } else {
+        this.setState({keyboardSpace: frames.endCoordinates.height});
+      }
+    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({
+        keyboardSpace: 48
+      });
+    });
   },
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
+
+      if (frames.end) {
+        this.setState({keyboardSpace: frames.end.height});
+      } else {
+        this.setState({keyboardSpace: frames.endCoordinates.height});
+      }
+    });
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
+      this.setState({
+        keyboardSpace: 48
+      });
+    });
   },
 
   onSearching() {
@@ -85,7 +116,7 @@ var NewThreadView = React.createClass({
 
   onSwitchToThread(thread_id) {
     // go to thread view
-    this.props.mainNavigator.replace(routes.MAIN.MESSAGEVIEW);
+    this.props.mainNavigator.replace(routes.CHAT.CHATVIEW);
   },
 
   onBackButton() {
@@ -260,6 +291,7 @@ var NewThreadView = React.createClass({
         </View>
         { this._renderSearchUsers() }
         <MessageInput
+          marginBottom={ this.state.keyboardSpace }
           onSubmitEditing={ this.onSubmit }
         />
       </View>

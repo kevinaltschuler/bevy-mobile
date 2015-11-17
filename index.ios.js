@@ -10,7 +10,8 @@ var {
   AppRegistry,
   StatusBarIOS,
   Navigator,
-  AsyncStorage
+  AsyncStorage,
+  PushNotificationIOS
 } = React;
 
 var MainView = require('./js/app/components/MainView.ios.js');
@@ -143,7 +144,18 @@ var App = React.createClass({
     };
   },
 
-  componentDidMount() {
+  componentWillMount() {
+
+    PushNotificationIOS.addEventListener('register', function(token){
+     console.log('You are registered and the device token is: ',token)
+    });
+
+    PushNotificationIOS.addEventListener('notification', function(notification){
+     console.log('You have received a new notification!', notification);
+    });
+
+
+
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
     BevyStore.on(CHAT.CHANGE_ALL, this._onChatChange);
@@ -187,6 +199,8 @@ var App = React.createClass({
     ChatStore.off(change_all_events);
     NotificationStore.off(change_all_events);
 
+    PushNotificationIOS.removeEventListener('register', this._onNotificationReg);
+
     UserStore.off(USER.LOADED)
 
     AppActions.unload();
@@ -226,6 +240,9 @@ var App = React.createClass({
       authModalOpen: !this.state.authModalOpen
     });
   },
+  _onNotificationReg(data) {
+    console.log(data);
+  },
 
   render() {
 
@@ -238,6 +255,9 @@ var App = React.createClass({
       close: this.closeAuthModal,
       toggle: this.toggleAuthModal
     };
+
+    PushNotificationIOS.requestPermissions();
+    PushNotificationIOS.checkPermissions(data => {console.log(data)})
 
     return (
       <View style={{ flex: 1 }}>

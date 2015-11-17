@@ -227,12 +227,6 @@ var styles = StyleSheet.create({
     marginTop: 48,
     flexDirection: 'row',
   },
-  topBar: {
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
   closeButton: {
     height: 68,
     paddingLeft: 10,
@@ -242,7 +236,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 20,
     marginTop: 20,
-    color: 'white',
     position: 'absolute'
   },
   imageCountText: {
