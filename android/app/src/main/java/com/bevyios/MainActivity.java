@@ -5,6 +5,7 @@ import com.chymtt.reactnativedropdown.DropdownPackage;
 import com.eguma.vibration.Vibration;
 import com.sh3rawi.RNAudioPlayer.*;
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
+import com.learnium.RNDeviceInfo.*; 
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -54,6 +55,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new RNAudioPlayer())
         .addPackage(new ReactNativeDialogsPackage(this))
         .addPackage(new GCMPackage(this))
+        .addPackage(new RNDeviceInfo())
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();

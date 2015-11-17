@@ -509,6 +509,7 @@ _.extend(UserStore, {
             return;
           } else {
             // add to device list
+            
           }
         })
       });
