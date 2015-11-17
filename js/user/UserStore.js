@@ -519,10 +519,12 @@ _.extend(UserStore, {
     return this.userSearchResults.toJSON();
   },
 
-  getUserImage(user) {
+  getUserImage(user, width, height) {
     var img_default = require('./../images/user-profile-icon.png');
     var source = { uri: user.image_url };
-    if(source.uri.slice(7, 23) == 'api.joinbevy.com') {
+    if(source.uri.slice(7, 23) == 'api.joinbevy.com'
+      && width != undefined
+      && height != undefined) {
       source.uri += '?w=50&h=50';
     }
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {

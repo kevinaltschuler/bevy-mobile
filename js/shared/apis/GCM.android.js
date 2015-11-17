@@ -9,6 +9,15 @@
 var React = require('react-native');
 var {
   NativeModules,
+  Platform
 } = React;
 
-module.exports = NativeModules.GCM;
+var GCM = {};
+
+if(Platform.OS == 'android') {
+  GCM = NativeModules.GCM;
+} else {
+
+}
+
+module.exports = GCM;
