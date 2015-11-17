@@ -21,7 +21,7 @@
     "react-native-file-transfer": "^0.0.3",
     "react-native-vector-icons": "^0.8.4",
     "react-native-calendar": "^0.6.0",
-    "react-native-swiper-fork": "https://github.com/manandmoon/react-native-swiper#master",
+    "react-native-swiper-fork": "^2.0.1",
     "react-native-spinkit": "^0.0.5",
     "react-native-timer-mixin": "^0.11.0",
     "react-native-collapsible": "^0.5.2",

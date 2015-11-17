@@ -11,7 +11,8 @@ var {
   VibrationIOS,
   Platform,
   Push,
-  PushNotificationIOS
+  PushNotificationIOS,
+  AlertIOS
 } = React;
 //var VibrationAndroid = (Platform.OS == 'android')
 //  ? require('react-native-vibration')
@@ -33,7 +34,7 @@ var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
 //if(Platform.OS == 'android')
-//window.navigator.userAgent = "react-native";
+window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);
@@ -140,6 +141,28 @@ _.extend(NotificationStore, {
           notification.destroy();
         });
         this.trigger(NOTIFICATION.CHANGE_ALL);
+
+        break;
+      case NOTIFICATION.REGISTER:
+        var token = payload.token;
+        var user_id = payload.user_id;
+
+        if(_.isEmpty(token) || _.isEmpty(user_id)) {
+          break;
+        }
+        if(Platform.OS == 'ios') {
+          fetch(constants.apiurl + '/users/'+ user_id +'/devices', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              token: token,
+              device_platform: 'ios'
+            })
+          });
+        }
 
         break;
     }

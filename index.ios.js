@@ -11,11 +11,13 @@ var {
   StatusBarIOS,
   Navigator,
   AsyncStorage,
-  PushNotificationIOS
+  PushNotificationIOS,
+  AlertIOS
 } = React;
 
 var MainView = require('./js/app/components/MainView.ios.js');
 var LoginModal = require('./js/login/components/LoginModal.ios.js');
+var NotificationActions = require('./js/notification/NotificationActions');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -145,10 +147,11 @@ var App = React.createClass({
   },
 
   componentWillMount() {
-
-    PushNotificationIOS.addEventListener('register', function(token){
-     console.log('You are registered and the device token is: ',token)
-    });
+    PushNotificationIOS.addEventListener('register', function(token) {
+      if(this.state.loggedIn) {
+        NotificationActions.registerDevice(token, this.state.user._id);
+      }
+    }.bind(this));
 
     PushNotificationIOS.addEventListener('notification', function(notification){
      console.log('You have received a new notification!', notification);
@@ -257,7 +260,7 @@ var App = React.createClass({
     };
 
     PushNotificationIOS.requestPermissions();
-    PushNotificationIOS.checkPermissions(data => {console.log(data)})
+    //PushNotificationIOS.checkPermissions(data => {console.log(data)})
 
     return (
       <View style={{ flex: 1 }}>

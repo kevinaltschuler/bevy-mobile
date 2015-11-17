@@ -27,6 +27,13 @@ var NotificationActions = {
       actionType: NOTIFICATION.READ,
       id: (id == undefined) ? '0' : id
     });
+  },
+  registerDevice(token, user_id) {
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.REGISTER,
+      token: (token == undefined) ? null : token,
+      user_id: (user_id == undefined) ? null : user_id,
+    });
   }
 };
 

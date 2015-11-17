@@ -161,6 +161,7 @@ exports.FILE = {
 exports.NOTIFICATION = {
   DISMISS: 'notification_dismiss',
   DISMISS_ALL: 'notification_dismiss_all',
+  REGISTER: 'notification_register',
 
   CHANGE_ALL: 'notification_change_all'
 };
