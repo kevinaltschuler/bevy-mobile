@@ -33,8 +33,8 @@ public class RegistrationIntentService extends IntentService {
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    String userID = intent.getStringExtra("userID");
+    //SharedPreferences sharedPreferences = 
+    //  PreferenceManager.getDefaultSharedPreferences(this);
     try {
       // [START register_for_gcm]
       // Initially this call goes out to the network to retrieve the token, subsequent calls
@@ -47,7 +47,6 @@ public class RegistrationIntentService extends IntentService {
               GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
       // [END get_token]
       Log.i(TAG, "GCM Registration Token: " + token);
-      Log.i(TAG, "Associated User ID: " + userID);
 
       // TODO: Implement this method to send any registration to your app's servers.
       //sendRegistrationToServer(token, userID);
@@ -58,7 +57,6 @@ public class RegistrationIntentService extends IntentService {
       // Notify UI that registration has completed, so the progress indicator can be hidden.
       Intent registrationComplete = new Intent("REGISTRATION_COMPLETE");
       registrationComplete.putExtra("token", token);
-      registrationComplete.putExtra("userID", userID);
       LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
 
       // You should store a boolean that indicates whether the generated token has been

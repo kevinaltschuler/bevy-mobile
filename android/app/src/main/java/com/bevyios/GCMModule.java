@@ -58,13 +58,8 @@ public class GCMModule extends ReactContextBaseJavaModule {
       public void onReceive(Context context, Intent intent) {
         //SharedPreferences sharedPreferences =
         //  PreferenceManager.getDefaultSharedPreferences(context);
-
         String token = intent.getStringExtra("token");
-        String userID = intent.getStringExtra("userID");
-
         Log.i(TAG, token);
-        Log.i(TAG, userID);
-
         success.invoke(token);
       }
     };
@@ -76,13 +71,12 @@ public class GCMModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void register(String userID, Callback successCallback) {
+  public void register(Callback successCallback) {
     success = successCallback;
     if (checkPlayServices()) {
 
       // Start IntentService to register this application with GCM.
       Intent intent = new Intent(mContext, RegistrationIntentService.class);
-      intent.putExtra("userID", userID);
       mContext.startService(intent);
       LocalBroadcastManager.getInstance(mContext)
         .registerReceiver(mRegistrationBroadcastReceiver,

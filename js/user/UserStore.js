@@ -496,9 +496,24 @@ _.extend(UserStore, {
     this.user = new User(user);
     this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
-    GCM.register(this.user.get('_id'), function(token) {
-      console.log('GCM TOKEN', token);
-    });
+    // register push notifications for android
+    // get token if it exists
+    if(Platform.OS == 'android') {
+      GCM.register(function(token) {
+        console.log('GCM TOKEN', token);
+        // check if we've already sent this token
+        AsyncStorage.getItem('GCM_token')
+        .then(token => {
+          if(token) {
+            // it already exists, do nothing
+            return;
+          } else {
+            // add to device list
+          }
+        })
+      });
+    }
+    
     //this.trigger(USER.LOADED);
   },
 
