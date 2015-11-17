@@ -10,6 +10,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
@@ -18,10 +21,17 @@ import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.bevyios.FletcherPackage;
 import com.bevyios.GoogleAuthPackage;
+import com.bevyios.GCMPackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
+
+  private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+  private static final String TAG = "MainActivity";
 
   private ReactInstanceManager mReactInstanceManager;
   private ReactRootView mReactRootView;
@@ -43,6 +53,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new Vibration())
         .addPackage(new RNAudioPlayer())
         .addPackage(new ReactNativeDialogsPackage(this))
+        .addPackage(new GCMPackage(this))
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
@@ -50,6 +61,12 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
       mReactRootView.startReactApplication(mReactInstanceManager, "bevy", null);
 
       setContentView(mReactRootView);
+
+      if (checkPlayServices()) {
+        // Start IntentService to register this application with GCM.
+        //Intent intent = new Intent(this, RegistrationIntentService.class);
+        //startService(intent);
+      }
   }
 
   @Override
@@ -89,5 +106,26 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
     if (mReactInstanceManager != null) {
       mReactInstanceManager.onResume(this);
     }
+  }
+
+  /**
+   * Check the device to make sure it has the Google Play Services APK. If
+   * it doesn't, display a dialog that allows users to download the APK from
+   * the Google Play Store or enable it in the device's system settings.
+   */
+  private boolean checkPlayServices() {
+    GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+    int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+    if (resultCode != ConnectionResult.SUCCESS) {
+      if (apiAvailability.isUserResolvableError(resultCode)) {
+        apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+          .show();
+      } else {
+        Log.i(TAG, "This device is not supported.");
+        finish();
+      }
+      return false;
+    }
+    return true;
   }
 }

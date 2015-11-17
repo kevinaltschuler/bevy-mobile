@@ -259,14 +259,14 @@ var BevyInfoView = React.createClass({
         <ScrollView>
           <View style={ styles.header }>
             <Image
-              source={ BevyStore.getBevyImage(this.props.activeBevy._id) }
+              source={ BevyStore.getBevyImage(this.props.activeBevy._id, 100, 100) }
               style={ styles.bevyImage }
             />
             <View style={ styles.bevyDetails }>
               <Text style={ styles.bevyName }>
                 { this.props.activeBevy.name.trim() }
               </Text>
-              <Text style={ styles.bevyDescription } numberOfLines={ 3 }>
+              <Text style={ styles.bevyDescription }>
                 { this.props.activeBevy.description.trim() }
               </Text>
               <View style={ styles.bevyDetailsBottom }>
@@ -365,6 +365,7 @@ var styles = StyleSheet.create({
     height: 100,
     flex: 1,
     flexDirection: 'column',
+    flexWrap: 'wrap',
     alignItems: 'flex-start',
     justifyContent: 'center'
   },
@@ -374,7 +375,8 @@ var styles = StyleSheet.create({
   },
   bevyDescription: {
     color: '#AAA',
-    marginBottom: 5
+    marginBottom: 5,
+    flexWrap: 'wrap'
   },
   bevyDetailsBottom: {
     flexDirection: 'row',

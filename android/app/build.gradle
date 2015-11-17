@@ -16,6 +16,9 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        packagingOptions {
+            exclude "lib/arm64-v8a/librealm-jni.so"
+        }
     }
     signingConfigs {
         release {
@@ -32,6 +35,9 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 repositories {
@@ -40,8 +46,9 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.google.android.gms:play-services-identity:8.1.0'
-    compile 'com.google.android.gms:play-services-plus:8.1.0'
+    compile 'com.google.android.gms:play-services-identity:8.3.0'
+    compile 'com.google.android.gms:play-services-plus:8.3.0'
+    compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
     compile 'com.facebook.react:react-native:0.14.+'

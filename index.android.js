@@ -15,11 +15,21 @@ var {
   Navigator,
   BackAndroid
 } = React;
+
+// first things first load all the stores
+require('./js/app/AppStore');
+require('./js/bevy/BevyStore');
+require('./js/chat/ChatStore');
+require('./js/notification/NotificationStore');
+require('./js/post/PostStore');
+require('./js/user/UserStore');
+
 var MainView = require('./js/app/components/android/MainView.android.js');
 var ImageModal = require('./js/post/components/android/ImageModal.android.js');
 var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
 var ActionSheet = require('./js/shared/components/android/ActionSheet.android.js');
 var TagModal = require('./js/bevy/components/android/TagModal.android.js');
+var GCM = require('./js/shared/apis/GCM.android.js');
 
 var routes = require('./js/routes');
 var constants = require('./js/constants');
@@ -201,8 +211,9 @@ var App = React.createClass({
     AsyncStorage.getItem('user')
     .then((user) => {
       if(user) {
-        console.log('user fetched');
-        UserStore.setUser(JSON.parse(user));
+        user = JSON.parse(user);
+        console.log('user fetched', user);
+        UserStore.setUser(user);
         AppActions.load();
       } else {
         console.log('going to login screen...');
@@ -212,13 +223,13 @@ var App = React.createClass({
   },
 
   componentWillUnmount() {
-    AppStore.off(APP.CHANGE_ALL);
+    /*AppStore.off(APP.CHANGE_ALL);
     BevyStore.off(change_all_events);
     PostStore.off(change_all_events);
     ChatStore.off(change_all_events);
     NotificationStore.off(change_all_events);
-    UserStore.off(USER.LOADED)
-    AppActions.unload();
+    UserStore.off(USER.LOADED);*/
+    //AppActions.unload();
   },
 
   _onAppChange() {

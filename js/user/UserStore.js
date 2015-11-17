@@ -10,6 +10,7 @@ var APP = constants.APP;
 var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
 var Fletcher = require('./../shared/components/android/Fletcher.android.js');
+var GCM = require('./../shared/apis/GCM.android.js');
 
 var React = require('react-native');
 var {
@@ -495,8 +496,10 @@ _.extend(UserStore, {
     this.user = new User(user);
     this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
-    //console.log(this.user.toJSON());
-    this.trigger(USER.LOADED);
+    GCM.register(this.user.get('_id'), function(token) {
+      console.log('GCM TOKEN', token);
+    });
+    //this.trigger(USER.LOADED);
   },
 
   getUser() {
@@ -519,6 +522,9 @@ _.extend(UserStore, {
   getUserImage(user) {
     var img_default = require('./../images/user-profile-icon.png');
     var source = { uri: user.image_url };
+    if(source.uri.slice(7, 23) == 'api.joinbevy.com') {
+      source.uri += '?w=50&h=50';
+    }
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
       source = img_default;
     } else if(source.uri == '/img/user-profile-icon.png') {
