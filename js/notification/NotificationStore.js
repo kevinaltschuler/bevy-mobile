@@ -71,7 +71,7 @@ _.extend(NotificationStore, {
         });
 
         ws.on('kitty cats', function(data) {
-          console.log(data);
+          //console.log(data);
         });
 
         ws.on('chat:' + user._id, function(message) {

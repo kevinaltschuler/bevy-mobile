@@ -150,7 +150,7 @@ var LoginView = React.createClass({
     return(
       <View style={ styles.container }>
         <Image
-          source={ require('image!logo_512') }
+          source={ require('./../../../images/logo_100_reversed.png') }
           style={ styles.bevyLogo }
         />
         { this._renderErrorText() }

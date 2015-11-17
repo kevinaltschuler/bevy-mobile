@@ -519,6 +519,11 @@ _.extend(UserStore, {
   getUserImage(user) {
     var img_default = require('./../images/user-profile-icon.png');
     var source = { uri: user.image_url };
+    if(source.uri.slice(7, 23) == 'api.joinbevy.com'
+      && width != undefined
+      && height != undefined) {
+      source.uri += '?w=50&h=50';
+    }
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
       source = img_default;
     } else if(source.uri == '/img/user-profile-icon.png') {

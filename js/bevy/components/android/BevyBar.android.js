@@ -107,7 +107,7 @@ var BevyBar = React.createClass({
       return (
         <View style={ styles.bevyImageWrapper }>
           <Image
-            source={ BevyStore.getBevyImage(this.props.activeBevy._id) }
+            source={ BevyStore.getBevyImage(this.props.activeBevy._id, 300, 300) }
             style={ styles.bevyImage }
           />
           <View style={ styles.imageDarkener } />
