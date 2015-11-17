@@ -56,6 +56,7 @@ _.extend(PostStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
+        console.log('POST STORE CAUGHT APP DOT LOAD');
         if(UserStore.loggedIn) {
           this.posts.url = 
             constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';

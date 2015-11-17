@@ -91,12 +91,12 @@ public class Fletcher extends ReactContextBaseJavaModule {
       @Override
       public void onFailure(int statusCode, Header[] headers, Throwable e, JSONObject response) {
         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-        errorCallback.invoke(response.toString());
+        errorCallback.invoke(e.toString());
       }
       @Override
       public void onFailure(int statusCode, Header[] headers, Throwable e, JSONArray response) {
         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-        errorCallback.invoke(response.toString());
+        errorCallback.invoke(e.toString());
       }
       @Override
       public void onRetry(int retryNo) {
