@@ -17,17 +17,10 @@ var {
   AsyncStorage,
   Platform
 } = React;
+var DeviceInfo = require('react-native-device-info');
 
-var User = Backbone.Model.extend({
-  defaults: {
-    image_url: constants.siteurl + '/img/user-profile-icon.png'
-  },
-  _idAttribute: '_id'
-});
-
-var Users = Backbone.Collection.extend({
-  model: User
-});
+var User = require('./UserModel');
+var Users = require('./UserCollection');
 
 var UserStore = _.extend({}, Backbone.Events);
 _.extend(UserStore, {
@@ -503,19 +496,41 @@ _.extend(UserStore, {
         console.log('GCM TOKEN', token);
         // check if we've already sent this token
         AsyncStorage.getItem('GCM_token')
-        .then(token => {
-          if(token) {
-            // it already exists, do nothing
+        .then($token => {
+          if($token && $token == token) {
+            // it already exists and/or it matches, do nothing
+            console.log('gcm token already exists. continuing...');
             return;
           } else {
+            console.log('gcm token not found. registering...');
             // add to device list
-            
+            var new_device = this.user.devices.add({
+              token: token,
+              platform: 'android',
+              uniqueID: DeviceInfo.getUniqueID(),
+              manufacturer: DeviceInfo.getManufacturer(),
+              model: DeviceInfo.getModel(),
+              deviceID: DeviceInfo.getDeviceId(),
+              name: DeviceInfo.getSystemName(),
+              version: DeviceInfo.getSystemVersion(),
+              bundleID: DeviceInfo.getBundleId(),
+              buildNum: DeviceInfo.getBuildNumber(),
+              appVersion: DeviceInfo.getVersion(),
+              appVersionReadable: DeviceInfo.getReadableVersion()
+            });
+            console.log('saving', new_device.toJSON(), 'to ', new_device.url);
+            new_device.save(null, {
+              success: function(model, response, options) {
+                console.log('device registration success');
+              },
+              error: function(error) {
+                console.error('device registration error:', error);
+              }
+            });
           }
-        })
-      });
+        });
+      }.bind(this));
     }
-    
-    //this.trigger(USER.LOADED);
   },
 
   getUser() {

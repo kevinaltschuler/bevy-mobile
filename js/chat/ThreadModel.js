@@ -13,7 +13,7 @@ var Messages = require('./MessageCollection');
 // backbone model
 var ThreadModel = Backbone.Model.extend({
   idAttribute: '_id',
-  initialize: function() {
+  initialize() {
     this.messages = new Messages;
     this.messages.url = constants.apiurl + '/threads/' + this.id + '/messages';
 

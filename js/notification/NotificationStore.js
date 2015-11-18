@@ -14,6 +14,7 @@ var {
   PushNotificationIOS,
   AlertIOS
 } = React;
+var GCM = require('./../shared/apis/GCM.android.js');
 //var VibrationAndroid = (Platform.OS == 'android')
 //  ? require('react-native-vibration')
 //  : {};
@@ -177,6 +178,9 @@ _.extend(NotificationStore, {
   }
 });
 
+GCM.addEventListener('notification', function(data) {
+  console.log('got remote notification', data);
+});
 
 
 var dispatchToken = Dispatcher.register(NotificationStore.handleDispatch.bind(NotificationStore));
