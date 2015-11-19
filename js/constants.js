@@ -106,6 +106,7 @@ exports.BEVY = {
 };
 
 exports.CHAT = {
+  // actions
   SWITCH: 'chat_switch',
   THREAD_OPEN: 'chat_thread_open',
   FETCH_MORE: 'chat_fetch_more',
@@ -117,10 +118,12 @@ exports.CHAT = {
   EDIT_THREAD: 'chat_edit_thread',
   START_PM: 'chat_start_pm',
 
+  // events
   CHANGE_ALL: 'chat_change_all',
   CHANGE_ONE: 'chat_change_one:',
   THREAD_CREATED: 'chat_thread_created',
   SWITCH_TO_THREAD: 'chat_switch_to_thread',
+  SWITCH_TO_THREAD_INTENT: 'chat_switch_to_thread_intent',
   STARTED_PM: 'chat_started_pm'
 };
 

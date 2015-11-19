@@ -32,23 +32,36 @@ _.extend(ChatStore, {
 	handleDispatch(payload) {
 		switch(payload.actionType) {
       case APP.LOAD:
-        console.log('GETTING BEVY INTENT');
-        BevyIntent.getIntent(data => console.log('BEVYINTENT', data));
         if(UserStore.loggedIn) {
+          // get all threads of the user
           this.threads.fetch({
             reset: true,
             success: function(collection, response, options) {
               //console.log('threads fetched', this.threads.toJSON());
+              // get thread messages
               this.threads.forEach(function(thread) {
                 thread.messages.fetch({
                   reset: true,
                   success: function(collection, response, options) {
                     thread.messages.sort();
+                    this.trigger(CHAT.CHANGE_ONE + thread.get('_id'));
                     this.trigger(CHAT.CHANGE_ALL);
                   }.bind(this)
                 });
               }.bind(this));
             }.bind(this)
+          });
+          // check for launched intent of chat message
+          console.log('GETTING BEVY INTENT');
+          BevyIntent.getIntent(data => {
+            var payload = data.extras;
+            console.log('BEVYINTENT', data);
+            if(payload.event == 'chat_message') {
+              // if so, then set the active thread to the chat message thread
+              this.active = payload.thread_id;
+              this.trigger(CHAT.CHANGE_ALL);
+              this.trigger(CHAT.SWITCH_TO_THREAD_INTENT, payload.thread_id);
+            }
           });
         }
 

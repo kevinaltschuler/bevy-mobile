@@ -24,7 +24,10 @@ var NewThreadView = require('./../../../chat/components/android/NewThreadView.an
 var ThreadSettingsView
    = require('./../../../chat/components/android/ThreadSettingsView.android.js');
 
+var ChatStore = require('./../../../chat/ChatStore');
+var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var CHAT = constants.CHAT;
 
 var MainView = React.createClass({
   propTypes: {
@@ -35,6 +38,20 @@ var MainView = React.createClass({
   getInitialState() {
     return {
     };
+  },
+
+  componentDidMount() {
+    console.log('LISTENING TO SWITCH THREAD INTENT')
+    ChatStore.on(CHAT.SWITCH_TO_THREAD_INTENT, this.showMessageView);
+  },
+  componentWillUnmount() {
+    console.log('STOPPED LISTENING TO SWITCH THREAD INTENT')
+    ChatStore.off(CHAT.SWITCH_TO_THREAD_INTENT, this.showMessageView);
+  },
+
+  showMessageView(thread_id) {
+    console.log('SHOW MESSAGE VIEW', thread_id);
+    this.props.mainNavigator.push(routes.MAIN.MESSAGEVIEW);
   },
 
   render() {
