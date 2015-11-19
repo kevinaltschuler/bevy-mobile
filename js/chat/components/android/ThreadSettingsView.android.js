@@ -241,13 +241,16 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   headerDetails: {
+    flex: 1,
     height: 48,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginLeft: 10
+    marginLeft: 10,
+    flexWrap: 'wrap'
   },
   threadName: {
-    color: '#000'
+    color: '#000',
+    flexWrap: 'wrap'
   },
   sectionTitle: {
     color: '#AAA',
