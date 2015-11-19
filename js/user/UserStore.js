@@ -519,9 +519,12 @@ _.extend(UserStore, {
               appVersionReadable: DeviceInfo.getReadableVersion()
             });
             console.log('saving', new_device.toJSON(), 'to ', new_device.url);
+            // save to server
             new_device.save(null, {
               success: function(model, response, options) {
                 console.log('device registration success');
+                // save to local storage
+                AsyncStorage.setItem('GCM_token', token);
               },
               error: function(error) {
                 console.error('device registration error:', error);
