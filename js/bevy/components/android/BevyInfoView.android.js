@@ -345,15 +345,13 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE'
   },
   header: {
+    width: constants.width,
     height: 100,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
     paddingHorizontal: 10,
-    margin: 10,
     marginBottom: 0,
-    borderRadius: 5
   },
   bevyImage: {
     width: 60,
@@ -371,9 +369,11 @@ var styles = StyleSheet.create({
   },
   bevyName: {
     fontSize: 22,
-    color: '#888'
+    color: '#888',
+    flexWrap: 'wrap'
   },
   bevyDescription: {
+    width: constants.width - 10 - 60 - 10 - 10,
     color: '#AAA',
     marginBottom: 5,
     flexWrap: 'wrap'
