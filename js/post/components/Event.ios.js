@@ -352,7 +352,8 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     height: 26,
-    marginLeft: 10
+    marginLeft: 10,
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   titleText: {
     width: cardWidth - 40 - 10 - 16,
@@ -372,9 +373,10 @@ var styles = StyleSheet.create({
     paddingTop: 5
   },
   bodyText: {
-    fontSize: 20,
+    fontSize: 18,
     color: '#393939',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   descriptionText: {
     color: '#777',

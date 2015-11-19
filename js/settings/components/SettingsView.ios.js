@@ -78,6 +78,13 @@ var SettingsView = React.createClass({
     if(!this.props.loggedIn) {
       return (
         <SettingsItem
+        icon={
+          <Icon
+            name={'person'}
+            size={30}
+            color='rgba(0,0,0,.3)'
+          />
+        }
           title='Log In'
           onPress={() => {
             this.props.authModalActions.open('Log In');

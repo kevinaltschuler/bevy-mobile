@@ -49,6 +49,9 @@ _.extend(ChatStore, {
                   }.bind(this)
                 });
               }.bind(this));
+              this.threads.comparator = this.sortByLatest;
+              this.threads.sort();
+
             }.bind(this)
           });
           // check for launched intent of chat message
@@ -447,6 +450,11 @@ _.extend(ChatStore, {
     var message = thread.messages.last();
     if(!_.isEmpty(message)) return message.toJSON();
     else return {};
+  },
+
+  sortByLatest(thread) {
+    var latest = thread.latest;
+    return -latest.created;
   },
 
   addMessage(message: Object) {

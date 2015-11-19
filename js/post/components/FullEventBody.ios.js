@@ -12,7 +12,8 @@ var {
   Text,
   View,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
+  AlertIOS
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
@@ -96,7 +97,15 @@ var FullEventBody = React.createClass({
             date.toLocaleDateString("en", {day: "numeric"}) + ' ' + 
             date.toLocaleTimeString("en", {hour: "numeric", minute: "numeric"})
           }
-          onPress={() => {}}
+          onPress={() => {
+            AlertIOS.alert(
+              'This feature is not yet implemented',
+              token,
+              [
+                {text: 'ok', onPress: () => console.log('Foo Pressed!')},
+              ]
+            )}
+          }
           icon={<Icon size={30} name='calendar' style={{color: '#999'}}/>}
         />
         <SettingsItem 
