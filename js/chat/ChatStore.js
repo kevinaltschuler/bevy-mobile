@@ -407,6 +407,7 @@ _.extend(ChatStore, {
             message.set('_id', model.get('_id'));
             message.set('author', model.get('author'));
             message.set('created', model.get('created'));
+            this.trigger(CHAT.CHANGE_ALL);
             this.trigger(CHAT.CHANGE_ONE + thread_id);
           }.bind(this)
         });
@@ -449,12 +450,23 @@ _.extend(ChatStore, {
   },
 
   addMessage(message: Object) {
-    //console.log('adding message...');
-    var thread = this.threads.get(message.thread);
+    console.log('adding message...');
+    // get the thread the message is posted to
+    // and account for a potentially populated thread object inside the message
+    var thread_id = (_.isObject(message.thread))
+      ? message.thread._id
+      : message.thread;
+    var thread = this.threads.get(thread_id);
+    // if the thread doesnt exist or is not fetched yet, then abort
     if(thread == undefined) return;
+    // dont add duplicate messages. probably wont ever happen
+    if(thread.messages.get(message._id) != undefined) return;
+
+    // add to collection and sort to ensure order
     thread.messages.add(message);
     thread.messages.sort();
-    //this.trigger(CHAT.CHANGE_ALL);
+    // trigger UI changes
+    this.trigger(CHAT.CHANGE_ALL);
     this.trigger(CHAT.CHANGE_ONE + thread.id);
   }
 });

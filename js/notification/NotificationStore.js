@@ -83,8 +83,6 @@ _.extend(NotificationStore, {
           message = JSON.parse(message);
           console.log('ws got message', message);
 
-          if(message.author._id == user._id) return;
-
           // TODO: play audio
           if(Platform.OS == 'android') {
             //AudioPlayer.play('notification.mp3');
