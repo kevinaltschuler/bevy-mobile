@@ -55,17 +55,19 @@ _.extend(ChatStore, {
             }.bind(this)
           });
           // check for launched intent of chat message
-          console.log('GETTING BEVY INTENT');
-          BevyIntent.getIntent(data => {
-            var payload = data.extras;
-            console.log('BEVYINTENT', data);
-            if(payload.event == 'chat_message') {
-              // if so, then set the active thread to the chat message thread
-              this.active = payload.thread_id;
-              this.trigger(CHAT.CHANGE_ALL);
-              this.trigger(CHAT.SWITCH_TO_THREAD_INTENT, payload.thread_id);
-            }
-          });
+          if(Platform.OS == 'android') {
+            console.log('GETTING BEVY INTENT');
+            BevyIntent.getIntent(data => {
+              var payload = data.extras;
+              console.log('BEVYINTENT', data);
+              if(payload.event == 'chat_message') {
+                // if so, then set the active thread to the chat message thread
+                this.active = payload.thread_id;
+                this.trigger(CHAT.CHANGE_ALL);
+                this.trigger(CHAT.SWITCH_TO_THREAD_INTENT, payload.thread_id);
+              }
+            });
+          }
         }
 
         break;
