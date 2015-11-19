@@ -106,18 +106,18 @@ public class BevyGcmListenerService extends GcmListenerService {
     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT);
 
-    Bitmap largeIcon = BitmapFactory.decodeResource(resources, resourceId);
+    //Bitmap largeIcon = BitmapFactory.decodeResource(resources, resourceId);
 
     Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-      .setLargeIcon(largeIcon)
+      //.setLargeIcon(largeIcon)
       .setSmallIcon(R.drawable.ic_launcher)
-      .setContentTitle(bundle.getString("contentTitle"))
-      .setContentText(bundle.getString("message"))
+      .setContentTitle("title")
+      .setContentText("content")
       .setAutoCancel(false)
       .setSound(defaultSoundUri)
-      .setTicker(bundle.getString("ticker"))
+      //.setTicker(bundle.getString("ticker"))
       .setCategory(NotificationCompat.CATEGORY_CALL)
       .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
       .setPriority(NotificationCompat.PRIORITY_HIGH)
