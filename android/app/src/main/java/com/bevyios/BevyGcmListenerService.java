@@ -112,7 +112,7 @@ public class BevyGcmListenerService extends GcmListenerService {
 
     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
       .setLargeIcon(largeIcon)
-      //.setSmallIcon(R.drawable.ic_cast_dark)
+      .setSmallIcon(R.drawable.ic_launcher)
       .setContentTitle(bundle.getString("contentTitle"))
       .setContentText(bundle.getString("message"))
       .setAutoCancel(false)
