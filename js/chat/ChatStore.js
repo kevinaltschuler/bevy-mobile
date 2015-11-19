@@ -16,6 +16,12 @@ var APP = constants.APP;
 var CHAT = constants.CHAT;
 var BEVY = constants.BEVY;
 
+var React = require('react-native');
+var {
+  Platform
+} = React;
+var BevyIntent = require('./../shared/apis/BevyIntent.android.js');
+
 var ChatStore = _.extend({}, Backbone.Events);
 
 _.extend(ChatStore, {
@@ -26,6 +32,8 @@ _.extend(ChatStore, {
 	handleDispatch(payload) {
 		switch(payload.actionType) {
       case APP.LOAD:
+        console.log('GETTING BEVY INTENT');
+        BevyIntent.getIntent(data => console.log('BEVYINTENT', data));
         if(UserStore.loggedIn) {
           this.threads.fetch({
             reset: true,

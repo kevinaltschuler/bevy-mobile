@@ -21,6 +21,9 @@ import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.facebook.react.bridge.WritableMap;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -28,6 +31,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.bevyios.FletcherPackage;
 import com.bevyios.GoogleAuthPackage;
 import com.bevyios.GCMPackage;
+import com.bevyios.BevyIntentPackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
@@ -41,6 +45,9 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
   protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       mReactRootView = new ReactRootView(this);
+
+      Intent intent = getIntent();
+      //handleIntent(intent);
 
       mReactInstanceManager = ReactInstanceManager.builder()
         .setApplication(getApplication())
@@ -56,6 +63,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new ReactNativeDialogsPackage(this))
         .addPackage(new GCMPackage(this))
         .addPackage(new RNDeviceInfo())
+        .addPackage(new BevyIntentPackage(this, intent))
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
@@ -130,4 +138,17 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
     }
     return true;
   }
+
+  /*private void handleIntent(Intent intent) {
+    String action = intent.getAction();
+    String type = intent.getType();
+    if(Intent.ACTION_VIEW.equals(action)) {
+      String thread_id = intent.getStringExtra("thread_id");
+      WritableMap params = Arguments.createMap();
+      params.putString("thread_id", thread_id);
+      ((ReactApplicationContext)(getApplication()))
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit("startWithIntent", params);
+    }
+  }*/
 }
