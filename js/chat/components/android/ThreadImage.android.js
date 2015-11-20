@@ -168,7 +168,7 @@ var ThreadImage = React.createClass({
             <Image 
               key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id } 
               style={ iconStyle } 
-              source={ UserStore.getUserImage(user) }
+              source={ UserStore.getUserImage(user, 20, 20) }
             />
           );
         }
