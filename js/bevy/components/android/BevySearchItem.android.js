@@ -42,7 +42,7 @@ var BevySearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={ BevyStore.getBevyImage(this.props.bevy._id, 50, 50) }
+            source={ BevyStore.getBevyImage(this.props.bevy._id, 30, 30) }
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>
