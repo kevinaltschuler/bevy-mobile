@@ -50,6 +50,7 @@ _.extend(ChatStore, {
               }
 
               this.threads.comparator = this.sortByLatest;
+              console.log(this.threads);
               this.threads.sort();
               this.trigger(CHAT.CHANGE_ALL);
             }.bind(this)
@@ -470,8 +471,12 @@ _.extend(ChatStore, {
   },
 
   sortByLatest(thread) {
+    var thread = thread.toJSON();
     var latest = thread.latest;
-    if(_.isEmpty(latest)) return thread.created;
+    console.log(thread);
+    if(latest == null) {
+      return -thread.created;
+    }
     return -latest.created;
   },
 
