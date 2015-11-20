@@ -151,13 +151,13 @@ var App = React.createClass({
     PushNotificationIOS.addEventListener('register', function(token) {
       if(!this.state.registered) {
         NotificationActions.registerDevice(token, this.state.user._id);
-        /*AlertIOS.alert(
+        AlertIOS.alert(
           'youre device has been registered!',
           token,
           [
             {text: 'yay!', onPress: () => console.log('Foo Pressed!')},
           ]
-        )*/
+        )
         this.setState({
           registered: true
         })

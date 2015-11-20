@@ -49,9 +49,6 @@ _.extend(ChatStore, {
                   }.bind(this)
                 });
               }.bind(this));
-              this.threads.comparator = this.sortByLatest;
-              console.log(this.threads);
-              this.threads.sort();
 
             }.bind(this)
           });
@@ -453,16 +450,6 @@ _.extend(ChatStore, {
     var message = thread.messages.last();
     if(!_.isEmpty(message)) return message.toJSON();
     else return {};
-  },
-
-  sortByLatest(thread) {
-    var thread = thread.toJSON();
-    var latest = thread.latest;
-    console.log(thread);
-    if(latest == null) {
-      return -thread.created;
-    }
-    return -latest.created;
   },
 
   addMessage(message: Object) {
