@@ -456,8 +456,9 @@ _.extend(ChatStore, {
   },
 
   sortByLatest(thread) {
+    var thread = thread.toJSON();
     var latest = thread.latest;
-    console.log(latest);
+    console.log(thread);
     if(latest == null) {
       return -thread.created;
     }
