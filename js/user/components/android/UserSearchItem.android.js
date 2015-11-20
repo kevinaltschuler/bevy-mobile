@@ -116,7 +116,7 @@ var styles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    color: '#888'
+    color: '#000'
   }
 });
 

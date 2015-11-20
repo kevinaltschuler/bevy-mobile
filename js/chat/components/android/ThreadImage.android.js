@@ -30,20 +30,33 @@ var ThreadImage = React.createClass({
   },
 
   getInitialState() {
-    var source = { uri: ChatStore.getThreadImageURL(this.props.thread._id) };
+    return {
+      source: this.getImageSource(this.props)
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      source: this.getImageSource(nextProps)
+    })
+  },
+
+  getImageSource(props) {
+    var source = { uri: ChatStore.getThreadImageURL(props.thread._id) };
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
       source = img_default;
     } else if(source.uri == '/img/user-profile-icon.png') {
       source = img_default;
     }
     if(this.props.thread.type == 'bevy') {
-      source = BevyStore.getBevyImage(this.props.thread.bevy._id, 50, 50);
+      source = BevyStore.getBevyImage(props.thread.bevy._id, 50, 50);
     }
-    return {
-      source: source
-    };
-  },
+    if(_.isEmpty(source) || _.isEmpty(source.uri))
+      source = img_default;
 
+    return source;
+  },
+ 
   _renderSingleImage() {
     var imageStyle = {
       width: 40,
@@ -159,6 +172,9 @@ var ThreadImage = React.createClass({
             />
           );
         }
+
+        if(_.isEmpty(users))
+          users = <View />;
         
         return (
           <View style={{

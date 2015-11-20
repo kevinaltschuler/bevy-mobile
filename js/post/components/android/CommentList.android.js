@@ -74,7 +74,7 @@ var CommentList = React.createClass({
   render() {
     if(_.isEmpty(this.props.comments) && this.props.root) {
       return (
-        <View style={ styles.container }>
+        <View style={ styles.noCommentsContainer }>
           <Text style={ styles.noComments }>
             No Comments
           </Text>
@@ -308,8 +308,13 @@ var CommentItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
   },
+  noCommentsContainer: {
+    backgroundColor: '#FFF',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 0
+  },
   noComments: {
-    flex: 1,
     color: '#AAA',
     textAlign: 'center'
   },
