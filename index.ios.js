@@ -100,7 +100,8 @@ var App = React.createClass({
       
     return _.extend({
       authModalOpen: false,
-      authModalMessage: ''
+      authModalMessage: '',
+      registered: false,
     },
       this.getBevyState(),
       this.getPostState(),
@@ -148,8 +149,18 @@ var App = React.createClass({
 
   componentWillMount() {
     PushNotificationIOS.addEventListener('register', function(token) {
-      if(this.state.loggedIn) {
+      if(!this.state.registered) {
         NotificationActions.registerDevice(token, this.state.user._id);
+        /*AlertIOS.alert(
+          'youre device has been registered!',
+          token,
+          [
+            {text: 'yay!', onPress: () => console.log('Foo Pressed!')},
+          ]
+        )*/
+        this.setState({
+          registered: true
+        })
       }
     }.bind(this));
 

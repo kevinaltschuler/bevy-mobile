@@ -33,7 +33,7 @@ var routes = require('./../../routes');
 var ChatNavigator = React.createClass({
 
   propTypes: {
-    allThread: React.PropTypes.array,
+    allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object
   },
 
