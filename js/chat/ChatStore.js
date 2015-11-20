@@ -37,21 +37,21 @@ _.extend(ChatStore, {
           this.threads.fetch({
             reset: true,
             success: function(collection, response, options) {
-              //console.log('threads fetched', this.threads.toJSON());
-              // get thread messages
-              this.threads.forEach(function(thread) {
+              if(this.active != -1) {
+                // if theres already an active thread set
+                // then fetch the messages asap
+                var thread = this.threads.get(this.active);
                 thread.messages.fetch({
-                  reset: true,
-                  success: function(collection, response, options) {
-                    thread.messages.sort();
-                    this.trigger(CHAT.CHANGE_ONE + thread.get('_id'));
+                  success: function($collection, $response, $options) {
                     this.trigger(CHAT.CHANGE_ALL);
+                    this.trigger(CHAT.CHANGE_ONE + this.active);
                   }.bind(this)
                 });
-              }.bind(this));
+              }
+
               this.threads.comparator = this.sortByLatest;
               this.threads.sort();
-
+              this.trigger(CHAT.CHANGE_ALL);
             }.bind(this)
           });
           // check for launched intent of chat message
@@ -118,7 +118,22 @@ _.extend(ChatStore, {
 
       case CHAT.SWITCH:
         var thread_id = payload.thread_id;
+
+        var thread = this.threads.get(thread_id);
+        if(thread == undefined) return;
         this.active = thread_id;
+
+        // if theres no messages yet, then load some
+        if(_.isEmpty(thread.messages.models)) {
+          thread.messages.fetch({
+            remove: false,
+            success: function(collection, response, options) {
+              thread.messages.sort();
+              this.trigger(CHAT.CHANGE_ONE + thread_id);
+            }.bind(this)
+          });
+        }
+
         this.trigger(CHAT.CHANGE_ALL);
         break;
 
@@ -456,6 +471,7 @@ _.extend(ChatStore, {
 
   sortByLatest(thread) {
     var latest = thread.latest;
+    if(_.isEmpty(latest)) return thread.created;
     return -latest.created;
   },
 

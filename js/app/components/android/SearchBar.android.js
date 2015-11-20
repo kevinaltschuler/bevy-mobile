@@ -242,9 +242,18 @@ var SearchBarWrapper = React.createClass({
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         onDrawerOpen={() => this.setState({ drawerOpen: true })}
         onDrawerClose={() => this.setState({ drawerOpen: false })}
-        renderNavigationView={() => <Drawer drawerActions={ drawerActions } { ...this.props } />}
+        renderNavigationView={() => 
+          <Drawer 
+            drawerActions={ drawerActions } 
+            { ...this.props } 
+          />
+        }
       >
-        <SearchNavigator drawerOpen={ this.state.drawerOpen } drawerActions={ drawerActions } { ...this.props } />
+        <SearchNavigator 
+          drawerOpen={ this.state.drawerOpen } 
+          drawerActions={ drawerActions } 
+          { ...this.props } 
+        />
       </DrawerLayoutAndroid>
     );
   }

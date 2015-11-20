@@ -38,40 +38,16 @@ var ThreadItem = React.createClass({
   },
 
   getInitialState() {
-
-    var thread = this.props.thread;
-    var threadInfo = this.getThreadInfo(thread);
     return {
-      threadName: threadInfo.threadName,
-      threadImage: threadInfo.threadImage
-    };
+
+    }
   },
 
   componentWillReceiveProps(nextProps) {
-
-    var thread = nextProps.thread;
-    var threadInfo = this.getThreadInfo(thread);
-
-    this.setState({
-      threadName: threadInfo.threadName,
-      threadImage: threadInfo.threadImage
-    });
-  },
-
-  getThreadInfo(thread) {
-    var user = this.props.user;
-    var thread = this.props.thread;
-
-    var threadName = ChatStore.getThreadName(thread._id);
-    var threadImage = ChatStore.getThreadImageURL(thread._id);
-    return {
-      threadName: threadName,
-      threadImage: threadImage
-    };
   },
 
   _renderLatestMessageInfo() {
-    var latestMessage = ChatStore.getLatestMessage(this.props.thread._id);
+    var latestMessage = this.props.thread.latest;
     if(_.isEmpty(latestMessage)) return <View />;
 
     var posterName = latestMessage.author.displayName;
@@ -86,8 +62,8 @@ var ThreadItem = React.createClass({
 
   render() {
     var thread = this.props.thread;
-    var threadName = this.state.threadName;
-    var threadImage = this.state.threadImage;
+    var threadName = ChatStore.getThreadName(thread._id);
+    var threadImage = ChatStore.getThreadImageURL(thread._id);
 
     if(_.isEmpty(threadName)) return <View />;
 
@@ -104,7 +80,7 @@ var ThreadItem = React.createClass({
           backgroundColor: '#fff'
         }]} >
           <ThreadImage 
-            thread={thread}
+            thread={ thread }
           />
           <View style={ styles.titleTextColumn }>
             <Text style={ styles.titleText }>
