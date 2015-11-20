@@ -154,6 +154,11 @@ var SettingsView = React.createClass({
           About
         </Text>
         <View style={ styles.settingButton }>
+          <Icon
+            name='flag'
+            size={ 30 }
+            color='#AAA'
+          />
           <Text style={ styles.settingButtonText }>
             Version
           </Text>
