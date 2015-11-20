@@ -393,9 +393,10 @@ _.extend(BevyStore, {
   },
 
   getBevyImage(bevy_id, width, height) {
-    if(bevy_id == -1) return '';
+    var default_img = require('./../images/logo_200.png');
+    if(bevy_id == -1) return default_img;
     var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
-    if(bevy == undefined) return '';
+    if(bevy == undefined) return default_img;
     var default_bevies = [
       '11sports',
       '22gaming',
@@ -415,7 +416,7 @@ _.extend(BevyStore, {
       source.uri += '?w=' + width + '&h=' + height;
     }
     if(_.isEmpty(source.uri)) {
-      source = require('./../images/logo_200.png');
+      source = default_img;
     }
     if(default_bevy_index > -1) {
       switch(default_bevy_index) {

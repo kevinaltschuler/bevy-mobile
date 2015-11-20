@@ -230,9 +230,8 @@ var BevyBar = React.createClass({
   render() {
     var disappearingStyle = (this.props.disappearing)
     ? {
-      marginTop: (this.props.height * -1),
-      position: 'absolute',
-      top: 0,
+      top: (this.props.height * -1) - 5,
+      position: 'absolute'
     } : {};
 
     if(_.isEmpty(this.props.activeBevy)) return <View />;

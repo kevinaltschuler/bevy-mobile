@@ -565,6 +565,8 @@ _.extend(UserStore, {
       source = img_default;
     } else if(source.uri == '/img/user-profile-icon.png') {
       source = img_default;
+    } else if (_.isEmpty(source.uri)) {
+      source = img_default;
     }
     return source;
   }
