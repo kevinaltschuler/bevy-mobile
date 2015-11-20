@@ -25,6 +25,8 @@ var constants = require('./../../../constants');
 var POST = constants.POST;
 var PostStore = require('./../../PostStore');
 var BevyActions = require('./../../../bevy/BevyActions');
+var BevyStore = require('./../../../bevy/BevyStore');
+var BEVY = constants.BEVY;
 
 var PostList = React.createClass({
   propTypes: {
@@ -67,10 +69,12 @@ var PostList = React.createClass({
   componentDidMount() {
     PostStore.on(POST.LOADING, this._onPostsLoading);
     PostStore.on(POST.LOADED, this._onPostsLoaded);
+    BevyStore.on(BEVY.SWITCHED, this._onBevySwitched);
   },
   componentWillUnmount() {
     PostStore.off(POST.LOADING, this._onPostsLoading);
     PostStore.off(POST.LOADED, this._onPostsLoaded);
+    BevyStore.off(BEVY.SWITCHED, this._onBevySwitched);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -89,6 +93,12 @@ var PostList = React.createClass({
     }
     // send action
     BevyActions.requestJoin(this.props.activeBevy, this.props.user);
+  },
+
+  _onBevySwitched() {
+    this.setState({
+      navHeight: 0
+    })
   },
 
   _onPostsLoading() {
@@ -222,14 +232,13 @@ var PostList = React.createClass({
           <ListView
             dataSource={ this.state.posts }
             style={ styles.postList }
-            scrollRenderAheadDistance={ 300 }
-            removeClippedSubviews={ true }
-            initialListSize={ 3 }
+            scrollRenderAheadDistance={ 400 }
+            initialListSize={ 5 }
             onScroll={(data) => {
               this.onScroll(data.nativeEvent.contentOffset.y);
             }}
             renderHeader={ this._renderNewPostCard }
-            pageSize={ 3 }
+            pageSize={ 5 }
             renderRow={(post) => {
               if(this.props.activeBevy._id == -1 &&
                 post.pinned) return <View />;
