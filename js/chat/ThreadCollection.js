@@ -17,8 +17,9 @@ var ThreadCollection = Backbone.Collection.extend({
       return -(new Date(thread.get('created')));
     }
     var latest = thread.get('latest');
+    //console.log(thread);
     if(thread.get('name') == 'bevy team')
-      console.log(latest);
+      //console.log(latest);
     return -(new Date(latest.created));
   },
   url: function() {

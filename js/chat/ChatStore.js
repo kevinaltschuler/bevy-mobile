@@ -41,6 +41,7 @@ _.extend(ChatStore, {
                 // if theres already an active thread set
                 // then fetch the messages asap
                 var thread = this.threads.get(this.active);
+                this.threads.sort();
                 thread.messages.fetch({
                   success: function($collection, $response, $options) {
                     this.trigger(CHAT.CHANGE_ALL);
@@ -48,7 +49,11 @@ _.extend(ChatStore, {
                   }.bind(this)
                 });
               }
-            }.bind(this)
+              this.trigger(CHAT.CHANGE_ALL);
+            }.bind(this),
+            error: function(model, response, options) {
+              console.log('error');
+            }
           });
           // check for launched intent of chat message
           if(Platform.OS == 'android') {
