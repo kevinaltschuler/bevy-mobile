@@ -75,7 +75,7 @@ var PostHeader = React.createClass({
         >
           <View>
             <Image 
-              source={ UserStore.getUserImage(author) }
+              source={ UserStore.getUserImage(author, 30, 30) }
               style={ styles.authorImage }
             />
           </View>

@@ -558,8 +558,10 @@ _.extend(UserStore, {
     var source = { uri: user.image_url };
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
-      && height != undefined) {
-      source.uri += '?w=50&h=50';
+      && height != undefined
+      && this.gup('w', user.image_url) == null
+      && this.gup('h', user.image_url) == null) {
+      source.uri += '?w=' + width + '&h=' + height;
     }
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
       source = img_default;
@@ -569,6 +571,15 @@ _.extend(UserStore, {
       source = img_default;
     }
     return source;
+  },
+
+  gup(name, url) {
+    if(!url) url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(url);
+    return results == null ? null : results[1];
   }
 });
 var dispatchToken = Dispatcher.register(UserStore.handleDispatch.bind(UserStore));

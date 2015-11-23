@@ -77,7 +77,7 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={ UserStore.getUserImage(this.props.searchUser) }
+            source={ UserStore.getUserImage(this.props.searchUser, 30, 30) }
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>

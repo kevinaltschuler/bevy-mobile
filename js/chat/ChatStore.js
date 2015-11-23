@@ -49,11 +49,10 @@ _.extend(ChatStore, {
                   }.bind(this)
                 });
               }
+              this.threads.comparator = this.sortByLatest;
+              this.threads.sort();
               this.trigger(CHAT.CHANGE_ALL);
-            }.bind(this),
-            error: function(model, response, options) {
-              console.log('error');
-            }
+            }.bind(this)
           });
           // check for launched intent of chat message
           if(Platform.OS == 'android') {
@@ -468,6 +467,15 @@ _.extend(ChatStore, {
     var message = thread.messages.last();
     if(!_.isEmpty(message)) return message.toJSON();
     else return {};
+  },
+
+  sortByLatest(thread) {
+    var thread = thread.toJSON();
+    var latest = thread.latest;
+    if(latest == null) {
+      return -thread.created;
+    }
+    return -latest.created;
   },
 
   addMessage(message: Object) {

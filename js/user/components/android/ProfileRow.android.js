@@ -46,8 +46,7 @@ var ProfileRow = React.createClass({
         height: this.props.height 
       }, this.props.style ]}>
         <Image
-          source={ UserStore.getUserImage(this.props.user) }
-          //source={{ uri: 'http://joinbevy.com/img/user-profile-icon.png' }}
+          source={ UserStore.getUserImage(this.props.user, 30, 30) }
           style={[ styles.profileImage, { 
             width: this.props.imageSize, 
             height: this.props.imageSize, 
