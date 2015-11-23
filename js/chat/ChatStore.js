@@ -48,7 +48,6 @@ _.extend(ChatStore, {
                   }.bind(this)
                 });
               }
-
               this.threads.comparator = this.sortByLatest;
               this.threads.sort();
               this.trigger(CHAT.CHANGE_ALL);

@@ -158,7 +158,7 @@ _.extend(NotificationStore, {
             },
             body: JSON.stringify({
               token: token,
-              device_platform: 'ios'
+              platform: 'ios'
             })
           });
         }

@@ -13,8 +13,13 @@ var ThreadCollection = Backbone.Collection.extend({
   model: Thread, 
   // sort alphabetically by name
   comparator: thread => {
-    if(_.isEmpty(thread.getName())) return '';
-    return thread.getName().toLowerCase();
+    if(thread.get('latest') == null) {
+      return -(new Date(thread.get('created')));
+    }
+    var latest = thread.get('latest');
+    if(thread.get('name') == 'bevy team')
+      console.log(latest);
+    return -(new Date(latest.created));
   },
   url: function() {
     var user = UserStore.getUser();
