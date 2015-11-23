@@ -40,6 +40,7 @@ _.extend(ChatStore, {
               if(this.active != -1) {
                 // if theres already an active thread set
                 // then fetch the messages asap
+                // 
                 var thread = this.threads.get(this.active);
                 this.threads.sort();
                 thread.messages.fetch({
