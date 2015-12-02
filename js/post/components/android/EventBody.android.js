@@ -32,9 +32,7 @@ var EventBody = React.createClass({
 
   getInitialState() {
     return {
-      source: (this.props.post.images[0] == '/img/default_event_img.png')
-        ? require('./../../../images/default_event_img.png')
-        : { uri: this.props.post.images[0] },
+      source: { uri: this.props.post.images[0].path },
       date: new Date(this.props.post.event.date)
     };
   },

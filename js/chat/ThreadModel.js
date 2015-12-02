@@ -56,13 +56,14 @@ var ThreadModel = Backbone.Model.extend({
    getImageURL() {
     var default_bevy_img = constants.siteurl + '/img/logo_100.png';
     var default_user_img = constants.siteurl + '/img/user-profile-icon.png';
-    if(!_.isEmpty(this.get('image_url'))) return this.get('image_url');
+    
+    if(!_.isEmpty(this.get('image'))) return this.get('image').path;
     switch(this.get('type')) {
       case 'bevy':
         if(!this.get('bevy')) return default_bevy_img;
         var bevy = BevyStore.getBevy(this.get('bevy')._id);
-        if(_.isEmpty(bevy.image_url)) return default_bevy_img;
-        return bevy.image_url;
+        if(_.isEmpty(bevy.image)) return default_bevy_img;
+        return bevy.image.path;
         break;
       case 'group':
         // TODO: @kevin do some magic here
@@ -77,8 +78,8 @@ var ThreadModel = Backbone.Model.extend({
           }
         });
         if(otherUser == undefined) return default_user_img;
-        if(_.isEmpty(otherUser.image_url)) return default_user_img;
-        return otherUser.image_url;
+        if(_.isEmpty(otherUser.image)) return default_user_img;
+        return otherUser.image.path;
         break;
     }
     // something went wrong

@@ -123,8 +123,8 @@
     <orderEntry type="library" exported="" name="fresco-0.6.1" level="project" />
     <orderEntry type="library" exported="" name="httpclient-4.3.6" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
-    <orderEntry type="library" exported="" name="okio-1.5.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="okio-1.5.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="drawee-0.6.1" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />

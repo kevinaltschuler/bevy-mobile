@@ -73,8 +73,8 @@ var NotificationItem = React.createClass({
         var post_id = data.post_id;
         var post_created = data.post_created;
 
-        if(_.isEmpty(PostStore.getPost(post_id)) || _.isEmpty(BevyStore.getBevy(bevy_id)))
-          return <View/>;
+        //if(_.isEmpty(PostStore.getPost(post_id)) || _.isEmpty(BevyStore.getBevy(bevy_id)))
+        //  return <View/>;
 
         body = (
           <View style={ styles.notificationBody }>

@@ -19,6 +19,7 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var PostImages = React.createClass({
   propTypes: {
@@ -51,7 +52,8 @@ var PostImages = React.createClass({
   render() {
     if(_.isEmpty(this.props.post.images)) return <View />;
 
-    var image_url = _.first(this.props.post.images);
+    var image = _.first(this.props.post.images);
+    var image_url = resizeImage(image, constants.width, constants.height).url;
 
     return (
       <TouchableOpacity

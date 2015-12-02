@@ -56,7 +56,6 @@ var ImageModal = React.createClass({
 
   show() {
     var images = constants.getImageModalImages();
-    console.log(images);
     this.setState({ visible: true, images: images });
   },
 
@@ -90,10 +89,10 @@ var ImageModal = React.createClass({
           </View>
         </TouchableNativeFeedback>
         <Text style={ styles.imageIndex }>
-          { (this.state.imageIndex + 1) + ' of ' + this.state.images.length }
+          { (this.state.imageIndex + 1) + ' / ' + this.state.images.length }
         </Text>
         <Text style={ styles.title }>
-          { this.state.images[this.state.imageIndex] }
+          { this.state.images[this.state.imageIndex].path }
         </Text>
       </View>
     );
@@ -102,14 +101,15 @@ var ImageModal = React.createClass({
   _renderImages() {
     var images = [];
     for(var key in this.state.images) {
-      var image_url = this.state.images[key];
+      var image = this.state.images[key];
       images.push(
         <View 
           key={ 'image:' + key }
-          style={{ flex: 1 }}
+          style={{ 
+          }}
         >
           <ImageModalItem
-            url={ image_url }
+            image={ image }
           />
         </View>
       );

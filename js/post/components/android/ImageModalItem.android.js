@@ -13,73 +13,59 @@ var {
   StyleSheet
 } = React;
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var ImageModalItem = React.createClass({
   propTypes: {
-    url: React.PropTypes.string
+    image: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      width: constants.width,
-      height: -1,
-      adjusted: false // flag to see if we've already adjusted the image
     }
-  },
-
-  onLayout(ev) {
-    // dont do anything if we've already adjusted the image
-    if(this.state.adjusted) return;
-
-    var layout = ev.nativeEvent.layout;
-    var width = layout.width;
-    var height = layout.height;
-
-    console.log('orig dimensions', width, height);
-
-    if(width >= height) {
-      // horizontal or square image
-      var ratio = constants.width / width;
-      width = constants.width;
-      height = height * ratio
-    } else {
-      // vertical image
-      var ratio = (constants.height - 48) / height;
-      height = constants.height - 48;
-      width = width * ratio;
-    }
-    console.log('adjusted dimensions', width, height);
-    this.setState({
-      width: width,
-      height: height,
-      adjusted: true
-    });
   },
 
   render() {
+    var image = resizeImage(
+      this.props.image, 
+      constants.width, 
+      constants.height
+    );
 
-    var imageStyle = {};
-    //if(this.state.width > 0)
-    //  imageStyle.width = this.state.width;
-    //if(this.state.height > 0)
-    //  imageStyle.height = this.state.height;
-
-    return (
+    return (this.props.image.foreign)
+    ? (
       <Image
-        style={[ styles.image, imageStyle ]}
-        source={{ uri: this.props.url }}
-        //onLayout={ this.onLayout }
+        style={{
+          flex: 1
+        }}
+        source={{ uri: this.props.image.path }}
         resizeMode='contain'
       />
+    ) : (
+      <View
+        style={{
+          flex: 1,
+          paddingTop: 48,
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <Image
+          style={{
+            width: image.width,
+            height: image.height
+          }}
+          source={{ uri: image.url }}
+          resizeMode='cover'
+        />
+      </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  image: {
-    flex: 1
-  }
 });
 
 module.exports = ImageModalItem;

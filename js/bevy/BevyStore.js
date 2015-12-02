@@ -407,7 +407,7 @@ _.extend(BevyStore, {
       '777books'
     ];
 
-    var source = { uri: bevy.get('image_url') };
+    var source = { uri: bevy.get('image').path };
     var default_bevy_index = default_bevies.indexOf(bevy_id);
 
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'

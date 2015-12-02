@@ -65,7 +65,9 @@ var BevyAdminItem = React.createClass({
               style={ styles.image }
             />
             <View style={ styles.details }>
-              <Text style={ styles.name }>{ this.props.admin.displayName }</Text>
+              <Text style={ styles.name }>
+                { this.props.admin.displayName }
+              </Text>
             </View>
           </View>
         </TouchableNativeFeedback>

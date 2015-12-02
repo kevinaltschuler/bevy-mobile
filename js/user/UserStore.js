@@ -555,12 +555,14 @@ _.extend(UserStore, {
 
   getUserImage(user, width, height) {
     var img_default = require('./../images/user-profile-icon.png');
-    var source = { uri: user.image_url };
+    var source = { uri: (_.isEmpty(user.image))
+      ? ''
+      : user.image.path };
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
       && height != undefined
-      && this.gup('w', user.image_url) == null
-      && this.gup('h', user.image_url) == null) {
+      && this.gup('w', user.image.path) == null
+      && this.gup('h', user.image.path) == null) {
       source.uri += '?w=' + width + '&h=' + height;
     }
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
