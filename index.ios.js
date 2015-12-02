@@ -128,6 +128,7 @@ var App = React.createClass({
   },
 
   getChatState() {
+    //console.log(ChatStore.getAll());
     return {
       allThreads: ChatStore.getAll(),
       activeThread: ChatStore.getActive()
@@ -149,15 +150,10 @@ var App = React.createClass({
 
   componentWillMount() {
     PushNotificationIOS.addEventListener('register', function(token) {
-      if(!this.state.registered) {
+      console.log(this.state.registered);
+      if(!this.state.registered && this.state.loggedIn) {
+        console.log('trying');
         NotificationActions.registerDevice(token, this.state.user._id);
-        AlertIOS.alert(
-          'youre device has been registered!',
-          token,
-          [
-            {text: 'yay!', onPress: () => console.log('Foo Pressed!')},
-          ]
-        )
         this.setState({
           registered: true
         })
@@ -165,7 +161,7 @@ var App = React.createClass({
     }.bind(this));
 
     PushNotificationIOS.addEventListener('notification', function(notification){
-     console.log('You have received a new notification!', notification);
+     console.log('You have received a new notification!');
     });
 
 
@@ -255,7 +251,7 @@ var App = React.createClass({
     });
   },
   _onNotificationReg(data) {
-    console.log(data);
+    //console.log(data);
   },
 
   render() {
@@ -272,6 +268,7 @@ var App = React.createClass({
 
     PushNotificationIOS.requestPermissions();
     //PushNotificationIOS.checkPermissions(data => {console.log(data)})
+    PushNotificationIOS.presentLocalNotification({alertBody: 'irbfwebfwe'});
 
     return (
       <View style={{ flex: 1 }}>

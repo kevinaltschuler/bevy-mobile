@@ -35,7 +35,7 @@ var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
 //if(Platform.OS == 'android')
-window.navigator.userAgent = "react-native";
+//window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);
@@ -147,9 +147,11 @@ _.extend(NotificationStore, {
         var user_id = payload.user_id;
 
         if(_.isEmpty(token) || _.isEmpty(user_id)) {
+          console.log('somethings wrong');
           break;
         }
         if(Platform.OS == 'ios') {
+          console.log('good stuff');
           fetch(constants.apiurl + '/users/'+ user_id +'/devices', {
             method: 'POST',
             headers: {
