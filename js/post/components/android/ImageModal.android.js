@@ -110,6 +110,7 @@ var ImageModal = React.createClass({
         >
           <ImageModalItem
             image={ image }
+            dismiss={ this.dismiss }
           />
         </View>
       );
@@ -121,9 +122,7 @@ var ImageModal = React.createClass({
     if(!this.state.visible) return <View />;
     return (
       <View style={ styles.container }>
-        <TouchableWithoutFeedback onPress={ this.dismiss }>
         <View style={ styles.backdrop } />
-        </TouchableWithoutFeedback>
         <ViewPagerAndroid
           ref='Pager'
           style={ styles.imageContainer }

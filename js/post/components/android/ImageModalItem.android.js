@@ -10,6 +10,7 @@ var React = require('react-native');
 var {
   View,
   Image,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 
@@ -19,12 +20,17 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var ImageModalItem = React.createClass({
   propTypes: {
-    image: React.PropTypes.object
+    image: React.PropTypes.object,
+    dismiss: React.PropTypes.func
   },
 
   getInitialState() {
     return {
     }
+  },
+
+  dismiss() {
+    this.props.dismiss();
   },
 
   render() {
@@ -36,31 +42,35 @@ var ImageModalItem = React.createClass({
 
     return (this.props.image.foreign)
     ? (
-      <Image
-        style={{
-          flex: 1
-        }}
-        source={{ uri: this.props.image.path }}
-        resizeMode='contain'
-      />
-    ) : (
-      <View
-        style={{
-          flex: 1,
-          paddingTop: 48,
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-      >
+      <TouchableWithoutFeedback onPress={ this.dismiss }>
         <Image
           style={{
-            width: image.width,
-            height: image.height
+            flex: 1
           }}
-          source={{ uri: image.url }}
-          resizeMode='cover'
+          source={{ uri: this.props.image.path }}
+          resizeMode='contain'
         />
-      </View>
+      </TouchableWithoutFeedback>
+    ) : (
+      <TouchableWithoutFeedback onPress={ this.dismiss }>
+        <View
+          style={{
+            flex: 1,
+            paddingTop: 48,
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Image
+            style={{
+              width: image.width,
+              height: image.height
+            }}
+            source={{ uri: image.url }}
+            resizeMode='cover'
+          />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 });
