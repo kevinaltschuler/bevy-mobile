@@ -51,7 +51,9 @@ var MessageItem = React.createClass({
             ? '12'
             : createDate.getHours()) 
         + ':'
-        + createDate.getMinutes()
+        + ((createDate.getMinutes() < 10)
+          ? '0' + createDate.getMinutes()
+          : createDate.getMinutes())
         + ((createDate.getHours() > 11) ? ' PM' : ' AM');
     } else if (diff <= ( 1000 * 60 * 60 * 24 * 7)) {
       // within a week - only display short weekday
