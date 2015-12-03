@@ -28,7 +28,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import com.bevyios.FletcherPackage;
 import com.bevyios.GoogleAuthPackage;
 import com.bevyios.GCMPackage;
 import com.bevyios.BevyIntentPackage;
@@ -55,7 +54,6 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .setJSMainModuleName("index.android")
         .addPackage(new MainReactPackage())
         .addPackage(new VectorIconsPackage())
-        .addPackage(new FletcherPackage())
         .addPackage(new GoogleAuthPackage(this))
         .addPackage(new DropdownPackage())
         .addPackage(new Vibration())
@@ -114,7 +112,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
   protected void onResume() {
     super.onResume();
     if (mReactInstanceManager != null) {
-      mReactInstanceManager.onResume(this);
+      mReactInstanceManager.onResume(this, this);
     }
   }
 

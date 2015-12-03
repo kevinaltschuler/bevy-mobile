@@ -16,7 +16,6 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
-var Fletcher = require('./../../../shared/components/android/Fletcher.android.js');
 
 var $Map = React.createClass({
   propTypes: {
@@ -53,35 +52,31 @@ var $Map = React.createClass({
 
   getCoordinates() {
     // query google for the latitude and longitude
-    Fletcher.fletch(
+    fetch(
       'http://maps.googleapis.com/maps/api/geocode/json?address=' 
       + encodeURIComponent(this.props.location),
       {
         method: 'GET',
         headers: {},
-        body: ''
-      },
-      function(error) {
-        console.error(error);
-      }.bind(this),
-      function(data) {
-        data = JSON.parse(data);
-        var coords = {};
-        var results = data.results;
-        if(_.isEmpty(results)) return;
-        var geometry = results[0].geometry;
-        if(_.isEmpty(geometry) || _.isEmpty(geometry.location)) return;
-        this.setState({
-          result: results[0],
-          latitude: geometry.location.lat,
-          longitude: geometry.location.lng,
-          latitudeDelta: Math.abs(geometry.viewport.northeast.lat
-            - geometry.viewport.southwest.lat),
-          longitudeDelta: Math.abs(geometry.viewport.northeast.lng
-            - geometry.viewport.southwest.lng)
-        });
-      }.bind(this)
-    );
+      })
+    .then(res => res.json())
+    .then(res => {
+      data = res;
+      var coords = {};
+      var results = data.results;
+      if(_.isEmpty(results)) return;
+      var geometry = results[0].geometry;
+      if(_.isEmpty(geometry) || _.isEmpty(geometry.location)) return;
+      this.setState({
+        result: results[0],
+        latitude: geometry.location.lat,
+        longitude: geometry.location.lng,
+        latitudeDelta: Math.abs(geometry.viewport.northeast.lat
+          - geometry.viewport.southwest.lat),
+        longitudeDelta: Math.abs(geometry.viewport.northeast.lng
+          - geometry.viewport.southwest.lng)
+      });
+    });
   },
 
   goBack() {

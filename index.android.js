@@ -26,7 +26,6 @@ require('./js/user/UserStore');
 
 var MainView = require('./js/app/components/android/MainView.android.js');
 var ImageModal = require('./js/post/components/android/ImageModal.android.js');
-var Fletcher = require('./js/shared/components/android/Fletcher.android.js');
 var ActionSheet = require('./js/shared/components/android/ActionSheet.android.js');
 var TagModal = require('./js/bevy/components/android/TagModal.android.js');
 var GCM = require('./js/shared/apis/GCM.android.js');
@@ -76,39 +75,23 @@ Backbone.sync = function(method, model, options) {
   var startTime = Date.now();
   console.log('START ' + method + ' ' + url);
 
-  Fletcher.fletch(url, {
+  var opts = {
     method: method,
     headers: headers,
     body: JSON.stringify(body)
-  }, function(error) {
-    console.error(error);
-  }, function(response) {
-    var endTime = Date.now();
-    var deltaTime = endTime - startTime;
-    console.log('END ' + deltaTime + 'ms ' + method + ' ' + url);
-    response = JSON.parse(response);
-    options.success(response, options);
-  });
+  };
+  if(method === 'GET' || method === 'HEAD')
+    delete opts.body;
 
-  /*return fetch(url, {
-    method: method,
-    headers: headers,
-    body: body
-  })
-  .then((res) => {
+  return fetch(url, opts)
+  .then(res => res.json())
+  .then(res => {
     var endTime = Date.now();
     var deltaTime = endTime - startTime;
     console.log('END', method, url);
-    var response = JSON.parse(res._bodyText);
-    options.success(response, options);
-  })
-  .catch((error) => {
-    console.error(error);
-  })
-  .done();*/
+    options.success(res, options);
+  });
 };
-
-
 
 var BevyStore = require('./js/bevy/BevyStore');
 var PostStore = require('./js/post/PostStore');

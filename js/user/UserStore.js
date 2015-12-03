@@ -9,7 +9,6 @@ var BEVY = constants.BEVY;
 var APP = constants.APP;
 var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
-var Fletcher = require('./../shared/components/android/Fletcher.android.js');
 var GCM = require('./../shared/apis/GCM.android.js');
 
 var React = require('react-native');
@@ -61,61 +60,35 @@ _.extend(UserStore, {
         var password = payload.password;
         console.log('logging in');
 
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(constants.siteurl + '/login', {
-            method: 'POST',
-            headers: {},
-            body: JSON.stringify({
-              username: username,
-              password: password
-            })
-          }, function(error) {
-            console.error(error);
-            this.trigger(USER.LOGIN_ERROR, JSON.parse(error).message);
-          }.bind(this), function(response) {
-            response = JSON.parse(response);
-            console.log('logged in', response);
-
-            AsyncStorage.setItem('user', JSON.stringify(response))
-              .then((err, result) => {
-              });
-
-            this.setUser(response);
-            this.trigger(USER.LOGIN_SUCCESS, response);
-          }.bind(this));
-        } else {
-          fetch(constants.siteurl + '/login',
-          {
-            method: 'post',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              username: username,
-              password: password
-            })
+        fetch(constants.siteurl + '/login', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
           })
-          // on fetch
-          .then((res) => (res.json()))
-          .then((res) => {
-            if(res.object == undefined) {
-              // success
-              console.log('logged in', res);
-              
-              AsyncStorage.setItem('user', JSON.stringify(res))
-              .then((err, result) => {
-              });
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(res.object == undefined) {
+            // success
+            console.log('logged in', res);
+            
+            AsyncStorage.setItem('user', JSON.stringify(res))
+            .then((err, result) => {
+            });
 
-              this.setUser(res);
-              this.trigger(USER.LOGIN_SUCCESS, res);
-            } else {
-              console.log('error', res);
-              // error
-              this.trigger(USER.LOGIN_ERROR, res.message);
-            }
-          });
-        }
+            this.setUser(res);
+            this.trigger(USER.LOGIN_SUCCESS, res);
+          } else {
+            console.log('error', res);
+            // error
+            this.trigger(USER.LOGIN_ERROR, res.message);
+          }
+        });
         break;
 
       case USER.LOGIN_GOOGLE:
@@ -154,64 +127,59 @@ _.extend(UserStore, {
         var password = payload.password;
         var email = payload.email;
 
-        // create user and switch to it directly on success
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(constants.apiurl + '/users', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              username: username,
-              password: password,
-              email: email
-            })
+        fetch(constants.apiurl + '/users', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
           },
-          function(error) {
-            error = JSON.parse(error);
-            console.error(error);
-            this.trigger(USER.LOGIN_ERROR, error.message);
-          }.bind(this),
-          function(data) {
-            // success
-            var user = JSON.parse(data);
-            this.setUser(user);
-            AsyncStorage.setItem('user', JSON.stringify(user))
-            .then((err, result) => {
-            });
-            this.trigger(USER.LOGIN_SUCCESS, user);
-          }.bind(this));
-        } else {
-          // ios
-        }
+          body: JSON.stringify({
+            username: username,
+            password: password,
+            email: email
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          var user = res;
+          this.setUser(user);
+          AsyncStorage.setItem('user', JSON.stringify(user))
+          .then((err, result) => {
+          });
+          this.trigger(USER.LOGIN_SUCCESS, user);
+        })
+        .catch(error => {
+          error = JSON.parse(error);
+          console.error(error);
+          this.trigger(USER.LOGIN_ERROR, error.message);
+        })
+        .done();
+         
         break;
 
       case USER.RESET_PASSWORD:
         var email = payload.email;
 
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(constants.siteurl + '/forgot', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: email
-            })
+        fetch(constants.siteurl + '/forgot', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
           },
-          function(error) {
-            error = JSON.parse(error);
-            console.error(error);
-            this.trigger(USER.RESET_PASSWORD_ERROR, error.message);
-          }.bind(this),
-          function(data) {
-            this.trigger(USER.RESET_PASSWORD_SUCCESS);
-          }.bind(this));
-        } else {
-
-        }
+          body: JSON.stringify({
+            email: email
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.trigger(USER.RESET_PASSWORD_SUCCESS);
+        })
+        .catch(error => {
+          error = JSON.parse(error);
+          console.error(error);
+          this.trigger(USER.RESET_PASSWORD_ERROR, error.message);
+        })
+        .done();
         break;
 
       case USER.UPDATE:
@@ -241,59 +209,30 @@ _.extend(UserStore, {
         var account_id = payload.account_id;
         var url = constants.siteurl + '/switch';
 
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(url, {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              username: 'dummy',
-              password: 'dummy',
-              user_id: this.user.get('_id'),
-              switch_to_id: account_id
-            })
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
-          function(error) {
-            error = JSON.parse(error);
-            console.error(error);
-          }.bind(this), function(res) {
-            res = JSON.parse(res);
-            AsyncStorage.setItem('user', JSON.stringify(res))
-            .then((err, result) => {
-            });
-
-            this.setUser(res);
-            //this.trigger(USER.LOGIN_SUCCESS, res);
-            AppActions.load();
-          }.bind(this))
-        } else {
-          fetch(url, {
-            method: 'post',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              username: 'dummy',
-              password: 'dummy',
-              user_id: this.user.get('_id'),
-              switch_to_id: account_id
-            })
+          body: JSON.stringify({
+            username: 'dummy',
+            password: 'dummy',
+            user_id: this.user.get('_id'),
+            switch_to_id: account_id
           })
-          .then((res) => res.json())
-          .then((res) => {
-            console.log('switched');
-            AsyncStorage.setItem('user', JSON.stringify(res))
-            .then((err, result) => {
-            });
-
-            this.setUser(res);
-            //this.trigger(USER.LOGIN_SUCCESS, res);
-            AppActions.load();
+        })
+        .then(res => res.json())
+        .then(res => {
+          console.log('switched');
+          AsyncStorage.setItem('user', JSON.stringify(res))
+          .then((err, result) => {
           });
-        }
+
+          this.setUser(res);
+          //this.trigger(USER.LOGIN_SUCCESS, res);
+          AppActions.load();
+        });
         break;
 
       case BEVY.SUBSCRIBE:
@@ -397,41 +336,20 @@ _.extend(UserStore, {
 
       case USER.VERIFY_USERNAME:
         var username = payload.username;
-        var url = 
-          constants.apiurl + '/users/' + encodeURIComponent(username) + '/verify';
+        var url = constants.apiurl + '/users/' + 
+          encodeURIComponent(username) + '/verify';
 
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(url, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: ''
-          },
-          function(error) {
-            error = JSON.parse(error);
-            console.error(error);
-            this.trigger(USER.VERIFY_ERROR, error.message);
-          }.bind(this),
-          function(data) {
-            data = JSON.parse(data);
-            this.trigger(USER.VERIFY_SUCCESS, data);
-          }.bind(this));
-        } else {
-          fetch(url, {
-            method: 'get',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: ''
-          })
-          .then(res => res.json())
-          .then(res => {
-            this.trigger(USER.VERIFY_SUCCESS, res);
-          });
-        }
+        fetch(url, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.trigger(USER.VERIFY_SUCCESS, res);
+        });
         break;
 
       case USER.SEARCH:
@@ -444,43 +362,21 @@ _.extend(UserStore, {
           ? constants.apiurl + '/users'
           : constants.apiurl + '/users/search/' + query;
 
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(url, {
-            method: 'GET',
-            headers: {
-              'Accept': 'application/json'
-            },
-            body: ''
-          }, function(error) {
-            console.error(error);
-            this.trigger(USER.SEARCH_ERROR);
-          }.bind(this), function(data) {
-            data = JSON.parse(data);
-            this.userSearchQuery = query;
-            this.userSearchResults.reset(data);
-            if(this.loggedIn)
-              this.userSearchResults.remove(this.user._id); // remove self from search results
-            this.trigger(USER.SEARCH_COMPLETE);
-          }.bind(this));
-        } else {
-          fetch(url,
-          {
-            method: 'get',
-            headers: {
-              'Accept': 'application/json',
-            },
-            body: ''
-          })
-          // on fetch
-          .then((res) => (res.json()))
-          .then((res) => {
-            this.userSearchQuery = query;
-            this.userSearchResults.reset(res);
-            if(this.loggedIn)
-              this.userSearchResults.remove(this.user._id); // remove self from search results
-            this.trigger(USER.SEARCH_COMPLETE);
-          });
-        }
+        fetch(url,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          }
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.userSearchQuery = query;
+          this.userSearchResults.reset(res);
+          if(this.loggedIn)
+            this.userSearchResults.remove(this.user._id); // remove self from search results
+          this.trigger(USER.SEARCH_COMPLETE);
+        });
         break;
     }
   },
@@ -555,9 +451,9 @@ _.extend(UserStore, {
 
   getUserImage(user, width, height) {
     var img_default = require('./../images/user-profile-icon.png');
-    var source = { uri: (_.isEmpty(user.image))
+    var source = { uri: ((_.isEmpty(user.image))
       ? ''
-      : user.image.path };
+      : user.image.path) };
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
       && height != undefined

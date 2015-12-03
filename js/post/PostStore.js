@@ -16,7 +16,6 @@ var React = require('react-native');
 var {
   Platform
 } = React;
-var Fletcher = require('./../shared/components/android/Fletcher.android.js');
 
 var Dispatcher = require('./../shared/dispatcher');
 
@@ -346,34 +345,14 @@ _.extend(PostStore, {
         var comment_id = payload.comment_id;
         var url = constants.apiurl + '/comments/' + comment_id;
 
-        // send server request
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(url, {
-            method: 'DELETE',
-            headers: {
-              'Accept': 'application/json'
-            },
-            body: ''
-          },
-          function(error) {
-            error = JSON.parse(error);
-            console.error(error);
-          }.bind(this), function(res) {
-            res = JSON.parse(res);
-            //this.trigger(POST.CHANGE_ALL);
-            //this.trigger(POST.CHANGE_ONE + post_id);
-          }.bind(this))
-        } else {
-          // ios
-          fetch(url, {
-            method: 'delete',
-          })
-          .then(res => res.json())
-          .then(res => {
-            //this.trigger(POST.CHANGE_ALL);
-            //this.trigger(POST.CHANGE_ONE + post_id);
-          });
-        }
+        fetch(url, {
+          method: 'DELETE'
+        })
+        .then(res => res.json())
+        .then(res => {
+          //this.trigger(POST.CHANGE_ALL);
+          //this.trigger(POST.CHANGE_ONE + post_id);
+        });
 
         var post = this.posts.get(post_id);
         var comments = post.get('comments');

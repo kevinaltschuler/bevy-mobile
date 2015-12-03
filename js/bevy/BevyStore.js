@@ -17,9 +17,6 @@ var {
   Platform,
   ToastAndroid
 } = React;
-var Fletcher = (Platform.OS == 'android')
-  ? require('./../shared/components/android/Fletcher.android.js')
-  : {};
 
 //var Bevy = require('./BevyModel');
 //var Bevies = require('./BevyCollection');
@@ -261,31 +258,32 @@ _.extend(BevyStore, {
         var bevy = payload.bevy;
         var user = payload.user;
 
-        if(Platform.OS == 'android') {
-          Fletcher.fletch(constants.apiurl + '/notifications', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'Content-Encoding': 'gzip'
-            },
-            body: JSON.stringify({
-              event: 'bevy:requestjoin',
-              bevy_id: bevy._id,
-              bevy_name: bevy.name,
-              user_id: user._id,
-              user_name: user.displayName,
-              user_image: user.image_url,
-              user_email: user.email
-            })
-          }, function(error) {
-            console.error(error);
-          }, function(response) {
+        fetch(constants.apiurl + '/notifications', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Content-Encoding': 'gzip'
+          },
+          body: JSON.stringify({
+            event: 'bevy:requestjoin',
+            bevy_id: bevy._id,
+            bevy_name: bevy.name,
+            user_id: user._id,
+            user_name: user.displayName,
+            user_image: user.image_url,
+            user_email: user.email
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(Platform.OS === 'android') {
             ToastAndroid.show('Request Sent', ToastAndroid.SHORT);
-          }.bind(this));
-        } else {
+          } else {
+            // alert ios here
+          }
+        });
 
-        }
         break;
 
       case BEVY.SEARCH:
@@ -407,7 +405,9 @@ _.extend(BevyStore, {
       '777books'
     ];
 
-    var source = { uri: bevy.get('image').path };
+    var source = { uri: (_.isEmpty(bevy.get('image')))
+      ? ''
+      : bevy.get('image').path };
     var default_bevy_index = default_bevies.indexOf(bevy_id);
 
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
