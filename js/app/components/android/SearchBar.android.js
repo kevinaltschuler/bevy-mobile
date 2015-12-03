@@ -143,13 +143,14 @@ var SearchBar = React.createClass({
       <View style={ styles.navbar }>
         { this._renderLeftButton() }
         <View style={ styles.searchInputWrapper }>
+          <View style={ styles.searchBackdrop } />
           <Icon name='search' color='#fff' size={ 24 } />
           <TextInput
             ref='Search'
             style={ styles.searchInput }
             placeholder='Search'
             placeholderTextColor='#FFF'
-            underlineColorAndroid='#FFF'
+            underlineColorAndroid='#6BCC9D'
             onBlur={ this.onSearchBlur }
             onFocus={ this.onSearchFocus }
             onChangeText={ this.onSearch }
@@ -280,8 +281,8 @@ var styles = StyleSheet.create({
   },
   backButton: {
     height: 48,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingLeft: 13,
+    paddingRight: 13,
     flexDirection: 'row',
     alignItems: 'center'
   },
@@ -293,8 +294,18 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: 8,
-    paddingRight: 8
+    paddingLeft: 16,
+    paddingRight: 16
+  },
+  searchBackdrop: {
+    position: 'absolute',
+    top: 7, 
+    left: 0,
+    backgroundColor: '#FFF',
+    opacity: 0.3,
+    height: 34,
+    width: constants.width - 16 - 16 - 10 - 25,
+    borderRadius: 5
   },
   searchIcon: {
     width: 25,
