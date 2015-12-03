@@ -34,7 +34,6 @@ var RefreshingIndicator = require('./../../shared/components/RefreshingIndicator
 var MessageItem = require('./MessageItem.ios.js');
 
 var MessageView = React.createClass({
-
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
@@ -44,7 +43,6 @@ var MessageView = React.createClass({
   },
 
   getInitialState: function() {
-
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -76,7 +74,6 @@ var MessageView = React.createClass({
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
 
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
-
       if (frames.end) {
         this.setState({keyboardSpace: frames.end.height});
       } else {
@@ -205,12 +202,23 @@ var MessageView = React.createClass({
       return (
         <TouchableOpacity
           activeOpacity={.5}
-          style={{backgroundColor: 'rgba(0,0,0,.1)', borderRadius: 2, paddingHorizontal: 10, paddingVertical: 5, justifyContent: 'center', alignItems: 'center', marginVertical: 10}}
+          style={{
+            backgroundColor: 'rgba(0,0,0,.1)', 
+            borderRadius: 2, 
+            paddingHorizontal: 10, 
+            paddingVertical: 5, 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            marginVertical: 10
+          }}
           onPress={() => {
             this.onRefresh();
           }}
         >
-          <Text style={{color: '#fff', fontWeight: 'bold'}}>
+          <Text style={{
+            color: '#fff', 
+            fontWeight: 'bold'
+          }}>
             Load More
           </Text>
         </TouchableOpacity>
@@ -219,10 +227,10 @@ var MessageView = React.createClass({
       return (
         <View style={ styles.loading }>
           <Spinner 
-            isVisible={true} 
-            size={40} 
-            type={'Arc'} 
-            color={'#2cb673'}
+            isVisible={ true } 
+            size={ 40 } 
+            type={ 'Arc' } 
+            color={ '#2cb673' }
           />
         </View>
       );
@@ -230,15 +238,18 @@ var MessageView = React.createClass({
   },
 
   clearAndRetainFocus: function() {
-    this.setState({messageValue: ''});
+    this.setState({ 
+      messageValue: '' 
+    });
     setTimeout(function() {
-      this.setState({messageValue: this.getInitialState().messageValue});
+      this.setState({ 
+        messageValue: this.getInitialState().messageValue
+      });
       this.refs.MessageInput.focus();
     }.bind(this), 0);
   },
 
   render: function () {
-
     return (
       <View 
         style={styles.container} 
@@ -265,7 +276,8 @@ var MessageView = React.createClass({
             //console.log(this.state.dataSource._dataBlob.s1[rowID]);
             var hidePic = false;
             if(rowID > 0) {
-              if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id == message.author._id) {
+              if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id 
+                == message.author._id) {
                 var hidePic = true;
               }
             }
@@ -274,14 +286,18 @@ var MessageView = React.createClass({
                 key={ message._id } 
                 message={ message } 
                 user={ this.props.user } 
-                hidePic={hidePic}
+                hidePic={ hidePic }
               />
             )
           }}
           renderHeader={ this.renderHeader }
-          renderFooter={() => { return <View style={{height: 20}}/>}}
+          renderFooter={() => { 
+            return <View style={{ height: 20 }}/>;
+          }}
         />
-        <View style={[styles.inputContainer, {marginBottom: this.state.keyboardSpace - 48} ]}>
+        <View style={[styles.inputContainer, {
+          marginBottom: this.state.keyboardSpace - 48
+        }]}>
           <TextInput
             ref='MessageInput'
             value={ this.state.messageValue }
