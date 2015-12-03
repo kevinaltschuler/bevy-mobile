@@ -272,8 +272,6 @@ var MessageView = React.createClass({
           showsVerticalScrollIndicator={true}
           onEndReached={ this.onEndReached }
           renderRow={ (message, sectionID, rowID, highlightRow) => {
-            //console.log('message', message);
-            //console.log(this.state.dataSource._dataBlob.s1[rowID]);
             var hidePic = false;
             if(rowID > 0) {
               if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id 

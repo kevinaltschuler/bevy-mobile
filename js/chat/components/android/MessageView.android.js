@@ -48,7 +48,8 @@ var MessageView = React.createClass({
     return {
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
-      loading: false
+      loading: false,
+      scrollY: 0
     };
   },
 
@@ -116,6 +117,34 @@ var MessageView = React.createClass({
       messages: messages,
       dataSource: this.state.dataSource.cloneWithRows(messages)
     });
+  },
+
+  handleResponderGrant() {
+    this.isTouching = true;
+  },
+  handleResponderRelease() {
+    this.isTouching = false;
+  },
+
+  handleScroll(e) {
+    var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
+    //console.log(scrollY);
+    if(this.state.scrollY == null) {
+      this.setState({
+        scrollY: scrollY
+      });
+      return;
+    }
+    if((this.state.scrollY - scrollY) > 5) {
+      this.refs.MessageInput.blur();
+    }
+    if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
+      this.refs.MessageInput.focus();
+    }
+    this.setState({
+      scrollY: scrollY
+    });
+    console.log(scrollY);
   },
 
   _renderInfoButton() {
@@ -188,9 +217,6 @@ var MessageView = React.createClass({
           { this._renderInfoButton() }
         </View>
         <ListView
-          renderScrollComponent={
-            (props) => <InvertibleScrollView {...props} { ...this.state } />
-          }
           contentContainerStyle={{
             paddingBottom: 20
           }}
@@ -200,19 +226,28 @@ var MessageView = React.createClass({
           removeClippedSubviews={ true }
           initialListSize={ 10 }
           pageSize={ 10 }
+          decelerationRate={ 0.9 }
+          onResponderGrant={ this.handleResponderGrant }
+          onResponderRelease={ this.handleResponderRelease }
+          onScroll={ this.handleScroll }
           renderHeader={ this._renderListHeader }
-          renderRow={(message) => {
+          renderRow={(message, sectionID, rowID, highlightRow) => {
+            var hidePic = (rowID > 0 && 
+              (this.state.dataSource._dataBlob.s1[rowID - 1].author._id 
+                == message.author._id));
             return (
               <MessageItem
                 key={ 'message:' + message._id }
                 message={ message }
                 user={ this.props.user }
                 mainNavigator={ this.props.mainNavigator }
+                hidePic={ hidePic }
               />
             );
           }}
         />
         <MessageInput
+          ref='MessageInput'
           onSubmitEditing={ this.onSubmitEditing }
         />
       </View>

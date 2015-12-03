@@ -36,6 +36,13 @@ var MessageInput = React.createClass({
     };
   },
 
+  focus() {
+    this.refs.MessageInput.focus();
+  },
+  blur() {
+    this.refs.MessageInput.blur();
+  },
+
   onSubmitEditing(ev) {
     this.props.onSubmitEditing(this.state.messageInput);
     this.setState({

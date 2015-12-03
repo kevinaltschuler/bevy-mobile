@@ -15,7 +15,6 @@ var constants = require('./../../constants');
 var Collapsible = require('react-native-collapsible');
 
 var MessageItem = React.createClass({
-
   propTypes: {
     message: React.PropTypes.object,
     user: React.PropTypes.object,
@@ -46,9 +45,13 @@ var MessageItem = React.createClass({
     if(diff <= ( 1000 * 60 * 60 * 24)) {
       // within a day - only display hours and minutes
       created = 
-        ((createDate.getHours() > 12 ) ? createDate.getHours() - 12 : createDate.getHours()) // 12 hr format
+        ((createDate.getHours() > 12 ) 
+          ? createDate.getHours() - 12 
+          : createDate.getHours()) // 12 hr format
         + ':'
-        + createDate.getMinutes()
+        + ((createDate.getMinutes() < 10)
+          ? '0' + createDate.getMinutes()
+          : createDate.getMinutes())
         + ((createDate.getHours() > 11) ? ' PM' : ' AM');
     } else if (diff <= ( 1000 * 60 * 60 * 24 * 7)) {
       // within a week - only display short weekday
