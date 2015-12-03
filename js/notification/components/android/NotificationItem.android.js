@@ -135,11 +135,18 @@ var NotificationItem = React.createClass({
             </TouchableNativeFeedback>
 
             <TouchableNativeFeedback
-              background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+              background={ TouchableNativeFeedback.Ripple('#EEE', false) }
               onPress={ this.acceptJoinRequest }
             >
-              <View style={styles.textWrapper}>
-                <Text>
+              <View style={{
+                height: 60,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 20
+              }}>
+                <Text style={{
+                  color: '#2CB673'
+                }}>
                   Accept
                 </Text>
               </View>
