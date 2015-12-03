@@ -38,7 +38,6 @@ var Bevies = Backbone.Collection.extend({
 var constants = require('./../constants');
 var BEVY = constants.BEVY;
 var POST = constants.POST;
-var CONTACT = constants.CONTACT;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
 var USER = constants.USER;

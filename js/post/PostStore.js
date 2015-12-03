@@ -25,7 +25,6 @@ var Posts = require('./PostCollection');
 var constants = require('./../constants');
 var BEVY = constants.BEVY;
 var POST = constants.POST;
-var CONTACT = constants.CONTACT;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
 var COMMENT = constants.COMMENT;
@@ -34,9 +33,6 @@ var USER = constants.USER;
 var PostActions = require('./PostActions');
 var BevyStore = require('./../bevy/BevyStore');
 var UserStore = require('./../user/UserStore');
-
-var tagRegex = /#\w+/g;
-
 
 // inherit event class first
 // VERY IMPORTANT, as the PostContainer view binds functions

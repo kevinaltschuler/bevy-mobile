@@ -24,6 +24,7 @@ var PostStore = require('./../../../post/PostStore');
 var NotificationActions = require('./../../NotificationActions');
 var BevyActions = require('./../../../bevy/BevyActions');
 var routes = require('./../../../routes');
+var constants = require('./../../../constants');
 
 var NotificationItem = React.createClass({
   propTypes: {
@@ -40,13 +41,27 @@ var NotificationItem = React.createClass({
   },
 
   goToPost() {
-    /*this.markRead();
-    //if(this.props.inCommentView) return;
-    var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = this.props.notification.data.post_id;
-    console.log(commentRoute);
-    this.props.mainNavigator.push(commentRoute);*/
-    ToastAndroid.show('Feature coming soon', ToastAndroid.SHORT);
+    var post_id = this.props.notification.data.post_id;
+    var bevy_id = this.props.notification.data.bevy_id;
+
+    fetch(constants.apiurl + '/bevies/' + bevy_id + '/posts/' + post_id, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .then(res => {
+      // if its an error, get outta here
+      if(typeof res === 'string') {
+        ToastAndroid.show(res, ToastAndroid.SHORT);
+        return;
+      }
+      var route = routes.MAIN.COMMENT;
+      route.post = res;
+      this.props.mainNavigator.push(route);
+      this.markRead();
+    });
   },
 
   acceptJoinRequest() {
