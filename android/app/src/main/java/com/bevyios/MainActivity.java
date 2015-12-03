@@ -1,5 +1,8 @@
 package com.bevyios;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.chymtt.reactnativedropdown.DropdownPackage;
 import com.eguma.vibration.Vibration;
@@ -31,6 +34,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.bevyios.GoogleAuthPackage;
 import com.bevyios.GCMPackage;
 import com.bevyios.BevyIntentPackage;
+import com.bevyios.imagepicker.*;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
@@ -39,6 +43,12 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
 
   private ReactInstanceManager mReactInstanceManager;
   private ReactRootView mReactRootView;
+
+  private List<ActivityResultListener> mListeners = new ArrayList<>();
+
+  public void addActivityResultListener(ActivityResultListener listener){
+      mListeners.add(listener);
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +72,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new GCMPackage(this))
         .addPackage(new RNDeviceInfo())
         .addPackage(new BevyIntentPackage(this, intent))
+        .addPackage(new ImagePickerPackage(this))
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
@@ -149,4 +160,11 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .emit("startWithIntent", params);
     }
   }*/
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      for (ActivityResultListener listener : mListeners) {
+          listener.onActivityResult(requestCode, resultCode, data);
+      }
+  }
 }

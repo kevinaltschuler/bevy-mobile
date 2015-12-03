@@ -16,6 +16,7 @@ var {
   ProgressBarAndroid,
   StyleSheet
 } = React;
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var Dropdown = require('react-native-dropdown-android');
 
@@ -64,6 +65,18 @@ var NewPostInputView = React.createClass({
 
     // clear state
     this.setState(this.getInitialState());
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, (cancelled, response) => {
+      console.log(cancelled, response);
+    });
+  },
+
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, (cancelled, response) => {
+      console.log(cancelled, response);
+    });
   },
 
   submitPost() {
@@ -180,7 +193,7 @@ var NewPostInputView = React.createClass({
         <View style={ styles.actionBar }>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => {}}
+            onPress={ this.openCamera }
           >
             <View style={ styles.addMediaButton }>
               <Icon
@@ -192,7 +205,7 @@ var NewPostInputView = React.createClass({
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => {}}
+            onPress={ this.openImageLibrary }
           >
             <View style={ styles.addMediaButton }>
               <Icon

@@ -144,7 +144,6 @@ var MessageView = React.createClass({
     this.setState({
       scrollY: scrollY
     });
-    console.log(scrollY);
   },
 
   _renderInfoButton() {

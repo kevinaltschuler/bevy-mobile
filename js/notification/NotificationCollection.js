@@ -7,7 +7,7 @@ var constants = require('./../constants');
 
 var NotificationCollection = Backbone.Collection.extend({
   model: Notification,
-  comparator: '-created'
+  //comparator: '-created'
 });
 
 module.exports = NotificationCollection;
