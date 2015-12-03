@@ -102,6 +102,14 @@ var BevyActions = {
       user: user
     });
   },
+
+  addUser(bevy_id, user_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_USER,
+      bevy_id: bevy_id,
+      user_id: user_id
+    });
+  }
 };
 
 module.exports = BevyActions;

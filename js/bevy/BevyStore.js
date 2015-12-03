@@ -283,7 +283,20 @@ _.extend(BevyStore, {
             // alert ios here
           }
         });
+        break;
 
+      case BEVY.ADD_USER:
+        var bevy_id = payload.bevy_id;
+        var user_id = payload.user_id;
+
+        fetch(constants.apiurl + '/users/' + user_id + '/addbevy/' + bevy_id, {
+          method: 'PATCH',
+          body: ''
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.trigger(BEVY.CHANGE_ALL);
+        });
         break;
 
       case BEVY.SEARCH:

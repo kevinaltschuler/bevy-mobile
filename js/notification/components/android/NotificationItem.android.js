@@ -22,6 +22,7 @@ var _ = require('underscore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostStore = require('./../../../post/PostStore');
 var NotificationActions = require('./../../NotificationActions');
+var BevyActions = require('./../../../bevy/BevyActions');
 var routes = require('./../../../routes');
 
 var NotificationItem = React.createClass({
@@ -49,7 +50,10 @@ var NotificationItem = React.createClass({
   },
 
   acceptJoinRequest() {
-
+    BevyActions.addUser(
+      this.props.notification.data.bevy_id,
+      this.props.notification.data.user_id
+    );
   },
 
   render() {
