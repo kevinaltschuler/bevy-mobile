@@ -35,6 +35,7 @@ import com.bevyios.GoogleAuthPackage;
 import com.bevyios.GCMPackage;
 import com.bevyios.BevyIntentPackage;
 import com.bevyios.imagepicker.*;
+import com.bevyios.fileupload.*;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 
@@ -73,6 +74,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new RNDeviceInfo())
         .addPackage(new BevyIntentPackage(this, intent))
         .addPackage(new ImagePickerPackage(this))
+        .addPackage(new FileUploadPackage())
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
