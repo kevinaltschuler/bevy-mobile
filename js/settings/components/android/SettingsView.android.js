@@ -17,19 +17,48 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserActions = require('./../../../user/UserActions');
 var AppActions = require('./../../../app/AppActions');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
+var FILE = constants.FILE;
 
 var SettingsView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     user: React.PropTypes.object,
     tabActions: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+    };
+  },
+
+  componentDidMount() {
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
+  },
+  componentWillUnmount() {
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+  },
+
+  onUploadComplete(file) {
+    // dont catch other upload complete events from new post view
+    // or new bevy view or other stuff
+    if(this.props.mainRoute.name != routes.MAIN.TABBAR.name) return;
+    UserActions.changeProfilePicture(null, file);
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
   },
 
   goToPublicProfile() {
@@ -41,7 +70,35 @@ var SettingsView = React.createClass({
   },
 
   changePicture() {
-    ToastAndroid.show('Feature Not Yet Implemented :(', ToastAndroid.SHORT);
+    constants.getActionSheetActions().show(
+      [
+        "Take a Picture",
+        "Choose from Library"
+       ],
+      function(key, option) {
+        //console.log(key);
+        switch(option) {
+          case "Take a Picture":
+            this.openCamera();
+            break;
+          case "Choose from Library":
+            this.openImageLibrary();
+            break;
+        }
+      }.bind(this),
+      'Change Profile Picture'
+    );
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+  uploadImage(cancelled, response) {
+    if(cancelled) return;
+    FileActions.upload(response.uri);
   },
 
   goToAccounts() {

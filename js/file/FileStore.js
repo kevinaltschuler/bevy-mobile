@@ -49,6 +49,8 @@ _.extend(FileStore, {
         this.trigger(FILE.UPLOAD_ERROR, err);
         return;
       }
+      // populate path
+      file.path = constants.apiurl + '/files/' + file.filename;
       this.trigger(FILE.UPLOAD_COMPLETE, file);
       // make sure the status bar is still white
       if(Platform.OS === 'ios') {

@@ -58,16 +58,12 @@ var NewPostInputView = React.createClass({
     PostStore.on(POST.POST_CREATED, this.onPostCreated);
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
-    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardDidHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
     PostStore.off(POST.POST_CREATED, this.onPostCreated);
     FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
-    DeviceEventEmitter.removeListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.removeListener('keyboardDidHide', this.onKeyboardHide);
   },
 
   onBackButton() {
@@ -83,13 +79,6 @@ var NewPostInputView = React.createClass({
 
     // clear state
     this.setState(this.getInitialState());
-  },
-
-  onKeyboardShow() {
-    this.setState({ inputFocused: true });
-  },
-  onKeyboardHide() {
-    this.setState({ inputFocused: false });
   },
 
   onUploadComplete(file) {

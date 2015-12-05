@@ -187,22 +187,34 @@ _.extend(UserStore, {
 
       case USER.CHANGE_PROFILE_PICTURE:
         var uri = payload.uri;
+        var image = payload.image;
 
-        FileStore.upload(uri, (err, filename) => {
-          console.log(err, filename);
-          if(err) return;
+        if(uri) {
+          FileStore.upload(uri, (err, filename) => {
+            console.log(err, filename);
+            if(err) return;
+            this.user.save({
+              image_url: filename
+            }, {
+              patch: true,
+              success: function(model, response, options) {
+                //console.log(response);
+              }.bind(this)
+            });
+            this.user.set('image_url', filename);
+            this.trigger(USER.LOADED);
+          });
+        } else {
           this.user.save({
-            image_url: filename
+            image: image
           }, {
             patch: true,
             success: function(model, response, options) {
-              //console.log(response);
             }.bind(this)
           });
-          this.user.set('image_url', filename);
+          this.user.set('image', image);
           this.trigger(USER.LOADED);
-        });
-
+        }
         break;
 
       case USER.SWITCH_USER:
@@ -454,19 +466,22 @@ _.extend(UserStore, {
     var source = { uri: ((_.isEmpty(user.image))
       ? ''
       : user.image.path) };
+    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
+      source = img_default;
+      return source;
+    } else if(source.uri == '/img/user-profile-icon.png') {
+      source = img_default;
+      return source;
+    } else if (_.isEmpty(source.uri)) {
+      source = img_default;
+      return source;
+    }
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
       && height != undefined
       && this.gup('w', user.image.path) == null
       && this.gup('h', user.image.path) == null) {
       source.uri += '?w=' + width + '&h=' + height;
-    }
-    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
-      source = img_default;
-    } else if(source.uri == '/img/user-profile-icon.png') {
-      source = img_default;
-    } else if (_.isEmpty(source.uri)) {
-      source = img_default;
     }
     return source;
   },
