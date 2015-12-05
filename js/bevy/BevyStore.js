@@ -166,7 +166,7 @@ _.extend(BevyStore, {
       case BEVY.CREATE:
         var name = payload.name;
         var description = payload.description;
-        var image_url = payload.image_url;
+        var image = payload.image;
         var slug = payload.slug;
         var user = UserStore.getUser();
 
@@ -174,7 +174,7 @@ _.extend(BevyStore, {
         var newBevy = this.myBevies.add({
           name: name,
           description: description,
-          image_url: image_url,
+          image: image,
           admins: [ user._id ], // add self as admin
           slug: slug
         });
