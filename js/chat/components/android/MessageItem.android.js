@@ -23,7 +23,8 @@ var MessageItem = React.createClass({
   propTypes: {
     message: React.PropTypes.object,
     user: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    hidePic: React.PropTypes.bool
   },
 
   goToPublicProfile() {
@@ -94,32 +95,21 @@ var MessageItem = React.createClass({
       ? '/img/triangle_right.png' 
       : '/img/triangle_left.png';
     return (
-      <Image 
-        source={{ uri: constants.siteurl + triangleImage, tintColor: '#fff' }}
-        style={ styles.arrow } 
-      />
+      <View style={{width: 10, height: 10}}/>
     );
   },
 
   _renderMessageBody() {
     var isMe = (this.props.user._id == this.props.message.author._id);
-    var messageBodyStyle = {
-      backgroundColor: '#fff',
-      paddingTop: 5,
-      paddingBottom: 5,
-      paddingLeft: 5,
-      paddingRight: 5
-    };
+    var messageBodyStyle = (isMe) ? styles.messageBodyMe : styles.messageBody;
     var textAlign = (isMe) ? 'right' : 'left';
     var authorName = (isMe) ? 'Me' : this.props.message.author.displayName;
+    var messageColor = (isMe) ? {color: '#fff'}: {color: '#333'};
     return (
       <View style={ messageBodyStyle }>
-        <Text style={{ textAlign: textAlign }}>
+        <Text style={{ textAlign: textAlign }, messageColor}>
           { this.props.message.body }
           { '\n' }
-          <Text style={ styles.authorName }>
-            { authorName } · { this._renderDate() }
-          </Text>
         </Text>
       </View>
     );
@@ -131,6 +121,13 @@ var MessageItem = React.createClass({
     
     var isMe = (this.props.user._id == author._id);
     var containerStyle = (isMe) ? styles.containerMe : styles.container;
+
+    var authorImage = (this.props.hidePic)
+    ? <View style={{height: 40, width: 40}}/>
+    : <Image 
+        source={ UserStore.getUserImage(author) }
+        style={ styles.authorImage }
+      />;
     
     return (
       <View style={ containerStyle }>
@@ -139,10 +136,7 @@ var MessageItem = React.createClass({
         <TouchableWithoutFeedback
           onPress={ this.goToPublicProfile }
         >
-          <Image 
-            source={ UserStore.getUserImage(author) }
-            style={ styles.authorImage }
-          />
+          { authorImage }
         </TouchableWithoutFeedback>
         { (isMe) ? <View /> : this._renderTriangle() }
         { (isMe) ? <View /> : this._renderMessageBody() }
@@ -157,13 +151,13 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   containerMe: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   authorImage: {
     width: 40,
@@ -172,17 +166,20 @@ var styles = StyleSheet.create({
   },
   messageBody: {
     backgroundColor: '#fff',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderRadius: 15
   },
   messageBodyMe: {
-    backgroundColor: '#fff',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5
+    backgroundColor: '#2cb673',
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 8,
+    paddingRight: 8,
+    color: '#fff',
+    borderRadius: 15
   },
   messageTextContainer: {
     //flexDirection: 'row',

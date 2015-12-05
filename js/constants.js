@@ -157,6 +157,7 @@ exports.USER = {
 
 exports.FILE = {
   'UPLOAD': 'file_upload',
+  
   'UPLOAD_COMPLETE': 'file_upload_complete',
   'UPLOAD_ERROR': 'file_upload_error'
 }

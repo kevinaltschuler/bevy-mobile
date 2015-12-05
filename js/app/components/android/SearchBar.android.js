@@ -294,8 +294,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: 16,
-    paddingRight: 16
+    paddingLeft: 10,
+    paddingRight: 10
   },
   searchBackdrop: {
     position: 'absolute',

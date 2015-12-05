@@ -139,7 +139,7 @@ var MessageView = React.createClass({
       this.refs.MessageInput.blur();
     }
     if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
-      this.refs.MessageInput.focus();
+      //this.refs.MessageInput.focus();
     }
     this.setState({
       scrollY: scrollY
