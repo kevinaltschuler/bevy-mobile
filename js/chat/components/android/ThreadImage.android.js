@@ -80,7 +80,7 @@ var ThreadImage = React.createClass({
       case 'pm':
         return this._renderSingleImage();
       case 'group':
-        if(this.props.thread.image_url) {
+        if(!_.isEmpty(this.props.thread.image)) {
           // if theres a set image, use that instead
           return this._renderSingleImage();
         }

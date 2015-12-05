@@ -16,18 +16,23 @@ var {
   ScrollView,
   ListView,
   BackAndroid,
+  ToastAndroid,
   TouchableNativeFeedback
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadImage = require('./ThreadImage.android.js');
 var PersonItem = require('./PersonItem.android.js');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatActions = require('./../../../chat/ChatActions');
 var ChatStore = require('./../../../chat/ChatStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
 var CHAT = constants.CHAT;
+var FILE = constants.FILE;
 
 var ThreadSettingsView = React.createClass({
   propTypes: {
@@ -39,10 +44,21 @@ var ThreadSettingsView = React.createClass({
   componentDidMount() {
     ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
   componentWillUnmount() {
     ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+  },
+
+  onUploadComplete(file) {
+    ChatActions.editThread(this.props.activeThread._id, null, file);
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
   },
 
   onSwitchToThread(thread_id) {
@@ -62,6 +78,38 @@ var ThreadSettingsView = React.createClass({
 
   goBack() {
     this.props.mainNavigator.pop();
+  },
+
+  changePicture() {
+    constants.getActionSheetActions().show(
+      [
+        "Take a Picture",
+        "Choose from Library"
+       ],
+      function(key, option) {
+        //console.log(key);
+        switch(option) {
+          case "Take a Picture":
+            this.openCamera();
+            break;
+          case "Choose from Library":
+            this.openImageLibrary();
+            break;
+        }
+      }.bind(this),
+      'Change Thread Picture'
+    );
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+  uploadImage(cancelled, response) {
+    if(cancelled) return;
+    FileActions.upload(response.uri);
   },
 
   changeName() {
@@ -132,6 +180,21 @@ var ThreadSettingsView = React.createClass({
           <Text style={ styles.sectionTitle }>
             Settings
           </Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={ this.changePicture }
+          >
+            <View style={ styles.settingButton }>
+              <Icon
+                name='photo'
+                size={ 36 }
+                color='#AAA'
+              />
+              <Text style={ styles.settingText }>
+                Change Picture
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={ this.changeName }

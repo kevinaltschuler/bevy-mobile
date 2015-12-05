@@ -49,12 +49,12 @@ var ChatActions = {
     });
   },
 
-  editThread(thread_id, name, image_url) {
+  editThread(thread_id, name, image) {
     Dispatcher.dispatch({
       actionType: CHAT.EDIT_THREAD,
       thread_id: thread_id,
       name: name,
-      image_url: image_url
+      image: image
     });
   },
 
