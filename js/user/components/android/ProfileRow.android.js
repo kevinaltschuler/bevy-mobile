@@ -10,10 +10,12 @@ var {
   View,
   Text,
   Image,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var UserStore = require('./../../../user/UserStore');
 
 var ProfileRow = React.createClass({
@@ -42,6 +44,13 @@ var ProfileRow = React.createClass({
     };
   },
 
+  openProfileImage() {
+    if(_.isEmpty(this.props.user.image)) return;
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.user.image]);
+    actions.show();
+  },
+
   render() {
     if(this.props.big) {
       return (
@@ -55,6 +64,9 @@ var ProfileRow = React.createClass({
           paddingRight: 10,
           elevation: 2
         }}>
+          <TouchableWithoutFeedback
+            onPress={ this.openProfileImage }
+          >
           <Image
             source={ UserStore.getUserImage(this.props.user, 60, 60) }
             style={{
@@ -64,6 +76,7 @@ var ProfileRow = React.createClass({
               marginRight: 10
             }}
           />
+          </TouchableWithoutFeedback>
           <View style={{
             flex: 1,
             flexDirection: 'column',

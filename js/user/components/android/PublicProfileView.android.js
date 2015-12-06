@@ -182,8 +182,7 @@ var PublicProfileView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EEE',
-    paddingTop: 10
+    backgroundColor: '#EEE'
   },
   topBar: {
     backgroundColor: '#2CB673',
@@ -206,7 +205,8 @@ var styles = StyleSheet.create({
     fontSize: 18
   },
   list: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   },
   profileRow: {
     backgroundColor: '#FFF',
