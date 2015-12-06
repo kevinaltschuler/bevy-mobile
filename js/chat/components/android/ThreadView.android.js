@@ -13,6 +13,7 @@ var {
   TouchableNativeFeedback,
   Text,
   ToastAndroid,
+  PullToRefreshViewAndroid,
   StyleSheet
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
@@ -135,16 +136,16 @@ var ThreadView = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
-        <ListView
-          style={ styles.threadList }
-          contentContainerStyle={ styles.threadList }
-          dataSource={ this.state.ds }
-          renderRow={ this._renderThreadItem }
-          scrollRenderAheadDistance={ 300 }
-          removeClippedSubviews={ true }
-          initialListSize={ 10 }
-          pageSize={ 10 }
-        />
+          <ListView
+            style={ styles.threadList }
+            contentContainerStyle={ styles.threadList }
+            dataSource={ this.state.ds }
+            renderRow={ this._renderThreadItem }
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 10 }
+            pageSize={ 10 }
+          />
         { this._renderActionBar() }
       </View>
     );

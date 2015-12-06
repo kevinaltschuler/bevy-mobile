@@ -136,6 +136,7 @@ var SettingsView = React.createClass({
     return (
       <ScrollView style={ styles.container }>
         <ProfileRow 
+          big={ true }
           user={ this.props.user }
           nameColor='#000'
           emailColor='#000'
@@ -232,7 +233,8 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#EEE'
+    backgroundColor: '#EEE',
+    paddingTop: 10
   },
   settingHeader: {
     color: '#AAA',

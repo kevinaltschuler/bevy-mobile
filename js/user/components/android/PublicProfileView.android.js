@@ -128,6 +128,7 @@ var PublicProfileView = React.createClass({
         { this._renderTopBar() }
         <ScrollView style={ styles.list }>
           <ProfileRow
+            big={ true }
             user={ this.props.routeUser }
             nameColor='#666'
             emailColor='#666'
@@ -181,7 +182,8 @@ var PublicProfileView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EEE'
+    backgroundColor: '#EEE',
+    paddingTop: 10
   },
   topBar: {
     backgroundColor: '#2CB673',

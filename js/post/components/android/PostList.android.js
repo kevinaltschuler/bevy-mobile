@@ -13,6 +13,7 @@ var {
   Image,
   StyleSheet,
   TouchableNativeFeedback,
+  PullToRefreshViewAndroid,
   ToastAndroid,
   ProgressBarAndroid
 } = React;
@@ -228,35 +229,39 @@ var PostList = React.createClass({
       );
     } else {
       return (
+
         <View style={ styles.container }>
-          <ListView
-            dataSource={ this.state.posts }
-            style={ styles.postList }
-            scrollRenderAheadDistance={ 400 }
-            initialListSize={ 5 }
-            onScroll={(data) => {
-              this.onScroll(data.nativeEvent.contentOffset.y);
-            }}
-            renderHeader={ this._renderNewPostCard }
-            pageSize={ 5 }
-            renderRow={(post) => {
-              if(this.props.activeBevy._id == -1 &&
-                post.pinned) return <View />;
-              return (
-                <Post
-                  key={ 'post:' + post._id }
-                  post={ post }
-                  mainNavigator={ this.props.mainNavigator }
-                  mainRoute={ this.props.mainRoute }
-                  user={ this.props.user }
-                  loggedIn={ this.props.loggedIn }
-                  activeBevy={ this.props.activeBevy }
-                />
-              );
-            }}
-          />
+          
+            <ListView
+              dataSource={ this.state.posts }
+              style={ styles.postList }
+              scrollRenderAheadDistance={ 400 }
+              initialListSize={ 5 }
+              onScroll={(data) => {
+                this.onScroll(data.nativeEvent.contentOffset.y);
+              }}
+              renderHeader={ this._renderNewPostCard }
+              pageSize={ 5 }
+              renderRow={(post) => {
+                if(this.props.activeBevy._id == -1 &&
+                  post.pinned) return <View />;
+                return (
+                  <Post
+                    key={ 'post:' + post._id }
+                    post={ post }
+                    mainNavigator={ this.props.mainNavigator }
+                    mainRoute={ this.props.mainRoute }
+                    user={ this.props.user }
+                    loggedIn={ this.props.loggedIn }
+                    activeBevy={ this.props.activeBevy }
+                  />
+                );
+              }}
+            />
+          
           { this._renderHeader() }
         </View>
+
       );
     }
   }

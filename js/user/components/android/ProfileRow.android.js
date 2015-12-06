@@ -23,7 +23,8 @@ var ProfileRow = React.createClass({
     imageSize: React.PropTypes.number,
     nameColor: React.PropTypes.string,
     emailColor: React.PropTypes.string,
-    style: React.PropTypes.object
+    style: React.PropTypes.object,
+    big: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -36,11 +37,57 @@ var ProfileRow = React.createClass({
       imageSize: 30,
       nameColor: '#FFF',
       emailColor: '#AAA',
-      style: {}
+      style: {},
+      big: false
     };
   },
 
   render() {
+    if(this.props.big) {
+      return (
+        <View style={{
+          backgroundColor: '#FFF',
+          height: 80,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingLeft: 10,
+          paddingRight: 10,
+          elevation: 2
+        }}>
+          <Image
+            source={ UserStore.getUserImage(this.props.user, 60, 60) }
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 30,
+              marginRight: 10
+            }}
+          />
+          <View style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'center'
+          }}>
+            <Text style={{
+              color: '#000',
+              fontSize: 18
+            }}>
+              { this.props.user.displayName }
+            </Text>
+            <Text style={{
+              color: '#888',
+              fontSize: 16
+            }}>
+              { (_.isEmpty(this.props.user.email))
+              ? 'No Email'
+              : this.props.user.email }
+            </Text>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={[ styles.container, { 
         height: this.props.height 
