@@ -11,6 +11,7 @@ var {
   ScrollView,
   Text,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   Image,
   SwitchAndroid,
   BackAndroid,
@@ -84,6 +85,13 @@ var BevyInfoView = React.createClass({
   goToTags() {
     // go to tag view
     this.props.bevyNavigator.push(routes.BEVY.TAGS);
+  },
+
+  openImage() {
+    if(_.isEmpty(this.props.activeBevy.image)) return;
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.activeBevy.image]);
+    actions.show();
   },
 
   updateBevySettings(settings) {
@@ -262,10 +270,14 @@ var BevyInfoView = React.createClass({
           }}
         >
           <View style={ styles.header }>
-            <Image
-              source={ BevyStore.getBevyImage(this.props.activeBevy._id, 100, 100) }
-              style={ styles.bevyImage }
-            />
+            <TouchableWithoutFeedback
+              onPress={ this.openImage }
+            >
+              <Image
+                source={ BevyStore.getBevyImage(this.props.activeBevy._id, 100, 100) }
+                style={ styles.bevyImage }
+              />
+            </TouchableWithoutFeedback>
             <View style={ styles.bevyDetails }>
               <Text style={ styles.bevyName }>
                 { this.props.activeBevy.name.trim() }
@@ -357,9 +369,9 @@ var styles = StyleSheet.create({
     elevation: 2
   },
   bevyImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     marginRight: 10
   },
   bevyDetails: {
