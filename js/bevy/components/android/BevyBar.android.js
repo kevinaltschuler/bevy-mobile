@@ -230,7 +230,7 @@ var BevyBar = React.createClass({
   render() {
     var disappearingStyle = (this.props.disappearing)
     ? {
-      top: (this.props.height * -1) - 5,
+      top: (this.props.height * -1) - 3,
       position: 'absolute'
     } : {};
 
@@ -263,7 +263,8 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     opacity: 1,
     borderBottomColor: '#EEE',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    elevation: 3
   },
   bevyImageWrapper: {
     position: 'absolute',

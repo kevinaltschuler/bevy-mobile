@@ -148,7 +148,8 @@ var styles = StyleSheet.create({
   containerRow: {
     flexDirection: 'column',
     backgroundColor: '#FFF',
-    marginBottom: 10
+    marginBottom: 10,
+    elevation: 2
   }
 });
 

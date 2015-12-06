@@ -65,7 +65,8 @@ var styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 14,
     paddingLeft: 10,
-    paddingRight: 10
+    paddingRight: 10,
+    elevation: 2
   },
   userImage: {
     width: 30,

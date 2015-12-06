@@ -256,7 +256,11 @@ var BevyInfoView = React.createClass({
           bevyNavigator={ this.props.bevyNavigator }
           bevyRoute={ this.props.bevyRoute }
         />
-        <ScrollView>
+        <ScrollView
+          contentContainerStyle={{
+            backgroundColor: '#EEE'
+          }}
+        >
           <View style={ styles.header }>
             <Image
               source={ BevyStore.getBevyImage(this.props.activeBevy._id, 100, 100) }
@@ -345,13 +349,12 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE'
   },
   header: {
-    width: constants.width,
     height: 100,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    marginBottom: 0,
+    elevation: 2
   },
   bevyImage: {
     width: 60,
