@@ -26,7 +26,16 @@ var img_default = require('./../../../images/user-profile-icon.png');
 
 var ThreadImage = React.createClass({
   propTypes: {
-    thread: React.PropTypes.object
+    thread: React.PropTypes.object,
+    size: React.PropTypes.number,
+    openModal: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      size: 40,
+      openModal: false
+    };
   },
 
   getInitialState() {
@@ -39,6 +48,13 @@ var ThreadImage = React.createClass({
     this.setState({
       source: this.getImageSource(nextProps)
     })
+  },
+
+  openImage() {
+    if(_.isEmpty(this.props.thread.image)) return;
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.thread.image]);
+    actions.show();
   },
 
   getImageSource(props) {
@@ -59,12 +75,24 @@ var ThreadImage = React.createClass({
  
   _renderSingleImage() {
     var imageStyle = {
-      width: 40,
-      height: 40,
+      width: this.props.size,
+      height: this.props.size,
       padding: 0,
       marginRight: 10,
-      borderRadius: 20,
+      borderRadius: this.props.size / 2,
     };
+    if(this.props.openModal) {
+      return (
+        <TouchableWithoutFeedback
+          onPress={ this.openImage }
+        >
+          <Image 
+            style={ imageStyle } 
+            source={ this.state.source }
+          />
+        </TouchableWithoutFeedback>
+      );
+    }
     return (
       <Image 
         style={ imageStyle } 
@@ -99,15 +127,15 @@ var ThreadImage = React.createClass({
           switch(threadUsers.length) {
             case 1:
               // only one other user
-              iconStyle.width = 40;
-              iconStyle.height = 40;
-              iconStyle.borderRadius = 20;
+              iconStyle.width = this.props.size;
+              iconStyle.height = this.props.size;
+              iconStyle.borderRadius = this.props.size / 2;
               break;
             case 2:
               // two other users
-              iconStyle.width = 26;
-              iconStyle.height = 26;
-              iconStyle.borderRadius = 13;
+              iconStyle.width = 0.65 * this.props.size;
+              iconStyle.height = 0.65 * this.props.size;
+              iconStyle.borderRadius = 0.325 * this.props.size;
               iconStyle.position = 'absolute';
               if(key == 0) {
                 // first user - top left
@@ -121,14 +149,14 @@ var ThreadImage = React.createClass({
               break;
             case 3:
               // 3 other users
-              iconStyle.width = 20;
-              iconStyle.height = 20;
-              iconStyle.borderRadius = 10;
+              iconStyle.width = 0.5 * this.props.size;
+              iconStyle.height = 0.5 * this.props.size;
+              iconStyle.borderRadius = 0.25 * this.props.size;
               iconStyle.position = 'absolute';
               if(key == 0) {
                 // first user - top center
                 iconStyle.top = 0;
-                iconStyle.left = 10;
+                iconStyle.left = 0.25 * this.props.size;
               } else if (key == 1) {
                 // second user - bottom left
                 iconStyle.bottom = 0;
@@ -141,9 +169,9 @@ var ThreadImage = React.createClass({
               break;
             case 4:
               // 4 other users
-              iconStyle.width = 20;
-              iconStyle.height = 20;
-              iconStyle.borderRadius = 10;
+              iconStyle.width = 0.5 * this.props.size;
+              iconStyle.height = 0.5 * this.props.size;
+              iconStyle.borderRadius = 0.25 * this.props.size;
               iconStyle.position = 'absolute';
               if(key == 0) {
                 // first user - top left
@@ -168,7 +196,7 @@ var ThreadImage = React.createClass({
             <Image 
               key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id } 
               style={ iconStyle } 
-              source={ UserStore.getUserImage(user, 20, 20) }
+              source={ UserStore.getUserImage(user, this.props.size, this.props.size) }
             />
           );
         }
@@ -178,9 +206,9 @@ var ThreadImage = React.createClass({
         
         return (
           <View style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
+            width: this.props.size,
+            height: this.props.size,
+            borderRadius: 0.5 * this.props.size,
             marginRight: 10,
             padding: 0
           }}>

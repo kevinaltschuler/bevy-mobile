@@ -170,10 +170,18 @@ var ThreadSettingsView = React.createClass({
           <View style={ styles.header }>
             <ThreadImage
               thread={ this.props.activeThread }
+              size={ 60 }
+              openModal={ true }
             />
             <View style={ styles.headerDetails }>
               <Text style={ styles.threadName }>
                 { ChatStore.getThreadName(this.props.activeThread._id) }
+              </Text>
+              <Text style={{
+                color: '#888',
+                fontSize: 16
+              }}>
+                { this.props.activeThread.users.length } Participants
               </Text>
             </View>
           </View>
@@ -297,7 +305,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    height: 48,
+    height: 80,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
@@ -305,7 +313,7 @@ var styles = StyleSheet.create({
   },
   headerDetails: {
     flex: 1,
-    height: 48,
+    height: 80,
     flexDirection: 'column',
     justifyContent: 'center',
     marginLeft: 10,
@@ -313,7 +321,8 @@ var styles = StyleSheet.create({
   },
   threadName: {
     color: '#000',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    fontSize: 18
   },
   sectionTitle: {
     color: '#AAA',

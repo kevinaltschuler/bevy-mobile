@@ -67,15 +67,15 @@ var ProfileRow = React.createClass({
           <TouchableWithoutFeedback
             onPress={ this.openProfileImage }
           >
-          <Image
-            source={ UserStore.getUserImage(this.props.user, 60, 60) }
-            style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              marginRight: 10
-            }}
-          />
+            <Image
+              source={ UserStore.getUserImage(this.props.user, 60, 60) }
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                marginRight: 10
+              }}
+            />
           </TouchableWithoutFeedback>
           <View style={{
             flex: 1,
