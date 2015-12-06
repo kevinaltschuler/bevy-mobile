@@ -16,7 +16,7 @@ var {
   BackAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var BevyBar = require('./BevyBar.android.js');
 var BevyAdminItem = require('./BevyAdminItem.android.js');
 var Dropdown = require('react-native-dropdown-android');

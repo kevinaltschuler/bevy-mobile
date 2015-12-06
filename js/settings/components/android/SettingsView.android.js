@@ -14,7 +14,7 @@ var {
   ToastAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
 var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');

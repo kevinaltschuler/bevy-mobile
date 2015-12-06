@@ -16,7 +16,7 @@ var {
   StyleSheet
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');

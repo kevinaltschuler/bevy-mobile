@@ -21,7 +21,7 @@ var {
   DeviceEventEmitter
 } = React;
 var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var Dropdown = require('react-native-dropdown-android');
 var NewPostImageItem = require('./NewPostImageItem.android.js');
 

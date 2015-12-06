@@ -18,7 +18,7 @@ var {
   ToastAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var MessageInput = require('./MessageInput.android.js');
 var UserSearchItem = require('./../../../user/components/android/UserSearchItem.android.js');
 var AddedUserItem = require('./../../../user/components/android/AddedUserItem.android.js');

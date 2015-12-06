@@ -13,7 +13,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var AddedUserItem = React.createClass({
   propTypes: {

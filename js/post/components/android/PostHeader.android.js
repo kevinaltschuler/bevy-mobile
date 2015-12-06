@@ -13,7 +13,7 @@ var {
   TouchableWithoutFeedback,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -91,12 +91,11 @@ var PostHeader = React.createClass({
                 </Text>
               </View>
             </TouchableWithoutFeedback>
-            <Icon
-              name='chevron-right'
-              size={ 20 }
-              color='#999'
-              style={ styles.chevron }
-            />
+            <Text style={{
+              marginHorizontal: 6
+            }}>
+              >
+            </Text>
             <TouchableWithoutFeedback
               onPress={ this.goToBevy }
             >

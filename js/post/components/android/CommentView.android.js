@@ -16,7 +16,7 @@ var {
   BackAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var Post = require('./Post.android.js');
 var CommentList = require('./CommentList.android.js');
 

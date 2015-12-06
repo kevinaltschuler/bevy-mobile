@@ -19,7 +19,7 @@ var {
   ToastAndroid,
   TouchableNativeFeedback
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ThreadImage = require('./ThreadImage.android.js');
 var PersonItem = require('./PersonItem.android.js');
 var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');

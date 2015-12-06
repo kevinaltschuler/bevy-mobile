@@ -18,7 +18,7 @@ var {
 var MainTabBar = require('./MainTabBar.android.js');
 var SearchView = require('./SearchView.android.js');
 var Drawer = require('./Drawer.android.js');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
