@@ -119,6 +119,13 @@ var MessageView = React.createClass({
     });
   },
 
+  onInputFocus() {
+    // scroll to bottom of list
+    setTimeout(function() {
+      this.list.scrollResponderScrollTo(0, 999999999999);
+    }.bind(this), 500);
+  },
+
   handleResponderGrant() {
     this.isTouching = true;
   },
@@ -216,6 +223,7 @@ var MessageView = React.createClass({
           { this._renderInfoButton() }
         </View>
         <ListView
+          ref={ list => { this.list = list }}
           contentContainerStyle={{
             paddingBottom: 20
           }}
@@ -248,6 +256,7 @@ var MessageView = React.createClass({
         <MessageInput
           ref='MessageInput'
           onSubmitEditing={ this.onSubmitEditing }
+          onFocus={ this.onInputFocus }
         />
       </View>
     );

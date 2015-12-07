@@ -11,8 +11,11 @@ var {
   Text,
   Image,
   TouchableWithoutFeedback,
+  TouchableHighlight,
   StyleSheet
 } = React;
+var Icon = require('./../../../shared/components/android/Icon.android.js');
+var Collapsible = require('react-native-collapsible');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -25,6 +28,18 @@ var MessageItem = React.createClass({
     user: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
     hidePic: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      hidePic: false
+    };
+  },
+
+  getInitialState() {
+    return {
+      collapsed: true
+    };  
   },
 
   goToPublicProfile() {
@@ -59,30 +74,14 @@ var MessageItem = React.createClass({
     } else if (diff <= ( 1000 * 60 * 60 * 24 * 7)) {
       // within a week - only display short weekday
       var weekdayMap = [
-        'Sun',
-        'Mon',
-        'Tues',
-        'Wed',
-        'Thurs',
-        'Fri',
-        'Sat'
+        'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'
       ];
       created = weekdayMap[createDate.getDay()];
     } else {
       // outside of a week - display month and day
       var monthMap = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
       ];
       created = monthMap[createDate.getMonth() - 1] + ' ' + createDate.getDate();
     }
@@ -104,10 +103,14 @@ var MessageItem = React.createClass({
     var messageBodyStyle = (isMe) ? styles.messageBodyMe : styles.messageBody;
     var textAlign = (isMe) ? 'right' : 'left';
     var authorName = (isMe) ? 'Me' : this.props.message.author.displayName;
-    var messageColor = (isMe) ? {color: '#fff'}: {color: '#333'};
+    var messageColor = (isMe) ? '#fff' : '#333';
     return (
       <View style={ messageBodyStyle }>
-        <Text style={{ textAlign: textAlign }, messageColor}>
+        <Text style={{ 
+          textAlign: textAlign,
+          color: messageColor,
+          flexWrap: 'wrap'
+        }}>
           { this.props.message.body }
           { '\n' }
         </Text>
@@ -123,24 +126,57 @@ var MessageItem = React.createClass({
     var containerStyle = (isMe) ? styles.containerMe : styles.container;
 
     var authorImage = (this.props.hidePic)
-    ? <View style={{height: 40, width: 40}}/>
+    ? <View style={{height: 1, width: 40}}/>
     : <Image 
         source={ UserStore.getUserImage(author) }
         style={ styles.authorImage }
       />;
     
     return (
-      <View style={ containerStyle }>
-        { (isMe) ? this._renderMessageBody() : <View /> }
-        { (isMe) ? this._renderTriangle() : <View /> }
-        <TouchableWithoutFeedback
-          onPress={ this.goToPublicProfile }
-        >
-          { authorImage }
-        </TouchableWithoutFeedback>
-        { (isMe) ? <View /> : this._renderTriangle() }
-        { (isMe) ? <View /> : this._renderMessageBody() }
-      </View>
+      <TouchableWithoutFeedback
+        underlayColor='#FFF'
+        onPress={() => this.setState({ collapsed: !this.state.collapsed })}
+        delayLongPress={ 500 }
+        onLongPress={() => {}}
+      >
+        <View style={{
+          marginBottom: 5
+        }}>
+          <View style={ containerStyle }>
+            { (isMe) ? this._renderMessageBody() : <View /> }
+            { (isMe) ? this._renderTriangle() : <View /> }
+            <TouchableWithoutFeedback
+              onPress={ this.goToPublicProfile }
+            >
+              { authorImage }
+            </TouchableWithoutFeedback>
+            { (isMe) ? <View /> : this._renderTriangle() }
+            { (isMe) ? <View /> : this._renderMessageBody() }
+            
+          </View>
+          <Collapsible duration={ 250 } collapsed={ this.state.collapsed }>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              justifyContent: (isMe)
+                ? 'flex-end'
+                : 'flex-start',
+              marginRight: (isMe)
+                ? 60
+                : 0,
+              marginLeft: (isMe)
+                ? 0
+                : 60
+            }}>
+              <Text style={{
+                color: '#AAA'
+              }}>
+                { this._renderDate() }
+              </Text>
+            </View>
+          </Collapsible>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 });
@@ -150,14 +186,14 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingBottom: 5,
+    alignItems: 'flex-end',
+    elevation: 2
   },
   containerMe: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    paddingBottom: 5,
+    elevation: 2
   },
   authorImage: {
     width: 40,
@@ -170,7 +206,8 @@ var styles = StyleSheet.create({
     paddingBottom: 3,
     paddingLeft: 8,
     paddingRight: 8,
-    borderRadius: 15
+    borderRadius: 15,
+    flexWrap: 'wrap'
   },
   messageBodyMe: {
     backgroundColor: '#2cb673',
@@ -178,8 +215,8 @@ var styles = StyleSheet.create({
     paddingBottom: 0,
     paddingLeft: 8,
     paddingRight: 8,
-    color: '#fff',
-    borderRadius: 15
+    borderRadius: 15,
+    flexWrap: 'wrap'
   },
   messageTextContainer: {
     //flexDirection: 'row',
