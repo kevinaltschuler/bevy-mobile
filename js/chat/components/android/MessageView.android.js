@@ -97,6 +97,10 @@ var MessageView = React.createClass({
       dataSource: this.state.dataSource.cloneWithRows(messages),
       loading: false
     });
+    // scroll to bottom
+    setTimeout(function() {
+      this.list.scrollResponderScrollTo(0, 999999999999);
+    }.bind(this), 500);
   },
 
   onSubmitEditing(text) {
