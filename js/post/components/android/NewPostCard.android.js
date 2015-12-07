@@ -17,6 +17,7 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var UserStore = require('./../../../user/UserStore');
 var routes = require('./../../../routes');
 
 var NewPostCard = React.createClass({
@@ -42,7 +43,7 @@ var NewPostCard = React.createClass({
       >
         <View style={ styles.container }>
           <Image
-            source={{ uri: _.isEmpty(this.props.user.image_url) ? constants.siteurl + '/img/user-profile-icon.png' : this.props.user.image_url }}
+            source={{ uri: UserStore.getUserImage(this.props.user, 30, 30) }}
             style={ styles.userImage }
           />
           <Text style={ styles.promptText }>
