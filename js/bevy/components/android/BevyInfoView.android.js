@@ -429,7 +429,9 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    elevation: 2
+    //margin: 5,
+    //borderRadius: 5,
+    //elevation: 2
   },
   bevyImage: {
     width: 70,

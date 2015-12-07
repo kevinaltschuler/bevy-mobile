@@ -259,17 +259,20 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   logInButton: {
-    marginTop: 10,
+    margin: 10,
     backgroundColor: '#FFF',
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    elevation: 2,
+    borderRadius: 5
   },
   logInButtonText: {
     textAlign: 'left',
-    color: '#000'
+    color: '#000',
+    fontSize: 16
   },
   logOutButton: {
     height: 48,

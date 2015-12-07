@@ -43,7 +43,7 @@ var NewPostCard = React.createClass({
       >
         <View style={ styles.container }>
           <Image
-            source={{ uri: UserStore.getUserImage(this.props.user, 30, 30) }}
+            source={ UserStore.getUserImage(this.props.user, 30, 30) }
             style={ styles.userImage }
           />
           <Text style={ styles.promptText }>

@@ -223,10 +223,11 @@ var styles = StyleSheet.create({
     backgroundColor: '#2CB673',
   },
   bevyLogo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    marginBottom: 10,
+    marginTop: 10
   },
   titleText: {
     color: '#FFF',
@@ -241,7 +242,8 @@ var styles = StyleSheet.create({
     borderRadius: 12,
     paddingLeft: 8,
     paddingRight: 8,
-    marginBottom: 10
+    marginBottom: 10,
+    elevation: 2
   },
   errorText: {
     color: '#FFF',
@@ -275,8 +277,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF',
-    //borderRadius: 24,
-    marginBottom: 10
+    borderRadius: 5,
+    marginBottom: 10,
+    elevation: 2
   },
   logInButtonText: {
     color: '#000'
@@ -288,8 +291,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DF4A32',
-    //borderRadius: 24,
-    marginBottom: 10
+    borderRadius: 5,
+    marginBottom: 10,
+    elevation: 2
   },
   googleLogInButtonText: {
     color: '#FFF'

@@ -155,7 +155,8 @@ var styles = StyleSheet.create({
     height: 30,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginVertical: 10
+    marginVertical: 10,
+    elevation: 2
   },
   errorText: {
     color: '#FFF'
@@ -180,7 +181,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF',
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius: 5,
+    elevation: 2
   },
   requestButtonText: {
     color: '#000'

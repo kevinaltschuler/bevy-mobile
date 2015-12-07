@@ -105,7 +105,17 @@ var MessageItem = React.createClass({
     var authorName = (isMe) ? 'Me' : this.props.message.author.displayName;
     var messageColor = (isMe) ? '#fff' : '#333';
     return (
-      <View style={ messageBodyStyle }>
+      <View style={{
+        backgroundColor: (isMe) ? '#2cb673' : '#fff',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 8,
+        paddingRight: 8,
+        borderRadius: 15,
+        marginBottom: 3,
+        flexWrap: 'wrap',
+        //elevation: 2 // ADD IF YOU WANT SHADOWS FAM
+      }}>
         <Text style={{ 
           textAlign: textAlign,
           color: messageColor,
@@ -123,7 +133,6 @@ var MessageItem = React.createClass({
     var author = message.author;
     
     var isMe = (this.props.user._id == author._id);
-    var containerStyle = (isMe) ? styles.containerMe : styles.container;
 
     var authorImage = (this.props.hidePic)
     ? <View style={{height: 1, width: 40}}/>
@@ -142,7 +151,12 @@ var MessageItem = React.createClass({
         <View style={{
           marginBottom: 5
         }}>
-          <View style={ containerStyle }>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: (isMe) ? 'flex-end' : 'flex-start',
+            alignItems: 'flex-end'
+          }}>
             { (isMe) ? this._renderMessageBody() : <View /> }
             { (isMe) ? this._renderTriangle() : <View /> }
             <TouchableWithoutFeedback
@@ -182,48 +196,10 @@ var MessageItem = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    elevation: 2
-  },
-  containerMe: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    elevation: 2
-  },
   authorImage: {
     width: 40,
     height: 40,
     borderRadius: 20
-  },
-  messageBody: {
-    backgroundColor: '#fff',
-    paddingTop: 3,
-    paddingBottom: 3,
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 15,
-    flexWrap: 'wrap'
-  },
-  messageBodyMe: {
-    backgroundColor: '#2cb673',
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 15,
-    flexWrap: 'wrap'
-  },
-  messageTextContainer: {
-    //flexDirection: 'row',
-    //flex: 1
-  },
-  messageText: {
-
   },
   arrow: {
     width: 10,

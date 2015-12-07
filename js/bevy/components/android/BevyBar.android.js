@@ -264,6 +264,7 @@ var styles = StyleSheet.create({
     opacity: 1,
     borderBottomColor: '#EEE',
     borderBottomWidth: 1,
+    backgroundColor: '#FFF',
     elevation: 3
   },
   bevyImageWrapper: {
