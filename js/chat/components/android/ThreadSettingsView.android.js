@@ -23,6 +23,7 @@ var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ThreadImage = require('./ThreadImage.android.js');
 var PersonItem = require('./PersonItem.android.js');
 var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -113,7 +114,22 @@ var ThreadSettingsView = React.createClass({
   },
 
   changeName() {
-
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Thread Name',
+      input: {
+        prefill: (_.isEmpty(this.props.activeThread.name)) 
+          ? '' 
+          : this.props.activeThread.name,
+        allowEmptyInput: false,
+        callback: newName => {
+          ChatActions.editThread(this.props.activeThread._id, newName, null);
+        }
+      },
+      positiveText: 'Confirm',
+      negativeText: 'Cancel'
+    });
+    dialog.show();
   },
 
   leaveConversation() {
