@@ -82,24 +82,22 @@ var ThreadSettingsView = React.createClass({
   },
 
   changePicture() {
-    constants.getActionSheetActions().show(
-      [
-        "Take a Picture",
-        "Choose from Library"
-       ],
-      function(key, option) {
-        //console.log(key);
-        switch(option) {
-          case "Take a Picture":
-            this.openCamera();
-            break;
-          case "Choose from Library":
-            this.openImageLibrary();
-            break;
-        }
-      }.bind(this),
-      'Change Thread Picture'
-    );
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Thread Picture',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
   },
 
   openCamera() {

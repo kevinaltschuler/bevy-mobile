@@ -14,6 +14,7 @@ var {
   TouchableWithoutFeedback,
   Image,
   SwitchAndroid,
+  ToastAndroid,
   BackAndroid,
   StyleSheet
 } = React;
@@ -21,6 +22,8 @@ var Icon = require('./../../../shared/components/android/Icon.android.js');
 var BevyBar = require('./BevyBar.android.js');
 var BevyAdminItem = require('./BevyAdminItem.android.js');
 var Dropdown = require('react-native-dropdown-android');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -28,6 +31,9 @@ var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
 var BevyActions = require('./../../BevyActions');
 var BevyStore = require('./../../BevyStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
+var FILE = constants.FILE;
 
 var BevyInfoView = React.createClass({
   propTypes: {
@@ -48,9 +54,13 @@ var BevyInfoView = React.createClass({
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -87,6 +97,49 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.push(routes.BEVY.TAGS);
   },
 
+  changePicture() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Bevy Picture',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+  uploadImage(cancelled, response) {
+    if(cancelled) return;
+    FileActions.upload(response.uri);
+  },
+
+  onUploadComplete(file) {
+    BevyActions.update(
+      this.props.activeBevy._id,
+      this.props.activeBevy.name,
+      this.props.activeBevy.description,
+      file,
+      this.props.activeBevy.settings
+    );
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
+  },
+
   openImage() {
     if(_.isEmpty(this.props.activeBevy.image)) return;
     var actions = constants.getImageModalActions();
@@ -99,7 +152,7 @@ var BevyInfoView = React.createClass({
       this.props.activeBevy._id,
       this.props.activeBevy.name,
       this.props.activeBevy.description,
-      this.props.activeBevy.image_url,
+      this.props.activeBevy.image,
       settings
     );
   },
@@ -156,6 +209,16 @@ var BevyInfoView = React.createClass({
     return (
       <View>
         <Text style={ styles.settingTitle }>Bevy Settings</Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+          onPress={ this.changePicture }
+        >
+          <View style={ styles.settingItem }>
+            <Text style={ styles.settingItemText }>
+              Change Bevy Picture
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
         <View style={ styles.settingItem }>
           <Text style={ styles.settingText }>Privacy</Text>
           <Dropdown

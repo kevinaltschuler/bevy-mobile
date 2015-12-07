@@ -38,13 +38,13 @@ var BevyActions = {
     });
   },
 
-  update(bevy_id, name, description, image_url, settings) {
+  update(bevy_id, name, description, image, settings) {
     Dispatcher.dispatch({
       actionType: BEVY.UPDATE,
       bevy_id: (bevy_id == undefined) ? '' : bevy_id,
       name: (name == undefined) ? null : name,
       description: (description == undefined) ? null : description,
-      image_url: (image_url == undefined) ? null : image_url,
+      image: (image == undefined) ? null : image,
       settings: (settings == undefined) ? null : settings
     });
   },

@@ -18,6 +18,7 @@ var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var GoogleAuth = require('./../../../shared/components/android/GoogleAuth.android.js');
 var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -70,24 +71,22 @@ var SettingsView = React.createClass({
   },
 
   changePicture() {
-    constants.getActionSheetActions().show(
-      [
-        "Take a Picture",
-        "Choose from Library"
-       ],
-      function(key, option) {
-        //console.log(key);
-        switch(option) {
-          case "Take a Picture":
-            this.openCamera();
-            break;
-          case "Choose from Library":
-            this.openImageLibrary();
-            break;
-        }
-      }.bind(this),
-      'Change Profile Picture'
-    );
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Profile Picture',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
   },
 
   openCamera() {

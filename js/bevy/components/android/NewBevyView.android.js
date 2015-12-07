@@ -19,6 +19,7 @@ var {
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -115,24 +116,22 @@ var NewBevyView = React.createClass({
   },
 
   addImage() {
-    constants.getActionSheetActions().show(
-      [
-        "Take a Picture",
-        "Choose from Library"
-       ],
-      function(key, option) {
-        //console.log(key);
-        switch(option) {
-          case "Take a Picture":
-            this.openCamera();
-            break;
-          case "Choose from Library":
-            this.openImageLibrary();
-            break;
-        }
-      }.bind(this),
-      'Add Bevy Picture'
-    );
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Add Bevy Image',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
   },
 
   removeImage() {
