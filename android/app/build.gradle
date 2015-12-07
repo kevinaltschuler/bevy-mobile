@@ -11,7 +11,7 @@ android {
         applicationId "com.bevyios"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 4
+        versionCode 6
         versionName "1.06"
         ndk {
             abiFilters "armeabi-v7a", "x86"
