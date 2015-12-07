@@ -400,48 +400,53 @@ _.extend(UserStore, {
     // register push notifications for android
     // get token if it exists
     if(Platform.OS == 'android') {
-      GCM.register(function(token) {
-        console.log('GCM TOKEN', token);
-        // check if we've already sent this token
-        AsyncStorage.getItem('GCM_token')
-        .then($token => {
-          if($token && $token == token) {
-            // it already exists and/or it matches, do nothing
-            console.log('gcm token already exists. continuing...');
-            return;
-          } else {
-            console.log('gcm token not found. registering...');
-            // add to device list
-            var new_device = this.user.devices.add({
-              token: token,
-              platform: 'android',
-              uniqueID: DeviceInfo.getUniqueID(),
-              manufacturer: DeviceInfo.getManufacturer(),
-              model: DeviceInfo.getModel(),
-              deviceID: DeviceInfo.getDeviceId(),
-              name: DeviceInfo.getSystemName(),
-              version: DeviceInfo.getSystemVersion(),
-              bundleID: DeviceInfo.getBundleId(),
-              buildNum: DeviceInfo.getBuildNumber(),
-              appVersion: DeviceInfo.getVersion(),
-              appVersionReadable: DeviceInfo.getReadableVersion()
-            });
-            console.log('saving', new_device.toJSON(), 'to ', new_device.url);
-            // save to server
-            new_device.save(null, {
-              success: function(model, response, options) {
-                console.log('device registration success');
-                // save to local storage
-                AsyncStorage.setItem('GCM_token', token);
-              },
-              error: function(error) {
-                console.error('device registration error:', error);
-              }
-            });
+      GCM.addEventListener('register', data => {
+        this.onRegister(data.deviceToken);
+      });
+      GCM.register();
+    }
+  },
+
+  onRegister(token) {
+    console.log('GCM TOKEN', token);
+    // check if we've already sent this token
+    AsyncStorage.getItem('GCM_token')
+    .then($token => {
+      if($token && $token == token) {
+        // it already exists and/or it matches, do nothing
+        console.log('gcm token already exists. continuing...');
+        return;
+      } else {
+        console.log('gcm token not found. registering...');
+        // add to device list
+        var new_device = this.user.devices.add({
+          token: token,
+          platform: 'android',
+          uniqueID: DeviceInfo.getUniqueID(),
+          manufacturer: DeviceInfo.getManufacturer(),
+          model: DeviceInfo.getModel(),
+          deviceID: DeviceInfo.getDeviceId(),
+          name: DeviceInfo.getSystemName(),
+          version: DeviceInfo.getSystemVersion(),
+          bundleID: DeviceInfo.getBundleId(),
+          buildNum: DeviceInfo.getBuildNumber(),
+          appVersion: DeviceInfo.getVersion(),
+          appVersionReadable: DeviceInfo.getReadableVersion()
+        });
+        console.log('saving', new_device.toJSON(), 'to ', new_device.url);
+        // save to server
+        new_device.save(null, {
+          success: function(model, response, options) {
+            console.log('device registration success');
+            // save to local storage
+            AsyncStorage.setItem('GCM_token', token);
+          },
+          error: function(error) {
+            console.error('device registration error:', error);
           }
         });
-      }.bind(this));
-    }
+      }
+    });
   },
 
   getUser() {

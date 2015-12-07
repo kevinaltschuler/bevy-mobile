@@ -25,12 +25,8 @@ if(Platform.OS == 'android') {
 } else {
 }
 
-class GcmAndroid {
-  constructor(data) {
-    this.data = data;
-  }
-  
-  static addEventListener(type: String, handler: Function) {
+var GcmAndroid = {
+  addEventListener(type, handler) {
     invariant(
       type === 'notification' || type === 'register',
       'GcmAndroid only supports the notification and register events'
@@ -53,21 +49,21 @@ class GcmAndroid {
       );
     }
     _notifHandlers.set(handler, listener);
-  }
+  },
 
-  static register(callback: Function) {
-    GCM.register(callback);
-  }
+  register() {
+    GCM.register();
+  },
 
-  static abandonPermissions() {
+  abandonPermissions() {
 
-  }
+  },
 
-  static checkPermissions(callback: Function) {
+  checkPermissions(callback) {
 
-  }
+  },
 
-  static removeEventListener(type: String, handler: Function) {
+  removeEventListener(type, handler) {
     invariant(
       type === 'notification' || type === 'register',
       'GcmAndroid only supports the notification and register events'
@@ -78,6 +74,5 @@ class GcmAndroid {
     _notifHandlers.delete(handler); 
   }
 }
-
 
 module.exports = GcmAndroid;

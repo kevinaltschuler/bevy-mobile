@@ -29,10 +29,6 @@ import android.preference.PreferenceManager;
 
 import org.json.*;
 import com.loopj.android.http.*;
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpStatus;
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.entity.StringEntity;
 
 import java.util.Map;
 import java.io.File;
@@ -53,8 +49,6 @@ public class GCMModule extends ReactContextBaseJavaModule {
   private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
   private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-  private Callback success;
-
   public GCMModule(ReactApplicationContext reactContext, Activity activity) {
     super(reactContext);
 
@@ -68,7 +62,6 @@ public class GCMModule extends ReactContextBaseJavaModule {
         //  PreferenceManager.getDefaultSharedPreferences(context);
         String token = intent.getStringExtra("token");
         Log.i(TAG, token);
-        success.invoke(token);
 
         WritableMap params = Arguments.createMap();
         params.putString("deviceToken", token);
@@ -106,8 +99,7 @@ public class GCMModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void register(Callback successCallback) {
-    success = successCallback;
+  public void register() {
     if (checkPlayServices()) {
 
       // Start IntentService to register this application with GCM.

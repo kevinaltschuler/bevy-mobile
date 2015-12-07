@@ -34,8 +34,7 @@ import java.util.HashMap;
 
 public class FileUploadModule extends ReactContextBaseJavaModule {
 
-  //private static AsyncHttpClient client = new AsyncHttpClient();
-    private final OkHttpClient client = new OkHttpClient();
+  private final OkHttpClient client = new OkHttpClient();
 
   private static String siteUrl = "http://joinbevy.com";
   private static String apiUrl = "http://api.joinbevy.com";
