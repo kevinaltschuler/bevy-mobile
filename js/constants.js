@@ -19,7 +19,7 @@ var api_version = '';
 var hostname = 'joinbevy.com';
 var protocol = 'http:';
 
-exports.android_version = '1.0.5';
+exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
 exports.siteurl = protocol + slashes + hostname;
