@@ -44,17 +44,24 @@ var SearchBar = React.createClass({
   },
 
   componentDidMount() {
-    this.props.navigator.navigationContext.addListener('willfocus', (ev) => {
-      var route = ev.data.route;
-      this.setState({
-        activeRoute: route
-      });
-      this.forceUpdate();
-    });
+    this.props.navigator.navigationContext.addListener('willfocus', 
+      this.switchRoute);
+  },
+  componentWillUnmount() {
+    //this.props.navigator.navigationContext.removeListener('willfocus', 
+    //  this.switchRoute);
   },
 
-  componentWillUnmount() {
-    //this.props.navigator.navigationContext.removeListener('willfocus');
+  switchRoute(ev) {
+    var route = ev.data.route;
+    this.setState({
+      activeRoute: route
+    });
+    this.forceUpdate();
+    if(route.name == routes.SEARCH.IN.name) {
+      // focus search bar
+      this.searchInput.focus();
+    } 
   },
 
   onSearchBlur() {
@@ -94,7 +101,7 @@ var SearchBar = React.createClass({
   },
 
   goBack() {
-    this.refs.Search.blur();
+    this.searchInput.blur();
     this.props.navigator.pop();
     this.setState({
       activeRoute: routes.SEARCH.OUT
@@ -139,14 +146,26 @@ var SearchBar = React.createClass({
   },
 
   render() {
+    // dirty hack to keep the search bar focused as stuff is rendering below it
+    // and also keep focused when tab switch between bevies and users
+    setTimeout(() => {
+      if(this.state.activeRoute.name == routes.SEARCH.IN.name) {
+        // focus search bar
+        this.searchInput.focus();
+      } 
+    }, 500);
     return (
       <View style={ styles.navbar }>
         { this._renderLeftButton() }
         <View style={ styles.searchInputWrapper }>
           <View style={ styles.searchBackdrop } />
-          <Icon name='search' color='#fff' size={ 24 } />
+          <Icon 
+            name='search' 
+            color='#fff' 
+            size={ 24 } 
+          />
           <TextInput
-            ref='Search'
+            ref={ref => { this.searchInput = ref; }}
             style={ styles.searchInput }
             placeholder='Search'
             placeholderTextColor='#FFF'
@@ -168,7 +187,9 @@ var SearchNavigator = React.createClass({
         configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.mainNavigator }
         navigationBar={ 
-          <SearchBar { ...this.props }/> 
+          <SearchBar 
+            { ...this.props }
+          /> 
         }
         initialRouteStack={[
           routes.SEARCH.OUT
@@ -214,11 +235,11 @@ var SearchBarWrapper = React.createClass({
   },
 
   openDrawer() {
-    this.refs.Drawer.openDrawer();
+    this.drawer.openDrawer();
   },
 
   closeDrawer() {
-    this.refs.Drawer.closeDrawer();
+    this.drawer.closeDrawer();
   },
 
   toggleDrawer() {
@@ -229,7 +250,6 @@ var SearchBarWrapper = React.createClass({
   },
 
   render() {
-
     var drawerActions = {
       open: this.openDrawer,
       close: this.closeDrawer,
@@ -238,7 +258,7 @@ var SearchBarWrapper = React.createClass({
 
     return (
       <DrawerLayoutAndroid
-        ref='Drawer'
+        ref={ ref => { this.drawer = ref; }}
         drawerWidth={ (constants.width / 3) * 2 }
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         onDrawerOpen={() => this.setState({ drawerOpen: true })}
