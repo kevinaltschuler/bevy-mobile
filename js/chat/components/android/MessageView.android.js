@@ -14,6 +14,7 @@ var {
   TouchableNativeFeedback,
   BackAndroid,
   ProgressBarAndroid,
+  PullToRefreshViewAndroid,
   StyleSheet
 } = React;
 var MessageItem = require('./MessageItem.android.js');
@@ -91,16 +92,18 @@ var MessageView = React.createClass({
   },
 
   _onChatChange() {
+    if(!this.state.loading) {
+      // scroll to bottom
+      setTimeout(function() {
+        this.list.scrollResponderScrollTo(0, 999999999999);
+      }.bind(this), 500); 
+    }
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       messages: messages,
       dataSource: this.state.dataSource.cloneWithRows(messages),
       loading: false
     });
-    // scroll to bottom
-    setTimeout(function() {
-      this.list.scrollResponderScrollTo(0, 999999999999);
-    }.bind(this), 500);
   },
 
   onSubmitEditing(text) {
@@ -226,37 +229,44 @@ var MessageView = React.createClass({
           </View>
           { this._renderInfoButton() }
         </View>
-        <ListView
-          ref={ list => { this.list = list }}
-          contentContainerStyle={{
-            paddingBottom: 20
+        <PullToRefreshViewAndroid
+          style={{
+            flex: 1
           }}
-          dataSource={ this.state.dataSource }
-          style={ styles.messageList }
-          scrollRenderAheadDistance={ 300 }
-          removeClippedSubviews={ true }
-          initialListSize={ 10 }
-          pageSize={ 10 }
-          decelerationRate={ 0.9 }
-          onResponderGrant={ this.handleResponderGrant }
-          onResponderRelease={ this.handleResponderRelease }
-          onScroll={ this.handleScroll }
-          renderHeader={ this._renderListHeader }
-          renderRow={(message, sectionID, rowID, highlightRow) => {
-            var hidePic = (rowID > 0 && 
-              (this.state.dataSource._dataBlob.s1[rowID - 1].author._id 
-                == message.author._id));
-            return (
-              <MessageItem
-                key={ 'message:' + message._id }
-                message={ message }
-                user={ this.props.user }
-                mainNavigator={ this.props.mainNavigator }
-                hidePic={ hidePic }
-              />
-            );
-          }}
-        />
+          refreshing={ this.state.loading }
+          onRefresh={ this.loadMessages }
+        >
+          <ListView
+            ref={ list => { this.list = list }}
+            contentContainerStyle={{
+              paddingBottom: 20
+            }}
+            dataSource={ this.state.dataSource }
+            style={ styles.messageList }
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 10 }
+            pageSize={ 10 }
+            decelerationRate={ 0.9 }
+            onResponderGrant={ this.handleResponderGrant }
+            onResponderRelease={ this.handleResponderRelease }
+            onScroll={ this.handleScroll }
+            renderRow={(message, sectionID, rowID, highlightRow) => {
+              var hidePic = (rowID > 0 && 
+                (this.state.dataSource._dataBlob.s1[rowID - 1].author._id 
+                  == message.author._id));
+              return (
+                <MessageItem
+                  key={ 'message:' + message._id }
+                  message={ message }
+                  user={ this.props.user }
+                  mainNavigator={ this.props.mainNavigator }
+                  hidePic={ hidePic }
+                />
+              );
+            }}
+          />
+        </PullToRefreshViewAndroid>
         <MessageInput
           ref='MessageInput'
           onSubmitEditing={ this.onSubmitEditing }

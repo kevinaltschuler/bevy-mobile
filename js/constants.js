@@ -117,8 +117,11 @@ exports.CHAT = {
   DELETE_THREAD: 'chat_delete_thread',
   EDIT_THREAD: 'chat_edit_thread',
   START_PM: 'chat_start_pm',
+  FETCH_THREADS: 'chat_fetch_threads',
 
   // events
+  FETCHING_THREADS: 'chat_fetching_threads',
+  THREADS_FETCHED: 'chat_threads_fetched',
   CHANGE_ALL: 'chat_change_all',
   CHANGE_ONE: 'chat_change_one:',
   THREAD_CREATED: 'chat_thread_created',
@@ -163,11 +166,16 @@ exports.FILE = {
 }
 
 exports.NOTIFICATION = {
+  // actions
   DISMISS: 'notification_dismiss',
   DISMISS_ALL: 'notification_dismiss_all',
   REGISTER: 'notification_register',
+  FETCH: 'notification_fetch',
 
-  CHANGE_ALL: 'notification_change_all'
+  // events
+  CHANGE_ALL: 'notification_change_all',
+  FETCHING: 'notification_fetching',
+  FETCHED: 'notification_fetched'
 };
 
 exports.setSearchNavigator = function(navigator) {

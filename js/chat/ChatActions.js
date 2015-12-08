@@ -79,6 +79,12 @@ var ChatActions = {
       author: author,
       body: body
     });
+  },
+
+  fetchThreads() {
+    Dispatcher.dispatch({
+      actionType: CHAT.FETCH_THREADS
+    });
   }
 };
 

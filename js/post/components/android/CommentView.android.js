@@ -76,6 +76,10 @@ var CommentView = React.createClass({
     this.refs.Input.focus();
   },
 
+  onRefresh() {
+    
+  },
+
   onCommentSelect(comment_id) {
     this.setState({
       selectedComment: (this.state.selectedComment == comment_id)

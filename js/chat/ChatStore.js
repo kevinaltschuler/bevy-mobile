@@ -70,7 +70,18 @@ _.extend(ChatStore, {
             });
           }
         }
+        break;
 
+      case CHAT.FETCH_THREADS:
+        this.trigger(CHAT.FETCHING_THREADS);
+        this.threads.fetch({
+          success: function(collection, response, options) {
+            this.threads.comparator = this.sortByLatest;
+            this.threads.sort();
+            this.trigger(CHAT.CHANGE_ALL);
+            this.trigger(CHAT.THREADS_FETCHED);
+          }.bind(this)
+        });
         break;
 
       case BEVY.SWITCH:

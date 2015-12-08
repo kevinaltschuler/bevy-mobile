@@ -120,6 +120,7 @@ var SettingsView = React.createClass({
       return (
         <ScrollView style={ styles.container }>
           <TouchableNativeFeedback 
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={() => {
               this.props.mainNavigator.push(routes.MAIN.LOGIN);
             }}

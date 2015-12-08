@@ -111,7 +111,7 @@ var SearchBar = React.createClass({
   _renderLeftButton() {
     if(this.state.activeRoute.name == routes.SEARCH.IN.name) {
       return (
-        <TouchableNativeFeedback  
+        <TouchableNativeFeedback
           onPress={ this.goBack }
         >
           <View style={ styles.backButton }>
