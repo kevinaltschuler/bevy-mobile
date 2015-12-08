@@ -25,10 +25,14 @@ var UserStore = require('./../../../user/UserStore');
 var PostHeader = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object
   },
 
   goToAuthorProfile() {
+    // dont go if already in the profile view
+    if(this.props.mainRoute.name == routes.MAIN.PROFILE.name) return;
+
     var route = routes.MAIN.PROFILE;
     route.user = this.props.post.author;
     this.props.mainNavigator.push(route);

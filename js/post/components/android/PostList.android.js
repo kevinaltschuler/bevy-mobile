@@ -24,7 +24,8 @@ var Post = require('./Post.android.js');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var POST = constants.POST;
-var PostStore = require('./../../PostStore');
+var PostStore = require('./../../../post/PostStore');
+var PostActions = require('./../../../post/PostActions');
 var BevyActions = require('./../../../bevy/BevyActions');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BEVY = constants.BEVY;
@@ -50,7 +51,7 @@ var PostList = React.createClass({
       showNewPostCard: false,
       renderHeader: true,
       activeBevy: {},
-      activeTags: ['-1'] // default is -1, which means show all posts,
+      activeTags: ['-1'] // default is -1, which means show all posts
     }
   },
 
@@ -145,6 +146,10 @@ var PostList = React.createClass({
     })
   },
 
+  onRefresh() {
+    PostActions.fetch(this.props.activeBevy._id);
+  },
+
   _renderHeader() {
     if(!this.props.renderHeader) return <View />;
     else return (
@@ -163,7 +168,10 @@ var PostList = React.createClass({
   _renderNewPostCard() {
     if(!this.props.showNewPostCard) return <View />;
     else return (
-      <View style={{marginBottom: 10, marginTop: 45}}>
+      <View style={{
+        marginBottom: 10, 
+        marginTop: 45
+      }}>
         <NewPostCard
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
@@ -171,6 +179,51 @@ var PostList = React.createClass({
         />
       </View>
     );
+  },
+
+  _renderList() {
+    if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
+      return (
+        <View style={ styles.noPostsContainer }>   
+          <Text style={ styles.noPosts }>No Posts</Text>
+        </View>
+      );
+    } /*else if (_.isEmpty(this.props.allPosts) && this.state.loading) {
+      return (
+        <View style={ styles.noPostsContainer }>   
+          <ProgressBarAndroid styleAttr="Inverse" />
+        </View>
+      );
+    } */else {
+      return (
+        <ListView
+          dataSource={ this.state.posts }
+          style={ styles.postList }
+          scrollRenderAheadDistance={ 400 }
+          initialListSize={ 5 }
+          onScroll={(data) => {
+            this.onScroll(data.nativeEvent.contentOffset.y);
+          }}
+          renderHeader={ this._renderNewPostCard }
+          removeClippedSubviews={ false }
+          renderRow={(post) => {
+            if(this.props.activeBevy._id == -1 &&
+              post.pinned) return <View />;
+            return (
+              <Post
+                key={ 'post:' + post._id }
+                post={ post }
+                mainNavigator={ this.props.mainNavigator }
+                mainRoute={ this.props.mainRoute }
+                user={ this.props.user }
+                loggedIn={ this.props.loggedIn }
+                activeBevy={ this.props.activeBevy }
+              />
+            );
+          }}
+        />
+      );
+    }
   },
 
   render() {
@@ -209,61 +262,18 @@ var PostList = React.createClass({
         </View>
       );
     }
-    if(this.state.loading) {
-      return (
-        <View style={ styles.container }> 
-          { this._renderHeader() }     
-          <View style={ styles.noPostsContainer }>   
-            <ProgressBarAndroid styleAttr="Inverse" />
-          </View>
-        </View>
-      );
-    } else if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
-      return (
-        <View style={ styles.container }> 
-          { this._renderHeader() }     
-          <View style={ styles.noPostsContainer }>   
-            <Text style={ styles.noPosts }>No Posts</Text>
-          </View>
-        </View>
-      );
-    } else {
-      return (
-
-        <View style={ styles.container }>
-          
-            <ListView
-              dataSource={ this.state.posts }
-              style={ styles.postList }
-              scrollRenderAheadDistance={ 400 }
-              initialListSize={ 5 }
-              onScroll={(data) => {
-                this.onScroll(data.nativeEvent.contentOffset.y);
-              }}
-              renderHeader={ this._renderNewPostCard }
-              pageSize={ 5 }
-              renderRow={(post) => {
-                if(this.props.activeBevy._id == -1 &&
-                  post.pinned) return <View />;
-                return (
-                  <Post
-                    key={ 'post:' + post._id }
-                    post={ post }
-                    mainNavigator={ this.props.mainNavigator }
-                    mainRoute={ this.props.mainRoute }
-                    user={ this.props.user }
-                    loggedIn={ this.props.loggedIn }
-                    activeBevy={ this.props.activeBevy }
-                  />
-                );
-              }}
-            />
-          
-          { this._renderHeader() }
-        </View>
-
-      );
-    }
+    return (
+      <View style={{ flex: 1 }}>
+        <PullToRefreshViewAndroid 
+          style={ styles.container }
+          refreshing={ this.state.loading }
+          onRefresh={ this.onRefresh }
+        >
+          { this._renderList() }
+        </PullToRefreshViewAndroid>
+        { this._renderHeader() }
+      </View>
+    );
   }
 });
 

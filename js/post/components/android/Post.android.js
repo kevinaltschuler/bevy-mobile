@@ -127,6 +127,7 @@ var Post = React.createClass({
         <PostHeader 
           post={ this.props.post } 
           mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
         />
         { this._renderBody() }
         { this._renderImages() }
