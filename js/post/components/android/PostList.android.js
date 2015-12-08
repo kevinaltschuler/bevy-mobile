@@ -181,47 +181,12 @@ var PostList = React.createClass({
     );
   },
 
-  _renderList() {
+  _renderNoPosts() {
     if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
       return (
         <View style={ styles.noPostsContainer }>   
           <Text style={ styles.noPosts }>No Posts</Text>
         </View>
-      );
-    } /*else if (_.isEmpty(this.props.allPosts) && this.state.loading) {
-      return (
-        <View style={ styles.noPostsContainer }>   
-          <ProgressBarAndroid styleAttr="Inverse" />
-        </View>
-      );
-    } */else {
-      return (
-        <ListView
-          dataSource={ this.state.posts }
-          style={ styles.postList }
-          scrollRenderAheadDistance={ 400 }
-          initialListSize={ 5 }
-          onScroll={(data) => {
-            this.onScroll(data.nativeEvent.contentOffset.y);
-          }}
-          renderHeader={ this._renderNewPostCard }
-          removeClippedSubviews={ false }
-          renderRow={(post) => {
-            if(this.props.activeBevy._id == -1 &&
-              post.pinned) return <View />;
-            return (
-              <Post
-                key={ 'post:' + post._id }
-                post={ post }
-                mainNavigator={ this.props.mainNavigator }
-                mainRoute={ this.props.mainRoute }
-                user={ this.props.user }
-                loggedIn={ this.props.loggedIn }
-                activeBevy={ this.props.activeBevy }
-              />
-            );
-          }}
-        />
       );
     }
   },
@@ -263,14 +228,46 @@ var PostList = React.createClass({
       );
     }
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ 
+        flex: 1, 
+        flexDirection: 'column' 
+      }}>
         <PullToRefreshViewAndroid 
-          style={ styles.container }
+          style={{
+            flex: 1
+          }}
           refreshing={ this.state.loading }
           onRefresh={ this.onRefresh }
         >
-          { this._renderList() }
+          <ListView
+            dataSource={ this.state.posts }
+            style={ styles.postList }
+            onScroll={(data) => {
+              this.onScroll(data.nativeEvent.contentOffset.y);
+            }}
+            renderHeader={ this._renderNewPostCard }
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 10 }
+            pageSize={ 10 }
+            renderRow={post => {
+              if(this.props.activeBevy._id == -1 &&
+                post.pinned) return <View />;
+              return (
+                <Post
+                  key={ 'post:' + post._id }
+                  post={ post }
+                  mainNavigator={ this.props.mainNavigator }
+                  mainRoute={ this.props.mainRoute }
+                  user={ this.props.user }
+                  loggedIn={ this.props.loggedIn }
+                  activeBevy={ this.props.activeBevy }
+                />
+              );
+            }}
+          />
         </PullToRefreshViewAndroid>
+        { this._renderNoPosts() }
         { this._renderHeader() }
       </View>
     );
@@ -282,7 +279,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   postList: {
-
+    flex: 1
   },
   header: {
     flexDirection: 'column',
@@ -293,7 +290,7 @@ var styles = StyleSheet.create({
   noPostsContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center'
   },
   noPosts: {
