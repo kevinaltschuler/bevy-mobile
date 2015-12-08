@@ -258,6 +258,7 @@ var BevyBar = React.createClass({
 var styles = StyleSheet.create({
   container: {
     width: constants.width,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',

@@ -239,7 +239,7 @@ var MessageView = React.createClass({
           <ListView
             ref={ list => { this.list = list }}
             contentContainerStyle={{
-              paddingBottom: 20
+              paddingBottom: 30
             }}
             dataSource={ this.state.dataSource }
             style={ styles.messageList }
@@ -349,7 +349,7 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,
-    paddingBottom: 20
+    paddingBottom: 30
   }
 });
 

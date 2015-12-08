@@ -41,7 +41,8 @@ var BevyInfoView = React.createClass({
     bevyNavigator: React.PropTypes.object,
     bevyRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -85,6 +86,16 @@ var BevyInfoView = React.createClass({
     } else {
       BevyActions.unsubscribe(this.props.activeBevy._id);
     }
+  },
+
+  requestJoin() {
+    // dont allow this for non logged in users
+    if(!this.props.loggedIn) {
+      ToastAndroid.show('Please Log In to Join a Bevy', ToastAndroid.SHORT);
+      return;
+    }
+    // send action
+    BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },
 
   goToRelated() {
@@ -202,6 +213,49 @@ var BevyInfoView = React.createClass({
         <Text style={ styles.noAdmins }>No Admins</Text>
       );
     } else return admins;
+  },
+
+  _renderSubscribe() {
+    // check if bevy is private
+    if(this.props.activeBevy._id != -1 // if not the frontpage
+      && this.props.activeBevy.settings.privacy == 1
+      && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+      return (
+        <View style={ styles.settingItem }>
+          <Text style={ styles.settingText }>Subscribed</Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#FFF', false) }
+            onPress={ this.requestJoin }
+          >
+            <View style={{
+              backgroundColor: '#2CB673',
+              marginRight: -10,
+              height: 48,
+              paddingHorizontal: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Text style={{
+                color: '#FFF'
+              }}>
+                Request to Join
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      );
+    }
+
+    return (
+      <View style={ styles.settingItem }>
+        <Text style={ styles.settingText }>Subscribed</Text>
+        <SwitchAndroid
+          value={ this.state.subscribed }
+          onValueChange={(value) => this.onToggleSubscribe(value)}
+        />
+      </View>
+    );
   },
 
   _renderBevySettings() {
@@ -346,7 +400,9 @@ var BevyInfoView = React.createClass({
                 { this.props.activeBevy.name.trim() }
               </Text>
               <Text style={ styles.bevyDescription }>
-                { this.props.activeBevy.description.trim() }
+                { _.isEmpty(this.props.activeBevy.description)
+                  ? 'No Description'
+                  : this.props.activeBevy.description.trim() }
               </Text>
               <View style={ styles.bevyDetailsBottom }>
                 <Icon
@@ -372,13 +428,7 @@ var BevyInfoView = React.createClass({
             </View>
           </View>
           <Text style={ styles.settingTitle }>General</Text>
-          <View style={ styles.settingItem }>
-            <Text style={ styles.settingText }>Subscribed</Text>
-            <SwitchAndroid
-              value={ this.state.subscribed }
-              onValueChange={(value) => this.onToggleSubscribe(value)}
-            />
-          </View>
+          { this._renderSubscribe() }
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#EEE', false) }
             onPress={ this.goToRelated }

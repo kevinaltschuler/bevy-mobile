@@ -203,9 +203,7 @@ var PostList = React.createClass({
             activeBevy={ this.props.activeBevy }
             bevyNavigator={ this.props.bevyNavigator }
             bevyRoute={ this.props.bevyRoute }
-            showActions={ false }
-            height={ this.state.navheight }
-            disappearing={ true }
+            showActions={ true }
           />
           <Image
             style={ styles.privateImage }
@@ -319,8 +317,9 @@ var styles = StyleSheet.create({
   requestJoinButton: {
     backgroundColor: '#2CB673',
     borderRadius: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 10
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    elevation: 2
   },
   requestJoinButtonText: {
     color: '#FFF'
