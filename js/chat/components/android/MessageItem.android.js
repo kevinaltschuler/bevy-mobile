@@ -12,10 +12,12 @@ var {
   Image,
   TouchableWithoutFeedback,
   TouchableHighlight,
+  NativeModules,
   StyleSheet
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 var Collapsible = require('react-native-collapsible');
+var UIManager = NativeModules.UIManager;
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -38,8 +40,28 @@ var MessageItem = React.createClass({
 
   getInitialState() {
     return {
-      collapsed: true
-    };  
+      collapsed: true,
+      wrap: false
+    };
+  },
+
+  componentDidMount() {
+    this.measureMessageBody();
+  },
+  componentWillUnmount() {
+
+  },
+
+  measureMessageBody() {
+    setTimeout(() => {
+      this.messageBody.measure((ox, oy, width, height, px, py) => {
+        if(width > (constants.width - 40 - 10 - 8 - 8)) {
+          this.setState({
+            wrap: true
+          });
+        }
+      });
+    }, 50);
   },
 
   goToPublicProfile() {
@@ -60,12 +82,12 @@ var MessageItem = React.createClass({
     var created = '';
     if(diff <= ( 1000 * 60 * 60 * 24)) {
       // within a day - only display hours and minutes
-      created = 
-        ((createDate.getHours() > 12 ) 
-          ? createDate.getHours() - 12 
+      created =
+        ((createDate.getHours() > 12 )
+          ? createDate.getHours() - 12
           : (createDate.getHours() == 0)
             ? '12'
-            : createDate.getHours()) 
+            : createDate.getHours())
         + ':'
         + ((createDate.getMinutes() < 10)
           ? '0' + createDate.getMinutes()
@@ -90,8 +112,8 @@ var MessageItem = React.createClass({
 
   _renderTriangle() {
     var isMe = (this.props.user._id == this.props.message.author._id);
-    var triangleImage = (isMe) 
-      ? '/img/triangle_right.png' 
+    var triangleImage = (isMe)
+      ? '/img/triangle_right.png'
       : '/img/triangle_left.png';
     return (
       <View style={{width: 10, height: 10}}/>
@@ -105,7 +127,10 @@ var MessageItem = React.createClass({
     var authorName = (isMe) ? 'Me' : this.props.message.author.displayName;
     var messageColor = (isMe) ? '#fff' : '#333';
     return (
-      <View style={{
+      <View
+      ref={ ref => { this.messageBody = ref; }}
+      style={{
+        flex: (this.state.wrap) ? 1 : 0,
         backgroundColor: (isMe) ? '#2cb673' : '#fff',
         paddingTop: 3,
         paddingBottom: 3,
@@ -116,7 +141,7 @@ var MessageItem = React.createClass({
         flexWrap: 'wrap',
         //elevation: 2 // ADD IF YOU WANT SHADOWS FAM
       }}>
-        <Text style={{ 
+        <Text style={{
           textAlign: textAlign,
           color: messageColor,
           flexWrap: 'wrap'
@@ -131,16 +156,16 @@ var MessageItem = React.createClass({
   render() {
     var message = this.props.message;
     var author = message.author;
-    
+
     var isMe = (this.props.user._id == author._id);
 
     var authorImage = (this.props.hidePic)
     ? <View style={{height: 1, width: 40}}/>
-    : <Image 
+    : <Image
         source={ UserStore.getUserImage(author) }
         style={ styles.authorImage }
       />;
-    
+
     return (
       <TouchableWithoutFeedback
         underlayColor='#FFF'
@@ -166,7 +191,7 @@ var MessageItem = React.createClass({
             </TouchableWithoutFeedback>
             { (isMe) ? <View /> : this._renderTriangle() }
             { (isMe) ? <View /> : this._renderMessageBody() }
-            
+
           </View>
           <Collapsible duration={ 250 } collapsed={ this.state.collapsed }>
             <View style={{

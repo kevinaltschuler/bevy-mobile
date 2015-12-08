@@ -94,9 +94,7 @@ var MessageView = React.createClass({
   _onChatChange() {
     if(!this.state.loading) {
       // scroll to bottom
-      setTimeout(function() {
-        this.list.scrollResponderScrollTo(0, 999999999999);
-      }.bind(this), 500); 
+      setTimeout(this.scrollToBottom, 500);
     }
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
@@ -128,9 +126,7 @@ var MessageView = React.createClass({
 
   onInputFocus() {
     // scroll to bottom of list
-    setTimeout(function() {
-      this.list.scrollResponderScrollTo(0, 999999999999);
-    }.bind(this), 500);
+    setTimeout(this.scrollToBottom, 500);
   },
 
   handleResponderGrant() {
@@ -160,8 +156,14 @@ var MessageView = React.createClass({
     });
   },
 
+  scrollToBottom() {
+    if(this.list == undefined || !this.list.scrollResponderScrollTo)
+      return;
+    this.list.scrollResponderScrollTo(0, 999999999999);
+  },
+
   _renderInfoButton() {
-    if(this.props.activeThread.type == 'bevy') return <View />; 
+    if(this.props.activeThread.type == 'bevy') return <View />;
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#62D487', false) }
@@ -252,8 +254,8 @@ var MessageView = React.createClass({
             onResponderRelease={ this.handleResponderRelease }
             onScroll={ this.handleScroll }
             renderRow={(message, sectionID, rowID, highlightRow) => {
-              var hidePic = (rowID > 0 && 
-                (this.state.dataSource._dataBlob.s1[rowID - 1].author._id 
+              var hidePic = (rowID > 0 &&
+                (this.state.dataSource._dataBlob.s1[rowID - 1].author._id
                   == message.author._id));
               return (
                 <MessageItem
