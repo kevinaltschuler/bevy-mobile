@@ -1,6 +1,6 @@
 /**
  * the bevy ios app
- * made by kevin for the SUB-OHM ARMY 
+ * made by kevin for the SUB-OHM ARMY
  */
 'use strict';
 
@@ -15,8 +15,8 @@ var {
   AlertIOS
 } = React;
 
-var MainView = require('./js/app/components/MainView.ios.js');
-var LoginModal = require('./js/login/components/LoginModal.ios.js');
+var MainView = require('./js/app/components/ios/MainView.ios.js');
+var LoginModal = require('./js/login/components/ios/LoginModal.ios.js');
 var NotificationActions = require('./js/notification/NotificationActions');
 
 var Backbone = require('backbone');
@@ -97,7 +97,7 @@ var App = React.createClass({
   getInitialState() {
 
     StatusBarIOS.setStyle(1);
-      
+
     return _.extend({
       authModalOpen: false,
       authModalMessage: '',
@@ -284,8 +284,8 @@ var App = React.createClass({
           initialRouteStack={[
             routes.MAIN.TABBAR
           ]}
-          renderScene={(route, navigator) => 
-            <MainView 
+          renderScene={(route, navigator) =>
+            <MainView
               mainRoute={ route }
               mainNavigator={ navigator }
               authModalActions={ authModalActions }
@@ -300,4 +300,3 @@ var App = React.createClass({
 
 
 AppRegistry.registerComponent('bevyios', () => App);
-
