@@ -116,8 +116,8 @@ var ThreadSettingsView = React.createClass({
     dialog.set({
       title: 'Change Thread Name',
       input: {
-        prefill: (_.isEmpty(this.props.activeThread.name)) 
-          ? '' 
+        prefill: (_.isEmpty(this.props.activeThread.name))
+          ? ''
           : this.props.activeThread.name,
         allowEmptyInput: false,
         callback: newName => {
@@ -140,6 +140,11 @@ var ThreadSettingsView = React.createClass({
     ChatActions.deleteThread(this.props.activeThread._id);
     // go back to tab bar
     this.props.mainNavigator.popToTop();
+  },
+
+  addPeople() {
+    // nav to add user view
+    this.props.mainNavigator.push(routes.MAIN.ADDUSER);
   },
 
   _renderPeople() {
@@ -175,7 +180,7 @@ var ThreadSettingsView = React.createClass({
             </View>
           </TouchableNativeFeedback>
           <Text style={ styles.title }>
-            { (this.props.activeThread.type == 'group') 
+            { (this.props.activeThread.type == 'group')
               ? 'Group Details'
               : 'Details' }
           </Text>

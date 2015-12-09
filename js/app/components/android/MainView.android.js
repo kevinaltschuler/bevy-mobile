@@ -23,6 +23,7 @@ var SwitchAccountView = require('./../../../user/components/android/SwitchAccoun
 var NewThreadView = require('./../../../chat/components/android/NewThreadView.android.js');
 var ThreadSettingsView
    = require('./../../../chat/components/android/ThreadSettingsView.android.js');
+var AddUserView = require('./../../../chat/components/android/AddUserView.android.js');
 
 var ChatStore = require('./../../../chat/ChatStore');
 var constants = require('./../../../constants');
@@ -106,6 +107,9 @@ var MainView = React.createClass({
         break;
       case routes.MAIN.THREADSETTINGS.name:
         return <ThreadSettingsView { ...this.props } />;
+        break;
+      case routes.MAIN.ADDUSER.name:
+        return <AddUserView { ...this.props } />;
         break;
       default:
         return (
