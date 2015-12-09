@@ -1,7 +1,7 @@
 /**
  * BevyBar.android.js
  * the navigation bar used in PostList
- * 
+ *
  * @author albert
  */
 
@@ -16,6 +16,7 @@ var {
   TouchableNativeFeedback
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -51,8 +52,8 @@ var BevyBar = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      iconColor: (nextProps.activeBevy._id == -1) 
-        ? '#888' 
+      iconColor: (nextProps.activeBevy._id == -1)
+        ? '#888'
         : '#FFF'
     });
   },
@@ -67,13 +68,16 @@ var BevyBar = React.createClass({
   },
 
   openSortSheet() {
-    constants.getActionSheetActions().show(
-      [
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Sort Posts By:',
+      items: [
         'Top',
         'New'
       ],
-      function(key) {
-        switch(key) {
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        switch(index) {
           case '0':
             PostActions.sort('top');
             break;
@@ -81,9 +85,9 @@ var BevyBar = React.createClass({
             PostActions.sort('new');
             break;
         }
-      }.bind(this),
-      'Sort Posts By:'
-    );
+      }
+    });
+    dialog.show();
   },
 
   openTagModal() {
@@ -100,7 +104,7 @@ var BevyBar = React.createClass({
       var bgColor = (this.props.activeBevy._id == -1)
         ? '#FFF'
         : '#AAA';
-      return <View style={[ styles.bevyImageWrapperDefault, { 
+      return <View style={[ styles.bevyImageWrapperDefault, {
         backgroundColor: bgColor
       }]} />;
     } else {
@@ -139,10 +143,10 @@ var BevyBar = React.createClass({
 
   _renderInfoButton() {
     if(!this.props.showActions) return <View />;
-    if(  this.props.activeBevy._id == -1 
+    if(  this.props.activeBevy._id == -1
       || this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
       return <View />;
     else return (
       <TouchableNativeFeedback
@@ -164,7 +168,7 @@ var BevyBar = React.createClass({
     if(!this.props.showActions) return <View />;
     if(  this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
       return <View />;
     else return (
       <TouchableNativeFeedback
@@ -184,10 +188,10 @@ var BevyBar = React.createClass({
 
   _renderTagButton() {
     if(!this.props.showActions) return <View />;
-    if(  this.props.activeBevy._id == -1 
+    if(  this.props.activeBevy._id == -1
       || this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
       return <View />;
     else return (
       <TouchableNativeFeedback
@@ -209,8 +213,8 @@ var BevyBar = React.createClass({
     if(!this.props.showActions) return <View />;
     if(this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) 
-      return <View />; 
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
+      return <View />;
     else return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#EEE', false) }
@@ -240,10 +244,10 @@ var BevyBar = React.createClass({
         { this._renderImage() }
         { this._renderBackButton() }
         <Text style={[ styles.bevyName, { color: this.state.iconColor } ]}>
-          { 
+          {
             _.isEmpty(this.props.activeBevy.name)
             ? 'Loading...'
-            : this.props.activeBevy.name 
+            : this.props.activeBevy.name
           }
         </Text>
         { this._renderTagButton() }

@@ -14,6 +14,7 @@ var {
   StyleSheet
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -86,7 +87,7 @@ var PostActions = React.createClass({
 
   getLikeCountText() {
     var likeCount = PostStore.getPostVoteCount(this.props.post._id);
-    return (likeCount > 1 || likeCount == 0) 
+    return (likeCount > 1 || likeCount == 0)
     ? likeCount + ' likes'
     : likeCount + ' like';
   },
@@ -96,6 +97,33 @@ var PostActions = React.createClass({
     return (commentCount > 1 || commentCount == 0)
     ? commentCount + ' comments'
     : commentCount + ' comment';
+  },
+
+  showMoreActions() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Post Actions',
+      items: [
+        'Go To Author Profile',
+        'Go To Bevy',
+        'Delete Post'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        switch(index) {
+          case 0:
+            this.goToAuthorProfile();
+            break;
+          case 1:
+            this.goToBevy();
+            break;
+          case 2:
+            this.deletePost();
+            break;
+        }
+      }
+    });
+    dialog.show();
   },
 
   render() {
@@ -133,31 +161,7 @@ var PostActions = React.createClass({
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-          onPress={() => {
-            constants.getActionSheetActions().show(
-              [
-                "Go To Author's Profile",
-                "Go To Bevy",
-                //"Edit Post",
-                "Delete Post"
-               ],
-              function(key, option) {
-                //console.log(key);
-                switch(option) {
-                  case "Go To Author's Profile":
-                    this.goToAuthorProfile();
-                    break;
-                  case "Go To Bevy":
-                    this.goToBevy();
-                    break;
-                  case "Delete Post":
-                    this.deletePost();
-                    break;
-                }
-              }.bind(this),
-              'Post Actions'
-            );
-          }}
+          onPress={ this.showMoreActions }
         >
           <View style={ styles.moreButton }>
             <Icon

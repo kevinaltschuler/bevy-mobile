@@ -15,6 +15,7 @@ var {
 } = React;
 var Collapsible = require('react-native-collapsible');
 var Icon = require('./../../../shared/components/android/Icon.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -39,7 +40,7 @@ var CommentList = React.createClass({
     post: React.PropTypes.object,
     onSelect: React.PropTypes.func,
     selectedComment: React.PropTypes.string,
-    root: React.PropTypes.bool // if its the root comment list 
+    root: React.PropTypes.bool // if its the root comment list
                                // being rendered by the comment view
   },
 
@@ -147,10 +148,13 @@ var CommentItem = React.createClass({
     // if no actions to show, then dont show the action sheet
     if(_.isEmpty(actions)) return;
 
-    constants.getActionSheetActions().show(
-      actions,
-      function(key, option) {
-        switch(option) {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Comment Actions',
+      cancelable: true,
+      items: actions,
+      itemsCallback: (index, item) => {
+        switch(item) {
           case "Delete Comment":
             this.deleteComment();
             break;
@@ -161,24 +165,24 @@ var CommentItem = React.createClass({
             this.goToAuthorProfile();
             break;
         }
-      }.bind(this),
-      'Comment Actions'
-    );
+      }
+    });
+    dialog.show();
   },
 
   _renderComment() {
     var commentStyle = {};
-    commentStyle.borderLeftColor = 
+    commentStyle.borderLeftColor =
       (this.props.comment.depth == 0)
-       ? 'transparent' 
+       ? 'transparent'
        : colorMap[(this.props.comment.depth - 1) % colorMap.length];
-    commentStyle.borderLeftWidth = 
-      (this.props.comment.depth == 0) 
-      ? 0 
+    commentStyle.borderLeftWidth =
+      (this.props.comment.depth == 0)
+      ? 0
       : (this.props.comment.depth) * 5;
-    commentStyle.backgroundColor = 
-      (this.state.showActionBar) 
-      ? '#F8F8F8' 
+    commentStyle.backgroundColor =
+      (this.state.showActionBar)
+      ? '#F8F8F8'
       : '#FFF';
 
     if(this.state.isCompact) {
@@ -215,7 +219,7 @@ var CommentItem = React.createClass({
             <Text style={ styles.bodyText }>
               { this.props.comment.body.trim() }
             </Text>
-          </View> 
+          </View>
         </View>
       );
     }
