@@ -29,6 +29,7 @@ var ThreadList = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
+    console.log('rerender');
     this.setState({
       threads: this.state.threads.cloneWithRows(nextProps.allThreads)
     });

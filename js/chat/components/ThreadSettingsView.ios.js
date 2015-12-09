@@ -102,7 +102,7 @@ var ThreadSettingsView = React.createClass({
   },
 
   addPeople() {
-    
+    this.props.mainNavigator.push(routes.CHAT.ADDPEOPLE);
   },
 
   _renderName() {

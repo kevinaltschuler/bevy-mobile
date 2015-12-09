@@ -314,7 +314,7 @@ var styles = StyleSheet.create({
   titleImage: {
     width: 40,
     height: 40,
-    backgroundColor: '#000',
+    backgroundColor: '#eee',
     borderRadius: 20,
   },
   rightRow: {

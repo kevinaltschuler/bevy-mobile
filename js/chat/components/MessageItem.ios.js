@@ -104,6 +104,10 @@ var MessageItem = React.createClass({
 
     var space = (this.props.hidePic) ? -5 : 5;
 
+    if(message.body.length >= 32) {
+      space = 0;
+    }
+
     return (
       <View>
         { (isMe) 
@@ -148,14 +152,14 @@ var MessageItem = React.createClass({
                   { image }
                   <View style={{width: 5}}/>
                   <View style={[messageBodyStyle, {backgroundColor: '#eee'} ]}>
-                    <Text style={{ textAlign: 'right', color: '#333' }}>
+                    <Text style={{ textAlign: 'left', color: '#333' }}>
                       { message.body }
                     </Text>
                   </View>
                 </View>
                 <Collapsible collapsed={this.state.collapsed} >
                   <Text style={[styles.authorName, {color: '#888'} ]}>
-                    Me · { created }
+                    {author.displayName} · { created }
                   </Text>
                 </Collapsible>
               </View>
@@ -175,7 +179,8 @@ var styles = StyleSheet.create({
     paddingBottom: 0,
     borderRadius: 2,
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
+    width: 350
   },
   containerMe: {
     flexDirection: 'row',

@@ -229,6 +229,13 @@ _.extend(ChatStore, {
 
         // merge user lists
         var thread_users = thread.get('users');
+
+        for(var key in users) {
+          var user = users[key]
+          if(_.contains(thread_users, user))
+            break;
+        }
+
         thread_users = _.union(thread_users, users);
 
         if(thread.get('type') == 'pm') {
@@ -495,6 +502,9 @@ _.extend(ChatStore, {
     // add to collection and sort to ensure order
     thread.messages.add(message);
     thread.messages.sort();
+    console.log(threads);
+    this.threads.sort();
+    console.log(threads);
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
     this.trigger(CHAT.CHANGE_ONE + thread.id);

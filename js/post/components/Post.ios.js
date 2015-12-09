@@ -191,7 +191,7 @@ var Post = React.createClass({
       >
         <Image
           style={ styles.postImage }
-          source={{ uri: this.state.post.images[0] }}
+          source={{ uri: this.state.post.images[0].path }}
           resizeMode='cover'
         >
           { imageCountText }
@@ -216,7 +216,7 @@ var Post = React.createClass({
           <View style={styles.titleRow}>
             <Image 
               style={styles.titleImage}
-              source={{ uri: post.author.image_url }}
+              source={{ uri: post.author.image.path }}
             />
             <View style={styles.titleTextColumn}>
               <Text numberOfLines={ 1 } style={styles.titleText}>
@@ -242,7 +242,8 @@ var Post = React.createClass({
                 if(this.props.loggedIn) {
                   PostActions.vote(post._id);
                   this.setState({
-                    voted: !this.state.voted
+                    voted: !this.state.voted,
+                    overlayVisible: false
                   });
                 } else {
                   this.props.authModalActions.open('Log In To Post');
@@ -346,7 +347,7 @@ var styles = StyleSheet.create({
   titleImage: {
     width: 30,
     height: 30,
-    backgroundColor: '#000',
+    backgroundColor: '#eee',
     borderRadius: 15,
     marginLeft: 0
   },

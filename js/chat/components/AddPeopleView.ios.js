@@ -1,7 +1,7 @@
 /**
- * NewThreadView.ios.js
+ * AddPeopleView.ios.js
  * @author kevin
- * @ey
+ * algo sux
  */
 
 'use strict';
@@ -33,9 +33,11 @@ var UserStore = require('./../../user/UserStore');
 var USER = constants.USER;
 var CHAT = constants.CHAT;
 
-var NewThreadView = React.createClass({
+var AddPeopleView = React.createClass({
   propTypes: {
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    activeThread: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -75,6 +77,7 @@ var NewThreadView = React.createClass({
       });
     });
   },
+
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
@@ -99,12 +102,14 @@ var NewThreadView = React.createClass({
       searching: true
     });
   },
+
   onSearchError() {
     this.setState({
       searching: false,
       searchUsers: []
     });
   },
+
   onSearchComplete() {
     var searchUsers = UserStore.getUserSearchResults();
     this.setState({
@@ -198,17 +203,14 @@ var NewThreadView = React.createClass({
     });
   },
 
-  onSubmit(messageBody) {
+  submit() {
     // dont allow for no added users
     if(_.isEmpty(this.state.addedUsers)) {
       return;
     }
-    // dont allow for empty message
-    if(_.isEmpty(messageBody)) {
-      return;
-    }
     // call action
-    ChatActions.createThreadAndMessage(this.state.addedUsers, messageBody);
+    ChatActions.addUsers(this.props.activeThread._id, this.state.addedUsers);
+    this.props.chatNavigator.pop();
   },
 
   _renderAddedUsers() {
@@ -290,10 +292,6 @@ var NewThreadView = React.createClass({
           />
         </View>
         { this._renderSearchUsers() }
-        <MessageInput
-          marginBottom={ this.state.keyboardSpace }
-          onSubmitEditing={ this.onSubmit }
-        />
       </View>
     );
   }
@@ -358,4 +356,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = NewThreadView;
+module.exports = AddPeopleView;

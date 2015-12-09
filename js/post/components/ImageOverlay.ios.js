@@ -120,7 +120,7 @@ var ImageOverlay = React.createClass({
 
       var imageCards = [];
       for (var key in this.props.images) {
-        var image = this.props.images[key];
+        var image = this.props.images[key].path;
         imageCards.push(
           <View style={styles.card}>
             <Image

@@ -41,7 +41,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    width: 35,
+    width: 60,
+    paddingLeft: 20,
     marginLeft: 0,
     marginRight: 0
   },

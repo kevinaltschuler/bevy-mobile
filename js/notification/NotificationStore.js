@@ -65,6 +65,8 @@ _.extend(NotificationStore, {
           }.bind(this)
         });
 
+        console.log('APP LOADING IN NOTE STORE');
+
         //var ws_url = 'ws://' + constants.hostname + '/socket.io/';
         //console.log('ws connecting to', ws_url);
         //var ws = new WebSocket(ws_url);
@@ -81,7 +83,7 @@ _.extend(NotificationStore, {
 
         ws.on('chat:' + user._id, function(message) {
           message = JSON.parse(message);
-          console.log('ws got message', message);
+          //console.log('ws got message', message);
 
           // TODO: play audio
           if(Platform.OS == 'android') {
@@ -97,6 +99,8 @@ _.extend(NotificationStore, {
             VibrationIOS.vibrate();
           }
           
+          console.log('eyyyyy');
+
           ChatStore.addMessage(message);
         }.bind(this));
 
@@ -178,9 +182,10 @@ _.extend(NotificationStore, {
   }
 });
 
-GCM.addEventListener('notification', function(data) {
-  console.log('got remote notification', data);
-});
+if(Platform.OS == 'android')
+  GCM.addEventListener('notification', function(data) {
+    console.log('got remote notification', data);
+  });
 
 
 var dispatchToken = Dispatcher.register(NotificationStore.handleDispatch.bind(NotificationStore));

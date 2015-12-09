@@ -25,7 +25,8 @@ var Navbar = require('./../../shared/components/Navbar.ios.js');
 var BackButton = require('./../../shared/components/BackButton.ios.js');
 var ThreadList = require('./ThreadList.ios.js');
 var ChatStore = require('./../ChatStore');
-var NewThreadView = require('./NewThreadView.ios.js')
+var NewThreadView = require('./NewThreadView.ios.js');
+var AddPeopleView = require('./AddPeopleView.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../routes');
@@ -39,7 +40,7 @@ var ChatNavigator = React.createClass({
 
   getInitialState() {
     return {
-      navbarText: 'Chat'
+      navbarText: 'Chat',
     }
   },
 
@@ -93,6 +94,16 @@ var ChatNavigator = React.createClass({
                 />
               );
               break;
+            case routes.CHAT.ADDPEOPLE.name:
+              view = (
+                <AddPeopleView 
+                  { ...this.props }
+                  chatNavigator={ navigator }
+                  ref={ref => this.addPeopleView = ref}
+                />
+              );
+              break;
+
           }
 
           var navbarText = 'Chat';
@@ -164,9 +175,32 @@ var ChatNavigator = React.createClass({
             </TouchableOpacity>
           );
 
-          var right = (route.name == routes.CHAT.LISTVIEW.name)
-          ? newMessage
-          : infoButton;
+          var finishedAdding = (
+            <TouchableOpacity
+              activeOpacity={.5}
+              onPress={() => {
+                console.log(this.refs.AddPeopleView);
+                this.addPeopleView.submit();
+              }}
+              style={{marginRight: 10, height: 39, width: 39, alignItems: 'center', justifyContent: 'center'}}
+            >
+              <Text style={{color: '#2cb673', fontSize: 16, fontWeight: 'bold'}}>
+                done
+              </Text>
+            </TouchableOpacity>
+          );
+
+          switch(route.name) {
+            case routes.CHAT.LISTVIEW.name:
+              var right = newMessage;
+              break;
+            case routes.CHAT.ADDPEOPLE.name:
+              var right = finishedAdding;
+              break;
+            default:
+              var right = infoButton;
+              break;
+          }
 
           return (
             <View style={{ flex: 1, backgroundColor: '#eee'}}>

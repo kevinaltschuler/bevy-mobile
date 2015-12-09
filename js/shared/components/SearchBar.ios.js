@@ -124,7 +124,7 @@ var SearchBar = React.createClass({
               <Icon 
                 name='ios-search'
                 color='#fff'
-                size={ 25 }
+                size={ 20 }
                 style={ styles.searchIcon }
               />
               <TextInput 
@@ -222,7 +222,9 @@ var styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    width: window.width
+    width: window.width,
+    paddingLeft: 0,
+    marginLeft: 0
   },
   navbarTop: {
     height: 48,
@@ -235,14 +237,18 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    borderBottomColor: '#fff',
-    borderBottomWidth: 1,
     marginRight: 20,
-    marginLeft: 20
+    marginLeft: 15,
+    borderRadius: 5,
+    backgroundColor: 'rgba(255,255,255,.3)',
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   searchIcon: {
-    width: 25,
-    height: 25
+    width: 20,
+    height: 20,
+    marginLeft: 5
   },
   searchInput: {
     flex: 1,
@@ -256,7 +262,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: 20
+    paddingLeft: 0
   }
 });
 

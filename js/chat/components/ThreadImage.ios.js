@@ -36,6 +36,7 @@ var ThreadImage = React.createClass({
       marginLeft: 10,
       marginRight: 10,
       borderRadius: 20,
+      backgroundColor: '#eee'
     };
     return (
       <Image style={ imageStyle } source={{uri: image_url}}/>
@@ -64,6 +65,7 @@ var ThreadImage = React.createClass({
           var iconStyle = {
             flex: 1,
             padding: 0,
+            backgroundColor: '#eee'
           };
           switch(threadUsers.length) {
             case 1:

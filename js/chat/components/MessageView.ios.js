@@ -141,7 +141,7 @@ var MessageView = React.createClass({
     }
     if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
       //console.log('focusing');
-      this.refs.MessageInput.focus();
+      //this.refs.MessageInput.focus();
     }
     this.setState({
       scrollY: scrollY
@@ -171,9 +171,13 @@ var MessageView = React.createClass({
 
   onSubmitEditing: function() {
     var text = this.state.messageValue;
-    console.log(text);
     var user = this.props.user;
+    // dont send an empty message
+    if(text == '') {
+      return;
+    }
     ChatActions.postMessage(this.props.activeThread._id, user, text);
+    //reset the field
     this.setState({
       messageValue: ''
     });
