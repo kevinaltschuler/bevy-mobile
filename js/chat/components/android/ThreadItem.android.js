@@ -69,7 +69,7 @@ var ThreadItem = React.createClass({
 
     return (
       <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#FFF', false) }
+        background={ TouchableNativeFeedback.Ripple('#DDD', false) }
         onPress={() => {
           var thread_id = this.props.thread._id;
           ChatActions.switchThread(thread_id);
@@ -79,7 +79,7 @@ var ThreadItem = React.createClass({
         <View style={[ styles.container, {
           backgroundColor: '#fff'
         }]} >
-          <ThreadImage 
+          <ThreadImage
             thread={ thread }
           />
           <View style={ styles.titleTextColumn }>
