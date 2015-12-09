@@ -17,7 +17,7 @@ var {
   ProgressBarAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -290,7 +290,8 @@ var styles = StyleSheet.create({
     height: 30,
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginVertical: 10
+    marginVertical: 10,
+    elevation: 2
   },
   errorText: {
     color: '#FFF'
@@ -330,7 +331,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#FFF',
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius: 5,
+    elevation: 2
   },
   registerButtonText: {
     color: '#000'
@@ -342,7 +345,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DF4A32',
-    marginBottom: 10
+    marginBottom: 10,
+    borderRadius: 5,
+    elevation: 2
   },
   googleRegisterButtonText: {
     color: '#FFF'

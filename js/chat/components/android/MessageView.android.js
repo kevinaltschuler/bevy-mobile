@@ -14,11 +14,12 @@ var {
   TouchableNativeFeedback,
   BackAndroid,
   ProgressBarAndroid,
+  PullToRefreshViewAndroid,
   StyleSheet
 } = React;
 var MessageItem = require('./MessageItem.android.js');
 var InvertibleScrollView = require('react-native-invertible-scroll-view');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var MessageInput = require('./MessageInput.android.js');
 
 var _ = require('underscore');
@@ -48,7 +49,8 @@ var MessageView = React.createClass({
     return {
       messages: messages,
       dataSource: ds.cloneWithRows(messages),
-      loading: false
+      loading: false,
+      scrollY: 0
     };
   },
 
@@ -90,6 +92,10 @@ var MessageView = React.createClass({
   },
 
   _onChatChange() {
+    if(!this.state.loading) {
+      // scroll to bottom
+      setTimeout(this.scrollToBottom, 500);
+    }
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       messages: messages,
@@ -118,8 +124,46 @@ var MessageView = React.createClass({
     });
   },
 
+  onInputFocus() {
+    // scroll to bottom of list
+    setTimeout(this.scrollToBottom, 500);
+  },
+
+  handleResponderGrant() {
+    this.isTouching = true;
+  },
+  handleResponderRelease() {
+    this.isTouching = false;
+  },
+
+  handleScroll(e) {
+    var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
+    //console.log(scrollY);
+    if(this.state.scrollY == null) {
+      this.setState({
+        scrollY: scrollY
+      });
+      return;
+    }
+    if((this.state.scrollY - scrollY) > 5) {
+      this.refs.MessageInput.blur();
+    }
+    if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
+      //this.refs.MessageInput.focus();
+    }
+    this.setState({
+      scrollY: scrollY
+    });
+  },
+
+  scrollToBottom() {
+    if(this.list == undefined || !this.list.scrollResponderScrollTo)
+      return;
+    this.list.scrollResponderScrollTo(0, 999999999999);
+  },
+
   _renderInfoButton() {
-    if(this.props.activeThread.type == 'bevy') return <View />; 
+    if(this.props.activeThread.type == 'bevy') return <View />;
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#62D487', false) }
@@ -187,33 +231,48 @@ var MessageView = React.createClass({
           </View>
           { this._renderInfoButton() }
         </View>
-        <ListView
-          renderScrollComponent={
-            (props) => <InvertibleScrollView {...props} { ...this.state } />
-          }
-          contentContainerStyle={{
-            paddingBottom: 20
+        <PullToRefreshViewAndroid
+          style={{
+            flex: 1
           }}
-          dataSource={ this.state.dataSource }
-          style={ styles.messageList }
-          scrollRenderAheadDistance={ 300 }
-          removeClippedSubviews={ true }
-          initialListSize={ 10 }
-          pageSize={ 10 }
-          renderHeader={ this._renderListHeader }
-          renderRow={(message) => {
-            return (
-              <MessageItem
-                key={ 'message:' + message._id }
-                message={ message }
-                user={ this.props.user }
-                mainNavigator={ this.props.mainNavigator }
-              />
-            );
-          }}
-        />
+          refreshing={ this.state.loading }
+          onRefresh={ this.loadMessages }
+        >
+          <ListView
+            ref={ list => { this.list = list }}
+            contentContainerStyle={{
+              paddingBottom: 30
+            }}
+            dataSource={ this.state.dataSource }
+            style={ styles.messageList }
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 10 }
+            pageSize={ 10 }
+            decelerationRate={ 0.9 }
+            onResponderGrant={ this.handleResponderGrant }
+            onResponderRelease={ this.handleResponderRelease }
+            onScroll={ this.handleScroll }
+            renderRow={(message, sectionID, rowID, highlightRow) => {
+              var hidePic = (rowID > 0 &&
+                (this.state.dataSource._dataBlob.s1[rowID - 1].author._id
+                  == message.author._id));
+              return (
+                <MessageItem
+                  key={ 'message:' + message._id }
+                  message={ message }
+                  user={ this.props.user }
+                  mainNavigator={ this.props.mainNavigator }
+                  hidePic={ hidePic }
+                />
+              );
+            }}
+          />
+        </PullToRefreshViewAndroid>
         <MessageInput
+          ref='MessageInput'
           onSubmitEditing={ this.onSubmitEditing }
+          onFocus={ this.onInputFocus }
         />
       </View>
     );
@@ -292,7 +351,7 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 10,
-    paddingBottom: 20
+    paddingBottom: 30
   }
 });
 

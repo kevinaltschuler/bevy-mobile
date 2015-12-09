@@ -187,22 +187,34 @@ _.extend(UserStore, {
 
       case USER.CHANGE_PROFILE_PICTURE:
         var uri = payload.uri;
+        var image = payload.image;
 
-        FileStore.upload(uri, (err, filename) => {
-          console.log(err, filename);
-          if(err) return;
+        if(uri) {
+          FileStore.upload(uri, (err, filename) => {
+            console.log(err, filename);
+            if(err) return;
+            this.user.save({
+              image_url: filename
+            }, {
+              patch: true,
+              success: function(model, response, options) {
+                //console.log(response);
+              }.bind(this)
+            });
+            this.user.set('image_url', filename);
+            this.trigger(USER.LOADED);
+          });
+        } else {
           this.user.save({
-            image_url: filename
+            image: image
           }, {
             patch: true,
             success: function(model, response, options) {
-              //console.log(response);
             }.bind(this)
           });
-          this.user.set('image_url', filename);
+          this.user.set('image', image);
           this.trigger(USER.LOADED);
-        });
-
+        }
         break;
 
       case USER.SWITCH_USER:
@@ -388,48 +400,53 @@ _.extend(UserStore, {
     // register push notifications for android
     // get token if it exists
     if(Platform.OS == 'android') {
-      GCM.register(function(token) {
-        console.log('GCM TOKEN', token);
-        // check if we've already sent this token
-        AsyncStorage.getItem('GCM_token')
-        .then($token => {
-          if($token && $token == token) {
-            // it already exists and/or it matches, do nothing
-            console.log('gcm token already exists. continuing...');
-            return;
-          } else {
-            console.log('gcm token not found. registering...');
-            // add to device list
-            var new_device = this.user.devices.add({
-              token: token,
-              platform: 'android',
-              uniqueID: DeviceInfo.getUniqueID(),
-              manufacturer: DeviceInfo.getManufacturer(),
-              model: DeviceInfo.getModel(),
-              deviceID: DeviceInfo.getDeviceId(),
-              name: DeviceInfo.getSystemName(),
-              version: DeviceInfo.getSystemVersion(),
-              bundleID: DeviceInfo.getBundleId(),
-              buildNum: DeviceInfo.getBuildNumber(),
-              appVersion: DeviceInfo.getVersion(),
-              appVersionReadable: DeviceInfo.getReadableVersion()
-            });
-            console.log('saving', new_device.toJSON(), 'to ', new_device.url);
-            // save to server
-            new_device.save(null, {
-              success: function(model, response, options) {
-                console.log('device registration success');
-                // save to local storage
-                AsyncStorage.setItem('GCM_token', token);
-              },
-              error: function(error) {
-                console.error('device registration error:', error);
-              }
-            });
+      GCM.addEventListener('register', data => {
+        this.onRegister(data.deviceToken);
+      });
+      GCM.register();
+    }
+  },
+
+  onRegister(token) {
+    console.log('GCM TOKEN', token);
+    // check if we've already sent this token
+    AsyncStorage.getItem('GCM_token')
+    .then($token => {
+      if($token && $token == token) {
+        // it already exists and/or it matches, do nothing
+        console.log('gcm token already exists. continuing...');
+        return;
+      } else {
+        console.log('gcm token not found. registering...');
+        // add to device list
+        var new_device = this.user.devices.add({
+          token: token,
+          platform: 'android',
+          uniqueID: DeviceInfo.getUniqueID(),
+          manufacturer: DeviceInfo.getManufacturer(),
+          model: DeviceInfo.getModel(),
+          deviceID: DeviceInfo.getDeviceId(),
+          name: DeviceInfo.getSystemName(),
+          version: DeviceInfo.getSystemVersion(),
+          bundleID: DeviceInfo.getBundleId(),
+          buildNum: DeviceInfo.getBuildNumber(),
+          appVersion: DeviceInfo.getVersion(),
+          appVersionReadable: DeviceInfo.getReadableVersion()
+        });
+        console.log('saving', new_device.toJSON(), 'to ', new_device.url);
+        // save to server
+        new_device.save(null, {
+          success: function(model, response, options) {
+            console.log('device registration success');
+            // save to local storage
+            AsyncStorage.setItem('GCM_token', token);
+          },
+          error: function(error) {
+            console.error('device registration error:', error);
           }
         });
-      }.bind(this));
-    }
+      }
+    });
   },
 
   getUser() {
@@ -454,19 +471,22 @@ _.extend(UserStore, {
     var source = { uri: ((_.isEmpty(user.image))
       ? ''
       : user.image.path) };
+    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
+      source = img_default;
+      return source;
+    } else if(source.uri == '/img/user-profile-icon.png') {
+      source = img_default;
+      return source;
+    } else if (_.isEmpty(source.uri)) {
+      source = img_default;
+      return source;
+    }
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
       && height != undefined
       && this.gup('w', user.image.path) == null
       && this.gup('h', user.image.path) == null) {
       source.uri += '?w=' + width + '&h=' + height;
-    }
-    if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
-      source = img_default;
-    } else if(source.uri == '/img/user-profile-icon.png') {
-      source = img_default;
-    } else if (_.isEmpty(source.uri)) {
-      source = img_default;
     }
     return source;
   },

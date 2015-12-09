@@ -13,6 +13,7 @@ var {
   Image,
   StyleSheet,
   TouchableNativeFeedback,
+  PullToRefreshViewAndroid,
   ToastAndroid,
   ProgressBarAndroid
 } = React;
@@ -23,7 +24,8 @@ var Post = require('./Post.android.js');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var POST = constants.POST;
-var PostStore = require('./../../PostStore');
+var PostStore = require('./../../../post/PostStore');
+var PostActions = require('./../../../post/PostActions');
 var BevyActions = require('./../../../bevy/BevyActions');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BEVY = constants.BEVY;
@@ -49,7 +51,7 @@ var PostList = React.createClass({
       showNewPostCard: false,
       renderHeader: true,
       activeBevy: {},
-      activeTags: ['-1'] // default is -1, which means show all posts,
+      activeTags: ['-1'] // default is -1, which means show all posts
     }
   },
 
@@ -144,6 +146,10 @@ var PostList = React.createClass({
     })
   },
 
+  onRefresh() {
+    PostActions.fetch(this.props.activeBevy._id);
+  },
+
   _renderHeader() {
     if(!this.props.renderHeader) return <View />;
     else return (
@@ -162,7 +168,10 @@ var PostList = React.createClass({
   _renderNewPostCard() {
     if(!this.props.showNewPostCard) return <View />;
     else return (
-      <View style={{marginBottom: 10, marginTop: 45}}>
+      <View style={{
+        marginBottom: 10, 
+        marginTop: 45
+      }}>
         <NewPostCard
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
@@ -170,6 +179,16 @@ var PostList = React.createClass({
         />
       </View>
     );
+  },
+
+  _renderNoPosts() {
+    if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
+      return (
+        <View style={ styles.noPostsContainer }>   
+          <Text style={ styles.noPosts }>No Posts</Text>
+        </View>
+      );
+    }
   },
 
   render() {
@@ -184,9 +203,7 @@ var PostList = React.createClass({
             activeBevy={ this.props.activeBevy }
             bevyNavigator={ this.props.bevyNavigator }
             bevyRoute={ this.props.bevyRoute }
-            showActions={ false }
-            height={ this.state.navheight }
-            disappearing={ true }
+            showActions={ true }
           />
           <Image
             style={ styles.privateImage }
@@ -208,38 +225,30 @@ var PostList = React.createClass({
         </View>
       );
     }
-    if(this.state.loading) {
-      return (
-        <View style={ styles.container }> 
-          { this._renderHeader() }     
-          <View style={ styles.noPostsContainer }>   
-            <ProgressBarAndroid styleAttr="Inverse" />
-          </View>
-        </View>
-      );
-    } else if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
-      return (
-        <View style={ styles.container }> 
-          { this._renderHeader() }     
-          <View style={ styles.noPostsContainer }>   
-            <Text style={ styles.noPosts }>No Posts</Text>
-          </View>
-        </View>
-      );
-    } else {
-      return (
-        <View style={ styles.container }>
+    return (
+      <View style={{ 
+        flex: 1, 
+        flexDirection: 'column' 
+      }}>
+        <PullToRefreshViewAndroid 
+          style={{
+            flex: 1
+          }}
+          refreshing={ this.state.loading }
+          onRefresh={ this.onRefresh }
+        >
           <ListView
             dataSource={ this.state.posts }
             style={ styles.postList }
-            scrollRenderAheadDistance={ 400 }
-            initialListSize={ 5 }
             onScroll={(data) => {
               this.onScroll(data.nativeEvent.contentOffset.y);
             }}
             renderHeader={ this._renderNewPostCard }
-            pageSize={ 5 }
-            renderRow={(post) => {
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 10 }
+            pageSize={ 10 }
+            renderRow={post => {
               if(this.props.activeBevy._id == -1 &&
                 post.pinned) return <View />;
               return (
@@ -255,10 +264,11 @@ var PostList = React.createClass({
               );
             }}
           />
-          { this._renderHeader() }
-        </View>
-      );
-    }
+        </PullToRefreshViewAndroid>
+        { this._renderNoPosts() }
+        { this._renderHeader() }
+      </View>
+    );
   }
 });
 
@@ -267,7 +277,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   postList: {
-
+    flex: 1
   },
   header: {
     flexDirection: 'column',
@@ -278,7 +288,7 @@ var styles = StyleSheet.create({
   noPostsContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center'
   },
   noPosts: {
@@ -307,8 +317,9 @@ var styles = StyleSheet.create({
   requestJoinButton: {
     backgroundColor: '#2CB673',
     borderRadius: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 10
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    elevation: 2
   },
   requestJoinButtonText: {
     color: '#FFF'

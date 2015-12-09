@@ -11,6 +11,12 @@ var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 
 var NotificationActions = {
+  fetch() {
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.FETCH
+    });
+  },
+
   dismiss(id) {
     Dispatcher.dispatch({
       actionType: NOTIFICATION.DISMISS,

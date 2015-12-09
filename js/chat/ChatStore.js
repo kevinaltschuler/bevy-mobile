@@ -70,7 +70,18 @@ _.extend(ChatStore, {
             });
           }
         }
+        break;
 
+      case CHAT.FETCH_THREADS:
+        this.trigger(CHAT.FETCHING_THREADS);
+        this.threads.fetch({
+          success: function(collection, response, options) {
+            this.threads.comparator = this.sortByLatest;
+            this.threads.sort();
+            this.trigger(CHAT.CHANGE_ALL);
+            this.trigger(CHAT.THREADS_FETCHED);
+          }.bind(this)
+        });
         break;
 
       case BEVY.SWITCH:
@@ -350,14 +361,14 @@ _.extend(ChatStore, {
         if(thread == undefined) break;
 
         var name = payload.name || thread.get('name');
-        var image_url = payload.image_url || thread.get('image_url');
+        var image = payload.image || thread.get('image');
 
         var tempBevy = thread.get('bevy');
         var tempUsers = thread.get('users');
 
         thread.save({
           name: name,
-          image_url: image_url
+          image: image
         }, {
           patch: true,
           success: function(model, response, options) {

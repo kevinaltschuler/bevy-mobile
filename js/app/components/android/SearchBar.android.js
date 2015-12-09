@@ -18,7 +18,7 @@ var {
 var MainTabBar = require('./MainTabBar.android.js');
 var SearchView = require('./SearchView.android.js');
 var Drawer = require('./Drawer.android.js');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -44,17 +44,24 @@ var SearchBar = React.createClass({
   },
 
   componentDidMount() {
-    this.props.navigator.navigationContext.addListener('willfocus', (ev) => {
-      var route = ev.data.route;
-      this.setState({
-        activeRoute: route
-      });
-      this.forceUpdate();
-    });
+    this.props.navigator.navigationContext.addListener('willfocus', 
+      this.switchRoute);
+  },
+  componentWillUnmount() {
+    //this.props.navigator.navigationContext.removeListener('willfocus', 
+    //  this.switchRoute);
   },
 
-  componentWillUnmount() {
-    //this.props.navigator.navigationContext.removeListener('willfocus');
+  switchRoute(ev) {
+    var route = ev.data.route;
+    this.setState({
+      activeRoute: route
+    });
+    this.forceUpdate();
+    if(route.name == routes.SEARCH.IN.name) {
+      // focus search bar
+      this.searchInput.focus();
+    } 
   },
 
   onSearchBlur() {
@@ -94,7 +101,7 @@ var SearchBar = React.createClass({
   },
 
   goBack() {
-    this.refs.Search.blur();
+    this.searchInput.blur();
     this.props.navigator.pop();
     this.setState({
       activeRoute: routes.SEARCH.OUT
@@ -111,7 +118,7 @@ var SearchBar = React.createClass({
   _renderLeftButton() {
     if(this.state.activeRoute.name == routes.SEARCH.IN.name) {
       return (
-        <TouchableNativeFeedback  
+        <TouchableNativeFeedback
           onPress={ this.goBack }
         >
           <View style={ styles.backButton }>
@@ -139,17 +146,30 @@ var SearchBar = React.createClass({
   },
 
   render() {
+    // dirty hack to keep the search bar focused as stuff is rendering below it
+    // and also keep focused when tab switch between bevies and users
+    setTimeout(() => {
+      if(this.state.activeRoute.name == routes.SEARCH.IN.name) {
+        // focus search bar
+        this.searchInput.focus();
+      } 
+    }, 500);
     return (
       <View style={ styles.navbar }>
         { this._renderLeftButton() }
         <View style={ styles.searchInputWrapper }>
-          <Icon name='search' color='#fff' size={ 24 } />
+          <View style={ styles.searchBackdrop } />
+          <Icon 
+            name='search' 
+            color='#fff' 
+            size={ 24 } 
+          />
           <TextInput
-            ref='Search'
+            ref={ref => { this.searchInput = ref; }}
             style={ styles.searchInput }
             placeholder='Search'
             placeholderTextColor='#FFF'
-            underlineColorAndroid='#FFF'
+            underlineColorAndroid='#6BCC9D'
             onBlur={ this.onSearchBlur }
             onFocus={ this.onSearchFocus }
             onChangeText={ this.onSearch }
@@ -167,7 +187,9 @@ var SearchNavigator = React.createClass({
         configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.mainNavigator }
         navigationBar={ 
-          <SearchBar { ...this.props }/> 
+          <SearchBar 
+            { ...this.props }
+          /> 
         }
         initialRouteStack={[
           routes.SEARCH.OUT
@@ -213,11 +235,11 @@ var SearchBarWrapper = React.createClass({
   },
 
   openDrawer() {
-    this.refs.Drawer.openDrawer();
+    this.drawer.openDrawer();
   },
 
   closeDrawer() {
-    this.refs.Drawer.closeDrawer();
+    this.drawer.closeDrawer();
   },
 
   toggleDrawer() {
@@ -228,7 +250,6 @@ var SearchBarWrapper = React.createClass({
   },
 
   render() {
-
     var drawerActions = {
       open: this.openDrawer,
       close: this.closeDrawer,
@@ -237,7 +258,7 @@ var SearchBarWrapper = React.createClass({
 
     return (
       <DrawerLayoutAndroid
-        ref='Drawer'
+        ref={ ref => { this.drawer = ref; }}
         drawerWidth={ (constants.width / 3) * 2 }
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         onDrawerOpen={() => this.setState({ drawerOpen: true })}
@@ -280,8 +301,8 @@ var styles = StyleSheet.create({
   },
   backButton: {
     height: 48,
-    paddingLeft: 8,
-    paddingRight: 8,
+    paddingLeft: 13,
+    paddingRight: 13,
     flexDirection: 'row',
     alignItems: 'center'
   },
@@ -293,8 +314,18 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: 8,
-    paddingRight: 8
+    paddingLeft: 10,
+    paddingRight: 10
+  },
+  searchBackdrop: {
+    position: 'absolute',
+    top: 7, 
+    left: 0,
+    backgroundColor: '#FFF',
+    opacity: 0.3,
+    height: 34,
+    width: constants.width - 16 - 16 - 10 - 25,
+    borderRadius: 5
   },
   searchIcon: {
     width: 25,

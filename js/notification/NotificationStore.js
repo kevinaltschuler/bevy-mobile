@@ -112,8 +112,17 @@ _.extend(NotificationStore, {
         
         break;
 
-      case APP.UNLOAD:
-        //clearTimeout(this.timeoutId);
+      case NOTIFICATION.FETCH:
+        this.trigger(NOTIFICATION.FETCHING);
+        this.notifications.fetch({
+          success: function(collection, response, options) {
+            this.unread = this.notifications.filter(
+              (notification) => notification.read == false)
+            .length; // count all notifications that are unread
+            this.trigger(NOTIFICATION.CHANGE_ALL);
+            this.trigger(NOTIFICATION.FETCHED);
+          }.bind(this)
+        });
         break;
 
       case NOTIFICATION.DISMISS:

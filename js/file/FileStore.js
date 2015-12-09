@@ -3,7 +3,8 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var {
-  StatusBarIOS
+  StatusBarIOS,
+  Platform
 } = require('react-native');
 
 var Dispatcher = require('./../shared/dispatcher');
@@ -17,21 +18,13 @@ _.extend(FileStore, {
     switch(payload.actionType) {
       case FILE.UPLOAD:
         var uri = payload.uri;
-        this.upload(uri, (err, filename) => {
-          if(err) {
-            this.trigger(FILE.UPLOAD_ERROR, err);
-            return;
-          }
-          this.trigger(FILE.UPLOAD_COMPLETE, filename);
-          // make sure the status bar is still white
-          StatusBarIOS.setStyle(1);
-        });
-
+        this.upload(uri);
         break;
     }
   },
 
-  upload(uri: String, callback: Function) {
+  upload(uri: String) {
+    console.log('sending multipart request...');
     FileTransfer.upload({
       uri: uri, 
       uploadUrl: constants.apiurl + '/files/upload',
@@ -45,13 +38,24 @@ _.extend(FileStore, {
         // along with the uploaded file
       }
     }, (err, res) => {
+      console.log('RESPONSE', err, res);
       // make sure the status bar is still white
-      StatusBarIOS.setStyle(1);
+      if(Platform.OS === 'ios') {
+        StatusBarIOS.setStyle(1);
+      }
 
-      if(err) callback(err, null);
-      var data = JSON.parse(res.data);
-      var filename = constants.apiurl + '/files/' + data.filename;
-      callback(null, filename);
+      var file = JSON.parse(res);
+      if(err) {
+        this.trigger(FILE.UPLOAD_ERROR, err);
+        return;
+      }
+      // populate path
+      file.path = constants.apiurl + '/files/' + file.filename;
+      this.trigger(FILE.UPLOAD_COMPLETE, file);
+      // make sure the status bar is still white
+      if(Platform.OS === 'ios') {
+        StatusBarIOS.setStyle(1);
+      }
     });
   }
 });

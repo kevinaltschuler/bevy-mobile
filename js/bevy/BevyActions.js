@@ -11,7 +11,7 @@
 // imports
 var Dispatcher = require('./../shared/dispatcher');
 var BEVY = require('./../constants').BEVY;
-//var getSlug = require('speakingurl');
+var getSlug = require('speakingurl');
 
 var BevyActions = {
 
@@ -22,12 +22,12 @@ var BevyActions = {
     });
   },
   
-  create(name, description, image_url, slug) {
+  create(name, description, image, slug) {
     Dispatcher.dispatch({
       actionType: BEVY.CREATE,
       name: (name == undefined) ? '' : name,
       description: (description == undefined) ? '' : description,
-      image_url: (image_url == undefined) ? '' : image_url,
+      image: (image == undefined) ? '' : image,
       slug: (slug == undefined) ? getSlug(name) : getSlug(slug) // force verification
     });
   },
@@ -38,13 +38,13 @@ var BevyActions = {
     });
   },
 
-  update(bevy_id, name, description, image_url, settings) {
+  update(bevy_id, name, description, image, settings) {
     Dispatcher.dispatch({
       actionType: BEVY.UPDATE,
       bevy_id: (bevy_id == undefined) ? '' : bevy_id,
       name: (name == undefined) ? null : name,
       description: (description == undefined) ? null : description,
-      image_url: (image_url == undefined) ? null : image_url,
+      image: (image == undefined) ? null : image,
       settings: (settings == undefined) ? null : settings
     });
   },

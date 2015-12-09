@@ -19,7 +19,7 @@ var api_version = '';
 var hostname = 'joinbevy.com';
 var protocol = 'http:';
 
-exports.android_version = '1.0.5';
+exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
 exports.siteurl = protocol + slashes + hostname;
@@ -117,8 +117,11 @@ exports.CHAT = {
   DELETE_THREAD: 'chat_delete_thread',
   EDIT_THREAD: 'chat_edit_thread',
   START_PM: 'chat_start_pm',
+  FETCH_THREADS: 'chat_fetch_threads',
 
   // events
+  FETCHING_THREADS: 'chat_fetching_threads',
+  THREADS_FETCHED: 'chat_threads_fetched',
   CHANGE_ALL: 'chat_change_all',
   CHANGE_ONE: 'chat_change_one:',
   THREAD_CREATED: 'chat_thread_created',
@@ -157,16 +160,22 @@ exports.USER = {
 
 exports.FILE = {
   'UPLOAD': 'file_upload',
+  
   'UPLOAD_COMPLETE': 'file_upload_complete',
   'UPLOAD_ERROR': 'file_upload_error'
 }
 
 exports.NOTIFICATION = {
+  // actions
   DISMISS: 'notification_dismiss',
   DISMISS_ALL: 'notification_dismiss_all',
   REGISTER: 'notification_register',
+  FETCH: 'notification_fetch',
 
-  CHANGE_ALL: 'notification_change_all'
+  // events
+  CHANGE_ALL: 'notification_change_all',
+  FETCHING: 'notification_fetching',
+  FETCHED: 'notification_fetched'
 };
 
 exports.setSearchNavigator = function(navigator) {

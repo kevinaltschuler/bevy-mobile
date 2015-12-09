@@ -15,7 +15,7 @@ var {
 } = React;
 var ProfileRow = require('./../../../user/components/android/ProfileRow.android.js');
 var BevyList = require('./../../../bevy/components/android/BevyList.android.js');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');

@@ -14,7 +14,7 @@ var {
   StyleSheet
 } = React;
 var Collapsible = require('react-native-collapsible');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');

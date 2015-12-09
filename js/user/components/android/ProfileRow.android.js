@@ -10,10 +10,12 @@ var {
   View,
   Text,
   Image,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var UserStore = require('./../../../user/UserStore');
 
 var ProfileRow = React.createClass({
@@ -23,7 +25,8 @@ var ProfileRow = React.createClass({
     imageSize: React.PropTypes.number,
     nameColor: React.PropTypes.string,
     emailColor: React.PropTypes.string,
-    style: React.PropTypes.object
+    style: React.PropTypes.object,
+    big: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -36,11 +39,68 @@ var ProfileRow = React.createClass({
       imageSize: 30,
       nameColor: '#FFF',
       emailColor: '#AAA',
-      style: {}
+      style: {},
+      big: false
     };
   },
 
+  openProfileImage() {
+    if(_.isEmpty(this.props.user.image)) return;
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.user.image]);
+    actions.show();
+  },
+
   render() {
+    if(this.props.big) {
+      return (
+        <View style={{
+          backgroundColor: '#FFF',
+          height: 80,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingLeft: 10,
+          paddingRight: 10,
+          elevation: 2
+        }}>
+          <TouchableWithoutFeedback
+            onPress={ this.openProfileImage }
+          >
+            <Image
+              source={ UserStore.getUserImage(this.props.user, 60, 60) }
+              style={{
+                width: 60,
+                height: 60,
+                borderRadius: 30,
+                marginRight: 10
+              }}
+            />
+          </TouchableWithoutFeedback>
+          <View style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'center'
+          }}>
+            <Text style={{
+              color: '#000',
+              fontSize: 18
+            }}>
+              { this.props.user.displayName }
+            </Text>
+            <Text style={{
+              color: '#888',
+              fontSize: 16
+            }}>
+              { (_.isEmpty(this.props.user.email))
+              ? 'No Email'
+              : this.props.user.email }
+            </Text>
+          </View>
+        </View>
+      );
+    }
     return (
       <View style={[ styles.container, { 
         height: this.props.height 

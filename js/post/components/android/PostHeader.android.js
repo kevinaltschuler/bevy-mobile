@@ -13,7 +13,7 @@ var {
   TouchableWithoutFeedback,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -25,10 +25,14 @@ var UserStore = require('./../../../user/UserStore');
 var PostHeader = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object
   },
 
   goToAuthorProfile() {
+    // dont go if already in the profile view
+    if(this.props.mainRoute.name == routes.MAIN.PROFILE.name) return;
+
     var route = routes.MAIN.PROFILE;
     route.user = this.props.post.author;
     this.props.mainNavigator.push(route);
@@ -91,12 +95,11 @@ var PostHeader = React.createClass({
                 </Text>
               </View>
             </TouchableWithoutFeedback>
-            <Icon
-              name='chevron-right'
-              size={ 20 }
-              color='#999'
-              style={ styles.chevron }
-            />
+            <Text style={{
+              marginHorizontal: 6
+            }}>
+              >
+            </Text>
             <TouchableWithoutFeedback
               onPress={ this.goToBevy }
             >

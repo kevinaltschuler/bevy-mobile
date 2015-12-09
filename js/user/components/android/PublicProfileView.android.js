@@ -14,7 +14,7 @@ var {
   BackAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var PostList = require('./../../../post/components/android/PostList.android.js');
 var ProfileRow = require('./ProfileRow.android.js');
 
@@ -128,6 +128,7 @@ var PublicProfileView = React.createClass({
         { this._renderTopBar() }
         <ScrollView style={ styles.list }>
           <ProfileRow
+            big={ true }
             user={ this.props.routeUser }
             nameColor='#666'
             emailColor='#666'
@@ -204,7 +205,8 @@ var styles = StyleSheet.create({
     fontSize: 18
   },
   list: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   },
   profileRow: {
     backgroundColor: '#FFF',

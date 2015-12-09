@@ -14,9 +14,10 @@ var {
   TouchableNativeFeedback,
   ToastAndroid,
   BackAndroid,
+  PullToRefreshViewAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var Post = require('./Post.android.js');
 var CommentList = require('./CommentList.android.js');
 
@@ -73,6 +74,10 @@ var CommentView = React.createClass({
     });
     // focus the input
     this.refs.Input.focus();
+  },
+
+  onRefresh() {
+    
   },
 
   onCommentSelect(comment_id) {
@@ -258,23 +263,31 @@ var CommentView = React.createClass({
             { this.props.activeBevy.name }
           </Text>
         </View>
-        <ScrollView 
-          style={ styles.listContainer }
-          showsVerticalScrollIndicator={ true }
+        <PullToRefreshViewAndroid
+          style={{
+            flex: 1
+          }}
+          refreshing={ this.state.refreshing }
+          onRefresh={ this.onRefresh }
         >
-          <Post
-            post={ this.props.post }
-            mainNavigator={ this.props.mainNavigator }
-            mainRoute={ this.props.mainRoute }
-            expandText={ true }
-            card={ false }
-            user={ this.props.user }
-            loggedIn={ this.props.loggedIn }
-            activeBevy={ this.props.activeBevy }
-          />
-          { this._renderCommentList() }
-          <View style={{ height: 20 }} />
-        </ScrollView>
+          <ScrollView 
+            style={ styles.listContainer }
+            showsVerticalScrollIndicator={ true }
+          >
+            <Post
+              post={ this.props.post }
+              mainNavigator={ this.props.mainNavigator }
+              mainRoute={ this.props.mainRoute }
+              expandText={ true }
+              card={ false }
+              user={ this.props.user }
+              loggedIn={ this.props.loggedIn }
+              activeBevy={ this.props.activeBevy }
+            />
+            { this._renderCommentList() }
+            <View style={{ height: 20 }} />
+          </ScrollView>
+        </PullToRefreshViewAndroid>
         { this._renderReplyBar() }
         { this._renderInput() }
       </View>

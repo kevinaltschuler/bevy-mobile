@@ -1,11 +1,13 @@
 'use strict';
 
+var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var FILE = constants.FILE;
 
 var FileActions = {
   upload(uri: String) {
-    dispatch(FILE.UPLOAD, {
+    Dispatcher.dispatch({
+      actionType: FILE.UPLOAD,
       uri: uri
     });
   }

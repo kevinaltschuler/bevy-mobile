@@ -166,7 +166,7 @@ _.extend(BevyStore, {
       case BEVY.CREATE:
         var name = payload.name;
         var description = payload.description;
-        var image_url = payload.image_url;
+        var image = payload.image;
         var slug = payload.slug;
         var user = UserStore.getUser();
 
@@ -174,7 +174,7 @@ _.extend(BevyStore, {
         var newBevy = this.myBevies.add({
           name: name,
           description: description,
-          image_url: image_url,
+          image: image,
           admins: [ user._id ], // add self as admin
           slug: slug
         });
@@ -230,27 +230,26 @@ _.extend(BevyStore, {
 
         var name = payload.name || bevy.get('name');
         var description = payload.description || bevy.get('description');
-        var image_url = payload.image_url || bevy.get('image_url');
+        var image = payload.image || bevy.get('image');
         var settings = payload.settings || bevy.get('settings');
 
         bevy.set({
           name: name,
           description: description,
-          image_url: image_url,
+          image: image,
           settings: settings
         });
 
         bevy.save({
           name: name,
           description: description,
-          image_url: image_url,
+          image: image,
           settings: settings
         }, {
           patch: true
         });
 
         this.trigger(BEVY.CHANGE_ALL);
-
         break;
 
       case BEVY.REQUEST_JOIN:

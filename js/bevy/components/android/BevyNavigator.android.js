@@ -13,7 +13,6 @@ var {
   StyleSheet
 } = React;
 var PostList = require('./../../../post/components/android/PostList.android.js');
-var PostView = require('./../../../post/components/android/PostView.android.js');
 var BevyInfoView = require('./BevyInfoView.android.js');
 var RelatedView = require('./RelatedView.android.js');
 var BevyTagView = require('./BevyTagView.android.js');

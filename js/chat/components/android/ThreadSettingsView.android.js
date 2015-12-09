@@ -16,18 +16,24 @@ var {
   ScrollView,
   ListView,
   BackAndroid,
+  ToastAndroid,
   TouchableNativeFeedback
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ThreadImage = require('./ThreadImage.android.js');
 var PersonItem = require('./PersonItem.android.js');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatActions = require('./../../../chat/ChatActions');
 var ChatStore = require('./../../../chat/ChatStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
 var CHAT = constants.CHAT;
+var FILE = constants.FILE;
 
 var ThreadSettingsView = React.createClass({
   propTypes: {
@@ -39,10 +45,21 @@ var ThreadSettingsView = React.createClass({
   componentDidMount() {
     ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
   componentWillUnmount() {
     ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+  },
+
+  onUploadComplete(file) {
+    ChatActions.editThread(this.props.activeThread._id, null, file);
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
   },
 
   onSwitchToThread(thread_id) {
@@ -64,8 +81,53 @@ var ThreadSettingsView = React.createClass({
     this.props.mainNavigator.pop();
   },
 
-  changeName() {
+  changePicture() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Thread Picture',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
+  },
 
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+  uploadImage(cancelled, response) {
+    if(cancelled) return;
+    FileActions.upload(response.uri);
+  },
+
+  changeName() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Thread Name',
+      input: {
+        prefill: (_.isEmpty(this.props.activeThread.name)) 
+          ? '' 
+          : this.props.activeThread.name,
+        allowEmptyInput: false,
+        callback: newName => {
+          ChatActions.editThread(this.props.activeThread._id, newName, null);
+        }
+      },
+      positiveText: 'Confirm',
+      negativeText: 'Cancel'
+    });
+    dialog.show();
   },
 
   leaveConversation() {
@@ -122,16 +184,39 @@ var ThreadSettingsView = React.createClass({
           <View style={ styles.header }>
             <ThreadImage
               thread={ this.props.activeThread }
+              size={ 60 }
+              openModal={ true }
             />
             <View style={ styles.headerDetails }>
               <Text style={ styles.threadName }>
                 { ChatStore.getThreadName(this.props.activeThread._id) }
+              </Text>
+              <Text style={{
+                color: '#888',
+                fontSize: 16
+              }}>
+                { this.props.activeThread.users.length } Participants
               </Text>
             </View>
           </View>
           <Text style={ styles.sectionTitle }>
             Settings
           </Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={ this.changePicture }
+          >
+            <View style={ styles.settingButton }>
+              <Icon
+                name='photo'
+                size={ 36 }
+                color='#AAA'
+              />
+              <Text style={ styles.settingText }>
+                Change Picture
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#DDD', false) }
             onPress={ this.changeName }
@@ -234,7 +319,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    height: 48,
+    height: 80,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
@@ -242,7 +327,7 @@ var styles = StyleSheet.create({
   },
   headerDetails: {
     flex: 1,
-    height: 48,
+    height: 80,
     flexDirection: 'column',
     justifyContent: 'center',
     marginLeft: 10,
@@ -250,7 +335,8 @@ var styles = StyleSheet.create({
   },
   threadName: {
     color: '#000',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    fontSize: 18
   },
   sectionTitle: {
     color: '#AAA',

@@ -11,8 +11,13 @@ var {
   Text,
   Image,
   TouchableWithoutFeedback,
+  TouchableHighlight,
+  NativeModules,
   StyleSheet
 } = React;
+var Icon = require('./../../../shared/components/android/Icon.android.js');
+var Collapsible = require('react-native-collapsible');
+var UIManager = NativeModules.UIManager;
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -23,7 +28,40 @@ var MessageItem = React.createClass({
   propTypes: {
     message: React.PropTypes.object,
     user: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    hidePic: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      hidePic: false
+    };
+  },
+
+  getInitialState() {
+    return {
+      collapsed: true,
+      wrap: false
+    };
+  },
+
+  componentDidMount() {
+    this.measureMessageBody();
+  },
+  componentWillUnmount() {
+
+  },
+
+  measureMessageBody() {
+    setTimeout(() => {
+      this.messageBody.measure((ox, oy, width, height, px, py) => {
+        if(width > (constants.width - 40 - 10 - 8 - 8)) {
+          this.setState({
+            wrap: true
+          });
+        }
+      });
+    }, 50);
   },
 
   goToPublicProfile() {
@@ -44,12 +82,12 @@ var MessageItem = React.createClass({
     var created = '';
     if(diff <= ( 1000 * 60 * 60 * 24)) {
       // within a day - only display hours and minutes
-      created = 
-        ((createDate.getHours() > 12 ) 
-          ? createDate.getHours() - 12 
+      created =
+        ((createDate.getHours() > 12 )
+          ? createDate.getHours() - 12
           : (createDate.getHours() == 0)
             ? '12'
-            : createDate.getHours()) 
+            : createDate.getHours())
         + ':'
         + ((createDate.getMinutes() < 10)
           ? '0' + createDate.getMinutes()
@@ -58,30 +96,14 @@ var MessageItem = React.createClass({
     } else if (diff <= ( 1000 * 60 * 60 * 24 * 7)) {
       // within a week - only display short weekday
       var weekdayMap = [
-        'Sun',
-        'Mon',
-        'Tues',
-        'Wed',
-        'Thurs',
-        'Fri',
-        'Sat'
+        'Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'
       ];
       created = weekdayMap[createDate.getDay()];
     } else {
       // outside of a week - display month and day
       var monthMap = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
       ];
       created = monthMap[createDate.getMonth() - 1] + ' ' + createDate.getDate();
     }
@@ -90,36 +112,42 @@ var MessageItem = React.createClass({
 
   _renderTriangle() {
     var isMe = (this.props.user._id == this.props.message.author._id);
-    var triangleImage = (isMe) 
-      ? '/img/triangle_right.png' 
+    var triangleImage = (isMe)
+      ? '/img/triangle_right.png'
       : '/img/triangle_left.png';
     return (
-      <Image 
-        source={{ uri: constants.siteurl + triangleImage, tintColor: '#fff' }}
-        style={ styles.arrow } 
-      />
+      <View style={{width: 10, height: 10}}/>
     );
   },
 
   _renderMessageBody() {
     var isMe = (this.props.user._id == this.props.message.author._id);
-    var messageBodyStyle = {
-      backgroundColor: '#fff',
-      paddingTop: 5,
-      paddingBottom: 5,
-      paddingLeft: 5,
-      paddingRight: 5
-    };
+    var messageBodyStyle = (isMe) ? styles.messageBodyMe : styles.messageBody;
     var textAlign = (isMe) ? 'right' : 'left';
     var authorName = (isMe) ? 'Me' : this.props.message.author.displayName;
+    var messageColor = (isMe) ? '#fff' : '#333';
     return (
-      <View style={ messageBodyStyle }>
-        <Text style={{ textAlign: textAlign }}>
+      <View
+      ref={ ref => { this.messageBody = ref; }}
+      style={{
+        flex: (this.state.wrap) ? 1 : 0,
+        backgroundColor: (isMe) ? '#2cb673' : '#fff',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 8,
+        paddingRight: 8,
+        borderRadius: 15,
+        marginBottom: 3,
+        flexWrap: 'wrap',
+        //elevation: 2 // ADD IF YOU WANT SHADOWS FAM
+      }}>
+        <Text style={{
+          textAlign: textAlign,
+          color: messageColor,
+          flexWrap: 'wrap'
+        }}>
           { this.props.message.body }
           { '\n' }
-          <Text style={ styles.authorName }>
-            { authorName } · { this._renderDate() }
-          </Text>
         </Text>
       </View>
     );
@@ -128,68 +156,75 @@ var MessageItem = React.createClass({
   render() {
     var message = this.props.message;
     var author = message.author;
-    
+
     var isMe = (this.props.user._id == author._id);
-    var containerStyle = (isMe) ? styles.containerMe : styles.container;
-    
+
+    var authorImage = (this.props.hidePic)
+    ? <View style={{height: 1, width: 40}}/>
+    : <Image
+        source={ UserStore.getUserImage(author) }
+        style={ styles.authorImage }
+      />;
+
     return (
-      <View style={ containerStyle }>
-        { (isMe) ? this._renderMessageBody() : <View /> }
-        { (isMe) ? this._renderTriangle() : <View /> }
-        <TouchableWithoutFeedback
-          onPress={ this.goToPublicProfile }
-        >
-          <Image 
-            source={ UserStore.getUserImage(author) }
-            style={ styles.authorImage }
-          />
-        </TouchableWithoutFeedback>
-        { (isMe) ? <View /> : this._renderTriangle() }
-        { (isMe) ? <View /> : this._renderMessageBody() }
-      </View>
+      <TouchableWithoutFeedback
+        underlayColor='#FFF'
+        onPress={() => this.setState({ collapsed: !this.state.collapsed })}
+        delayLongPress={ 500 }
+        onLongPress={() => {}}
+      >
+        <View style={{
+          marginBottom: 5
+        }}>
+          <View style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: (isMe) ? 'flex-end' : 'flex-start',
+            alignItems: 'flex-end'
+          }}>
+            { (isMe) ? this._renderMessageBody() : <View /> }
+            { (isMe) ? this._renderTriangle() : <View /> }
+            <TouchableWithoutFeedback
+              onPress={ this.goToPublicProfile }
+            >
+              { authorImage }
+            </TouchableWithoutFeedback>
+            { (isMe) ? <View /> : this._renderTriangle() }
+            { (isMe) ? <View /> : this._renderMessageBody() }
+
+          </View>
+          <Collapsible duration={ 250 } collapsed={ this.state.collapsed }>
+            <View style={{
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              justifyContent: (isMe)
+                ? 'flex-end'
+                : 'flex-start',
+              marginRight: (isMe)
+                ? 60
+                : 0,
+              marginLeft: (isMe)
+                ? 0
+                : 60
+            }}>
+              <Text style={{
+                color: '#AAA'
+              }}>
+                { this._renderDate() }
+              </Text>
+            </View>
+          </Collapsible>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    paddingBottom: 5
-  },
-  containerMe: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    paddingBottom: 5
-  },
   authorImage: {
     width: 40,
     height: 40,
     borderRadius: 20
-  },
-  messageBody: {
-    backgroundColor: '#fff',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5
-  },
-  messageBodyMe: {
-    backgroundColor: '#fff',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5
-  },
-  messageTextContainer: {
-    //flexDirection: 'row',
-    //flex: 1
-  },
-  messageText: {
-
   },
   arrow: {
     width: 10,

@@ -11,15 +11,19 @@ var {
   ScrollView,
   Text,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   Image,
   SwitchAndroid,
+  ToastAndroid,
   BackAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var BevyBar = require('./BevyBar.android.js');
 var BevyAdminItem = require('./BevyAdminItem.android.js');
 var Dropdown = require('react-native-dropdown-android');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -27,6 +31,9 @@ var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
 var BevyActions = require('./../../BevyActions');
 var BevyStore = require('./../../BevyStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
+var FILE = constants.FILE;
 
 var BevyInfoView = React.createClass({
   propTypes: {
@@ -34,7 +41,8 @@ var BevyInfoView = React.createClass({
     bevyNavigator: React.PropTypes.object,
     bevyRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
@@ -47,9 +55,13 @@ var BevyInfoView = React.createClass({
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -76,6 +88,16 @@ var BevyInfoView = React.createClass({
     }
   },
 
+  requestJoin() {
+    // dont allow this for non logged in users
+    if(!this.props.loggedIn) {
+      ToastAndroid.show('Please Log In to Join a Bevy', ToastAndroid.SHORT);
+      return;
+    }
+    // send action
+    BevyActions.requestJoin(this.props.activeBevy, this.props.user);
+  },
+
   goToRelated() {
     // go to related bevies view
     this.props.bevyNavigator.push(routes.BEVY.RELATED);
@@ -86,12 +108,62 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.push(routes.BEVY.TAGS);
   },
 
+  changePicture() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Change Bevy Picture',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+  uploadImage(cancelled, response) {
+    if(cancelled) return;
+    FileActions.upload(response.uri);
+  },
+
+  onUploadComplete(file) {
+    BevyActions.update(
+      this.props.activeBevy._id,
+      this.props.activeBevy.name,
+      this.props.activeBevy.description,
+      file,
+      this.props.activeBevy.settings
+    );
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
+  },
+
+  openImage() {
+    if(_.isEmpty(this.props.activeBevy.image)) return;
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.activeBevy.image]);
+    actions.show();
+  },
+
   updateBevySettings(settings) {
     BevyActions.update(
       this.props.activeBevy._id,
       this.props.activeBevy.name,
       this.props.activeBevy.description,
-      this.props.activeBevy.image_url,
+      this.props.activeBevy.image,
       settings
     );
   },
@@ -143,11 +215,64 @@ var BevyInfoView = React.createClass({
     } else return admins;
   },
 
+  _renderSubscribe() {
+    // check if bevy is private
+    if(this.props.activeBevy._id != -1 // if not the frontpage
+      && this.props.activeBevy.settings.privacy == 1
+      && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+      return (
+        <View style={ styles.settingItem }>
+          <Text style={ styles.settingText }>Subscribed</Text>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#FFF', false) }
+            onPress={ this.requestJoin }
+          >
+            <View style={{
+              backgroundColor: '#2CB673',
+              marginRight: -10,
+              height: 48,
+              paddingHorizontal: 10,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Text style={{
+                color: '#FFF'
+              }}>
+                Request to Join
+              </Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
+      );
+    }
+
+    return (
+      <View style={ styles.settingItem }>
+        <Text style={ styles.settingText }>Subscribed</Text>
+        <SwitchAndroid
+          value={ this.state.subscribed }
+          onValueChange={(value) => this.onToggleSubscribe(value)}
+        />
+      </View>
+    );
+  },
+
   _renderBevySettings() {
     if(!this.state.isAdmin) return <View />;
     return (
       <View>
         <Text style={ styles.settingTitle }>Bevy Settings</Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#EEE', false) }
+          onPress={ this.changePicture }
+        >
+          <View style={ styles.settingItem }>
+            <Text style={ styles.settingItemText }>
+              Change Bevy Picture
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
         <View style={ styles.settingItem }>
           <Text style={ styles.settingText }>Privacy</Text>
           <Dropdown
@@ -256,18 +381,28 @@ var BevyInfoView = React.createClass({
           bevyNavigator={ this.props.bevyNavigator }
           bevyRoute={ this.props.bevyRoute }
         />
-        <ScrollView>
+        <ScrollView
+          contentContainerStyle={{
+            backgroundColor: '#EEE'
+          }}
+        >
           <View style={ styles.header }>
-            <Image
-              source={ BevyStore.getBevyImage(this.props.activeBevy._id, 100, 100) }
-              style={ styles.bevyImage }
-            />
+            <TouchableWithoutFeedback
+              onPress={ this.openImage }
+            >
+              <Image
+                source={ BevyStore.getBevyImage(this.props.activeBevy._id, 100, 100) }
+                style={ styles.bevyImage }
+              />
+            </TouchableWithoutFeedback>
             <View style={ styles.bevyDetails }>
               <Text style={ styles.bevyName }>
                 { this.props.activeBevy.name.trim() }
               </Text>
               <Text style={ styles.bevyDescription }>
-                { this.props.activeBevy.description.trim() }
+                { _.isEmpty(this.props.activeBevy.description)
+                  ? 'No Description'
+                  : this.props.activeBevy.description.trim() }
               </Text>
               <View style={ styles.bevyDetailsBottom }>
                 <Icon
@@ -293,13 +428,7 @@ var BevyInfoView = React.createClass({
             </View>
           </View>
           <Text style={ styles.settingTitle }>General</Text>
-          <View style={ styles.settingItem }>
-            <Text style={ styles.settingText }>Subscribed</Text>
-            <SwitchAndroid
-              value={ this.state.subscribed }
-              onValueChange={(value) => this.onToggleSubscribe(value)}
-            />
-          </View>
+          { this._renderSubscribe() }
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#EEE', false) }
             onPress={ this.goToRelated }
@@ -345,18 +474,19 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE'
   },
   header: {
-    width: constants.width,
     height: 100,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    marginBottom: 0,
+    //margin: 5,
+    //borderRadius: 5,
+    //elevation: 2
   },
   bevyImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     marginRight: 10
   },
   bevyDetails: {

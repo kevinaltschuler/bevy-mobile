@@ -13,14 +13,18 @@ var {
   TouchableNativeFeedback,
   Text,
   ToastAndroid,
+  PullToRefreshViewAndroid,
   StyleSheet
 } = React;
 var ThreadItem = require('./ThreadItem.android.js');
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var ChatStore = require('./../../../chat/ChatStore');
+var ChatActions = require('./../../../chat/ChatActions');
+var CHAT = constants.CHAT;
 
 var ThreadView = React.createClass({
   propTypes: {
@@ -37,11 +41,18 @@ var ThreadView = React.createClass({
     return {
       ds: ds.cloneWithRows(threads),
       threads: threads,
-      floatingActionOpen: false
+      floatingActionOpen: false,
+      loading: false
     };
   },
 
   componentDidMount() {
+    ChatStore.on(CHAT.FETCHING_THREADS, this.onFetchingThreads);
+    ChatStore.on(CHAT.THREADS_FETCHED, this.onThreadsFetched);
+  },
+  componentWillUnmount() {
+    ChatStore.off(CHAT.FETCHING_THREADS, this.onFetchingThreads);
+    ChatStore.off(CHAT.THREADS_FETCHED, this.onThreadsFetched);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -50,6 +61,21 @@ var ThreadView = React.createClass({
       ds: this.state.ds.cloneWithRows(threads),
       threads: threads
     });
+  },
+
+  onFetchingThreads() {
+    this.setState({
+      loading: true
+    });
+  },
+  onThreadsFetched() {
+    this.setState({
+      loading: false
+    });
+  },
+
+  onRefresh() {
+    ChatActions.fetchThreads();
   },
 
   openNewThreadView() {
@@ -135,16 +161,24 @@ var ThreadView = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderNoThreadsText() }
-        <ListView
-          style={ styles.threadList }
-          contentContainerStyle={ styles.threadList }
-          dataSource={ this.state.ds }
-          renderRow={ this._renderThreadItem }
-          scrollRenderAheadDistance={ 300 }
-          removeClippedSubviews={ true }
-          initialListSize={ 10 }
-          pageSize={ 10 }
-        />
+        <PullToRefreshViewAndroid
+          style={{
+            flex: 1
+          }}
+          refreshing={ this.state.loading }
+          onRefresh={ this.onRefresh }
+        >
+          <ListView
+            style={ styles.threadList }
+            contentContainerStyle={ styles.threadList }
+            dataSource={ this.state.ds }
+            renderRow={ this._renderThreadItem }
+            scrollRenderAheadDistance={ 300 }
+            removeClippedSubviews={ true }
+            initialListSize={ 10 }
+            pageSize={ 10 }
+          />
+        </PullToRefreshViewAndroid>
         { this._renderActionBar() }
       </View>
     );

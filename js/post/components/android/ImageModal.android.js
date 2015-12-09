@@ -16,7 +16,7 @@ var {
   ViewPagerAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var ImageModalItem = require('./ImageModalItem.android.js');
 
 var _ = require('underscore');

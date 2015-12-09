@@ -9,22 +9,31 @@
 var React = require('react-native');
 var {
   View,
+  ScrollView,
   Text,
+  Image,
   TouchableNativeFeedback,
   TextInput,
   BackAndroid,
   ProgressBarAndroid,
-  StyleSheet
+  StyleSheet,
+  ToastAndroid,
+  DeviceEventEmitter
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 var Dropdown = require('react-native-dropdown-android');
+var NewPostImageItem = require('./NewPostImageItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
 var POST = constants.POST;
+var FILE = constants.FILE;
 
 var NewPostInputView = React.createClass({
   propTypes: {
@@ -38,17 +47,23 @@ var NewPostInputView = React.createClass({
     return {
       selectedTag: 0,
       postInput: '',
-      loading: false
+      loading: false,
+      images: [],
+      inputFocused: false
     };
   },
 
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
     PostStore.on(POST.POST_CREATED, this.onPostCreated);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
   componentWillUnmount() {
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
     PostStore.off(POST.POST_CREATED, this.onPostCreated);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
   },
 
   onBackButton() {
@@ -66,6 +81,39 @@ var NewPostInputView = React.createClass({
     this.setState(this.getInitialState());
   },
 
+  onUploadComplete(file) {
+    var images = this.state.images;
+    images.push(file);
+    this.setState({
+      images: images
+    });
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+
+  uploadImage(cancelled, response) {
+    console.log(cancelled, response);
+    if(cancelled) return;
+    FileActions.upload(response.uri);
+  },
+
+  onImageItemRemove(image) {
+    var images = this.state.images;
+    images = _.reject(images, ($image) => $image.filename == image.filename);
+    this.setState({
+      images: images
+    });
+  },
+
   submitPost() {
     // disallow empty post - for now
     if(_.isEmpty(this.state.postInput)) return;
@@ -73,7 +121,7 @@ var NewPostInputView = React.createClass({
     // send action
     PostActions.create(
       this.state.postInput, // title
-      [], // images
+      this.state.images, // images
       this.props.user, // author
       this.props.selectedBevy, // bevy to post to
       'default', // post type - this is just a normal post
@@ -97,6 +145,51 @@ var NewPostInputView = React.createClass({
         <Text style={ styles.loadingText }>
           Creating...
         </Text>
+      </View>
+    );
+  },
+
+  _renderImages() {
+    if(_.isEmpty(this.state.images) || this.state.inputFocused) {
+      return (
+        <View />
+      );
+    }
+
+    var images = [];
+    for(var key in this.state.images) {
+      var image = this.state.images[key];
+      images.push(
+        <NewPostImageItem
+          key={ 'inputimage:' + image.filename }
+          image={ image }
+          onRemove={ this.onImageItemRemove }
+        />
+      );
+    }
+    return (
+      <View style={{
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+        marginBottom: 6
+      }}>
+        <Text style={{
+          color: '#AAA',
+          fontSize: 16,
+          marginBottom: 6
+        }}>
+          Images
+        </Text>
+        <ScrollView 
+          horizontal={ true }
+          showHorizontalScrollIndicator={ true }
+          contentContainerStyle={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}
+        >
+          { images }
+        </ScrollView>
       </View>
     );
   },
@@ -165,22 +258,25 @@ var NewPostInputView = React.createClass({
             }} 
           />
         </View>
-        <TextInput
-          ref='Input'
-          style={ styles.postInput }
-          autoCorrect={ false }
-          multiline={ true }
-          placeholder='Drop a Line...'
-          placeholderTextColor='#AAA'
-          underlineColorAndroid='#EEE'
-          value={ this.state.postInput }
-          onChangeText={(text) => this.setState({ postInput: text })}
-          textAlignVertical='top'
-        />
+        <ScrollView>
+          <TextInput
+            ref='Input'
+            style={ styles.postInput }
+            autoCorrect={ false }
+            multiline={ true }
+            placeholder='Drop a Line...'
+            placeholderTextColor='#AAA'
+            underlineColorAndroid='#EEE'
+            value={ this.state.postInput }
+            onChangeText={(text) => this.setState({ postInput: text })}
+            textAlignVertical='top'
+          />
+        </ScrollView>
+        { this._renderImages() }
         <View style={ styles.actionBar }>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => {}}
+            onPress={ this.openCamera }
           >
             <View style={ styles.addMediaButton }>
               <Icon
@@ -192,7 +288,7 @@ var NewPostInputView = React.createClass({
           </TouchableNativeFeedback>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => {}}
+            onPress={ this.openImageLibrary }
           >
             <View style={ styles.addMediaButton }>
               <Icon

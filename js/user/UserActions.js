@@ -11,10 +11,11 @@ var UserActions = {
     });
   },
 
-  changeProfilePicture(uri: String) {
+  changeProfilePicture(uri, image) {
     Dispatcher.dispatch({
       actionType: USER.CHANGE_PROFILE_PICTURE,
-      uri: uri
+      uri: uri,
+      image: image
     });
   },
 

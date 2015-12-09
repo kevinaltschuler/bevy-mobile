@@ -17,13 +17,19 @@ var {
   BackAndroid,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
+var ImagePickerManager = require('./../../../shared/apis/ImagePickerManager.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var getSlug = require('speakingurl');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../BevyActions');
 var BevyStore = require('./../../BevyStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
+var FILE = constants.FILE;
 var BEVY = constants.BEVY;
 
 var NewBevyView = React.createClass({
@@ -36,7 +42,7 @@ var NewBevyView = React.createClass({
       name: '',
       description: '',
       slug: '',
-      image: '',
+      image: {},
       creating: false,
       error: ''
     };
@@ -45,10 +51,14 @@ var NewBevyView = React.createClass({
   componentDidMount() {
     BevyStore.on(BEVY.CREATED, this.onBevyCreated);
     BackAndroid.addEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
   componentWillUnmount() {
     BevyStore.off(BEVY.CREATED, this.onBevyCreated);
     BackAndroid.removeEventListener('hardwareBackPress', this.onBackButton);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
   },
 
   onBackButton() {
@@ -65,6 +75,15 @@ var NewBevyView = React.createClass({
     this.props.mainNavigator.pop();
     // reset state
     this.setState(this.getInitialState());
+  },
+
+  onUploadComplete(file) {
+    this.setState({
+      image: file
+    });
+  },
+  onUploadError(error) {
+    ToastAndroid.show(error.toString(), ToastAndroid.SHORT);
   },
 
   createBevy() {
@@ -97,7 +116,39 @@ var NewBevyView = React.createClass({
   },
 
   addImage() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Add Bevy Image',
+      items: [
+        'Take a Picture',
+        'Choose from Library'
+      ],
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        if(index == 0)
+          this.openCamera();
+        else
+          this.openImageLibrary();
+      }
+    });
+    dialog.show();
+  },
 
+  removeImage() {
+    this.setState({
+      image: {}
+    });
+  },
+
+  openCamera() {
+    ImagePickerManager.launchCamera({}, this.uploadImage);
+  },
+  openImageLibrary() {
+    ImagePickerManager.launchImageLibrary({}, this.uploadImage);
+  },
+  uploadImage(cancelled, response) {
+    if(cancelled) return;
+    FileActions.upload(response.uri);
   },
 
   _renderTopBar() {
@@ -132,8 +183,6 @@ var NewBevyView = React.createClass({
   },
 
   _renderImageButton() {
-    // disable for now
-    return <View />;
     if(_.isEmpty(this.state.image)) {
       return (
         <TouchableNativeFeedback
@@ -150,11 +199,27 @@ var NewBevyView = React.createClass({
         </TouchableNativeFeedback>
       );
     } else {
+      var image = resizeImage(this.state.image, constants.width, constants.height);
       return (
-        <Image
-          style={ styles.bevyImage }
-          source={{ uri: this.state.image }}
-        />
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#FFF', false) }
+          onPress={ this.removeImage }
+        >
+          <View style={{
+            width: image.width,
+            height: image.height
+          }}>
+            <Image
+              style={[ styles.bevyImage, {
+                width: image.width,
+                height: image.height
+              }]}
+              source={{ 
+                uri: image.url
+              }}
+            />
+          </View>
+        </TouchableNativeFeedback>
       );
     }
   },
@@ -226,7 +291,7 @@ var NewBevyView = React.createClass({
               underlineColorAndroid='#AAA'
             />
           </View>
-          {/*<Text style={ styles.addImage }>Bevy Image</Text>*/}
+          <Text style={ styles.addImage }>Bevy Image</Text>
           { this._renderImageButton() }
         </ScrollView>
       </View>
@@ -329,7 +394,6 @@ var styles = StyleSheet.create({
     padding: 10
   },
   bevyImage: {
-
   }
 });
 

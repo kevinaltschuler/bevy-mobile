@@ -14,19 +14,23 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 
 var MessageInput = React.createClass({
   propTypes: {
-    onSubmitEditing: React.PropTypes.func
+    onSubmitEditing: React.PropTypes.func,
+    onFocus: React.PropTypes.func,
+    onBlur: React.PropTypes.func
   },
 
   getDefaultProps() {
     return {
-      onSubmitEditing: _.noop
+      onSubmitEditing: _.noop,
+      onFocus: _.noop,
+      onBlur: _.noop
     };
   },
 
@@ -34,6 +38,20 @@ var MessageInput = React.createClass({
     return {
       messageInput: ''
     };
+  },
+
+  focus() {
+    this.refs.MessageInput.focus();
+  },
+  blur() {
+    this.refs.MessageInput.blur();
+  },
+
+  onFocus() {
+    this.props.onFocus();
+  },
+  onBlur() {
+    this.props.onBlur();
   },
 
   onSubmitEditing(ev) {
@@ -52,6 +70,8 @@ var MessageInput = React.createClass({
           style={ styles.messageInput }
           onChangeText={(text) => this.setState({ messageInput: text })}
           onSubmitEditing={ this.onSubmitEditing }
+          onFocus={ this.onFocus }
+          onBlur={ this.onBlur }
           placeholder='Chat'
           placeholderTextColor='#AAA'
           underlineColorAndroid='#FFF'

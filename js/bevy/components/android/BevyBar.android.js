@@ -15,7 +15,7 @@ var {
   Image,
   TouchableNativeFeedback
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -230,7 +230,7 @@ var BevyBar = React.createClass({
   render() {
     var disappearingStyle = (this.props.disappearing)
     ? {
-      top: (this.props.height * -1) - 5,
+      top: (this.props.height * -1) - 3,
       position: 'absolute'
     } : {};
 
@@ -258,12 +258,15 @@ var BevyBar = React.createClass({
 var styles = StyleSheet.create({
   container: {
     width: constants.width,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     opacity: 1,
     borderBottomColor: '#EEE',
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    backgroundColor: '#FFF',
+    elevation: 3
   },
   bevyImageWrapper: {
     position: 'absolute',

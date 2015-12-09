@@ -127,6 +127,7 @@ var Post = React.createClass({
         <PostHeader 
           post={ this.props.post } 
           mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
         />
         { this._renderBody() }
         { this._renderImages() }
@@ -142,12 +143,14 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     marginHorizontal: 10,
     marginBottom: 10,
-    borderRadius: 3
+    borderRadius: 3,
+    elevation: 2
   },
   containerRow: {
     flexDirection: 'column',
     backgroundColor: '#FFF',
-    marginBottom: 10
+    marginBottom: 10,
+    elevation: 2
   }
 });
 
