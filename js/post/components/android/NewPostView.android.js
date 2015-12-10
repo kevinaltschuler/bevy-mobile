@@ -14,6 +14,7 @@ var {
 } = React;
 var NewPostInputView = require('./NewPostInputView.android.js');
 var BevyPickerView = require('./BevyPickerView.android.js');
+var NewPostEventView = require('./NewPostEventView.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -28,8 +29,8 @@ var NewPostView = React.createClass({
 
   getInitialState() {
     return {
-      selectedBevy: (this.props.activeBevy._id == -1) 
-        ? this.props.myBevies[1] 
+      selectedBevy: (this.props.activeBevy._id == -1)
+        ? this.props.myBevies[1]
         : this.props.activeBevy
     };
   },
@@ -53,21 +54,31 @@ var NewPostView = React.createClass({
         }}
         renderScene={(route, navigator) => {
           switch(route.name) {
+            case routes.NEWPOST.CREATEEVENT.name:
+              return (
+                <NewPostEventView
+                  newPostRoute={ route }
+                  newPostNavigator={ navigator }
+                  selectedBevy={ this.state.selectedBevy }
+                  { ...this.props }
+                />
+              );
+              break;
             case routes.NEWPOST.BEVYPICKER.name:
               return (
-                <BevyPickerView 
-                  newPostRoute={ route } 
+                <BevyPickerView
+                  newPostRoute={ route }
                   newPostNavigator={ navigator }
                   selectedBevy={ this.state.selectedBevy }
                   onSwitchBevy={ this.onSwitchBevy }
-                  { ...this.props } 
+                  { ...this.props }
                 />
               );
               break;
             case routes.NEWPOST.INPUT.name:
             default:
               return (
-                <NewPostInputView 
+                <NewPostInputView
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
                   selectedBevy={ this.state.selectedBevy }

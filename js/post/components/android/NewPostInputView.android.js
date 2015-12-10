@@ -1,7 +1,7 @@
 /**
  * NewPostInputView.android.js
  * @author albert
- * @flow 
+ * @flow
  */
 
 'use strict';
@@ -114,6 +114,10 @@ var NewPostInputView = React.createClass({
     });
   },
 
+  openNewEventView() {
+    this.props.newPostNavigator.replace(routes.NEWPOST.CREATEEVENT);
+  },
+
   submitPost() {
     // disallow empty post - for now
     if(_.isEmpty(this.state.postInput)) return;
@@ -180,7 +184,7 @@ var NewPostInputView = React.createClass({
         }}>
           Images
         </Text>
-        <ScrollView 
+        <ScrollView
           horizontal={ true }
           showHorizontalScrollIndicator={ true }
           contentContainerStyle={{
@@ -243,19 +247,19 @@ var NewPostInputView = React.createClass({
           { this._renderLoading() }
         </View>
         <View style={ styles.tagBar }>
-          <View style={[ styles.tagCircle, { 
+          <View style={[ styles.tagCircle, {
             backgroundColor: this.props.selectedBevy.tags[this.state.selectedTag].color
           }]}>
           </View>
           <Dropdown
             style={{ height: 30, width: 200}}
-            values={ tags } 
-            selected={ this.state.selectedTag } 
+            values={ tags }
+            selected={ this.state.selectedTag }
             onChange={(data) => {
               this.setState({
                 selectedTag: data.selected
               });
-            }} 
+            }}
           />
         </View>
         <ScrollView>
@@ -293,6 +297,18 @@ var NewPostInputView = React.createClass({
             <View style={ styles.addMediaButton }>
               <Icon
                 name='image'
+                size={ 30 }
+                color='#888'
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+            onPress={ this.openNewEventView }
+          >
+            <View style={ styles.addMediaButton }>
+              <Icon
+                name='event'
                 size={ 30 }
                 color='#888'
               />

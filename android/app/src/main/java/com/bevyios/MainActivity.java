@@ -8,7 +8,8 @@ import com.chymtt.reactnativedropdown.DropdownPackage;
 import com.eguma.vibration.Vibration;
 import com.sh3rawi.RNAudioPlayer.*;
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
-import com.learnium.RNDeviceInfo.*; 
+import com.learnium.RNDeviceInfo.*;
+import me.nucleartux.date.ReactDatePackage;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -75,6 +76,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new BevyIntentPackage(this, intent))
         .addPackage(new ImagePickerPackage(this))
         .addPackage(new FileUploadPackage())
+        .addPackage(new ReactDatePackage(this))
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
         .build();
