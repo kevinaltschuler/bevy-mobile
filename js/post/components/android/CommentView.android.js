@@ -44,8 +44,17 @@ var CommentView = React.createClass({
       input: '',
       replyToComment: {},
       comments: this.nestComments(this.props.post.comments),
-      selectedComment: ''
+      selectedComment: '',
+      post: this.props.post,
+      refreshing: false
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      post: nextProps.post,
+      comments: this.nestComments(nextProps.post.comments)
+    });
   },
 
   componentDidMount() {
@@ -77,7 +86,22 @@ var CommentView = React.createClass({
   },
 
   onRefresh() {
-    
+    var url = constants.apiurl + '/bevies/' + this.props.post.bevy._id
+      + '/posts/' + this.props.post._id;
+
+    this.setState({
+      refreshing: true
+    });
+
+    fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        post: res,
+        comments: this.nestComments(res.comments),
+        refreshing: false
+      });
+    });
   },
 
   onCommentSelect(comment_id) {
@@ -132,8 +156,8 @@ var CommentView = React.createClass({
       text, // body
       user._id, // author id
       this.props.post._id, // post id
-      (_.isEmpty(this.state.replyToComment)) 
-        ? null 
+      (_.isEmpty(this.state.replyToComment))
+        ? null
         : this.state.replyToComment._id // parent id
     );
 
@@ -142,14 +166,14 @@ var CommentView = React.createClass({
       _id: Date.now(), // temp id
       author: user,
       body: text,
-      postId: this.props.post,
-      parentId: (_.isEmpty(this.state.replyToComment)) 
-        ? null 
+      postId: this.state.post,
+      parentId: (_.isEmpty(this.state.replyToComment))
+        ? null
         : this.state.replyToComment._id,
       created: (new Date()).toString(),
       comments: []
     };
-    var comments = this.props.post.comments;
+    var comments = this.state.post.comments;
     comments.push(comment);
     comments = this.nestComments(comments);
     this.setState({
@@ -161,7 +185,7 @@ var CommentView = React.createClass({
     // buffer delay it so it blurs only when the set state clears up
     setTimeout(
       () => this.refs.Input.blur(), // this also clears the replyToComment state field
-      100 
+      100
     );
   },
 
@@ -175,7 +199,7 @@ var CommentView = React.createClass({
           user={ UserStore.getUser() }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
-          post={ this.props.post }
+          post={ this.state.post }
           root={ true }
           onSelect={ this.onCommentSelect }
           selectedComment={ this.state.selectedComment }
@@ -205,7 +229,7 @@ var CommentView = React.createClass({
           <View style={ styles.cancelButton }>
             <Text style={ styles.cancelButtonText }>
               Cancel
-            </Text> 
+            </Text>
           </View>
         </TouchableNativeFeedback>
       </View>
@@ -270,12 +294,12 @@ var CommentView = React.createClass({
           refreshing={ this.state.refreshing }
           onRefresh={ this.onRefresh }
         >
-          <ScrollView 
+          <ScrollView
             style={ styles.listContainer }
             showsVerticalScrollIndicator={ true }
           >
             <Post
-              post={ this.props.post }
+              post={ this.state.post }
               mainNavigator={ this.props.mainNavigator }
               mainRoute={ this.props.mainRoute }
               expandText={ true }
