@@ -9,7 +9,6 @@ import com.eguma.vibration.Vibration;
 import com.sh3rawi.RNAudioPlayer.*;
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 import com.learnium.RNDeviceInfo.*;
-import me.nucleartux.date.ReactDatePackage;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -37,6 +36,7 @@ import com.bevyios.GCMPackage;
 import com.bevyios.BevyIntentPackage;
 import com.bevyios.imagepicker.*;
 import com.bevyios.fileupload.*;
+import com.bevyios.dtpicker.ReactDatePackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
 

@@ -3,6 +3,24 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:datePickerDialogTheme">
+          @style/BevyDatePickerDialogTheme
+        </item>
+        <item name="android:timePickerDialogTheme">
+          @style/BevyTimePickerDialogTheme
+        </item>
+    </style>
+
+    <style name="BevyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+      <item name="android:colorAccent">
+        @color/bevygreen
+      </item>
+    </style>
+
+    <style name="BevyTimePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+      <item name="android:colorAccent">
+        @color/bevygreen
+      </item>
     </style>
 
 </resources>

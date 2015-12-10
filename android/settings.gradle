@@ -19,6 +19,3 @@ project(':react-native-dialogs').projectDir = file('../node_modules/react-native
 
 include ':RNDeviceInfo', ':app'
 project(':RNDeviceInfo').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
-
-include ':reactdate', ':app'
-project(':reactdate').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-date')

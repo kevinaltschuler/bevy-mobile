@@ -60,5 +60,4 @@ dependencies {
     compile project(':RNAudioPlayer')
     compile project(':react-native-dialogs')
     compile project(':RNDeviceInfo')
-    compile project(':reactdate')
 }
