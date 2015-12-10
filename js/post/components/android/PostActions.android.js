@@ -75,6 +75,13 @@ var PostActions = React.createClass({
     });
   },
 
+  goToEditView() {
+    var route = routes.MAIN.NEWPOST;
+    route.editing = true;
+    route.post = this.props.post;
+    this.props.mainNavigator.push(route);
+  },
+
   deletePost() {
     if(this.props.user._id == this.props.post.author._id // if the original author
       || _.contains(this.props.post.bevy.admins, this.props.user._id) // if an admin of the bevy
@@ -106,6 +113,7 @@ var PostActions = React.createClass({
       items: [
         'Go To Author Profile',
         'Go To Bevy',
+        'Edit Post',
         'Delete Post'
       ],
       cancelable: true,
@@ -118,6 +126,9 @@ var PostActions = React.createClass({
             this.goToBevy();
             break;
           case 2:
+            this.goToEditView();
+            break;
+          case 3:
             this.deletePost();
             break;
         }

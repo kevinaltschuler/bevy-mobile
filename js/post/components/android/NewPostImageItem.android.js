@@ -16,6 +16,7 @@ var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var NewPostImageItem = React.createClass({
   propTypes: {
@@ -28,21 +29,23 @@ var NewPostImageItem = React.createClass({
   },
 
   render() {
+    var image = resizeImage(this.props.image, 75, 75);
     return (
         <View style={{
           backgroundColor: '#000',
           width: 75,
           height: 75,
-          borderRadius: 5
+          borderRadius: 5,
+          marginHorizontal: 5
         }}>
           <Image
-            source={{ uri: constants.apiurl + '/files/' + this.props.image.filename }}
+            source={{ uri: image.url }}
             style={{
               width: 75,
               height: 75,
               borderRadius: 5
             }}
-            resizeMode='contain'
+            resizeMode='cover'
           />
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#FFF', false) }

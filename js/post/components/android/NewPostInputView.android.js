@@ -40,15 +40,33 @@ var NewPostInputView = React.createClass({
     mainNavigator: React.PropTypes.object,
     newPostNavigator: React.PropTypes.object,
     selectedBevy: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    editing: React.PropTypes.bool,
+    post: React.PropTypes.object
   },
 
   getInitialState() {
+    var tagIndex = 0;
+    if(this.props.editing) {
+      for(var key in this.props.post.bevy.tags) {
+        var tag = this.props.post.bevy.tags[key];
+        if(tag.name == this.props.post.tag.name) {
+          tagIndex = key;
+          break;
+        }
+      }
+    }
     return {
-      selectedTag: 0,
-      postInput: '',
+      selectedTag: (this.props.editing)
+        ? tagIndex
+        : 0,
+      postInput: (this.props.editing)
+        ? this.props.post.title
+        : '',
       loading: false,
-      images: [],
+      images: (this.props.editing)
+        ? this.props.post.images
+        : [],
       inputFocused: false
     };
   },
@@ -115,12 +133,52 @@ var NewPostInputView = React.createClass({
   },
 
   openNewEventView() {
+    if(this.props.editing) return;
+
     this.props.newPostNavigator.replace(routes.NEWPOST.CREATEEVENT);
   },
 
+  finishEditing() {
+    // disallow empty post and empty images
+    if(_.isEmpty(this.state.postInput) && _.isEmpty(this.state.images)) {
+      ToastAndroid.show('Please Enter a Title or Attach Images to your Post',
+        ToastAndroid.SHORT);
+      return;
+    }
+
+    PostActions.update(
+      this.props.post._id, // _id
+      this.state.postInput, // title
+      this.state.images, // images
+      this.props.post.bevy.tags[this.state.selectedTag], // tag
+      {} // event
+    );
+
+    // nav to comment view
+    var route = routes.MAIN.COMMENT;
+    var post = this.props.post;
+    post.title = this.state.postInput;
+    post.images = this.state.images;
+    post.tag = this.props.post.bevy.tags[this.state.selectedTag];
+    route.post = post;
+    this.props.mainNavigator.replace(route);
+
+    // clear state
+    this.setState({
+      selectedTag: 0,
+      postInput: '',
+      images: [],
+      loading: true // flip loading flag
+    });
+  },
+
   submitPost() {
-    // disallow empty post - for now
-    if(_.isEmpty(this.state.postInput)) return;
+    // disallow empty post and empty images
+    if(_.isEmpty(this.state.postInput) && _.isEmpty(this.state.images)) {
+      ToastAndroid.show('Please Enter a Title or Attach Images to your Post',
+        ToastAndroid.SHORT);
+      return;
+    }
 
     // send action
     PostActions.create(
@@ -137,8 +195,63 @@ var NewPostInputView = React.createClass({
     this.setState({
       selectedTag: 0,
       postInput: '',
+      images: [],
       loading: true // flip loading flag
     });
+  },
+
+  _renderPostButton() {
+    if(this.props.editing) {
+      return (
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+          onPress={ this.finishEditing }
+        >
+          <View style={ styles.postButton }>
+            <Text style={{
+              color: '#FFF',
+              fontSize: 16
+            }}>
+              Done
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    return (
+      <TouchableNativeFeedback
+        background={ TouchableNativeFeedback.Ripple('#62D487', false) }
+        onPress={ this.submitPost }
+      >
+        <View style={ styles.postButton }>
+          <Icon
+            name='send'
+            size={ 30 }
+            color='#FFF'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
+  _renderPostingToBar() {
+    if(this.props.editing) return <View />;
+    return (
+      <View style={ styles.postingToBar }>
+        <Text style={ styles.postingTo }>Post To</Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={() => this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER)}
+        >
+          <View style={ styles.bevyPickerButton }>
+            <Text style={ styles.bevyPickerButtonText }>
+              { this.props.selectedBevy.name }
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+        { this._renderLoading() }
+      </View>
+    );
   },
 
   _renderLoading() {
@@ -199,16 +312,16 @@ var NewPostInputView = React.createClass({
   },
 
   render() {
-    var tags = _.pluck(this.props.selectedBevy.tags, 'name');
+    var tags = (this.props.editing)
+      ? _.pluck(this.props.post.bevy.tags, 'name')
+      : _.pluck(this.props.selectedBevy.tags, 'name');
+
     return (
       <View style={ styles.container }>
         <View style={ styles.topBar }>
           <TouchableNativeFeedback
             background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-            onPress={() => {
-              // go back
-              this.props.mainNavigator.pop();
-            }}
+            onPress={ this.onBackButton }
           >
             <View style={ styles.backButton }>
               <Icon
@@ -218,44 +331,24 @@ var NewPostInputView = React.createClass({
               />
             </View>
           </TouchableNativeFeedback>
-          <Text style={ styles.topBarTitle }>New Post</Text>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-            onPress={ this.submitPost }
-          >
-            <View style={ styles.postButton }>
-              <Icon
-                name='send'
-                size={ 30 }
-                color='#FFF'
-              />
-            </View>
-          </TouchableNativeFeedback>
+          <Text style={ styles.topBarTitle }>
+            { (this.props.editing) ? 'Edit Post' : 'New Post' }
+          </Text>
+          { this._renderPostButton() }
         </View>
-        <View style={ styles.postingToBar }>
-          <Text style={ styles.postingTo }>Post To</Text>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER)}
-          >
-            <View style={ styles.bevyPickerButton }>
-              <Text style={ styles.bevyPickerButtonText }>
-                { this.props.selectedBevy.name }
-              </Text>
-            </View>
-          </TouchableNativeFeedback>
-          { this._renderLoading() }
-        </View>
+        { this._renderPostingToBar() }
         <View style={ styles.tagBar }>
           <View style={[ styles.tagCircle, {
-            backgroundColor: this.props.selectedBevy.tags[this.state.selectedTag].color
+            backgroundColor: (this.props.editing)
+              ? this.props.post.bevy.tags[this.state.selectedTag].color
+              : this.props.selectedBevy.tags[this.state.selectedTag].color
           }]}>
           </View>
           <Dropdown
             style={{ height: 30, width: 200}}
             values={ tags }
-            selected={ this.state.selectedTag }
-            onChange={(data) => {
+            selected={ parseInt(this.state.selectedTag) }
+            onChange={ data => {
               this.setState({
                 selectedTag: data.selected
               });

@@ -52,7 +52,7 @@ _.extend(PostStore, {
 
       case APP.LOAD:
         if(UserStore.loggedIn) {
-          this.posts.url = 
+          this.posts.url =
             constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         } else {
           this.posts.url =
@@ -75,7 +75,7 @@ _.extend(PostStore, {
         });
 
         // trigger anyways
-        this.trigger(POST.CHANGE_ALL); 
+        this.trigger(POST.CHANGE_ALL);
         break;
 
       case POST.FETCH:
@@ -86,11 +86,11 @@ _.extend(PostStore, {
 
         if(bevy_id == null) {
           // fetch user profile posts
-          this.posts.url = 
+          this.posts.url =
             constants.apiurl + '/users/' + profile_user_id + '/posts';
         } else if(bevy_id == -1 && loggedIn) {
           // fetch user frontpage posts
-          this.posts.url = 
+          this.posts.url =
             constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         } else if(bevy_id == -1 && !loggedIn) {
           // fetch public frontpage posts
@@ -103,7 +103,7 @@ _.extend(PostStore, {
         this.posts.reset();
         this.trigger(POST.LOADING);
         this.trigger(POST.CHANGE_ALL);
-        
+
         // then fetch
         this.posts.fetch({
           success: function(posts, response, options) {
@@ -240,24 +240,34 @@ _.extend(PostStore, {
         break;
 
       case POST.UPDATE:
-
         var post_id = payload.post_id;
-        var title = payload.postTitle;
-
         var post = this.posts.get(post_id);
+        if(post == undefined) return;
+
+        var title = payload.title || post.get('title');
+        var images = payload.images || post.get('images');
+        var tag = payload.tag || post.get('tag');
+        var event = payload.event || post.get('event');
 
         post.set('title', title);
+        post.set('images', images);
+        post.set('tag', tag);
+        post.set('event', event);
 
         post.save({
           title: title,
+          images: images,
+          tag: tag,
+          event: event,
           updated: Date.now()
         }, {
           patch: true,
           success: function($post, response, options) {
-            this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
+        // trigger update
+        this.trigger(POST.CHANGE_ONE + post.get('_id'));
+        this.trigger(POST.CHANGE_ALL);
         break;
 
       case POST.SORT:

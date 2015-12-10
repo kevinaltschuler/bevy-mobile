@@ -24,7 +24,16 @@ var NewPostView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
     myBevies: React.PropTypes.array,
-    activeBevy: React.PropTypes.object
+    activeBevy: React.PropTypes.object,
+    editing: React.PropTypes.bool,
+    post: React.PropTypes.object
+  },
+
+  getDefaultProps() {
+    return {
+      editing: false,
+      post: {}
+    };
   },
 
   getInitialState() {
@@ -60,6 +69,8 @@ var NewPostView = React.createClass({
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
                   selectedBevy={ this.state.selectedBevy }
+                  editing={ this.props.editing }
+                  post={ this.props.post }
                   { ...this.props }
                 />
               );
@@ -82,6 +93,8 @@ var NewPostView = React.createClass({
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
                   selectedBevy={ this.state.selectedBevy }
+                  editing={ this.props.editing }
+                  post={ this.props.post }
                   { ...this.props }
                 />
               )
