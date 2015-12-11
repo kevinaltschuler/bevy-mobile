@@ -86,6 +86,11 @@ var NewPostInputView = React.createClass({
 
   onBackButton() {
     this.props.mainNavigator.pop();
+    this.setState({
+      postInput: '',
+      images: [],
+      selectedTag: 0
+    });
     return true;
   },
 
