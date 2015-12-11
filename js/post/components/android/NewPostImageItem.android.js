@@ -56,7 +56,9 @@ var NewPostImageItem = React.createClass({
               top: 0,
               right: 0,
               width: 30,
-              height: 30
+              height: 30,
+              flexDirection: 'row',
+              alignItems: 'center'
             }}>
               <Icon
                 name='close'
