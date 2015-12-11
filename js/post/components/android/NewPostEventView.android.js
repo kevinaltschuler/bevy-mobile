@@ -40,17 +40,31 @@
     mainNavigator: React.PropTypes.object,
     newPostNavigator: React.PropTypes.object,
     selectedBevy: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    editing: React.PropTypes.bool,
+    post: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      title: '',
-      location: '',
-      description: '',
+      title: (this.props.editing)
+        ? this.props.post.title
+        : '',
+      location: (this.props.editing)
+        ? this.props.post.event.location
+        : '',
+      description: (this.props.editing)
+        ? this.props.post.event.description
+        : '',
       loading: false,
-      image: {},
-      date: new Date()
+      image: (this.props.editing)
+        ? (_.isEmpty(this.props.post.images[0]))
+          ? {}
+          : this.props.post.images[0]
+        : {},
+      date: (this.props.editing)
+        ? new Date(this.props.post.event.date)
+        : new Date()
     };
   },
 
@@ -169,7 +183,58 @@
     FileActions.upload(response.uri);
   },
 
+  finishEditing() {
+    // disallow empty post
+    if(_.isEmpty(this.state.title)) {
+      ToastAndroid.show('Please Enter a Title for your Event',
+        ToastAndroid.SHORT);
+      return;
+    }
+
+    PostActions.update(
+      this.props.post._id, // _id
+      this.state.title, // title
+      [this.state.image], // images
+      null, // tag
+      {
+        location: this.state.location,
+        date: this.state.date,
+        description: this.state.description
+      } // event
+    );
+
+    // nav to comment view
+    var route = routes.MAIN.COMMENT;
+    var post = this.props.post;
+    post.title = this.state.title;
+    post.images = [this.state.image];
+    post.event = {
+      location: this.state.location,
+      date: this.state.date,
+      description: this.state.description
+    }
+    route.post = post;
+    this.props.mainNavigator.replace(route);
+
+    // clear state
+    this.setState({
+      title: '',
+      image: {},
+      location: '',
+      description: '',
+      date: new Date(),
+      loading: true // flip loading flag
+    });
+  },
+
   submitPost() {
+    // disallow empty post
+    if(_.isEmpty(this.state.title)) {
+      ToastAndroid.show('Please Enter a Title for your Event',
+        ToastAndroid.SHORT);
+      return;
+    }
+
     PostActions.create(
       this.state.title,
       this.state.image,
@@ -214,6 +279,58 @@
     return hour + ':' + minutes + ' ' + ampm;
   },
 
+  _renderPostButton() {
+    if(this.props.editing) {
+      return (
+        <TouchableNativeFeedback
+         onPress={ this.finishEditing }
+        >
+          <View style={ styles.postButton }>
+            <Text style={{
+              color: '#FFF',
+              fontSize: 16
+            }}>
+              Done
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    return (
+      <TouchableNativeFeedback
+       onPress={ this.submitPost }
+      >
+        <View style={ styles.postButton }>
+          <Icon
+            name='send'
+            size={ 30 }
+            color='#FFF'
+          />
+        </View>
+      </TouchableNativeFeedback>
+    );
+  },
+
+  _renderPostingToBar() {
+    if(this.props.editing) return <View />;
+    return (
+      <View style={ styles.postingToBar }>
+        <Text style={ styles.postingTo }>Post To</Text>
+        <TouchableNativeFeedback
+         background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+         onPress={ this.goToBevyPicker }
+        >
+         <View style={ styles.bevyPickerButton }>
+           <Text style={ styles.bevyPickerButtonText }>
+             { this.props.selectedBevy.name }
+           </Text>
+         </View>
+        </TouchableNativeFeedback>
+        { this._renderLoading() }
+      </View>
+    );
+  },
+
   _renderLoading() {
     if(!this.state.loading) return <View />;
     return (
@@ -242,34 +359,12 @@
              />
            </View>
           </TouchableNativeFeedback>
-          <Text style={ styles.topBarTitle }>New Event</Text>
-          <TouchableNativeFeedback
-           background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-           onPress={ this.submitPost }
-          >
-           <View style={ styles.postButton }>
-             <Icon
-               name='send'
-               size={ 30 }
-               color='#FFF'
-             />
-           </View>
-          </TouchableNativeFeedback>
+          <Text style={ styles.topBarTitle }>
+            { (this.props.editing) ? 'Edit Event' : 'New Event' }
+          </Text>
+          { this._renderPostButton() }
         </View>
-        <View style={ styles.postingToBar }>
-          <Text style={ styles.postingTo }>Post To</Text>
-          <TouchableNativeFeedback
-           background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-           onPress={ this.goToBevyPicker }
-          >
-           <View style={ styles.bevyPickerButton }>
-             <Text style={ styles.bevyPickerButtonText }>
-               { this.props.selectedBevy.name }
-             </Text>
-           </View>
-          </TouchableNativeFeedback>
-          { this._renderLoading() }
-        </View>
+        { this._renderPostingToBar() }
         <ScrollView style={ styles.body }>
           <View style={ styles.header }>
             <Image
@@ -460,6 +555,7 @@
   header: {
     width: constants.width,
     height: 150,
+    backgroundColor: '#888',
     flexDirection: 'row',
     alignItems: 'center'
   },

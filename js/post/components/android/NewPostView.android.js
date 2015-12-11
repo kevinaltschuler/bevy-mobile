@@ -51,13 +51,18 @@ var NewPostView = React.createClass({
   },
 
   render() {
+    var initialRoutes = [];
+    if(this.props.editing && this.props.post.type == 'event') {
+      initialRoutes.push(routes.NEWPOST.CREATEEVENT);
+    } else {
+      initialRoutes.push(routes.NEWPOST.INPUT);
+    }
+
     return (
       <Navigator
         configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.mainNavigator }
-        initialRouteStack={[
-          routes.NEWPOST.INPUT
-        ]}
+        initialRouteStack={ initialRoutes }
         sceneStyle={{
           flex: 1
         }}
