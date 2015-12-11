@@ -10,6 +10,7 @@ var {
   View,
   Image,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
@@ -28,9 +29,18 @@ var NewPostImageItem = React.createClass({
     this.props.onRemove(this.props.image);
   },
 
+  showImageModal() {
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.image]);
+    actions.show();
+  },
+
   render() {
     var image = resizeImage(this.props.image, 75, 75);
     return (
+      <TouchableWithoutFeedback
+        onPress={ this.showImageModal }
+      >
         <View style={{
           backgroundColor: '#000',
           width: 75,
@@ -48,7 +58,6 @@ var NewPostImageItem = React.createClass({
             resizeMode='cover'
           />
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#FFF', false) }
             onPress={ this.remove }
           >
             <View style={{
@@ -68,6 +77,7 @@ var NewPostImageItem = React.createClass({
             </View>
           </TouchableNativeFeedback>
         </View>
+      </TouchableWithoutFeedback>
     );
   }
 });
