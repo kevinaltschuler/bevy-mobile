@@ -337,7 +337,8 @@ var styles = StyleSheet.create({
     flex: 1,
     height: 40,
     color: '#FFF',
-    fontSize: 16
+    fontSize: 16,
+    marginRight: 8
   },
 });
 
