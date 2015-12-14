@@ -38,6 +38,7 @@ bevy for iphone and android, using <a href='https://facebook.github.io/react-nat
 5. Add android-sdk/tools to path so we can use adb commands
 6. Run ```android sdk```
   * Download the latest API version (SDK platform and Google APIs Intel x86_64 image are the only ones we need)
+  * Also Install (in Extras) Android Support Repository, Android Support Library, Google Repository, all the Google Play stuff, and Intel HAXM (need to run a separate installer)
 7. Install Genymotion [here](https://www.genymotion.com/#!/) - we're not using the default emulator
   * You need to create an account. Just use the free version for now
   * Im currently using a virtual Nexus 5 w/ API 22
