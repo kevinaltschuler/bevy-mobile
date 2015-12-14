@@ -9,6 +9,7 @@ import com.eguma.vibration.Vibration;
 import com.sh3rawi.RNAudioPlayer.*;
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 import com.learnium.RNDeviceInfo.*;
+import com.burlap.filetransfer.*;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -35,7 +36,6 @@ import com.bevyios.GoogleAuthPackage;
 import com.bevyios.GCMPackage;
 import com.bevyios.BevyIntentPackage;
 import com.bevyios.imagepicker.*;
-import com.bevyios.fileupload.*;
 import com.bevyios.dtpicker.ReactDatePackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {
@@ -75,7 +75,7 @@ public class MainActivity extends FragmentActivity implements DefaultHardwareBac
         .addPackage(new RNDeviceInfo())
         .addPackage(new BevyIntentPackage(this, intent))
         .addPackage(new ImagePickerPackage(this))
-        .addPackage(new FileUploadPackage())
+        .addPackage(new FileTransferPackage())
         .addPackage(new ReactDatePackage(this))
         .setUseDeveloperSupport(BuildConfig.DEBUG)
         .setInitialLifecycleState(LifecycleState.RESUMED)
