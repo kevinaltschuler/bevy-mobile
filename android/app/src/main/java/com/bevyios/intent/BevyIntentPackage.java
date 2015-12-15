@@ -1,4 +1,4 @@
-package com.bevyios;
+package com.bevyios.intent;
 
 import android.app.Activity;
 import android.content.Intent;

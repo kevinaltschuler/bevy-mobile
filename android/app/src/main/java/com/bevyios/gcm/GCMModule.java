@@ -1,4 +1,4 @@
-package com.bevyios;
+package com.bevyios.gcm;
 
 import android.content.Context;
 import android.content.Intent;

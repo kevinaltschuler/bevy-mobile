@@ -3,7 +3,7 @@
  * @author  albert
  */
 
-package com.bevyios;
+package com.bevyios.intent;
 
 import java.util.Set;
 
@@ -13,6 +13,7 @@ import android.content.IntentFilter;
 import android.app.Activity;
 import android.util.Log;
 import android.os.Bundle;
+import android.net.Uri;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.NativeModule;
@@ -63,5 +64,16 @@ public class BevyIntentModule extends ReactContextBaseJavaModule {
     params.putMap("extras", extras);
 
     callback.invoke(params);
+  }
+
+  @ReactMethod
+  public void openMap(String location) {
+    if(location == null || location.length() == 0) {
+      return;
+    }
+    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + location);
+    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+    mapIntent.setPackage("com.google.android.apps.maps");
+    mActivity.startActivity(mapIntent);
   }
 }

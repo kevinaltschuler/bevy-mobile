@@ -47,14 +47,14 @@
       </intent-filter>
     </receiver>
     <service
-      android:name="com.bevyios.BevyGcmListenerService"
+      android:name="com.bevyios.gcm.BevyGcmListenerService"
       android:exported="false" >
       <intent-filter>
         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
       </intent-filter>
     </service>
     <service
-      android:name="com.bevyios.BevyIDListenerService"
+      android:name="com.bevyios.gcm.BevyIDListenerService"
       android:exported="false">
       <intent-filter>
         <action android:name="com.google.android.gms.iid.InstanceID"/>
@@ -62,7 +62,7 @@
     </service>
 
     <service
-      android:name="com.bevyios.RegistrationIntentService"
+      android:name="com.bevyios.gcm.RegistrationIntentService"
       android:exported="false">
     </service>
 

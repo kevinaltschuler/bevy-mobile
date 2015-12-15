@@ -32,10 +32,11 @@ import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import com.bevyios.GoogleAuthPackage;
-import com.bevyios.GCMPackage;
-import com.bevyios.BevyIntentPackage;
-import com.bevyios.imagepicker.*;
+import com.bevyios.googleauth.GoogleAuthPackage;
+import com.bevyios.gcm.GCMPackage;
+import com.bevyios.intent.BevyIntentPackage;
+import com.bevyios.imagepicker.ImagePickerPackage;
+import com.bevyios.imagepicker.ActivityResultListener;
 import com.bevyios.dtpicker.ReactDatePackage;
 
 public class MainActivity extends FragmentActivity implements DefaultHardwareBackBtnHandler {

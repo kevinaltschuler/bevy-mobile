@@ -21,6 +21,7 @@ var PostActions = require('./PostActions.android.js');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var BevyIntent = require('./../../../shared/apis/BevyIntent.android.js');
 
 var EventBody = React.createClass({
   propTypes: {
@@ -43,7 +44,7 @@ var EventBody = React.createClass({
     // navigate to comments
     var commentRoute = routes.MAIN.COMMENT;
     commentRoute.post = this.props.post;
-    this.props.mainNavigator.push(commentRoute);  
+    this.props.mainNavigator.push(commentRoute);
   },
 
   addToCalendar() {
@@ -54,37 +55,22 @@ var EventBody = React.createClass({
     //var mapRoute = routes.MAIN.MAP;
     //mapRoute.location = this.props.post.event.location;
     //this.props.mainNavigator.push(mapRoute);
-    ToastAndroid.show('This feature is not supported yet :(', ToastAndroid.SHORT);
+    //ToastAndroid.show('This feature is not supported yet :(', ToastAndroid.SHORT);
+    BevyIntent.openMap(this.props.post.event.location);
   },
 
   getMonthText() {
     var monthNum = this.state.date.getMonth();
     var monthMap = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
     return monthMap[monthNum];
   },
   getWeekdayText() {
     var weekdayNum = this.state.date.getDay();
     var weekdayMap = [
-      'Sun',
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat'
+      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
     ];
     return weekdayMap[weekdayNum];
   },
@@ -112,7 +98,7 @@ var EventBody = React.createClass({
         onPress={ this.goToPostView }
       >
         <View style={ compactStyles.container }>
-          <Image 
+          <Image
             style={ compactStyles.image }
             source={ this.state.source }
           />
@@ -177,17 +163,9 @@ var EventBody = React.createClass({
           />
           <View style={ expandedStyles.dateDetails }>
             <Text style={ expandedStyles.startDate }>
-              { this.getWeekdayText() 
-                + ', ' 
-                + this.getMonthText()
-                + ' '
-                + this.state.date.getDate()
-                + ' at '
-                + this.getHoursText()
-                + ':'
-                + this.getMinutesText()
-                + ' '
-                + this.getAMorPM()
+              { this.getWeekdayText() + ', '  + this.getMonthText() + ' '
+                + this.state.date.getDate() + ' at ' + this.getHoursText()+ ':'
+                + this.getMinutesText() + ' ' + this.getAMorPM()
               }
             </Text>
             <Text style={ expandedStyles.endDate }>
