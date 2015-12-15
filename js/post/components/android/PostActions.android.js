@@ -108,28 +108,46 @@ var PostActions = React.createClass({
 
   showMoreActions() {
     var dialog = new DialogAndroid();
+    var items = [
+      "Go To Author's Profile",
+      "Go To Bevy"
+    ];
+    if(this.props.user._id == this.props.post.author._id) {
+      // if user is the author
+      items.push("Edit Post");
+      items.push("Delete Post");
+    }
+    if(_.contains(this.props.post.bevy.admins, this.props.user._id)) {
+      // if user is the admin of the post's bevy
+      if(!_.contains(items, "Delete Post"))
+        items.push("Delete Post");
+      if(this.props.post.pinned) {
+        items.push("Unpin Post");
+      } else {
+        items.push("Pin Post");
+      }
+    }
     dialog.set({
       title: 'Post Actions',
-      items: [
-        'Go To Author Profile',
-        'Go To Bevy',
-        'Edit Post',
-        'Delete Post'
-      ],
+      items: items,
       cancelable: true,
       itemsCallback: (index, item) => {
-        switch(index) {
-          case 0:
+        switch(item) {
+          case "Go To Author's Profile":
             this.goToAuthorProfile();
             break;
-          case 1:
+          case "Go To Bevy":
             this.goToBevy();
             break;
-          case 2:
+          case "Edit Post":
             this.goToEditView();
             break;
-          case 3:
+          case "Delete Post":
             this.deletePost();
+            break;
+          case "Pin Post":
+          case "Unpin Post":
+            $PostActions.pin(this.props.post._id);
             break;
         }
       }

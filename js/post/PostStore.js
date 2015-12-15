@@ -291,6 +291,35 @@ _.extend(PostStore, {
         this.trigger(POST.LOADED);
         break;
 
+        case POST.PIN:
+          var post_id = payload.post_id;
+          var post = this.posts.get(post_id);
+          if(post == undefined) break;
+
+          var pinned = !post.get('pinned');
+          var expires = (pinned)
+          ? new Date('2035', '1', '1') // expires in a long time
+          : new Date(Date.now() + (post.get('bevy').settings.posts_expire_in
+            * 1000 * 60 * 60 * 24)) // unpinned - expire like default
+
+          if(!pinned && (post.get('bevy').settings.posts_expire_in == -1))
+            expires = new Date('2035', '1', '1');
+
+          post.set('pinned', pinned);
+          post.set('expires', expires);
+
+          post.save({
+            pinned: pinned,
+            expires: expires
+          }, {
+            patch: true
+          });
+
+          this.posts.sort();
+          this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.CHANGE_ONE + post_id);
+          break;
+
       case BEVY.SWITCH:
         Dispatcher.waitFor([BevyStore.dispatchToken]);
         var bevy_id = BevyStore.active;
