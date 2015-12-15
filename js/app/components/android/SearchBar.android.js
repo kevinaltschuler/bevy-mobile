@@ -46,6 +46,11 @@ var SearchBar = React.createClass({
   componentDidMount() {
     this.props.navigator.navigationContext.addListener('willfocus',
       this.switchRoute);
+      
+    constants.setSearchBarActions({
+      focus: this.focus,
+      blur: this.blur
+    });
   },
   componentWillUnmount() {
     //this.props.navigator.navigationContext.removeListener('willfocus',
@@ -98,6 +103,13 @@ var SearchBar = React.createClass({
         BevyActions.search(this.state.query);
         break;
     }
+  },
+
+  focus() {
+    this.searchInput.focus();
+  },
+  blur() {
+    this.searchInput.blur();
   },
 
   goBack() {

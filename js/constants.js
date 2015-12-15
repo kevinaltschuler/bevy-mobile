@@ -160,7 +160,7 @@ exports.USER = {
 
 exports.FILE = {
   'UPLOAD': 'file_upload',
-  
+
   'UPLOAD_COMPLETE': 'file_upload_complete',
   'UPLOAD_ERROR': 'file_upload_error'
 }
@@ -212,14 +212,6 @@ exports.getImageModalImages = function() {
   return imageModalImages
 };
 
-var actionSheetActions = {};
-exports.setActionSheetActions = function(actions) {
-  actionSheetActions = actions;
-};
-exports.getActionSheetActions = function() {
-  return actionSheetActions;
-};
-
 var tagModalActions = {};
 exports.setTagModalActions = function(actions) {
   tagModalActions = actions;
@@ -234,4 +226,12 @@ exports.setTabBarActions = function(actions) {
 };
 exports.getTabBarActions = function() {
   return tabBarActions;
+};
+
+var searchBarActions = {};
+exports.setSearchBarActions = function(actions) {
+  searchBarActions = actions;
+};
+exports.getSearchBarActions = function() {
+  return searchBarActions;
 };
