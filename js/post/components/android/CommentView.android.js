@@ -77,6 +77,14 @@ var CommentView = React.createClass({
     return true;
   },
 
+  onInputFocus() {
+    setTimeout(() => {
+      if(this.scrollView == undefined || !this.scrollView.scrollResponderScrollTo)
+        return;
+      this.scrollView.scrollResponderScrollTo(0, 9999999999);
+    }, 250);
+  },
+
   onReply(comment) {
     this.setState({
       replyToComment: comment
@@ -244,6 +252,7 @@ var CommentView = React.createClass({
           value={ this.state.input }
           style={ styles.textInput }
           onChangeText={(text) => this.setState({ input: text })}
+          onFocus={ this.onInputFocus }
           onBlur={() => this.setState({ replyToComment: {} })}
           placeholder='Comment'
           placeholderTextColor='#AAA'
@@ -295,6 +304,7 @@ var CommentView = React.createClass({
           onRefresh={ this.onRefresh }
         >
           <ScrollView
+            ref={ ref => { this.scrollView = ref; }}
             style={ styles.listContainer }
             showsVerticalScrollIndicator={ true }
           >
