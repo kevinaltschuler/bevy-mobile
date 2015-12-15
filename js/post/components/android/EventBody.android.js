@@ -12,6 +12,7 @@ var {
   Image,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  TouchableHighlight,
   ToastAndroid,
   StyleSheet
 } = React;
@@ -48,14 +49,17 @@ var EventBody = React.createClass({
   },
 
   addToCalendar() {
-    ToastAndroid.show('Feature Not Yet Implemented', ToastAndroid.SHORT);
+    var startTime = new Date(this.props.post.event.date);
+    BevyIntent.addEvent({
+      startTime: String(startTime.getTime()),
+      endTime: String(startTime.getTime() + (1000 * 60 * 60)), // one hour later
+      title: this.props.post.title,
+      description: this.props.post.event.description,
+      location: this.props.post.event.location
+    });
   },
 
   goToMap() {
-    //var mapRoute = routes.MAIN.MAP;
-    //mapRoute.location = this.props.post.event.location;
-    //this.props.mainNavigator.push(mapRoute);
-    //ToastAndroid.show('This feature is not supported yet :(', ToastAndroid.SHORT);
     BevyIntent.openMap(this.props.post.event.location);
   },
 
@@ -146,6 +150,31 @@ var EventBody = React.createClass({
             source={ this.state.source }
           />
           <View style={ expandedStyles.darkener } />
+          <TouchableHighlight
+            onPress={ this.addToCalendar }
+            underlayColor='#EEE'
+            style={{
+              backgroundColor: '#FFF',
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              elevation: 8,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <View>
+              <Icon
+                name='event'
+                size={ 26 }
+                color='#888'
+              />
+            </View>
+          </TouchableHighlight>
           <Text style={ expandedStyles.title }>
             { this.props.post.title.trim() }
           </Text>
@@ -182,9 +211,44 @@ var EventBody = React.createClass({
               size={ 30 }
               color='#888'
             />
-            <Text style={ expandedStyles.locationText }>
-              { this.props.post.event.location }
-            </Text>
+            <View style={{
+              flex: 1,
+              height: 48,
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginLeft: 10,
+              borderBottomWidth: 1,
+              borderBottomColor: '#EEE'
+            }}>
+              <Text style={ expandedStyles.locationText }>
+                { this.props.post.event.location }
+              </Text>
+            </View>
+          </View>
+        </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+          onPress={ this.addToCalendar }
+        >
+          <View style={ expandedStyles.locationRow }>
+            <Icon
+              name='event'
+              size={ 30 }
+              color='#888'
+            />
+            <View style={{
+              flex: 1,
+              height: 48,
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginLeft: 10,
+              //borderBottomWidth: 1,
+              //borderBottomColor: '#EEE'
+            }}>
+              <Text style={ expandedStyles.locationText }>
+                Add To Calendar
+              </Text>
+            </View>
           </View>
         </TouchableNativeFeedback>
         <View style={ expandedStyles.divider } />
@@ -296,7 +360,8 @@ var expandedStyles = StyleSheet.create({
     left: 15,
     bottom: 10,
     color: '#FFF',
-    textAlign: 'left'
+    textAlign: 'left',
+    fontSize: 18
   },
   dateRow: {
     height: 48,
@@ -332,8 +397,7 @@ var expandedStyles = StyleSheet.create({
   },
   locationText: {
     flex: 1,
-    color: '#AAA',
-    marginLeft: 10
+    color: '#AAA'
   },
   descriptionRow: {
     backgroundColor: '#FFF',
