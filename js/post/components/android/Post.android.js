@@ -7,7 +7,7 @@
 
 var React = require('react-native');
 var {
-  View,  
+  View,
   Text,
   StyleSheet,
   TouchableHighlight,
@@ -37,6 +37,7 @@ var Post = React.createClass({
   getDefaultProps() {
     return {
       post: {},
+      user: {},
       expandText: false,
       card: true
     };
@@ -62,8 +63,8 @@ var Post = React.createClass({
       case 'default':
       default:
         return (
-          <PostBody 
-            post={ this.props.post } 
+          <PostBody
+            post={ this.props.post }
             mainNavigator={ this.props.mainNavigator }
             mainRoute={ this.props.mainRoute }
             expandText={ this.props.expandText }
@@ -98,8 +99,8 @@ var Post = React.createClass({
       return <View />;
     } else {
       return (
-        <PostActions 
-          post={ this.props.post } 
+        <PostActions
+          post={ this.props.post }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
           user={ this.props.user }
@@ -118,14 +119,14 @@ var Post = React.createClass({
     // if the post is from a private bevy
     // and the user is not a part of that bevy,
     // then hide the post
-    if(this.props.post.bevy.settings.privacy == 1 
+    if(this.props.post.bevy.settings.privacy == 1
       && !_.contains(this.props.user.bevies, this.props.post.bevy._id))
       return <View />;
 
     return (
       <View style={ containerStyle }>
-        <PostHeader 
-          post={ this.props.post } 
+        <PostHeader
+          post={ this.props.post }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
         />

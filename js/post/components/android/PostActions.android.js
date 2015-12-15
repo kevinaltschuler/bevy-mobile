@@ -34,12 +34,15 @@ var PostActions = React.createClass({
   },
 
   getInitialState() {
-    if(_.isEmpty(this.props.user)) return {
+    if(_.isEmpty(UserStore.getUser())) return {
       voted: false
     };
-    var vote = _.findWhere(this.props.post.votes, { voter: this.props.user._id });
+    var vote = _.findWhere(this.props.post.votes, { voter: UserStore.getUser()._id });
     return {
-      voted: (vote != undefined && vote.score > 0)
+      voted: (vote != undefined && vote.score > 0),
+      user: (_.isEmpty(this.props.user))
+        ? UserStore.getUser()
+        : this.props.user
     };
   },
 
@@ -83,8 +86,8 @@ var PostActions = React.createClass({
   },
 
   deletePost() {
-    if(this.props.user._id == this.props.post.author._id // if the original author
-      || _.contains(this.props.post.bevy.admins, this.props.user._id) // if an admin of the bevy
+    if(this.state.user._id == this.props.post.author._id // if the original author
+      || _.contains(this.props.post.bevy.admins, this.state.user._id) // if an admin of the bevy
     ) {
       $PostActions.destroy(this.props.post._id);
     } else {
@@ -112,12 +115,12 @@ var PostActions = React.createClass({
       "Go To Author's Profile",
       "Go To Bevy"
     ];
-    if(this.props.user._id == this.props.post.author._id) {
+    if(this.state.user._id == this.props.post.author._id) {
       // if user is the author
       items.push("Edit Post");
       items.push("Delete Post");
     }
-    if(_.contains(this.props.post.bevy.admins, this.props.user._id)) {
+    if(_.contains(this.props.post.bevy.admins, this.state.user._id)) {
       // if user is the admin of the post's bevy
       if(!_.contains(items, "Delete Post"))
         items.push("Delete Post");

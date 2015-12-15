@@ -83,7 +83,10 @@ var MainView = React.createClass({
         break;
       case routes.MAIN.COMMENT.name:
         return (
-          <CommentView post={ this.props.mainRoute.post } { ...this.props } />
+          <CommentView
+            post={ this.props.mainRoute.post }
+            { ...this.props }
+          />
         );
         break;
       case routes.MAIN.NEWBEVY.name:
