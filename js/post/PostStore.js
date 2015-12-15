@@ -364,14 +364,37 @@ _.extend(PostStore, {
         comment.url = constants.apiurl + '/comments';
         comment.save(null, {
           success: function(model, response, options) {
-            // populate
-            comment.set('_id', model.get('_id'));
-            comment.set('created', model.get('created'));
             // add to post
-            post.get('comments').push(comment);
+            var comments = post.get('comments') || [];
+            comments.push(model);
+            post.set('comments', comments);
             // trigger updates
-            this.trigger(POST.CHANGE_ALL);
+            //this.trigger(POST.CHANGE_ALL);
+            //this.trigger(POST.CHANGE_ONE + post_id);
           }.bind(this)
+        });
+        break;
+
+      case COMMENT.EDIT:
+        var post_id = payload.post_id;
+        var comment_id = payload.comment_id;
+        var body = payload.body;
+
+        var url = constants.apiurl + '/posts/' + post_id + '/comments/' + comment_id;
+        fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            body: body
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.CHANGE_ONE + post_id);
         });
         break;
 
@@ -394,7 +417,7 @@ _.extend(PostStore, {
 
         if(_.findWhere(comments, { _id: comment_id })) {
           // delete from post
-          comments = _.reject(comments, function(comment) {
+          comments = _.reject(comments, comment => {
             return comment._id == comment_id;
           });
           post.set('comments', comments);
@@ -408,8 +431,7 @@ _.extend(PostStore, {
         //this.postsNestComment(post);
 
         this.trigger(POST.CHANGE_ALL);
-        this.trigger(POST.CHANGE_ONE + post_id);
-
+        //this.trigger(POST.CHANGE_ONE + post_id);
         break;
     }
   },
@@ -419,7 +441,7 @@ _.extend(PostStore, {
    */
   removeComment(comments, comment_id) {
     // use every so we can break out if we need
-    return comments.every(function(comment, index) {
+    return comments.every((comment, index) => {
       if(comment._id == comment_id) {
         // it's a match. remove the comment and collapse
         comments.splice(index, 1);
@@ -435,7 +457,7 @@ _.extend(PostStore, {
       }
       // continue the every loop
       return true;
-    }.bind(this));
+    });
   },
 
   sortByTop(post) {

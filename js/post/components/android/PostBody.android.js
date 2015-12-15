@@ -45,22 +45,25 @@ var PostBody = React.createClass({
 
   _renderText() {
     var textStyle = {};
-    if(this.state.height != 0 
-      && this.state.height > MAX_HEIGHT 
+    if(this.state.height != 0
+      && this.state.height > MAX_HEIGHT
       && !this.props.expandText) {
       textStyle.height = MAX_HEIGHT;
     };
 
     return (
-      <Text
-        style={[ styles.postText, textStyle ]}>
-        { this.props.post.title }
-      </Text>
+			<View accessible={ true }>
+	      <Text
+	        style={[ styles.postText, textStyle ]}
+					onPress={() => { }}>
+	        { this.props.post.title }
+	      </Text>
+			</View>
     );
   },
 
   _renderExpandButton() {
-    if(this.state.height != 0 
+    if(this.state.height != 0
       && this.state.height > MAX_HEIGHT
       && !this.props.expandText) {
       return (
@@ -89,12 +92,12 @@ var PostBody = React.createClass({
 
   render() {
     return (
-      <View 
+      <View
         style={ styles.container }
         onLayout={ this.onLayout }
         accessible={ true }
       >
-        { this._renderText() } 
+        { this._renderText() }
         { this._renderExpandButton() }
       </View>
     );

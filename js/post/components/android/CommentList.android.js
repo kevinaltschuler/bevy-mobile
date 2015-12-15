@@ -105,7 +105,9 @@ var CommentItem = React.createClass({
   getInitialState() {
     return {
       isCompact: false,
-      showActionBar: false
+      showActionBar: false,
+      body: this.props.comment.body,
+      visible: true
     };
   },
 
@@ -123,7 +125,39 @@ var CommentItem = React.createClass({
   },
 
   deleteComment() {
-    CommentActions.destroy(this.props.comment.postId, this.props.comment._id)
+    CommentActions.destroy(
+      this.props.comment.postId,
+      this.props.comment._id
+    );
+    // optimistic update
+    this.setState({
+      visible: false
+    });
+  },
+
+  editComment() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Edit Comment',
+      input: {
+        prefill: this.state.body,
+        allowEmptyInput: false,
+        callback: newComment => {
+          CommentActions.edit(
+            this.props.comment.postId,
+            this.props.comment._id,
+            newComment
+          );
+          // optimistic update
+          this.setState({
+            body: newComment
+          });
+        }
+      },
+      positiveText: 'Done',
+      negativeText: 'Cancel'
+    });
+    dialog.show();
   },
 
   goToAuthorProfile() {
@@ -136,11 +170,16 @@ var CommentItem = React.createClass({
 
   showActionSheet() {
     var actions = [];
-    // only allow deletion if the user is the author of the comment
-    // or if the user is an admin of the active bevy
-    if(this.props.user._id == this.props.comment.author._id
-      || _.contains(this.props.post.bevy.admins, this.props.user._id)) {
+    if(this.props.user._id == this.props.comment.author._id) {
+      // if user is the author of the comment
       actions.push("Delete Comment");
+      actions.push("Edit Comment");
+    }
+    if( _.contains(this.props.post.bevy.admins, this.props.user._id)) {
+      // if user is the admin of the bevy of the post this was
+      // commented on
+      if(!_.contains(actions, "Delete Comment"))
+        actions.push("Delete Comment");
     }
     actions.push("Reply To Comment");
     actions.push("Go To Author's Profile");
@@ -157,6 +196,9 @@ var CommentItem = React.createClass({
         switch(item) {
           case "Delete Comment":
             this.deleteComment();
+            break;
+          case "Edit Comment":
+            this.editComment();
             break;
           case "Reply To Comment":
             this.replyToComment();
@@ -217,7 +259,7 @@ var CommentItem = React.createClass({
           </View>
           <View style={ styles.body } accessible={ true }>
             <Text style={ styles.bodyText }>
-              { this.props.comment.body.trim() }
+              { this.state.body.trim() }
             </Text>
           </View>
         </View>
@@ -288,6 +330,9 @@ var CommentItem = React.createClass({
 
 
   render() {
+    if(!this.state.visible) {
+      return <View />;
+    }
     return (
       <View style={ styles.container }>
         <TouchableNativeFeedback

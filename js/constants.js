@@ -69,6 +69,7 @@ exports.POST = {
 
 exports.COMMENT = {
   CREATE: 'comment_create',
+  EDIT: 'comment_edit',
   DESTROY: 'comment_destroy',
   VOTE: 'comment_vote'
 }

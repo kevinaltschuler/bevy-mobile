@@ -67,9 +67,9 @@ var CommentView = React.createClass({
   },
 
   onPostChange() {
-    this.setState({
-      comments: this.nestComments(PostStore.getPost(this.props.post._id).comments)
-    });
+    //this.setState({
+    //  comments: this.nestComments(PostStore.getPost(this.props.post._id).comments)
+    //});
   },
 
   onBackButton() {
