@@ -94,7 +94,7 @@ var MessageView = React.createClass({
   _onChatChange() {
     if(!this.state.loading) {
       // scroll to bottom
-      setTimeout(this.scrollToBottom, 500);
+      setTimeout(this.scrollToBottom, 250);
     }
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
@@ -122,11 +122,13 @@ var MessageView = React.createClass({
       messages: messages,
       dataSource: this.state.dataSource.cloneWithRows(messages)
     });
+
+    this.refs.MessageInput.focus();
   },
 
   onInputFocus() {
     // scroll to bottom of list
-    setTimeout(this.scrollToBottom, 500);
+    setTimeout(this.scrollToBottom, 250);
   },
 
   handleResponderGrant() {
@@ -145,11 +147,12 @@ var MessageView = React.createClass({
       });
       return;
     }
-    if((this.state.scrollY - scrollY) > 5) {
+    if((this.state.scrollY - scrollY) > 10) {
+      console.log('BLURRING')
       this.refs.MessageInput.blur();
     }
-    if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
-      //this.refs.MessageInput.focus();
+    if((this.state.scrollY - scrollY) < -5 && this.state.scrollY >= 0) {
+      this.refs.MessageInput.focus();
     }
     this.setState({
       scrollY: scrollY

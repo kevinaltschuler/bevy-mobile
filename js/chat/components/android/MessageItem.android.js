@@ -54,6 +54,7 @@ var MessageItem = React.createClass({
 
   measureMessageBody() {
     setTimeout(() => {
+      if(this.messageBody == undefined || this.messageBody == null) return;
       this.messageBody.measure((ox, oy, width, height, px, py) => {
         if(width > (constants.width - 40 - 10 - 8 - 8)) {
           this.setState({

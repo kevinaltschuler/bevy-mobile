@@ -126,6 +126,7 @@ var SearchView = React.createClass({
     }
     if(scrollY - this.prevScrollY > 5) {
       // scrolling down
+      // hide the keyboard so we can see easier
       constants.getSearchBarActions().blur();
     }
     this.prevScrollY = scrollY;
