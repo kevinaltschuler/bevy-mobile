@@ -48,7 +48,7 @@ var BevyInfoView = React.createClass({
   getInitialState() {
     return {
       subscribed: _.contains(this.props.user.bevies, this.props.activeBevy._id),
-      isAdmin: _.findWhere(this.props.activeBevy.admins, 
+      isAdmin: _.findWhere(this.props.activeBevy.admins,
         { _id: this.props.user._id }) != undefined
     };
   },
@@ -67,8 +67,8 @@ var BevyInfoView = React.createClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       subscribed: _.contains(nextProps.user.bevies, nextProps.activeBevy._id),
-      isAdmin: _.findWhere(nextProps.activeBevy.admins, 
-        { _id: nextProps.user._id }) != undefined     
+      isAdmin: _.findWhere(nextProps.activeBevy.admins,
+        { _id: nextProps.user._id }) != undefined
     });
   },
 
@@ -204,6 +204,7 @@ var BevyInfoView = React.createClass({
         <BevyAdminItem
           key={ 'bevyadminitem:' + admin._id }
           admin={ admin }
+          activeBevy={ this.props.activeBevy }
           mainNavigator={ this.props.mainNavigator }
         />
       );
@@ -280,8 +281,8 @@ var BevyInfoView = React.createClass({
             values={[
               'Public',
               'Private'
-            ]} 
-            selected={ this.props.activeBevy.settings.privacy } 
+            ]}
+            selected={ this.props.activeBevy.settings.privacy }
             onChange={data => {
               var settings = this.props.activeBevy.settings;
               settings.privacy = data.selected;
@@ -291,7 +292,7 @@ var BevyInfoView = React.createClass({
                 return;
 
               this.updateBevySettings(settings);
-            }} 
+            }}
           />
         </View>
         <View style={ styles.settingItem }>
@@ -329,7 +330,7 @@ var BevyInfoView = React.createClass({
               settings.posts_expire_in = posts_expire_in;
 
               // dont do anything if nothing has changed
-              if(posts_expire_in == this.props.activeBevy.settings.posts_expire_in) 
+              if(posts_expire_in == this.props.activeBevy.settings.posts_expire_in)
                 return;
 
               this.updateBevySettings(settings);
@@ -347,7 +348,7 @@ var BevyInfoView = React.createClass({
               // if nothing has changed, dont send the action
               if(settings.group_chat == this.props.activeBevy.settings.group_chat)
                   return;
-              
+
               this.updateBevySettings(settings);
             }}
           />
@@ -460,7 +461,7 @@ var BevyInfoView = React.createClass({
 
           { this._renderBevySettings() }
           { this._renderDangerZone() }
-          
+
           <View style={{ height: 15 }} />
         </ScrollView>
       </View>

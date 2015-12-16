@@ -365,6 +365,7 @@ _.extend(BevyStore, {
         });
         this.trigger(BEVY.CHANGE_ALL);
         break;
+
       case BEVY.REMOVE_TAG:
         var bevy_id = payload.bevy_id;
         var name = payload.name;
@@ -381,6 +382,46 @@ _.extend(BevyStore, {
           patch: true,
           success: function(model, response, options) {
 
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.ADD_ADMIN:
+        var bevy_id = payload.bevy_id;
+        var admin = payload.admin;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var admins = bevy.get('admins');
+        admins.push(admin);
+        bevy.set('admins', admins);
+        bevy.save({
+          admins: _.pluck(admins, '_id')
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.REMOVE_ADMIN:
+        var bevy_id = payload.bevy_id;
+        var admin_id = payload.admin_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var admins = bevy.get('admins');
+        admins = _.reject(admins, admin => admin._id == admin_id);
+        bevy.set('admins', admins);
+        bevy.save({
+          admins: _.pluck(admins, '_id')
+        }, {
+          patch: true,
+          success: function(model, response, options) {
           }
         });
         this.trigger(BEVY.CHANGE_ALL);

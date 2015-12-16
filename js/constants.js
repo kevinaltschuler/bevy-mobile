@@ -91,6 +91,8 @@ exports.BEVY = {
   REQUEST_JOIN: 'bevy_request_join',
   ADD_TAG: 'bevy_add_tag',
   REMOVE_TAG: 'bevy_remove_tag',
+  ADD_ADMIN: 'bevy_add_admin',
+  REMOVE_ADMIN: 'bevy_remove_admin',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',

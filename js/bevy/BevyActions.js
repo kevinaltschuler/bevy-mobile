@@ -126,6 +126,22 @@ var BevyActions = {
       bevy_id: bevy_id,
       name: name
     });
+  },
+
+  addAdmin(bevy_id, admin) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_ADMIN,
+      bevy_id: bevy_id,
+      admin: admin
+    });
+  },
+
+  removeAdmin(bevy_id, admin_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REMOVE_ADMIN,
+      bevy_id: bevy_id,
+      admin_id: admin_id
+    });
   }
 };
 
