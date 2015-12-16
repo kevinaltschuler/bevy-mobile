@@ -21,7 +21,7 @@ var BevyActions = {
       user: (user == undefined) ? {} : user
     });
   },
-  
+
   create(name, description, image, slug) {
     Dispatcher.dispatch({
       actionType: BEVY.CREATE,
@@ -108,6 +108,23 @@ var BevyActions = {
       actionType: BEVY.ADD_USER,
       bevy_id: bevy_id,
       user_id: user_id
+    });
+  },
+
+  addTag(bevy_id, name, color) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_TAG,
+      bevy_id: bevy_id,
+      name: name,
+      color: color
+    });
+  },
+
+  removeTag(bevy_id, name) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REMOVE_TAG,
+      bevy_id: bevy_id,
+      name: name
     });
   }
 };

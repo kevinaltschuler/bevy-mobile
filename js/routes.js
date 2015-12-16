@@ -41,7 +41,8 @@ var routes = {
     INFO: { name: 'InfoView' },
     RELATED: { name: 'related' },
     TAGS: { name: 'tags' },
-    SETTINGS: { name: 'BevySettings' }
+    SETTINGS: { name: 'BevySettings' },
+    NEWTAG: { name: 'NewTag' }
   },
 
   CHAT: {

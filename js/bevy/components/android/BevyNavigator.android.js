@@ -16,7 +16,9 @@ var PostList = require('./../../../post/components/android/PostList.android.js')
 var BevyInfoView = require('./BevyInfoView.android.js');
 var RelatedView = require('./RelatedView.android.js');
 var BevyTagView = require('./BevyTagView.android.js');
+var NewTagView = require('./NewTagView.android.js');
 
+var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 
@@ -69,6 +71,15 @@ var BevyNavigator = React.createClass({
             case routes.BEVY.TAGS.name:
               return (
                 <BevyTagView
+                  bevyNavigator={ navigator }
+                  bevyRoute={ route }
+                  { ...this.props }
+                />
+              );
+              break;
+            case routes.BEVY.NEWTAG.name:
+              return (
+                <NewTagView
                   bevyNavigator={ navigator }
                   bevyRoute={ route }
                   { ...this.props }

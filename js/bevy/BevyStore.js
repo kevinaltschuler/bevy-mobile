@@ -94,8 +94,8 @@ _.extend(BevyStore, {
               this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
               // exclude the frontpage in the filter list
               this.frontpageFilters = _.reject(
-                this.frontpageFilters, 
-                function(bevy_id){ 
+                this.frontpageFilters,
+                function(bevy_id){
                   return bevy_id == -1;
                 }
               );
@@ -340,7 +340,50 @@ _.extend(BevyStore, {
         this.trigger(POST.CHANGE_ALL);
         this.trigger(BEVY.CHANGE_ALL);
         this.trigger(POST.LOADED);
+        break;
 
+      case BEVY.ADD_TAG:
+        var bevy_id = payload.bevy_id;
+        var name = payload.name;
+        var color = payload.color;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var tags = bevy.get('tags');
+        tags.push({
+          name: name,
+          color: color
+        });
+        bevy.set('tags', tags);
+        bevy.save({
+          tags: tags
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+      case BEVY.REMOVE_TAG:
+        var bevy_id = payload.bevy_id;
+        var name = payload.name;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var tags = bevy.get('tags');
+        tags = _.reject(tags, tag => tag.name == name);
+        bevy.set('tags', tags);
+        bevy.save({
+          tags: tags
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
         break;
     }
   },

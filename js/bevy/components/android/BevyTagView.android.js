@@ -11,12 +11,18 @@ var {
   Text,
   ListView,
   BackAndroid,
+  TouchableNativeFeedback,
   StyleSheet
 } = React;
 var BevyBar = require('./BevyBar.android.js');
 var BevyTagItem = require('./BevyTagItem.android.js');
+var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
+var routes = require('./../../../routes');
+var BevyActions = require('./../../../bevy/BevyActions');
+var DialogAndroid = require('react-native-dialogs');
 
 var BevyTagView = React.createClass({
   propTypes: {
@@ -30,7 +36,7 @@ var BevyTagView = React.createClass({
   getInitialState() {
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     var tags = this.props.activeBevy.tags;
-    var isAdmin = 
+    var isAdmin =
       _.findWhere(this.props.activeBevy.admins, { _id: this.props.user._id }) == undefined;
     return {
       dataSource: ds.cloneWithRows(tags),
@@ -47,10 +53,10 @@ var BevyTagView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    var isAdmin = 
+    var isAdmin =
       _.findWhere(nextProps.activeBevy.admins, { _id: nextProps.user._id }) == undefined;
     this.setState({
-      dataSource: dataSource.cloneWithRows(nextProps.activeBevy.tags),
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.activeBevy.tags),
       tags: nextProps.activeBevy.tags,
       isAdmin: isAdmin
     });
@@ -61,12 +67,56 @@ var BevyTagView = React.createClass({
     return true;
   },
 
+  goToNewTagView() {
+    this.props.bevyNavigator.push(routes.BEVY.NEWTAG);
+  },
+
+  onTagRemove(tag) {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Are you sure?',
+      positiveText: 'Ok',
+      negativeText: 'Cancel',
+      onPositive: () => {
+        BevyActions.removeTag(
+          this.props.activeBevy._id,
+          tag.name
+        );
+      }
+    });
+    dialog.show();
+  },
+
   _renderHeader() {
     return (
       <View style={ styles.header }>
         <Text style={ styles.title }>
           Tags of { this.props.activeBevy.name }
         </Text>
+        <TouchableNativeFeedback
+          onPress={ this.goToNewTagView }
+        >
+          <View style={{
+            backgroundColor: '#FFF',
+            height: 48,
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingHorizontal: 10
+          }}>
+            <Icon
+              name='add'
+              size={ 36 }
+              color='#2CB673'
+            />
+            <Text style={{
+              flex: 1,
+              color: '#000',
+              marginRight: 10
+            }}>
+              Add New Tag
+            </Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   },
@@ -89,6 +139,7 @@ var BevyTagView = React.createClass({
                 key={ 'tagitem:' + tag.name }
                 tag={ tag }
                 isAdmin={ this.state.isAdmin }
+                onRemove={ this.onTagRemove }
               />
             );
           }}
@@ -104,17 +155,15 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE'
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 15,
     marginTop: 10
   },
   title: {
     flex: 1,
     textAlign: 'left',
     color: '#AAA',
-    marginBottom: 4
+    marginBottom: 4,
+    marginLeft: 10,
+    paddingHorizontal: 15
   },
   tagList: {
     flex: 1

@@ -89,6 +89,8 @@ exports.BEVY = {
   UPDATE_FRONT: 'bevy_updatefront',
   UPDATE_TAGS: 'bevy_updatetags',
   REQUEST_JOIN: 'bevy_request_join',
+  ADD_TAG: 'bevy_add_tag',
+  REMOVE_TAG: 'bevy_remove_tag',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
