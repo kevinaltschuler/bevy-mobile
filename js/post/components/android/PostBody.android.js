@@ -12,6 +12,7 @@ var {
   TouchableNativeFeedback,
   StyleSheet
 } = React;
+var PostLinks = require('./PostLinks.android.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -42,6 +43,10 @@ var PostBody = React.createClass({
       height: height
     });
   },
+
+	goToCommentView() {
+
+	},
 
   _renderText() {
     var textStyle = {};
@@ -99,6 +104,9 @@ var PostBody = React.createClass({
       >
         { this._renderText() }
         { this._renderExpandButton() }
+				<PostLinks
+					post={ this.props.post }
+				/>
       </View>
     );
   }
