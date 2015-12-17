@@ -123,7 +123,9 @@ var BevyBar = React.createClass({
   _renderBackButton() {
     if(this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name) {
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name
+      || this.props.bevyRoute.name == routes.BEVY.NEWTAG.name
+      || this.props.bevyRoute.name == routes.BEVY.ADDRELATED.name) {
       return (
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
@@ -146,7 +148,9 @@ var BevyBar = React.createClass({
     if(  this.props.activeBevy._id == -1
       || this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name
+      || this.props.bevyRoute.name == routes.BEVY.NEWTAG.name
+      || this.props.bevyRoute.name == routes.BEVY.ADDRELATED.name)
       return <View />;
     else return (
       <TouchableNativeFeedback
@@ -168,7 +172,9 @@ var BevyBar = React.createClass({
     if(!this.props.showActions) return <View />;
     if(  this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name
+      || this.props.bevyRoute.name == routes.BEVY.NEWTAG.name
+      || this.props.bevyRoute.name == routes.BEVY.ADDRELATED.name)
       return <View />;
     else return (
       <TouchableNativeFeedback
@@ -191,7 +197,9 @@ var BevyBar = React.createClass({
     if(  this.props.activeBevy._id == -1
       || this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name
+      || this.props.bevyRoute.name == routes.BEVY.NEWTAG.name
+      || this.props.bevyRoute.name == routes.BEVY.ADDRELATED.name)
       return <View />;
     else return (
       <TouchableNativeFeedback
@@ -213,7 +221,9 @@ var BevyBar = React.createClass({
     if(!this.props.showActions) return <View />;
     if(this.props.bevyRoute.name == routes.BEVY.INFO.name
       || this.props.bevyRoute.name == routes.BEVY.RELATED.name
-      || this.props.bevyRoute.name == routes.BEVY.TAGS.name)
+      || this.props.bevyRoute.name == routes.BEVY.TAGS.name
+      || this.props.bevyRoute.name == routes.BEVY.NEWTAG.name
+      || this.props.bevyRoute.name == routes.BEVY.ADDRELATED.name)
       return <View />;
     else return (
       <TouchableNativeFeedback

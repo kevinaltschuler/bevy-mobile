@@ -42,7 +42,8 @@ var routes = {
     RELATED: { name: 'related' },
     TAGS: { name: 'tags' },
     SETTINGS: { name: 'BevySettings' },
-    NEWTAG: { name: 'NewTag' }
+    NEWTAG: { name: 'NewTag' },
+    ADDRELATED: { name: 'AddRelated' }
   },
 
   CHAT: {

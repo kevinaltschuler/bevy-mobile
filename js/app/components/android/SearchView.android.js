@@ -171,6 +171,11 @@ var SearchView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  goToBevy(bevy) {
+    BevyActions.switchBevy(this.props.bevy._id);
+    this.props.searchNavigator.jumpTo(routes.SEARCH.OUT);
+  },
+
   _renderTabBar() {
     return (
       <View style={ styles.tabbar }>
@@ -231,7 +236,7 @@ var SearchView = React.createClass({
                 <BevySearchItem
                   key={ 'bevysearchitem:' + bevy._id }
                   bevy={ bevy }
-                  searchNavigator={ this.props.searchNavigator }
+                  onPress={ this.goToBevy }
                 />
               }
             />

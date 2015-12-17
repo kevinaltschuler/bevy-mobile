@@ -426,6 +426,42 @@ _.extend(BevyStore, {
         });
         this.trigger(BEVY.CHANGE_ALL);
         break;
+
+      case BEVY.ADD_RELATED:
+        var bevy_id = payload.bevy_id;
+        var new_bevy = payload.new_bevy;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var siblings = bevy.get('siblings');
+        siblings.push(new_bevy._id);
+        bevy.set('siblings', siblings);
+        bevy.save({
+          siblings: siblings
+        }, {
+          patch: true
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.REMOVE_RELATED:
+        var bevy_id = payload.bevy_id;
+        var related_id = payload.related_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var siblings = bevy.get('siblings');
+        siblings = _.reject(siblings, sibling => sibling._id == related_id);
+        bevy.set('siblings', siblings);
+        bevy.save({
+          siblings: _.pluck(siblings, '_id')
+        }, {
+          patch: true
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
     }
   },
 

@@ -142,6 +142,22 @@ var BevyActions = {
       bevy_id: bevy_id,
       admin_id: admin_id
     });
+  },
+
+  addRelated(bevy_id, new_bevy) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_RELATED,
+      bevy_id: bevy_id,
+      new_bevy: new_bevy
+    });
+  },
+
+  removeRelated(bevy_id, related_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REMOVE_RELATED,
+      bevy_id: bevy_id,
+      related_id: related_id
+    });
   }
 };
 

@@ -93,6 +93,8 @@ exports.BEVY = {
   REMOVE_TAG: 'bevy_remove_tag',
   ADD_ADMIN: 'bevy_add_admin',
   REMOVE_ADMIN: 'bevy_remove_admin',
+  ADD_RELATED: 'bevy_add_related',
+  REMOVE_RELATED: 'bevy_remove_related',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',

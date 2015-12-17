@@ -480,6 +480,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
+    paddingTop: 8,
     //margin: 5,
     //borderRadius: 5,
     //elevation: 2
@@ -506,7 +507,6 @@ var styles = StyleSheet.create({
   bevyDescription: {
     width: constants.width - 10 - 60 - 10 - 10,
     color: '#AAA',
-    marginBottom: 5,
     flexWrap: 'wrap'
   },
   bevyDetailsBottom: {
