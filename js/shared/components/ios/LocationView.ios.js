@@ -1,6 +1,6 @@
 /* MapView.ios.js
 * made by @kevin
-* the girl to our left is intensely goofing off. iphone in hand, ipad in lap and imac on desk.
+* the girl to our left has iphone in hand, ipad in lap and imac on desk.
 */
 'use strict';
 

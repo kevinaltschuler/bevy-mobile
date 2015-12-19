@@ -99,7 +99,7 @@ var TagPickerView = React.createClass({
                 underlayColor='rgba(0,0,0,.1)'
                 onPress={() => {
                   this.props.onSelectTag(tag);
-                }.bind(this)}
+                }}
               >
                 <View style={ styles.bevyPickerItem }>
                   <View style={{

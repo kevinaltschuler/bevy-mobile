@@ -189,9 +189,11 @@ _.extend(UserStore, {
         var uri = payload.uri;
         var image = payload.image;
 
+        console.log(uri);
+
         if(uri) {
           FileStore.upload(uri, (err, filename) => {
-            console.log(err, filename);
+            //console.log(err, filename);
             if(err) return;
             this.user.save({
               image_url: filename

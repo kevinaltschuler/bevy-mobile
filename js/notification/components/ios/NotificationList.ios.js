@@ -10,7 +10,8 @@ var {
   StyleSheet,
   Text,
   View,
-  ListView
+  ListView,
+  ScrollView
 } = React;
 var NotificationItem = require('./NotificationItem.ios.js');
 
@@ -23,16 +24,14 @@ var NotificationList = React.createClass({
   },
 
   getInitialState() {
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
     return {
-      dataSource: ds.cloneWithRows(this.props.allNotifications)
+      notes: this.props.allNotifications
     };
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.allNotifications)
+      notes: nextProps.allNotifications
     });
   },
 
@@ -50,6 +49,21 @@ var NotificationList = React.createClass({
     }
   },
 
+  _renderNotes() {
+    var notes = [];
+    for(var key in this.state.notes) {
+      var note = this.state.notes[key];
+      notes.push(
+        <NotificationItem
+          mainNavigator={ this.props.mainNavigator }
+          notification={ note }
+          key={'note:' + note._id}
+        />
+      );
+    }
+    return notes;
+  },
+
   render() {
     if(!this.props.loggedIn) {
       return (
@@ -65,19 +79,11 @@ var NotificationList = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderNoNotificationsText() }
-        <ListView
-          dataSource={ this.state.dataSource }
+        <ScrollView>
 
-          renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          renderFooter={() => (<View style={{marginBottom: 48, borderBottomColor: '#AAA', borderBottomWidth: 0}}/>)}
-          renderRow={(notification) =>
-            <NotificationItem
-              mainNavigator={ this.props.mainNavigator }
-              notification={ notification }
+            {this._renderNotes()}
 
-            />
-          }
-        />
+        </ScrollView>
       </View>
     );
   }

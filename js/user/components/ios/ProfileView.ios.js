@@ -50,6 +50,8 @@ var ProfileView = React.createClass({
   },
 
   render() {
+    console.log(this.props.profileUser.image.filename);
+    var userImage = this.props.profileUser.image_url || constants.apiurl + this.props.profileUser.image.filename;
     return (
       <View style={ styles.container }>
         <Navbar
@@ -93,7 +95,7 @@ var ProfileView = React.createClass({
 
             <View style={ styles.profileCard }>
               <Image
-                source={{ uri: this.props.profileUser.image_url }}
+                source={{ uri: userImage }}
                 style={ styles.profileImage }
               />
               <View style={ styles.profileDetails }>
@@ -107,36 +109,41 @@ var ProfileView = React.createClass({
             </Text>
 
             <View style={styles.generalItem}>
-              <Text style={styles.generalTitle}>
-                points
-              </Text>
-              <Text style={styles.generalText}>
-                {this.props.user.points}
-              </Text>
+              <View style={styles.itemInner}>
+                <Text style={styles.generalTitle}>
+                  points
+                </Text>
+                <Text style={styles.generalText}>
+                  {this.props.user.points}
+                </Text>
+              </View>
             </View>
 
             <View style={styles.generalItem}>
-              <Text style={styles.generalTitle}>
-                comments
-              </Text>
-              <Text style={styles.generalText}>
-                {this.props.user.commentCount}
-              </Text>
+              <View style={styles.itemInner}>
+                <Text style={styles.generalTitle}>
+                  comments
+                </Text>
+                <Text style={styles.generalText}>
+                  {this.props.user.commentCount}
+                </Text>
+              </View>
             </View>
 
             <View style={styles.generalItem}>
-              <Text style={styles.generalTitle}>
-                posts
-              </Text>
-              <Text style={styles.generalText}>
-                {this.props.user.postCount}
-              </Text>
+              <View style={styles.itemInner}>
+                <Text style={styles.generalTitle}>
+                  posts
+                </Text>
+                <Text style={styles.generalText}>
+                  {this.props.user.postCount}
+                </Text>
+              </View>
             </View>
 
             <Text style={styles.postsTitle}>
               Posts
             </Text>
-
             <PostList
               showNewPostCard={ false }
               profileUser={ this.props.profileUser }
@@ -154,7 +161,8 @@ var ProfileView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#eee'
   },
 
   navButtonLeft: {
@@ -178,14 +186,15 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee'
+    backgroundColor: '#eee',
+    minHeight: constants.height
   },
 
   profileCard: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     padding: 10,
-    margin: 10,
+    marginBottom: 10,
     borderRadius: 2,
     shadowColor: '#000',
     shadowRadius: 1,
@@ -214,17 +223,29 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 15,
     height: 48,
     borderWidth: .5,
     borderColor: 'rgba(0,0,0,.2)',
     backgroundColor: '#fff'
   },
   generalTitle: {
-    color: '#666'
+    color: '#666',
+    backgroundColor: '#fff',
+    fontSize: 16
   },
   generalText: {
-    color: '#666'
+    color: '#666',
+    backgroundColor: '#fff'
+  },
+  itemInner: {
+    height: 48,
+    width: constants.width,
+    backgroundColor: '#fff',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    paddingHorizontal: 16,
   },
   sectionTitle: {
     color: '#666',

@@ -19,6 +19,7 @@ var {
 var MainView = require('./js/app/components/ios/MainView.ios.js');
 var LoginModal = require('./js/login/components/ios/LoginModal.ios.js');
 var NotificationActions = require('./js/notification/NotificationActions');
+var NativeModules = require('NativeModules');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -269,7 +270,14 @@ var App = React.createClass({
 
     PushNotificationIOS.requestPermissions();
     //PushNotificationIOS.checkPermissions(data => {console.log(data)})
-    PushNotificationIOS.presentLocalNotification({alertBody: 'irbfwebfwe'});
+
+    NativeModules.CameraManager.checkDeviceAuthorizationStatus(function(err, isAuthorized) {
+      if(isAuthorized) {
+        //console.log('you have permissions');
+      } else {
+        //console.log('you dont');
+      }
+    });
 
     return (
       <View style={{ flex: 1 }}>

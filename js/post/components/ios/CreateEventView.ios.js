@@ -92,7 +92,7 @@ var CreateEventView = React.createClass({
     }, (type, response) => {
       if (type !== 'cancel') {
         //console.log(response);
-        FileActions.upload(response);
+        FileActions.upload(response.uri);
       } else {
         //console.log('Cancel');
       }
@@ -181,7 +181,8 @@ var CreateEventView = React.createClass({
                   shadowColor: 'rgba(0,0,0,.3)',
                   shadowOffset: {width: 2, height: 2},
                   shadowOpacity: 1,
-                  shadowRadius: 5 }}
+                  shadowRadius: 5 
+              }}
               onPress={() => {
                 UIImagePickerManager.showImagePicker({
                     returnBase64Image: false,

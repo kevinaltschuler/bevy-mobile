@@ -65,7 +65,7 @@ var NotificationView = React.createClass({
         <Navbar
           notificationRoute={ this.props.notificationRoute }
           notificationNavigator={ this.props.notificationNavigator }
-          center='Notifications'
+          center={<Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>Notifications</Text>}
           right={ clearAllButton }
           { ...this.props }
         />

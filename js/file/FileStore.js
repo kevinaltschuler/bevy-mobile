@@ -43,8 +43,12 @@ _.extend(FileStore, {
       if(Platform.OS === 'ios') {
         StatusBarIOS.setStyle(1);
       }
-
-      var file = JSON.parse(res);
+      if(Platform.OS == 'ios') {
+        var file = res.data;
+        file = JSON.parse(file);
+      } else {
+        var file = JSON.parse(res);
+      }
       if(err) {
         this.trigger(FILE.UPLOAD_ERROR, err);
         return;

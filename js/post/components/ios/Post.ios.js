@@ -313,7 +313,7 @@ var Post = React.createClass({
                 this.setState({
                   collapsed: !this.state.collapsed
                 })
-              }.bind(this)}
+              }}
             />
           </Collapsible>
         </View>

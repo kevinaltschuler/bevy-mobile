@@ -76,10 +76,12 @@ var styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     width: 30,
-    height: 30
+    height: 30,
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   backButtonText: {
-    fontSize: 15
+    fontSize: 15,
+    backgroundColor: 'rgba(0,0,0,0)'
   }
 });
 

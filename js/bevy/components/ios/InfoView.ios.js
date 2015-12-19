@@ -42,10 +42,21 @@ var InfoView = React.createClass({
   getInitialState() {
     var user = this.props.user;
     //console.log(user.bevies, this.props.activeBevy._id);
+    
+    var bevy = this.props.activeBevy;
+    
+    var bevyImage = bevy.image_url || bevy.image.filename || constants.siteurl + '/img/default_group_img.png' ;
+    var defaultBevies = [
+      '11sports', '22gaming', '3333pics',
+      '44videos', '555music', '6666news', '777books'
+    ];
+    if(_.contains(defaultBevies, bevy._id)) {
+      bevyImage = constants.apiurl + bevy.image_url;
+    }
     return {
       subscribed: _.findWhere(user.bevies, { _id: this.props.activeBevy._id }) != undefined,
       public: true,
-      bevyImageURI: this.props.activeBevy.image_url
+      bevyImageURI: bevyImage
     };
   },
 
@@ -110,19 +121,25 @@ var InfoView = React.createClass({
     // dont render this if you're an admin
     if(_.contains(bevy.admins, user._id)) return null;
     return (
-      <View style={[ styles.switchContainer, {
-        marginTop: -10,
-        borderTopWidth: 1,
-        borderTopColor: '#ddd'
+      <View style={[ styles.actionRow, {
+        marginTop: 15
       }]}>
-        <Text style={ styles.switchDescription }>Subscribed</Text>
-        <SubSwitch
-          subbed={subbed}
-          loggedIn={ this.props.loggedIn }
-          authModalActions={ this.props.authModalActions }
-          bevy={bevy}
-          user={user}
-        />
+        <Text style={ styles.settingsTitle }>Subscribe</Text>
+        <View style={[ styles.switchContainer, {
+          marginTop: 0,
+          borderTopWidth: 1,
+          borderTopColor: '#ddd',
+          paddingHorizontal: 16
+        }]}>
+          <Text style={ styles.switchDescription }>Subscribed</Text>
+          <SubSwitch
+            subbed={subbed}
+            loggedIn={ this.props.loggedIn }
+            authModalActions={ this.props.authModalActions }
+            bevy={bevy}
+            user={user}
+          />
+        </View>
       </View>
     );
   },
@@ -240,7 +257,7 @@ var InfoView = React.createClass({
             <View style={styles.settingContainer}>
               <Image
                 style={styles.relatedImage}
-                source={{ uri: admin.image_url }}
+                source={{ uri: admin.image.path }}
               />
               <Text style={styles.settingValue}>
                 { admin.displayName }
@@ -334,9 +351,9 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
-    margin: 10,
+    margin: 0,
     marginBottom: 20,
-    marginTop: 10,
+    marginTop: 0,
     borderRadius: 2,
     shadowColor: '#000',
     shadowRadius: 1,
@@ -405,6 +422,7 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     flexDirection: 'column',
+    marginBottom: 24
   },
   settingContainer: {
     flex: 1,
@@ -412,7 +430,10 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 0,
     paddingBottom: 0,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    height: 47,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   settingsTitle: {
     color: '#888',
@@ -435,8 +456,6 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: 48,
-    paddingLeft: 16,
-    paddingRight: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
   },

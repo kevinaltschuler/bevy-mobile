@@ -157,9 +157,7 @@ var PostList = React.createClass({
         />
       </View>
     );
-    return (
-        { newPostCard }
-    );
+    return newPostCard;
   },
 
   render() {
@@ -224,7 +222,7 @@ var PostList = React.createClass({
             onScroll={(data) => {
               this.props.onScroll(data.nativeEvent.contentOffset.y);
             }}
-            scrollRenderAheadDistance={3}
+            scrollRenderAheadDistance={100}
             renderHeader={() => {
               return this._renderHeader();
             }}
@@ -288,7 +286,7 @@ var PostList = React.createClass({
                     loggedIn={ this.props.loggedIn }
                   />
                 </View>;
-            }.bind(this)}
+            }}
           />
         </View>
     );
@@ -322,7 +320,7 @@ var styles = StyleSheet.create({
   cardContainer: {
     height: 50,
     backgroundColor: '#eee',
-    marginTop: 2,
+    marginTop: 22,
     marginBottom: -10
   },
   listContainer: {

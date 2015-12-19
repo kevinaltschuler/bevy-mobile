@@ -69,8 +69,11 @@ var LoginView = React.createClass({
           this.onLoginSuccess(user);
         });
       } else {
+        
         // no one has logged in before or has consciously signed out
-        // do oauth via the browser, and listen for the callback
+        // navigate to GoogleWebSignIn and let it handle things
+        this.props.loginNavigator.change('google');
+        /*
         LinkingIOS.addEventListener('url', this.handleGoogleURL);
         LinkingIOS.openURL([
           'https://accounts.google.com/o/oauth2/auth',
@@ -79,6 +82,7 @@ var LoginView = React.createClass({
           '&redirect_uri=' + constants.google_redirect_uri,
           '&scope=email%20profile'
         ].join(''));
+        */
       }
     });
   },
@@ -86,7 +90,7 @@ var LoginView = React.createClass({
   handleGoogleURL: function(event) {
     // when the browser gets back to us
     // it should only send an access code that we use to get the oauth token
-    LinkingIOS.removeEventListener('url', this.handleGoogleURL);
+    //LinkingIOS.removeEventListener('url', this.handleGoogleURL);
     var url = event.url;
     var code = url.slice(38); // jenky query parser
     console.log('got access code', code);
@@ -167,7 +171,6 @@ var LoginView = React.createClass({
         <View
           style={{
             flex: 1,
-            color: '#ddd',
             height: 1
           }}
         />
@@ -246,7 +249,6 @@ var styles = StyleSheet.create({
     flex: 1,
     height: 40,
     paddingLeft: 16,
-    color: '#000',
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
     marginBottom: 10

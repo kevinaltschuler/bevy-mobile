@@ -110,9 +110,10 @@ var SettingsView = React.createClass({
               returnIsVertical: true
             }, (type, response) => {
               if (type !== 'cancel') {
-                UserActions.changeProfilePicture(response);
+                UserActions.changeProfilePicture(response.uri);
+                //console.log(response)
                 this.setState({
-                  profilePicture: response
+                  profilePicture: response.uri
                 });
               }
             });
