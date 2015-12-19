@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bevyios;
+package com.bevyios.gcm;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

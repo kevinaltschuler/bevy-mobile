@@ -94,8 +94,8 @@ _.extend(BevyStore, {
               this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
               // exclude the frontpage in the filter list
               this.frontpageFilters = _.reject(
-                this.frontpageFilters, 
-                function(bevy_id){ 
+                this.frontpageFilters,
+                function(bevy_id){
                   return bevy_id == -1;
                 }
               );
@@ -340,7 +340,127 @@ _.extend(BevyStore, {
         this.trigger(POST.CHANGE_ALL);
         this.trigger(BEVY.CHANGE_ALL);
         this.trigger(POST.LOADED);
+        break;
 
+      case BEVY.ADD_TAG:
+        var bevy_id = payload.bevy_id;
+        var name = payload.name;
+        var color = payload.color;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var tags = bevy.get('tags');
+        tags.push({
+          name: name,
+          color: color
+        });
+        bevy.set('tags', tags);
+        bevy.save({
+          tags: tags
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.REMOVE_TAG:
+        var bevy_id = payload.bevy_id;
+        var name = payload.name;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var tags = bevy.get('tags');
+        tags = _.reject(tags, tag => tag.name == name);
+        bevy.set('tags', tags);
+        bevy.save({
+          tags: tags
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.ADD_ADMIN:
+        var bevy_id = payload.bevy_id;
+        var admin = payload.admin;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var admins = bevy.get('admins');
+        admins.push(admin);
+        bevy.set('admins', admins);
+        bevy.save({
+          admins: _.pluck(admins, '_id')
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.REMOVE_ADMIN:
+        var bevy_id = payload.bevy_id;
+        var admin_id = payload.admin_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var admins = bevy.get('admins');
+        admins = _.reject(admins, admin => admin._id == admin_id);
+        bevy.set('admins', admins);
+        bevy.save({
+          admins: _.pluck(admins, '_id')
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+          }
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.ADD_RELATED:
+        var bevy_id = payload.bevy_id;
+        var new_bevy = payload.new_bevy;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var siblings = bevy.get('siblings');
+        siblings.push(new_bevy._id);
+        bevy.set('siblings', siblings);
+        bevy.save({
+          siblings: siblings
+        }, {
+          patch: true
+        });
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.REMOVE_RELATED:
+        var bevy_id = payload.bevy_id;
+        var related_id = payload.related_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break;
+
+        var siblings = bevy.get('siblings');
+        siblings = _.reject(siblings, sibling => sibling._id == related_id);
+        bevy.set('siblings', siblings);
+        bevy.save({
+          siblings: _.pluck(siblings, '_id')
+        }, {
+          patch: true
+        });
+        this.trigger(BEVY.CHANGE_ALL);
         break;
     }
   },

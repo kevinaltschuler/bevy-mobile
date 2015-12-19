@@ -14,14 +14,18 @@ var {
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 
+var _ = require('underscore');
+var BevyActions = require('./../../../bevy/BevyActions');
+
 var BevyTagItem = React.createClass({
   propTypes: {
     tag: React.PropTypes.object,
-    isAdmin: React.PropTypes.bool
+    isAdmin: React.PropTypes.bool,
+    onRemove: React.PropTypes.func
   },
 
   remove() {
-
+    this.props.onRemove(this.props.tag);
   },
 
   _renderRemoveButton() {
@@ -63,7 +67,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 15
+    paddingHorizontal: 10
   },
   color: {
     width: 30,

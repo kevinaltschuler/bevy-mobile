@@ -1,4 +1,4 @@
-/** 
+/**
  * BevySearchItem.android.js
  * @author albert
  * @flow
@@ -24,13 +24,11 @@ var BevyStore = require('./../../../bevy/BevyStore');
 var BevySearchItem = React.createClass({
   propTypes: {
     bevy: React.PropTypes.object,
-    searchNavigator: React.PropTypes.object
+    onPress: React.PropTypes.func
   },
 
   onPress() {
-    // switch bevy
-    BevyActions.switchBevy(this.props.bevy._id);
-    this.props.searchNavigator.jumpTo(routes.SEARCH.OUT);
+    this.props.onPress(this.props.bevy);
   },
 
   render() {

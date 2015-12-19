@@ -26,7 +26,7 @@ import java.util.List;
 
 import com.bevyios.*;
 
-public class ImagePickerModule extends ReactContextBaseJavaModule 
+public class ImagePickerModule extends ReactContextBaseJavaModule
   implements ActivityResultListener {
 
   static final int REQUEST_LAUNCH_CAMERA = 1;
@@ -89,6 +89,12 @@ public class ImagePickerModule extends ReactContextBaseJavaModule
     if (requestCode == REQUEST_LAUNCH_CAMERA || requestCode == REQUEST_LAUNCH_IMAGE_LIBRARY) {
       if (resultCode == Activity.RESULT_OK) {
         Uri uri = requestCode == REQUEST_LAUNCH_CAMERA ? mCameraCaptureURI : data.getData();
+        if(uri == null) {
+          Toast.makeText(mMainActivity.getApplicationContext(),
+              "Error reading image.", Toast.LENGTH_SHORT)
+              .show();
+          return;
+        }
         WritableMap response = Arguments.createMap();
         response.putString("uri", uri.toString());
         mCallback.invoke(false, response);

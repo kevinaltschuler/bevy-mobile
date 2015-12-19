@@ -14,6 +14,7 @@ var {
   StyleSheet
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -33,12 +34,15 @@ var PostActions = React.createClass({
   },
 
   getInitialState() {
-    if(_.isEmpty(this.props.user)) return {
+    if(_.isEmpty(UserStore.getUser())) return {
       voted: false
     };
-    var vote = _.findWhere(this.props.post.votes, { voter: this.props.user._id });
+    var vote = _.findWhere(this.props.post.votes, { voter: UserStore.getUser()._id });
     return {
-      voted: (vote != undefined && vote.score > 0)
+      voted: (vote != undefined && vote.score > 0),
+      user: (_.isEmpty(this.props.user))
+        ? UserStore.getUser()
+        : this.props.user
     };
   },
 
@@ -74,9 +78,16 @@ var PostActions = React.createClass({
     });
   },
 
+  goToEditView() {
+    var route = routes.MAIN.NEWPOST;
+    route.editing = true;
+    route.post = this.props.post;
+    this.props.mainNavigator.push(route);
+  },
+
   deletePost() {
-    if(this.props.user._id == this.props.post.author._id // if the original author
-      || _.contains(this.props.post.bevy.admins, this.props.user._id) // if an admin of the bevy
+    if(this.state.user._id == this.props.post.author._id // if the original author
+      || _.contains(this.props.post.bevy.admins, this.state.user._id) // if an admin of the bevy
     ) {
       $PostActions.destroy(this.props.post._id);
     } else {
@@ -86,7 +97,7 @@ var PostActions = React.createClass({
 
   getLikeCountText() {
     var likeCount = PostStore.getPostVoteCount(this.props.post._id);
-    return (likeCount > 1 || likeCount == 0) 
+    return (likeCount > 1 || likeCount == 0)
     ? likeCount + ' likes'
     : likeCount + ' like';
   },
@@ -96,6 +107,55 @@ var PostActions = React.createClass({
     return (commentCount > 1 || commentCount == 0)
     ? commentCount + ' comments'
     : commentCount + ' comment';
+  },
+
+  showMoreActions() {
+    var dialog = new DialogAndroid();
+    var items = [
+      "Go To Author's Profile",
+      "Go To Bevy"
+    ];
+    if(this.state.user._id == this.props.post.author._id) {
+      // if user is the author
+      items.push("Edit Post");
+      items.push("Delete Post");
+    }
+    if(_.contains(this.props.post.bevy.admins, this.state.user._id)) {
+      // if user is the admin of the post's bevy
+      if(!_.contains(items, "Delete Post"))
+        items.push("Delete Post");
+      if(this.props.post.pinned) {
+        items.push("Unpin Post");
+      } else {
+        items.push("Pin Post");
+      }
+    }
+    dialog.set({
+      title: 'Post Actions',
+      items: items,
+      cancelable: true,
+      itemsCallback: (index, item) => {
+        switch(item) {
+          case "Go To Author's Profile":
+            this.goToAuthorProfile();
+            break;
+          case "Go To Bevy":
+            this.goToBevy();
+            break;
+          case "Edit Post":
+            this.goToEditView();
+            break;
+          case "Delete Post":
+            this.deletePost();
+            break;
+          case "Pin Post":
+          case "Unpin Post":
+            $PostActions.pin(this.props.post._id);
+            break;
+        }
+      }
+    });
+    dialog.show();
   },
 
   render() {
@@ -133,31 +193,7 @@ var PostActions = React.createClass({
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
           background={ TouchableNativeFeedback.Ripple('#EEE', false) }
-          onPress={() => {
-            constants.getActionSheetActions().show(
-              [
-                "Go To Author's Profile",
-                "Go To Bevy",
-                //"Edit Post",
-                "Delete Post"
-               ],
-              function(key, option) {
-                //console.log(key);
-                switch(option) {
-                  case "Go To Author's Profile":
-                    this.goToAuthorProfile();
-                    break;
-                  case "Go To Bevy":
-                    this.goToBevy();
-                    break;
-                  case "Delete Post":
-                    this.deletePost();
-                    break;
-                }
-              }.bind(this),
-              'Post Actions'
-            );
-          }}
+          onPress={ this.showMoreActions }
         >
           <View style={ styles.moreButton }>
             <Icon

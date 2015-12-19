@@ -21,7 +21,7 @@ var GCM = require('./../shared/apis/GCM.android.js');
 //var AudioPlayer = (Platform.OS == 'android')
 //  ? require('react-native-audioplayer')
 //  : {};
-//  
+//
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -52,7 +52,7 @@ _.extend(NotificationStore, {
         }
         var user = UserStore.getUser();
 
-        this.notifications.url = 
+        this.notifications.url =
           constants.apiurl + '/users/' + user._id + '/notifications';
 
         this.notifications.fetch({
@@ -106,7 +106,7 @@ _.extend(NotificationStore, {
           } else if (Platform.OS == 'ios') {
             VibrationIOS.vibrate();
           }
-          
+
           console.log('eyyyyy');
 
           ChatStore.addMessage(message);
@@ -117,7 +117,7 @@ _.extend(NotificationStore, {
           this.notifications.add(notification);
           this.trigger(NOTIFICATION.CHANGE_ALL);
         }.bind(this));
-        
+
         break;
 
       case NOTIFICATION.FETCH:
@@ -147,7 +147,7 @@ _.extend(NotificationStore, {
       case NOTIFICATION.READ:
         var id = payload.id;
         var notification = this.notifications.get(id);
-        if(notification == null) 
+        if(notification == null)
           break;
         notification.read = true;
         this.unread -= 1;
@@ -185,7 +185,6 @@ _.extend(NotificationStore, {
             })
           });
         }
-
         break;
     }
   },
@@ -199,10 +198,11 @@ _.extend(NotificationStore, {
   }
 });
 
-if(Platform.OS == 'android')
+if(Platform.OS == 'android') {
   GCM.addEventListener('notification', function(data) {
     console.log('got remote notification', data);
   });
+}
 
 
 var dispatchToken = Dispatcher.register(NotificationStore.handleDispatch.bind(NotificationStore));

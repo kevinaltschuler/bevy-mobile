@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.bevyios;
+package com.bevyios.gcm;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -32,6 +32,7 @@ import android.graphics.BitmapFactory;
 import android.content.res.Resources;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
+import com.bevyios.R;
 import java.util.List;
 
 import com.google.android.gms.gcm.GcmListenerService;
@@ -56,7 +57,7 @@ public class BevyGcmListenerService extends GcmListenerService {
     sendNotification(bundle);
   }
   // [END receive_message]
-  
+
   public Class getMainActivityClass() {
     try {
       String packageName = getApplication().getPackageName();
@@ -68,12 +69,12 @@ public class BevyGcmListenerService extends GcmListenerService {
   }
 
   private boolean applicationIsRunning() {
-    ActivityManager activityManager = 
+    ActivityManager activityManager =
       (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
     List<RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
     for (ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
       if (processInfo.processName.equals(getApplication().getPackageName())) {
-        if (processInfo.importance 
+        if (processInfo.importance
           == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
           for (String d: processInfo.pkgList) {
             return true;

@@ -69,6 +69,7 @@ exports.POST = {
 
 exports.COMMENT = {
   CREATE: 'comment_create',
+  EDIT: 'comment_edit',
   DESTROY: 'comment_destroy',
   VOTE: 'comment_vote'
 }
@@ -88,6 +89,12 @@ exports.BEVY = {
   UPDATE_FRONT: 'bevy_updatefront',
   UPDATE_TAGS: 'bevy_updatetags',
   REQUEST_JOIN: 'bevy_request_join',
+  ADD_TAG: 'bevy_add_tag',
+  REMOVE_TAG: 'bevy_remove_tag',
+  ADD_ADMIN: 'bevy_add_admin',
+  REMOVE_ADMIN: 'bevy_remove_admin',
+  ADD_RELATED: 'bevy_add_related',
+  REMOVE_RELATED: 'bevy_remove_related',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
@@ -160,7 +167,7 @@ exports.USER = {
 
 exports.FILE = {
   'UPLOAD': 'file_upload',
-  
+
   'UPLOAD_COMPLETE': 'file_upload_complete',
   'UPLOAD_ERROR': 'file_upload_error'
 }
@@ -212,14 +219,6 @@ exports.getImageModalImages = function() {
   return imageModalImages
 };
 
-var actionSheetActions = {};
-exports.setActionSheetActions = function(actions) {
-  actionSheetActions = actions;
-};
-exports.getActionSheetActions = function() {
-  return actionSheetActions;
-};
-
 var tagModalActions = {};
 exports.setTagModalActions = function(actions) {
   tagModalActions = actions;
@@ -234,4 +233,12 @@ exports.setTabBarActions = function(actions) {
 };
 exports.getTabBarActions = function() {
   return tabBarActions;
+};
+
+var searchBarActions = {};
+exports.setSearchBarActions = function(actions) {
+  searchBarActions = actions;
+};
+exports.getSearchBarActions = function() {
+  return searchBarActions;
 };

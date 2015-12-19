@@ -13,7 +13,8 @@ var routes = {
     SWITCHACCOUNT: { name: 'SwitchAccount' },
     EDITPOST: {name: 'EditPost'},
     NEWTHREAD: { name: 'NewThread' },
-    THREADSETTINGS: { name: 'ThreadSettings' }
+    THREADSETTINGS: { name: 'ThreadSettings' },
+    ADDUSER: { name: 'AddUser' } // FOR ANDROID
   },
 
   NEWPOST: {
@@ -41,13 +42,15 @@ var routes = {
     RELATED: { name: 'related' },
     TAGS: { name: 'tags' },
     SETTINGS: { name: 'BevySettings' },
-    MYBEVIES: { name: 'MyBevies' }
+    MYBEVIES: { name: 'MyBevies' },
+    NEWTAG: { name: 'NewTag' },
+    ADDRELATED: { name: 'AddRelated' }
   },
-  
+
   CHAT: {
     LISTVIEW: { name: 'ListView'},
     CHATVIEW: { name: 'ChatView' },
-    ADDPEOPLE: { name: 'AddPeople' }
+    ADDPEOPLE: { name: 'AddPeople' } // FOR IOS
   },
 
   PROFILE: {

@@ -10,12 +10,14 @@ var {
   View,
   Image,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   StyleSheet
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var NewPostImageItem = React.createClass({
   propTypes: {
@@ -27,25 +29,35 @@ var NewPostImageItem = React.createClass({
     this.props.onRemove(this.props.image);
   },
 
+  showImageModal() {
+    var actions = constants.getImageModalActions();
+    constants.setImageModalImages([this.props.image]);
+    actions.show();
+  },
+
   render() {
+    var image = resizeImage(this.props.image, 75, 75);
     return (
+      <TouchableWithoutFeedback
+        onPress={ this.showImageModal }
+      >
         <View style={{
           backgroundColor: '#000',
           width: 75,
           height: 75,
-          borderRadius: 5
+          borderRadius: 5,
+          marginHorizontal: 5
         }}>
           <Image
-            source={{ uri: constants.apiurl + '/files/' + this.props.image.filename }}
+            source={{ uri: image.url }}
             style={{
               width: 75,
               height: 75,
               borderRadius: 5
             }}
-            resizeMode='contain'
+            resizeMode='cover'
           />
           <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#FFF', false) }
             onPress={ this.remove }
           >
             <View style={{
@@ -53,7 +65,9 @@ var NewPostImageItem = React.createClass({
               top: 0,
               right: 0,
               width: 30,
-              height: 30
+              height: 30,
+              flexDirection: 'row',
+              alignItems: 'center'
             }}>
               <Icon
                 name='close'
@@ -63,6 +77,7 @@ var NewPostImageItem = React.createClass({
             </View>
           </TouchableNativeFeedback>
         </View>
+      </TouchableWithoutFeedback>
     );
   }
 });

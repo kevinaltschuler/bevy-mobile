@@ -11,6 +11,7 @@ var {
   ListView,
   ScrollView,
   TouchableNativeFeedback,
+  TouchableHighlight,
   Text,
   ToastAndroid,
   PullToRefreshViewAndroid,
@@ -119,41 +120,31 @@ var ThreadView = React.createClass({
 
   _renderActionBar() {
     return (
-      <View style={ styles.actionBar }>
-        <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-          onPress={ this.openNewThreadView }
-        >
-          <View style={[ styles.actionButton, {
-            borderRightColor: '#62D487',
-            borderRightWidth: 1
-          }]}>
-            <Icon
-              name='create'
-              size={ 20 }
-              color='#FFF'
-            />
-            <Text style={ styles.actionButtonText }>
-              Message
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback
-          background={ TouchableNativeFeedback.Ripple('#62D487', false) }
-          onPress={ this.openNewThreadView }
-        >
-          <View style={ styles.actionButton }>
-            <Icon
-              name='group'
-              size={ 20 }
-              color='#FFF'
-            />
-            <Text style={ styles.actionButtonText }>
-              Group
-            </Text>
-          </View>
-        </TouchableNativeFeedback>
-      </View>
+      <TouchableHighlight
+        onPress={ this.openNewThreadView }
+        underlayColor='#62D487'
+        style={{
+          position: 'absolute',
+          bottom: 10,
+          right: 10,
+          backgroundColor: '#2CB673',
+          width: 48,
+          height: 48,
+          borderRadius: 24,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          elevation: 8
+        }}
+      >
+        <View>
+          <Icon
+            name='add'
+            size={ 40 }
+            color='#FFF'
+          />
+        </View>
+      </TouchableHighlight>
     );
   },
 
@@ -170,7 +161,6 @@ var ThreadView = React.createClass({
         >
           <ListView
             style={ styles.threadList }
-            contentContainerStyle={ styles.threadList }
             dataSource={ this.state.ds }
             renderRow={ this._renderThreadItem }
             scrollRenderAheadDistance={ 300 }
@@ -193,7 +183,7 @@ var styles = StyleSheet.create({
     borderTopWidth: 1
   },
   threadList: {
-    paddingBottom: 36
+    flex: 1
   },
   panelHeader: {
     height: 30,
@@ -214,29 +204,6 @@ var styles = StyleSheet.create({
     color: '#AAA',
     fontSize: 22,
     textAlign: 'center'
-  },
-  actionBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: constants.width,
-    height: 36,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#2CB673',
-    opacity: 0.95
-  },
-  actionButton: {
-    flex: 1,
-    height: 36,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  actionButtonText: {
-    color: '#FFF',
-    fontSize: 12,
-    marginLeft: 6
   }
 });
 

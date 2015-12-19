@@ -40,7 +40,7 @@ _.extend(ChatStore, {
               if(this.active != -1) {
                 // if theres already an active thread set
                 // then fetch the messages asap
-                // 
+                //
                 var thread = this.threads.get(this.active);
                 this.threads.sort();
                 thread.messages.fetch({
@@ -164,13 +164,13 @@ _.extend(ChatStore, {
         var duplicate = this.threads.find(function($thread) {
           return (
             _.difference(
-              _.pluck(addedUsers, '_id'), 
+              _.pluck(addedUsers, '_id'),
                 _.pluck($thread.get('users'), '_id')
             ).length <= 0)
             && addedUsers.length == $thread.get('users').length;
         });
 
-        // only dont create a new thread if this is a pm 
+        // only dont create a new thread if this is a pm
         // allow for duplicate group chats
         if(duplicate != undefined && addedUsers.length <= 2) {
           // if we find a duplicate thread
@@ -213,7 +213,7 @@ _.extend(ChatStore, {
 
             // set the urls
             thread.url = constants.apiurl + '/threads/' + thread.get('_id');
-            thread.messages.url = constants.apiurl + '/threads/' + 
+            thread.messages.url = constants.apiurl + '/threads/' +
               thread.get('_id') + '/messages';
             newMessage.save();
 
@@ -263,7 +263,7 @@ _.extend(ChatStore, {
               thread.set('users', thread_users);
               // set the urls
               thread.url = constants.apiurl + '/threads/' + thread.get('_id');
-              thread.messages.url = 
+              thread.messages.url =
                 constants.apiurl + '/threads/' + thread.get('_id') + '/messages';
 
               this.active = thread.get('_id');
@@ -316,7 +316,7 @@ _.extend(ChatStore, {
         var thread = this.threads.get(thread_id);
         if(thread == undefined) break;
 
-        // remove user 
+        // remove user
         var thread_users = _.reject(thread.get('users'), function($user) {
           return $user._id == user_id;
         });
@@ -497,7 +497,7 @@ _.extend(ChatStore, {
     return -latest.created;
   },
 
-  addMessage(message: Object) {
+  addMessage(message) {
     console.log('adding message...');
     // get the thread the message is posted to
     // and account for a potentially populated thread object inside the message

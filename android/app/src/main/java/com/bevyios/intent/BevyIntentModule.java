@@ -3,7 +3,7 @@
  * @author  albert
  */
 
-package com.bevyios;
+package com.bevyios.intent;
 
 import java.util.Set;
 
@@ -13,6 +13,8 @@ import android.content.IntentFilter;
 import android.app.Activity;
 import android.util.Log;
 import android.os.Bundle;
+import android.net.Uri;
+import android.provider.CalendarContract;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.NativeModule;
@@ -63,5 +65,34 @@ public class BevyIntentModule extends ReactContextBaseJavaModule {
     params.putMap("extras", extras);
 
     callback.invoke(params);
+  }
+
+  @ReactMethod
+  public void openMap(String location) {
+    if(location == null || location.length() == 0) {
+      return;
+    }
+    Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + location);
+    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+    mapIntent.setPackage("com.google.android.apps.maps");
+    mActivity.startActivity(mapIntent);
+  }
+
+  @ReactMethod
+  public void addEvent(ReadableMap options) {
+    Long startTime = Long.parseLong(options.getString("startTime"));
+    Long endTime = Long.parseLong(options.getString("endTime"));
+    String title = options.getString("title");
+    String description = options.getString("description");
+    String location = options.getString("location");
+
+    Intent intent = new Intent(Intent.ACTION_INSERT)
+      .setData(CalendarContract.Events.CONTENT_URI)
+      .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime)
+      .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime)
+      .putExtra(CalendarContract.Events.TITLE, title)
+      .putExtra(CalendarContract.Events.DESCRIPTION, description)
+      .putExtra(CalendarContract.Events.EVENT_LOCATION, location);
+    mActivity.startActivity(intent);
   }
 }

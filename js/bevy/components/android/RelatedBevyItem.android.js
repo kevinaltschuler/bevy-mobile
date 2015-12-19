@@ -33,6 +33,9 @@ var RelatedBevyItem = React.createClass({
   },
 
   render() {
+    if(_.isEmpty(this.props.bevy)) {
+      return <View />;
+    }
     return (
       <TouchableNativeFeedback
         background={ TouchableNativeFeedback.Ripple('#EEE', false) }

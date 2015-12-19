@@ -26,7 +26,6 @@ require('./js/user/UserStore');
 
 var MainView = require('./js/app/components/android/MainView.android.js');
 var ImageModal = require('./js/post/components/android/ImageModal.android.js');
-var ActionSheet = require('./js/shared/components/android/ActionSheet.android.js');
 var TagModal = require('./js/bevy/components/android/TagModal.android.js');
 var GCM = require('./js/shared/apis/GCM.android.js');
 
@@ -245,8 +244,8 @@ var App = React.createClass({
           sceneStyle={{
             flex: 1
           }}
-          renderScene={(route, navigator) => 
-            <MainView 
+          renderScene={(route, navigator) =>
+            <MainView
               mainRoute={ route }
               mainNavigator={ navigator }
               { ...this.state }
@@ -254,8 +253,7 @@ var App = React.createClass({
           }
         />
         <ImageModal />
-        <ActionSheet />
-        <TagModal 
+        <TagModal
           activeBevy={ this.state.activeBevy }
           activeTags={ this.state.activeTags }
         />

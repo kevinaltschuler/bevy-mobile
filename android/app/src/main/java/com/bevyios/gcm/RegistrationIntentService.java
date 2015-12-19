@@ -1,4 +1,4 @@
-package com.bevyios;
+package com.bevyios.gcm;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -33,7 +33,7 @@ public class RegistrationIntentService extends IntentService {
 
   @Override
   protected void onHandleIntent(Intent intent) {
-    //SharedPreferences sharedPreferences = 
+    //SharedPreferences sharedPreferences =
     //  PreferenceManager.getDefaultSharedPreferences(this);
     try {
       // [START register_for_gcm]

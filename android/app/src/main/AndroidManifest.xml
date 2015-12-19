@@ -9,6 +9,8 @@
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.READ_CALENDAR" />
+  <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
   <permission android:name="com.bevyios.permission.C2D_MESSAGE"
       android:protectionLevel="signature" />
@@ -20,13 +22,12 @@
     android:allowBackup="true"
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
-    android:theme="@style/AppTheme"
-    android:screenOrientation="portrait">
-
+    android:theme="@style/AppTheme">
     <activity
       android:name=".MainActivity"
       android:label="@string/app_name"
-      android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
+      android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+      android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -48,14 +49,14 @@
       </intent-filter>
     </receiver>
     <service
-      android:name="com.bevyios.BevyGcmListenerService"
+      android:name="com.bevyios.gcm.BevyGcmListenerService"
       android:exported="false" >
       <intent-filter>
         <action android:name="com.google.android.c2dm.intent.RECEIVE" />
       </intent-filter>
     </service>
     <service
-      android:name="com.bevyios.BevyIDListenerService"
+      android:name="com.bevyios.gcm.BevyIDListenerService"
       android:exported="false">
       <intent-filter>
         <action android:name="com.google.android.gms.iid.InstanceID"/>
@@ -63,10 +64,10 @@
     </service>
 
     <service
-      android:name="com.bevyios.RegistrationIntentService"
+      android:name="com.bevyios.gcm.RegistrationIntentService"
       android:exported="false">
     </service>
-    
+
   </application>
 
 </manifest>

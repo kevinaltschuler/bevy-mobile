@@ -29,10 +29,13 @@ var NewPostCard = React.createClass({
 
   goToNewPost() {
     if(this.props.loggedIn) {
-      this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+      var route = routes.MAIN.NEWPOST;
+      route.editing = false;
+      route.post = {};
+      this.props.mainNavigator.push(route);
     } else {
       ToastAndroid.show('Please Log In to Post', ToastAndroid.SHORT);
-    }
+    }2
   },
 
   render() {

@@ -15,6 +15,7 @@ var {
 } = React;
 var Collapsible = require('react-native-collapsible');
 var Icon = require('./../../../shared/components/android/Icon.android.js');
+var DialogAndroid = require('react-native-dialogs');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -39,7 +40,7 @@ var CommentList = React.createClass({
     post: React.PropTypes.object,
     onSelect: React.PropTypes.func,
     selectedComment: React.PropTypes.string,
-    root: React.PropTypes.bool // if its the root comment list 
+    root: React.PropTypes.bool // if its the root comment list
                                // being rendered by the comment view
   },
 
@@ -104,7 +105,9 @@ var CommentItem = React.createClass({
   getInitialState() {
     return {
       isCompact: false,
-      showActionBar: false
+      showActionBar: false,
+      body: this.props.comment.body,
+      visible: true
     };
   },
 
@@ -122,7 +125,39 @@ var CommentItem = React.createClass({
   },
 
   deleteComment() {
-    CommentActions.destroy(this.props.comment.postId, this.props.comment._id)
+    CommentActions.destroy(
+      this.props.comment.postId,
+      this.props.comment._id
+    );
+    // optimistic update
+    this.setState({
+      visible: false
+    });
+  },
+
+  editComment() {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Edit Comment',
+      input: {
+        prefill: this.state.body,
+        allowEmptyInput: false,
+        callback: newComment => {
+          CommentActions.edit(
+            this.props.comment.postId,
+            this.props.comment._id,
+            newComment
+          );
+          // optimistic update
+          this.setState({
+            body: newComment
+          });
+        }
+      },
+      positiveText: 'Done',
+      negativeText: 'Cancel'
+    });
+    dialog.show();
   },
 
   goToAuthorProfile() {
@@ -135,11 +170,16 @@ var CommentItem = React.createClass({
 
   showActionSheet() {
     var actions = [];
-    // only allow deletion if the user is the author of the comment
-    // or if the user is an admin of the active bevy
-    if(this.props.user._id == this.props.comment.author._id
-      || _.contains(this.props.post.bevy.admins, this.props.user._id)) {
+    if(this.props.user._id == this.props.comment.author._id) {
+      // if user is the author of the comment
       actions.push("Delete Comment");
+      actions.push("Edit Comment");
+    }
+    if( _.contains(this.props.post.bevy.admins, this.props.user._id)) {
+      // if user is the admin of the bevy of the post this was
+      // commented on
+      if(!_.contains(actions, "Delete Comment"))
+        actions.push("Delete Comment");
     }
     actions.push("Reply To Comment");
     actions.push("Go To Author's Profile");
@@ -147,12 +187,18 @@ var CommentItem = React.createClass({
     // if no actions to show, then dont show the action sheet
     if(_.isEmpty(actions)) return;
 
-    constants.getActionSheetActions().show(
-      actions,
-      function(key, option) {
-        switch(option) {
+    var dialog = new DialogAndroid();
+    dialog.set({
+      title: 'Comment Actions',
+      cancelable: true,
+      items: actions,
+      itemsCallback: (index, item) => {
+        switch(item) {
           case "Delete Comment":
             this.deleteComment();
+            break;
+          case "Edit Comment":
+            this.editComment();
             break;
           case "Reply To Comment":
             this.replyToComment();
@@ -161,24 +207,24 @@ var CommentItem = React.createClass({
             this.goToAuthorProfile();
             break;
         }
-      }.bind(this),
-      'Comment Actions'
-    );
+      }
+    });
+    dialog.show();
   },
 
   _renderComment() {
     var commentStyle = {};
-    commentStyle.borderLeftColor = 
+    commentStyle.borderLeftColor =
       (this.props.comment.depth == 0)
-       ? 'transparent' 
+       ? 'transparent'
        : colorMap[(this.props.comment.depth - 1) % colorMap.length];
-    commentStyle.borderLeftWidth = 
-      (this.props.comment.depth == 0) 
-      ? 0 
+    commentStyle.borderLeftWidth =
+      (this.props.comment.depth == 0)
+      ? 0
       : (this.props.comment.depth) * 5;
-    commentStyle.backgroundColor = 
-      (this.state.showActionBar) 
-      ? '#F8F8F8' 
+    commentStyle.backgroundColor =
+      (this.state.showActionBar)
+      ? '#F8F8F8'
       : '#FFF';
 
     if(this.state.isCompact) {
@@ -213,9 +259,9 @@ var CommentItem = React.createClass({
           </View>
           <View style={ styles.body } accessible={ true }>
             <Text style={ styles.bodyText }>
-              { this.props.comment.body.trim() }
+              { this.state.body.trim() }
             </Text>
-          </View> 
+          </View>
         </View>
       );
     }
@@ -284,6 +330,9 @@ var CommentItem = React.createClass({
 
 
   render() {
+    if(!this.state.visible) {
+      return <View />;
+    }
     return (
       <View style={ styles.container }>
         <TouchableNativeFeedback

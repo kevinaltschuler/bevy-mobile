@@ -1,7 +1,6 @@
-package com.bevyios;
+package com.bevyios.gcm;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -14,20 +13,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class BevyIntentPackage implements ReactPackage {
+public class GCMPackage implements ReactPackage {
   private Activity mActivity;
-  private Intent mIntent;
 
-  public BevyIntentPackage(Activity activity, Intent intent) {
+  public GCMPackage(Activity activity) {
     mActivity = activity;
-    mIntent = intent;
   }
 
   @Override
   public List<NativeModule> createNativeModules(
       ReactApplicationContext reactContext) {
     List<NativeModule> modules = new ArrayList<>();
-    modules.add(new BevyIntentModule(reactContext, mActivity, mIntent));
+    modules.add(new GCMModule(reactContext, mActivity));
     return modules;
   }
 

@@ -52,7 +52,7 @@ _.extend(PostStore, {
 
       case APP.LOAD:
         if(UserStore.loggedIn) {
-          this.posts.url = 
+          this.posts.url =
             constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         } else {
           this.posts.url =
@@ -75,7 +75,7 @@ _.extend(PostStore, {
         });
 
         // trigger anyways
-        this.trigger(POST.CHANGE_ALL); 
+        this.trigger(POST.CHANGE_ALL);
         break;
 
       case POST.FETCH:
@@ -86,11 +86,11 @@ _.extend(PostStore, {
 
         if(bevy_id == null) {
           // fetch user profile posts
-          this.posts.url = 
+          this.posts.url =
             constants.apiurl + '/users/' + profile_user_id + '/posts';
         } else if(bevy_id == -1 && loggedIn) {
           // fetch user frontpage posts
-          this.posts.url = 
+          this.posts.url =
             constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
         } else if(bevy_id == -1 && !loggedIn) {
           // fetch public frontpage posts
@@ -103,7 +103,7 @@ _.extend(PostStore, {
         this.posts.reset();
         this.trigger(POST.LOADING);
         this.trigger(POST.CHANGE_ALL);
-        
+
         // then fetch
         this.posts.fetch({
           success: function(posts, response, options) {
@@ -240,24 +240,34 @@ _.extend(PostStore, {
         break;
 
       case POST.UPDATE:
-
         var post_id = payload.post_id;
-        var title = payload.postTitle;
-
         var post = this.posts.get(post_id);
+        if(post == undefined) return;
+
+        var title = payload.title || post.get('title');
+        var images = payload.images || post.get('images');
+        var tag = payload.tag || post.get('tag');
+        var event = payload.event || post.get('event');
 
         post.set('title', title);
+        post.set('images', images);
+        post.set('tag', tag);
+        post.set('event', event);
 
         post.save({
           title: title,
+          images: images,
+          tag: tag,
+          event: event,
           updated: Date.now()
         }, {
           patch: true,
           success: function($post, response, options) {
-            this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
+        // trigger update
+        this.trigger(POST.CHANGE_ONE + post.get('_id'));
+        this.trigger(POST.CHANGE_ALL);
         break;
 
       case POST.SORT:
@@ -280,6 +290,35 @@ _.extend(PostStore, {
         this.trigger(POST.CHANGE_ALL);
         this.trigger(POST.LOADED);
         break;
+
+        case POST.PIN:
+          var post_id = payload.post_id;
+          var post = this.posts.get(post_id);
+          if(post == undefined) break;
+
+          var pinned = !post.get('pinned');
+          var expires = (pinned)
+          ? new Date('2035', '1', '1') // expires in a long time
+          : new Date(Date.now() + (post.get('bevy').settings.posts_expire_in
+            * 1000 * 60 * 60 * 24)) // unpinned - expire like default
+
+          if(!pinned && (post.get('bevy').settings.posts_expire_in == -1))
+            expires = new Date('2035', '1', '1');
+
+          post.set('pinned', pinned);
+          post.set('expires', expires);
+
+          post.save({
+            pinned: pinned,
+            expires: expires
+          }, {
+            patch: true
+          });
+
+          this.posts.sort();
+          this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.CHANGE_ONE + post_id);
+          break;
 
       case BEVY.SWITCH:
         Dispatcher.waitFor([BevyStore.dispatchToken]);
@@ -325,14 +364,37 @@ _.extend(PostStore, {
         comment.url = constants.apiurl + '/comments';
         comment.save(null, {
           success: function(model, response, options) {
-            // populate
-            comment.set('_id', model.get('_id'));
-            comment.set('created', model.get('created'));
             // add to post
-            post.get('comments').push(comment);
+            var comments = post.get('comments') || [];
+            comments.push(model);
+            post.set('comments', comments);
             // trigger updates
-            this.trigger(POST.CHANGE_ALL);
+            //this.trigger(POST.CHANGE_ALL);
+            //this.trigger(POST.CHANGE_ONE + post_id);
           }.bind(this)
+        });
+        break;
+
+      case COMMENT.EDIT:
+        var post_id = payload.post_id;
+        var comment_id = payload.comment_id;
+        var body = payload.body;
+
+        var url = constants.apiurl + '/posts/' + post_id + '/comments/' + comment_id;
+        fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            body: body
+          })
+        })
+        .then(res => res.json())
+        .then(res => {
+          this.trigger(POST.CHANGE_ALL);
+          this.trigger(POST.CHANGE_ONE + post_id);
         });
         break;
 
@@ -355,7 +417,7 @@ _.extend(PostStore, {
 
         if(_.findWhere(comments, { _id: comment_id })) {
           // delete from post
-          comments = _.reject(comments, function(comment) {
+          comments = _.reject(comments, comment => {
             return comment._id == comment_id;
           });
           post.set('comments', comments);
@@ -369,8 +431,7 @@ _.extend(PostStore, {
         //this.postsNestComment(post);
 
         this.trigger(POST.CHANGE_ALL);
-        this.trigger(POST.CHANGE_ONE + post_id);
-
+        //this.trigger(POST.CHANGE_ONE + post_id);
         break;
     }
   },
@@ -380,7 +441,7 @@ _.extend(PostStore, {
    */
   removeComment(comments, comment_id) {
     // use every so we can break out if we need
-    return comments.every(function(comment, index) {
+    return comments.every((comment, index) => {
       if(comment._id == comment_id) {
         // it's a match. remove the comment and collapse
         comments.splice(index, 1);
@@ -396,7 +457,7 @@ _.extend(PostStore, {
       }
       // continue the every loop
       return true;
-    }.bind(this));
+    });
   },
 
   sortByTop(post) {

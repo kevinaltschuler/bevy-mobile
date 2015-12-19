@@ -1,4 +1,4 @@
-package com.bevyios;
+package com.bevyios.googleauth;
 
 import android.accounts.Account;
 import android.content.Context;

@@ -54,11 +54,14 @@ var PostActions = {
 		});
 	},
 
-	update(post_id, postTitle) {
+	update(post_id, title, images, tag, event) {
 		Dispatcher.dispatch({
 			actionType: POST.UPDATE,
-			post_id: (post_id == undefined) ? '0' : post_id,
-			postTitle: (postTitle == undefined) ? '' : postTitle
+			post_id: (post_id == undefined) ? null : post_id,
+			title: (title == undefined) ? null : title,
+			images: (images == undefined) ? null : images,
+			tag: (tag == undefined) ? null : tag,
+			event: (event == undefined) ? null : event
 		});
 	},
 

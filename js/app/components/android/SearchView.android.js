@@ -19,7 +19,7 @@ var {
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 var SubSwitch = require('./SubSwitch.android.js');
-var BevySearchItem 
+var BevySearchItem
   = require('./../../../bevy/components/android/BevySearchItem.android.js');
 var UserSearchItem
   = require('./../../../user/components/android/UserSearchItem.android.js');
@@ -42,7 +42,7 @@ var SearchView = React.createClass({
     searchType: React.PropTypes.string,
     mainNavigator: React.PropTypes.object
   },
-  
+
   getInitialState() {
     var bevies = BevyStore.getSearchList();
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -118,6 +118,20 @@ var SearchView = React.createClass({
     this.switchSearchType(index);
   },
 
+  handleScroll(e) {
+    var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
+    if(this.prevScrollY == undefined) {
+      this.prevScrollY = scrollY;
+      return;
+    }
+    if(scrollY - this.prevScrollY > 5) {
+      // scrolling down
+      // hide the keyboard so we can see easier
+      constants.getSearchBarActions().blur();
+    }
+    this.prevScrollY = scrollY;
+  },
+
   onPageSelected(ev) {
     var index = ev.nativeEvent.position;
     this.setState({
@@ -157,6 +171,11 @@ var SearchView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  goToBevy(bevy) {
+    BevyActions.switchBevy(this.props.bevy._id);
+    this.props.searchNavigator.jumpTo(routes.SEARCH.OUT);
+  },
+
   _renderTabBar() {
     return (
       <View style={ styles.tabbar }>
@@ -190,7 +209,7 @@ var SearchView = React.createClass({
       </View>
     );
   },
-  
+
   render() {
     return (
       <View style={ styles.container }>
@@ -212,11 +231,12 @@ var SearchView = React.createClass({
               removeClippedSubviews={ true }
               initialListSize={ 10 }
               pageSize={ 10 }
-              renderRow={ bevy => 
+              onScroll={ this.handleScroll }
+              renderRow={ bevy =>
                 <BevySearchItem
                   key={ 'bevysearchitem:' + bevy._id }
                   bevy={ bevy }
-                  searchNavigator={ this.props.searchNavigator }
+                  onPress={ this.goToBevy }
                 />
               }
             />
@@ -230,7 +250,8 @@ var SearchView = React.createClass({
               removeClippedSubviews={ true }
               initialListSize={ 10 }
               pageSize={ 10 }
-              renderRow={ user => 
+              onScroll={ this.handleScroll }
+              renderRow={ user =>
                 <UserSearchItem
                   key={ 'searchuser:' + user._id }
                   searchUser={ user }

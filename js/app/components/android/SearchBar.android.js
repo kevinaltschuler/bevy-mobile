@@ -44,11 +44,16 @@ var SearchBar = React.createClass({
   },
 
   componentDidMount() {
-    this.props.navigator.navigationContext.addListener('willfocus', 
+    this.props.navigator.navigationContext.addListener('willfocus',
       this.switchRoute);
+      
+    constants.setSearchBarActions({
+      focus: this.focus,
+      blur: this.blur
+    });
   },
   componentWillUnmount() {
-    //this.props.navigator.navigationContext.removeListener('willfocus', 
+    //this.props.navigator.navigationContext.removeListener('willfocus',
     //  this.switchRoute);
   },
 
@@ -61,7 +66,7 @@ var SearchBar = React.createClass({
     if(route.name == routes.SEARCH.IN.name) {
       // focus search bar
       this.searchInput.focus();
-    } 
+    }
   },
 
   onSearchBlur() {
@@ -100,11 +105,19 @@ var SearchBar = React.createClass({
     }
   },
 
+  focus() {
+    this.searchInput.focus();
+  },
+  blur() {
+    this.searchInput.blur();
+  },
+
   goBack() {
     this.searchInput.blur();
     this.props.navigator.pop();
     this.setState({
-      activeRoute: routes.SEARCH.OUT
+      activeRoute: routes.SEARCH.OUT,
+      query: ''
     });
   },
 
@@ -122,10 +135,10 @@ var SearchBar = React.createClass({
           onPress={ this.goBack }
         >
           <View style={ styles.backButton }>
-            <Icon 
-              name='arrow-back' 
-              color='#FFF' 
-              size={ 30 } 
+            <Icon
+              name='arrow-back'
+              color='#FFF'
+              size={ 30 }
               style={{
               }}
             />
@@ -134,7 +147,7 @@ var SearchBar = React.createClass({
       );
     } else {
       return (
-        <TouchableNativeFeedback  
+        <TouchableNativeFeedback
           onPress={ this.toggleDrawer }
         >
           <View style={ styles.menuButton }>
@@ -152,20 +165,21 @@ var SearchBar = React.createClass({
       if(this.state.activeRoute.name == routes.SEARCH.IN.name) {
         // focus search bar
         this.searchInput.focus();
-      } 
+      }
     }, 500);
     return (
       <View style={ styles.navbar }>
         { this._renderLeftButton() }
         <View style={ styles.searchInputWrapper }>
           <View style={ styles.searchBackdrop } />
-          <Icon 
-            name='search' 
-            color='#fff' 
-            size={ 24 } 
+          <Icon
+            name='search'
+            color='#fff'
+            size={ 24 }
           />
           <TextInput
             ref={ref => { this.searchInput = ref; }}
+            value={ this.state.query }
             style={ styles.searchInput }
             placeholder='Search'
             placeholderTextColor='#FFF'
@@ -186,10 +200,10 @@ var SearchNavigator = React.createClass({
       <Navigator
         configureScene={() => Navigator.SceneConfigs.FloatFromBottomAndroid}
         navigator={ this.props.mainNavigator }
-        navigationBar={ 
-          <SearchBar 
+        navigationBar={
+          <SearchBar
             { ...this.props }
-          /> 
+          />
         }
         initialRouteStack={[
           routes.SEARCH.OUT
@@ -202,7 +216,7 @@ var SearchNavigator = React.createClass({
           switch(route.name) {
             case routes.SEARCH.IN.name:
               return (
-                <SearchView 
+                <SearchView
                   searchRoute={ route }
                   searchNavigator={ navigator }
                   { ...this.props }
@@ -212,13 +226,13 @@ var SearchNavigator = React.createClass({
             case routes.SEARCH.OUT.name:
             default:
               return (
-                <MainTabBar 
+                <MainTabBar
                   searchRoute={ route }
                   searchNavigator={ navigator }
-                  { ...this.props } 
+                  { ...this.props }
                 />
               );
-              break;  
+              break;
           }
         }}
       />
@@ -263,17 +277,17 @@ var SearchBarWrapper = React.createClass({
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         onDrawerOpen={() => this.setState({ drawerOpen: true })}
         onDrawerClose={() => this.setState({ drawerOpen: false })}
-        renderNavigationView={() => 
-          <Drawer 
-            drawerActions={ drawerActions } 
-            { ...this.props } 
+        renderNavigationView={() =>
+          <Drawer
+            drawerActions={ drawerActions }
+            { ...this.props }
           />
         }
       >
-        <SearchNavigator 
-          drawerOpen={ this.state.drawerOpen } 
-          drawerActions={ drawerActions } 
-          { ...this.props } 
+        <SearchNavigator
+          drawerOpen={ this.state.drawerOpen }
+          drawerActions={ drawerActions }
+          { ...this.props }
         />
       </DrawerLayoutAndroid>
     );
@@ -319,7 +333,7 @@ var styles = StyleSheet.create({
   },
   searchBackdrop: {
     position: 'absolute',
-    top: 7, 
+    top: 7,
     left: 0,
     backgroundColor: '#FFF',
     opacity: 0.3,
@@ -333,9 +347,10 @@ var styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    height: 48,
+    height: 40,
     color: '#FFF',
-    fontSize: 16
+    fontSize: 16,
+    marginRight: 8
   },
 });
 

@@ -21,7 +21,7 @@ var BevyActions = {
       user: (user == undefined) ? {} : user
     });
   },
-  
+
   create(name, description, image, slug) {
     Dispatcher.dispatch({
       actionType: BEVY.CREATE,
@@ -108,6 +108,55 @@ var BevyActions = {
       actionType: BEVY.ADD_USER,
       bevy_id: bevy_id,
       user_id: user_id
+    });
+  },
+
+  addTag(bevy_id, name, color) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_TAG,
+      bevy_id: bevy_id,
+      name: name,
+      color: color
+    });
+  },
+
+  removeTag(bevy_id, name) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REMOVE_TAG,
+      bevy_id: bevy_id,
+      name: name
+    });
+  },
+
+  addAdmin(bevy_id, admin) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_ADMIN,
+      bevy_id: bevy_id,
+      admin: admin
+    });
+  },
+
+  removeAdmin(bevy_id, admin_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REMOVE_ADMIN,
+      bevy_id: bevy_id,
+      admin_id: admin_id
+    });
+  },
+
+  addRelated(bevy_id, new_bevy) {
+    Dispatcher.dispatch({
+      actionType: BEVY.ADD_RELATED,
+      bevy_id: bevy_id,
+      new_bevy: new_bevy
+    });
+  },
+
+  removeRelated(bevy_id, related_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.REMOVE_RELATED,
+      bevy_id: bevy_id,
+      related_id: related_id
     });
   }
 };
