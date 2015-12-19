@@ -193,7 +193,7 @@ _.extend(UserStore, {
 
         if(uri) {
           FileStore.upload(uri, (err, filename) => {
-            //console.log(err, filename);
+            console.log('USER STORE', err, filename);
             if(err) return;
             this.user.save({
               image_url: filename
