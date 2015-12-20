@@ -146,7 +146,7 @@ _.extend(BevyStore, {
           if(bevy == undefined) {
             // not found in public bevies
             // find in subbevies
-            bevy = this.subBevies.get(bevy_id);
+            //bevy = this.subBevies.get(bevy_id);
             if(bevy == undefined) {
               // ok, now we'll ajax
               break;

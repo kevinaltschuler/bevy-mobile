@@ -121,7 +121,7 @@ var SearchView = React.createClass({
             if(_.contains(defaultBevies, bevy._id)) {
               imageUri = constants.apiurl + bevy.image_url;
             }
-            if(bevy._id == -1) return <View />; // disallow posting to frontpage
+            if(bevy._id == -1) return <View />; // dont show frontpage
             return (
               <View style={ styles.bevyRow }>
                 <TouchableHighlight
@@ -130,7 +130,7 @@ var SearchView = React.createClass({
                   onPress={() => {
                     // switch bevy
                     BevyActions.switchBevy(bevy._id);
-                    this.props.searchNavigator.jumpTo(routes.SEARCH.OUT);
+                    this.props.mainNavigator.push(routes.BEVY.POSTLIST);
                   }}
                 >
                   <View style={ styles.bevyPickerItem }>
@@ -143,7 +143,7 @@ var SearchView = React.createClass({
                     </Text>
                   </View>
                 </TouchableHighlight>
-                { this._renderSubSwitch(bevy) }
+                {/* this._renderSubSwitch(bevy) */}
               </View>
             );
           }}

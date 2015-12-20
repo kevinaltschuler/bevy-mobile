@@ -101,13 +101,12 @@ var SearchBar = React.createClass({
       />
     );
     if(this.state.activeRoute.name != routes.SEARCH.IN.name) {
-      leftButton = (
-        <BevyListButton
+      leftButton = <View/>;
+        /*<BevyListButton
           onPress={() => {
             this.context.menuActions.toggle();
           }}
-        />
-      );
+        />*/
     }
 
     return (
@@ -196,8 +195,8 @@ var SearchNavigator = React.createClass({
 
 var SearchBarWrapper = React.createClass({
   render() {
-    return (
-      <SideMenu
+    return <SearchNavigator { ...this.props }/>;
+      {/*<SideMenu
         menu={
           <BevyList
             {...this.props}
@@ -206,10 +205,10 @@ var SearchBarWrapper = React.createClass({
         touchToClose={ true }
         openMenuOffset={ constants.sideMenuWidth }
         disableGestures={ true }
-      >
-        <SearchNavigator { ...this.props }/>
-      </SideMenu>
-    );
+      >*/}
+        
+      {/*</SideMenu>*/}
+    
   }
 });
 
@@ -236,7 +235,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginRight: 20,
-    marginLeft: 15,
+    marginLeft: 20,
     borderRadius: 5,
     backgroundColor: 'rgba(255,255,255,.3)',
     paddingHorizontal: 10,
@@ -264,8 +263,8 @@ var styles = StyleSheet.create({
   }
 });
 
-SearchBar.contextTypes = {
+/*SearchBar.contextTypes = {
   menuActions: React.PropTypes.object.isRequired
-};
+};*/
 
 module.exports = SearchBarWrapper;

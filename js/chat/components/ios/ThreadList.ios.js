@@ -10,7 +10,8 @@ var {
   View,
   ListView,
   Text,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var ThreadItem = require('./ThreadItem.ios.js');
@@ -28,17 +29,46 @@ var ThreadList = React.createClass({
   },
 
   getInitialState() {
-    var threadData = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     return {
-      threads: threadData.cloneWithRows(this.props.allThreads)
+      threads: this.props.allThreads
     };
   },
 
   componentWillReceiveProps(nextProps) {
     console.log('rerender');
     this.setState({
-      threads: this.state.threads.cloneWithRows(nextProps.allThreads)
-    });
+      threads: nextProps.allThreads
+    })
+  },
+
+  _renderThreads() {
+
+    var threadItems = [];
+
+    for(var key in this.state.threads) {
+
+      //console.log('thread');
+
+      var thread = this.state.threads[key];
+      var active = false;
+
+      if(thread._id == this.props.activeThread._id) active = true;
+
+      if(_.isEmpty(ChatStore.getThreadName(thread._id)))
+        continue;
+
+      threadItems.push(
+          <ThreadItem
+            thread={ thread }
+            user={ this.props.user }
+            key={ 'threadItem:' + thread._id }
+            active={ active }
+            chatNavigator={ this.props.chatNavigator }
+          />
+      );
+    }
+
+    return threadItems;
   },
 
   render() {
@@ -55,29 +85,13 @@ var ThreadList = React.createClass({
     }
     return (
       <View style={ styles.container }>
-        <ListView
+        <ScrollView
           dataSource={ this.state.threads }
           style={ styles.list }
-          renderHeader={() => (<View style={{marginTop: -20}}/>)}
-          renderFooter={() => (<View style={{marginBottom: 48}}/>)}
-          renderRow={(thread) => {
-
-            var active = false;
-            if(thread._id == this.props.activeThread._id) active = true;
-
-            if(_.isEmpty(ChatStore.getThreadName(thread._id)))
-              return <View/>;
-
-            return (
-              <ThreadItem
-                thread={ thread }
-                user={ this.props.user }
-                active={ active }
-                chatNavigator={ this.props.chatNavigator }
-              />
-            );
-          }}
-        />
+          automaticallyAdjustContentInsets={false}
+        >
+          { this._renderThreads() }
+        </ScrollView>
       </View>
     );
   }
@@ -89,6 +103,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row'
   },
   list: {
+    marginBottom: 48
   },
   noThreadsContainer: {
     flex: 1,

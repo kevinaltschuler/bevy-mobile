@@ -1,5 +1,5 @@
 /**
- * BevyList.js
+ * MyBevies.js
  * kevin made this
  * the yung sauce villain
  */
@@ -14,11 +14,14 @@ var {
   Image,
   ListView,
   TouchableHighlight,
+  TouchableOpacity,
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var AddBevyModal = require('./AddBevyModal.ios.js');
+var BevyCard = require('./BevyCard.ios.js');
+var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -29,11 +32,10 @@ var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BEVY = constants.BEVY;
 
-var BevyList = React.createClass({
+var MyBevies = React.createClass({
   propTypes: {
     myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
-    menuActions: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     mainNavigator: React.PropTypes.object
@@ -53,44 +55,6 @@ var BevyList = React.createClass({
 
   changeBevy: function(rowData) {
 
-  },
-
-  _renderProfileHeader() {
-    if(!this.props.loggedIn) {
-      return ( <View/> );
-          {/*<TouchableHighlight
-            underlayColor='#333'
-            style={{
-              height: 48,
-              borderBottomWidth: 1,
-              borderBottomColor: 'rgba(255,255,255,.4)',
-              padding: 10,
-            }}
-            onPress={() => {
-              this.props.authModalActions.open('Log In');
-            }}
-          >
-            <Text style={{ color: '#fff', fontSize: 16, marginLeft: 2}}>Log In</Text>
-          </TouchableHighlight>
-      );*/}
-    }
-
-    var image_url = (_.isEmpty(this.props.user.image_url))
-    ? constants.siteurl + '/img/user-profile-icon.png'
-    : this.props.user.image_url;
-
-    return (
-      <View style={ styles.profileHeader }>
-        <Image
-          source={{ uri: image_url }}
-          style={ styles.profileImage }
-        />
-        <View style={ styles.profileDetails }>
-          <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-          <Text style={ styles.profileEmail }>{ this.props.user.email }</Text>
-        </View>
-      </View>
-    );
   },
 
   _renderPublicHeader() {
@@ -133,82 +97,84 @@ var BevyList = React.createClass({
     ? _.filter(this.props.myBevies, function(bevy) { return bevy.parent == null })
     : this.props.publicBevies;
 
-    if(!this.props.loggedIn) {
-      bevies.unshift({
-        _id: '-1',
-        name: 'Frontpage'
-      });
-    }
-
     var bevyList = [];
 
     for(var key in bevies) {
       var bevy = bevies[key];
-      var active = (bevy._id == this.props.activeBevy._id);
       if(bevy._id == -1) {
         continue;
       }
+
       bevyList.push(
-        <TouchableHighlight
+        <BevyCard 
+          bevy={bevy}
+          bevyNavigator={ this.props.bevyNavigator }
           key={ 'bevylist:' + bevy._id }
-          underlayColor='rgba(255,255,255,.5)'
-          style={ (active) ? styles.bevyItemActive : styles.bevyItem }
-          onPress={() => {
-            if(active) return;
-            BevyActions.switchBevy(bevy._id);
-            // close the side menu
-            this.context.menuActions.close();
-          }}
-        >
-          <Text 
-            key={'bevylistkey:' + bevy._id}
-            style={ (active)
-            ? styles.bevyItemActiveText
-            : styles.bevyItemText }>
-            { bevy.name }
-          </Text>
-        </TouchableHighlight>
+          mainNavigator={this.props.mainNavigator}
+        />
       );
     }
 
     return (
-      <ScrollView style={ styles.bevyList }>
+      <ScrollView 
+        contentContainerStyle={ styles.bevyList }
+        automaticallyAdjustContentInsets={true}
+        showsVerticalScrollIndicator={true}
+        style={{flex: 1, marginTop: -23, marginBottom: 49}}
+      >
         { bevyList }
       </ScrollView>
     );
   },
 
   render: function() {
+
+    var right = (
+      <TouchableOpacity
+        activeOpacity={.3}
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+        }}
+        style={{
+          marginRight: 10,
+          borderRadius: 2,
+          paddingHorizontal: 5,
+          paddingVertical: 5,
+        }}
+      >
+        <Icon
+          name='ios-plus-empty'
+          size={ 30 }
+          color={ '#999' }
+          style={{}}
+        />
+      </TouchableOpacity>
+    );
+
     return (
       <View style={styles.container}>
+
+        <Navbar
+          center={<Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>My Bevies</Text>}
+          right={ right }
+          activeBevy={ this.props.activeBevy }
+          fontColor={ '#999' }
+          { ...this.props }
+          styleBottom={{
+            backgroundColor: '#fff',
+            height: 40,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: '#eee',
+            marginTop: 0
+          }}
+        />
 
         <View style={{
           height: StatusBarSizeIOS.currentHeight
         }} />
-
-        { this._renderProfileHeader() }
-
-        <TouchableHighlight
-          key={ 'bevylist:' + -1 }
-          underlayColor='rgba(255,255,255,.5)'
-          style={ (this.props.activeBevy._id == -1)
-            ? styles.bevyItemActive
-            : styles.bevyItem }
-          onPress={() => {
-            if(this.props.activeBevy._id == -1) return;
-            BevyActions.switchBevy(-1);
-            // close the side menu
-            this.context.menuActions.close();
-          }}
-        >
-          <Text style={ (this.props.activeBevy._id == -1)
-            ? styles.bevyItemActiveText
-            : styles.bevyItemText }>
-            Frontpage
-          </Text>
-        </TouchableHighlight>
-
-        { this._renderPublicHeader() }
 
         { this._renderBevyList() }
 
@@ -222,11 +188,10 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingTop: 3,
-    width: constants.sideMenuWidth,
-    height: constants.height,
-    backgroundColor: '#333',
+    width: constants.width,
+    height: constants.height - 48,
+    backgroundColor: '#eee',
   },
-
   publicHeader: {
     fontSize: 18,
     color: '#999',
@@ -291,7 +256,12 @@ var styles = StyleSheet.create({
   },
 
   bevyList: {
-    flex: 1,
+    flexDirection: 'row',
+    marginTop: -15,
+    width: constants.width,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 10
   },
   bevyItem: {
     flexDirection: 'row',
@@ -331,8 +301,4 @@ var styles = StyleSheet.create({
   }
 });
 
-BevyList.contextTypes = {
-  menuActions: React.PropTypes.object.isRequired
-};
-
-module.exports = BevyList;
+module.exports = MyBevies;

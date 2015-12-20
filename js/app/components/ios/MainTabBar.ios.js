@@ -16,6 +16,7 @@ var {
 var Icon = require('react-native-vector-icons/Ionicons');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
+var MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
 var NotificationNavigator =
   require('./../../../notification/components/ios/NotificationNavigator.ios.js');
 var SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
@@ -27,7 +28,7 @@ var BevyStore = require('./../../../bevy/BevyStore');
 var BEVY = constants.BEVY;
 
 var tabs = {
-  Posts: 'BevyNavigator',
+  Bevies: 'BevyNavigator',
   Chat: 'ChatNavigator',
   Notifications: 'NotificationNavigator',
   More: 'SettingsNavigator'
@@ -37,7 +38,7 @@ var MainTabBar = React.createClass({
 
   getInitialState() {
     return {
-      selectedTab: tabs.Posts,
+      selectedTab: tabs.Bevies,
     };
   },
 
@@ -47,7 +48,7 @@ var MainTabBar = React.createClass({
 
   navPostView() {
     this.setState({
-      selectedTab: tabs.Posts,
+      selectedTab: tabs.Bevies,
     });
   },
 
@@ -64,10 +65,11 @@ var MainTabBar = React.createClass({
     };
 
     switch(this.state.selectedTab) {
-      case tabs.Posts:
+      case tabs.Bevies:
         return (
-          <BevyNavigator
+          <MyBevies
             { ...this.props }
+            bevyNavigator={ this.props.bevyNavigator }
             tabBarActions={ tabBarActions }
           />
         );
@@ -104,18 +106,19 @@ var MainTabBar = React.createClass({
           tintColor='#2cb673'
           barTintColor='#FFF'
           translucent={ false }
+          style={{borderTopWidth: 1, borderTopColor: '#eee'}}
         >
           <Icon.TabBarItem
-            title='Posts'
-            iconName='ios-list-outline'
-            selectedIconName='ios-list'
+            title='Home'
+            iconName='ios-home-outline'
+            selectedIconName='ios-home'
             color='rgba(0,0,0,.3)'
             size={ 28 }
-            selected={ this.state.selectedTab === tabs.Posts }
+            selected={ this.state.selectedTab === tabs.Bevies }
             style={ styles.tabIcon }
             onPress={() => {
               this.setState({
-                selectedTab: tabs.Posts,
+                selectedTab: tabs.Bevies,
               });
             }}
           >

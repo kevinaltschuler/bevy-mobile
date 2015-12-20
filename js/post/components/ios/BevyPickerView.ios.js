@@ -105,7 +105,7 @@ var BevyPickerView = React.createClass({
                 underlayColor='rgba(0,0,0,.1)'
                 onPress={() => {
                   this.props.onSwitchBevy(bevy);
-                }.bind(this)}
+                }}
               >
                 <View style={ styles.bevyPickerItem }>
                   <Image

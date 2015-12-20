@@ -34,8 +34,8 @@ var UserStore = require('./../user/UserStore');
 var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
-if(Platform.OS == 'android')
-  window.navigator.userAgent = "react-native";
+//if(Platform.OS == 'android')
+//window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);
@@ -65,17 +65,25 @@ _.extend(NotificationStore, {
           }.bind(this)
         });
 
-        console.log('APP LOADING IN NOTE STORE');
-
         //var ws_url = 'ws://' + constants.hostname + '/socket.io/';
         //console.log('ws connecting to', ws_url);
         //var ws = new WebSocket(ws_url);
+        
+        //console.log(io.connect);
+        
         var ws = io(constants.siteurl);
+
+        ws.on('error', function(error) {
+          console.log(error);
+          console.log('error');
+        });
+        console.log('2');
         ws.on('connect', function() {
           console.log('websocket client connected');
           console.log('setting user id', user._id);
           ws.emit('set_user_id', user._id);
         });
+        console.log('3');
 
         ws.on('kitty cats', function(data) {
           //console.log(data);

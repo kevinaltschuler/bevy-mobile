@@ -138,7 +138,7 @@ var ThreadImage = React.createClass({
           }
           users.push(
             <Image
-              key={ 'threadimage:user:' + user._id }
+              key={ 'threadimage:user:' + user._id + Math.random() }
               style={ iconStyle }
               source={{uri: image_url}}
             />

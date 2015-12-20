@@ -17,19 +17,19 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var MessageInput = require('./MessageInput.ios.js');
-var UserSearchItem = require('./../../user/components/UserSearchItem.ios.js');
-var AddedUserItem = require('./../../user/components/AddedUserItem.ios.js');
+var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
+var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js');
 var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var _ = require('underscore');
-var constants = require('./../../constants');
-var routes = require('./../../routes');
-var ChatActions = require('./../../chat/ChatActions');
-var ChatStore = require('./../../chat/ChatStore');
-var UserActions = require('./../../user/UserActions');
-var UserStore = require('./../../user/UserStore');
+var constants = require('./../../../constants');
+var routes = require('./../../../routes');
+var ChatActions = require('./../../../chat/ChatActions');
+var ChatStore = require('./../../../chat/ChatStore');
+var UserActions = require('./../../../user/UserActions');
+var UserStore = require('./../../../user/UserStore');
 var USER = constants.USER;
 var CHAT = constants.CHAT;
 

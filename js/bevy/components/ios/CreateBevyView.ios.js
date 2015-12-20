@@ -12,7 +12,8 @@ var {
   Text,
   TextInput,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
@@ -23,10 +24,14 @@ var BEVY = constants.BEVY;
 var FILE = constants.FILE;
 var BevyActions = require('./../../../bevy/BevyActions');
 var BevyStore = require('./../../../bevy/BevyStore');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileActions = require('./../../../file/FileActions');
 var FileStore = require('./../../../file/FileStore');
+var getSlug = require('speakingurl');
 
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var NativeModules = require('NativeModules');
+
 var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
@@ -47,7 +52,8 @@ var CreateBevyView = React.createClass({
       bevyImage: '',
       name: '',
       description: '',
-      creating: false
+      creating: false,
+      slug: ''
     };
   },
 
@@ -87,7 +93,74 @@ var CreateBevyView = React.createClass({
     }
   },
 
-  _renderBevyImageButton() {
+  _renderTitleDescription() {
+    return (
+      <View style={ styles.section }>
+        <Text style={ styles.sectionTitle }>General</Text>
+        
+        <View style={ styles.generalCard} >
+          <TextInput
+            style={ styles.bevyNameInput }
+            ref='bevyName'
+            value={ this.state.name }
+            onChangeText={(text) => {
+              this.setState({ 
+                name: text,
+                slug: getSlug(text)
+              });
+            }}
+            autoCorrect={ false }
+            placeholder='Bevy Name'
+            placeholderTextColor='#AAA'
+          />
+
+          <TextInput
+            style={ styles.descriptionInput }
+            ref='description'
+            onChange={(ev) => {
+              this.setState({
+                description: ev.nativeEvent.text
+              });
+            }}
+            placeholder='Description'
+            multiline={ true }
+          />
+        </View>
+      </View>
+    );
+  },
+
+  _renderSlug() {
+    return (
+      <View style={ styles.section }>
+        <Text style={ styles.sectionTitle }>Bevy Url</Text>
+        
+        <View style={ styles.generalCard} >
+          <TextInput
+            style={ styles.bevyNameInput }
+            ref='BevySlug'
+            onChangeText={(text) => 
+              this.setState({ 
+                slug: text.slice((constants.siteurl.length + 3))
+              })
+            }
+            value={constants.siteurl + '/b/' + this.state.slug}
+            onBlur={(ev) => {
+              this.setState({
+                slug: getSlug(this.state.slug)
+              });
+            }}
+            autoCorrect={ false }
+            placeholder='Bevy URL'
+            placeholderTextColor='#AAA'
+          />
+        </View>
+      </View>
+    );
+  },
+
+  _renderImageInput() {
+    var image = resizeImage(this.state.bevyImage, constants.width, constants.height);
     var middle = (_.isEmpty(this.state.bevyImage))
     ? (
       <Icon
@@ -100,39 +173,44 @@ var CreateBevyView = React.createClass({
     : (
       <Image
         style={ styles.bevyImage }
-        source={{ uri: this.state.bevyImage }}
+        source={{ uri: image.url }}
       />
     );
     return (
-      <TouchableHighlight
-        style={ styles.bevyImageButton }
-        underlayColor='rgba(0,0,0,0)'
-        onPress={() => {
-          UIImagePickerManager.showImagePicker({
-            title: 'Choose Bevy Picture',
-            cancelButtonTitle: 'Cancel',
-            takePhotoButtonTitle: 'Take Photo...',
-            chooseFromLibraryButtonTitle: 'Choose from Library...',
-            returnBase64Image: false,
-            returnIsVertical: false
-          }, (type, response) => {
-            if (type !== 'cancel') {
-              //console.log(response);
-              FileActions.upload(response);
-            } else {
-              //console.log('Cancel');
-            }
-          });
-        }}
-      >
-        { middle }
-      </TouchableHighlight>
+      <View style={ styles.section }>
+        <Text style={ styles.sectionTitle }>Bevy Image</Text>
+        <TouchableHighlight
+          style={ styles.bevyImageButton }
+          underlayColor='rgba(0,0,0,0)'
+          onPress={() => {
+            UIImagePickerManager.showImagePicker({
+              title: 'Choose Bevy Picture',
+              cancelButtonTitle: 'Cancel',
+              takePhotoButtonTitle: 'Take Photo...',
+              chooseFromLibraryButtonTitle: 'Choose from Library...',
+              returnBase64Image: false,
+              returnIsVertical: false
+            }, (didCancel, response) => {
+              if (didCancel) {
+                //console.log(response);
+                
+              } else {
+                //console.log('Cancel');
+                FileActions.upload(response.uri);
+                //console.log(response.uri);
+              }
+            });
+          }}
+        >
+          { middle }
+        </TouchableHighlight>
+      </View>
     );
   },
 
   render() {
     return (
-      <View style={ styles.container }>
+      <ScrollView style={ styles.container }>
 
         <Navbar
           styleParent={{
@@ -182,6 +260,7 @@ var CreateBevyView = React.createClass({
                   this.state.name, // bevy name
                   this.state.description, // bevy description
                   (_.isEmpty(this.state.bevyImage)) ? constants.siteurl + '/img/logo_100.png' : this.state.bevyImage, // bevy image
+                  this.state.slug
                 );
 
                 // blur all text inputs
@@ -204,37 +283,14 @@ var CreateBevyView = React.createClass({
 
           { this._renderLoadingView() }
 
-          <View style={ styles.top }>
-            { this._renderBevyImageButton() }
-            <View style={ styles.bevyNameInputWrapper }>
-              <TextInput
-                style={ styles.bevyNameInput }
-                ref='bevyName'
-                onChange={(ev) => {
-                  this.setState({
-                    name: ev.nativeEvent.text
-                  });
-                }}
-                placeholder='Bevy Name'
-              />
-            </View>
-          </View>
+          { this._renderTitleDescription() }
 
-          <View style={ styles.bottom }>
-            <TextInput
-              style={ styles.descriptionInput }
-              ref='description'
-              onChange={(ev) => {
-                this.setState({
-                  description: ev.nativeEvent.text
-                });
-              }}
-              placeholder='Description'
-              multiline={ true }
-            />
-          </View>
+          { this._renderSlug() }
+
+          { this._renderImageInput() }
+
         </View>
-      </View>
+      </ScrollView>
     );
   }
 });
@@ -242,7 +298,8 @@ var CreateBevyView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#eee'
   },
   loadingView: {
     marginTop: 20,
@@ -300,57 +357,47 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
-
   body: {
     flex: 1,
-    flexDirection: 'column'
-  },
-
-  top: {
-    height: 50,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingTop: 15,
-    paddingLeft: 15,
-    paddingRight: 15
+    flexDirection: 'column',
+    backgroundColor: '#eee',
   },
   bevyImageButton: {
-    marginRight: 10,
-    width: 40,
-    height: 40,
+    width: constants.width,
+    height: 120,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 20
+    backgroundColor: '#fff',
+    marginTop: 0
   },
   bevyImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
-  },
-  bevyNameInputWrapper: {
-    flex: 1,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    width: constants.width,
+    height: 120
   },
   bevyNameInput: {
-    flex: 1,
     fontSize: 17,
-    height: 32
+    height: 48,
+    width: constants.width,
   },
-
-  bottom: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 15
+  sectionTitle: {
+    color: '#888',
+    fontSize: 15,
+    marginLeft: 10,
+    marginBottom: 5
   },
   descriptionInput: {
-    flex: 1,
-    fontSize: 17
+    fontSize: 17,
+    height: 48,
+    width: constants.width,
+    paddingTop: 10
+  },
+  generalCard: {
+    backgroundColor: '#fff',
+    padding: 10
+  },
+  section: {
+    marginTop: 20
   }
 });
 

@@ -18,7 +18,8 @@ var MessageItem = React.createClass({
   propTypes: {
     message: React.PropTypes.object,
     user: React.PropTypes.object,
-    hidePic: React.PropTypes.bool
+    hidePic: React.PropTypes.bool,
+    showName: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -29,8 +30,30 @@ var MessageItem = React.createClass({
 
   getInitialState() {
     return {
-      collapsed: true
+      collapsed: true,
+      wrap: false
     }
+  },
+
+  componentDidMount() {
+    this.measureMessageBody();
+  },
+
+  measureMessageBody() {
+    var message = this.props.message;
+    var author = message.author;
+    var user = this.props.user;
+    var isMe = (user._id == author._id);
+    setTimeout(() => {
+      this.MessageBody.measure((ox, oy, width, height, px, py) => {
+
+        if(width >= (constants.width - 80)) {
+          this.setState({
+            wrap: true
+          });
+        }
+      });
+    }, 0);
   },
 
   render: function() {
@@ -75,15 +98,14 @@ var MessageItem = React.createClass({
       paddingLeft: 8,
       paddingRight: 8,
       borderRadius: 14,
+      flexWrap: 'wrap',
+      flex: (this.state.wrap) ? 1 : 0,
     };
-    if(message.body.length >= 32) {
-      messageBodyStyle.flex = 1;
-    }
 
     var isMe = (user._id == author._id);
 
     var image = (this.props.hidePic)
-    ? <View style={{height: 35, width: 35}}/>
+    ? <View style={{height: 5, width: 35}}/>
     : <Image
       source={{ uri: (_.isEmpty(author.image_url))
         ? constants.siteurl + '/img/user-profile-icon.png'
@@ -91,11 +113,23 @@ var MessageItem = React.createClass({
       style={ styles.authorImage }
     />
 
-    var space = (this.props.hidePic) ? -5 : 5;
+    var name = (isMe) ? 'Me' : author.displayName;
 
-    if(message.body.length >= 32) {
-      space = 0;
-    }
+    var nameTitle = (this.props.showName)
+    ? <Text 
+        style={{
+          width: constants.width, 
+          flexDirection: 'column', 
+          textAlign: (isMe) ? 'right' : 'left',
+          paddingHorizontal: 45,
+          color: 'rgba(0,0,0,.3)'
+        }}
+      >
+        {name}
+      </Text>
+    : <View/>;
+
+    var space = (this.props.hidePic) ? 5 : 0;
 
     return (
       <View>
@@ -107,18 +141,23 @@ var MessageItem = React.createClass({
                 this.setState({
                   collapsed: !this.state.collapsed
                 })
-              }.bind(this)}
+              }}
             >
               <View style={{
                 flexDirection: 'column',
                 alignItems: 'flex-end',
-                justifyContent: 'flex-end'
+                justifyContent: 'flex-end',
               }}>
-                <View style={[styles.containerMe, { marginTop: space }]}>
-                  <View style={[messageBodyStyle, { backgroundColor: '#2cb673' } ]}>
+                { nameTitle }
+                <View style={[styles.containerMe, {marginTop: space}]}>
+                  <View 
+                    style={[messageBodyStyle, { backgroundColor: '#2cb673' } ]}
+                    ref={ref => { this.MessageBody = ref; }}
+                  >
                     <Text style={{
                       textAlign: 'right',
-                      color: '#fff'
+                      color: '#fff',
+                      flex: 1,
                     }}>
                       { message.body}
                     </Text>
@@ -141,7 +180,7 @@ var MessageItem = React.createClass({
                 this.setState({
                   collapsed: !this.state.collapsed
                 })
-              }.bind(this)}
+              }}
             >
               <View style={{
                 flexDirection: 'column',
@@ -149,10 +188,14 @@ var MessageItem = React.createClass({
                 justifyContent: 'flex-start',
                 backgroundColor: 'rgba(0,0,0,0)'
               }}>
+                {nameTitle}
                 <View style={[styles.container, {marginTop: space}]}>
                   { image }
                   <View style={{width: 5}}/>
-                  <View style={[messageBodyStyle, {backgroundColor: '#eee'} ]}>
+                  <View 
+                    style={[messageBodyStyle, {backgroundColor: '#eee'} ]}
+                    ref={ref => { this.MessageBody = ref; }}
+                  >
                     <Text style={{ textAlign: 'left', color: '#333' }}>
                       { message.body }
                     </Text>
@@ -174,14 +217,14 @@ var MessageItem = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
     paddingBottom: 0,
     borderRadius: 2,
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0)',
-    width: 350
+    width: constants.width - 80
   },
   containerMe: {
     flexDirection: 'row',
@@ -189,7 +232,8 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 0,
     borderRadius: 2,
-    backgroundColor: 'rgba(0,0,0,0)'
+    backgroundColor: 'rgba(0,0,0,0)',
+    width: constants.width - 80
   },
   authorImage: {
     width: 35,

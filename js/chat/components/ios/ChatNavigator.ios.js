@@ -22,7 +22,7 @@ var ThreadSettingsView = require('./ThreadSettingsView.ios.js');
 var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var BackButton = require('./../../../shared/components/ios/BackButton.ios.js');
 var ThreadList = require('./ThreadList.ios.js');
-var ChatStore = require('./../ChatStore');
+var ChatStore = require('./../../ChatStore');
 var NewThreadView = require('./NewThreadView.ios.js');
 var AddPeopleView = require('./AddPeopleView.ios.js');
 
@@ -118,10 +118,12 @@ var ChatNavigator = React.createClass({
           if(route.name == routes.CHAT.LISTVIEW.name) {
             navbarText = 'Chat'
           }
-          if(navbarText.length > 30) {
-            navbarText = navbarText.substr(0,30);
+          if(navbarText.length > 20) {
+            navbarText = navbarText.substr(0,20);
             navbarText = navbarText.concat('...');
           }
+
+          var center = <Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>{navbarText}</Text>;
 
           var backButton = (route.name == routes.CHAT.LISTVIEW.name)
           ? <View />
@@ -191,7 +193,6 @@ var ChatNavigator = React.createClass({
             <TouchableOpacity
               activeOpacity={.5}
               onPress={() => {
-                console.log(this.refs.AddPeopleView);
                 this.addPeopleView.submit();
               }}
               style={{marginRight: 10, height: 39, width: 39, alignItems: 'center', justifyContent: 'center'}}
@@ -220,7 +221,7 @@ var ChatNavigator = React.createClass({
                 chatRoute={ route }
                 chatNavigator={ navigator }
                 left={ backButton }
-                center={ navbarText }
+                center={ center }
                 right={ right }
                 { ...this.props }
               />

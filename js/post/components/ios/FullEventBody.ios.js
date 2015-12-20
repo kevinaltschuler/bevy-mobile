@@ -114,7 +114,7 @@ var FullEventBody = React.createClass({
             var mapRoute = routes.MAIN.MAP;
             mapRoute.location = this.state.post.event.location;
             this.props.mainNavigator.push(mapRoute);
-          }.bind(this)}
+          }}
         />
       </View>
     );

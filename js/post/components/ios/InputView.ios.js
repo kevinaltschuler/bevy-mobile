@@ -15,8 +15,8 @@ var {
   DeviceEventEmitter
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
-var SettingsItem = require('./../../shared/components/SettingsItem.ios.js');
-var Navbar = require('./../../shared/components/Navbar.ios.js');
+var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
+var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var _ = require('underscore');
@@ -89,7 +89,7 @@ var InputView = React.createClass({
     }, (type, response) => {
       if (type !== 'cancel') {
         //console.log(response);
-        FileActions.upload(response);
+        FileActions.upload(response.uri);
       } else {
         //console.log('Cancel');
       }
@@ -229,11 +229,11 @@ var InputView = React.createClass({
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
                 //this.uploadImage();
-                UIImagePickerManager.showLibrary({
+                UIImagePickerManager.launchImageLibrary({
                   returnBase64Image: false,
                   returnIsVertical: true
-                }, (type, response) => {
-                  if (type !== 'cancel') {
+                }, (didCancel, response) => {
+                  if (!didCancel) {
                     console.log(response);
                     FileActions.upload(response);
                   } else {
@@ -254,11 +254,11 @@ var InputView = React.createClass({
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
                 //this.uploadImage();
-                UIImagePickerManager.showCamera({
+                UIImagePickerManager.launchCamera({
                   returnBase64Image: false,
                   returnIsVertical: true
-                }, (type, response) => {
-                  if (type !== 'cancel') {
+                }, (didCancel, response) => {
+                  if (!didCancel) {
                     console.log(response);
                     FileActions.upload(response);
                   } else {

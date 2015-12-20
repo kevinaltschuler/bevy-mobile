@@ -17,6 +17,7 @@ var CreateBevyView = require('./../../../bevy/components/ios/CreateBevyView.ios.
 var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
 var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
 var SwitchUserView = require('./../../../user/components/ios/SwitchUserView.ios.js');
+var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -97,6 +98,13 @@ var MainView = React.createClass({
            />
         );
         break;
+
+      case routes.BEVY.POSTLIST.name:
+        return (
+          <BevyNavigator
+            { ...this.props }
+          />
+        );
         
       case routes.MAIN.TABBAR.name:
       default:

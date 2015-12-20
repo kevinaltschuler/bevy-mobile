@@ -84,6 +84,7 @@ var MessageView = React.createClass({
         keyboardSpace: 48
       });
     });
+    ChatActions.fetchMore(this.props.activeThread._id);
   },
 
   componentWillUnmount: function() {
@@ -252,19 +253,28 @@ var MessageView = React.createClass({
     }.bind(this), 0);
   },
 
+  scrollToBottom() {
+    var scrollProperties = this.refs.ListView.scrollProperties;
+    var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
+    requestAnimationFrame(() => {
+      this.refs.ListView.getScrollResponder().scrollTo(scrollOffset);
+    });
+  },
+
   render: function () {
+
     return (
       <View
         style={styles.container}
         onStartShouldSetResponder={() => {
           this.refs.MessageInput.blur();
           this.setState({
-            keyboardSpace: 0
+            keyboardSpace: 48
           });
         }}
       >
         <ListView
-          ref='messageList'
+          ref={'ListView'}
           style={ styles.scrollContainer }
           onScroll={ this.handleScroll }
           onResponderGrant={ this.handleResponderGrant }
@@ -276,10 +286,19 @@ var MessageView = React.createClass({
           onEndReached={ this.onEndReached }
           renderRow={ (message, sectionID, rowID, highlightRow) => {
             var hidePic = false;
+            var showName = true;
+            var rowID = parseInt(rowID);
+            if(rowID < (this.state.dataSource._dataBlob.s1.length - 1)) {
+              hidePic = true;
+              if(this.state.dataSource._dataBlob.s1[rowID + 1].author._id
+              != message.author._id) {
+                hidePic = false;
+              }
+            }
             if(rowID > 0) {
               if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id
-                == message.author._id) {
-                var hidePic = true;
+              == message.author._id) {
+                showName = false;
               }
             }
             return (
@@ -288,6 +307,7 @@ var MessageView = React.createClass({
                 message={ message }
                 user={ this.props.user }
                 hidePic={ hidePic }
+                showName={ showName }
               />
             )
           }}
@@ -305,10 +325,16 @@ var MessageView = React.createClass({
             style={ styles.messageInput }
             onChangeText={(text) => { this.onChange(text); }}
             onSubmitEditing={(ev) => { this.onSubmitEditing(); }}
+            onFocus={() => { 
+              this.scrollToBottom();
+            }}
+            onLayout={(x,y,width,height) => {
+              console.log(height);
+            }}
             clearButtonMode={ 'while-editing' }
             placeholder='Chat'
             placeholderTextColor='#AAA'
-            returnKeyType={ 'send' }
+            returnKeyType='send'
           />
           <TouchableOpacity
             activeOpacity={.5}

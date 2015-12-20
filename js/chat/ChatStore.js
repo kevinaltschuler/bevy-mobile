@@ -513,7 +513,7 @@ _.extend(ChatStore, {
     // add to collection and sort to ensure order
     thread.messages.add(message);
     thread.messages.sort();
-    //this.threads.sort();
+    this.threads.sort();
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
     this.trigger(CHAT.CHANGE_ONE + thread.id);
