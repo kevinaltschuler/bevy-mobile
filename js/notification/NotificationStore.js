@@ -34,7 +34,6 @@ var UserStore = require('./../user/UserStore');
 var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
-//if(Platform.OS == 'android')
 window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 

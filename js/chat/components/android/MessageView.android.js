@@ -18,7 +18,6 @@ var {
   StyleSheet
 } = React;
 var MessageItem = require('./MessageItem.android.js');
-var InvertibleScrollView = require('react-native-invertible-scroll-view');
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 var MessageInput = require('./MessageInput.android.js');
 
