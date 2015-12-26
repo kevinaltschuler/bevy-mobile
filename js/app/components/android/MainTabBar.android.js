@@ -127,6 +127,7 @@ var MainTabBar = React.createClass({
   },
 
   switchTab(tab) {
+    return
     var history = this.state.tabHistory || [];
     history.push(tab);
     this.setState({
@@ -201,13 +202,14 @@ var MainTabBar = React.createClass({
   },
 
   render() {
+    return(<View></View>)
     return (
       <View style={ styles.container }>
         <View style={ styles.tabBar }>
           <TabBarItem 
             tab={ tabs.posts }
             activeTab={ this.state.activeTab }
-            onPress={() => this.switchTab(tabs.posts) } 
+            onPress={() => <View></View> } 
             icon={
               <Icon 
                 name='view-list' 
@@ -226,7 +228,7 @@ var MainTabBar = React.createClass({
           <TabBarItem 
             tab={ tabs.chat }
             activeTab={ this.state.activeTab }
-            onPress={() => this.switchTab(tabs.chat) } 
+            onPress={() => <View></View> } 
             icon={
               <Icon 
                 name='chat-bubble' 
@@ -246,7 +248,7 @@ var MainTabBar = React.createClass({
             tab={ tabs.notifications }
             activeTab={ this.state.activeTab }
             unreadCount={ this.props.unreadCount }
-            onPress={() => this.switchTab(tabs.notifications) } 
+            onPress={() => <View></View> } 
             icon={
               <Icon 
                 name='notifications' 
@@ -265,7 +267,7 @@ var MainTabBar = React.createClass({
           <TabBarItem 
             tab={ tabs.more }
             activeTab={ this.state.activeTab }
-            onPress={() => this.switchTab(tabs.more) } 
+            onPress={() => <View></View> } 
             icon={
               <Icon 
                 name='more-horiz' 

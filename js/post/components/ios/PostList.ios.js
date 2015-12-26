@@ -20,7 +20,7 @@ var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
-var TagModal = require('./TagModal.ios.js');
+//var TagModal = require('./TagModal.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -206,15 +206,8 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-          <TagModal
-            isVisible={this.props.showTags}
-            mainNavigator={this.props.mainNavigator}
-            onHide={this.props.onHideTags}
-            activeBevy={ this.props.activeBevy }
-            frontpageFilters={ this.props.frontpageFilters }
-            activeTags={this.props.activeTags}
-            myBevies={ this.props.myBevies }
-          />
+          
+    
           <ListView
             ref={LISTVIEW}
             dataSource={ this.state.dataSource }

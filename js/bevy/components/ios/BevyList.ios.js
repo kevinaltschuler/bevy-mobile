@@ -26,7 +26,7 @@ var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
 var UserActions = require('./../../../user/UserActions');
 var FileActions = require('./../../../file/FileActions');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
+//var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BEVY = constants.BEVY;
 
 var BevyList = React.createClass({
@@ -183,7 +183,7 @@ var BevyList = React.createClass({
       <View style={styles.container}>
 
         <View style={{
-          height: StatusBarSizeIOS.currentHeight
+          height: 20//StatusBarSizeIOS.currentHeight
         }} />
 
         { this._renderProfileHeader() }
