@@ -18,7 +18,7 @@ var {
 } = React;
 var BackButton = require('./../../../shared/components/ios/BackButton.ios.js');
 var InfoButton = require('./InfoButton.ios.js');
-//var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
+var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
@@ -290,7 +290,7 @@ var BevyView = React.createClass({
 
     return (
       <View style={{ flex: 1 }}>
-        {/*
+        
         <Navbar
           bevyRoute={ this.props.bevyRoute }
           bevyNavigator={ this.props.bevyNavigator }
@@ -315,7 +315,7 @@ var BevyView = React.createClass({
             marginTop: 0 
           }}
         />
-      */}
+      
           { view }
       </View>
 

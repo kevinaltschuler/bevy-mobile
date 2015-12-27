@@ -13,8 +13,10 @@ var {
   Image,
   ListView,
   TouchableHighlight,
-  SwitchIOS
+  SwitchIOS,
+  TabBarIOS
 } = React;
+var Icon = require('react-native-vector-icons/Ionicons');
 var SubSwitch = require('./SubSwitch.ios.js');
 
 var _ = require('underscore');
@@ -71,6 +73,37 @@ var SearchView = React.createClass({
         .cloneWithRows(bevies)
     });
   },
+  switchSearchType(index) {
+    var data;
+    switch(index) {
+      case 0:
+        // bevy
+        AppActions.switchSearchType('bevy');
+        data = BevyStore.getSearchList();
+        break;
+      case 1:
+        // user
+        AppActions.switchSearchType('user');
+        data = UserStore.getUserSearchResults();
+        if(_.isEmpty(data)) {
+          // no users have been searched for yet
+          // so we'll trigger it when we switch to that search type
+          UserActions.search('');
+        }
+        break;
+    }
+    // repopulate data store with proper results
+    this.setState({
+      ds: this.state.ds.cloneWithRows(data)
+    });
+  },
+  switchTab(index) {
+    this.setState({
+      activeTab: index
+    });
+    this.pager.setPage(index);
+    this.switchSearchType(index);
+  },
 
   _renderSubSwitch(bevy) {
     var user = this.props.user;
@@ -102,13 +135,63 @@ var SearchView = React.createClass({
     }*/
   },
 
+  _renderTabBar() {
+    return (
+      <View style={ styles.tabbar }>
+        <TouchableHighlight
+          underlayColor = "rgba(0,0,0,.1)"
+          onPress={ () => { this.switchTab(0) }}
+        >
+          <View style={[ styles.searchTab, {
+            borderRightColor: '#EEE',
+            borderRightWidth: 1
+          }]}>
+            <Text style={ (this.state.activeTab == 0)
+              ? styles.searchTabTextActive
+              : styles.searchTabText }>
+              Bevies
+            </Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight
+          underlayColor = "rgba(0,0,0,.1)"
+          onPress={ () => { this.switchTab(1) }}
+        >
+          <View style={ styles.searchTab }>
+            <Text style={ (this.state.activeTab == 1)
+              ? styles.searchTabTextActive
+              : styles.searchTabText }>
+              Users
+            </Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+  },
+
   render() {
     return (
       <View style={styles.container}>
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight
-        }} />
-        <Text style={ styles.publicBevyTitle }>Public Bevies</Text>
+        <TabBarIOS
+          tintColor='#2cb673'
+          barTintColor='#FFF'
+          translucent={ false }
+          style = {styles.tabbar}
+        >
+              <TabBarIOS.Item
+                style = {styles.searchTab}
+              >
+              <Text style={{ fontSize: 12 }}>bevies</Text>
+              </TabBarIOS.Item>
+
+              <TabBarIOS.Item
+                style = {styles.searchTab}
+              >
+              <Text style={{ fontSize: 12}}>users</Text>
+              </TabBarIOS.Item>
+
+        </TabBarIOS>
+
         <ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
@@ -155,10 +238,38 @@ var SearchView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',
     paddingTop: 60
+  },
+  tabbar: {
+    width: constants.width,
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontSize: 40,
+    borderBottomColor: '#EEE',
+    borderBottomWidth: 1
+  },
+  searchTab: {
+    flex: 1,
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchTabText: {
+    color: '#AAA'
+  },
+  searchTabTextActive: {
+    color: '#2CB673'
+  },
+  searchPage: {
+    flex: 1
+  },
+  searchItemList: {
+    flex: 1,
+    flexDirection: 'column'
   },
   bevyRow: {
     flex: 1,
