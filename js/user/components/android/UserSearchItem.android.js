@@ -11,7 +11,7 @@ var {
   View,
   Text,
   Image,
-  TouchableNativeFeedback,
+  TouchableHighlight,
   StyleSheet
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
@@ -70,8 +70,7 @@ var UserSearchItem = React.createClass({
 
   render() {
     return (
-      <TouchableNativeFeedback
-        background={ TouchableNativeFeedback.Ripple('#DDD', false) }
+      <TouchableHighlight
         onPress={ this.onSelect }
       >
         <View style={ styles.container }>
@@ -86,7 +85,7 @@ var UserSearchItem = React.createClass({
             { this._renderIcon() }
           </View>
         </View>
-      </TouchableNativeFeedback>
+      </TouchableHighlight>
     );
   }
 });

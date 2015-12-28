@@ -23,11 +23,19 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
+var AppActions = require('./../../../app/AppActions');
+var BevyActions = require('./../../../bevy/BevyActions');
+var UserActions = require('./../../../user/UserActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
 var BevyActions = require('./../../../bevy/BevyActions');
+var SearchUser = require('./SearchUser.ios.js');
+
 var BEVY = constants.BEVY;
+
+var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
+var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 
 var SearchView = React.createClass({
   propTypes: {
@@ -37,11 +45,16 @@ var SearchView = React.createClass({
 
   getInitialState() {
     var bevies = BevyStore.getPublicBevies();
+    var users = UserStore.getUserSearchResults();
     return {
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         .cloneWithRows(bevies),
+      userDataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+        .cloneWithRows(users),
       fetching: false,
-      searchQuery: BevyStore.getSearchQuery()
+      searchQuery: BevyStore.getSearchQuery(),
+      userQuery: UserStore.getUserSearchQuery(),
+      activeTab: 0
     };
   },
 
@@ -99,9 +112,9 @@ var SearchView = React.createClass({
   },
   switchTab(index) {
     this.setState({
-      activeTab: index
+      activeTab: 0
     });
-    this.pager.setPage(index);
+    //this.pager.setPage(index);
     this.switchSearchType(index);
   },
 
@@ -134,65 +147,53 @@ var SearchView = React.createClass({
       });
     }*/
   },
-
-  _renderTabBar() {
-    return (
-      <View style={ styles.tabbar }>
-        <TouchableHighlight
-          underlayColor = "rgba(0,0,0,.1)"
-          onPress={ () => { this.switchTab(0) }}
-        >
-          <View style={[ styles.searchTab, {
-            borderRightColor: '#EEE',
-            borderRightWidth: 1
-          }]}>
-            <Text style={ (this.state.activeTab == 0)
-              ? styles.searchTabTextActive
-              : styles.searchTabText }>
-              Bevies
-            </Text>
-          </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          underlayColor = "rgba(0,0,0,.1)"
-          onPress={ () => { this.switchTab(1) }}
-        >
-          <View style={ styles.searchTab }>
-            <Text style={ (this.state.activeTab == 1)
-              ? styles.searchTabTextActive
-              : styles.searchTabText }>
-              Users
-            </Text>
-          </View>
-        </TouchableHighlight>
-      </View>
+  _renderSearchUsers() {
+    if(this.state.searching) {
+      return (
+        <View style={ styles.progressContainer }>
+          <Spinner 
+            isVisible={true} 
+            size={40} 
+            type={'Arc'} 
+            color={'#2cb673'}
+          />
+        </View>
+      );
+    } else if(!this.state.searching && _.isEmpty(this.state.searchUsers)) {
+      return (
+        <View style={ styles.progressContainer }> 
+          <Text style={ styles.noneFoundText }>
+            No Users Found
+          </Text>
+        </View>
+      );
+    } else return (
+      <ListView
+        style={ styles.userList }
+        dataSource={ this.state.userDataSource }
+        scrollRenderAheadDistance={ 300 }
+        removeClippedSubviews={ true }
+        initialListSize={ 10 }
+        pageSize={ 10 }
+        renderRow={(user) => {
+          return (
+            <UserSearchItem
+              key={ 'searchuser:' + user._id }
+              searchUser={ user }
+              onSelect={ this.onSearchUserSelect }
+              selected={ 
+                _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
+              }
+            />
+          );
+        }}
+      />
     );
   },
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <TabBarIOS
-          tintColor='#2cb673'
-          barTintColor='#FFF'
-          translucent={ false }
-          style = {styles.tabbar}
-        >
-              <TabBarIOS.Item
-                style = {styles.searchTab}
-              >
-              <Text style={{ fontSize: 12 }}>bevies</Text>
-              </TabBarIOS.Item>
-
-              <TabBarIOS.Item
-                style = {styles.searchTab}
-              >
-              <Text style={{ fontSize: 12}}>users</Text>
-              </TabBarIOS.Item>
-
-        </TabBarIOS>
-
-        <ListView
+  
+  _renderSearchBevies() {
+    return(
+      <ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
           renderRow={(bevy) => {
@@ -226,11 +227,51 @@ var SearchView = React.createClass({
                     </Text>
                   </View>
                 </TouchableHighlight>
-                {/* this._renderSubSwitch(bevy) */}
+                
               </View>
             );
           }}
         />
+      );
+  },
+
+  switchSearchTab(index) {
+    if(index == 0)
+      return(
+        <View>
+        {this._renderSearchBevies()}
+        </View>
+        );
+    else
+      return(
+        <SearchUser>
+        </SearchUser>
+        );
+  },
+
+  render() {
+    return (   
+      <View style={styles.container}>
+        <View style={styles.tabBar}>
+          <TouchableHighlight 
+            onPress = {() =>{
+              this.setState({activeTab: 0});
+            }}
+            style={styles.searchTab}
+          >
+            <Text>bevies</Text>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            onPress = {() =>{
+              this.setState({activeTab: 1});
+            }}
+            style={styles.searchTab}
+          >
+            <Text>users</Text>
+          </TouchableHighlight>
+        </View>
+        {this.switchSearchTab(this.state.activeTab)}
       </View>
     )
   }
@@ -238,16 +279,16 @@ var SearchView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
+    flex:1,
     flexDirection: 'column',
     backgroundColor: '#fff',
-    paddingTop: 60
+    paddingTop: 70
   },
-  tabbar: {
+  tabBar: {
     width: constants.width,
     height: 40,
     flexDirection: 'row',
-    alignItems: 'center',
-    fontSize: 40,
+    alignItems: 'center',    
     borderBottomColor: '#EEE',
     borderBottomWidth: 1
   },

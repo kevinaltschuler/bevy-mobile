@@ -19,10 +19,8 @@ var {
 } = React;
 var Icon = require('./../../../shared/components/android/Icon.android.js');
 var SubSwitch = require('./SubSwitch.android.js');
-var BevySearchItem
-  = require('./../../../bevy/components/android/BevySearchItem.android.js');
-var UserSearchItem
-  = require('./../../../user/components/android/UserSearchItem.android.js');
+var BevySearchItem = require('./../../../bevy/components/android/BevySearchItem.android.js');
+var UserSearchItem = require('./../../../user/components/android/UserSearchItem.android.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -32,6 +30,7 @@ var BevyActions = require('./../../../bevy/BevyActions');
 var AppActions = require('./../../../app/AppActions');
 var UserStore = require('./../../../user/UserStore');
 var UserActions = require('./../../../user/UserActions');
+var ViewPager = require('react-native-viewpager');
 var BEVY = constants.BEVY;
 var USER = constants.USER;
 
