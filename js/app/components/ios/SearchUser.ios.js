@@ -17,8 +17,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 //var MessageInput = require('./MessageInput.ios.js');
-var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
-var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js');
+var UserSearchItem = require('./UserSearchItem.ios.js');
+var AddedUserItem = require('./UserItem.ios.js');
 var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
@@ -305,9 +305,9 @@ var styles = StyleSheet.create({
     flex: 1,
     color: '#000'
   },
-  toBar: {
+  tabBar: {
     width: constants.width,
-    backgroundColor: '#FFF',
+    backgroundColor: 'rgba(0,0,0,.1)',
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,

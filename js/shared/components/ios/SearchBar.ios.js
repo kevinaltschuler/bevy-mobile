@@ -23,6 +23,7 @@ var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BevyActions = require('./../../../bevy/BevyActions');
+var UserActions = require('./../../../user/UserActions');
 var BEVY = constants.BEVY;
 
 var SearchBar = React.createClass({
@@ -84,6 +85,7 @@ var SearchBar = React.createClass({
         query: query
       });
       BevyActions.search(this.state.query);
+      UserActions.search(this.state.query);
     }.bind(this), 500);
   },
 

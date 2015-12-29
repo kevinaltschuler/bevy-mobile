@@ -258,6 +258,7 @@ var SearchView = React.createClass({
               this.setState({activeTab: 0});
             }}
             style={styles.searchTab}
+            underlayColor = 'rgba(0,0,0,.1)'
           >
             <Text>bevies</Text>
           </TouchableHighlight>
@@ -267,6 +268,7 @@ var SearchView = React.createClass({
               this.setState({activeTab: 1});
             }}
             style={styles.searchTab}
+            underlayColor = 'rgba(0,0,0,.1)'
           >
             <Text>users</Text>
           </TouchableHighlight>
@@ -291,6 +293,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',    
     borderBottomColor: '#EEE',
     borderBottomWidth: 1
+    
   },
   searchTab: {
     flex: 1,
@@ -320,7 +323,7 @@ var styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingRight: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    borderBottomColor: '#FFF'
   },
   publicBevyTitle: {
     fontSize: 17,
