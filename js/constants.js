@@ -30,6 +30,8 @@ exports.protocol = protocol;
 exports.api_subdomain = api_subdomain;
 exports.api_version = api_version;
 
+exports.client_id = 'ios';
+exports.client_secret = 'BY-THE-LIGHT-OF-THE-MOON';
 exports.google_client_id = '540892787949-0e61br4320fg4l2its3gr9csssrn07aj.apps.googleusercontent.com';
 exports.google_client_secret = 'LuNykxTlzbeH8pa6f77WXroG';
 exports.google_redirect_uri = 'com.joinbevy.ios:/oauth2callback';

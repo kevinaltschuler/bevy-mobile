@@ -14,8 +14,10 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var USER = constants.USER;
 var routes = require('./../../../routes');
 var AppActions = require('./../../../app/AppActions');
+var UserActions = require('./../../../user/UserActions');
 var UserStore = require('./../../../user/UserStore');
 
 var LoginView = React.createClass({
@@ -33,28 +35,24 @@ var LoginView = React.createClass({
     }
   },
 
-  loginEmail() {
-    fetch(constants.siteurl + '/login',
-    {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: this.state.username,
-        password: this.state.pass
-      })
+  componentDidMount() {
+    UserStore.on(USER.LOGIN_SUCCESS, this.onLoginSuccess);
+    UserStore.on(USER.LOGIN_ERROR, this.updateError);
+  },
+
+  componentWillUnmount() {
+    UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
+    UserStore.off(USER.LOGIN_ERROR, this.updateError);
+  },
+
+  updateError(error) {
+    this.setState({
+      error: error
     })
-    // on fetch
-    .then((res) => (res.json()))
-    .then((res) => {
-      if(res.object == undefined) {
-        this.onLoginSuccess(res);
-      } else {
-        this.setState({error: res.message});
-      }
-    });
+  },
+
+  loginEmail() {
+    UserActions.logIn(this.state.username, this.state.pass);
   },
 
   loginGoogle() {
@@ -74,16 +72,6 @@ var LoginView = React.createClass({
         // no one has logged in before or has consciously signed out
         // navigate to GoogleWebSignIn and let it handle things
         this.props.loginNavigator.change('google');
-        /*
-        LinkingIOS.addEventListener('url', this.handleGoogleURL);
-        LinkingIOS.openURL([
-          'https://accounts.google.com/o/oauth2/auth',
-          '?response_type=code',
-          '&client_id=' + constants.google_client_id,
-          '&redirect_uri=' + constants.google_redirect_uri,
-          '&scope=email%20profile'
-        ].join(''));
-        */
       }
     });
   },
@@ -135,18 +123,9 @@ var LoginView = React.createClass({
     });
   },
 
-  onLoginSuccess(user) {
-    console.log('success', user);
-    this.props.authModalActions.close();
-
-    UserStore.setUser(user);
-    AppActions.load();
-
-    this.setState({
-      username: '',
-      pass: '',
-      error: ''
-    });
+  onLoginSuccess() {
+    console.log('THE ROURE', routes.MAIN.TABBAR);
+    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
   },
 
   _renderError() {

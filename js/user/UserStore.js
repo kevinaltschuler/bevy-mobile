@@ -94,7 +94,7 @@ _.extend(UserStore, {
         this.loggedIn = false;
 
         this.trigger(USER.LOADED);
-        this.trigger(BEVY.CHANGE_ALL);
+        this.trigger(USER.LOGOUT);
         break;
 
       case USER.REGISTER:
@@ -430,6 +430,7 @@ _.extend(UserStore, {
   },
 
   login(username, password) {
+    console.log(username, password)
     fetch(constants.siteurl + '/login', {
       method: 'POST',
       headers: {
@@ -470,6 +471,7 @@ _.extend(UserStore, {
     this.user = new User(user);
     this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
+    AsyncStorage.setItem('user', JSON.stringify(user));
     // register push notifications for android
     // get token if it exists
     if(Platform.OS == 'android') {
@@ -478,6 +480,9 @@ _.extend(UserStore, {
       });
       GCM.register();
     }
+
+    this.trigger(USER.LOADED);
+    this.trigger(USER.LOGIN_SUCCESS)
   },
   
   setTokens(accessToken, refreshToken, expires_in) {

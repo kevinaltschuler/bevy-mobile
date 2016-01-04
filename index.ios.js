@@ -244,20 +244,6 @@ var App = React.createClass({
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
 
     UserStore.on(USER.LOADED, this._onUserChange);
-
-    // first things first try to load the user
-    console.log('loading...');
-    AsyncStorage.getItem('user')
-    .then((user) => {
-      if(user) {
-        console.log('user fetched');
-        UserStore.setUser(JSON.parse(user));
-        AppActions.load();
-      } else {
-        console.log('going to login screen...');
-        AppActions.load();
-      }
-    });
   },
 
   componentWillUnmount() {
@@ -323,7 +309,7 @@ var App = React.createClass({
       toggle: this.toggleAuthModal
     };
 
-    PushNotificationIOS.requestPermissions();
+    PushNotificationIOS.requestPermissions();/*
     //PushNotificationIOS.checkPermissions(data => {console.log(data)})
 
     NativeModules.CameraManager.checkDeviceAuthorizationStatus(function(err, isAuthorized) {
@@ -332,30 +318,23 @@ var App = React.createClass({
       } else {
         //console.log('you dont');
       }
-    });
+    });*/
+
+    console.log(AsyncStorage.getItem('access_token'));
+
+    var initialRoute = routes.MAIN.LOADING;
 
     return (
       <View style={{ flex: 1 }}>
         <Navigator
           configureScene={() => sceneConfig }
-          initialRoute={ routes.MAIN.LOGIN }
+          initialRoute={ initialRoute }
           initialRouteStack={[
-            routes.MAIN.LOGIN
+            initialRoute
           ]}
           renderScene={(route, navigator) => {
               switch(route.name) {
-                case routes.MAIN.LOGIN.name:
                 default:
-                  return (
-                    <LoginNavigator
-                      mainRoute={ route }
-                      mainNavigator={ navigator }
-                      authModalActions={ authModalActions }
-                      { ...this.state }
-                    />
-                  )
-                  break;
-                case routes.MAIN.TABBAR:
                   return (
                     <MainView
                       mainRoute={ route }

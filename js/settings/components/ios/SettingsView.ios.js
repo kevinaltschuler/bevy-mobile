@@ -161,6 +161,8 @@ var SettingsView = React.createClass({
   },
 
   render() {
+
+    
     return (
       <View style={ styles.container }>
         <Navbar

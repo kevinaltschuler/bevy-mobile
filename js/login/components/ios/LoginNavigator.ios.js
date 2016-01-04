@@ -25,7 +25,7 @@ var routes = require('./../../../routes');
 
 var LoginNavigator = React.createClass({
   propTypes: {
-    authModalActions: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
     close: React.PropTypes.func
   },
 
