@@ -23,6 +23,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var UserActions = require('./../../../user/UserActions');
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var SettingsView = React.createClass({
   propTypes: {
@@ -166,10 +167,26 @@ var SettingsView = React.createClass({
     return (
       <View style={ styles.container }>
         <Navbar
-          center='Settings'
+          center={<Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>Settings</Text>}
+          activeBevy={ this.props.activeBevy }
+          fontColor={ '#999' }
           { ...this.props }
           profilePicture={ this.state.profilePicture }
+          styleBottom={{
+            backgroundColor: '#fff',
+            height: 40,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottomWidth: 1,
+            borderBottomColor: '#eee',
+            marginTop: 0
+          }}
         />
+
+        <View style={{
+          height: StatusBarSizeIOS.currentHeight
+        }} />
         <ScrollView style={{ flex: 1, marginTop: (this.props.loggedIn) ? -20 : 0 }}>
           { this._renderUserHeader() }
 

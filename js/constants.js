@@ -140,6 +140,7 @@ exports.CHAT = {
 };
 
 exports.USER = {
+  LOAD_USER: 'user_load_user',
   UPDATE: 'user_update',
   LOGIN: 'user_login',
   LOGIN_GOOGLE: 'user_login_google',

@@ -34,7 +34,7 @@ var Navbar = React.createClass({
     return {
       styleParent: {
         flexDirection: 'column',
-        paddingTop: 48,
+        paddingTop: 0,
         overflow: 'visible',
         backgroundColor: '#eee'
       },

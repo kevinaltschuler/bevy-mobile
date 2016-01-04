@@ -25,6 +25,8 @@ var NativeModules = require('NativeModules');
 var Backbone = require('backbone');
 var _ = require('underscore');
 
+
+
 Backbone.sync = function(method, model, options) {
 
   var headers = {
@@ -69,7 +71,36 @@ Backbone.sync = function(method, model, options) {
 
     options.success(response, options);
   });
-}
+};
+
+var $fetch = window.fetch;
+window.fetch = function(input, init) {
+  var url = input;
+  var options = init;
+  if(options == undefined) options = {};
+  if(_.isEmpty(options.headers)) {
+    options.headers = {
+      'Accept': 'application/json'
+    };
+    if(!_.isEmpty(options.body)) {
+      options.headers['Content-Type'] = 'application/json';
+    }
+  }
+  // if this is an api call
+  if(url.includes(constants.apiurl)) {
+    // if we have an authorization token
+    if(!_.isEmpty(UserStore.getAccessToken())) {
+      //console.log(localStorage.getItem('access_token'));
+      options.headers['Authorization'] = 'Bearer ' + UserStore.getAccessToken();
+      //console.log(UserStore.getAccessToken(), url);
+    }
+  } else {
+    // if this is going back to the main site
+    // include the cookie it sent to maintain the session
+    options.credentials = 'include';
+  }
+  return $fetch(url, options);
+};
 
 var constants = require('./js/constants');
 var routes = require('./js/routes');
@@ -320,7 +351,7 @@ var App = React.createClass({
       }
     });*/
 
-    console.log(AsyncStorage.getItem('access_token'));
+    console.log(UserStore.getAccessToken());
 
     var initialRoute = routes.MAIN.LOADING;
 
