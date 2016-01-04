@@ -38,6 +38,7 @@ var BEVY = constants.BEVY;
 
 var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
+var SearchBar = require('./../../../shared/components/ios/Navbar.ios.js');
 
 var SearchView = React.createClass({
   propTypes: {
@@ -244,6 +245,9 @@ var SearchView = React.createClass({
   render() {
     return (
       <View style={styles.container}>
+        <SearchBar>
+        </SearchBar>
+
         <View style={styles.tabBar}>
           <TouchableHighlight
             onPress = {() =>{
@@ -276,7 +280,7 @@ var styles = StyleSheet.create({
     flex:1,
     flexDirection: 'column',
     backgroundColor: '#fff',
-    paddingTop: 70
+    paddingTop: 0
   },
   tabBar: {
     width: constants.width,
