@@ -35,7 +35,7 @@ var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
 
-//window.navigator.userAgent = "react-native";
+window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);

@@ -15,6 +15,7 @@ var {
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
+var routes = require('./../../../routes.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -24,7 +25,8 @@ var UserSearchItem = React.createClass({
     searchUser: React.PropTypes.object,
     onSelect: React.PropTypes.func,
     selected: React.PropTypes.bool,
-    showIcon: React.PropTypes.bool
+    showIcon: React.PropTypes.bool,
+    mainNavigator: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -49,10 +51,9 @@ var UserSearchItem = React.createClass({
   },
 
   onSelect() {
-    this.props.onSelect(this.props.searchUser);
-    this.setState({
-      selected: !this.state.selected
-    });
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = this.props.searchUser;
+    this.props.mainNavigator.push(route);
   },
 
   _renderIcon() {
@@ -101,7 +102,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    
     paddingHorizontal: 10
   },
   image: {

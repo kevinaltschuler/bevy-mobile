@@ -14,7 +14,8 @@ var {
   ListView,
   TouchableHighlight,
   SwitchIOS,
-  TabBarIOS
+  TabBarIOS,
+  ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var SubSwitch = require('./SubSwitch.ios.js');
@@ -31,6 +32,7 @@ var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
 var BevyActions = require('./../../../bevy/BevyActions');
 var SearchUser = require('./SearchUser.ios.js');
+var BevyCard = require('./../../../bevy/components/ios/BevyCard.ios.js');
 
 var BEVY = constants.BEVY;
 
@@ -51,6 +53,7 @@ var SearchView = React.createClass({
         .cloneWithRows(bevies),
       userDataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         .cloneWithRows(users),
+      bevies: BevyStore.getPublicBevies(),
       fetching: false,
       searchQuery: BevyStore.getSearchQuery(),
       userQuery: UserStore.getUserSearchQuery(),
@@ -83,7 +86,8 @@ var SearchView = React.createClass({
     this.setState({
       fetching: false,
       dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-        .cloneWithRows(bevies)
+        .cloneWithRows(bevies),
+      bevies: BevyStore.getSearchList()
     });
   },
   switchSearchType(index) {
@@ -192,46 +196,34 @@ var SearchView = React.createClass({
   },
   
   _renderSearchBevies() {
-    return(
-      <ListView
-          dataSource={ this.state.dataSource }
-          style={ styles.bevyPickerList }
-          renderRow={(bevy) => {
-            var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
-            var defaultBevies = [
-              '11sports', '22gaming', '3333pics',
-              '44videos', '555music', '6666news', '777books'
-            ];
-            if(_.contains(defaultBevies, bevy._id)) {
-              imageUri = constants.apiurl + bevy.image_url;
-            }
-            if(bevy._id == -1) return <View />; // dont show frontpage
-            return (
-              <View style={ styles.bevyRow }>
-                <TouchableHighlight
-                  underlayColor='rgba(0,0,0,.1)'
-                  style={styles.bevyButton}
-                  onPress={() => {
-                    // switch bevy
-                    BevyActions.switchBevy(bevy._id);
-                    this.props.mainNavigator.push(routes.BEVY.POSTLIST);
-                  }}
-                >
-                  <View style={ styles.bevyPickerItem }>
-                    <Image
-                      style={ styles.bevyPickerImage }
-                      source={{ uri: imageUri }}
-                    />
-                    <Text style={ styles.bevyPickerName }>
-                      { bevy.name }
-                    </Text>
-                  </View>
-                </TouchableHighlight>
-                
-              </View>
-            );
-          }}
+    var bevies = (this.state.bevies)
+    
+
+    var bevyList = [];
+
+    for(var key in bevies) {
+      var bevy = bevies[key];
+      if(bevy._id == -1) {
+        continue;
+      }
+
+      bevyList.push(
+        <BevyCard 
+          bevy={bevy}
+          key={ 'bevylist:' + bevy._id }
+          mainNavigator={this.props.mainNavigator}
         />
+      );
+    }
+    return(
+      <ScrollView 
+        contentContainerStyle={ styles.bevyList }
+        automaticallyAdjustContentInsets={true}
+        showsVerticalScrollIndicator={true}
+        style={{flex: 1}}
+      >
+        { bevyList }
+      </ScrollView>
       );
   },
 
@@ -250,10 +242,10 @@ var SearchView = React.createClass({
   },
 
   render() {
-    return (   
+    return (
       <View style={styles.container}>
         <View style={styles.tabBar}>
-          <TouchableHighlight 
+          <TouchableHighlight
             onPress = {() =>{
               this.setState({activeTab: 0});
             }}
@@ -355,6 +347,13 @@ var styles = StyleSheet.create({
   },
   bevyButton: {
     flex: 2
+  },
+  bevyList: {
+    flexDirection: 'row',
+    width: constants.width,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginBottom: 10
   }
 });
 
