@@ -60,7 +60,6 @@ var MainView = React.createClass({
   },
 
   _onLogin() {
-    console.log('login LOGIN_SUCCESS')
     this.props.mainNavigator.replace(routes.MAIN.TABBAR);
   },
 

@@ -5,6 +5,13 @@ var constants = require('./../constants');
 var USER = constants.USER;
 
 var UserActions = {
+  loadUser(user) {
+    Dispatcher.dispatch({
+      actionType: USER.LOAD_USER,
+      user: user
+    })
+  },
+
   update() {
     Dispatcher.dispatch({
       actionType: USER.UPDATE

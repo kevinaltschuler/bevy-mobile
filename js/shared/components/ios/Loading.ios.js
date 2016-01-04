@@ -11,6 +11,7 @@ var constants = require('./../../../constants');
 var USER = constants.USER;
 var routes = require('./../../../routes');
 var UserStore = require('./../../../user/UserStore');
+var UserActions = require('./../../../user/UserActions');
 var AppActions = require('./../../../app/AppActions');
 
 var {
@@ -28,7 +29,7 @@ var Loading = React.createClass({
 	    .then((user) => {
 	      if(user) {
 	        console.log('user fetched');
-	        UserStore.setUser(JSON.parse(user));
+	        UserActions.loadUser(JSON.parse(user));
 	        AppActions.load();
 	      } else {
 	        console.log('going to login screen...');
@@ -40,7 +41,6 @@ var Loading = React.createClass({
 
 	render() {
 		var logoUrl = constants.siteurl + '/img/logo_300_white.png';
-		console.log(logoUrl)
 		return (
 			<View style={{
 				height: constants.height, 

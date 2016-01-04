@@ -189,7 +189,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 3,
     width: constants.width,
-    height: constants.height - 48,
+    height: constants.height,
     backgroundColor: '#eee',
   },
   publicHeader: {

@@ -36,27 +36,28 @@ _.extend(UserStore, {
 
   handleDispatch(payload) {
     switch(payload.actionType) {
-      case APP.LOAD_USER:
-        if(_.isEmpty(this.user)) {
+      case USER.LOAD_USER:
+        console.log('herer');
+        var user = payload.user;
+        if(_.isEmpty(user)) {
           this.loggedIn = false;
           break;
         } else {
-          this.setUser(this.user);
+          this.setUser(user);
           this.loggedIn = true;
         }
         // check if auth tokens have been passed in from the server
-        if(!_.isEmpty(AsyncStorage.getItem('access_token'))
-          && !_.isEmpty(AsyncStorage.getItem('refresh_token'))) {
-          this.setTokens(
-            AsyncStorage.getItem('access_token'),
-            AsyncStorage.getItem('refresh_token'),
-            AsyncStorage.getItem('expires_in')
-          );
-        } else {
-          console.log('access token failure');
-          break;
-        }
-        this.trigger(USER.LOADED);
+        AsyncStorage.multiGet(['access_token', 'refresh_token', 'expires_in'])
+        .then((response) => {
+            var access = response[0][1];
+            var refresh = response[1][1];
+            var expires = response[2][1];
+            if(!_.isEmpty(access) && !_.isEmpty(refresh)) {
+              this.setTokens(access, refresh, expires);
+            }
+            this.trigger(USER.LOADED);
+          }
+        );
         break;
 
       case USER.LOGIN:
@@ -484,6 +485,10 @@ _.extend(UserStore, {
     this.trigger(USER.LOADED);
     this.trigger(USER.LOGIN_SUCCESS)
   },
+
+  getAccessToken() {
+    return this.accessToken;
+  },
   
   setTokens(accessToken, refreshToken, expires_in) {
     if(_.isEmpty(accessToken) || _.isEmpty(refreshToken)) {
@@ -496,6 +501,7 @@ _.extend(UserStore, {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
     this.expires_in = expires_in;
+
     // and save
     console.log('tokens set!');
     AsyncStorage.setItem('access_token', accessToken);
