@@ -18,6 +18,7 @@ var {
 
 var MainView = require('./js/app/components/ios/MainView.ios.js');
 var LoginModal = require('./js/login/components/ios/LoginModal.ios.js');
+var LoginNavigator = require('./js/login/components/ios/LoginNavigator.ios.js');
 var NotificationActions = require('./js/notification/NotificationActions');
 var NativeModules = require('NativeModules');
 
@@ -93,6 +94,60 @@ var NotificationStore = require('./js/notification/NotificationStore');
 var UserStore = require('./js/user/UserStore');
 
 var AppActions = require('./js/app/AppActions');
+
+// load globals
+var Backbone = require('backbone');
+// backbone shim
+Backbone.sync = function(method, model, options) {
+  var headers = {
+    'Accept': 'application/json'
+  };
+  var body = {};
+
+  var url = model.url;
+  if (!options.url) {
+    url = _.result(model, 'url');
+  } else {
+    url = options.url;
+  }
+
+  if(options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+    headers['Content-Type'] = 'application/json';
+    body = options.attrs || model.toJSON(options);
+  }
+
+  var methodMap = {
+    'create': 'POST',
+    'update': 'PUT',
+    'patch':  'PATCH',
+    'delete': 'DELETE',
+    'read':   'GET'
+  };
+  method = methodMap[method];
+
+  var startTime = Date.now();
+  //console.log('START ' + method + ' ' + url);
+
+  var opts = {
+    method: method,
+    headers: headers,
+    body: JSON.stringify(body)
+  };
+  if(method === 'GET' || method === 'HEAD')
+    delete opts.body;
+
+  return fetch(url, opts)
+  .then(res => res.json())
+  .then(res => {
+    var endTime = Date.now();
+    var deltaTime = endTime - startTime;
+    //console.log('END', method, url);
+    options.success(res, options);
+  })
+  .catch(error => {
+    options.error(error.toString())
+  });
+};
 
 var App = React.createClass({
 
@@ -189,20 +244,6 @@ var App = React.createClass({
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
 
     UserStore.on(USER.LOADED, this._onUserChange);
-
-    // first things first try to load the user
-    console.log('loading...');
-    AsyncStorage.getItem('user')
-    .then((user) => {
-      if(user) {
-        console.log('user fetched');
-        UserStore.setUser(JSON.parse(user));
-        AppActions.load();
-      } else {
-        console.log('going to login screen...');
-        AppActions.load();
-      }
-    });
   },
 
   componentWillUnmount() {
@@ -268,7 +309,7 @@ var App = React.createClass({
       toggle: this.toggleAuthModal
     };
 
-    PushNotificationIOS.requestPermissions();
+    PushNotificationIOS.requestPermissions();/*
     //PushNotificationIOS.checkPermissions(data => {console.log(data)})
 
     NativeModules.CameraManager.checkDeviceAuthorizationStatus(function(err, isAuthorized) {
@@ -277,29 +318,33 @@ var App = React.createClass({
       } else {
         //console.log('you dont');
       }
-    });
+    });*/
+
+    console.log(AsyncStorage.getItem('access_token'));
+
+    var initialRoute = routes.MAIN.LOADING;
 
     return (
       <View style={{ flex: 1 }}>
-        {/* auth modal */}
-        <LoginModal
-          isOpen={ this.state.authModalOpen }
-          message={ this.state.authModalMessage }
-          authModalActions={ authModalActions }
-        />
         <Navigator
           configureScene={() => sceneConfig }
-          initialRoute={ routes.MAIN.TABBAR }
+          initialRoute={ initialRoute }
           initialRouteStack={[
-            routes.MAIN.TABBAR
+            initialRoute
           ]}
-          renderScene={(route, navigator) =>
-            <MainView
-              mainRoute={ route }
-              mainNavigator={ navigator }
-              authModalActions={ authModalActions }
-              { ...this.state }
-            />
+          renderScene={(route, navigator) => {
+              switch(route.name) {
+                default:
+                  return (
+                    <MainView
+                      mainRoute={ route }
+                      mainNavigator={ navigator }
+                      { ...this.state }
+                    />
+                  )
+                  break;
+              }
+            }
           }
         />
       </View>

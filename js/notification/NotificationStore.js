@@ -38,6 +38,8 @@ var Notifications = require('./NotificationCollection');
 window.navigator.userAgent = "react-native";
 var io = require('socket.io-client/socket.io');
 
+
+
 var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
 

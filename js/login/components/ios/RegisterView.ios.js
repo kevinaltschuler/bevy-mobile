@@ -78,13 +78,18 @@ var RegisterView = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>
+            Register
+          </Text>
+        </View>
         { this._renderError() }
         <TextInput
           autoCorrect={ false }
           autoCapitalize='none'
           keyboardType='default'
           placeholder='Username'
-          placeholderTextColor='#aaa'
+          placeholderTextColor='rgba(255,255,255,.5)'
           style={ styles.registerInput }
           value={ this.state.username }
           onChangeText={(text) => this.setState({ username: text })}
@@ -94,7 +99,7 @@ var RegisterView = React.createClass({
           autoCapitalize='none'
           password={ true }
           placeholder='•••••••'
-          placeholderTextColor='#aaa'
+          placeholderTextColor='rgba(255,255,255,.5)'
           style={ styles.registerInput }
           value={ this.state.pass }
           onChangeText={(text) => this.setState({ pass: text })}
@@ -124,12 +129,26 @@ var RegisterView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: constants.width * 2 / 3,
-    backgroundColor: '#fff',
+    width: constants.width,
+    backgroundColor: '#2cb673',
     flexDirection: 'column',
-    borderRadius: 20,
-    paddingTop: 15,
-    paddingBottom: 5
+    paddingBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: constants.width / 2,
+    paddingHorizontal: constants.width / 12
+  },
+  logo: {
+    width: 60,
+    height: 60
+  },
+  title: {
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  titleText: {
+    fontSize: 28,
+    color: '#fff'
   },
   registerTitle: {
     textAlign: 'center',
@@ -144,40 +163,42 @@ var styles = StyleSheet.create({
     marginBottom: 5
   },
   registerInput: {
-    flex: 1,
-    height: 40,
+    height: 50,
     paddingLeft: 16,
-    color: '#000',
-    borderBottomColor: '#ccc',
-    borderBottomWidth: .5,
-    marginBottom: 10
-  },
-  registerButton: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#2CB673',
+    borderColor: '#fff',
+    borderWidth: 1,
     marginBottom: 10,
-    borderRadius: 20,
-    marginHorizontal: 10
-  },
-  registerButtonText: {
-    flex: 1,
-    fontSize: 17,
-    textAlign: 'center',
+    borderRadius: 25,
+    width: constants.width / 1.2,
     color: '#fff'
   },
+  registerButton: {
+    padding: 10,
+    backgroundColor: '#fff',
+    height: 50,
+    flexDirection: 'column',
+    borderRadius: 25,
+    marginBottom: 10,
+    marginHorizontal: 20,
+    width: constants.width / 1.2
+  },
+  registerButtonText: {
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#666'
+  },
   textButton: {
-    flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingTop: 5,
     paddingBottom: 5,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20
   },
   textButtonText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#666'
+    color: '#eee'
   }
 });
 

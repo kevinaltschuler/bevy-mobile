@@ -18,6 +18,8 @@ var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
 var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
 var SwitchUserView = require('./../../../user/components/ios/SwitchUserView.ios.js');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
+var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
+var Loading = require('./../../../shared/components/ios/Loading.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -25,6 +27,7 @@ var routes = require('./../../../routes');
 var PostStore = require('./../../../post/PostStore');
 var UserStore = require('./../../../user/UserStore');
 var POST = constants.POST;
+var USER = constants.USER;
 
 var styles = StyleSheet.create({
   container: {
@@ -44,6 +47,25 @@ var MainView = React.createClass({
     return {
       route: {}
     };
+  },
+
+  componentDidMount() {
+    UserStore.on(USER.LOGIN_SUCCESS, this._onLogin);
+    UserStore.on(USER.LOGOUT, this._onLogout);
+  },
+
+  componentWillUnmount() {
+    UserStore.off(USER.LOGIN_SUCCESS, this._onLogin);
+    UserStore.off(USER.LOGOUT, this._onLogout);
+  },
+
+  _onLogin() {
+    console.log('login LOGIN_SUCCESS')
+    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
+  },
+
+  _onLogout() {
+    this.props.mainNavigator.replace(routes.MAIN.LOGIN);
   },
 
   render() {
@@ -68,7 +90,12 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.PROFILE.name:
-        return <ProfileView profileUser={ this.props.mainRoute.profileUser } { ...this.props } />
+        return (
+          <ProfileView 
+            profileUser={ this.props.mainRoute.profileUser } 
+            { ...this.props } 
+          />
+        )
         break;
 
       case routes.MAIN.MAP.name:
@@ -107,9 +134,21 @@ var MainView = React.createClass({
         );
         
       case routes.MAIN.TABBAR.name:
-      default:
-        return <SearchBar { ...this.props } />
+        return <MainTabBar { ...this.props } />
         break;
+
+      case routes.MAIN.LOADING.name:
+        return <Loading {...this.props} />
+        break;
+
+      case routes.MAIN.LOGIN.name:
+        default:
+          return (
+            <LoginNavigator
+              { ...this.props }
+            />
+          )
+          break;
     }
   }
 });

@@ -2,6 +2,7 @@
 
 var routes = {
   MAIN: {
+    LOADING: { name: 'loading'},
     TABBAR: { name: 'MainTabBar' },
     NEWPOST: { name: 'NewPost' },
     NEWBEVY: { name: 'NewBevy' },
