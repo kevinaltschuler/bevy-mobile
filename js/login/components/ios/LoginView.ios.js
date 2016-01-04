@@ -8,7 +8,8 @@ var {
   TextInput,
   AsyncStorage,
   LinkingIOS,
-  TouchableHighlight
+  TouchableHighlight,
+  Image
 } = React;
 
 var _ = require('underscore');
@@ -156,8 +157,15 @@ var LoginView = React.createClass({
   },
 
   render() {
+    var logoUrl = constants.apiurl + '/img/logo_100_reversed.png';
     return (
       <View style={ styles.container }>
+        <Image style={styles.logo} source={{uri: logoUrl}}/>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>
+            Bevy
+          </Text>
+        </View>
         { this._renderError() }
         <TextInput
           autoCorrect={ false }
@@ -166,13 +174,7 @@ var LoginView = React.createClass({
           keyboardType='default'
           style={ styles.loginInput }
           onChangeText={ (text) => this.setState({ username: text }) }
-          placeholderTextColor='#aaa'
-        />
-        <View
-          style={{
-            flex: 1,
-            height: 1
-          }}
+          placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TextInput
           autoCorrect={ false }
@@ -181,11 +183,11 @@ var LoginView = React.createClass({
           placeholder='•••••••'
           style={ styles.loginInput }
           onChangeText={ (text) => this.setState({ pass: text }) }
-          placeholderTextColor='#aaa'
+          placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TouchableHighlight
           style={ styles.loginButton }
-          underlayColor='rgba(44,182,105,0.8)'
+          underlayColor='rgba(255,255,255,.8)'
           onPress={ this.loginEmail }>
           <Text style={ styles.loginButtonText }>
             Login
@@ -199,24 +201,26 @@ var LoginView = React.createClass({
             Login With Google
           </Text>
         </TouchableHighlight>
-        <TouchableHighlight
-          underlayColor='#eee'
-          style={[ styles.textButton, { borderBottomColor: '#eee', borderBottomWidth: 1 } ]}
-          onPress={() => {
-            this.props.loginNavigator.change('register');
-          }}
-        >
-          <Text style={[ styles.textButtonText, { fontSize: 17 } ]}>Create An Account</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          underlayColor='#eee'
-          style={ styles.textButton }
-          onPress={() => {
-            this.props.loginNavigator.change('forgot');
-          }}
-        >
-          <Text style={ styles.textButtonText }>Forgot Password?</Text>
-        </TouchableHighlight>
+        <View style={styles.textButtons}>
+          <TouchableHighlight
+            underlayColor='rgba(255,255,255,.1)'
+            style={[styles.textButton, {borderRightWidth: 1, borderRightColor: '#fff'}]}
+            onPress={() => {
+              this.props.loginNavigator.change('register');
+            }}
+          >
+            <Text style={[styles.textButtonText, ]}>Create An Account</Text>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='rgba(255,255,255,.1)'
+            style={ styles.textButton }
+            onPress={() => {
+              this.props.loginNavigator.change('forgot');
+            }}
+          >
+            <Text style={ styles.textButtonText }>Forgot Password?</Text>
+          </TouchableHighlight>
+        </View>
       </View>
     );
   }
@@ -225,83 +229,94 @@ var LoginView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: constants.width * 2 / 3,
-    backgroundColor: '#fff',
+    width: constants.width,
+    backgroundColor: '#2cb673',
     flexDirection: 'column',
-    borderRadius: 20,
-    paddingTop: 15,
     paddingBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: constants.width / 3,
+    paddingHorizontal: constants.width / 12
+  },
+  logo: {
+    width: 60,
+    height: 60
+  },
+  title: {
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  titleText: {
+    fontSize: 28,
+    color: '#fff'
   },
   logInTitle: {
-    flex: 1,
     textAlign: 'center',
     fontSize: 17,
     color: '#666',
     marginBottom: 10
   },
   errorText: {
-    flex: 1,
     textAlign: 'center',
     color: '#df4a32',
     marginBottom: 5
   },
   loginInput: {
-    flex: 1,
-    height: 40,
+    height: 50,
     paddingLeft: 16,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
-    marginBottom: 10
-  },
-  loginButton: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#2CB673',
-    height: 40,
-    flexDirection: 'column',
-    borderRadius: 20,
+    borderColor: '#fff',
+    borderWidth: 1,
     marginBottom: 10,
-    marginHorizontal: 20
-  },
-  loginButtonText: {
-    flex: 1,
-    fontSize: 17,
-    textAlign: 'center',
+    borderRadius: 25,
+    width: constants.width / 1.2,
     color: '#fff'
   },
+  loginButton: {
+    padding: 10,
+    backgroundColor: '#fff',
+    height: 50,
+    flexDirection: 'column',
+    borderRadius: 25,
+    marginBottom: 10,
+    marginHorizontal: 20,
+    width: constants.width / 1.2
+  },
+  loginButtonText: {
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#666'
+  },
   loginButtonGoogle: {
-    flex: 1,
     backgroundColor: '#df4a32',
     padding: 10,
     marginBottom: 10,
     flexDirection: 'column',
-    height: 40,
-    borderRadius: 20,
-    marginHorizontal: 20
+    height: 50,
+    borderRadius: 25,
+    marginHorizontal: 20,
+    width: constants.width / 1.2
   },
   loginButtonTextGoogle: {
-    flex: 1,
     fontSize: 17,
     textAlign: 'center',
     color: '#fff',
   },
-
+  textButtons: {
+    flexDirection: 'row',
+    marginTop: 10
+  },
   textButton: {
-    flex: 1,
     flexDirection: 'column',
     paddingTop: 5,
     paddingBottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
-    height: 40,
-    marginLeft: 10,
-    marginRight: 10
+    paddingHorizontal: 20
   },
   textButtonText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#666'
+    color: '#eee'
   }
 });
 

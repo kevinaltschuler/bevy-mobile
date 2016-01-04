@@ -108,7 +108,7 @@ var MainView = React.createClass({
         
       case routes.MAIN.TABBAR.name:
       default:
-        return <SearchBar { ...this.props } />
+        return <MainTabBar { ...this.props } />
         break;
     }
   }

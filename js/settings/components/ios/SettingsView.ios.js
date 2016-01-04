@@ -132,7 +132,7 @@ var SettingsView = React.createClass({
             this.props.mainNavigator.push(route);
           }}
         />
-        <SettingsItem
+        {/*<SettingsItem
           title='Switch Account'
           icon={<Icon
               name={'ios-shuffle-strong'}
@@ -144,7 +144,7 @@ var SettingsView = React.createClass({
             route.profileUser = this.props.user;
             this.props.mainNavigator.push(route);
           }}
-        />
+        />*/}
         <SettingsItem
           title='Sign Out'
           icon= {<Icon

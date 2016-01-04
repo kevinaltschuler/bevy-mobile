@@ -20,6 +20,7 @@ var MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
 var NotificationNavigator =
   require('./../../../notification/components/ios/NotificationNavigator.ios.js');
 var SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
+var SearchView = require('./SearchView.ios.js');
 
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -31,7 +32,8 @@ var tabs = {
   Bevies: 'BevyNavigator',
   Chat: 'ChatNavigator',
   Notifications: 'NotificationNavigator',
-  More: 'SettingsNavigator'
+  More: 'SettingsNavigator',
+  Search: 'SearchView'
 };
 
 var MainTabBar = React.createClass({
@@ -97,6 +99,14 @@ var MainTabBar = React.createClass({
             tabBarActions={ tabBarActions }
           />
         );
+      case tabs.Search:
+        return (
+          <SearchView
+            {...this.props}
+            tabBarActions={ tabBarActions }
+          />
+        )
+        break;
     }
   },
 
@@ -119,6 +129,22 @@ var MainTabBar = React.createClass({
             onPress={() => {
               this.setState({
                 selectedTab: tabs.Bevies,
+              });
+            }}
+          >
+            { this._renderContent() }
+          </Icon.TabBarItem>
+          <Icon.TabBarItem
+            title='Search'
+            iconName='ios-search'
+            selectedIconName='ios-search-strong'
+            color='rgba(0,0,0,.3)'
+            size={ 28 }
+            selected={ this.state.selectedTab === tabs.Search }
+            style={ styles.tabIcon }
+            onPress={() => {
+              this.setState({
+                selectedTab: tabs.Search,
               });
             }}
           >

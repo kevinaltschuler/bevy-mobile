@@ -222,7 +222,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 0,
     borderRadius: 2,
-    alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0)',
     width: constants.width - 80
   },

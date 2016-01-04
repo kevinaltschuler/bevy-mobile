@@ -233,7 +233,6 @@ var styles = StyleSheet.create({
   },
   searchInputWrapper: {
     flex: 1,
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginRight: 20,
@@ -242,7 +241,6 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,.3)',
     paddingHorizontal: 10,
     flexDirection: 'row',
-    alignItems: 'center'
   },
   searchIcon: {
     width: 20,

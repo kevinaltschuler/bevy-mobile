@@ -67,15 +67,17 @@ var ForgotView = React.createClass({
   render: function() {
     return (
       <View style={styles.container}>
-        <Text style={styles.loginSubTitle}>
-          { this.state.subTitle }
-        </Text>
+        <View style={styles.title}>
+          <Text style={styles.titleText}>
+            {this.state.subTitle}
+          </Text>
+        </View>
         <TextInput
           autoCorrect={false}
           autoCapitalize='none'
           placeholder='Email Address'
           keyboardType='email-address'
-          placeholderTextColor='#aaa'
+          placeholderTextColor='rgba(255,255,255,.5)'
           style={ styles.loginInput }
           value={ this.state.email }
           onChangeText={(text) => this.setState({email: text})}
@@ -89,7 +91,7 @@ var ForgotView = React.createClass({
           </Text>
         </TouchableHighlight>
         <TouchableHighlight
-          underlayColor='#eee'
+          underlayColor='rgba(255,255,255,.5)'
           style={ styles.textButton }
           onPress={() => {
             this.props.loginNavigator.change('login');
@@ -105,12 +107,22 @@ var ForgotView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: constants.width * 2 / 3,
-    backgroundColor: '#fff',
+    width: constants.width,
+    backgroundColor: '#2cb673',
     flexDirection: 'column',
-    borderRadius: 20,
-    paddingTop: 15,
-    paddingBottom: 5
+    paddingBottom: 5,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: constants.width / 2,
+    paddingHorizontal: constants.width / 12
+  },
+  title: {
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  titleText: {
+    fontSize: 28,
+    color: '#fff'
   },
   loginTitle: {
     textAlign: 'center',
@@ -124,42 +136,42 @@ var styles = StyleSheet.create({
     marginBottom: 10
   },
   loginInput: {
-    flex: 1,
-    height: 40,
+    height: 50,
     paddingLeft: 16,
-    color: '#000',
-    borderBottomWidth: .5,
-    borderBottomColor: '#ddd',
-    marginBottom: 10
-  },
-  loginButton: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: '#2CB673',
+    borderColor: '#fff',
+    borderWidth: 1,
     marginBottom: 10,
-    borderRadius: 20,
-    marginHorizontal: 10
-  },
-  loginButtonText: {
-    flex: 1,
-    fontSize: 17,
-    textAlign: 'center',
+    borderRadius: 25,
+    width: constants.width / 1.2,
     color: '#fff'
   },
+  loginButton: {
+    padding: 10,
+    backgroundColor: '#fff',
+    height: 50,
+    flexDirection: 'column',
+    borderRadius: 25,
+    marginBottom: 10,
+    marginHorizontal: 20,
+    width: constants.width / 1.2
+  },
+  loginButtonText: {
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#666'
+  },
   textButton: {
-    flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     paddingTop: 5,
     paddingBottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 10
+    paddingHorizontal: 20
   },
   textButtonText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#666',
-    borderRadius: 20
+    color: '#eee'
   }
 });
 

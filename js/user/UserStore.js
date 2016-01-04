@@ -29,66 +29,41 @@ _.extend(UserStore, {
   userSearchQuery: '',
   userSearchResults: new Users,
 
-  linkedAccounts: new Users,
+  accessToken: '',
+  refreshToken: '',
+  expires_in: 0,
+  tokensLoaded: false,
 
   handleDispatch(payload) {
     switch(payload.actionType) {
-      case APP.LOAD:
-        // fetch user from server if its been updated?
-        if(this.loggedIn) {
-          this.linkedAccounts.url = 
-            constants.apiurl + '/users/' + this.user.get('_id') + '/linkedaccounts';
-          this.linkedAccounts.fetch({
-            success: function(collection, response, options) {
-              this.trigger(USER.LOADED);
-            }.bind(this)
-          });
-          this.user.fetch({
-            success: function(model, response, options) {
-              //console.log('user fetched from server');
-              // update local storage user
-              AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
-
-              this.trigger(USER.LOADED);
-            }.bind(this)
-          });
+      case APP.LOAD_USER:
+        if(_.isEmpty(this.user)) {
+          this.loggedIn = false;
+          break;
+        } else {
+          this.setUser(this.user);
+          this.loggedIn = true;
         }
+        // check if auth tokens have been passed in from the server
+        if(!_.isEmpty(AsyncStorage.getItem('access_token'))
+          && !_.isEmpty(AsyncStorage.getItem('refresh_token'))) {
+          this.setTokens(
+            AsyncStorage.getItem('access_token'),
+            AsyncStorage.getItem('refresh_token'),
+            AsyncStorage.getItem('expires_in')
+          );
+        } else {
+          console.log('access token failure');
+          break;
+        }
+        this.trigger(USER.LOADED);
         break;
 
       case USER.LOGIN:
         var username = payload.username;
         var password = payload.password;
         console.log('logging in');
-
-        fetch(constants.siteurl + '/login', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password
-          })
-        })
-        .then(res => res.json())
-        .then(res => {
-          if(res.object == undefined) {
-            // success
-            console.log('logged in', res);
-            
-            AsyncStorage.setItem('user', JSON.stringify(res))
-            .then((err, result) => {
-            });
-
-            this.setUser(res);
-            this.trigger(USER.LOGIN_SUCCESS, res);
-          } else {
-            console.log('error', res);
-            // error
-            this.trigger(USER.LOGIN_ERROR, res.message);
-          }
-        });
+        this.login(username, password);
         break;
 
       case USER.LOGIN_GOOGLE:
@@ -395,20 +370,6 @@ _.extend(UserStore, {
     }
   },
 
-  setUser(user) {
-    this.user = new User(user);
-    this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
-    this.loggedIn = true;
-    // register push notifications for android
-    // get token if it exists
-    if(Platform.OS == 'android') {
-      GCM.addEventListener('register', data => {
-        this.onRegister(data.deviceToken);
-      });
-      GCM.register();
-    }
-  },
-
   onRegister(token) {
     console.log('GCM TOKEN', token);
     // check if we've already sent this token
@@ -466,6 +427,82 @@ _.extend(UserStore, {
 
   getUserSearchResults() {
     return this.userSearchResults.toJSON();
+  },
+
+  login(username, password) {
+    fetch(constants.siteurl + '/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        client_id: constants.client_id,
+        client_secret: constants.client_secret,
+        grant_type: 'password',
+        username: username,
+        password: password
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log('login success', res.user._id);
+      // set the access and refresh tokens
+      this.setTokens(
+        res.accessToken,
+        res.refreshToken,
+        res.expires_in
+      );
+      // set the new user
+      this.setUser(res.user);
+      // trigger success
+      this.trigger(USER.LOGIN_SUCCESS);
+    })
+    .catch(err => {
+      console.log('login error', err.toString());
+      // trigger error and pass along error message
+      this.trigger(USER.LOGIN_ERROR, err.toString());
+    });
+  },
+
+  setUser(user) {
+    this.user = new User(user);
+    this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
+    this.loggedIn = true;
+    // register push notifications for android
+    // get token if it exists
+    if(Platform.OS == 'android') {
+      GCM.addEventListener('register', data => {
+        this.onRegister(data.deviceToken);
+      });
+      GCM.register();
+    }
+  },
+  
+  setTokens(accessToken, refreshToken, expires_in) {
+    if(_.isEmpty(accessToken) || _.isEmpty(refreshToken)) {
+      // if one of them is missing, then we need to clear all
+      console.log('clearing oauth2 tokens');
+      this.clearTokens();
+      return;
+    }
+    // set locally
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
+    this.expires_in = expires_in;
+    // and save
+    console.log('tokens set!');
+    AsyncStorage.setItem('access_token', accessToken);
+    AsyncStorage.setItem('refresh_token', refreshToken);
+    AsyncStorage.setItem('expires_in', expires_in.toString());
+    this.tokensLoaded = true;
+  },
+
+  clearTokens() {
+    AsyncStorage.removeItem('access_token');
+    AsyncStorage.removeItem('refresh_token');
+    AsyncStorage.removeItem('expires_in');
   },
 
   getUserImage(user, width, height) {

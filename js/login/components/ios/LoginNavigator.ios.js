@@ -90,28 +90,9 @@ var LoginNavigator = React.createClass({
         />;
         break;
     }
-    return <BlurView blurType='dark' style={styles.container}>
-            <View style={ styles.panel }>
-                <View style={ styles.topBar }>
-                  <TouchableHighlight
-                    underlayColor='rgba(0,0,0,0.2)'
-                    style={ styles.closeButton }
-                    onPress={() => {
-                      this.props.close()
-                    }}
-                  >
-                    <Icon
-                      name='ios-close-empty'
-                      size={ 30 }
-                      style={{ width: 30, height: 30 }}
-                      color='#333'
-                    />
-                  </TouchableHighlight>
-                  <Text style={ styles.panelHeaderText }>{title}</Text>
-                </View>
-              { content }
-            </View>
-          </BlurView>;
+    return (
+       content 
+    );
   }
 });
 
@@ -132,7 +113,6 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     borderRadius: 20,
-    width: constants.width * 2 / 3,
   },
   topBar: {
     height: 42,
@@ -141,7 +121,6 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginTop: 10,
     flex: 1,
-    width: constants.width * 2 / 4
   },
   closeButton: {
     height: 48,
