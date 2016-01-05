@@ -245,7 +245,9 @@ var SearchView = React.createClass({
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar>
+        <SearchBar
+         center={<Text style={{color: '#999', fontSize: 18, fontWeight: 'bold'}}>Search</Text>}
+        >
         </SearchBar>
 
         <View style={styles.tabBar}>
