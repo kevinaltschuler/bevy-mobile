@@ -187,7 +187,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    paddingTop: 3,
+    paddingTop: 0,
     width: constants.width,
     height: constants.height,
     backgroundColor: '#eee',

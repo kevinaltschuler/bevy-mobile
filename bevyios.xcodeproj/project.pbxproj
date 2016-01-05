@@ -33,8 +33,8 @@
 		CE6822FD1BC6CB9100BE5DE5 /* libRNBlur.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3874141BC6C5F800C7BCD6 /* libRNBlur.a */; };
 		CE76683B1BC9AFF300DDDD50 /* libRCTRefreshControl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7668311BC9AFB900DDDD50 /* libRCTRefreshControl.a */; };
 		CEA42E9B1C21F5FF0009CA73 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
-		CEA42E9F1C21F7940009CA73 /* UIImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEA42E9E1C21F7940009CA73 /* UIImagePickerManager.m */; };
 		CEA42EA01C2207490009CA73 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CEA42E701C20F3120009CA73 /* libRCTCamera.a */; };
+		CEE8DBA21C3B3EF200457BD6 /* UIImagePickerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CEE8DBA11C3B3EF200457BD6 /* UIImagePickerManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -218,10 +218,9 @@
 		CE38740F1BC6C5F800C7BCD6 /* RNBlur.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBlur.xcodeproj; path = "node_modules/react-native-blur/ios/RNBlur.xcodeproj"; sourceTree = "<group>"; };
 		CE7668261BC9AFB900DDDD50 /* RCTRefreshControl.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTRefreshControl.xcodeproj; path = "node_modules/react-refresh-control/RCTRefreshControl.xcodeproj"; sourceTree = "<group>"; };
 		CEA42E691C20F3110009CA73 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
-		CEA42E951C21F4840009CA73 /* UIImagePickerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = UIImagePickerManager.m; path = "node_modules/react-native-image-picker/UIImagePickerManager/UIImagePickerManager.m"; sourceTree = "<group>"; };
-		CEA42E9D1C21F7940009CA73 /* UIImagePickerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImagePickerManager.h; sourceTree = "<group>"; };
-		CEA42E9E1C21F7940009CA73 /* UIImagePickerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImagePickerManager.m; sourceTree = "<group>"; };
 		CEC226ED1BBEF50A005FAC9B /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
+		CEE8DBA01C3B3EF200457BD6 /* UIImagePickerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImagePickerManager.h; path = "node_modules/react-native-image-picker/ios/UIImagePickerManager.h"; sourceTree = "<group>"; };
+		CEE8DBA11C3B3EF200457BD6 /* UIImagePickerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImagePickerManager.m; path = "node_modules/react-native-image-picker/ios/UIImagePickerManager.m"; sourceTree = "<group>"; };
 		CEF188B61BCFFD8F00808FB2 /* UIImagePickerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIImagePickerManager.h; sourceTree = "<group>"; };
 		CEF188B71BCFFD8F00808FB2 /* UIImagePickerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIImagePickerManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -376,7 +375,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				CEA42E9C1C21F7940009CA73 /* UIImagePickerManager */,
+				CEE8DBA01C3B3EF200457BD6 /* UIImagePickerManager.h */,
+				CEE8DBA11C3B3EF200457BD6 /* UIImagePickerManager.m */,
 				CEA42E691C20F3110009CA73 /* RCTCamera.xcodeproj */,
 				CE0EE6691BF5694800D87C48 /* RCTPushNotification.xcodeproj */,
 				CE0E4E9E1BDD60A900330EF8 /* RNSpinkit.xcodeproj */,
@@ -411,7 +411,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				CEA42E951C21F4840009CA73 /* UIImagePickerManager.m */,
 				CEF188B61BCFFD8F00808FB2 /* UIImagePickerManager.h */,
 				CEF188B71BCFFD8F00808FB2 /* UIImagePickerManager.m */,
 				CE33A5471BBF73C100D857FC /* Entypo.ttf */,
@@ -479,16 +478,6 @@
 				CEA42E701C20F3120009CA73 /* libRCTCamera.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		CEA42E9C1C21F7940009CA73 /* UIImagePickerManager */ = {
-			isa = PBXGroup;
-			children = (
-				CEA42E9D1C21F7940009CA73 /* UIImagePickerManager.h */,
-				CEA42E9E1C21F7940009CA73 /* UIImagePickerManager.m */,
-			);
-			name = UIImagePickerManager;
-			path = "node_modules/react-native-image-picker/UIImagePickerManager";
 			sourceTree = "<group>";
 		};
 		CEC226EE1BBEF50A005FAC9B /* Products */ = {
@@ -827,7 +816,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D19E2451B79240900BCD97C /* RCTFileTransfer.m in Sources */,
-				CEA42E9F1C21F7940009CA73 /* UIImagePickerManager.m in Sources */,
+				CEE8DBA21C3B3EF200457BD6 /* UIImagePickerManager.m in Sources */,
 				CEA42E9B1C21F5FF0009CA73 /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				4D7764F91B58085E005FE588 /* RCTReadImageData.m in Sources */,
