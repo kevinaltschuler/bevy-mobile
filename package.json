@@ -24,6 +24,7 @@
     "react-native-calendar": "^0.6.0",
     "react-native-swiper-fork": "^2.0.1",
     "react-native-spinkit": "^0.0.5",
+    "react-native-image-picker": "^0.11.1",
     "react-native-timer-mixin": "^0.11.0",
     "react-native-collapsible": "^0.5.2",
     "react-native-vibration": "^0.1.1",
