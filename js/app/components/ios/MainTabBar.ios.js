@@ -37,7 +37,6 @@ var tabs = {
 };
 
 var MainTabBar = React.createClass({
-
   getInitialState() {
     return {
       selectedTab: tabs.Bevies,

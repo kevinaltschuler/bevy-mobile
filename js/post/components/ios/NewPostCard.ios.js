@@ -18,8 +18,7 @@ var NewPostCard = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    mainNavigator: React.PropTypes.object,
-    authModalActions: React.PropTypes.object
+    mainNavigator: React.PropTypes.object
   },
 
   render() {
@@ -32,10 +31,7 @@ var NewPostCard = React.createClass({
       <TouchableHighlight
         underlayColor={'rgba(0,0,0,0)'}
         onPress={() => {
-          if(this.props.loggedIn)
-            this.props.mainNavigator.push(routes.MAIN.NEWPOST);
-          else
-            this.props.authModalActions.open('Log In To Post');
+          this.props.mainNavigator.push(routes.MAIN.NEWPOST);
         }}
         style={ styles.touchContainer }
       >

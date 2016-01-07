@@ -72,17 +72,6 @@ var ThreadList = React.createClass({
   },
 
   render() {
-    if(!this.props.loggedIn) {
-      return (
-        <View style={ styles.container }>
-          <View style={ styles.noThreadsContainer }>
-            <Text style={ styles.noThreadsText }>
-              Please log in
-            </Text>
-          </View>
-        </View>
-      );
-    }
     return (
       <View style={ styles.container }>
         <ScrollView

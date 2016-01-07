@@ -23,7 +23,6 @@ var UserStore = require('./../../../user/UserStore');
 var LoginView = React.createClass({
   propTypes: {
     loginNavigator: React.PropTypes.object,
-    authModalActions: React.PropTypes.object,
     message: React.PropTypes.string
   },
 
@@ -63,12 +62,11 @@ var LoginView = React.createClass({
         // yes we have, and we have the token
         // we can skip doing the oauth2 grant request
         fetch(constants.apiurl + '/users/google/' + google_id)
-        .then(($res) => {
-          var user = JSON.parse($res._bodyText);
-          this.onLoginSuccess(user);
+        .then(res => res.json())
+        .then(res => {
+          this.onLoginSuccess(res);
         });
       } else {
-        
         // no one has logged in before or has consciously signed out
         // navigate to GoogleWebSignIn and let it handle things
         this.props.loginNavigator.change('google');

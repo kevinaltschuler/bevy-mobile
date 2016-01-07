@@ -29,8 +29,7 @@ var SettingsView = React.createClass({
   propTypes: {
     loggedIn: React.PropTypes.bool,
     user: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object,
-    authModalActions: React.PropTypes.object
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -72,24 +71,6 @@ var SettingsView = React.createClass({
   },
 
   _renderAccountSettings() {
-    if(!this.props.loggedIn) {
-      return (
-        <SettingsItem
-        icon={
-          <Icon
-            name={'person'}
-            size={30}
-            color='rgba(0,0,0,.3)'
-          />
-        }
-          title='Log In'
-          onPress={() => {
-            this.props.authModalActions.open('Log In');
-          }}
-        />
-      );
-    }
-
     return (
       <View style={{ flexDirection: 'column' }}>
         <SettingsItem
@@ -163,7 +144,7 @@ var SettingsView = React.createClass({
 
   render() {
 
-    
+
     return (
       <View style={ styles.container }>
         <Navbar

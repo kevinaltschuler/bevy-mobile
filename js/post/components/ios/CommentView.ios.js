@@ -28,7 +28,6 @@ var CommentView = React.createClass({
     postID: React.PropTypes.string,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    authModalActions: React.PropTypes.object,
     mainNavigator: React.PropTypes.object
   },
 
@@ -84,12 +83,6 @@ var CommentView = React.createClass({
   },
 
   postReply() {
-    // gate this if not logged in
-    if(!this.props.loggedIn) {
-      this.props.authModalActions.open('Log In To Comment');
-      return;
-    }
-
     var text = this.state.replyText;
     // dont post empty reply
     if(_.isEmpty(text)) {

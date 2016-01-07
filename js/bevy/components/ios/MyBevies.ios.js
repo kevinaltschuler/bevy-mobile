@@ -58,11 +58,6 @@ var MyBevies = React.createClass({
   },
 
   _renderPublicHeader() {
-    if(!this.props.loggedIn) return (
-      <Text style={ styles.publicHeader }>
-        All Bevies
-      </Text>
-    );
     return (
       <View style={ styles.myBeviesHeader }>
         <View style={styles.myBeviesHeaderTextWrapper}>
@@ -106,7 +101,7 @@ var MyBevies = React.createClass({
       }
 
       bevyList.push(
-        <BevyCard 
+        <BevyCard
           bevy={bevy}
           bevyNavigator={ this.props.bevyNavigator }
           key={ 'bevylist:' + bevy._id }
@@ -122,7 +117,7 @@ var MyBevies = React.createClass({
         onPress={() => {
           this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
         }}
-        style={{    
+        style={{
           alignItems: 'center',
           justifyContent: 'center',
           width: constants.width / 1.3,
@@ -139,7 +134,7 @@ var MyBevies = React.createClass({
             alignItems: 'center'
           }}
         >
-          <Icon 
+          <Icon
             name='ios-plus'
             size={60}
             color='#aaa'
@@ -157,7 +152,7 @@ var MyBevies = React.createClass({
     );
 
     return (
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={ styles.bevyList }
         automaticallyAdjustContentInsets={true}
         showsVerticalScrollIndicator={true}

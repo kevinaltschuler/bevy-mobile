@@ -23,8 +23,7 @@ var AppActions = require('./../../../app/AppActions');
 var RegisterView = React.createClass({
   propTypes: {
     message: React.PropTypes.string,
-    loginNavigator: React.PropTypes.object,
-    authModalActions: React.PropTypes.object
+    loginNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -59,7 +58,6 @@ var RegisterView = React.createClass({
           pass: '',
           error: ''
         });
-        this.props.authModalActions.close();
         this.props.close();
       } else {
         // error

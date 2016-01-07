@@ -19,25 +19,22 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var SubSwitch = require('./SubSwitch.ios.js');
+var SearchUser = require('./SearchUser.ios.js');
+var BevyCard = require('./../../../bevy/components/ios/BevyCard.ios.js');
+var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
+var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
 var AppActions = require('./../../../app/AppActions');
-var BevyActions = require('./../../../bevy/BevyActions');
 var UserActions = require('./../../../user/UserActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
-var BevyActions = require('./../../../bevy/BevyActions');
-var SearchUser = require('./SearchUser.ios.js');
-var BevyCard = require('./../../../bevy/components/ios/BevyCard.ios.js');
 
 var BEVY = constants.BEVY;
-
-var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
-var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 
 var SearchView = React.createClass({
   propTypes: {
@@ -90,6 +87,7 @@ var SearchView = React.createClass({
       bevies: BevyStore.getSearchList()
     });
   },
+
   switchSearchType(index) {
     var data;
     switch(index) {
@@ -133,7 +131,6 @@ var SearchView = React.createClass({
         <SubSwitch
           subbed={subbed}
           loggedIn={ this.props.loggedIn }
-          authModalActions={ this.props.authModalActions }
           bevy={bevy}
           user={user}
         />
@@ -155,17 +152,17 @@ var SearchView = React.createClass({
     if(this.state.searching) {
       return (
         <View style={ styles.progressContainer }>
-          <Spinner 
-            isVisible={true} 
-            size={40} 
-            type={'Arc'} 
+          <Spinner
+            isVisible={true}
+            size={40}
+            type={'Arc'}
             color={'#2cb673'}
           />
         </View>
       );
     } else if(!this.state.searching && _.isEmpty(this.state.searchUsers)) {
       return (
-        <View style={ styles.progressContainer }> 
+        <View style={ styles.progressContainer }>
           <Text style={ styles.noneFoundText }>
             No Users Found
           </Text>
@@ -185,7 +182,7 @@ var SearchView = React.createClass({
               key={ 'searchuser:' + user._id }
               searchUser={ user }
               onSelect={ this.onSearchUserSelect }
-              selected={ 
+              selected={
                 _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
               }
             />
@@ -194,10 +191,10 @@ var SearchView = React.createClass({
       />
     );
   },
-  
+
   _renderSearchBevies() {
     var bevies = (this.state.bevies)
-    
+
 
     var bevyList = [];
 
@@ -208,7 +205,7 @@ var SearchView = React.createClass({
       }
 
       bevyList.push(
-        <BevyCard 
+        <BevyCard
           bevy={bevy}
           key={ 'bevylist:' + bevy._id }
           mainNavigator={this.props.mainNavigator}
@@ -216,7 +213,7 @@ var SearchView = React.createClass({
       );
     }
     return(
-      <ScrollView 
+      <ScrollView
         contentContainerStyle={ styles.bevyList }
         automaticallyAdjustContentInsets={true}
         showsVerticalScrollIndicator={true}
@@ -282,10 +279,9 @@ var styles = StyleSheet.create({
     width: constants.width,
     height: 40,
     flexDirection: 'row',
-    alignItems: 'center',    
+    alignItems: 'center',
     borderBottomColor: '#EEE',
     borderBottomWidth: 1
-    
   },
   searchTab: {
     flex: 1,

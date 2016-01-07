@@ -65,17 +65,6 @@ var NotificationList = React.createClass({
   },
 
   render() {
-    if(!this.props.loggedIn) {
-      return (
-        <View style={ styles.container }>
-          <View style={ styles.noNotificationsContainer }>
-            <Text style={ styles.noNotificationsText }>
-              Please log in
-            </Text>
-          </View>
-        </View>
-      );
-    }
     return (
       <View style={ styles.container }>
         { this._renderNoNotificationsText() }

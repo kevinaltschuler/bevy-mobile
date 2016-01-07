@@ -42,17 +42,11 @@ var SubSwitch = React.createClass({
   render() {
     var bevy = this.props.bevy;
 
-    return (     
+    return (
       <SwitchAndroid
         value={this.state.value}
         style={styles.switch}
         onValueChange={(value) => {
-
-          if(!this.props.loggedIn) {
-            this.props.authModalActions.open('Log In To Subscribe');
-            return;
-          }
-
           this.setState({
             value: value
           });
@@ -71,7 +65,7 @@ var SubSwitch = React.createClass({
 
 var styles = StyleSheet.create({
   switch: {
-    
+
   }
 });
 module.exports = SubSwitch;
