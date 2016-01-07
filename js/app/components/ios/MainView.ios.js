@@ -24,6 +24,7 @@ var Loading = require('./../../../shared/components/ios/Loading.ios.js');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var AppActions = require('./../../../app/AppActions');
 var PostStore = require('./../../../post/PostStore');
 var UserStore = require('./../../../user/UserStore');
 var POST = constants.POST;
@@ -52,11 +53,13 @@ var MainView = React.createClass({
   componentDidMount() {
     UserStore.on(USER.LOGIN_SUCCESS, this._onLogin);
     UserStore.on(USER.LOGOUT, this._onLogout);
+    UserStore.on(USER.TOKENS_LOADED, this._onTokens);
   },
 
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_SUCCESS, this._onLogin);
     UserStore.off(USER.LOGOUT, this._onLogout);
+    UserStore.on(USER.TOKENS_LOADED, this._onTokens);
   },
 
   _onLogin() {
@@ -65,6 +68,11 @@ var MainView = React.createClass({
 
   _onLogout() {
     this.props.mainNavigator.replace(routes.MAIN.LOGIN);
+  },
+
+  _onTokens() {
+    console.log('got the tokens, loading app');
+    AppActions.load();
   },
 
   render() {

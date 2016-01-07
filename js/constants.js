@@ -114,6 +114,11 @@ exports.BEVY = {
   NAV_POSTVIEW: 'bevy_nav_postview'
 };
 
+exports.BOARD = {
+  SWITCH: 'board_switch_board',
+  CLEAR: 'board_clear'
+};
+
 exports.CHAT = {
   // actions
   SWITCH: 'chat_switch',
@@ -161,6 +166,7 @@ exports.USER = {
   VERIFY_ERROR: 'user_verify_error',
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded',
+  TOKENS_LOADED: 'user_tokens_loaded',
 
   SEARCH: 'user_search',
   SEARCHING: 'user_searching',

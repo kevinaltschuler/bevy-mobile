@@ -30,11 +30,9 @@ var Loading = React.createClass({
 	      if(user) {
 	        console.log('user fetched');
 	        UserActions.loadUser(JSON.parse(user));
-	        AppActions.load();
 	      } else {
 	        console.log('going to login screen...');
 	        this.props.mainNavigator.replace(routes.MAIN.LOGIN);
-	        AppActions.load();
 	      }
 	    });
 	},

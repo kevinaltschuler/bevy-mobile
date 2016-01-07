@@ -51,31 +51,6 @@ _.extend(PostStore, {
     switch(payload.actionType) {
 
       case APP.LOAD:
-        if(UserStore.loggedIn) {
-          this.posts.url =
-            constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
-        } else {
-          this.posts.url =
-            constants.apiurl + '/frontpage';
-        }
-        // frontpage posts
-        this.posts.comparator = this.sortByNew;
-        this.sortType = 'new';
-
-        // trigger loading event so frontend can respond
-        this.trigger(POST.LOADING);
-
-        this.posts.fetch({
-          reset: true,
-          success: function(posts, response, options) {
-            // trigger events to let frontend knows that data is available
-            this.trigger(POST.LOADED);
-            this.trigger(POST.CHANGE_ALL);
-          }.bind(this)
-        });
-
-        // trigger anyways
-        this.trigger(POST.CHANGE_ALL);
         break;
 
       case POST.FETCH:
@@ -321,28 +296,15 @@ _.extend(PostStore, {
           break;
 
       case BEVY.SWITCH:
-        Dispatcher.waitFor([BevyStore.dispatchToken]);
-        var bevy_id = BevyStore.active;
-
-        if(bevy_id == -1)
-          this.posts.url = constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
-        else {
-          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
-        }
-
-        this.trigger(POST.LOADING);
-
+        var bevy_id = payload.bevy_id;
+        this.posts.comparator = this.sortByNew;
+        this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         this.posts.fetch({
-          reset: true,
-          success: function(posts, response, options) {
-            this.trigger(POST.LOADED);
+          success: function(collection, response, options) {
+            this.posts.sort();
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
-
-        // clear posts immediately
-        this.posts.reset();
-        this.trigger(POST.CHANGE_ALL);
         break;
 
       case COMMENT.CREATE:

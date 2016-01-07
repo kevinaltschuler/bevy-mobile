@@ -17,6 +17,8 @@ var {
   ScrollView
 } = React;
 
+var Icon = require('react-native-vector-icons/Ionicons');
+
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -30,22 +32,25 @@ var BevyCard = React.createClass({
 
     render() {
         var bevy = this.props.bevy;
+        var bevyName = bevy.name;
 
-        var bevyImage = bevy.image_url || constants.siteurl + '/img/default_group_img.png' ;
-        var defaultBevies = [
-          '11sports', '22gaming', '3333pics',
-          '44videos', '555music', '6666news', '777books'
-        ];
-        if(_.contains(defaultBevies, bevy._id)) {
-          bevyImage = constants.apiurl + bevy.image_url;
+        var bevyImage = bevy.image.path || constants.siteurl + '/img/default_group_img.png' ;
+
+        if(bevyName.length > 20) {
+          bevyName = bevyName.substr(0,20);
+          bevyName = bevyName.concat('...');
         }
+
+        var publicPrivateIcon = (bevy.settings.privacy == 'Private')
+        ?'android-lock'
+        :'android-globe';
 
         return (
             <TouchableHighlight
               underlayColor='rgba(255,255,255,.5)'
               style={{
-                width: 130, 
-                height: 140, 
+                width: constants.width / 1.3, 
+                height: 160, 
                 marginVertical: 10,
                 marginHorizontal: 10,
                 shadowColor: 'rgba(0,0,0,.2)',
@@ -62,9 +67,20 @@ var BevyCard = React.createClass({
               <View style={styles.bevyCard}>
                 <Image style={ styles.bevyImage } source={{uri: bevyImage }}/>
                 <View style={ styles.bevyName }>
-                  <Text style={{color: '#555'}} key={'bevylistkey:' + bevy._id}>
-                    { bevy.name }
+                  <Text style={{color: '#555', fontSize: 20}} key={'bevylistkey:' + bevy._id}>
+                    { bevyName }
                   </Text>
+                  <View style={{flexDirection: 'row'}}>
+                    {/*<View style={styles.infoItem}> 
+                      <Text style={styles.infoText}>
+                        {bevy.subCount}
+                      </Text>
+                      <Icon name='android-people' size={24} color='#555' />
+                    </View>*/}
+                    <View style={styles.infoItem}> 
+                      <Icon name={publicPrivateIcon} size={24} color='#555' />
+                    </View>
+                  </View>
                 </View>
               </View>
             </TouchableHighlight>
@@ -75,14 +91,14 @@ var BevyCard = React.createClass({
 
 var styles = StyleSheet.create({
   bevyImage: {
-    width: 130,
+    width: constants.width / 1.3,
     height: 110,
   },
 
   bevyCard: {
     flexDirection: 'column',
-    width: 130,
-    height: 140,
+    width: constants.width / 1.3,
+    height: 160,
     backgroundColor: '#fff',
     borderRadius: 5,
     overflow: 'hidden'
@@ -90,12 +106,26 @@ var styles = StyleSheet.create({
 
   bevyName: {
     flex: 1,
-    width: 130,
-    height: 20,
+    width: constants.width / 1.3,
+    height: 40,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     borderRadius: 8,
+    paddingLeft: 10,
+    flexDirection: 'row'
   },
+
+  infoItem: {
+    flexDirection: 'row',
+    paddingRight: 10,
+    alignItems: 'center'
+  },
+
+  infoText: {
+    color: '#555',
+    fontSize: 18,
+    marginRight: 5
+  }
 
 });
 

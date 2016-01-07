@@ -11,6 +11,7 @@
 // imports
 var Dispatcher = require('./../shared/dispatcher');
 var BEVY = require('./../constants').BEVY;
+var BOARD = require('./../constants').BOARD;
 var getSlug = require('speakingurl');
 
 var BevyActions = {
@@ -22,11 +23,11 @@ var BevyActions = {
     });
   },
 
-  create(name, description, image, slug) {
+  create(name, image, slug, privacy) {
     Dispatcher.dispatch({
       actionType: BEVY.CREATE,
       name: (name == undefined) ? '' : name,
-      description: (description == undefined) ? '' : description,
+      privacy: (privacy == undefined) ? 'Public' : privacy,
       image: (image == undefined) ? '' : image,
       slug: (slug == undefined) ? getSlug(name) : getSlug(slug) // force verification
     });
@@ -81,20 +82,6 @@ var BevyActions = {
     });
   },
 
-  updateTags(tags) {
-    Dispatcher.dispatch({
-      actionType: BEVY.UPDATE_TAGS,
-      tags: (tags == undefined) ? null : tags
-    });
-  },
-
-  updateFront(bevies) {
-    Dispatcher.dispatch({
-      actionType: BEVY.UPDATE_FRONT,
-      bevies: (bevies == undefined) ? null : bevies
-    });
-  },
-
   requestJoin(bevy, user) {
     Dispatcher.dispatch({
       actionType: BEVY.REQUEST_JOIN,
@@ -108,23 +95,6 @@ var BevyActions = {
       actionType: BEVY.ADD_USER,
       bevy_id: bevy_id,
       user_id: user_id
-    });
-  },
-
-  addTag(bevy_id, name, color) {
-    Dispatcher.dispatch({
-      actionType: BEVY.ADD_TAG,
-      bevy_id: bevy_id,
-      name: name,
-      color: color
-    });
-  },
-
-  removeTag(bevy_id, name) {
-    Dispatcher.dispatch({
-      actionType: BEVY.REMOVE_TAG,
-      bevy_id: bevy_id,
-      name: name
     });
   },
 
@@ -144,21 +114,18 @@ var BevyActions = {
     });
   },
 
-  addRelated(bevy_id, new_bevy) {
+  switchBoard(board_id) {
     Dispatcher.dispatch({
-      actionType: BEVY.ADD_RELATED,
-      bevy_id: bevy_id,
-      new_bevy: new_bevy
-    });
+      actionType: BOARD.SWITCH_BOARD,
+      board_id: board_id
+    })
   },
 
-  removeRelated(bevy_id, related_id) {
+  clearBoard() {
     Dispatcher.dispatch({
-      actionType: BEVY.REMOVE_RELATED,
-      bevy_id: bevy_id,
-      related_id: related_id
-    });
-  }
+      actionType: BOARD.CLEAR
+    })
+  },
 };
 
 module.exports = BevyActions;

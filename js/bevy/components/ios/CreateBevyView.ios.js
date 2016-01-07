@@ -13,7 +13,8 @@ var {
   TextInput,
   TouchableHighlight,
   StyleSheet,
-  ScrollView
+  ScrollView,
+  SegmentedControlIOS
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
@@ -51,7 +52,7 @@ var CreateBevyView = React.createClass({
     return {
       bevyImage: '',
       name: '',
-      description: '',
+      privacy: 'Public',
       creating: false,
       slug: ''
     };
@@ -112,18 +113,6 @@ var CreateBevyView = React.createClass({
             autoCorrect={ false }
             placeholder='Bevy Name'
             placeholderTextColor='#AAA'
-          />
-
-          <TextInput
-            style={ styles.descriptionInput }
-            ref='description'
-            onChange={(ev) => {
-              this.setState({
-                description: ev.nativeEvent.text
-              });
-            }}
-            placeholder='Description'
-            multiline={ true }
           />
         </View>
       </View>
@@ -208,6 +197,47 @@ var CreateBevyView = React.createClass({
     );
   },
 
+  _renderPrivatePublic() {
+    var privacyIndex = (this.state.privacy == 'Public') ? 1 : 0;
+    var privacyIcon = (this.state.privacy == 'Public') ? 'android-globe' : 'android-lock';
+    var privacyText = (this.state.privacy == 'Public')
+    ? 'Anybody can view and post content to a Public Bevy'
+    : 'Only approved members may view and post content to a Private Bevy'
+    return (
+      <View style={ styles.section }>
+        <Text style={ styles.sectionTitle }>Privacy</Text>
+        <SegmentedControlIOS
+          style={{
+            backgroundColor: '#fff',
+            marginBottom: 10,
+            marginHorizontal: 20
+          }}
+          tintColor='#aaa'
+          values={['Private', 'Public']}
+          selectedIndex={privacyIndex}
+          onValueChange={(ev) => {
+            this.setState({
+              privacy: ev
+            });
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            paddingHorizontal: 20,
+            marginBottom: 40
+          }}
+        >
+
+          <Text style={{color: '#888'}}>
+            {privacyText}
+          </Text>
+        </View>
+      </View>
+    )
+  },
+
   render() {
     return (
       <ScrollView style={ styles.container }>
@@ -258,14 +288,13 @@ var CreateBevyView = React.createClass({
                 // call action
                 BevyActions.create(
                   this.state.name, // bevy name
-                  this.state.description, // bevy description
                   (_.isEmpty(this.state.bevyImage)) ? constants.siteurl + '/img/logo_100.png' : this.state.bevyImage, // bevy image
-                  this.state.slug
+                  this.state.slug,
+                  this.state.privacy
                 );
 
                 // blur all text inputs
                 this.refs.bevyName.blur();
-                this.refs.description.blur();
                 this.setState({
                   creating: true
                 });
@@ -288,6 +317,8 @@ var CreateBevyView = React.createClass({
           { this._renderSlug() }
 
           { this._renderImageInput() }
+
+          { this._renderPrivatePublic() }
 
         </View>
       </ScrollView>

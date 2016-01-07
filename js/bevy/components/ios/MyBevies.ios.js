@@ -115,6 +115,47 @@ var MyBevies = React.createClass({
       );
     }
 
+    bevyList.push(
+      <TouchableHighlight
+        key={ 'bevylist:newbevy'}
+        underlayColor='rgba(0,0,0,.1)'
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+        }}
+        style={{    
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: constants.width / 1.3,
+          height: 160,
+          borderColor: '#aaa',
+          borderWidth: 3,
+          borderRadius: 5,
+          overflow: 'hidden',
+          marginVertical: 10
+        }}
+      >
+        <View
+          style={{
+            alignItems: 'center'
+          }}
+        >
+          <Icon 
+            name='ios-plus'
+            size={60}
+            color='#aaa'
+            style={{}}
+          />
+          <Text
+            style={{
+              color: '#999'
+            }}
+          >
+            Create a New Bevy
+          </Text>
+        </View>
+      </TouchableHighlight>
+    );
+
     return (
       <ScrollView 
         contentContainerStyle={ styles.bevyList }
@@ -256,11 +297,11 @@ var styles = StyleSheet.create({
   },
 
   bevyList: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginTop: -15,
     width: constants.width,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginBottom: 10
   },
   bevyItem: {

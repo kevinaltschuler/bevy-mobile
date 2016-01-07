@@ -15,7 +15,7 @@ var {
   Image
 } = React;
 var Spinner = require('react-native-spinkit');
-var RCTRefreshControl = require('react-refresh-control');
+var RCTRefreshControl = require('react-native-refresh-control');
 var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
@@ -79,15 +79,6 @@ var PostList = React.createClass({
     BevyStore.on(POST.LOADING, this.setLoading);
     PostStore.on(POST.LOADING, this.setLoading);
     PostStore.on(POST.REFRESH, this.onRefresh);
-
-    RCTRefreshControl.configure({
-      node: this.refs[LISTVIEW],
-    }, () => {
-      this.onRefresh();
-      setTimeout(() => {
-        RCTRefreshControl.endRefreshing(this.refs[LISTVIEW]);
-      }, 2000);
-    });
   },
 
   componentWillUnmount() {
@@ -109,9 +100,9 @@ var PostList = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    /*this.setState({
+    this.setState({
       dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
-    });*/
+    });
   },
 
   _onPostsLoaded() {
@@ -121,11 +112,12 @@ var PostList = React.createClass({
     });
   },
 
-  onRefresh() {
+  onRefresh(stopRefresh) {
     PostActions.fetch(
       this.props.activeBevy._id,
       (this.props.profileUser) ? this.props.profileUser._id : null
     );
+    setTimeout(stopRefresh, 2000);
   },
 
   handleScroll(y) {
@@ -135,18 +127,13 @@ var PostList = React.createClass({
   },
 
   requestJoin() {
-    // dont allow this for non logged in users
-    if(!this.props.loggedIn) {
-      this.props.authModalActions.open('Log In To join');
-      return;
-    }
     // send action
     BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },
 
   _renderHeader() {
-    var newPostCard = (!this.props.showNewPostCard || _.isEmpty(this.props.activeBevy))
-    ? <View style={{height: 0}} />
+    var newPostCard = (!this.props.showNewPostCard || _.isEmpty(this.props.activeBoard.name))
+    ? <View/>
     : (
       <View style={styles.cardContainer}>
         <NewPostCard
@@ -162,8 +149,11 @@ var PostList = React.createClass({
 
   render() {
 
-    if(this.props.activeBevy._id != -1 // if not the frontpage
-      && this.props.activeBevy.settings.privacy == 1
+    if(_.isEmpty(this.props.activeBevy)) {
+      return <View/>;
+    }
+
+    if(this.props.activeBevy.settings.privacy == 'Private'
       && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
       // if this is a private bevy that the user is not a part of
       // dont show any posts. only show a request join view
@@ -186,7 +176,10 @@ var PostList = React.createClass({
             </View>
           </TouchableHighlight>
           <ListView
-            ref={LISTVIEW}
+            onRefresh={this.onRefresh}
+            ref={(ref) => {
+              this.ListView = ref;
+            }}
             dataSource={ this.state.dataSource }
             style={ styles.postContainer }
             onScroll={(data) => {
@@ -197,7 +190,7 @@ var PostList = React.createClass({
               return <View/>
             }}
             renderRow={(post) => {
-              return <View/>
+              return <View/>;
             }}
           />
         </View>
@@ -206,10 +199,12 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-          
     
-          <ListView
-            ref={LISTVIEW}
+          <RCTRefreshControl.ListView
+            onRefresh={this.onRefresh}
+            ref={(ref) => {
+              this.ListView = ref;
+            }}
             dataSource={ this.state.dataSource }
             style={ styles.postContainer }
             onScroll={(data) => {
@@ -235,50 +230,20 @@ var PostList = React.createClass({
                 </View>
                 );
               }
-              if(_.isEmpty(post.bevy)) {
+              if(_.isEmpty(post.board)) {
                 return <View/>
               }
-              if(this.props.activeBevy._id == -1) {
-                if(!_.contains(this.props.frontpageFilters, post.bevy._id) && this.props.loggedIn) {
-                  //console.log("filtering by bevy", this.props.frontpageFilters, post.bevy._id);
-                  return <View/>;
-                }
-              }
-              if(this.props.activeBevy._id != -1) {
-                if(post.tag == undefined)
-                  return <View />;
-                if(!_.contains(_.pluck(this.props.activeTags, 'name'), post.tag.name) && this.props.loggedIn) {
-                  //console.log("filtering by tag", _.pluck(this.props.activeTags, 'name'), post.tag.name);
-                  return <View/>;
-                }
-              }
-              if(post.pinned && this.props.activeBevy._id == -1) {
-                return <View/>;
-              }
-              if(post.type == 'event')
-                return <View style={{backgroundColor: '#eee'}}>
-                  <Event
-                    key={ 'postlist:' + post._id }
-                    post={ post }
-                    mainRoute={ this.props.mainRoute }
-                    mainNavigator={ this.props.mainNavigator }
-                    user={ this.props.user }
-                    authModalActions={ this.props.authModalActions }
-                    loggedIn={ this.props.loggedIn }
-                  />
-                </View>;
-              else
-                return <View style={{backgroundColor: '#eee'}}>
-                  <Post
-                    key={ 'postlist:' + post._id }
-                    post={ post }
-                    mainRoute={ this.props.mainRoute }
-                    mainNavigator={ this.props.mainNavigator }
-                    user={ this.props.user }
-                    authModalActions={ this.props.authModalActions }
-                    loggedIn={ this.props.loggedIn }
-                  />
-                </View>;
+              return <View style={{backgroundColor: '#eee'}}>
+                <Post
+                  key={ 'postlist:' + post._id }
+                  post={ post }
+                  mainRoute={ this.props.mainRoute }
+                  mainNavigator={ this.props.mainNavigator }
+                  user={ this.props.user }
+                  authModalActions={ this.props.authModalActions }
+                  loggedIn={ this.props.loggedIn }
+                />
+              </View>;
             }}
           />
         </View>

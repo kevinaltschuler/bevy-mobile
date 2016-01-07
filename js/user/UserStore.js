@@ -37,7 +37,6 @@ _.extend(UserStore, {
   handleDispatch(payload) {
     switch(payload.actionType) {
       case USER.LOAD_USER:
-        console.log('herer');
         var user = payload.user;
         if(_.isEmpty(user)) {
           this.loggedIn = false;
@@ -54,8 +53,8 @@ _.extend(UserStore, {
             var expires = response[2][1];
             if(!_.isEmpty(access) && !_.isEmpty(refresh)) {
               this.setTokens(access, refresh, expires);
+              this.trigger(USER.LOADED);
             }
-            this.trigger(USER.LOADED);
           }
         );
         break;
@@ -504,10 +503,11 @@ _.extend(UserStore, {
 
     // and save
     console.log('tokens set!');
+    this.tokensLoaded = true;
     AsyncStorage.setItem('access_token', accessToken);
     AsyncStorage.setItem('refresh_token', refreshToken);
     AsyncStorage.setItem('expires_in', expires_in.toString());
-    this.tokensLoaded = true;
+    this.trigger(USER.TOKENS_LOADED);
   },
 
   clearTokens() {

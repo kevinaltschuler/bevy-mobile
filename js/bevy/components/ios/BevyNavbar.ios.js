@@ -12,7 +12,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var SideMenu = require('react-native-side-menu');
-var BevyListButton = require('./BevyListButton.ios.js');
+var BevyListButton = require('./../../../shared/components/ios/BevyListButton.ios.js');
 var BevyList = require('./../../../bevy/components/ios/BevyList.ios.js');
 
 var _ = require('underscore');
@@ -21,7 +21,7 @@ var constants = require('./../../../constants');
 var window = require('Dimensions').get('window');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
-var Navbar = React.createClass({
+var BevyNavbar = React.createClass({
   propTypes: {
     styleParent: React.PropTypes.object,
     styleBottom: React.PropTypes.object,
@@ -94,19 +94,44 @@ var Navbar = React.createClass({
         <View/>
       );
     }
+    var publicPrivateIcon = (bevy.settings.privacy == 'Private')
+      ?'android-lock'
+      :'android-globe';
     if(this.props.activeBevy) {
       if((this.props.route == routes.BEVY.POSTLIST.name)) {
         return (
           <Image source={{uri: image_url}} style={[styles.imageBottom, {height: this.state.bottomHeight}]}>
             <View style={[styles.imageWrapper, {height: this.state.bottomHeight}]}>
-              <View style={ styles.left }>
-                { this._renderLeft() }
+              <View style={styles.bevyTop}>
+                <View style={ styles.left }>
+                  { this._renderLeft() }
+                </View>
+                <View style={ styles.center }>
+                  { this._renderCenter() }
+                </View>
+                <View style={ styles.right }>
+                  { this._renderRight() }
+                </View>
               </View>
-              <View style={ styles.center }>
-                { this._renderCenter() }
-              </View>
-              <View style={ styles.right }>
-                { this._renderRight() }
+              <View style={styles.bevyBottom}>
+                <View style={styles.detailItem}>
+                  <Icon name={publicPrivateIcon} size={18} color='#fff'/>
+                  <Text style={styles.itemText}>
+                    {bevy.settings.privacy}
+                  </Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Icon name='android-people' size={18} color='#fff'/>
+                  <Text style={styles.itemText}>
+                    {bevy.subCount} Subscribers
+                  </Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Icon name='android-person' size={18} color='#fff'/>
+                  <Text style={styles.itemText}>
+                    {bevy.admins.length} Admins
+                  </Text>
+                </View>
               </View>
             </View>
           </Image>
@@ -129,6 +154,9 @@ var Navbar = React.createClass({
   },
 
   render() {
+    if(_.isEmpty(this.props.activeBevy)) {
+      return <View/>;
+    }
     return (
       <View style={ this.props.styleParent }>
         <View style={{
@@ -150,14 +178,13 @@ var styles = StyleSheet.create({
   imageBottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   imageWrapper: {
     backgroundColor: 'rgba(0,0,0,.3)',
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     borderBottomWidth: .5,
     borderBottomColor: '#ddd',
   },
@@ -223,6 +250,31 @@ var styles = StyleSheet.create({
     color: '#888',
     fontSize: 12
   },
+  bevyTop: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 48
+  },
+  bevyBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    width: constants.width,
+    justifyContent: 'center'
+  },
+  detailItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10
+  },
+  itemText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    marginLeft: 5,
+    fontSize: 12
+  },
 });
 
-module.exports = Navbar;
+module.exports = BevyNavbar;

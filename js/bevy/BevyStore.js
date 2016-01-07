@@ -12,11 +12,19 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var Dispatcher = require('./../shared/dispatcher');
+var getSlug = require('speakingurl');
 var React = require('react-native');
+
+var Bevies = require('./BevyCollection');
+var Boards = require('./../board/BoardCollection');
+var Board = require('./../board/BoardModel');
+var Invites = require('./InviteCollection');
+var Invite = require('./InviteModel');
 var {
   Platform,
   ToastAndroid
 } = React;
+var async = require('async');
 
 //var Bevy = require('./BevyModel');
 //var Bevies = require('./BevyCollection');
@@ -41,6 +49,7 @@ var POST = constants.POST;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
 var USER = constants.USER;
+var BOARD = constants.BOARD;
 
 var BevyActions = require('./BevyActions');
 var UserStore = require('./../user/UserStore');
@@ -57,9 +66,10 @@ _.extend(BevyStore, {
   publicBevies: new Bevies,
   searchQuery: '',
   searchList: new Bevies,
-  active: -1, // id of active bevy
-  activeTags: [],
-  frontpageFilters: [],
+  active: new Bevy,
+  activeBoard: new Board,
+  bevyBoards: new Boards,
+  bevyInvites: new Invites,
 
   // handle calls from the dispatcher
   // these are created from BevyActions.js
@@ -68,13 +78,7 @@ _.extend(BevyStore, {
 
       case APP.LOAD:
         var user = UserStore.getUser();
-        // push the frontpage first to reduce UI lag
-        // dont worry this wont create dupes. the fetch calls
-        // should reset the store anyways
-        this.myBevies.unshift({
-          _id: '-1',
-          name: 'Frontpage'
-        });
+
         if(!_.isEmpty(user._id)) {
           // explicitly set the collection url for the user
           this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
@@ -85,20 +89,6 @@ _.extend(BevyStore, {
           this.myBevies.fetch({
             reset: true,
             success: function(bevies, response, options) {
-              // add the dummy frontpage bevy to the collection - for ui purposes
-              this.myBevies.unshift({
-                _id: '-1',
-                name: 'Frontpage'
-              });
-              // set frontpage filters - for filtering by bevy on the frontpage
-              this.frontpageFilters = _.pluck(bevies.toJSON(), '_id');
-              // exclude the frontpage in the filter list
-              this.frontpageFilters = _.reject(
-                this.frontpageFilters,
-                function(bevy_id){
-                  return bevy_id == -1;
-                }
-              );
               this.myBevies.sort();
 
               // trigger finished events
@@ -107,11 +97,7 @@ _.extend(BevyStore, {
             }.bind(this)
           });
         } else {
-          // still push the frontpage bevy to non logged in users
-          this.myBevies.unshift({
-            _id: '-1',
-            name: 'Frontpage'
-          });
+
         }
         // load public bevies
         this.publicBevies.url = constants.apiurl + '/bevies';
@@ -134,50 +120,59 @@ _.extend(BevyStore, {
         break;
 
       case BEVY.SWITCH:
-        var bevy_id = payload.bevy_id;
-
-        this.trigger(BEVY.NAV_POSTVIEW);
-
-        // look for it in my bevies
-        var bevy = this.myBevies.get(bevy_id);
-        if(bevy == undefined) {
-          // not found. try looking in the public bevy list
-          bevy = this.publicBevies.get(bevy_id);
-          if(bevy == undefined) {
-            // not found in public bevies
-            // find in subbevies
-            //bevy = this.subBevies.get(bevy_id);
-            if(bevy == undefined) {
-              // ok, now we'll ajax
-              break;
-            }
-          }
-        }
-
-        // set active field
-        this.active = bevy.get('_id');
-        this.activeTags = bevy.get('tags');
-
-        this.trigger(BEVY.CHANGE_ALL);
-        this.trigger(BEVY.SWITCHED);
+        var bevy_id_or_slug = payload.bevy_id;
+        var user = UserStore.getUser();
+        this.active.url = constants.apiurl + '/bevies/' + bevy_id_or_slug;
+        this.active.fetch({
+          success: function(model, response, options) {
+            this.bevyBoards.url = constants.apiurl + '/bevies/' + this.active.attributes._id + '/boards';
+            this.bevyInvites.url = constants.apiurl + '/bevies/' + this.active.attributes._id + '/invites';
+            async.series([
+              this.bevyBoards.fetch({
+                success: function(collection, response, options) {
+                  this.trigger(BEVY.LOADED);
+                  this.trigger(BEVY.CHANGE_ALL);
+                }.bind(this)
+              }),
+              this.bevyInvites.fetch({
+                success: function(collection, response, options) {
+                  this.trigger(BEVY.CHANGE_ALL);
+                }.bind(this)
+              })
+            ])
+          }.bind(this)
+        });
 
         break;
 
       case BEVY.CREATE:
         var name = payload.name;
-        var description = payload.description;
         var image = payload.image;
         var slug = payload.slug;
         var user = UserStore.getUser();
+        var privacy = payload.privacy;
+
+        // sanitize slug before we continue;
+        if(_.isEmpty(slug)) {
+          slug = getSlug(name);
+        } else {
+          // double check to make sure its url friendly
+          slug = getSlug(slug);
+        }
 
         // create and add to my bevies list
         var newBevy = this.myBevies.add({
           name: name,
-          description: description,
           image: image,
-          admins: [ user._id ], // add self as admin
-          slug: slug
+          slug: slug,
+          admins: [user._id],
+          boards: [],
+          settings: {
+            privacy: privacy
+          }
         });
+
+        newBevy.url = constants.apiurl + '/bevies';
 
         // save to server
         newBevy.save(null, {
@@ -324,69 +319,6 @@ _.extend(BevyStore, {
         });
         break;
 
-      case BEVY.UPDATE_TAGS:
-        var tags = payload.tags || [];
-        this.activeTags = tags;
-        this.trigger(BEVY.CHANGE_ALL);
-        this.trigger(POST.CHANGE_ALL);
-        this.trigger(POST.LOADED);
-        break;
-
-      case BEVY.UPDATE_FRONT:
-        var bevies = payload.bevies || [];
-        //console.log('old', this.frontpageFilters);
-        //console.log('new', bevies);
-        this.frontpageFilters = bevies;
-        this.trigger(POST.CHANGE_ALL);
-        this.trigger(BEVY.CHANGE_ALL);
-        this.trigger(POST.LOADED);
-        break;
-
-      case BEVY.ADD_TAG:
-        var bevy_id = payload.bevy_id;
-        var name = payload.name;
-        var color = payload.color;
-
-        var bevy = this.myBevies.get(bevy_id);
-        if(bevy == undefined) break;
-
-        var tags = bevy.get('tags');
-        tags.push({
-          name: name,
-          color: color
-        });
-        bevy.set('tags', tags);
-        bevy.save({
-          tags: tags
-        }, {
-          patch: true,
-          success: function(model, response, options) {
-          }
-        });
-        this.trigger(BEVY.CHANGE_ALL);
-        break;
-
-      case BEVY.REMOVE_TAG:
-        var bevy_id = payload.bevy_id;
-        var name = payload.name;
-
-        var bevy = this.myBevies.get(bevy_id);
-        if(bevy == undefined) break;
-
-        var tags = bevy.get('tags');
-        tags = _.reject(tags, tag => tag.name == name);
-        bevy.set('tags', tags);
-        bevy.save({
-          tags: tags
-        }, {
-          patch: true,
-          success: function(model, response, options) {
-
-          }
-        });
-        this.trigger(BEVY.CHANGE_ALL);
-        break;
-
       case BEVY.ADD_ADMIN:
         var bevy_id = payload.bevy_id;
         var admin = payload.admin;
@@ -426,41 +358,19 @@ _.extend(BevyStore, {
         });
         this.trigger(BEVY.CHANGE_ALL);
         break;
-
-      case BEVY.ADD_RELATED:
-        var bevy_id = payload.bevy_id;
-        var new_bevy = payload.new_bevy;
-
-        var bevy = this.myBevies.get(bevy_id);
-        if(bevy == undefined) break;
-
-        var siblings = bevy.get('siblings');
-        siblings.push(new_bevy._id);
-        bevy.set('siblings', siblings);
-        bevy.save({
-          siblings: siblings
-        }, {
-          patch: true
-        });
-        this.trigger(BEVY.CHANGE_ALL);
+      case BOARD.SWITCH_BOARD:
+        var board_id = payload.board_id;
+        this.activeBoard.url = constants.apiurl + '/boards/' + board_id;
+        this.activeBoard.fetch({
+          success: function(model, response, options) {
+            this.activeBoard = model;
+            this.trigger(BOARD.CHANGE_ALL);
+          }.bind(this)
+        })
         break;
-
-      case BEVY.REMOVE_RELATED:
-        var bevy_id = payload.bevy_id;
-        var related_id = payload.related_id;
-
-        var bevy = this.myBevies.get(bevy_id);
-        if(bevy == undefined) break;
-
-        var siblings = bevy.get('siblings');
-        siblings = _.reject(siblings, sibling => sibling._id == related_id);
-        bevy.set('siblings', siblings);
-        bevy.save({
-          siblings: _.pluck(siblings, '_id')
-        }, {
-          patch: true
-        });
-        this.trigger(BEVY.CHANGE_ALL);
+      case BOARD.CLEAR:
+        this.activeBoard = new Board;
+        this.trigger(BOARD.CHANGE_ALL);
         break;
     }
   },
@@ -495,29 +405,43 @@ _.extend(BevyStore, {
   },
 
   getActive() {
-    var bevy = this.getBevy(this.active);
-    if(bevy == undefined) return {};
-    else return bevy;
+    return (!_.isEmpty(this.active))
+      ? this.active.toJSON()
+      : {};
+  },
+
+  getActiveBoard() {
+    return (!_.isEmpty(this.activeBoard))
+      ? this.activeBoard.toJSON()
+      : {};
   },
 
   getBevy(bevy_id) {
-    // try to get from myBevies first
-    if(bevy_id == -1) {
-      return {
-        _id: '-1',
-        name: 'Frontpage'
-      }
+    var bevy =
+      this.myBevies.get(bevy_id) ||
+      this.publicBevies.get(bevy_id) ||
+      this.searchList.get(bevy_id);
+    return (bevy)
+    ? bevy.toJSON()
+    : {};
+  },
+
+  getBevyBoards() {
+    return this.bevyBoards.toJSON() || [];
+  },
+
+  getBoard(board_id) {
+    if(_.isEmpty(board_id)) {
+      return {};
     }
-    var bevy = this.myBevies.get(bevy_id);
-    if(bevy == undefined) {
-      // now try to get from publicBevies
-      bevy = this.publicBevies.get(bevy_id);
-    }
-    if(bevy == undefined) {
-      // if still not found, return empty object
+    var board = this.bevyBoards.get(board_id);
+    if(board == undefined) {
       return {};
     } else {
-      return bevy.toJSON();
+      // we found it so return
+      return (board)
+        ? board.toJSON()
+        : {};
     }
   },
 

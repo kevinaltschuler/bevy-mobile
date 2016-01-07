@@ -107,12 +107,14 @@ var POST = constants.POST;
 var CHAT = constants.CHAT;
 var NOTIFICATION = constants.NOTIFICATION;
 var USER = constants.USER;
+var BOARD = constants.BOARD;
 
 var change_all_events = [
   POST.CHANGE_ALL,
   BEVY.CHANGE_ALL,
   NOTIFICATION.CHANGE_ALL,
-  CHAT.CHANGE_ALL
+  CHAT.CHANGE_ALL,
+  BOARD.CHANGE_ALL
 ].join(' ');
 
 var BevyStore = require('./js/bevy/BevyStore');
@@ -202,8 +204,8 @@ var App = React.createClass({
       myBevies: BevyStore.getMyBevies(),
       activeBevy: BevyStore.getActive(),
       publicBevies: BevyStore.getPublicBevies(),
-      frontpageFilters: BevyStore.getFrontpageFilters(),
-      activeTags: BevyStore.getActiveTags()
+      bevyBoards: BevyStore.getBevyBoards(),
+      activeBoard: BevyStore.getActiveBoard()
     };
   },
 
@@ -253,6 +255,7 @@ var App = React.createClass({
 
 
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
+    BevyStore.on(BOARD.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
     BevyStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     BevyStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
@@ -348,8 +351,6 @@ var App = React.createClass({
         //console.log('you dont');
       }
     });*/
-
-    console.log(UserStore.getAccessToken());
 
     var initialRoute = routes.MAIN.LOADING;
 
