@@ -30,9 +30,6 @@ var Drawer = React.createClass({
   },
 
   goToNewBevy() {
-    // dont allow non logged in users to create a bevy
-    // TODO: auth modal popup
-    if(!this.props.loggedIn) return;
     // go to new bevy view
     this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
   },
@@ -43,31 +40,16 @@ var Drawer = React.createClass({
   },
 
   _renderProfile() {
-    // render the user profile header
-    if(!this.props.loggedIn) {
-      return (
-        <TouchableNativeFeedback
-          onPress={() => {
-            this.props.mainNavigator.push(routes.MAIN.LOGIN);
-          }}
-        >
-          <View style={ styles.logInButton }>
-            <Text style={ styles.logInButtonText }>Log In</Text>
-          </View>
-        </TouchableNativeFeedback>
-      );
-    } else {
-      return (
-        <ProfileRow
-          user={ this.props.user }
-          style={{
-            backgroundColor: '#333',
-            borderBottomColor: '#444',
-            borderBottomWidth: 1
-          }}
-        />
-      );
-    }
+    return (
+      <ProfileRow
+        user={ this.props.user }
+        style={{
+          backgroundColor: '#333',
+          borderBottomColor: '#444',
+          borderBottomWidth: 1
+        }}
+      />
+    );
   },
 
   _renderFrontpageButton() {
@@ -87,27 +69,19 @@ var Drawer = React.createClass({
   },
 
   _renderBeviesHeader() {
-    if(!this.props.loggedIn) {
-      return (
-        <View style={ styles.myBeviesHeader }>
-          <Text style={ styles.myBeviesText }>Bevies</Text>
-        </View>
-      );
-    } else {
-      return (
-        <View style={ styles.myBeviesHeader }>
-          <Text style={ styles.myBeviesText }>My Bevies</Text>
-          <TouchableNativeFeedback
-            background={ TouchableNativeFeedback.Ripple('#888', false) } 
-            onPress={ this.goToNewBevy }
-          >
-            <View style={ styles.bevyAddButton }>
-              <Icon name='add' size={ 24 } color='#FFF' />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-      );
-    }
+    return (
+      <View style={ styles.myBeviesHeader }>
+        <Text style={ styles.myBeviesText }>My Bevies</Text>
+        <TouchableNativeFeedback
+          background={ TouchableNativeFeedback.Ripple('#888', false) }
+          onPress={ this.goToNewBevy }
+        >
+          <View style={ styles.bevyAddButton }>
+            <Icon name='add' size={ 24 } color='#FFF' />
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+    );
   },
 
   render() {

@@ -69,9 +69,6 @@ var PostActions = React.createClass({
   },
 
   vote() {
-    if(!this.props.loggedIn) {
-      ToastAndroid.show('Please Log In To Vote', ToastAndroid.SHORT);
-    }
     $PostActions.vote(this.props.post._id);
     this.setState({
       voted: !this.state.voted

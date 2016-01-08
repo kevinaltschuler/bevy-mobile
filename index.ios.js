@@ -17,7 +17,6 @@ var {
 } = React;
 
 var MainView = require('./js/app/components/ios/MainView.ios.js');
-var LoginModal = require('./js/login/components/ios/LoginModal.ios.js');
 var LoginNavigator = require('./js/login/components/ios/LoginNavigator.ios.js');
 var NotificationActions = require('./js/notification/NotificationActions');
 var NativeModules = require('NativeModules');
@@ -187,8 +186,6 @@ var App = React.createClass({
     StatusBarIOS.setStyle(1);
 
     return _.extend({
-      authModalOpen: false,
-      authModalMessage: '',
       registered: false,
     },
       this.getBevyState(),
@@ -252,8 +249,6 @@ var App = React.createClass({
      console.log('You have received a new notification!');
     });
 
-
-
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(BOARD.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
@@ -278,19 +273,6 @@ var App = React.createClass({
     UserStore.on(USER.LOADED, this._onUserChange);
   },
 
-  componentWillUnmount() {
-    BevyStore.off(change_all_events);
-    PostStore.off(change_all_events);
-    ChatStore.off(change_all_events);
-    NotificationStore.off(change_all_events);
-
-    PushNotificationIOS.removeEventListener('register', this._onNotificationReg);
-
-    UserStore.off(USER.LOADED)
-
-    AppActions.unload();
-  },
-
   _onBevyChange() {
     this.setState(_.extend(this.state, this.getBevyState()));
   },
@@ -308,23 +290,6 @@ var App = React.createClass({
     this.setState(_.extend(this.state, this.getUserState()));
   },
 
-  openAuthModal(message) {
-    this.setState({
-      authModalOpen: true,
-      authModalMessage: (message == undefined) ? 'Please Log In To Continue' : message
-    });
-  },
-  closeAuthModal() {
-    console.log('closing');
-    this.setState({
-      authModalOpen: false
-    });
-  },
-  toggleAuthModal() {
-    this.setState({
-      authModalOpen: !this.state.authModalOpen
-    });
-  },
   _onNotificationReg(data) {
     //console.log(data);
   },
@@ -334,12 +299,6 @@ var App = React.createClass({
     var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
     // disable gestures
     sceneConfig.gestures = null;
-
-    var authModalActions = {
-      open: this.openAuthModal,
-      close: this.closeAuthModal,
-      toggle: this.toggleAuthModal
-    };
 
     PushNotificationIOS.requestPermissions();/*
     //PushNotificationIOS.checkPermissions(data => {console.log(data)})

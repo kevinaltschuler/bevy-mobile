@@ -57,7 +57,6 @@ var LoginNavigator = React.createClass({
           { ...this.props }
           close={ this.props.close }
           loginNavigator={ navigator }
-          authModalActions={ this.props.authModalActions }
         />;
         break;
       case 'forgot':
@@ -66,14 +65,12 @@ var LoginNavigator = React.createClass({
           { ...this.props }
           close={this.props.close}
           loginNavigator={ navigator }
-          authModalActions={ this.props.authModalActions }
         />;
         break;
       case 'google':
         return (
-          <GoogleWebSignIn 
+          <GoogleWebSignIn
             loginNavigator={ navigator }
-            authModalActions={ this.props.authModalActions }
             { ...this.props }
             close={ this.props.close }
           />
@@ -86,12 +83,11 @@ var LoginNavigator = React.createClass({
           { ...this.props }
           close={ this.props.close }
           loginNavigator={ navigator }
-          authModalActions={ this.props.authModalActions }
         />;
         break;
     }
     return (
-       content 
+       content
     );
   }
 });

@@ -22,8 +22,13 @@ var protocol = 'http:';
 exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
-exports.siteurl = protocol + slashes + hostname;
-exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
+//exports.siteurl = protocol + slashes + hostname;
+//exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
+//exports.siteurl = 'http://joinbevy.com';
+//exports.apiurl = 'http://api.joinbevy.com';
+exports.siteurl = 'http://bevy.dev';
+exports.apiurl = 'http://api.bevy.dev';
+
 
 exports.hostname = hostname;
 exports.protocol = protocol;

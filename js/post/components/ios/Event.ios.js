@@ -231,14 +231,10 @@ var Event = React.createClass({
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
             onPress={() => {
-                if(this.props.loggedIn) {
-                  PostActions.vote(post._id);
-                  this.setState({
-                    voted: !this.state.voted
-                  });
-                } else {
-                  this.props.authModalActions.open('Log In To Post');
-                }
+              PostActions.vote(post._id);
+              this.setState({
+                voted: !this.state.voted
+              });
             }}
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>

@@ -40,7 +40,6 @@ var PostList = React.createClass({
     activeBevy: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
-    authModalActions: React.PropTypes.object,
     showNewPostCard: React.PropTypes.bool,
     profileUser: React.PropTypes.object,
     showTags: React.PropTypes.bool,
@@ -145,7 +144,6 @@ var PostList = React.createClass({
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
           mainNavigator={ this.props.mainNavigator }
-          authModalActions={ this.props.authModalActions }
         />
       </View>
     );
@@ -186,7 +184,7 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-    
+
           <RCTRefreshControl.ListView
             onRefresh={this.onRefresh}
             ref={(ref) => {
@@ -227,7 +225,6 @@ var PostList = React.createClass({
                   mainRoute={ this.props.mainRoute }
                   mainNavigator={ this.props.mainNavigator }
                   user={ this.props.user }
-                  authModalActions={ this.props.authModalActions }
                   loggedIn={ this.props.loggedIn }
                 />
               </View>;

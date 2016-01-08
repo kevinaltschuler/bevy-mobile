@@ -90,7 +90,7 @@ _.extend(BevyStore, {
             reset: true,
             success: function(bevies, response, options) {
               this.myBevies.sort();
-
+              
               // trigger finished events
               this.trigger(BEVY.CHANGE_ALL);
               this.trigger(BEVY.LOADED);

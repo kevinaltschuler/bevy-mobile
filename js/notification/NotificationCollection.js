@@ -1,3 +1,9 @@
+/**
+ * NotificationCollection.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var Backbone = require('backbone');

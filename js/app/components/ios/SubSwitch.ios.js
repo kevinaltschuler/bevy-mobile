@@ -48,11 +48,6 @@ var SubSwitch = React.createClass({
         value={this.state.value}
         style={styles.switch}
         onValueChange={(value) => {
-          if(!this.props.loggedIn) {
-            this.props.authModalActions.open('Log In To Subscribe');
-            return;
-          }
-
           this.setState({
             value: value
           });

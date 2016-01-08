@@ -35,16 +35,14 @@ var InfoView = React.createClass({
     bevyRoute: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool,
-    authModalActions: React.PropTypes.object
+    loggedIn: React.PropTypes.bool
   },
 
   getInitialState() {
     var user = this.props.user;
-    //console.log(user.bevies, this.props.activeBevy._id);
-    
+
     var bevy = this.props.activeBevy;
-    
+
     var bevyImage = bevy.image_url || bevy.image.filename || constants.siteurl + '/img/default_group_img.png' ;
     var defaultBevies = [
       '11sports', '22gaming', '3333pics',
@@ -135,7 +133,6 @@ var InfoView = React.createClass({
           <SubSwitch
             subbed={subbed}
             loggedIn={ this.props.loggedIn }
-            authModalActions={ this.props.authModalActions }
             bevy={bevy}
             user={user}
           />
