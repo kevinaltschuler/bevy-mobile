@@ -17,7 +17,7 @@ var {
   TouchableOpacity,
   ScrollView
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var AddBevyModal = require('./AddBevyModal.ios.js');
 var BevyCard = require('./BevyCard.ios.js');
@@ -53,38 +53,12 @@ var MyBevies = React.createClass({
     })
   },
 
-  changeBevy: function(rowData) {
+  changeBevy(rowData) {
 
   },
 
-  _renderPublicHeader() {
-    return (
-      <View style={ styles.myBeviesHeader }>
-        <View style={styles.myBeviesHeaderTextWrapper}>
-          <Text style={ styles.myBeviesHeaderText }>
-            My Bevies
-          </Text>
-        </View>
-        <TouchableHighlight
-          underlayColor='#333'
-          style={ styles.bevyAddButton }
-          onPress={() => { this.setState({ showAddBevyModal: true }); }}
-        >
-          <Icon
-            name='ios-plus-empty'
-            color='#999'
-            size={ 30 }
-            style={{ width: 30, height: 30 }}
-          />
-        </TouchableHighlight>
-        <AddBevyModal
-          onHide={ this.onHideModal }
-          isVisible={ this.state.showAddBevyModal }
-          mainNavigator={ this.props.mainNavigator }
-          menuActions={ this.context.menuActions }
-        />
-      </View>
-    );
+  goToNewBevy() {
+    this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
   },
 
   _renderBevyList() {
@@ -112,11 +86,8 @@ var MyBevies = React.createClass({
   _renderNewBevyCard() {
     return (
       <TouchableHighlight
-        key={ 'bevylist:newbevy'}
         underlayColor='rgba(0,0,0,.1)'
-        onPress={() => {
-          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-        }}
+        onPress={ this.goToNewBevy }
         style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -135,10 +106,9 @@ var MyBevies = React.createClass({
           }}
         >
           <Icon
-            name='ios-plus'
-            size={60}
+            name='add'
+            size={ 60 }
             color='#aaa'
-            style={{}}
           />
           <Text
             style={{
@@ -153,64 +123,38 @@ var MyBevies = React.createClass({
   },
 
   render: function() {
-
     return (
       <View style={ styles.container }>
-        <Navbar
-          center={
-            <Text style={{
-              color: '#999',
-              fontSize: 18,
-              marginLeft: 10,
-              fontWeight: 'bold'
-            }}>
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+            <Text style={ styles.title }>
               My Bevies
             </Text>
-          }
-          right={
-            <TouchableOpacity
-              activeOpacity={.3}
-              onPress={() => {
-                this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-              }}
-              style={{
-                marginRight: 10,
-                borderRadius: 2,
-                paddingHorizontal: 5,
-                paddingVertical: 5,
-              }}
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.plusButton }
             >
               <Icon
-                name='ios-plus-empty'
+                name='add'
                 size={ 30 }
-                color={ '#999' }
-                style={{}}
+                color='#FFF'
               />
-            </TouchableOpacity>
-          }
-          activeBevy={ this.props.activeBevy }
-          fontColor={ '#999' }
-          { ...this.props }
-          styleBottom={{
-            backgroundColor: '#fff',
-            height: 40,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottomWidth: 1,
-            borderBottomColor: '#eee',
-            marginTop: 0
-          }}
-        />
+            </TouchableHighlight>
+          </View>
+        </View>
 
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight
-        }} />
         <ScrollView
           contentContainerStyle={ styles.bevyList }
-          automaticallyAdjustContentInsets={true}
-          showsVerticalScrollIndicator={true}
-          style={{flex: 1, marginTop: -23, marginBottom: 49}}
+          automaticallyAdjustContentInsets={ false }
+          showsVerticalScrollIndicator={ true }
         >
           { this._renderBevyList() }
           { this._renderNewBevyCard() }
@@ -225,117 +169,40 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingTop: 0,
-    width: constants.width,
-    height: constants.height,
-    backgroundColor: '#eee',
+    backgroundColor: '#eee'
   },
-  publicHeader: {
-    fontSize: 18,
-    color: '#999',
-    paddingLeft: 10,
-    marginBottom: 10,
-    marginTop: 10
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
   },
-  myBeviesHeader: {
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
     flexDirection: 'row',
     alignItems: 'center',
-    borderTopWidth: .5,
-    borderBottomWidth: .5,
-    height: 48,
-    borderTopColor: 'rgba(255,255,255,.5)',
-    borderBottomColor: 'rgba(255,255,255,.5)',
-    backgroundColor: '#333'
   },
-  myBeviesHeaderTextWrapper: {
-    justifyContent: 'center',
-    borderTopWidth: .5,
-    borderBottomWidth: .5,
-    height: 48,
-    borderTopColor: 'rgba(255,255,255,.5)',
-    borderBottomColor: 'rgba(255,255,255,.5)',
-    flex: 1
-  },
-  myBeviesHeaderText: {
-    fontSize: 15,
-    color: '#999',
-    paddingLeft: 10
-  },
-  bevyAddButton: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-
-  profileHeader: {
-    flexDirection: 'row',
-    padding: 10,
-    borderBottomWidth: .5,
-    borderBottomColor: '#555'
-  },
-  profileImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 10
-  },
-  profileDetails: {
+  title: {
     flex: 1,
-    flexDirection: 'column'
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
   },
-  profileName: {
-    color: '#fff',
-    fontSize: 15
+  plusButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  profileEmail: {
-    color: '#eee',
-    fontSize: 12
-  },
-
   bevyList: {
     flexDirection: 'column',
-    marginTop: -15,
     width: constants.width,
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10
   },
-  bevyItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10
-  },
-  bevyItemActive: {
-    backgroundColor: '#444',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10
-  },
-  bevyItemText: {
-    flex: 1,
-    color: '#ddd',
-    fontSize: 15
-  },
-  bevyItemActiveText: {
-    flex: 1,
-    fontWeight: 'bold',
-    textAlign: 'left',
-    fontSize: 15,
-    color: '#fff'
-  },
-
-  bevyAddItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#333'
-  },
-  bevyAdd: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
-  }
 });
 
 module.exports = MyBevies;

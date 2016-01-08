@@ -96,9 +96,8 @@ var SettingsView = React.createClass({
               returnBase64Image: false,
               returnIsVertical: true
             }, (type, response) => {
-              if (type !== 'cancel') {
+              if (type !== 'cancel' && response) {
                 UserActions.changeProfilePicture(response.uri);
-                //console.log(response)
                 this.setState({
                   profilePicture: response.uri
                 });

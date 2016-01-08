@@ -56,8 +56,7 @@ var routes = {
   },
 
   PROFILE: {
-    USER: { name: 'UserView' },
-    SWITCH_USER: { name: 'SwitchUser' }
+    USER: { name: 'UserView' }
   }
 };
 
