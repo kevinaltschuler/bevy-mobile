@@ -19,18 +19,25 @@ var UserStore = require('./../../../user/UserStore');
 
 var ThreadImage = React.createClass({
   propTypes: {
-    thread: React.PropTypes.object.isRequired
+    thread: React.PropTypes.object.isRequired,
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+  },
+
+  getDefaultProps() {
+    return {
+      width: 40,
+      height: 40
+    };
   },
 
   _renderSingleImage() {
     var image_url = ChatStore.getThreadImageURL(this.props.thread._id, 64, 64);
     var imageStyle = {
-      width: 40,
-      height: 40,
+      width: this.props.width,
+      height: this.props.height,
       padding: 0,
-      marginLeft: 10,
-      marginRight: 10,
-      borderRadius: 20,
+      borderRadius: Math.floor(this.props.width / 2),
       backgroundColor: '#eee'
     };
     return (
@@ -67,15 +74,15 @@ var ThreadImage = React.createClass({
           switch(threadUsers.length) {
             case 1:
               // only one other user
-              iconStyle.width = 40;
-              iconStyle.height = 40;
-              iconStyle.borderRadius = 20;
+              iconStyle.width = this.props.width;
+              iconStyle.height = this.props.height;
+              iconStyle.borderRadius = Math.floor(this.props.width / 2);
               break;
             case 2:
               // two other users
-              iconStyle.width = 26;
-              iconStyle.height = 26;
-              iconStyle.borderRadius = 13;
+              iconStyle.width = Math.floor(this.props.width * 0.65);
+              iconStyle.height = Math.floor(this.props.height * 0.65);
+              iconStyle.borderRadius = Math.floor(this.props.width * 0.325);
               iconStyle.position = 'absolute';
               if(key == 0) {
                 // first user - top left
@@ -89,14 +96,14 @@ var ThreadImage = React.createClass({
               break;
             case 3:
               // 3 other users
-              iconStyle.width = 20;
-              iconStyle.height = 20;
-              iconStyle.borderRadius = 10;
+              iconStyle.width = Math.floor(this.props.width / 2);
+              iconStyle.height = Math.floor(this.props.width / 2);
+              iconStyle.borderRadius = Math.floor(this.props.width / 4);
               iconStyle.position = 'absolute';
               if(key == 0) {
                 // first user - top center
                 iconStyle.top = 0;
-                iconStyle.left = 10;
+                iconStyle.left = Math.floor(this.props.width / 4);
               } else if (key == 1) {
                 // second user - bottom left
                 iconStyle.bottom = 0;
@@ -109,9 +116,9 @@ var ThreadImage = React.createClass({
               break;
             case 4:
               // 4 other users
-              iconStyle.width = 20;
-              iconStyle.height = 20;
-              iconStyle.borderRadius = 10;
+              iconStyle.width = Math.floor(this.props.width / 2);
+              iconStyle.height = Math.floor(this.props.height / 2);
+              iconStyle.borderRadius = Math.floor(this.props.width / 4);
               iconStyle.position = 'absolute';
               if(key == 0) {
                 // first user - top left
@@ -136,7 +143,7 @@ var ThreadImage = React.createClass({
             <Image
               key={ 'threadimage:user:' + user._id + Math.random() }
               style={ iconStyle }
-              source={{uri: image_url}}
+              source={{ uri: image_url }}
             />
           );
         }
@@ -144,11 +151,9 @@ var ThreadImage = React.createClass({
         return (
           <View style={{
             position: 'relative',
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            marginRight: 10,
-            marginLeft: 10
+            width: this.props.width,
+            height: this.props.height,
+            borderRadius: Math.floor(this.props.width / 2)
           }}>
             { users }
           </View>

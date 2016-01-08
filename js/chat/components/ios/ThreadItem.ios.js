@@ -44,21 +44,51 @@ var ThreadItem = React.createClass({
     this.props.chatNavigator.push(routes.CHAT.MESSAGEVIEW);
   },
 
-  _renderLatestMessageInfo() {
+  _renderTimeAgo() {
     var latestMessage = this.props.thread.latest;
-    if(_.isEmpty(latestMessage)) return <View />;
+    if(_.isEmpty(latestMessage)) return '';
+
+    var createDate = new Date(latestMessage.created);
+    var delta = Date.now() - createDate.getTime();
+    // if within 2 days
+    if(delta <= (1000 * 60 * 60 * 24 * 2)) {
+      var ampm = (createDate.getHours() <= 11) ? 'am' : 'pm';
+      var hours = (createDate.getHours() > 12)
+        ? createDate.getHours() - 12
+        : (createDateDate.getHours() < 11)
+          ? '0' + (createDate.getHours() + 1)
+          : '12';
+      var minutes = (createDate.getMinutes() < 10)
+        ? '0' + createDate.getMinutes()
+        : createDate.getMinutes();
+      return hours + ':' + minutes + ' ' + ampm;
+    }
+    // if within a week
+    else if (delta <= (1000 * 60 * 60 * 24 * 7)) {
+      var weekdayMap = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return weekdayMap[createDate.getDay()];
+    }
+    // else, display the date
+    else {
+      var monthMap = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+        'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return monthMap[createDate.getMonth()] + ' ' + createDate.getDate();
+    }
+  },
+
+  _renderLatestMessage() {
+    var latestMessage = this.props.thread.latest;
+    if(_.isEmpty(latestMessage)) return '';
 
     var posterName = latestMessage.author.displayName;
     if(latestMessage.author._id == this.props.user._id) posterName = 'Me';
 
-    return (
-      <Text style={ styles.subTitleText }>
-        { latestMessage.author.displayName }: { latestMessage.body }
-      </Text>
-    );
+    return latestMessage.author.displayName + ': ' + latestMessage.body;
   },
 
   render() {
+
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.2)'
@@ -67,12 +97,21 @@ var ThreadItem = React.createClass({
         <View style={ styles.container } >
           <ThreadImage
             thread={ this.props.thread }
+            width={ 60 }
+            height={ 60 }
           />
-          <View style={ styles.titleTextColumn }>
-            <Text style={ styles.titleText }>
-              { ChatStore.getThreadName(this.props.thread._id) }
+          <View style={ styles.threadDetails }>
+            <View style={ styles.top }>
+              <Text style={ styles.name }>
+                { ChatStore.getThreadName(this.props.thread._id) }
+              </Text>
+              <Text style={ styles.time }>
+                { this._renderTimeAgo() }
+              </Text>
+            </View>
+            <Text style={ styles.message }>
+              { this._renderLatestMessage() }
             </Text>
-            { this._renderLatestMessageInfo() }
           </View>
         </View>
       </TouchableHighlight>
@@ -85,8 +124,9 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
-    backgroundColor: '#FFF'
+    height: 80,
+    backgroundColor: '#FFF',
+    paddingLeft: 15
   },
   titleImage: {
     width: 36,
@@ -95,18 +135,32 @@ var styles = StyleSheet.create({
     borderRadius: 18,
     marginRight: 8,
   },
-  titleTextColumn: {
+  threadDetails: {
     flex: 1,
-    height: 48,
+    height: 80,
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginLeft: 15
   },
-  titleText: {
-    color: '#282929'
+  top: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start'
   },
-  subTitleText: {
-    fontSize: 10,
-    color: '#282929'
+  name: {
+    flex: 1,
+    color: '#282929',
+    fontSize: 18,
+    marginBottom: 5
+  },
+  time: {
+    color: '#AAA',
+    fontSize: 17,
+    marginRight: 15
+  },
+  message: {
+    fontSize: 16,
+    color: '#AAA'
   },
 })
 

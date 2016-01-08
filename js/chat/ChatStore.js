@@ -482,8 +482,7 @@ _.extend(ChatStore, {
   },
 
   sortByLatest(thread) {
-    var thread = thread.toJSON();
-    var latest = thread.latest;
+    var latest = thread.get('latest');
     if(latest == null) {
       return -thread.created;
     }

@@ -84,7 +84,7 @@ var ThreadList = React.createClass({
         alignItems: 'center'
       }}>
         <View style={{
-          width: 60,
+          width: 90,
           height: 1,
           backgroundColor: '#FFF'
         }}/>
