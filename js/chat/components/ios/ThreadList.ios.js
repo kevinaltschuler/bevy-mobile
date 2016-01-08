@@ -29,7 +29,8 @@ var ThreadList = React.createClass({
   propTypes: {
     allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object,
-    chatNavigator: React.PropTypes.object
+    chatNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -58,7 +59,7 @@ var ThreadList = React.createClass({
   },
 
   goToNewThread() {
-    this.props.chatNavigator.push(routes.CHAT.NEWTHREAD);
+    this.props.mainNavigator.push(routes.MAIN.NEWTHREAD);
   },
 
   renderThreadRow(thread) {

@@ -14,14 +14,15 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var UserSearchItem = React.createClass({
   propTypes: {
-    searchUser: React.PropTypes.object,
+    user: React.PropTypes.object,
     onSelect: React.PropTypes.func,
     selected: React.PropTypes.bool,
     showIcon: React.PropTypes.bool
@@ -29,7 +30,6 @@ var UserSearchItem = React.createClass({
 
   getDefaultProps() {
     return {
-      searchUser: {},
       onSelect: _.noop,
       selected: false,
       showIcon: true
@@ -49,7 +49,7 @@ var UserSearchItem = React.createClass({
   },
 
   onSelect() {
-    this.props.onSelect(this.props.searchUser);
+    this.props.onSelect(this.props.user);
     this.setState({
       selected: !this.state.selected
     });
@@ -59,8 +59,7 @@ var UserSearchItem = React.createClass({
     if(!this.props.showIcon) return <View />;
     return (
       <Icon
-        name='ios-plus-empty'
-        //name={ (this.state.selected) ? 'check-box' : 'check-box-outline-blank' }
+        name='add'
         size={ 30 }
         color='#2CB673'
       />
@@ -68,10 +67,10 @@ var UserSearchItem = React.createClass({
   },
 
   render() {
-    var image_url = this.props.searchUser.image_url;
-    if(_.isEmpty(image_url)) {
-      image_url = constants.siteurl + '/img/user-profile-icon.png';
-    }
+    var userImageURL = (_.isEmpty(this.props.user.image))
+      ? constants.siteurl + '/img/user-profile-icon.png'
+      : resizeImage(this.props.user.image, 64, 64).url;
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
@@ -80,11 +79,11 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: image_url }}
+            source={{ uri: userImageURL }}
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>
-              { this.props.searchUser.displayName }
+              { this.props.user.displayName }
             </Text>
             { this._renderIcon() }
           </View>
@@ -97,20 +96,20 @@ var UserSearchItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     width: constants.width,
-    height: 48,
+    height: 60,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10
   },
   image: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     marginRight: 10
   },
   details: {
-    height: 48,
+    height: 60,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -119,7 +118,8 @@ var styles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    color: '#888'
+    color: '#282828',
+    fontSize: 17
   }
 });
 

@@ -69,15 +69,6 @@ var ChatNavigator = React.createClass({
                 />
               );
               break;
-            case routes.CHAT.NEWTHREAD.name:
-              return (
-                <NewThreadView
-                  { ...this.props }
-                  chatNavigator={ navigator }
-                  chatRoute={ route }
-                />
-              );
-              break;
             case routes.CHAT.ADDPEOPLE.name:
               return (
                 <AddPeopleView

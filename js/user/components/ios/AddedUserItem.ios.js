@@ -13,7 +13,9 @@ var {
   TouchableOpacity,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
+
+var _ = require('underscore');
 
 var AddedUserItem = React.createClass({
   propTypes: {
@@ -37,7 +39,7 @@ var AddedUserItem = React.createClass({
         >
           <View style={ styles.removeButton }>
             <Icon
-              name='ios-close-empty'
+              name='close'
               size={ 18 }
               color='#FFF'
             />

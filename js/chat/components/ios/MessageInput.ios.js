@@ -14,7 +14,7 @@ var {
   TouchableOpacity,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -60,10 +60,13 @@ var MessageInput = React.createClass({
         <TouchableOpacity
           activeOpacity={.5}
           onPress={ this.onSubmitEditing }
+          style={ styles.sendMessageButton }
         >
-          <Text style={ styles.sendMessageButton }>
-            Send
-          </Text>
+          <Icon
+            name='send'
+            size={ 30 }
+            color='#2CB673'
+          />
         </TouchableOpacity>
       </View>
     );
@@ -72,7 +75,7 @@ var MessageInput = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    height: 48,
+    height: 60,
     width: constants.width,
     backgroundColor: '#FFF',
     flexDirection: 'row',
@@ -84,19 +87,15 @@ var styles = StyleSheet.create({
   },
   messageInput: {
     flex: 1,
-    paddingLeft: 10
+    paddingLeft: 10,
+    fontSize: 17
   },
   sendMessageButton: {
-    height: 48,
+    height: 60,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 8,
-    paddingLeft: 12,
-    paddingRight: 12,
-    paddingVertical: 12,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2cb673'
+    justifyContent: 'center',
+    paddingHorizontal: 15
   }
 });
 
