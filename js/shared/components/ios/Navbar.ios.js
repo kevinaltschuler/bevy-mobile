@@ -32,7 +32,6 @@ var Navbar = React.createClass({
   },
 
   getDefaultProps() {
-
     return {
       styleParent: {
         flexDirection: 'column',
@@ -62,25 +61,27 @@ var Navbar = React.createClass({
   },
 
   _renderLeft() {
-    //var left = createElement(this.props.left, {});
     return this.props.left;
   },
 
   _renderCenter() {
     if(typeof this.props.center === 'string') {
       return (
-        <Text style={{textAlign: 'center', fontSize: 17, fontWeight: '500', color: this.props.fontColor}}>
+        <Text style={{
+          textAlign: 'center',
+          fontSize: 17,
+          fontWeight: '500',
+          color: this.props.fontColor
+        }}>
           { this.props.center }
         </Text>
       );
     } else {
-      //var center = createElement(this.props.center, {});
       return this.props.center;
     }
   },
 
   _renderRight() {
-    //var right = createElement(this.props.right, {});
     return this.props.right;
   },
 
@@ -97,8 +98,10 @@ var Navbar = React.createClass({
     if(this.props.activeBevy) {
       if((this.props.route == routes.BEVY.POSTLIST.name)) {
         return (
-          <Image source={{uri: image_url}} style={[styles.imageBottom, {height: this.state.bottomHeight}]}>
-            <View style={[styles.imageWrapper, {height: this.state.bottomHeight}]}>
+          <Image source={{uri: image_url}} style={[styles.imageBottom, {
+            height: this.state.bottomHeight
+          }]}>
+            <View style={[styles.imageWrapper, { height: this.state.bottomHeight }]}>
               <View style={ styles.left }>
                 { this._renderLeft() }
               </View>

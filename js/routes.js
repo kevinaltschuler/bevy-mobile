@@ -58,10 +58,6 @@ var routes = {
   PROFILE: {
     USER: { name: 'UserView' },
     SWITCH_USER: { name: 'SwitchUser' }
-  },
-
-  NOTIFICATION: {
-    LIST: { name: 'NotificationList' }
   }
 };
 

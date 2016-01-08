@@ -17,8 +17,8 @@ var Icon = require('react-native-vector-icons/Ionicons');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
 var MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
-var NotificationNavigator =
-  require('./../../../notification/components/ios/NotificationNavigator.ios.js');
+var NotificationView =
+  require('./../../../notification/components/ios/NotificationView.ios.js');
 var SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
 var SearchView = require('./SearchView.ios.js');
 
@@ -85,7 +85,7 @@ var MainTabBar = React.createClass({
         break;
       case tabs.Notifications:
         return (
-          <NotificationNavigator
+          <NotificationView
             { ...this.props }
             tabBarActions={ tabBarActions }
           />

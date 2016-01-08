@@ -1,8 +1,10 @@
 /**
  * NotificationList.js
- * kevin made this
- * albert sucks eggs
+ * @author albert
+ * @author kevin
+ * @flow
  */
+
 'use strict';
 
 var React = require('react-native');
@@ -55,9 +57,9 @@ var NotificationList = React.createClass({
       var note = this.state.notes[key];
       notes.push(
         <NotificationItem
+          key={'note:' + note._id}
           mainNavigator={ this.props.mainNavigator }
           notification={ note }
-          key={'note:' + note._id}
         />
       );
     }
@@ -68,10 +70,10 @@ var NotificationList = React.createClass({
     return (
       <View style={ styles.container }>
         { this._renderNoNotificationsText() }
-        <ScrollView>
-
-            {this._renderNotes()}
-
+        <ScrollView
+          contentInset={{ top: -20, left: 0, bottom: 0, right: 0 }}
+        >
+          { this._renderNotes() }
         </ScrollView>
       </View>
     );

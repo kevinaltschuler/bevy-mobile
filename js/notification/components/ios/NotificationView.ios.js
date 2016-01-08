@@ -1,7 +1,7 @@
 /**
  * NotificationView.js
- * kevin made this
- * GET NOTIFIED BITCH
+ * @author albert
+ * @flow
  */
 'use strict';
 
@@ -24,72 +24,29 @@ var NotificationActions = require('./../../../notification/NotificationActions')
 
 var NotificationView = React.createClass({
   propTypes: {
-    notificationRoute: React.PropTypes.object,
-    notificationNavigator: React.PropTypes.object,
     allNotifications: React.PropTypes.array
   },
 
   render: function() {
-    var view;
-    switch(this.props.notificationRoute.name) {
-      case 'NotificationList':
-      default:
-        view = (
-          <NotificationList
-            { ...this.props }
-          />
-        );
-        break;
-    }
-
-    var clearAllButton = (true)
-    ? <View />
-    : (
-      <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0)'}
-        onPress={() => {
-          NotificationActions.dismissAll();
-        }}
-      >
-        <Icon
-          name='ios-minus'
-          size={30}
-          color='#666'
-          style={styles.dismissAllButton}
-        />
-      </TouchableHighlight>
-    );
-
     return (
       <View style={{ flex: 1 }}>
         <Navbar
-          notificationRoute={ this.props.notificationRoute }
-          notificationNavigator={ this.props.notificationNavigator }
-          center={<Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>Notifications</Text>}
-          right={ clearAllButton }
+          center={
+            <Text style={{
+              color: '#999',
+              fontSize: 18,
+              marginLeft: 10,
+              fontWeight: 'bold'
+            }}>
+              Notifications
+            </Text>
+          }
           { ...this.props }
         />
-        { view }
+        <NotificationList
+          { ...this.props }
+        />
       </View>
-    );
-  }
-});
-
-var NotificationNavigator = React.createClass({
-  render: function () {
-    return (
-      <Navigator
-        navigator={ this.props.mainNavigator }
-        initialRoute={ routes.NOTIFICATION.LIST }
-        initialRouteStack={ _.toArray(routes.NOTIFICATION) }
-        renderScene={(route, navigator) =>
-          <NotificationView
-            notificationRoute={ route }
-            notificationNavigator={ navigator }
-            { ...this.props }
-          />
-        }
-      />
     );
   }
 });
@@ -141,4 +98,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = NotificationNavigator;
+module.exports = NotificationView;

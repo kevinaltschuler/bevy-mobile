@@ -138,9 +138,6 @@ var SettingsView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight
-        }} />
         <Navbar
           center={
             <Text style={{
@@ -168,7 +165,10 @@ var SettingsView = React.createClass({
             marginBottom: 0
           }}
         />
-        <ScrollView style={{ flex: 1, marginTop: (this.props.loggedIn) ? -20 : 0 }}>
+        <View style={{
+          height: StatusBarSizeIOS.currentHeight
+        }} />
+        <ScrollView style={{ flex: 1, marginTop: -40 }}>
           { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>
