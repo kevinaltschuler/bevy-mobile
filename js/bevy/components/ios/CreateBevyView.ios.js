@@ -1,6 +1,7 @@
-/*
+/**
  * CreateBevyView.ios.js
  * @author kevin
+ * @flow
  */
 
 'use strict';
@@ -16,7 +17,12 @@ var {
   ScrollView,
   SegmentedControlIOS
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
+var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var NativeModules = require('NativeModules');
+var RefreshingIndicator =
+  require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -29,13 +35,6 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileActions = require('./../../../file/FileActions');
 var FileStore = require('./../../../file/FileStore');
 var getSlug = require('speakingurl');
-
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
-var NativeModules = require('NativeModules');
-
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
-var RefreshingIndicator =
-  require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 
 var CreateBevyView = React.createClass({
   propTypes: {
@@ -82,6 +81,31 @@ var CreateBevyView = React.createClass({
     FileStore.off(FILE.UPLOAD_COMPLETE);
   },
 
+  goBack() {
+    this.refs.bevyName.blur();
+    this.props.mainNavigator.pop();
+  },
+
+  createBevy() {
+    if(_.isEmpty(this.state.name)) return;
+
+    // call action
+    BevyActions.create(
+      this.state.name, // bevy name
+      (_.isEmpty(this.state.bevyImage))
+        ? constants.siteurl + '/img/logo_100.png'
+        : this.state.bevyImage, // bevy image
+      this.state.slug,
+      this.state.privacy
+    );
+
+    // blur all text inputs
+    this.refs.bevyName.blur();
+    this.setState({
+      creating: true
+    });
+  },
+
   _renderLoadingView() {
     if(this.state.creating) {
       return (
@@ -98,14 +122,14 @@ var CreateBevyView = React.createClass({
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>General</Text>
-        
+
         <View style={ styles.generalCard} >
           <TextInput
             style={ styles.bevyNameInput }
             ref='bevyName'
             value={ this.state.name }
             onChangeText={(text) => {
-              this.setState({ 
+              this.setState({
                 name: text,
                 slug: getSlug(text)
               });
@@ -123,13 +147,13 @@ var CreateBevyView = React.createClass({
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Bevy Url</Text>
-        
+
         <View style={ styles.generalCard} >
           <TextInput
             style={ styles.bevyNameInput }
             ref='BevySlug'
-            onChangeText={(text) => 
-              this.setState({ 
+            onChangeText={(text) =>
+              this.setState({
                 slug: text.slice((constants.siteurl.length + 3))
               })
             }
@@ -153,7 +177,7 @@ var CreateBevyView = React.createClass({
     var middle = (_.isEmpty(this.state.bevyImage))
     ? (
       <Icon
-        name='plus'
+        name='add'
         size={ 30 }
         style={{ width: 30, height: 30 }}
         color='#ccc'
@@ -182,7 +206,7 @@ var CreateBevyView = React.createClass({
             }, (didCancel, response) => {
               if (didCancel) {
                 //console.log(response);
-                
+
               } else {
                 //console.log('Cancel');
                 FileActions.upload(response.uri);
@@ -241,85 +265,45 @@ var CreateBevyView = React.createClass({
   render() {
     return (
       <ScrollView style={ styles.container }>
-
-        <Navbar
-          styleParent={{
-            backgroundColor: '#2CB673',
-            flexDirection: 'column',
-            paddingTop: 0
-          }}
-          styleBottom={{
-            backgroundColor: '#2CB673',
-            height: 48,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-          left={
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
             <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                // go back
-                // blur all text inputs
-                this.refs.bevyName.blur();
-                this.refs.description.blur();
-                //this.props.mainNavigator.jumpTo(routes.MAIN.TABBAR);
-                this.props.mainNavigator.pop();
-              }}
-              style={ styles.navButtonLeft }>
-              <Text style={ styles.navButtonTextLeft }>
-                Cancel
-              </Text>
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
             </TouchableHighlight>
-          }
-          center={
-            <View style={ styles.navTitle }>
-              <Text style={ styles.navTitleText }>
-                New Bevy
-              </Text>
-            </View>
-          }
-          right={
+            <Text style={ styles.title }>
+              New Bevy
+            </Text>
             <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                if(_.isEmpty(this.state.name)) return;
-
-                // call action
-                BevyActions.create(
-                  this.state.name, // bevy name
-                  (_.isEmpty(this.state.bevyImage)) ? constants.siteurl + '/img/logo_100.png' : this.state.bevyImage, // bevy image
-                  this.state.slug,
-                  this.state.privacy
-                );
-
-                // blur all text inputs
-                this.refs.bevyName.blur();
-                this.setState({
-                  creating: true
-                });
-              }}
-              style={ styles.navButtonRight }>
-              <Text style={ styles.navButtonTextRight }>
-                Create
-              </Text>
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.createBevy }
+            >
+              <Icon
+                name='add'
+                size={ 30 }
+                color='#FFF'
+              />
             </TouchableHighlight>
-          }
-        />
-
-
+          </View>
+        </View>
         <View style={ styles.body }>
-
           { this._renderLoadingView() }
-
           { this._renderTitleDescription() }
-
           { this._renderSlug() }
-
           { this._renderImageInput() }
-
           { this._renderPrivatePublic() }
-
         </View>
       </ScrollView>
     );
@@ -331,6 +315,31 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#eee'
+  },
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    flex: 1,
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   loadingView: {
     marginTop: 20,

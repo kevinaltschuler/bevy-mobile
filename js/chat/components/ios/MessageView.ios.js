@@ -1,8 +1,10 @@
 /**
- * InChatView.js
- * kevin made this
- * dank nanr shake
+ * MessageView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
  */
+
 'use strict';
 
 var React = require('react-native');
@@ -19,6 +21,7 @@ var {
   TouchableHighlight,
   TouchableOpacity
 } = React;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var Spinner = require('react-native-spinkit');
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
@@ -26,10 +29,12 @@ var MessageItem = require('./MessageItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var ChatStore = require('./../../../chat/ChatStore');
 var ChatActions = require('./../../../chat/ChatActions');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 var CHAT = constants.CHAT;
 
 var MessageView = React.createClass({
@@ -200,6 +205,14 @@ var MessageView = React.createClass({
     })
   },
 
+  goBack() {
+    this.props.chatNavigator.pop();
+  },
+
+  goToSettings() {
+    this.props.chatNavigator.push(routes.CHAT.THREADSETTINGS);
+  },
+
   renderHeader: function() {
     if(_.isEmpty(this.state.messages)) return <View />;
     if(!this.state.isRefreshing) {
@@ -261,7 +274,7 @@ var MessageView = React.createClass({
     });
   },
 
-  render: function () {
+  render() {
 
     return (
       <View
@@ -273,6 +286,39 @@ var MessageView = React.createClass({
           });
         }}
       >
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              { ChatStore.getThreadName(this.props.activeThread._id) }
+            </Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goToSettings }
+            >
+              <Icon
+                name='info'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+          </View>
+        </View>
         <ListView
           ref={'ListView'}
           style={ styles.scrollContainer }
@@ -325,7 +371,7 @@ var MessageView = React.createClass({
             style={ styles.messageInput }
             onChangeText={(text) => { this.onChange(text); }}
             onSubmitEditing={(ev) => { this.onSubmitEditing(); }}
-            onFocus={() => { 
+            onFocus={() => {
               this.scrollToBottom();
             }}
             onLayout={(x,y,width,height) => {
@@ -355,6 +401,31 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-end'
+  },
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    flex: 1,
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   scrollContainer: {
     flex: 1,

@@ -50,9 +50,11 @@ var routes = {
   },
 
   CHAT: {
-    LISTVIEW: { name: 'ListView'},
-    CHATVIEW: { name: 'ChatView' },
-    ADDPEOPLE: { name: 'AddPeople' } // FOR IOS
+    THREADLIST: { name: 'ThreadList' },
+    ADDPEOPLE: { name: 'AddPeople' },
+    THREADSETTINGS: { name: 'ThreadSettings' },
+    MESSAGEVIEW: { name: 'MessageView' },
+    NEWTHREAD: { name: 'NewThread' }
   },
 
   PROFILE: {

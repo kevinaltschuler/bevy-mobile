@@ -1,3 +1,10 @@
+/**
+ * UserStore.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var Backbone = require('backbone');

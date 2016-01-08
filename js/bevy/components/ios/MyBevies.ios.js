@@ -88,17 +88,7 @@ var MyBevies = React.createClass({
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
         onPress={ this.goToNewBevy }
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: constants.width / 1.3,
-          height: 160,
-          borderColor: '#aaa',
-          borderWidth: 3,
-          borderRadius: 5,
-          overflow: 'hidden',
-          marginVertical: 10
-        }}
+        style={ styles.newBevyCard }
       >
         <View
           style={{
@@ -141,6 +131,7 @@ var MyBevies = React.createClass({
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0.1)'
               style={ styles.plusButton }
+              onPress={ this.goToNewBevy }
             >
               <Icon
                 name='add'
@@ -203,6 +194,17 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10
   },
+  newBevyCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: constants.width / 1.3,
+    height: 160,
+    borderColor: '#aaa',
+    borderWidth: 3,
+    borderRadius: 5,
+    overflow: 'hidden',
+    marginVertical: 10
+  }
 });
 
 module.exports = MyBevies;

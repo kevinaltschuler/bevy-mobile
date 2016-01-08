@@ -138,33 +138,17 @@ var SettingsView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <Navbar
-          center={
-            <Text style={{
-              color: '#999',
-              fontSize: 18,
-              marginLeft: 10,
-              fontWeight: 'bold'
-            }}>
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <Text style={ styles.title }>
               Settings
             </Text>
-          }
-          activeBevy={ this.props.activeBevy }
-          fontColor={ '#999' }
-          { ...this.props }
-          profilePicture={ this.state.profilePicture }
-          styleBottom={{
-            backgroundColor: '#fff',
-            height: 40,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            borderBottomWidth: 1,
-            borderBottomColor: '#eee',
-            marginTop: 0,
-            marginBottom: 0
-          }}
-        />
+          </View>
+        </View>
         <View style={{
           height: StatusBarSizeIOS.currentHeight
         }} />
@@ -200,6 +184,24 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     flex: 1,
     flexDirection: 'column'
+  },
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    flex: 1,
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
   },
   settingItemContainer: {
     backgroundColor: '#fff',
