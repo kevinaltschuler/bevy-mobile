@@ -221,7 +221,7 @@ var SearchView = React.createClass({
         contentContainerStyle={ styles.bevyList }
         automaticallyAdjustContentInsets={true}
         showsVerticalScrollIndicator={true}
-        style={{flex: 1}}
+        style={styles.bevyList}
       >
         { bevyList }
       </ScrollView>
@@ -281,8 +281,9 @@ var styles = StyleSheet.create({
   container: {
     flex:1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
-    paddingTop: 0
+    paddingTop: 0,
+    backgroundColor: '#EEE'
+
   },
   tabBar: {
     width: constants.width,
@@ -290,17 +291,18 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#EEE',
+    backgroundColor: '#FFF',
     borderBottomWidth: 1
   },
   searchTab: {
     flex: 1,
-    height: 50,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
   },
   searchTabText: {
-    color: '#AAA'
+    color: '#EEE'
   },
   searchTabTextActive: {
     color: '#2CB673'
@@ -357,8 +359,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     width: constants.width,
     flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 10
+    backgroundColor: '#EEE'
   }
 });
 
