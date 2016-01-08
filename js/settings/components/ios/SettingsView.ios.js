@@ -1,6 +1,7 @@
 /**
  * SettingsView.ios.js
  * @author albert
+ * @flow
  */
 
 'use strict';
@@ -168,7 +169,10 @@ var SettingsView = React.createClass({
         <View style={{
           height: StatusBarSizeIOS.currentHeight
         }} />
-        <ScrollView style={{ flex: 1, marginTop: -40 }}>
+        <ScrollView
+          style={{ flex: 1, marginTop: -20 }}
+          contentInset={{ top: -20, left: 0, bottom: 0, right: 0 }}
+        >
           { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>

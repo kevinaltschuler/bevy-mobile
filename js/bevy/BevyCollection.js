@@ -1,9 +1,7 @@
 /**
  * BevyCollection.js
- *
- * Backbone collection for bevies
- *
  * @author albert
+ * @flow
  */
 
 'use strict';
@@ -18,10 +16,8 @@ var UserStore = require('./../user/UserStore');
 
 var user = UserStore.getUser();
 
-// backbone collection
-module.exports = Backbone.Collection.extend({
-	model: Bevy,
-	_meta: {
-		active: null
-	}
+var BevyCollection = Backbone.Collection.extend({
+	model: Bevy
 });
+
+module.exports = BevyCollection;
