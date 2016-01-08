@@ -1,3 +1,10 @@
+/**
+ * MessageItem.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -13,6 +20,7 @@ var Collapsible = require('react-native-collapsible');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var MessageItem = React.createClass({
   propTypes: {
@@ -107,19 +115,19 @@ var MessageItem = React.createClass({
     var image = (this.props.hidePic)
     ? <View style={{height: 5, width: 35}}/>
     : <Image
-      source={{ uri: (_.isEmpty(author.image_url))
+      source={{ uri: (_.isEmpty(author.image))
         ? constants.siteurl + '/img/user-profile-icon.png'
-        : author.image_url }}
+        : resizeImage(author.image, 64, 64).url }}
       style={ styles.authorImage }
     />
 
     var name = (isMe) ? 'Me' : author.displayName;
 
     var nameTitle = (this.props.showName)
-    ? <Text 
+    ? <Text
         style={{
-          width: constants.width, 
-          flexDirection: 'column', 
+          width: constants.width,
+          flexDirection: 'column',
           textAlign: (isMe) ? 'right' : 'left',
           paddingHorizontal: 45,
           color: 'rgba(0,0,0,.3)'
@@ -150,7 +158,7 @@ var MessageItem = React.createClass({
               }}>
                 { nameTitle }
                 <View style={[styles.containerMe, {marginTop: space}]}>
-                  <View 
+                  <View
                     style={[messageBodyStyle, { backgroundColor: '#2cb673' } ]}
                     ref={ref => { this.MessageBody = ref; }}
                   >
@@ -192,7 +200,7 @@ var MessageItem = React.createClass({
                 <View style={[styles.container, {marginTop: space}]}>
                   { image }
                   <View style={{width: 5}}/>
-                  <View 
+                  <View
                     style={[messageBodyStyle, {backgroundColor: '#eee'} ]}
                     ref={ref => { this.MessageBody = ref; }}
                   >
