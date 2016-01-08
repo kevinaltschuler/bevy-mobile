@@ -143,12 +143,6 @@ var CommentView = React.createClass({
   },
 
   postReply() {
-    // gate this if not logged in
-    if(!this.props.loggedIn) {
-      ToastAndroid.show('Please Log In to Comment', ToastAndroid.SHORT);
-      return;
-    }
-
     var text = this.state.input;
     // dont post empty reply
     if(_.isEmpty(text)) {

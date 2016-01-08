@@ -9,9 +9,11 @@ var {
   AsyncStorage,
   LinkingIOS,
   TouchableHighlight,
-  Image
+  Image,
+  NativeAppEventEmitter
 } = React;
 
+var base64 = require('base-64');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var USER = constants.USER;
@@ -20,10 +22,11 @@ var AppActions = require('./../../../app/AppActions');
 var UserActions = require('./../../../user/UserActions');
 var UserStore = require('./../../../user/UserStore');
 
+var GoogleSignIn = require('react-native-google-signin');
+
 var LoginView = React.createClass({
   propTypes: {
     loginNavigator: React.PropTypes.object,
-    authModalActions: React.PropTypes.object,
     message: React.PropTypes.string
   },
 
@@ -31,7 +34,8 @@ var LoginView = React.createClass({
     return {
       username: '',
       pass: '',
-      error: ''
+      error: '',
+      loading: false
     }
   },
 
@@ -56,70 +60,10 @@ var LoginView = React.createClass({
   },
 
   loginGoogle() {
-    // see if we've logged in before
-    AsyncStorage.getItem('google_id')
-    .then((google_id) => {
-      if(google_id) {
-        // yes we have, and we have the token
-        // we can skip doing the oauth2 grant request
-        fetch(constants.apiurl + '/users/google/' + google_id)
-        .then(($res) => {
-          var user = JSON.parse($res._bodyText);
-          this.onLoginSuccess(user);
-        });
-      } else {
-        
-        // no one has logged in before or has consciously signed out
-        // navigate to GoogleWebSignIn and let it handle things
-        this.props.loginNavigator.change('google');
-      }
-    });
-  },
-
-  handleGoogleURL: function(event) {
-    // when the browser gets back to us
-    // it should only send an access code that we use to get the oauth token
-    //LinkingIOS.removeEventListener('url', this.handleGoogleURL);
-    var url = event.url;
-    var code = url.slice(38); // jenky query parser
-    console.log('got access code', code);
-    var body = [
-      'code=' + code,
-      '&client_id=' + constants.google_client_id,
-      '&client_secret=' + constants.google_client_secret,
-      '&redirect_uri=' + constants.google_redirect_uri,
-      '&grant_type=authorization_code'
-    ].join('');
-    // get the token
-    fetch('https://www.googleapis.com/oauth2/v3/token', {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      body: body
-    }).then((res) => {
-      var response = JSON.parse(res._bodyText);
-      var access_token = response.access_token;
-      console.log('got access token', access_token);
-      // get the google plus user, so we can get its id
-      fetch(
-        'https://www.googleapis.com/plus/v1/people/me' +
-        '?access_token=' + access_token, {
-      })
-      .then(($res) => {
-        var $response = JSON.parse($res._bodyText);
-        var google_id = $response.id;
-        // save this token so we dont have to go through that again
-        // unless we have to
-        AsyncStorage.setItem('google_id', google_id);
-        // finally we can query our own api
-        fetch(constants.apiurl + '/users/google/' + google_id)
-        .then(($user) => {
-          var user = JSON.parse($user._bodyText);
-          this.onLoginSuccess(user);
-        });
-      });
+    if(this.state.loading) return;
+    UserActions.logInGoogle();
+    this.setState({
+      loading: true
     });
   },
 

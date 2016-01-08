@@ -80,10 +80,6 @@ var ThreadView = React.createClass({
   },
 
   openNewThreadView() {
-    if(!this.props.loggedIn) {
-      ToastAndroid.show('Please Log In To Chat', ToastAndroid.SHORT);
-      return;
-    }
     this.props.mainNavigator.push(routes.MAIN.NEWTHREAD);
   },
 

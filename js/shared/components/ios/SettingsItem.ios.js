@@ -5,6 +5,7 @@
  * native settings app items
  *
  * @author albert
+ * @flow
  */
 
 'use strict';
@@ -18,6 +19,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 
+var _ = require('underscore');
+
 var SettingsItem = React.createClass({
   propTypes: {
     checked: React.PropTypes.bool,
@@ -29,46 +32,50 @@ var SettingsItem = React.createClass({
   getDefaultProps() {
     return {
       checked: false,
-      onPress: this.noop,
+      onPress: _.noop,
       title: 'Default Settings Title'
     };
   },
 
-  noop() {
+  onPress() {
+    this.props.onPress();
   },
 
-  render() {
-    var check = (this.props.checked)
-    ? (
+  _renderIcon() {
+    if(this.props.icon) {
+      return this.props.icon;
+    } else {
+      return <View />;
+    }
+  },
+
+  _renderCheck() {
+    if(!this.props.checked) return <View />;
+    return (
       <Icon
         name='ios-checkmark-empty'
         color='#2CB673'
         size={ 35 }
         style={{ width: 35, height: 35 }}
       />
-    )
-    : <View />;
+    );
+  },
 
-    var icon = (this.props.icon)
-    ? this.props.icon
-    : <View/>;
-
+  render() {
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,0.1)'
         style={[ styles.settingItemContainer ]}
-        onPress={() => {
-          this.props.onPress();
-        }}
+        onPress={ this.onPress }
       >
         <View style={ styles.settingItem}>
           <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
-            { icon }
+            { this._renderIcon() }
           </View>
           <Text style={ styles.settingTitle }>
             { this.props.title }
           </Text>
-          { check }
+          { this._renderCheck() }
         </View>
       </TouchableHighlight>
     );

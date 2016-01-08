@@ -27,7 +27,7 @@ _.extend(FileStore, {
     console.log('sending multipart request...');
     FileTransfer.upload({
       uri: uri, 
-      uploadUrl: constants.apiurl + '/files/upload',
+      uploadUrl: constants.apiurl + '/files',
       fileName: 'temp.jpg',
       mimeType: 'image/jpg',
       headers: {
@@ -45,6 +45,7 @@ _.extend(FileStore, {
       }
       if(Platform.OS == 'ios') {
         var file = res.data;
+        console.log(res);
         file = JSON.parse(file);
       } else {
         var file = JSON.parse(res);

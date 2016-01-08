@@ -201,31 +201,26 @@ var Post = React.createClass({
 
   render() {
     var post = this.state.post;
-
-    var tagBadge = (post.tag)
-    ? <View style={{paddingTop: 2, height: 18, paddingBottom: 2, paddingLeft: 4, paddingRight: 4, borderRadius: 8, backgroundColor: post.tag.color }}>
-        <Text style={{color: '#fff', fontSize: 10}}>
-          {post.tag.name}
-        </Text>
-      </View>
-    : <View/>;
+    var authorImage = constants.siteurl + '/img/user-profile-icon.png';
+    if(!_.isEmpty(post.author.image)) {
+      var authorImage = post.author.image.path;
+    }
 
     return (
         <View style={styles.postCard}>
           <View style={styles.titleRow}>
             <Image
               style={styles.titleImage}
-              source={{ uri: post.author.image.path }}
+              source={{ uri: authorImage }}
             />
             <View style={styles.titleTextColumn}>
               <Text numberOfLines={ 1 } style={styles.titleText}>
-                { post.author.displayName } • { post.bevy.name }
+                { post.author.displayName } • { post.board.name }
               </Text>
               <Text style={styles.subTitleText}>
                 { timeAgo(Date.parse(post.created)) }
               </Text>
             </View>
-            { tagBadge }
           </View>
 
           { this._renderPostTitle() }
@@ -238,15 +233,11 @@ var Post = React.createClass({
               underlayColor='rgba(0,0,0,0.1)'
               style={[ styles.actionTouchable, { flex: 2 } ]}
               onPress={() => {
-                if(this.props.loggedIn) {
-                  PostActions.vote(post._id);
-                  this.setState({
-                    voted: !this.state.voted,
-                    overlayVisible: false
-                  });
-                } else {
-                  this.props.authModalActions.open('Log In To Post');
-                }
+                PostActions.vote(post._id);
+                this.setState({
+                  voted: !this.state.voted,
+                  overlayVisible: false
+                });
               }}
             >
               <View style={[ styles.actionTouchable, { flex: 1 } ]}>

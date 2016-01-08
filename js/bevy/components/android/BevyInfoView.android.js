@@ -89,11 +89,6 @@ var BevyInfoView = React.createClass({
   },
 
   requestJoin() {
-    // dont allow this for non logged in users
-    if(!this.props.loggedIn) {
-      ToastAndroid.show('Please Log In to Join a Bevy', ToastAndroid.SHORT);
-      return;
-    }
     // send action
     BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },

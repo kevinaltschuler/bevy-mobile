@@ -51,7 +51,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:design:23.1.0'
-    compile 'com.facebook.react:react-native:0.16.+'
+    compile 'com.facebook.react:react-native:0.17.+'
     compile project(':react-native-vector-icons')
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'cz.msebera.android:httpclient:4.3.6'

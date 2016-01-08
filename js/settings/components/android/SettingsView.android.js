@@ -116,26 +116,9 @@ var SettingsView = React.createClass({
   },
 
   render() {
-    if(!this.props.loggedIn) {
-      return (
-        <ScrollView style={ styles.container }>
-          <TouchableNativeFeedback 
-            background={ TouchableNativeFeedback.Ripple('#DDD', false) }
-            onPress={() => {
-              this.props.mainNavigator.push(routes.MAIN.LOGIN);
-            }}
-          >
-            <View style={ styles.logInButton }>
-              <Text style={ styles.logInButtonText }>Log In</Text>
-            </View>
-          </TouchableNativeFeedback>
-        </ScrollView>
-      );
-    }
-
     return (
       <ScrollView style={ styles.container }>
-        <ProfileRow 
+        <ProfileRow
           big={ true }
           user={ this.props.user }
           nameColor='#000'
@@ -193,7 +176,7 @@ var SettingsView = React.createClass({
           onPress={ this.goToPublicProfile }
         >
           <View style={ styles.settingButton }>
-            <Icon 
+            <Icon
               name='person'
               size={ 30 }
               color='#AAA'

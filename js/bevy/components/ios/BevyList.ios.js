@@ -56,25 +56,6 @@ var BevyList = React.createClass({
   },
 
   _renderProfileHeader() {
-    if(!this.props.loggedIn) {
-      return ( <View/> );
-          {/*<TouchableHighlight
-            underlayColor='#333'
-            style={{
-              height: 48,
-              borderBottomWidth: 1,
-              borderBottomColor: 'rgba(255,255,255,.4)',
-              padding: 10,
-            }}
-            onPress={() => {
-              this.props.authModalActions.open('Log In');
-            }}
-          >
-            <Text style={{ color: '#fff', fontSize: 16, marginLeft: 2}}>Log In</Text>
-          </TouchableHighlight>
-      );*/}
-    }
-
     var image_url = (_.isEmpty(this.props.user.image_url))
     ? constants.siteurl + '/img/user-profile-icon.png'
     : this.props.user.image_url;
@@ -94,11 +75,6 @@ var BevyList = React.createClass({
   },
 
   _renderPublicHeader() {
-    if(!this.props.loggedIn) return (
-      <Text style={ styles.publicHeader }>
-        All Bevies
-      </Text>
-    );
     return (
       <View style={ styles.myBeviesHeader }>
         <View style={styles.myBeviesHeaderTextWrapper}>
@@ -133,13 +109,6 @@ var BevyList = React.createClass({
     ? _.filter(this.props.myBevies, function(bevy) { return bevy.parent == null })
     : this.props.publicBevies;
 
-    if(!this.props.loggedIn) {
-      bevies.unshift({
-        _id: '-1',
-        name: 'Frontpage'
-      });
-    }
-
     var bevyList = [];
 
     for(var key in bevies) {
@@ -160,7 +129,7 @@ var BevyList = React.createClass({
             this.context.menuActions.close();
           }}
         >
-          <Text 
+          <Text
             key={'bevylistkey:' + bevy._id}
             style={ (active)
             ? styles.bevyItemActiveText

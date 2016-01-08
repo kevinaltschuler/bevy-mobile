@@ -61,7 +61,7 @@ var PostList = React.createClass({
     posts = this.prunePosts(posts);
     return {
       posts: ds.cloneWithRows(posts),
-      loading: _.isEmpty(posts), // if there are no posts to display, 
+      loading: _.isEmpty(posts), // if there are no posts to display,
                                 // then they're probably loading at first
       navHeight: 0,
       scrollY: 0
@@ -88,11 +88,6 @@ var PostList = React.createClass({
   },
 
   requestJoin() {
-    // dont allow this for non logged in users
-    if(!this.props.loggedIn) {
-      ToastAndroid.show('Please Log In to Join a Bevy', ToastAndroid.SHORT);
-      return;
-    }
     // send action
     BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },
@@ -169,7 +164,7 @@ var PostList = React.createClass({
     if(!this.props.showNewPostCard) return <View />;
     else return (
       <View style={{
-        marginBottom: 10, 
+        marginBottom: 10,
         marginTop: 45
       }}>
         <NewPostCard
@@ -184,7 +179,7 @@ var PostList = React.createClass({
   _renderNoPosts() {
     if(_.isEmpty(this.props.allPosts) && !this.state.loading) {
       return (
-        <View style={ styles.noPostsContainer }>   
+        <View style={ styles.noPostsContainer }>
           <Text style={ styles.noPosts }>No Posts</Text>
         </View>
       );
@@ -226,11 +221,11 @@ var PostList = React.createClass({
       );
     }
     return (
-      <View style={{ 
-        flex: 1, 
-        flexDirection: 'column' 
+      <View style={{
+        flex: 1,
+        flexDirection: 'column'
       }}>
-        <PullToRefreshViewAndroid 
+        <PullToRefreshViewAndroid
           style={{
             flex: 1
           }}

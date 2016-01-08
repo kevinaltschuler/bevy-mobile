@@ -48,13 +48,7 @@ var ChatView = React.createClass({
 
   _renderContent() {
     var view;
-    if(!this.props.loggedIn) {
-      view = (
-        <View style={ styles.infoView }>
-          <Text style={ styles.infoViewText }>Sign In to Chat</Text>
-        </View>
-      );
-    } else if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
+    if(_.isEmpty(this.props.allThreads) && _.isEmpty(this.props.activeThread)) {
       // create a chat
       view = (
         <View style={ styles.infoView }>

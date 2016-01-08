@@ -2,6 +2,7 @@
 
 var Backbone = require('backbone');
 var _ = require('underscore');
+var base64 = require('base-64');
 var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var USER = constants.USER;
@@ -14,9 +15,11 @@ var GCM = require('./../shared/apis/GCM.android.js');
 var React = require('react-native');
 var {
   AsyncStorage,
-  Platform
+  Platform,
+  NativeAppEventEmitter
 } = React;
 var DeviceInfo = require('react-native-device-info');
+var GoogleSignIn = require('react-native-google-signin');
 
 var User = require('./UserModel');
 var Users = require('./UserCollection');
@@ -37,7 +40,6 @@ _.extend(UserStore, {
   handleDispatch(payload) {
     switch(payload.actionType) {
       case USER.LOAD_USER:
-        console.log('herer');
         var user = payload.user;
         if(_.isEmpty(user)) {
           this.loggedIn = false;
@@ -54,8 +56,8 @@ _.extend(UserStore, {
             var expires = response[2][1];
             if(!_.isEmpty(access) && !_.isEmpty(refresh)) {
               this.setTokens(access, refresh, expires);
+              this.trigger(USER.LOADED);
             }
-            this.trigger(USER.LOADED);
           }
         );
         break;
@@ -68,23 +70,66 @@ _.extend(UserStore, {
         break;
 
       case USER.LOGIN_GOOGLE:
-        var google_id = payload.google_id;
-
-        fetch(constants.apiurl + '/users/google/' + google_id)
-        .then((res) => res.json())
-        .then((user) => {
-          console.log('logged in google', user);
-
-          AsyncStorage.setItem('user', JSON.stringify(user))
-            .then((err, result) => {
-            });
-
-          this.setUser(user);
-          this.trigger(USER.LOGIN_SUCCESS, user);
+        console.log('google login start...');
+        // configure API keys and access right
+        GoogleSignIn.configure(
+          // CLIENT_ID - from .plist file
+          '540892787949-0e61br4320fg4l2its3gr9csssrn07aj.apps.googleusercontent.com',
+          // SCOPES - array of authorization names:
+          // eg ['https://www.googleapis.com/auth/calendar']
+          // for requesting access to user calendar
+          ['profile email']
+        );
+        // called on signin error
+        NativeAppEventEmitter.addListener('googleSignInError', error => {
+          console.log('google sign in error', error);
         });
 
+        // called on signin success, you get user data (email), access token and idToken
+        NativeAppEventEmitter.addListener('googleSignIn', user => {
+          /*User: {
+            name
+            email
+            accessToken
+            idToken (IOS ONLY)
+            accessTokenExpirationDate (IOS ONLY)
+          }*/
+          console.log('google sign in success', user);
+          var idToken = user.idToken;
+          var jot_guts = idToken.split('.');
+          var payload = JSON.parse(base64.decode(jot_guts[1]).toString());
+          fetch(constants.siteurl + '/login/google', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              google_id: payload.sub,
+              email: payload.email,
+              picture: payload.picture,
+              name: user.name
+            })
+          })
+          .then(res => res.json())
+          .then(res => {
+            console.log('got response from our server', res);
+            var user = res.user;
+            var access_token = res.access_token;
+            var refresh_token = res.refresh_token;
+            var expires_in = res.expires_in;
+            this.setTokens(access_token, refresh_token, expires_in);
+            this.setUser(user);
+            this.trigger(USER.LOGIN_SUCCESS);
+          })
+          .catch(err => {
+            console.log('our server error', err);
+          });
+        });
+        // call this method when user clicks the 'Signin with google' button
+        GoogleSignIn.signIn();
         break;
-      
+
       case USER.LOGOUT:
         // remove google token
         AsyncStorage.removeItem('google_id');
@@ -130,7 +175,7 @@ _.extend(UserStore, {
           this.trigger(USER.LOGIN_ERROR, error.message);
         })
         .done();
-         
+
         break;
 
       case USER.RESET_PASSWORD:
@@ -195,36 +240,6 @@ _.extend(UserStore, {
         }
         break;
 
-      case USER.SWITCH_USER:
-        var account_id = payload.account_id;
-        var url = constants.siteurl + '/switch';
-
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username: 'dummy',
-            password: 'dummy',
-            user_id: this.user.get('_id'),
-            switch_to_id: account_id
-          })
-        })
-        .then(res => res.json())
-        .then(res => {
-          console.log('switched');
-          AsyncStorage.setItem('user', JSON.stringify(res))
-          .then((err, result) => {
-          });
-
-          this.setUser(res);
-          //this.trigger(USER.LOGIN_SUCCESS, res);
-          AppActions.load();
-        });
-        break;
-
       case BEVY.SUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevies = this.user.get('bevies');
@@ -249,6 +264,7 @@ _.extend(UserStore, {
           }.bind(this)
         });
         break;
+
       case BEVY.UNSUBSCRIBE:
         var bevy_id = payload.bevy_id;
         var bevies = this.user.get('bevies');
@@ -271,62 +287,9 @@ _.extend(UserStore, {
         });
         break;
 
-      case USER.LINK_ACCOUNT:
-        var account = payload.account;
-
-        var linkedAccounts = this.user.get('linkedAccounts');
-        if(_.isEmpty(linkedAccounts)) linkedAccounts = [];
-
-        linkedAccounts.push(account._id);
-        _.uniq(linkedAccounts); // remove dupes
-
-        /*$.ajax({
-          url: constants.apiurl + '/users/' + this.user.get('_id') + '/linkedaccounts',
-          method: 'POST',
-          data: {
-            account_id: account._id
-          },
-          success: function(data) {
-
-          },
-          error: function(error) {
-            console.log(error);
-          }
-        });*/
-
-        // add to collection
-        this.linkedAccounts.push(account);
-        this.trigger(USER.CHANGE_ALL);
-        break;
-
-      case USER.UNLINK_ACCOUNT:
-        var account = payload.account;
-
-        var linkedAccounts = this.user.get('linkedAccounts');
-        if(_.isEmpty(linkedAccounts)) linkedAccounts = [];
-
-        linkedAccounts = _.without(linkedAccounts, account._id);
-        _.uniq(linkedAccounts); // remove dupes
-
-        /*$.ajax({
-          url: constants.apiurl + '/users/' + this.user.get('_id') + '/linkedaccounts/' + account._id,
-          method: 'DELETE',
-          success: function(data) {
-
-          },
-          error: function(error) {
-            console.log(error);
-          }
-        });*/
-
-        // remove from collection
-        this.linkedAccounts.remove(account._id);
-        this.trigger(USER.CHANGE_ALL);
-        break;
-
       case USER.VERIFY_USERNAME:
         var username = payload.username;
-        var url = constants.apiurl + '/users/' + 
+        var url = constants.apiurl + '/users/' +
           encodeURIComponent(username) + '/verify';
 
         fetch(url, {
@@ -489,7 +452,7 @@ _.extend(UserStore, {
   getAccessToken() {
     return this.accessToken;
   },
-  
+
   setTokens(accessToken, refreshToken, expires_in) {
     if(_.isEmpty(accessToken) || _.isEmpty(refreshToken)) {
       // if one of them is missing, then we need to clear all
@@ -504,10 +467,11 @@ _.extend(UserStore, {
 
     // and save
     console.log('tokens set!');
+    this.tokensLoaded = true;
     AsyncStorage.setItem('access_token', accessToken);
     AsyncStorage.setItem('refresh_token', refreshToken);
     AsyncStorage.setItem('expires_in', expires_in.toString());
-    this.tokensLoaded = true;
+    this.trigger(USER.TOKENS_LOADED);
   },
 
   clearTokens() {

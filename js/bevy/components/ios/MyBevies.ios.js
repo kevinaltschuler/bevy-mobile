@@ -1,7 +1,7 @@
 /**
  * MyBevies.js
- * kevin made this
- * the yung sauce villain
+ * @author kevin
+ * @flow
  */
 
 'use strict';
@@ -58,11 +58,6 @@ var MyBevies = React.createClass({
   },
 
   _renderPublicHeader() {
-    if(!this.props.loggedIn) return (
-      <Text style={ styles.publicHeader }>
-        All Bevies
-      </Text>
-    );
     return (
       <View style={ styles.myBeviesHeader }>
         <View style={styles.myBeviesHeaderTextWrapper}>
@@ -101,62 +96,98 @@ var MyBevies = React.createClass({
 
     for(var key in bevies) {
       var bevy = bevies[key];
-      if(bevy._id == -1) {
-        continue;
-      }
 
       bevyList.push(
-        <BevyCard 
-          bevy={bevy}
+        <BevyCard
+          bevy={ bevy }
           bevyNavigator={ this.props.bevyNavigator }
           key={ 'bevylist:' + bevy._id }
-          mainNavigator={this.props.mainNavigator}
+          mainNavigator={ this.props.mainNavigator }
         />
       );
     }
+    return bevyList;
+  },
 
+  _renderNewBevyCard() {
     return (
-      <ScrollView 
-        contentContainerStyle={ styles.bevyList }
-        automaticallyAdjustContentInsets={true}
-        showsVerticalScrollIndicator={true}
-        style={{flex: 1, marginTop: -23, marginBottom: 49}}
+      <TouchableHighlight
+        key={ 'bevylist:newbevy'}
+        underlayColor='rgba(0,0,0,.1)'
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+        }}
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: constants.width / 1.3,
+          height: 160,
+          borderColor: '#aaa',
+          borderWidth: 3,
+          borderRadius: 5,
+          overflow: 'hidden',
+          marginVertical: 10
+        }}
       >
-        { bevyList }
-      </ScrollView>
+        <View
+          style={{
+            alignItems: 'center'
+          }}
+        >
+          <Icon
+            name='ios-plus'
+            size={60}
+            color='#aaa'
+            style={{}}
+          />
+          <Text
+            style={{
+              color: '#999'
+            }}
+          >
+            Create a New Bevy
+          </Text>
+        </View>
+      </TouchableHighlight>
     );
   },
 
   render: function() {
 
-    var right = (
-      <TouchableOpacity
-        activeOpacity={.3}
-        onPress={() => {
-          this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
-        }}
-        style={{
-          marginRight: 10,
-          borderRadius: 2,
-          paddingHorizontal: 5,
-          paddingVertical: 5,
-        }}
-      >
-        <Icon
-          name='ios-plus-empty'
-          size={ 30 }
-          color={ '#999' }
-          style={{}}
-        />
-      </TouchableOpacity>
-    );
-
     return (
-      <View style={styles.container}>
-
+      <View style={ styles.container }>
         <Navbar
-          center={<Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>My Bevies</Text>}
-          right={ right }
+          center={
+            <Text style={{
+              color: '#999',
+              fontSize: 18,
+              marginLeft: 10,
+              fontWeight: 'bold'
+            }}>
+              My Bevies
+            </Text>
+          }
+          right={
+            <TouchableOpacity
+              activeOpacity={.3}
+              onPress={() => {
+                this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+              }}
+              style={{
+                marginRight: 10,
+                borderRadius: 2,
+                paddingHorizontal: 5,
+                paddingVertical: 5,
+              }}
+            >
+              <Icon
+                name='ios-plus-empty'
+                size={ 30 }
+                color={ '#999' }
+                style={{}}
+              />
+            </TouchableOpacity>
+          }
           activeBevy={ this.props.activeBevy }
           fontColor={ '#999' }
           { ...this.props }
@@ -175,9 +206,15 @@ var MyBevies = React.createClass({
         <View style={{
           height: StatusBarSizeIOS.currentHeight
         }} />
-
-        { this._renderBevyList() }
-
+        <ScrollView
+          contentContainerStyle={ styles.bevyList }
+          automaticallyAdjustContentInsets={true}
+          showsVerticalScrollIndicator={true}
+          style={{flex: 1, marginTop: -23, marginBottom: 49}}
+        >
+          { this._renderBevyList() }
+          { this._renderNewBevyCard() }
+        </ScrollView>
       </View>
     );
   }
@@ -256,11 +293,11 @@ var styles = StyleSheet.create({
   },
 
   bevyList: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     marginTop: -15,
     width: constants.width,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     marginBottom: 10
   },
   bevyItem: {
