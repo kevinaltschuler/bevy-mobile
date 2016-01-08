@@ -22,6 +22,7 @@ var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var UserActions = require('./../../../user/UserActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
@@ -34,39 +35,42 @@ var SettingsView = React.createClass({
 
   getInitialState() {
     return {
-      profilePicture: (_.isEmpty(this.props.user.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : this.props.user.image_url
+      profilePicture: (_.isEmpty(this.props.user.image))
+        ? constants.siteurl + '/img/user-profile-icon.png'
+        : resizeImage(this.props.user.image, 64, 64).url
     };
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      profilePicture: (_.isEmpty(nextProps.user.image_url)) ? constants.siteurl + '/img/user-profile-icon.png' : nextProps.user.image_url
+      profilePicture: (_.isEmpty(nextProps.user.image_url))
+        ? constants.siteurl + '/img/user-profile-icon.png'
+        : resizeImage(this.props.user.image, 64, 64).url
     });
   },
 
-  _renderUserHeader() {
-    if(!this.props.loggedIn) return <View />;
+  logOut() {
+    UserActions.logOut();
+    this.props.mainNavigator.popToTop();
+    this.props.mainNavigator.push(routes.MAIN.LOGIN);
+  },
 
+  _renderUserHeader() {
     return (
-      <TouchableHighlight
-        underlayColor='rgba(200,200,200,1)'
-        style={[ styles.settingItemContainer ]}
-        onPress={() => {
-        }}
-      >
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <View style={ styles.profileHeader }>
-            <Image
-              source={{ uri: this.state.profilePicture }}
-              style={ styles.profileImage }
-            />
-            <View style={ styles.profileDetails }>
-              <Text style={ styles.profileName }>{ this.props.user.displayName }</Text>
-              <Text style={ styles.profileEmail }>{ this.props.user.email || 'no email' }</Text>
-            </View>
-          </View>
+      <View style={ styles.profileHeader }>
+        <Image
+          source={{ uri: this.state.profilePicture }}
+          style={ styles.profileImage }
+        />
+        <View style={ styles.profileDetails }>
+          <Text style={ styles.profileName }>
+            { this.props.user.displayName }
+          </Text>
+          <Text style={ styles.profileEmail }>
+            { this.props.user.email || 'no email' }
+          </Text>
         </View>
-      </TouchableHighlight>
+      </View>
     );
   },
 
@@ -103,52 +107,51 @@ var SettingsView = React.createClass({
         />
         <SettingsItem
           title='View Public Profile'
-          icon={<Icon
+          icon={
+            <Icon
               name={'ios-person'}
               size={30}
               color='rgba(0,0,0,.3)'
-            />}
+            />
+          }
           onPress={() => {
             var route = routes.MAIN.PROFILE;
             route.profileUser = this.props.user;
             this.props.mainNavigator.push(route);
           }}
         />
-        {/*<SettingsItem
-          title='Switch Account'
-          icon={<Icon
-              name={'ios-shuffle-strong'}
-              size={30}
-              color='rgba(0,0,0,.3)'
-            />}
-          onPress={() => {
-            var route = routes.PROFILE.SWITCH_USER;
-            route.profileUser = this.props.user;
-            this.props.mainNavigator.push(route);
-          }}
-        />*/}
         <SettingsItem
           title='Sign Out'
-          icon= {<Icon
+          icon= {
+            <Icon
               name={'ios-undo'}
               size={30}
               color='rgba(0,0,0,.3)'
-            />}
-          onPress={() => {
-            UserActions.logOut();
-          }}
+            />
+          }
+          onPress={ this.logOut }
         />
       </View>
     );
   },
 
   render() {
-
-
     return (
       <View style={ styles.container }>
+        <View style={{
+          height: StatusBarSizeIOS.currentHeight
+        }} />
         <Navbar
-          center={<Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>Settings</Text>}
+          center={
+            <Text style={{
+              color: '#999',
+              fontSize: 18,
+              marginLeft: 10,
+              fontWeight: 'bold'
+            }}>
+              Settings
+            </Text>
+          }
           activeBevy={ this.props.activeBevy }
           fontColor={ '#999' }
           { ...this.props }
@@ -161,13 +164,10 @@ var SettingsView = React.createClass({
             alignItems: 'center',
             borderBottomWidth: 1,
             borderBottomColor: '#eee',
-            marginTop: 0
+            marginTop: 0,
+            marginBottom: 0
           }}
         />
-
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight
-        }} />
         <ScrollView style={{ flex: 1, marginTop: (this.props.loggedIn) ? -20 : 0 }}>
           { this._renderUserHeader() }
 
@@ -178,12 +178,14 @@ var SettingsView = React.createClass({
           <SettingsItem
             title={'Version: Beta 1.0'}
             onPress={() => {}}
-            icon={<Icon
-              name={'ios-flag'}
-              size={30}
-              color='rgba(0,0,0,.3)'
-            />}
-            />
+            icon={
+              <Icon
+                name={'ios-flag'}
+                size={30}
+                color='rgba(0,0,0,.3)'
+              />
+            }
+          />
         </ScrollView>
       </View>
     );
@@ -210,9 +212,11 @@ var styles = StyleSheet.create({
   },
   profileHeader: {
     flexDirection: 'row',
-    padding: 5,
-    height: 39,
-    backgroundColor: 'rgba(0,0,0,0)'
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    height: 48,
+    backgroundColor: '#FFF',
+    marginBottom: 5
   },
   profileImage: {
     width: 30,
@@ -233,7 +237,6 @@ var styles = StyleSheet.create({
     color: '#888',
     fontSize: 12
   },
-
   settingsTitle: {
     color: '#888',
     fontSize: 15,

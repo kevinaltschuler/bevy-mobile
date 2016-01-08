@@ -273,17 +273,6 @@ var App = React.createClass({
     UserStore.on(USER.LOADED, this._onUserChange);
   },
 
-  componentWillUnmount() {
-    BevyStore.off(change_all_events);
-    PostStore.off(change_all_events);
-    ChatStore.off(change_all_events);
-    NotificationStore.off(change_all_events);
-
-    PushNotificationIOS.removeEventListener('register', this._onNotificationReg);
-
-    UserStore.off(USER.LOADED)
-  },
-
   _onBevyChange() {
     this.setState(_.extend(this.state, this.getBevyState()));
   },
