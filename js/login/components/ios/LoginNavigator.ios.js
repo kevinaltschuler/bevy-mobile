@@ -2,7 +2,10 @@
  * LoginNavigator.ios.js
  * not using native navigator because of height/layout issues
  * so no fancy animations here
+ * @author kevin
+ * @flow
  */
+
 'use strict';
 
 var React = require('react-native');
@@ -19,6 +22,7 @@ var LoginView = require('./LoginView.ios.js');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotView = require('./ForgotView.ios.js');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 
@@ -41,44 +45,45 @@ var LoginNavigator = React.createClass({
   },
 
   render: function () {
-
     var navigator = {
       change: this.changeRoute
     };
 
-    var content = <View/>;
     var title = 'log in';
 
     switch(this.state.currentRoute) {
       case 'register':
         title = 'register';
-        content = <RegisterView
-          { ...this.props }
-          close={ this.props.close }
-          loginNavigator={ navigator }
-        />;
+        return (
+          <RegisterView
+            { ...this.props }
+            close={ this.props.close }
+            loginNavigator={ navigator }
+          />
+        );
         break;
       case 'forgot':
         title = 'forgot my password';
-        content = <ForgotView
-          { ...this.props }
-          close={this.props.close}
-          loginNavigator={ navigator }
-        />;
+        return (
+          <ForgotView
+            { ...this.props }
+            close={this.props.close}
+            loginNavigator={ navigator }
+          />
+        );
         break;
       case 'login':
       default:
         title = 'login';
-        content = <LoginView
-          { ...this.props }
-          close={ this.props.close }
-          loginNavigator={ navigator }
-        />;
+        return (
+          <LoginView
+            { ...this.props }
+            close={ this.props.close }
+            loginNavigator={ navigator }
+          />
+        );
         break;
     }
-    return (
-       content
-    );
   }
 });
 

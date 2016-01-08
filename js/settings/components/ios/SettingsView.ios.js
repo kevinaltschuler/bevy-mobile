@@ -52,7 +52,7 @@ var SettingsView = React.createClass({
 
   logOut() {
     UserActions.logOut();
-    this.props.mainNavigator.popToTop();
+    //this.props.mainNavigator.popToTop();
     this.props.mainNavigator.push(routes.MAIN.LOGIN);
   },
 

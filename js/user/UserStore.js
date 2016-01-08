@@ -157,9 +157,6 @@ _.extend(UserStore, {
 
         this.user = new User;
         this.loggedIn = false;
-
-        this.trigger(USER.LOADED);
-        this.trigger(USER.LOGOUT);
         break;
 
       case USER.REGISTER:

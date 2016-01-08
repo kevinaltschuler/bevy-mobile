@@ -151,8 +151,8 @@ var MainView = React.createClass({
 
       case routes.MAIN.LOGIN.name:
       default:
-          return <LoginNavigator { ...this.props } />;
-          break;
+        return <LoginNavigator { ...this.props } />;
+        break;
     }
   }
 });
