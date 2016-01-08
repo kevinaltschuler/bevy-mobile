@@ -30,34 +30,12 @@ var ThreadItem = React.createClass({
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
     thread: React.PropTypes.object,
-    user: React.PropTypes.object,
-    active: React.PropTypes.bool // is this thread being displayed currently
-  },
-
-  getDefaultProps() {
-    return {
-      active: false
-    };
+    user: React.PropTypes.object
   },
 
   getInitialState() {
-    var thread = this.props.thread;
-    var threadInfo = this.getThreadInfo(thread);
     return {
-      threadName: threadInfo.threadName,
-      threadImage: threadInfo.threadImage
     };
-  },
-
-  componentWillReceiveProps(nextProps) {
-
-    var thread = nextProps.thread;
-    var threadInfo = this.getThreadInfo(thread);
-
-    this.setState({
-      threadName: threadInfo.threadName,
-      threadImage: threadInfo.threadImage
-    });
   },
 
   goToMessageView() {
@@ -66,20 +44,8 @@ var ThreadItem = React.createClass({
     this.props.chatNavigator.push(routes.CHAT.MESSAGEVIEW);
   },
 
-  getThreadInfo(thread) {
-    var user = this.props.user;
-    var thread = this.props.thread;
-
-    var threadName = ChatStore.getThreadName(thread._id);
-    var threadImage = ChatStore.getThreadImageURL(thread._id, 64, 64);
-    return {
-      threadName: threadName,
-      threadImage: threadImage
-    };
-  },
-
   _renderLatestMessageInfo() {
-    var latestMessage = ChatStore.getLatestMessage(this.props.thread._id);
+    var latestMessage = this.props.thread.latest;
     if(_.isEmpty(latestMessage)) return <View />;
 
     var posterName = latestMessage.author.displayName;
@@ -93,27 +59,18 @@ var ThreadItem = React.createClass({
   },
 
   render() {
-
-    var thread = this.props.thread;
-    //console.log(thread);
-
-    var threadName = this.state.threadName;
-    var threadImage = this.state.threadImage;
-
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.2)'
         onPress={ this.goToMessageView }
       >
-        <View style={[ styles.container, {
-          backgroundColor: '#fff'
-        }]} >
+        <View style={ styles.container } >
           <ThreadImage
-            thread={thread}
+            thread={ this.props.thread }
           />
           <View style={ styles.titleTextColumn }>
             <Text style={ styles.titleText }>
-              { threadName }
+              { ChatStore.getThreadName(this.props.thread._id) }
             </Text>
             { this._renderLatestMessageInfo() }
           </View>
@@ -126,23 +83,21 @@ var ThreadItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 7,
-    paddingRight: 7,
-    paddingTop: 5,
-    paddingBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    height: 60
+    height: 48,
+    backgroundColor: '#FFF'
   },
   titleImage: {
     width: 36,
     height: 36,
     backgroundColor: 'white',
     borderRadius: 18,
-    marginRight: 7,
+    marginRight: 8,
   },
   titleTextColumn: {
     flex: 1,
+    height: 48,
     flexDirection: 'column',
     justifyContent: 'center'
   },
