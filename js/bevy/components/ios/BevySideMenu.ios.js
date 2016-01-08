@@ -23,6 +23,7 @@ var routes = require('./../../../routes');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var _ = require('underscore');
 var BevyActions = require('./../../BevyActions');
+var BoardActions = require('./../../../board/BoardActions');
 var BoardItem = require('./BoardItem.ios.js');
 
 var BevySideMenu = React.createClass({
@@ -56,6 +57,7 @@ var BevySideMenu = React.createClass({
           key={'boardItem:' + key} 
           board={board} 
           closeSideMenu={this.closeSideMenu}
+          bevyNavigator={this.props.bevyNavigator}
         />
       );
     }
@@ -86,7 +88,7 @@ var BevySideMenu = React.createClass({
             underlayColor='rgba(255,255,255,.2)'
             style={styles.bevyCard}
             onPress={() => {
-              BevyActions.clearBoard();
+              BoardActions.clearBoard();
               this.props.closeSideMenu();
             }}
           >

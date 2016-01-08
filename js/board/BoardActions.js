@@ -8,10 +8,12 @@
 
 'use strict';
 
-var _ = require('underscore');
+// imports
+var _ = require('underscore')
 var Dispatcher = require('./../shared/dispatcher');
-var constants = require('./../constants');
+var BEVY = require('./../constants').BEVY;
 var BOARD = require('./../constants').BOARD;
+var getSlug = require('speakingurl');
 
 var BoardActions = {
   loadBoardView(board_id) {
@@ -88,17 +90,15 @@ var BoardActions = {
 
   switchBoard(board_id) {
     if(_.isEmpty(board_id)) return;
-
     Dispatcher.dispatch({
-      actionType: BOARD.SWITCH,
+      actionType: BOARD.SWITCH_BOARD,
       board_id: board_id
     });
   },
 
-  getBoard(board_id) {
+  clearBoard() {
     Dispatcher.dispatch({
-      actionType: BOARD.GET,
-      board_id: (board_id == undefined) ? '' : board_id
+      actionType: BOARD.CLEAR,
     });
   }
 };

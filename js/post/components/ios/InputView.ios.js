@@ -34,7 +34,6 @@ var PostActions = require('./../../../post/PostActions');
 
 var InputView = React.createClass({
   propTypes: {
-    selected: React.PropTypes.object,
     user: React.PropTypes.object
   },
 
@@ -112,20 +111,17 @@ var InputView = React.createClass({
 
   render() {
     var user = this.props.user;
+    var board = this.props.activeBoard;
     var containerStyle = {
       flex: 1,
       flexDirection: 'column',
       marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace,
+      backgroundColor: '#eee'
     };
-    if(this.props.selected) {
-      var bevyImageUrl = this.props.selected.image_url || constants.apiurl + '/img/logo_100.png';
-      var defaultBevies = ['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
-      if(_.contains(defaultBevies, this.props.selected._id)) {
-        bevyImageUrl = constants.apiurl + this.props.selected.image_url;
-      }
+    if(board) {
+      var boardImageUrl = board.image_url || constants.apiurl + '/img/logo_100.png';
     }
-    var bevyName = (this.props.selected) ? this.props.selected.name : '';
-    var tagName = (this.props.selected) ? this.props.tag.name : '';
+    var boardName = (this.props.activeBoard) ? this.props.activeBoard.name : '';
     return (
       <View style={ containerStyle }>
         <Navbar
@@ -170,10 +166,9 @@ var InputView = React.createClass({
                   this.state.title,
                   (_.isEmpty(this.state.postImageURI)) ? [] : [this.state.postImageURI],
                   this.props.user,
-                  this.props.selected,
+                  this.props.activeBoard,
                   null,
                   null,
-                  this.props.tag
                 );
                 this.refs.input.setNativeProps({ text: '' }); // clear text
                 this.refs.input.blur(); // unfocus text field
@@ -188,24 +183,19 @@ var InputView = React.createClass({
         />
         <View style={ styles.body }>
           <View style={ styles.bevyPicker }>
+            <Text style={ styles.sectionTitle }>Board</Text>
             <SettingsItem
-              icon={<Image source={{uri: bevyImageUrl}} style={{borderRadius: 15, width: 30, height: 30}}/>}
+              icon={<Image source={{uri: boardImageUrl}} style={{borderRadius: 15, width: 30, height: 30}}/>}
+              title={boardName }
               onPress={() => {
-                this.props.newPostNavigator.push(routes.NEWPOST.BEVYPICKER);
+                
               }}
-              title={'Posting to: ' +  bevyName }
-            />
-            <SettingsItem
-              icon={<View style={{backgroundColor: this.props.tag.color, borderRadius: 15, width: 30, height: 30}}/>}
-              onPress={() => {
-                this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
-              }}
-              title={'Tag: ' + tagName}
             />
           </View>
+          <Text style={ styles.sectionTitle }>Post</Text>
           <View style={ styles.input }>
             <Image
-              style={ styles.inputProfileImage }
+              style={styles.inputProfileImage}
               source={{ uri: user.image_url }}
             />
             <TextInput
@@ -298,7 +288,8 @@ var InputView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#eee'
   },
   navButtonLeft: {
     flex: 1,
@@ -332,10 +323,10 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   bevyPicker: {
-    backgroundColor: '#fff',
     flexDirection: 'column',
-    height: 96,
-    padding: 0
+    padding: 0,
+    marginTop: 10,
+    marginBottom: 15
   },
   bevyPickerButton: {
     flexDirection: 'row',
@@ -369,6 +360,7 @@ var styles = StyleSheet.create({
     padding: 10,
     flex: 1,
     marginBottom: 48,
+    marginTop: 0,
     backgroundColor: '#fff'
   },
   inputProfileImage: {
@@ -379,7 +371,7 @@ var styles = StyleSheet.create({
   },
   textInput: {
     flex: 1,
-    fontSize: 15
+    fontSize: 15,
   },
   contentBar: {
     backgroundColor: '#fff',
@@ -430,7 +422,13 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     fontSize: 17,
     paddingLeft: 15
-  }
+  },
+  sectionTitle: {
+    color: '#888',
+    fontSize: 15,
+    marginLeft: 10,
+    marginBottom: 5
+  },
 });
 
 module.exports = InputView;

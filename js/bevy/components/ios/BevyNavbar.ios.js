@@ -28,7 +28,8 @@ var BevyNavbar = React.createClass({
     center: React.PropTypes.node,
     left: React.PropTypes.node,
     right: React.PropTypes.node,
-    bottomHeight: React.PropTypes.number
+    bottomHeight: React.PropTypes.number,
+    activeBoard: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -53,6 +54,12 @@ var BevyNavbar = React.createClass({
       left: <View />,
       right: <View />
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      bottomHeight: nextProps.bottomHeight
+    })
   },
 
   getInitialState() {
@@ -97,6 +104,29 @@ var BevyNavbar = React.createClass({
     var publicPrivateIcon = (bevy.settings.privacy == 'Private')
       ?'android-lock'
       :'android-globe';
+    var bevyBottom = (_.isEmpty(this.props.activeBoard.name))
+    ? (<View style={styles.bevyBottom}>
+        <View style={styles.detailItem}>
+          <Icon name={publicPrivateIcon} size={18} color='#fff'/>
+          <Text style={styles.itemText}>
+            {bevy.settings.privacy}
+          </Text>
+        </View>
+        <View style={styles.detailItem}>
+          <Icon name='android-people' size={18} color='#fff'/>
+          <Text style={styles.itemText}>
+            {bevy.subCount} Subscribers
+          </Text>
+        </View>
+        <View style={styles.detailItem}>
+          <Icon name='android-person' size={18} color='#fff'/>
+          <Text style={styles.itemText}>
+            {bevy.admins.length} Admins
+          </Text>
+        </View>
+      </View>)
+    : <View/>;
+
     if(this.props.activeBevy) {
       if((this.props.route == routes.BEVY.POSTLIST.name)) {
         return (
@@ -113,26 +143,7 @@ var BevyNavbar = React.createClass({
                   { this._renderRight() }
                 </View>
               </View>
-              <View style={styles.bevyBottom}>
-                <View style={styles.detailItem}>
-                  <Icon name={publicPrivateIcon} size={18} color='#fff'/>
-                  <Text style={styles.itemText}>
-                    {bevy.settings.privacy}
-                  </Text>
-                </View>
-                <View style={styles.detailItem}>
-                  <Icon name='android-people' size={18} color='#fff'/>
-                  <Text style={styles.itemText}>
-                    {bevy.subCount} Subscribers
-                  </Text>
-                </View>
-                <View style={styles.detailItem}>
-                  <Icon name='android-person' size={18} color='#fff'/>
-                  <Text style={styles.itemText}>
-                    {bevy.admins.length} Admins
-                  </Text>
-                </View>
-              </View>
+              {bevyBottom}
             </View>
           </Image>
         );
