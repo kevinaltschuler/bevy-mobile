@@ -12,7 +12,6 @@ var {
   StyleSheet,
   Text,
   View,
-  SegmentedControlIOS,
   ScrollView,
   ListView,
   TextInput,
@@ -267,15 +266,42 @@ var MessageView = React.createClass({
   },
 
   scrollToBottom() {
-    var scrollProperties = this.refs.ListView.scrollProperties;
+    var scrollProperties = this.MessageList.scrollProperties;
     var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
     requestAnimationFrame(() => {
-      this.refs.ListView.getScrollResponder().scrollTo(scrollOffset);
+      //this.MessageList.getScrollResponder().scrollTo(scrollOffset);
     });
   },
 
-  render() {
+  _renderMessageRow(message, sectionID, rowID, highlightRow) {
+    var hidePic = false;
+    var showName = true;
+    var rowID = parseInt(rowID);
+    if(rowID < (this.state.dataSource._dataBlob.s1.length - 1)) {
+      hidePic = true;
+      if(this.state.dataSource._dataBlob.s1[rowID + 1].author._id
+      != message.author._id) {
+        hidePic = false;
+      }
+    }
+    if(rowID > 0) {
+      if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id
+      == message.author._id) {
+        showName = false;
+      }
+    }
+    return (
+      <MessageItem
+        key={ message._id }
+        message={ message }
+        user={ this.props.user }
+        hidePic={ hidePic }
+        showName={ showName }
+      />
+    )
+  },
 
+  render() {
     return (
       <View
         style={styles.container}
@@ -320,8 +346,8 @@ var MessageView = React.createClass({
           </View>
         </View>
         <ListView
-          ref={'ListView'}
-          style={ styles.scrollContainer }
+          ref={(ref) => { this.MessageList = ref; }}
+          style={ styles.messageList }
           onScroll={ this.handleScroll }
           onResponderGrant={ this.handleResponderGrant }
           onResponderRelease={ this.handleResponderRelease }
@@ -330,33 +356,7 @@ var MessageView = React.createClass({
           dataSource={ this.state.dataSource }
           showsVerticalScrollIndicator={true}
           onEndReached={ this.onEndReached }
-          renderRow={ (message, sectionID, rowID, highlightRow) => {
-            var hidePic = false;
-            var showName = true;
-            var rowID = parseInt(rowID);
-            if(rowID < (this.state.dataSource._dataBlob.s1.length - 1)) {
-              hidePic = true;
-              if(this.state.dataSource._dataBlob.s1[rowID + 1].author._id
-              != message.author._id) {
-                hidePic = false;
-              }
-            }
-            if(rowID > 0) {
-              if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id
-              == message.author._id) {
-                showName = false;
-              }
-            }
-            return (
-              <MessageItem
-                key={ message._id }
-                message={ message }
-                user={ this.props.user }
-                hidePic={ hidePic }
-                showName={ showName }
-              />
-            )
-          }}
+          renderRow={ this._renderMessageRow }
           renderHeader={ this.renderHeader }
           renderFooter={() => {
             return <View style={{ height: 20 }}/>;
@@ -400,7 +400,9 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    backgroundColor: '#EEE',
+    paddingBottom: 48
   },
   topBarContainer: {
     flexDirection: 'column',
@@ -427,7 +429,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  scrollContainer: {
+  messageList: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#fff',

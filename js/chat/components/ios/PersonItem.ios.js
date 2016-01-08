@@ -15,7 +15,9 @@ var {
   TouchableHighlight
 } = React;
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var PersonItem = React.createClass({
   propTypes: {
@@ -23,6 +25,10 @@ var PersonItem = React.createClass({
   },
 
   render() {
+    var userImageURL = (_.isEmpty(this.props.user.image))
+      ? constants.siteurl + '/img/user-profile-icon.png'
+      : resizeImage(this.props.user.image, 64, 64).url;
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
@@ -31,7 +37,7 @@ var PersonItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: this.props.user.image_url }}
+            source={{ uri: userImageURL }}
           />
           <Text style={ styles.name }>
             { this.props.user.displayName }
@@ -49,7 +55,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 16
   },
   image: {
     width: 36,
@@ -60,7 +66,8 @@ var styles = StyleSheet.create({
   name: {
     flex: 1,
     color: '#000',
-    textAlign: 'left'
+    textAlign: 'left',
+    fontSize: 17
   }
 });
 
