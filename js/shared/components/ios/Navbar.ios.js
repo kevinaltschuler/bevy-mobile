@@ -40,8 +40,8 @@ var Navbar = React.createClass({
         backgroundColor: '#eee'
       },
       styleBottom: {
-        backgroundColor: '#fff',
-        height: 40,
+        backgroundColor: '#2CB673',
+        height: 50,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

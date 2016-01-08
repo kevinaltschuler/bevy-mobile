@@ -36,6 +36,11 @@ var UserStore = require('./../../../user/UserStore');
 
 var BEVY = constants.BEVY;
 
+var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
+var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
+var NavBar = require('./../../../shared/components/ios/Navbar.ios.js');
+var SearchBar = require('./../../../shared/components/ios/SearchBar.ios.js');
+
 var SearchView = React.createClass({
   propTypes: {
     searchRoute: React.PropTypes.object,
@@ -148,54 +153,9 @@ var SearchView = React.createClass({
       });
     }*/
   },
-  _renderSearchUsers() {
-    if(this.state.searching) {
-      return (
-        <View style={ styles.progressContainer }>
-          <Spinner
-            isVisible={true}
-            size={40}
-            type={'Arc'}
-            color={'#2cb673'}
-          />
-        </View>
-      );
-    } else if(!this.state.searching && _.isEmpty(this.state.searchUsers)) {
-      return (
-        <View style={ styles.progressContainer }>
-          <Text style={ styles.noneFoundText }>
-            No Users Found
-          </Text>
-        </View>
-      );
-    } else return (
-      <ListView
-        style={ styles.userList }
-        dataSource={ this.state.userDataSource }
-        scrollRenderAheadDistance={ 300 }
-        removeClippedSubviews={ true }
-        initialListSize={ 10 }
-        pageSize={ 10 }
-        renderRow={(user) => {
-          return (
-            <UserSearchItem
-              key={ 'searchuser:' + user._id }
-              searchUser={ user }
-              onSelect={ this.onSearchUserSelect }
-              selected={
-                _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
-              }
-            />
-          );
-        }}
-      />
-    );
-  },
 
   _renderSearchBevies() {
     var bevies = (this.state.bevies)
-
-
     var bevyList = [];
 
     for(var key in bevies) {
@@ -216,8 +176,7 @@ var SearchView = React.createClass({
       <ScrollView
         contentContainerStyle={ styles.bevyList }
         automaticallyAdjustContentInsets={true}
-        showsVerticalScrollIndicator={true}
-        style={{flex: 1}}
+        showsVerticalScrollIndicator={true}       
       >
         { bevyList }
       </ScrollView>
@@ -232,15 +191,21 @@ var SearchView = React.createClass({
         </View>
         );
     else
-      return(
-        <SearchUser>
-        </SearchUser>
-        );
+      return(<SearchUser></SearchUser>);
   },
 
   render() {
     return (
       <View style={styles.container}>
+        <NavBar
+         center={<Text style={{color: '#FFF', fontSize: 18}}>Search</Text>}
+         style ={{backgroundColor: '#2CB673'}}
+        >
+        </NavBar>
+        {/**
+        <SearchBar></SearchBar>
+        **/}
+
         <View style={styles.tabBar}>
           <TouchableHighlight
             onPress = {() =>{
@@ -272,8 +237,9 @@ var styles = StyleSheet.create({
   container: {
     flex:1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
-    paddingTop: 70
+    paddingTop: 0,
+    backgroundColor: '#EEE',
+
   },
   tabBar: {
     width: constants.width,
@@ -281,17 +247,18 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#EEE',
+    backgroundColor: '#FFF',
     borderBottomWidth: 1
   },
   searchTab: {
     flex: 1,
-    height: 50,
+    height: 40,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
   },
   searchTabText: {
-    color: '#AAA'
+    color: '#EEE'
   },
   searchTabTextActive: {
     color: '#2CB673'
@@ -306,7 +273,6 @@ var styles = StyleSheet.create({
   bevyRow: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
     height: 48,
     justifyContent: 'space-between',
     paddingRight: 10,
@@ -345,11 +311,12 @@ var styles = StyleSheet.create({
     flex: 2
   },
   bevyList: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     width: constants.width,
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    marginBottom: 10
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginTop: -10
   }
 });
 
