@@ -24,6 +24,7 @@ var NotificationActions = require('./../../../notification/NotificationActions')
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var timeAgo = require('./../../../shared/helpers/timeAgo');
 
 var NotificationItem = React.createClass({
   propTypes: {
@@ -55,13 +56,20 @@ var NotificationItem = React.createClass({
       ? { backgroundColor: '#EDFAF4' }
       : {}
 
+    if(_.isEmpty(data.author_image)) {
+      data.author_image = {
+        path: constants.siteurl + '/img/user-profile-icon.png',
+        foreign: true
+      };
+    }
+
     var body;
     switch(event) {
       case 'post:create':
         var author_name = data.author_name;
         var author_image = data.author_image;
-        var bevy_id = data.bevy_id;
-        var bevy_name = data.bevy_name;
+        var board_id = data.board_id;
+        var board_name = data.board_name;
         var post_title = data.post_title;
         var post_id = data.post_id;
         var post_created = data.post_created;
@@ -81,9 +89,13 @@ var NotificationItem = React.createClass({
                 <View style={styles.rightRow}>
                   <View style={styles.titleTextColumn}>
                     <Text style={styles.titleText}>
-                      Post to { bevy_name } by { author_name }
+                      <Text style={{ fontWeight: 'bold' }}>{ author_name }</Text>
+                      &nbsp;posted to&nbsp;
+                      <Text style={{ fontWeight: 'bold' }}>{ board_name }</Text>
+                      &nbsp;-&nbsp;
+                      { timeAgo(Date.parse(post_created)) }
                     </Text>
-                    <Text style={styles.subTitleText}>
+                    <Text style={{  }}>
                       { post_title }
                     </Text>
                   </View>
@@ -98,9 +110,9 @@ var NotificationItem = React.createClass({
         var author_name = data.author_name;
         var author_image = data.author_image;
         var post_title = data.post_title;
-        var bevy_name = data.bevy_name;
+        var board_name = data.board_name;
         var post_id = data.post_id;
-        var bevy_id = data.bevy_id;
+        var comment_created = data.comment_created;
 
         body = (
           <View style={ styles.notificationBody }>
@@ -117,10 +129,59 @@ var NotificationItem = React.createClass({
                 <View style={styles.rightRow}>
                   <View style={styles.titleTextColumn}>
                     <Text style={styles.titleText}>
-                      { author_name } replied to your post { post_title }
+                      <Text style={{ fontWeight: 'bold' }}>
+                        { author_name }
+                      </Text>
+                      &nbsp;replied to your post&nbsp;
+                      <Text style={{ fontStyle: 'italic' }}>
+                        { post_title }
+                      </Text>
                     </Text>
-                    <Text style={styles.subTitleText}>
-                      In { bevy_name }
+                    <Text>
+                      In&nbsp;
+                      <Text style={{ fontWeight: 'bold' }}>
+                        { board_name }
+                      </Text>
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableHighlight>
+          </View>
+        );
+        break;
+
+      case 'comment:reply':
+        var author_name = data.author_name;
+        var author_image = data.author_image;
+        var parent_comment_body = data.parent_comment_body;
+        var board_name = data.board_name;
+        var comment_created = data.comment_created;
+
+        body = (
+          <View style={ styles.notificationBody }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,.1)'
+              style={ styles.left }
+              onPress={ this.goToPost }
+            >
+              <View style={ styles.row }>
+                <Image
+                  style={ styles.titleImage }
+                  source={{ uri: resizeImage(author_image, 64, 64).url }}
+                />
+                <View style={styles.rightRow}>
+                  <View style={styles.titleTextColumn}>
+                    <Text style={styles.titleText}>
+                      { author_name }
+                      &nbsp;replied to your comment&nbsp;
+                      { parent_comment_body }
+                    </Text>
+                    <Text>
+                      In&nbsp;
+                      <Text style={{ fontWeight: 'bold' }}>
+                        { board_name }
+                      </Text>
                     </Text>
                   </View>
                 </View>
