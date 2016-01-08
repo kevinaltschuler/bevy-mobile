@@ -292,13 +292,6 @@ var CreateEventView = React.createClass({
               }}
               title={'Posting to: ' +  bevyName }
             />
-            <SettingsItem
-              icon={<View style={{backgroundColor: this.props.tag.color, borderRadius: 15, width: 30, height: 30}}/>}
-              onPress={() => {
-                this.props.newPostNavigator.push(routes.NEWPOST.TAGPICKER);
-              }}
-              title={'Tag: ' + tagName}
-            />
           </View>
           <ScrollView style={ styles.input }>
             { this._renderPostImage() }

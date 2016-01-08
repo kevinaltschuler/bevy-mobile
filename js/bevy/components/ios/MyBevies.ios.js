@@ -166,7 +166,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 0,
     overflow: 'visible',
-    backgroundColor: '#2CB673'
+    backgroundColor: '#2CB673',
   },
   topBar: {
     height: 48,
@@ -192,18 +192,20 @@ var styles = StyleSheet.create({
     width: constants.width,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
+    paddingTop: 10,
   },
   newBevyCard: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: constants.width / 1.3,
+    width: constants.width * .88,
     height: 160,
     borderColor: '#aaa',
     borderWidth: 3,
     borderRadius: 5,
     overflow: 'hidden',
-    marginVertical: 10
+    marginTop: 10,
+    marginBottom: 70
   }
 });
 

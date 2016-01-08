@@ -181,7 +181,7 @@ var InputView = React.createClass({
             </TouchableHighlight>
           }
         />
-        <View style={ styles.body }>
+        <ScrollView style={ styles.body } contentContainerStyle={{flex: 1, marginBottom: 50}}>
           <View style={ styles.bevyPicker }>
             <Text style={ styles.sectionTitle }>Board</Text>
             <SettingsItem
@@ -211,9 +211,10 @@ var InputView = React.createClass({
             />
           </View>
           <View style={ styles.image }>
+            <Text style={ styles.sectionTitle }>Images</Text>
             { this._renderPostImage() }
           </View>
-        </View>
+        </ScrollView>
         <View style={ styles.contentBar }>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
@@ -224,8 +225,8 @@ var InputView = React.createClass({
                   returnIsVertical: true
                 }, (didCancel, response) => {
                   if (!didCancel) {
-                    console.log(response);
-                    FileActions.upload(response);
+                    console.log(response.uri);
+                    //FileActions.upload(response);
                   } else {
                     console.log('Cancel');
                   }
@@ -250,7 +251,7 @@ var InputView = React.createClass({
                 }, (didCancel, response) => {
                   if (!didCancel) {
                     console.log(response);
-                    FileActions.upload(response);
+                    FileActions.upload(response.uri);
                   } else {
                     console.log('Cancel');
                   }
@@ -265,7 +266,7 @@ var InputView = React.createClass({
                 style={ styles.contentBarIcon }
               />
             </TouchableHighlight>
-            <TouchableHighlight
+            {/*<TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
                 this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
@@ -278,7 +279,7 @@ var InputView = React.createClass({
                 color='rgba(0,0,0,.3)'
                 style={ styles.contentBarIcon }
               />
-            </TouchableHighlight>
+            </TouchableHighlight>*/}
           </View>
       </View>
     );
@@ -359,7 +360,7 @@ var styles = StyleSheet.create({
     alignItems: 'flex-start',
     padding: 10,
     flex: 1,
-    marginBottom: 48,
+    marginBottom: 20,
     marginTop: 0,
     backgroundColor: '#fff'
   },
@@ -370,7 +371,7 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   textInput: {
-    flex: 1,
+    flex: 2,
     fontSize: 15,
   },
   contentBar: {
