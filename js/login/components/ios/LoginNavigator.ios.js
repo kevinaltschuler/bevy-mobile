@@ -18,7 +18,6 @@ var BlurView = require('react-native-blur').BlurView;
 var LoginView = require('./LoginView.ios.js');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotView = require('./ForgotView.ios.js');
-var GoogleWebSignIn = require('./GoogleWebSignIn.ios.js');
 
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -66,15 +65,6 @@ var LoginNavigator = React.createClass({
           close={this.props.close}
           loginNavigator={ navigator }
         />;
-        break;
-      case 'google':
-        return (
-          <GoogleWebSignIn
-            loginNavigator={ navigator }
-            { ...this.props }
-            close={ this.props.close }
-          />
-        );
         break;
       case 'login':
       default:
