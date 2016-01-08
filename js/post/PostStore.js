@@ -94,21 +94,9 @@ _.extend(PostStore, {
         var title = payload.title;
         var images = payload.images;
         var author = payload.author;
-        var bevy = payload.bevy;
+        var board = payload.board;
         var type = payload.type;
         var event = payload.event;
-        var tag = payload.tag;
-
-        var posts_expire_in;
-        if(bevy.settings.posts_expire_in && bevy.settings.posts_expire_in > 0) {
-          // if the bevy has a posts_expire_in setting, then apply it
-          posts_expire_in = bevy.settings.posts_expire_in // in days
-          posts_expire_in *= (1000 * 60 * 60 * 24); // convert to seconds
-          posts_expire_in += Date.now(); // add now
-        } else {
-          // by default, dont expire
-          posts_expire_in = new Date('2035', '1', '1');
-        }
 
         // create new backbone model
         var newPost = this.posts.add({
@@ -116,16 +104,14 @@ _.extend(PostStore, {
           comments: [],
           images: images,
           author: author._id,
-          bevy: bevy._id,
+          board: board._id,
           created: Date.now(),
-          expires: posts_expire_in,
           type: type,
           event: event,
-          tag: tag
         });
 
         // explicitly set url for safety
-        newPost.url = constants.apiurl + '/bevies/' + bevy._id + '/posts';
+        newPost.url = constants.apiurl + '/posts';
 
         // save to server
         newPost.save(null, {
@@ -135,7 +121,7 @@ _.extend(PostStore, {
             newPost.set('images', post.get('images'));
             newPost.set('links', post.get('links'));
             newPost.set('author', author);
-            newPost.set('bevy', bevy);
+            newPost.set('board', board);
             newPost.set('type', type);
             newPost.set('event', event);
             newPost.set('commentCount', 0);

@@ -18,6 +18,7 @@ var Icon = require('react-native-vector-icons/Ionicons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var NewPostImageItem = require('./NewPostImageItem.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -41,8 +42,8 @@ var InputView = React.createClass({
     return {
       keyboardSpace: 0,
       title: '',
-      postImageURI: '',
-      placeholderText: 'Drop a Line'
+      placeholderText: 'Drop a Line',
+      images: [],
     };
   },
 
@@ -50,14 +51,8 @@ var InputView = React.createClass({
     DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShowed);
     DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHid);
 
-    // file upload events
-    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
-      console.log('caught upload', filename)
-      this.setState({
-        postImageURI: filename,
-        placeholderText: 'Say Something About This Image'
-      });
-    });
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
 
   _onKeyboardShowed(ev) {
@@ -74,7 +69,23 @@ var InputView = React.createClass({
   },
 
   componentWillUnmount() {
-    FileStore.off(FILE.UPLOAD_COMPLETE);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+  },
+
+  onUploadComplete(file) {
+    console.log(file);
+    var images = this.state.images;
+    console.log(images);
+    images.push(file);
+    console.log(images);
+    this.setState({
+      images: images
+    });
+  },
+
+  onUploadError(error) {
+    console.log(error);
   },
 
   uploadImage() {
@@ -95,17 +106,42 @@ var InputView = React.createClass({
     });
   },
 
-  _renderPostImage() {
-    if(_.isEmpty(this.state.postImageURI)) return <View />;
+  _renderImages() {
+    if(_.isEmpty(this.state.images)) {
+      return (
+        <View />
+      );
+    }
+
+    var images = [];
+    for(var key in this.state.images) {
+      var image = this.state.images[key];
+      images.push(
+        <NewPostImageItem
+          key={ 'inputimage:' + image.filename }
+          image={ image }
+          onRemove={ this.onImageItemRemove }
+        />
+      );
+    }
     return (
-      <Image
-        source={{ uri: this.state.postImageURI }}
-        style={{
-          flex: 1,
-          width: window.width,
-          height: 300
-        }}
-      />
+      <View style={{
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+        marginBottom: 6
+      }}>
+        <Text style={ styles.sectionTitle }>Images</Text>
+        <ScrollView
+          horizontal={ true }
+          showHorizontalScrollIndicator={ true }
+          contentContainerStyle={{
+            flexDirection: 'row',
+            alignItems: 'center'
+          }}
+        >
+          { images }
+        </ScrollView>
+      </View>
     );
   },
 
@@ -164,7 +200,7 @@ var InputView = React.createClass({
                 if(this.state.title.length <= 0) return; // dont post if text is empty
                 PostActions.create( // send action
                   this.state.title,
-                  (_.isEmpty(this.state.postImageURI)) ? [] : [this.state.postImageURI],
+                  (_.isEmpty(this.state.images)) ? [] : this.state.images,
                   this.props.user,
                   this.props.activeBoard,
                   null,
@@ -181,16 +217,15 @@ var InputView = React.createClass({
             </TouchableHighlight>
           }
         />
-        <View style={ styles.body }>
+        <ScrollView style={ styles.body } contentContainerStyle={{flex: 1, marginBottom: 50}}>
           <View style={ styles.bevyPicker }>
             <Text style={ styles.sectionTitle }>Board</Text>
-            <SettingsItem
-              icon={<Image source={{uri: boardImageUrl}} style={{borderRadius: 15, width: 30, height: 30}}/>}
-              title={boardName }
-              onPress={() => {
-                
-              }}
-            />
+            <View style={styles.bevyNameContainer}>
+              <Image source={{uri: boardImageUrl}} style={{borderRadius: 15, width: 30, height: 30}}/>
+              <Text style={styles.bevyTitle}>
+                {boardName}
+              </Text>
+            </View>
           </View>
           <Text style={ styles.sectionTitle }>Post</Text>
           <View style={ styles.input }>
@@ -211,9 +246,9 @@ var InputView = React.createClass({
             />
           </View>
           <View style={ styles.image }>
-            { this._renderPostImage() }
+            { this._renderImages() }
           </View>
-        </View>
+        </ScrollView>
         <View style={ styles.contentBar }>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
@@ -224,8 +259,7 @@ var InputView = React.createClass({
                   returnIsVertical: true
                 }, (didCancel, response) => {
                   if (!didCancel) {
-                    console.log(response);
-                    FileActions.upload(response);
+                    FileActions.upload(response.uri);
                   } else {
                     console.log('Cancel');
                   }
@@ -250,7 +284,7 @@ var InputView = React.createClass({
                 }, (didCancel, response) => {
                   if (!didCancel) {
                     console.log(response);
-                    FileActions.upload(response);
+                    FileActions.upload(response.uri);
                   } else {
                     console.log('Cancel');
                   }
@@ -265,7 +299,7 @@ var InputView = React.createClass({
                 style={ styles.contentBarIcon }
               />
             </TouchableHighlight>
-            <TouchableHighlight
+            {/*<TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
                 this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
@@ -278,7 +312,7 @@ var InputView = React.createClass({
                 color='rgba(0,0,0,.3)'
                 style={ styles.contentBarIcon }
               />
-            </TouchableHighlight>
+            </TouchableHighlight>*/}
           </View>
       </View>
     );
@@ -343,6 +377,20 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     flex: 1
   },
+  bevyNameContainer: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    height: 48,
+    alignItems: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  bevyTitle: {
+    flex: 1,
+    fontSize: 17,
+    color: '#222',
+    marginLeft: 10
+  },
   toBevyPicker: {
     flex: 1,
     backgroundColor: '#fff',
@@ -359,7 +407,7 @@ var styles = StyleSheet.create({
     alignItems: 'flex-start',
     padding: 10,
     flex: 1,
-    marginBottom: 48,
+    marginBottom: 20,
     marginTop: 0,
     backgroundColor: '#fff'
   },
@@ -370,7 +418,7 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   textInput: {
-    flex: 1,
+    flex: 2,
     fontSize: 15,
   },
   contentBar: {

@@ -40,7 +40,7 @@ var PostActions = {
 		  title: (title == undefined) ? 'untitled' : title,
 		  images: (images == undefined) ? null : images,
 		  author: (author == undefined) ? null : author, // grab the current, logged in user?
-		  board: (bevy == undefined) ? null : bevy, // grab the current, active bevy
+		  board: (board == undefined) ? null : board, // grab the current, active bevy
 		  type: (type == undefined) ? 'default' : type,
 		  event: (event == undefined) ? null : event,
 		});
