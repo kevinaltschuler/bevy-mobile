@@ -1,3 +1,10 @@
+/**
+ * CommentView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -39,15 +46,36 @@ var CommentView = React.createClass({
 
   getInitialState() {
     var post = PostStore.getPost(this.props.postID);
-    console.log(post);
+    if(_.isEmpty(post)) {
+      this.setState({
+        loading: true
+      });
+      fetch(constants.apiurl + '/posts/' + this.props.postID)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          post: res,
+          comments: this.nestComments(post.comments),
+          loading: false
+        });
+      });
+    }
     var comments = this.nestComments(post.comments);
     return {
       post: post,
       comments: comments,
       replyToComment: {},
       replyText: '',
-      keyboardSpace: 0
+      keyboardSpace: 0,
+      loading: false
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      post: nextProps.post,
+      comments: this.nestComments(nextProps.post.comments)
+    });
   },
 
   _onKeyboardShowed(ev) {
@@ -66,11 +94,6 @@ var CommentView = React.createClass({
   componentDidMount() {
     DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShowed);
     DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHid);
-  },
-
-  componentWillUnmount() {
-    //DeviceEventEmitter.removeListener('keyboardDidShow', this._onKeyboardShowed);
-    //DeviceEventEmitter.removeListener('keyboardDidHide', this._onKeyboardHid);
   },
 
   onReply(comment) {
@@ -208,10 +231,11 @@ var CommentView = React.createClass({
 
     return (
       <View
-        style={{ position: 'absolute',
-                  width: constants.width,
-                  bottom: this.state.keyboardSpace
-              }}
+        style={{
+          position: 'absolute',
+          width: constants.width,
+          bottom: this.state.keyboardSpace
+        }}
       >
         { replyInfo }
         <View style={ styles.replyBar }>
@@ -280,6 +304,13 @@ var CommentView = React.createClass({
         </ScrollView>
       </View>
     );
+    if(this.state.loading) {
+      content = (
+        <View>
+          <Text>Loading</Text>
+        </View>
+      );
+    }
     return (
       <View style={ styles.container }>
         <Navbar
