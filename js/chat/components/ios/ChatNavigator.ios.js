@@ -1,6 +1,8 @@
 /**
- * PostView.js
- * kevin made this
+ * ChatNavigator.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
  */
 'use strict';
 
@@ -16,18 +18,15 @@ var {
   TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
-var SideMenu = require('react-native-side-menu');
-var ChatView = require('./ChatView.ios.js');
 var ThreadSettingsView = require('./ThreadSettingsView.ios.js');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
-var BackButton = require('./../../../shared/components/ios/BackButton.ios.js');
+var MessageView = require('./MessageView.ios.js');
 var ThreadList = require('./ThreadList.ios.js');
-var ChatStore = require('./../../ChatStore');
 var NewThreadView = require('./NewThreadView.ios.js');
 var AddPeopleView = require('./AddPeopleView.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
+var ChatStore = require('./../../ChatStore');
 
 var ChatNavigator = React.createClass({
   propTypes: {
@@ -51,15 +50,14 @@ var ChatNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRoute={ routes.CHAT.LISTVIEW }
+        initialRoute={ routes.CHAT.THREADLIST }
         initialRouteStack={[
-          routes.CHAT.LISTVIEW
+          routes.CHAT.THREADLIST
         ]}
         renderScene={(route, navigator) => {
           var view;
           switch(route.name) {
-            case routes.CHAT.LISTVIEW.name:
-            default:
+            case routes.CHAT.THREADLIST.name:
               view = (
                 <ThreadList
                   { ...this.props }
@@ -67,19 +65,19 @@ var ChatNavigator = React.createClass({
                 />
               );
               break;
-            case routes.CHAT.CHATVIEW.name:
+            case routes.CHAT.MESSAGEVIEW.name:
               view = (
-                <ChatView
-                  {...this.props }
+                <MessageView
+                  { ...this.props }
                   chatNavigator={ navigator }
                 />
-              )
+              );
               break;
-            case routes.MAIN.THREADSETTINGS.name:
+            case routes.CHAT.THREADSETTINGS.name:
               view = (
                 <ThreadSettingsView
                   { ...this.props }
-                  mainNavigator={ navigator }
+                  chatNavigator={ navigator }
                 />
               );
               break;
@@ -87,144 +85,29 @@ var ChatNavigator = React.createClass({
               view = (
                 <NewThreadView
                   { ...this.props }
-                  mainNavigator={ navigator }
+                  chatNavigator={ navigator }
                 />
               );
               break;
             case routes.CHAT.ADDPEOPLE.name:
               view = (
-                <AddPeopleView 
+                <AddPeopleView
                   { ...this.props }
                   chatNavigator={ navigator }
                   ref={ref => this.addPeopleView = ref}
                 />
               );
               break;
-
-          }
-
-          var navbarText = 'Chat';
-          if(!_.isEmpty(this.props.activeThread)) {
-            if(!_.isEmpty(this.props.activeThread.bevy)) {
-              // bevy chat
-              navbarText = this.props.activeThread.bevy.name + "'s Chat";
-            } else {
-              // PM
-              navbarText = ChatStore.getThreadName(
-                this.props.activeThread._id
-              );
-            }
-          }
-          if(route.name == routes.CHAT.LISTVIEW.name) {
-            navbarText = 'Chat'
-          }
-          if(navbarText.length > 20) {
-            navbarText = navbarText.substr(0,20);
-            navbarText = navbarText.concat('...');
-          }
-
-          var center = <Text style={{color: '#999', fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>{navbarText}</Text>;
-
-          var backButton = (route.name == routes.CHAT.LISTVIEW.name)
-          ? <View />
-          : <TouchableOpacity
-              activeOpacity={ 0.5 }
-              onPress={() => {
-                navigator.pop();
-              }}
-              style={ styles.backButtonContainer }
-            >
-              <View style={ styles.backButton }>
-                <Icon
-                  name='ios-arrow-left'
-                  size={ 30 }
-                  color={ 'rgba(0,0,0,.3)' }
-                  style={ styles.backButtonIcon }
-                />
-              </View>
-            </TouchableOpacity>;
-
-          var infoButton = (route.name != routes.CHAT.CHATVIEW.name
-            || this.props.activeThread.type == 'bevy')
-          ? <View/>
-          : <TouchableOpacity
-              activeOpacity={.5}
-              onPress={() => {
-                navigator.push(routes.MAIN.THREADSETTINGS);
-              }}
-              style={{
-                marginRight: 10,
-                height: 39,
-                width: 39,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <Icon
-                name='ios-information'
-                size={30}
-                color="rgba(0,0,0,0.3)"
-              />
-            </TouchableOpacity>;
-
-          var newMessage = (
-            <TouchableOpacity
-              activeOpacity={.5}
-              onPress={() => {
-                navigator.push(routes.MAIN.NEWTHREAD);
-              }}
-              style={{
-                marginRight: 10,
-                height: 39,
-                width: 39,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              <Icon
-                name='ios-compose'
-                size={30}
-                color="rgba(0,0,0,0.3)"
-              />
-            </TouchableOpacity>
-          );
-
-          var finishedAdding = (
-            <TouchableOpacity
-              activeOpacity={.5}
-              onPress={() => {
-                this.addPeopleView.submit();
-              }}
-              style={{marginRight: 10, height: 39, width: 39, alignItems: 'center', justifyContent: 'center'}}
-            >
-              <Text style={{color: '#2cb673', fontSize: 16, fontWeight: 'bold'}}>
-                done
-              </Text>
-            </TouchableOpacity>
-          );
-
-          switch(route.name) {
-            case routes.CHAT.LISTVIEW.name:
-              var right = newMessage;
-              break;
-            case routes.CHAT.ADDPEOPLE.name:
-              var right = finishedAdding;
-              break;
             default:
-              var right = infoButton;
+              return (
+                <View>
+                  <Text>DEFAULT CHAT ROUTE</Text>
+                </View>
+              );
               break;
           }
-
           return (
             <View style={{ flex: 1, backgroundColor: '#eee'}}>
-              <Navbar
-                chatRoute={ route }
-                chatNavigator={ navigator }
-                left={ backButton }
-                center={ center }
-                right={ right }
-                { ...this.props }
-              />
               { view }
             </View>
           );

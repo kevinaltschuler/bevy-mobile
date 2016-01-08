@@ -36,6 +36,7 @@ var BevyCard = React.createClass({
   },
 
   render() {
+    var bevy = this.props.bevy;
     var bevyImageURL = (_.isEmpty(this.props.bevy.image))
       ? constants.siteurl + '/img/default_group_img.png'
       : resizeImage(this.props.bevy.image, 256, 256).url;
@@ -43,6 +44,12 @@ var BevyCard = React.createClass({
     var publicPrivateIcon = (this.props.bevy.settings.privacy == 'Private')
       ? 'android-lock'
       : 'android-globe';
+
+    var bevyName = bevy.name;
+
+    if(bevyName.length > 30) {
+      bevyName = bevyName.substring(0,30);
+    }
 
     return (
       <TouchableHighlight
@@ -53,9 +60,11 @@ var BevyCard = React.createClass({
         <View style={styles.bevyCard}>
           <Image style={ styles.bevyImage } source={{ uri: bevyImageURL }}/>
           <View style={ styles.bevyInfo }>
-            <Text style={ styles.bevyName }>
-              { this.props.bevy.name }
-            </Text>
+            <View style={styles.bevyName}>
+              <Text style={ styles.bevyNameText }>
+                { bevyName }
+              </Text>
+            </View>
             <View style={ styles.details}>
               <View style={styles.infoItem}>
                 <Text style={styles.infoText}>
@@ -84,31 +93,26 @@ var BevyCard = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    width: constants.width / 1.3,
+    width: constants.width,
+    paddingHorizontal: 20,
     height: 160,
     marginVertical: 10,
     marginHorizontal: 10,
-    shadowColor: 'rgba(0,0,0,.2)',
-    shadowOffset: {width: 0, height: 1.5},
-    shadowOpacity: 1,
-    shadowRadius: 0
   },
 
   bevyCard: {
     flexDirection: 'column',
-    width: constants.width / 1.3,
+    flex: 1,
     height: 160,
     backgroundColor: '#fff',
     borderRadius: 5,
     overflow: 'hidden'
   },
   bevyImage: {
-    width: constants.width / 1.3,
-    height: 110,
+    flex: 2
   },
   bevyInfo: {
     flex: 1,
-    width: constants.width / 1.3,
     height: 40,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -117,11 +121,19 @@ var styles = StyleSheet.create({
     flexDirection: 'row'
   },
   bevyName: {
+    overflow: 'hidden',
+    flex: 1,
+    height: 40,
+    justifyContent: 'center',
+    flexDirection: 'column',
+    flexWrap: 'nowrap'
+  },
+  bevyNameText: {
     color: '#555',
-    fontSize: 20
+    fontSize: 20,
   },
   details: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   infoItem: {
     flexDirection: 'row',
@@ -131,7 +143,7 @@ var styles = StyleSheet.create({
 
   infoText: {
     color: '#555',
-    fontSize: 18,
+    fontSize: 14,
     marginRight: 5
   }
 

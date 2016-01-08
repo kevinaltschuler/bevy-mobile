@@ -1,3 +1,10 @@
+/**
+ * UserStore.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var Backbone = require('backbone');
@@ -7,7 +14,9 @@ var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var USER = constants.USER;
 var BEVY = constants.BEVY;
+var BOARD = constants.BOARD;
 var APP = constants.APP;
+var CHAT = constants.CHAT;
 var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
 var GCM = require('./../shared/apis/GCM.android.js');
@@ -39,6 +48,14 @@ _.extend(UserStore, {
 
   handleDispatch(payload) {
     switch(payload.actionType) {
+      case APP.LOAD:
+        this.user.url = constants.apiurl + '/users/' + this.user.get('id');
+        this.user.fetch({
+          success: function(model, res, options) {
+            this.setUser(res);
+          }.bind(this)
+        });
+        break;
       case USER.LOAD_USER:
         var user = payload.user;
         if(_.isEmpty(user)) {
@@ -329,6 +346,54 @@ _.extend(UserStore, {
           if(this.loggedIn)
             this.userSearchResults.remove(this.user._id); // remove self from search results
           this.trigger(USER.SEARCH_COMPLETE);
+        });
+        break;
+
+      case BOARD.JOIN:
+        // add to users bevies array
+        var board_id = payload.board_id;
+
+        var boards = this.user.get('boards');
+        if(_.contains(boards, board_id)) break; // already joined
+
+        boards.push(board_id);
+        _.uniq(boards); // ensure that theres no dupes
+
+        this.user.url = constants.apiurl + '/users/' + this.user.id;
+
+        this.user.save({
+          boards: boards
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+            console.log(model);
+            this.trigger(USER.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
+      case BOARD.DESTROY:
+      case BOARD.LEAVE:
+        // remove from users bevies array
+        var board_id = payload.board_id;
+
+        var boards = this.user.get('boards');
+        boards = _.reject(boards, function($board_id) {
+          return $board_id == board_id;
+        });
+        _.uniq(boards); // ensure that theres no dupes
+
+        this.user.url = constants.apiurl + '/users/' + this.user.id;
+
+        this.user.save({
+          boards: boards
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+            console.log(model);
+            this.trigger(CHAT.CHANGE_ALL);
+            this.trigger(USER.CHANGE_ALL);
+          }.bind(this)
         });
         break;
     }

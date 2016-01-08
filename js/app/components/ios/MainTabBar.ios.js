@@ -1,7 +1,10 @@
 /**
- * tabBar.js
- * kevin made this
+ * MainTabBar.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
  */
+
 'use strict';
 
 var React = require('react-native');
@@ -115,7 +118,6 @@ var MainTabBar = React.createClass({
           tintColor='#2cb673'
           barTintColor='#FFF'
           translucent={ false }
-          style={{borderTopWidth: 1, borderTopColor: '#eee'}}
         >
           <Icon.TabBarItem
             title='Home'

@@ -1,7 +1,7 @@
 /**
  * NewThreadView.ios.js
  * @author kevin
- * @ey
+ * @flow
  */
 
 'use strict';
@@ -13,15 +13,17 @@ var {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var MessageInput = require('./MessageInput.ios.js');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js');
 var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -119,7 +121,7 @@ var NewThreadView = React.createClass({
     this.props.mainNavigator.replace(routes.CHAT.CHATVIEW);
   },
 
-  onBackButton() {
+  goBack() {
     if(!_.isEmpty(this.state.addedUsers)) {
       // if theres added users, use back button to pop them
       var addedUsers = this.state.addedUsers;
@@ -129,14 +131,7 @@ var NewThreadView = React.createClass({
       });
       return true;
     }
-
-    // nothing else to do, go back
-    this.props.mainNavigator.pop();
-    return true;
-  },
-
-  goBack() {
-    this.props.mainNavigator.pop();
+    this.props.chatNavigator.pop();
   },
 
   onSearchUserSelect(user) {
@@ -273,6 +268,39 @@ var NewThreadView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              New Chat
+            </Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.onSubmit }
+            >
+              <Icon
+                name='add'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+          </View>
+        </View>
         <View style={ styles.toBar }>
           <Text style={ styles.toText }>
             To:
@@ -304,24 +332,30 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EEE'
   },
-  navBar: {
-    height: 48,
-    width: constants.width,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFF',
-    borderBottomColor: '#DDD',
-    borderBottomWidth: 1
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
   },
-  backButton: {
+  topBar: {
     height: 48,
+    backgroundColor: '#2CB673',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
   },
   title: {
     flex: 1,
-    color: '#000'
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   toBar: {
     width: constants.width,

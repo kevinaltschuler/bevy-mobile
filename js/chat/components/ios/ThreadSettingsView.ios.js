@@ -1,6 +1,7 @@
 /**
- * ThreadSettingsView.android.js
+ * ThreadSettingsView.ios.js
  * @author albert
+ * @author kevin
  * @flow
  */
 
@@ -19,10 +20,11 @@ var {
   TouchableOpacity,
   TouchableHighlight
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadImage = require('./ThreadImage.ios.js');
 var PersonItem = require('./PersonItem.ios.js');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -33,7 +35,7 @@ var CHAT = constants.CHAT;
 
 var ThreadSettingsView = React.createClass({
   propTypes: {
-    mainNavigator: React.PropTypes.object,
+    chatNavigator: React.PropTypes.object,
     activeThread: React.PropTypes.object,
     user: React.PropTypes.object
   },
@@ -63,19 +65,19 @@ var ThreadSettingsView = React.createClass({
   },
 
   goBack() {
-    this.props.mainNavigator.pop();
+    this.props.chatNavigator.pop();
   },
 
   leaveConversation() {
     ChatActions.removeUser(this.props.activeThread._id, this.props.user._id);
     // go back to tab bar
-    this.props.mainNavigator.popToTop();
+    this.props.chatNavigator.popToTop();
   },
 
   deleteConversation() {
     ChatActions.deleteThread(this.props.activeThread._id);
     // go back to tab bar
-    this.props.mainNavigator.popToTop();
+    this.props.chatNavigator.popToTop();
   },
 
   _renderPeople() {
@@ -102,7 +104,7 @@ var ThreadSettingsView = React.createClass({
   },
 
   addPeople() {
-    this.props.mainNavigator.push(routes.CHAT.ADDPEOPLE);
+    this.props.chatNavigator.push(routes.CHAT.ADDPEOPLE);
   },
 
   _renderName() {
@@ -221,9 +223,41 @@ var ThreadSettingsView = React.createClass({
   },
 
   render() {
-
     return (
       <View style={ styles.container }>
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              Chat Settings
+            </Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goToSettings }
+            >
+              <Icon
+                name='save'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+          </View>
+        </View>
         <ScrollView style={ styles.contentContainer }>
           { this._renderName() }
           <Text style={ styles.sectionTitle }>
@@ -247,25 +281,30 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EEE'
   },
-  topBar: {
-    width: constants.width,
-    height: 48,
-    backgroundColor: '#FFF',
-    borderBottomColor: '#DDD',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
   },
-  backButton: {
+  topBar: {
     height: 48,
-    paddingHorizontal: 10,
+    backgroundColor: '#2CB673',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
-    color: '#000',
-    textAlign: 'left',
-    flex: 1
+    flex: 1,
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   contentContainer: {
     flex: 1

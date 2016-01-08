@@ -60,6 +60,12 @@ var ThreadItem = React.createClass({
     });
   },
 
+  goToMessageView() {
+    var thread_id = this.props.thread._id;
+    ChatActions.switchThread(thread_id);
+    this.props.chatNavigator.push(routes.CHAT.MESSAGEVIEW);
+  },
+
   getThreadInfo(thread) {
     var user = this.props.user;
     var thread = this.props.thread;
@@ -97,11 +103,7 @@ var ThreadItem = React.createClass({
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.2)'
-        onPress={() => {
-          var thread_id = this.props.thread._id;
-          ChatActions.switchThread(thread_id);
-          this.props.chatNavigator.push(routes.CHAT.CHATVIEW);
-        }}
+        onPress={ this.goToMessageView }
       >
         <View style={[ styles.container, {
           backgroundColor: '#fff'

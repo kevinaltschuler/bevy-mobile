@@ -1,14 +1,19 @@
 /**
- * MainView
- * made by kev doggity dizzle
+ * MainView.ios.js
+ * @author kevin
+ * @author albert
+ * @flow
  */
+
 'use strict';
+
 var React = require('react-native');
 var {
   StyleSheet,
   Text,
   View
 } = React;
+
 var MainTabBar = require('./MainTabBar.ios.js');
 var SearchBar = require('./../../../shared/components/ios/SearchBar.ios.js');
 var LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
@@ -16,7 +21,6 @@ var NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
 var CreateBevyView = require('./../../../bevy/components/ios/CreateBevyView.ios.js');
 var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
 var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
-var SwitchUserView = require('./../../../user/components/ios/SwitchUserView.ios.js');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
 var Loading = require('./../../../shared/components/ios/Loading.ios.js');
@@ -76,9 +80,7 @@ var MainView = React.createClass({
   },
 
   render() {
-
     switch(this.props.mainRoute.name) {
-
       case routes.MAIN.NEWPOST.name:
         return <NewPostView { ...this.props } />;
         break;
@@ -98,9 +100,9 @@ var MainView = React.createClass({
 
       case routes.MAIN.PROFILE.name:
         return (
-          <ProfileView 
-            profileUser={ this.props.mainRoute.profileUser } 
-            { ...this.props } 
+          <ProfileView
+            profileUser={ this.props.mainRoute.profileUser }
+            { ...this.props }
           />
         )
         break;
@@ -123,23 +125,13 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.PROFILE.SWITCH_USER.name:
-        return (
-          <SwitchUserView
-            user={this.props.mainRoute.profileUser }
-            linkedAccounts={UserStore.getLinkedAccounts()}
-            { ...this.props }
-           />
-        );
-        break;
-
       case routes.BEVY.POSTLIST.name:
         return (
           <BevyNavigator
             { ...this.props }
           />
         );
-        
+
       case routes.MAIN.TABBAR.name:
         return <MainTabBar { ...this.props } />
         break;
@@ -150,11 +142,7 @@ var MainView = React.createClass({
 
       case routes.MAIN.LOGIN.name:
         default:
-          return (
-            <LoginNavigator
-              { ...this.props }
-            />
-          )
+          return <LoginNavigator { ...this.props } />;
           break;
     }
   }

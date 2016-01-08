@@ -113,7 +113,8 @@ var change_all_events = [
   BEVY.CHANGE_ALL,
   NOTIFICATION.CHANGE_ALL,
   CHAT.CHANGE_ALL,
-  BOARD.CHANGE_ALL
+  BOARD.CHANGE_ALL,
+  USER.CHANGE_ALL
 ].join(' ');
 
 var BevyStore = require('./js/bevy/BevyStore');
@@ -227,6 +228,7 @@ var App = React.createClass({
   },
 
   getUserState() {
+    console.log('get user state', UserStore.getUser());
     return {
       user: UserStore.getUser(),
       loggedIn: UserStore.loggedIn
