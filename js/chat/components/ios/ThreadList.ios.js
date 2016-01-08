@@ -1,6 +1,8 @@
-/*
+/**
  * ThreadItem.ios.js
- * @author albert kevin
+ * @author albert
+ * @author kevin
+ * @flow
  */
 
 'use strict';
@@ -21,7 +23,6 @@ var constants = require('./../../../constants');
 var ChatStore = require('./../../../chat/ChatStore');
 
 var ThreadList = React.createClass({
-
   propTypes: {
     allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object,
@@ -77,7 +78,7 @@ var ThreadList = React.createClass({
         <ScrollView
           dataSource={ this.state.threads }
           style={ styles.list }
-          automaticallyAdjustContentInsets={false}
+          automaticallyAdjustContentInsets={ false }
         >
           { this._renderThreads() }
         </ScrollView>
