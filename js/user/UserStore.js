@@ -49,6 +49,7 @@ _.extend(UserStore, {
   handleDispatch(payload) {
     switch(payload.actionType) {
       case APP.LOAD:
+        if(!this.loggedIn) break;
         this.user.url = constants.apiurl + '/users/' + this.user.get('id');
         this.user.fetch({
           success: function(model, res, options) {
@@ -137,6 +138,7 @@ _.extend(UserStore, {
             var expires_in = res.expires_in;
             this.setTokens(access_token, refresh_token, expires_in);
             this.setUser(user);
+            this.trigger(USER.LOADED);
             this.trigger(USER.LOGIN_SUCCESS);
           })
           .catch(err => {
@@ -144,7 +146,7 @@ _.extend(UserStore, {
           });
         });
         // call this method when user clicks the 'Signin with google' button
-        GoogleSignIn.signIn();
+        //GoogleSignIn.signIn();
         break;
 
       case USER.LOGOUT:
