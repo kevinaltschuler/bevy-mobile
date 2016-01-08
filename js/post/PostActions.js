@@ -34,16 +34,15 @@ var PostActions = {
 	* @param  {string} author
 	* @param  {string} bevy
 	*/
-	create(title, images, author, bevy, type, event, tag) {
+	create(title, images, author, board, type, event) {
 		Dispatcher.dispatch({
 		  actionType: POST.CREATE,
 		  title: (title == undefined) ? 'untitled' : title,
 		  images: (images == undefined) ? null : images,
 		  author: (author == undefined) ? null : author, // grab the current, logged in user?
-		  bevy: (bevy == undefined) ? null : bevy, // grab the current, active bevy
+		  board: (bevy == undefined) ? null : bevy, // grab the current, active bevy
 		  type: (type == undefined) ? 'default' : type,
 		  event: (event == undefined) ? null : event,
-		  tag: (tag == undefined) ? null: tag
 		});
 	},
 

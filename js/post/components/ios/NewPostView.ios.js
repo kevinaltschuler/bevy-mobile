@@ -39,30 +39,18 @@ var PostStore = require('./../../../post/PostStore');
 
 var NewPostView = React.createClass({
   propTypes: {
-    activeBevy: React.PropTypes.object,
+    activeBoard: React.PropTypes.object,
     myBevies: React.PropTypes.array,
     user: React.PropTypes.object
   },
 
   getInitialState() {
-    var selected;
-    if(this.props.activeBevy._id != -1) {
-      // if not frontpage, select active bevy
-      selected = this.props.activeBevy;
-    } else {
-      // else, get the first non-frontpage bevy
-      selected = this.props.myBevies[1];
-    }
-    console.log(selected);
-    var tag = (_.isEmpty(selected)) ? {name: 'tags loading', color: '#fff'} : selected.tags[0];
 
     return {
-      selected: selected,
       datePicker: false,
       date: new Date(),
       time: new Date(),
       location: '',
-      tag: tag
     };
   },
 
@@ -72,20 +60,6 @@ var NewPostView = React.createClass({
 
   componentWillUnmount() {
     PostStore.off(POST.POST_CREATED, this.toNewPost);
-  },
-
-  componentWillReceiveProps(nextProps) {
-    var selected;
-    if(nextProps.activeBevy._id != -1) {
-      // if not frontpage, select active bevy
-      selected = nextProps.activeBevy;
-    } else {
-      // else, get the first non-frontpage bevy
-      selected = nextProps.myBevies[1];
-    }
-    this.setState({
-      selected: selected
-    });
   },
 
   toNewPost(post) {
@@ -104,40 +78,6 @@ var NewPostView = React.createClass({
         initialRoute={ routes.NEWPOST.INPUT }
         renderScene={(route, navigator) => {
           switch(route.name) {
-            case routes.NEWPOST.BEVYPICKER.name:
-              return (
-                <BevyPickerView
-                  newPostRoute={ route }
-                  newPostNavigator={ navigator }
-                  selected={ this.state.selected }
-                  onSwitchBevy={(bevy) => {
-                    navigator.pop();
-                    this.setState({
-                      selected: bevy,
-                      tag: bevy.tags[0]
-                    });
-                  }}
-                  { ...this.props }
-                />
-              );
-              break;
-            case routes.NEWPOST.TAGPICKER.name:
-              return (
-                <TagPickerView
-                  newPostRoute={ route }
-                  newPostNavigator={ navigator }
-                  tag={ this.state.tag }
-                  selected={ this.state.selected }
-                  onSelectTag={(tag) => {
-                    navigator.pop();
-                    this.setState({
-                      tag: tag
-                    });
-                  }}
-                  { ...this.props }
-                />
-              );
-              break;
             case routes.NEWPOST.DATEPICKER.name:
               return (
                 <DatePickerView
@@ -178,8 +118,7 @@ var NewPostView = React.createClass({
                 <InputView
                   newPostRoute={ route }
                   newPostNavigator={ navigator }
-                  selected={ this.state.selected }
-                  tag={ this.state.tag }
+                  activeBoard={ this.props.activeBoard }
                   { ...this.props }
                 />
               );
