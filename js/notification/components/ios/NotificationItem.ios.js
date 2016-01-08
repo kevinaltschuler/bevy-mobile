@@ -94,9 +94,6 @@ var NotificationItem = React.createClass({
                       &nbsp;-&nbsp;
                       { timeAgo(Date.parse(post_created)) }
                     </Text>
-                    <Text style={{  }}>
-                      { post_title }
-                    </Text>
                   </View>
                 </View>
               </View>
@@ -131,13 +128,8 @@ var NotificationItem = React.createClass({
                       <Text style={{ fontWeight: 'bold' }}>
                         { author_name }
                       </Text>
-                      &nbsp;replied to your post&nbsp;
-                      <Text style={{ fontStyle: 'italic' }}>
-                        { post_title }
-                      </Text>
-                    </Text>
-                    <Text>
-                      In&nbsp;
+                      &nbsp;replied to your post
+                      &nbsp;In&nbsp;
                       <Text style={{ fontWeight: 'bold' }}>
                         { board_name }
                       </Text>
@@ -173,11 +165,8 @@ var NotificationItem = React.createClass({
                   <View style={styles.titleTextColumn}>
                     <Text style={styles.titleText}>
                       { author_name }
-                      &nbsp;replied to your comment&nbsp;
-                      { parent_comment_body }
-                    </Text>
-                    <Text>
-                      In&nbsp;
+                      &nbsp;replied to your comment
+                      &nbsp;In&nbsp;
                       <Text style={{ fontWeight: 'bold' }}>
                         { board_name }
                       </Text>
@@ -237,13 +226,16 @@ var styles = StyleSheet.create({
   	justifyContent: 'space-between'
   },
   titleTextColumn: {
+    flex: 1,
+    flexWrap: 'wrap',
     flexDirection: 'column',
     justifyContent: 'center',
     height: 40,
     marginLeft: 10
   },
   titleText: {
-    color: '#282929'
+    color: '#282929',
+    flexWrap: 'wrap'
   },
   subTitleText: {
     fontSize: 10,
