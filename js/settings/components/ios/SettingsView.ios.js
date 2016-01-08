@@ -171,7 +171,7 @@ var SettingsView = React.createClass({
         }} />
         <ScrollView
           style={{ flex: 1, marginTop: -20 }}
-          contentInset={{ top: -20, left: 0, bottom: 0, right: 0 }}
+          automaticallyAdjustContentInsets={ false }
         >
           { this._renderUserHeader() }
 

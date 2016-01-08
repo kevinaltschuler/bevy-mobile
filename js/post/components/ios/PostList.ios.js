@@ -20,6 +20,7 @@ var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
+var BoardCard = require('./../../../bevy/components/ios/BoardCard.ios.js');
 //var TagModal = require('./TagModal.ios.js');
 
 var _ = require('underscore');
@@ -135,6 +136,10 @@ var PostList = React.createClass({
     ? <View/>
     : (
       <View style={styles.cardContainer}>
+        <BoardCard
+          board={this.props.activeBoard}
+          user={this.props.user}
+        />
         <NewPostCard
           user={ this.props.user }
           loggedIn={ this.props.loggedIn }
@@ -173,24 +178,6 @@ var PostList = React.createClass({
               </Text>
             </View>
           </TouchableHighlight>
-          <ListView
-            onRefresh={this.onRefresh}
-            ref={(ref) => {
-              this.ListView = ref;
-            }}
-            dataSource={ this.state.dataSource }
-            style={ styles.postContainer }
-            onScroll={(data) => {
-              this.props.onScroll(data.nativeEvent.contentOffset.y);
-            }}
-            scrollRenderAheadDistance={3}
-            renderHeader={() => {
-              return <View/>
-            }}
-            renderRow={(post) => {
-              return <View/>;
-            }}
-          />
         </View>
       );
     }
@@ -273,7 +260,6 @@ var styles = StyleSheet.create({
     height: constants.height - 300
   },
   cardContainer: {
-    height: 50,
     backgroundColor: '#eee',
     marginTop: 22,
     marginBottom: -10

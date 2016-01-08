@@ -71,7 +71,7 @@ var NotificationList = React.createClass({
       <View style={ styles.container }>
         { this._renderNoNotificationsText() }
         <ScrollView
-          contentInset={{ top: -20, left: 0, bottom: 0, right: 0 }}
+          automaticallyAdjustContentInsets={ false }
         >
           { this._renderNotes() }
         </ScrollView>

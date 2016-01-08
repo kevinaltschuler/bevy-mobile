@@ -30,8 +30,8 @@ var BevyCard = React.createClass({
   },
 
   goToBevy() {
-    console.log(bevy._id);
-    BevyActions.switchBevy(bevy._id);
+    console.log(this.props.bevy._id);
+    BevyActions.switchBevy(this.props.bevy._id);
     this.props.mainNavigator.push(routes.BEVY.POSTLIST);
   },
 

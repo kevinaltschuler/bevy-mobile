@@ -121,7 +121,9 @@ exports.BEVY = {
 
 exports.BOARD = {
   SWITCH: 'board_switch_board',
-  CLEAR: 'board_clear'
+  CLEAR: 'board_clear',
+  LEAVE: 'board_leave',
+  JOIN: 'board_join'
 };
 
 exports.CHAT = {

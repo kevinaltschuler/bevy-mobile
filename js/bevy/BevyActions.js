@@ -113,19 +113,6 @@ var BevyActions = {
       admin_id: admin_id
     });
   },
-
-  switchBoard(board_id) {
-    Dispatcher.dispatch({
-      actionType: BOARD.SWITCH_BOARD,
-      board_id: board_id
-    })
-  },
-
-  clearBoard() {
-    Dispatcher.dispatch({
-      actionType: BOARD.CLEAR
-    })
-  },
 };
 
 module.exports = BevyActions;

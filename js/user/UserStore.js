@@ -412,7 +412,7 @@ _.extend(UserStore, {
     })
     .then(res => res.json())
     .then(res => {
-      console.log('login success', res.user._id);
+      console.log('login success');
       // set the access and refresh tokens
       this.setTokens(
         res.accessToken,

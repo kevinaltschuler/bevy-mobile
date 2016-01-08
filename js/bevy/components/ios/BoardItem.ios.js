@@ -18,9 +18,11 @@ var {
 
 var Icon = require('react-native-vector-icons/Ionicons');
 var _ = require('underscore');
+var routes = require('./../../../routes');
 
 var constants = require('./../../../constants');
 var BevyActions = require('./../../BevyActions');
+var BoardActions = require('./../../../board/BoardActions');
 
 var BoardItem = React.createClass({
   propTypes: {
@@ -28,7 +30,8 @@ var BoardItem = React.createClass({
   },
 
   switchBoard() {
-    BevyActions.switchBoard(this.props.board._id);
+    BoardActions.switchBoard(this.props.board._id);
+    //this.props.bevyNavigator.replace(routes.BEVY.BOARDVIEW)
     this.props.closeSideMenu();
   },
 

@@ -172,6 +172,7 @@ var BevyView = React.createClass({
         );        
         break;
       default:
+      case routes.BEVY.BOARDVIEW.name:
       case routes.BEVY.POSTLIST.name:
         var fontColor = '#fff';
         var bottomHeight = 80;
@@ -300,6 +301,10 @@ var BevyView = React.createClass({
     if(center.length > 30) {
       center = center.substr(0,30);
       center = center.concat('...');
+    }
+
+    if(!_.isEmpty(this.props.activeBoard.name)) {
+      bottomHeight = 40;
     }
 
     var menu = <BevySideMenu {...this.props} closeSideMenu={this.closeSideMenu}/>;
