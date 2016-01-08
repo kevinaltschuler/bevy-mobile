@@ -34,7 +34,7 @@ var AddedUserItem = React.createClass({
           { this.props.user.displayName }
         </Text>
         <TouchableOpacity
-          activeOpacity
+          activeOpacity={ 0.5 }
           onPress={ this.onRemove }
         >
           <View style={ styles.removeButton }>
@@ -53,8 +53,8 @@ var AddedUserItem = React.createClass({
 var styles = StyleSheet.create({
   addedUser: {
     backgroundColor: '#2CB673',
-    paddingHorizontal: 4,
-    height: 24,
+    paddingHorizontal: 8,
+    height: 36,
     borderRadius: 3,
     flexDirection: 'row',
     alignItems: 'center',
@@ -62,10 +62,11 @@ var styles = StyleSheet.create({
     marginBottom: 6,
   },
   addedUserText: {
-    color: '#FFF'
+    color: '#FFF',
+    fontSize: 17
   },
   removeButton: {
-    height: 24,
+    height: 36,
     marginLeft: 4,
     flexDirection: 'row',
     alignItems: 'center'

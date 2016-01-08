@@ -32,7 +32,7 @@ var SettingsItem = React.createClass({
   getDefaultProps() {
     return {
       checked: false,
-      onPress: _.noop,
+      onPress: null,
       title: 'Default Settings Title'
     };
   },
@@ -61,22 +61,31 @@ var SettingsItem = React.createClass({
     );
   },
 
+  _renderBody() {
+    return (
+      <View style={ styles.settingItem }>
+        <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
+          { this._renderIcon() }
+        </View>
+        <Text style={ styles.settingTitle }>
+          { this.props.title }
+        </Text>
+        { this._renderCheck() }
+      </View>
+    )
+  },
+
   render() {
+    if(this.props.onPress == null) {
+      return this._renderBody();
+    }
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,0.1)'
         style={[ styles.settingItemContainer ]}
         onPress={ this.onPress }
       >
-        <View style={ styles.settingItem}>
-          <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
-            { this._renderIcon() }
-          </View>
-          <Text style={ styles.settingTitle }>
-            { this.props.title }
-          </Text>
-          { this._renderCheck() }
-        </View>
+        { this._renderBody() }
       </TouchableHighlight>
     );
   }
@@ -88,15 +97,17 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 48,
     alignItems: 'center',
+  },
+  settingItem: {
+    backgroundColor: '#FFF',
+    flex: 1,
+    flexDirection: 'row',
+    height: 48,
+    alignItems: 'center',
     paddingLeft: 16,
     paddingRight: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
-  },
-  settingItem: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
   },
   settingTitle: {
     flex: 1,

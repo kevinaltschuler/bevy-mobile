@@ -359,7 +359,6 @@ var styles = StyleSheet.create({
   },
   toBar: {
     width: constants.width,
-    height: 60,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',

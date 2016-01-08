@@ -28,7 +28,7 @@ var Loading = React.createClass({
 	    AsyncStorage.getItem('user')
 	    .then((user) => {
 	      if(user) {
-	        console.log('user fetched');
+	        console.log('user fetched', user);
 	        UserActions.loadUser(JSON.parse(user));
 	      } else {
 	        console.log('going to login screen...');
@@ -41,10 +41,10 @@ var Loading = React.createClass({
 		var logoUrl = constants.siteurl + '/img/logo_300_white.png';
 		return (
 			<View style={{
-				height: constants.height, 
-				width: constants.width, 
-				backgroundColor: '#2cb673', 
-				alignItems: 'center', 
+				height: constants.height,
+				width: constants.width,
+				backgroundColor: '#2cb673',
+				alignItems: 'center',
 				justifyContent: 'center'
 			}}>
 				<Image style={{width: 60, height: 60}} source={{uri: logoUrl}}/>

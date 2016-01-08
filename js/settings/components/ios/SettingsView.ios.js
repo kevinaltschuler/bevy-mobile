@@ -15,7 +15,7 @@ var {
   TouchableHighlight,
   StyleSheet,
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
@@ -44,9 +44,9 @@ var SettingsView = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      profilePicture: (_.isEmpty(nextProps.user.image_url))
+      profilePicture: (_.isEmpty(nextProps.user.image))
         ? constants.siteurl + '/img/user-profile-icon.png'
-        : resizeImage(this.props.user.image, 64, 64).url
+        : resizeImage(nextProps.user.image, 64, 64).url
     });
   },
 
@@ -82,8 +82,8 @@ var SettingsView = React.createClass({
           title='Change Profile Picture'
           icon={
             <Icon
-              name={'ios-camera'}
-              size={30}
+              name='camera-alt'
+              size={ 30 }
               color='rgba(0,0,0,.3)'
             />
           }
@@ -106,10 +106,10 @@ var SettingsView = React.createClass({
           }}
         />
         <SettingsItem
-          title='View Public Profile'
+          title='View Profile'
           icon={
             <Icon
-              name={'ios-person'}
+              name='person'
               size={30}
               color='rgba(0,0,0,.3)'
             />
@@ -124,8 +124,8 @@ var SettingsView = React.createClass({
           title='Sign Out'
           icon= {
             <Icon
-              name={'ios-undo'}
-              size={30}
+              name='exit-to-app'
+              size={ 30 }
               color='rgba(0,0,0,.3)'
             />
           }
@@ -163,12 +163,11 @@ var SettingsView = React.createClass({
 
           <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>About</Text>
           <SettingsItem
-            title={'Version: Beta 1.0'}
-            onPress={() => {}}
+            title={ 'Version: ' + constants.ios_version }
             icon={
               <Icon
-                name={'ios-flag'}
-                size={30}
+                name='flag'
+                size={ 30 }
                 color='rgba(0,0,0,.3)'
               />
             }
@@ -219,32 +218,31 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignItems: 'center',
-    height: 48,
+    height: 60,
     backgroundColor: '#FFF',
-    marginBottom: 5
+    marginBottom: 10
   },
   profileImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     marginRight: 10,
   },
   profileDetails: {
     flex: 1,
-    flexDirection: 'column',
-    marginTop: -2
+    flexDirection: 'column'
   },
   profileName: {
     color: '#000',
-    fontSize: 15
+    fontSize: 17
   },
   profileEmail: {
     color: '#888',
-    fontSize: 12
+    fontSize: 15
   },
   settingsTitle: {
     color: '#888',
-    fontSize: 15,
+    fontSize: 17,
     marginLeft: 10,
     marginBottom: 5
   },
