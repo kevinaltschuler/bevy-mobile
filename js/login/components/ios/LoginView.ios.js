@@ -65,7 +65,7 @@ var LoginView = React.createClass({
   },
 
   onLoginSuccess() {
-    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
+    //this.props.mainNavigator.replace(routes.MAIN.TABBAR);
   },
 
   _renderError() {

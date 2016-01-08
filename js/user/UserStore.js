@@ -138,7 +138,7 @@ _.extend(UserStore, {
             var expires_in = res.expires_in;
             this.setTokens(access_token, refresh_token, expires_in);
             this.setUser(user);
-            this.trigger(USER.LOADED);
+            //this.trigger(USER.LOADED);
             this.trigger(USER.LOGIN_SUCCESS);
           })
           .catch(err => {
@@ -157,6 +157,8 @@ _.extend(UserStore, {
 
         this.user = new User;
         this.loggedIn = false;
+
+        this.trigger(USER.LOGOUT);
         break;
 
       case USER.REGISTER:
