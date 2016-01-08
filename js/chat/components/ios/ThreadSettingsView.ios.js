@@ -18,7 +18,8 @@ var {
   ListView,
   BackAndroid,
   TouchableOpacity,
-  TouchableHighlight
+  TouchableHighlight,
+  AlertIOS
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadImage = require('./ThreadImage.ios.js');
@@ -42,7 +43,6 @@ var ThreadSettingsView = React.createClass({
 
   getInitialState() {
     return {
-      editingName: false,
       threadName: ChatStore.getThreadName(this.props.activeThread._id)
     }
   },
@@ -66,6 +66,23 @@ var ThreadSettingsView = React.createClass({
 
   goBack() {
     this.props.chatNavigator.pop();
+  },
+
+  editName() {
+    AlertIOS.prompt(
+      'Edit Thread Name',
+      this.state.threadName,
+      [{
+        text: 'Save',
+        onPress: this.saveName
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    )
+  },
+  saveName(newName) {
+
   },
 
   leaveConversation() {
@@ -108,62 +125,18 @@ var ThreadSettingsView = React.createClass({
   },
 
   _renderName() {
-    if(this.state.editingName) {
-      return (
-        <View style={styles.editHeader}>
-          <View style={{flexDirection: 'column', flex: 1, alignItems: 'flex-end'}}>
-            <TextInput
-              style={styles.editInput}
-              defaultValue={ ChatStore.getThreadName(this.props.activeThread._id) }
-              onSubmitEditing={this.submitEdit}
-              onChangeText={(text) => {
-                console.log(text);
-                this.setState({
-                  threadName: text
-                })
-              }}
-            />
-            <View style={{flexDirection: 'row'}}>
-              <TouchableHighlight
-                onPress={() => {
-                  this.setState({
-                    editingName: false
-                  })
-                }}
-                underlayColor='rgba(0,0,0,.1)'
-                style={[styles.button, {borderColor: '#999'}]}
-              >
-                <Text style={{color: '#999', fontWeight: 'bold'}}>
-                  Cancel
-                </Text>
-              </TouchableHighlight>
-              <TouchableHighlight
-                onPress={this.submitEdit}
-                underlayColor='#2cb673'
-                style={[styles.button, {borderColor: '#2cb673'}]}
-              >
-                <Text style={{color: '#2cb673', fontWeight: 'bold'}}>
-                  Submit
-                </Text>
-              </TouchableHighlight>
-            </View>
-          </View>
+    return (
+      <View style={ styles.header }>
+        <ThreadImage
+          thread={ this.props.activeThread }
+        />
+        <View style={ styles.headerDetails }>
+          <Text style={ styles.threadName }>
+            { this.state.threadName }
+          </Text>
         </View>
-      )
-    } else {
-      return (
-        <View style={ styles.header }>
-          <ThreadImage
-            thread={ this.props.activeThread }
-          />
-          <View style={ styles.headerDetails }>
-            <Text style={ styles.threadName }>
-              { ChatStore.getThreadName(this.props.activeThread._id) }
-            </Text>
-          </View>
-        </View>
-      )
-    }
+      </View>
+    );
   },
 
   _renderEditName() {
@@ -171,16 +144,14 @@ var ThreadSettingsView = React.createClass({
       return <View/>;
     return (
       <SettingsItem
-        icon={<Icon
-            name='edit'
+        icon={
+          <Icon
+            name='create'
             size={ 30 }
             color='#AAA'
-          />}
-        onPress={() => {
-          this.setState({
-            editingName: true
-          })
-        }}
+          />
+        }
+        onPress={ this.editName }
         title='Change Name'
       />
     );
@@ -190,11 +161,13 @@ var ThreadSettingsView = React.createClass({
     if(this.props.activeThread.type != 'bevy') {
       return (
         <SettingsItem
-          icon={<Icon
-              name='ios-personadd'
+          icon={
+            <Icon
+              name='person-add'
               size={ 30 }
               color='#AAA'
-            />}
+            />
+          }
           onPress={ this.addPeople }
           title='Add People'
         />
@@ -208,11 +181,13 @@ var ThreadSettingsView = React.createClass({
     if(this.props.activeThread.type == 'group') {
       return (
         <SettingsItem
-          icon={<Icon
-              name='ios-undo'
+          icon={
+            <Icon
+              name='exit-to-app'
               size={ 30 }
               color='#AAA'
-            />}
+            />
+          }
           onPress={ this.leaveConversation }
           title='Leave Conversation'
         />
@@ -245,17 +220,10 @@ var ThreadSettingsView = React.createClass({
             <Text style={ styles.title }>
               Chat Settings
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.iconButton }
-              onPress={ this.goToSettings }
-            >
-              <Icon
-                name='save'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
           </View>
         </View>
         <ScrollView style={ styles.contentContainer }>
@@ -331,7 +299,8 @@ var styles = StyleSheet.create({
     marginLeft: 10
   },
   threadName: {
-    color: '#000'
+    color: '#000',
+    fontSize: 17
   },
   sectionTitle: {
     color: '#AAA',

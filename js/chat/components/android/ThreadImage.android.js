@@ -58,7 +58,7 @@ var ThreadImage = React.createClass({
   },
 
   getImageSource(props) {
-    var source = { uri: ChatStore.getThreadImageURL(props.thread._id) };
+    var source = { uri: ChatStore.getThreadImageURL(props.thread._id, 64, 64) };
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
       source = img_default;
     } else if(source.uri == '/img/user-profile-icon.png') {
@@ -72,7 +72,7 @@ var ThreadImage = React.createClass({
 
     return source;
   },
- 
+
   _renderSingleImage() {
     var imageStyle = {
       width: this.props.size,
@@ -86,16 +86,16 @@ var ThreadImage = React.createClass({
         <TouchableWithoutFeedback
           onPress={ this.openImage }
         >
-          <Image 
-            style={ imageStyle } 
+          <Image
+            style={ imageStyle }
             source={ this.state.source }
           />
         </TouchableWithoutFeedback>
       );
     }
     return (
-      <Image 
-        style={ imageStyle } 
+      <Image
+        style={ imageStyle }
         source={ this.state.source }
       />
     );
@@ -193,9 +193,9 @@ var ThreadImage = React.createClass({
               break;
           }
           users.push(
-            <Image 
-              key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id } 
-              style={ iconStyle } 
+            <Image
+              key={ 'threadimage:' + this.props.thread._id + ':user:' + user._id }
+              style={ iconStyle }
               source={ UserStore.getUserImage(user, this.props.size, this.props.size) }
             />
           );
@@ -203,7 +203,7 @@ var ThreadImage = React.createClass({
 
         if(_.isEmpty(users))
           users = <View />;
-        
+
         return (
           <View style={{
             width: this.props.size,

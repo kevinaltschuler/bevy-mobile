@@ -82,7 +82,6 @@ var BoardCard = React.createClass({
   render() {
     var board = this.props.board;
     var user = this.props.user;
-    console.log(user, board._id);
     if(_.isEmpty(board)) {
       return <View/>;
     }

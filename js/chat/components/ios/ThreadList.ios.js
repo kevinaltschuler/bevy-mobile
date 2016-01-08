@@ -39,7 +39,6 @@ var ThreadList = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    console.log('rerender');
     this.setState({
       threads: nextProps.allThreads
     })
@@ -114,7 +113,8 @@ var ThreadList = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#EEE'
   },
   topBarContainer: {
     flexDirection: 'column',

@@ -1,8 +1,15 @@
+/**
+ * ThreadModel.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 // imports
 var Backbone = require('backbone');
 var _ = require('underscore');
+var resizeImage = require('./../shared/helpers/resizeImage');
 
 var constants = require('./../constants');
 var BevyStore = require('./../bevy/BevyStore');
@@ -53,17 +60,19 @@ var ThreadModel = Backbone.Model.extend({
     return '';
   },
 
-   getImageURL() {
+   getImageURL(width, height) {
     var default_bevy_img = constants.siteurl + '/img/logo_100.png';
     var default_user_img = constants.siteurl + '/img/user-profile-icon.png';
-    
-    if(!_.isEmpty(this.get('image'))) return this.get('image').path;
+
+    if(!_.isEmpty(this.get('image'))) {
+      return resizeImage(this.get('image'), width, height).url;
+    }
     switch(this.get('type')) {
       case 'bevy':
         if(!this.get('bevy')) return default_bevy_img;
         var bevy = BevyStore.getBevy(this.get('bevy')._id);
         if(_.isEmpty(bevy.image)) return default_bevy_img;
-        return bevy.image.path;
+        return resizeImage(bevy.image, width, height).url;
         break;
       case 'group':
         // TODO: @kevin do some magic here
@@ -79,7 +88,7 @@ var ThreadModel = Backbone.Model.extend({
         });
         if(otherUser == undefined) return default_user_img;
         if(_.isEmpty(otherUser.image)) return default_user_img;
-        return otherUser.image.path;
+        return resizeImage(otherUser.image, width, height).url;
         break;
     }
     // something went wrong

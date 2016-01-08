@@ -71,7 +71,7 @@ var ThreadItem = React.createClass({
     var thread = this.props.thread;
 
     var threadName = ChatStore.getThreadName(thread._id);
-    var threadImage = ChatStore.getThreadImageURL(thread._id);
+    var threadImage = ChatStore.getThreadImageURL(thread._id, 64, 64);
     return {
       threadName: threadName,
       threadImage: threadImage
