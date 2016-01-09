@@ -16,7 +16,6 @@ var SideMenu = require('react-native-side-menu');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
-var window = require('Dimensions').get('window');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyNavbar = React.createClass({

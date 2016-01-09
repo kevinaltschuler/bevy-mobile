@@ -26,7 +26,6 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
 
 var _ = require('underscore');
-var window = require('Dimensions').get('window');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
