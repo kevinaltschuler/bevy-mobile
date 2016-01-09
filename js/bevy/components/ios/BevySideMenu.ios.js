@@ -17,7 +17,7 @@ var {
   TouchableHighlight,
   TouchableOpacity
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
@@ -75,8 +75,8 @@ var BevySideMenu = React.createClass({
       image_url = bevy.image.path;
 
     var publicPrivateIcon = (bevy.settings.privacy == 'Private')
-      ?'android-lock'
-      :'android-globe';
+      ?'lock'
+      :'public';
 
     return (
       <View style={styles.container}>
@@ -105,26 +105,19 @@ var BevySideMenu = React.createClass({
                     <Icon name={publicPrivateIcon} size={18} color='#fff'/>
                   </View>
                   <View style={styles.detailItem}>
-                    <Icon name='android-people' size={18} color='#fff'/>
+                    <Icon name='people' size={18} color='#fff'/>
                     <Text style={styles.itemText}>
                       {bevy.subCount}
                     </Text>
                   </View>
                   <View style={styles.detailItem}>
-                    <Icon name='android-person' size={18} color='#fff'/>
+                    <Icon name='person' size={18} color='#fff'/>
                     <Text style={styles.itemText}>
                       {bevy.admins.length}
                     </Text>
                   </View>
                 </View>
               </View>
-
-              <TouchableOpacity
-                activeOpacity={.2}
-                style={{alignSelf: 'flex-start', padding: 10, marginRight: 10, marginTop: -10}}
-              >
-                <Icon name='android-more-vertical' size={32} color='#fff'/>
-              </TouchableOpacity>
 
             </View>
           </TouchableHighlight>

@@ -21,6 +21,7 @@ var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
 var BoardCard = require('./../../../bevy/components/ios/BoardCard.ios.js');
+var Swiper = require('react-native-swiper-fork');
 //var TagModal = require('./TagModal.ios.js');
 
 var _ = require('underscore');
@@ -30,6 +31,7 @@ var POST = constants.POST;
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostActions = require('./../../../post/PostActions');
+var BevyActionButtons = require('./../../../bevy/components/ios/BevyActionButtons.ios.js');
 
 var SCROLLVIEW = 'ScrollView';
 var LISTVIEW = 'ListView';
@@ -62,7 +64,8 @@ var PostList = React.createClass({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
-      loading: false
+      loading: false,
+      joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
     };
   },
 
@@ -132,8 +135,13 @@ var PostList = React.createClass({
   },
 
   _renderHeader() {
-    var newPostCard = (!this.props.showNewPostCard || _.isEmpty(this.props.activeBoard.name))
-    ? <View/>
+    var bevy = this.props.activeBevy;
+    var user = this.props.user;
+    if(_.isEmpty(bevy)) {
+      return <View/>;
+    }
+    var newPostCard = ( _.isEmpty(this.props.activeBoard.name))
+    ? <BevyActionButtons bevy={bevy} user={user}/>
     : (
       <View style={styles.cardContainer}>
         <BoardCard
@@ -185,8 +193,7 @@ var PostList = React.createClass({
     return (
       <View style={ styles.postContainer }>
 
-          <RCTRefreshControl.ListView
-            onRefresh={this.onRefresh}
+          <ListView
             ref={(ref) => {
               this.ListView = ref;
             }}
@@ -203,6 +210,7 @@ var PostList = React.createClass({
               return <View style={{height: 52}}/>
             }}
             renderRow={(post) => {
+              console.log(post);
               if(this.state.loading) {
                 return (
                 <View style={styles.spinnerContainer}>
@@ -294,6 +302,25 @@ var styles = StyleSheet.create({
   },
   requestJoinButtonText: {
     color: '#2cb673'
+  },
+  boardActions: {
+    backgroundColor: '#fff'
+  },
+  slide: {
+    flexDirection: 'row',
+  },
+  actionWrapper: {
+    flex: 1,
+    height: 50
+  },
+  action: {
+    flexDirection: 'column',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  actionText: {
+    color: '#aaa'
   }
 })
 

@@ -15,7 +15,7 @@ var {
   Animated,
   TextInput
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
 var PostActionList = require('./PostActionList.ios.js');
 var Collapsible = require('react-native-collapsible');
@@ -214,9 +214,15 @@ var Post = React.createClass({
               source={{ uri: authorImage }}
             />
             <View style={styles.titleTextColumn}>
-              <Text numberOfLines={ 1 } style={styles.titleText}>
-                { post.author.displayName } • { post.board.name }
-              </Text>
+              <View style={styles.titleTextView}>
+                <Text numberOfLines={ 1 } style={styles.titleText}>
+                  { post.author.displayName } 
+                </Text>
+                <Icon name='chevron-right' style={{marginTop: 2}} color='#333' size={12}/> 
+                <Text numberOfLines={ 1 } style={styles.titleText}> 
+                  { post.board.name }
+                </Text>
+              </View>
               <Text style={styles.subTitleText}>
                 { timeAgo(Date.parse(post.created)) }
               </Text>
@@ -245,9 +251,9 @@ var Post = React.createClass({
                   { this.countVotes() }
                 </Text>
                 <Icon
-                  name={ (this.state.voted) ? 'ios-heart' : 'ios-heart-outline' }
+                  name={ (this.state.voted) ? 'favorite' : 'favorite-border' }
                   size={20}
-                  color={ (this.state.voted) ? '#2cb673' : '#757d83' }
+                  color={ (this.state.voted) ? '#2cb673' : '#rgba(0,0,0,.35)' }
                   style={styles.actionIcon}
                 />
               </View>
@@ -270,7 +276,7 @@ var Post = React.createClass({
                   { post.comments.length }
                 </Text>
                 <Icon
-                  name='ios-chatbubble'
+                  name='chat-bubble'
                   size={20}
                   color='rgba(0,0,0,.3)'
                   style={styles.actionIcon}
@@ -287,9 +293,9 @@ var Post = React.createClass({
               }}
             >
               <Icon
-                name='ios-more'
+                name='more-horiz'
                 size={20}
-                color='#757d83'
+                color='rgba(0,0,0,.3)'
                 style={styles.actionIcon}
               />
             </TouchableHighlight>
@@ -347,12 +353,16 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     height: 26,
-    marginLeft: 10
+    marginLeft: 10,
+    alignItems: 'flex-start'
   },
   titleText: {
-    width: cardWidth - 40 - 10 - 16,
     color: '#282929',
     fontSize: 12
+  },
+  titleTextView: {
+    width: cardWidth - 40 - 10 - 16,
+    flexDirection: 'row'
   },
   subTitleText: {
     fontSize: 9,

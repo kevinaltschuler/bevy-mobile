@@ -1,7 +1,7 @@
 /**
- * BoardCard.ios.js
+ * BevyUserButtons.ios.js
  * @author kevin
- * this card is gonna look so good
+ * the actions for a bevy
  */
 
 'use strict';
@@ -21,34 +21,34 @@ var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
-var BoardActions = require('./../../../board/BoardActions');
+var BevyActions = require('./../../../bevy/BevyActions');
 
-var BoardCard = React.createClass({
+var BevyActionButtons = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
-    board: React.PropTypes.object
+    bevy: React.PropTypes.object
   },
 
   getInitialState() {
     return {
-      joined: _.contains(this.props.user.boards, this.props.board._id)
+      joined: _.contains(this.props.user.bevies, this.props.bevy._id)
     }
   },
 
   _handleJoinLeave(index) {
-    var board = this.props.board;
+    var bevy = this.props.bevy;
     if(index == 0) {
       if(this.state.joined) {
-        BoardActions.leave(board._id);
+        BevyActions.leave(bevy._id);
         this.setState({
           joined: false
         })
       } else {
-        if(board.settings.privacy == 'private') {
-          BoardActions.requestBoard(board._id)
+        if(bevy.settings.privacy == 'private') {
+          //BoardActions.requestBoard(board._id)
         }
         else {
-          BoardActions.join(board._id)
+          BevyActions.join(bevy._id)
           this.setState({
             joined: true
           })
@@ -58,11 +58,11 @@ var BoardCard = React.createClass({
   },
 
   showActionSheet() {
-  var board = this.props.board;
+  var bevy = this.props.bevy;
     if(this.state.joined) {
       var joinOptions = ['leave', 'cancel'];
     } else {
-      if(board.settings.privacy == 'private') {
+      if(bevy.settings.privacy == 'private') {
        var joinOptions = ['request', 'cancel'];
       }
       else {
@@ -80,23 +80,20 @@ var BoardCard = React.createClass({
   },
 
   render() {
-    var board = this.props.board;
+    var bevy = this.props.bevy;
     var user = this.props.user;
-    if(_.isEmpty(board)) {
+    if(_.isEmpty(bevy)) {
       return <View/>;
     }
-    var image_url = constants.siteurl + '/img/default_board_img.png';
-    if(board.image)
-      image_url = board.image.path;
-    var typeIcon = (board.type == 'announcement')
-    ? 'flag'
-    : 'forum';
+    var typeIcon = (bevy.settings.privacy == 'Private')
+    ? 'lock'
+    : 'public';
     
     if(this.state.joined) {
       var joinedText = 'joined';
       var joinedColor = '#2cb673';
     } else {
-      if(board.settings.privacy == 'private') {
+      if(bevy.settings.privacy == 'Private') {
         var joinedText = 'request';
       }
       else {
@@ -107,29 +104,55 @@ var BoardCard = React.createClass({
 
 
     return (
-      <View style={styles.container}>
-        <Image source={{uri: image_url}} style={styles.boardImage}>
-          <View style={styles.imageWrapper}>
-            <Text style={styles.boardTitle}>
-              {board.name}
-            </Text>
-            <View style={styles.boardDetails}> 
-              <View style={styles.detailItem}>
-                <Icon name={typeIcon} size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  {board.type}
-                </Text>
+      <Swiper style={styles.boardActions} height={50} showsButtons={false} loop={false}>
+          <View style={styles.slide}>
+            <TouchableHighlight 
+              style={styles.actionWrapper} 
+              onPress={this.showActionSheet} 
+              underlayColor='rgba(0,0,0,.1)'
+            >
+              <View style={styles.action}>
+                  <Icon name='done' size={24} color={joinedColor}/>
+                  <Text style={[styles.actionText, {color: joinedColor}]}>
+                    {joinedText}
+                  </Text>
               </View>
-              <View style={styles.detailItem}>
-                <Icon name='people' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  {board.subCount} Subscribers
-                </Text>
+            </TouchableHighlight>
+            <TouchableHighlight 
+              style={styles.actionWrapper} 
+              underlayColor='rgba(0,0,0,.1)'
+            >
+              <View style={styles.action}>
+                  <Icon name='person-add' size={24} color='#aaa'/>
+                  <Text style={styles.actionText}>
+                    invite
+                  </Text>
               </View>
-            </View>
+            </TouchableHighlight>
+            <TouchableHighlight 
+              style={styles.actionWrapper} 
+              underlayColor='rgba(0,0,0,.1)'
+            >
+              <View style={styles.action}>
+                  <Icon name='search' size={24} color='#aaa'/>
+                  <Text style={styles.actionText}>
+                    Search
+                  </Text>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight 
+              style={styles.actionWrapper} 
+              underlayColor='rgba(0,0,0,.1)'
+            >
+              <View style={styles.action}>
+                  <Icon name='more-horiz' size={24} color='#aaa'/>
+                  <Text style={styles.actionText}>
+                    Info
+                  </Text>
+              </View>
+            </TouchableHighlight>
           </View>
-        </Image>
-      </View>
+      </Swiper>
     )
   }
 });
@@ -196,4 +219,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = BoardCard;
+module.exports = BevyActionButtons;
