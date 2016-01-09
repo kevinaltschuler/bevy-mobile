@@ -136,9 +136,10 @@ _.extend(UserStore, {
             var access_token = res.access_token;
             var refresh_token = res.refresh_token;
             var expires_in = res.expires_in;
-            this.setTokens(access_token, refresh_token, expires_in);
+
             this.setUser(user);
-            //this.trigger(USER.LOADED);
+            this.setTokens(access_token, refresh_token, expires_in);
+
             this.trigger(USER.LOGIN_SUCCESS);
           })
           .catch(err => {
@@ -479,14 +480,14 @@ _.extend(UserStore, {
     .then(res => res.json())
     .then(res => {
       console.log('login success');
+      // set the new user
+      this.setUser(res.user);
       // set the access and refresh tokens
       this.setTokens(
         res.accessToken,
         res.refreshToken,
         res.expires_in
       );
-      // set the new user
-      this.setUser(res.user);
       // trigger success
       this.trigger(USER.LOGIN_SUCCESS);
     })
