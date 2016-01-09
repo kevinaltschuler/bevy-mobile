@@ -1,22 +1,24 @@
+/**
+ * InputView.ios.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
 var {
   View,
   ScrollView,
-  ListView,
   Text,
   TextInput,
   Image,
   StyleSheet,
-  StatusBarIOS,
-  Navigator,
   TouchableHighlight,
   DeviceEventEmitter
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var NewPostImageItem = require('./NewPostImageItem.ios.js');
 
@@ -29,7 +31,6 @@ var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var window = require('Dimensions').get('window');
 var FILE = constants.FILE;
 var PostActions = require('./../../../post/PostActions');
 
@@ -106,6 +107,55 @@ var InputView = React.createClass({
     });
   },
 
+  addImage() {
+    //this.uploadImage();
+    UIImagePickerManager.launchImageLibrary({
+      returnBase64Image: false,
+      returnIsVertical: true
+    }, (didCancel, response) => {
+      if (!didCancel) {
+        FileActions.upload(response.uri);
+      } else {
+        console.log('Cancel');
+      }
+    });
+  },
+
+  launchCamera() {
+    //this.uploadImage();
+    UIImagePickerManager.launchCamera({
+      returnBase64Image: false,
+      returnIsVertical: true
+    }, (didCancel, response) => {
+      if (!didCancel) {
+        console.log(response);
+        FileActions.upload(response.uri);
+      } else {
+        console.log('Cancel');
+      }
+    });
+  },
+
+  goBack() {
+    this.refs.input.blur();
+    this.props.mainNavigator.pop();
+  },
+
+  submit() {
+    if(this.state.title.length <= 0) return; // dont post if text is empty
+    PostActions.create( // send action
+      this.state.title,
+      (_.isEmpty(this.state.images)) ? [] : this.state.images,
+      this.props.user,
+      this.props.activeBoard,
+      null,
+      null,
+    );
+    this.refs.input.setNativeProps({ text: '' }); // clear text
+    this.refs.input.blur(); // unfocus text field
+    //this.props.mainNavigator.pop(); // navigate back to main tab bar
+  },
+
   _renderImages() {
     if(_.isEmpty(this.state.images)) {
       return (
@@ -160,63 +210,39 @@ var InputView = React.createClass({
     var boardName = (this.props.activeBoard) ? this.props.activeBoard.name : '';
     return (
       <View style={ containerStyle }>
-        <Navbar
-          styleParent={{
-            backgroundColor: '#2CB673',
-            flexDirection: 'column',
-            paddingTop: 0
-          }}
-          styleBottom={{
-            backgroundColor: '#2CB673',
-            height: 48,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-          left={
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
             <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                this.refs.input.blur();
-                this.props.mainNavigator.pop();
-              }}
-              style={ styles.navButtonLeft }>
-              <Text style={ styles.navButtonTextLeft }>
-                Cancel
-              </Text>
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
             </TouchableHighlight>
-          }
-          center={
-            <View style={ styles.navTitle }>
-              <Text style={ styles.navTitleText }>
-                New Post
-              </Text>
-            </View>
-          }
-          right={
+            <Text style={ styles.title }>
+              New Post
+            </Text>
             <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                if(this.state.title.length <= 0) return; // dont post if text is empty
-                PostActions.create( // send action
-                  this.state.title,
-                  (_.isEmpty(this.state.images)) ? [] : this.state.images,
-                  this.props.user,
-                  this.props.activeBoard,
-                  null,
-                  null,
-                );
-                this.refs.input.setNativeProps({ text: '' }); // clear text
-                this.refs.input.blur(); // unfocus text field
-                //this.props.mainNavigator.pop(); // navigate back to main tab bar
-              }}
-              style={ styles.navButtonRight }>
-              <Text style={ styles.navButtonTextRight }>
-                Post
-              </Text>
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.submit }
+            >
+              <Icon
+                name='add'
+                size={ 30 }
+                color='#FFF'
+              />
             </TouchableHighlight>
-          }
-        />
+          </View>
+        </View>
         <ScrollView style={ styles.body } contentContainerStyle={{flex: 1, marginBottom: 50}}>
           <View style={ styles.bevyPicker }>
             <Text style={ styles.sectionTitle }>Board</Text>
@@ -250,55 +276,30 @@ var InputView = React.createClass({
           </View>
         </ScrollView>
         <View style={ styles.contentBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                //this.uploadImage();
-                UIImagePickerManager.launchImageLibrary({
-                  returnBase64Image: false,
-                  returnIsVertical: true
-                }, (didCancel, response) => {
-                  if (!didCancel) {
-                    FileActions.upload(response.uri);
-                  } else {
-                    console.log('Cancel');
-                  }
-                });
-              }}
-              style={ styles.contentBarItem }
-            >
-              <Icon
-                name='image'
-                size={30}
-                color='rgba(0,0,0,.3)'
-                style={ styles.contentBarIcon }
-              />
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                //this.uploadImage();
-                UIImagePickerManager.launchCamera({
-                  returnBase64Image: false,
-                  returnIsVertical: true
-                }, (didCancel, response) => {
-                  if (!didCancel) {
-                    console.log(response);
-                    FileActions.upload(response.uri);
-                  } else {
-                    console.log('Cancel');
-                  }
-                });
-              }}
-              style={ styles.contentBarItem }
-            >
-              <Icon
-                name='camera'
-                size={32}
-                color='rgba(0,0,0,.3)'
-                style={ styles.contentBarIcon }
-              />
-            </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0)'
+            onPress={ this.addImage }
+            style={ styles.contentBarItem }
+          >
+            <Icon
+              name='photo'
+              size={30}
+              color='rgba(0,0,0,.3)'
+              style={ styles.contentBarIcon }
+            />
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0)'
+            onPress={ this.launchCamera }
+            style={ styles.contentBarItem }
+          >
+            <Icon
+              name='add-a-photo'
+              size={32}
+              color='rgba(0,0,0,.3)'
+              style={ styles.contentBarIcon }
+            />
+          </TouchableHighlight>
             {/*<TouchableHighlight
               underlayColor='rgba(0,0,0,0)'
               onPress={() => {
@@ -325,32 +326,30 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#eee'
   },
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    padding: 10,
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  navButtonTextLeft: {
-    color: '#fff',
     fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
   },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   body: {
     flex: 1,
@@ -426,7 +425,7 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    width: window.width,
+    width: constants.width,
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,

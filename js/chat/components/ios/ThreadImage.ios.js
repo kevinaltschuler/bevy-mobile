@@ -47,7 +47,7 @@ var ThreadImage = React.createClass({
 
   render() {
     switch(this.props.thread.type) {
-      case 'bevy':
+      case 'board':
       case 'pm':
         return this._renderSingleImage();
       case 'group':

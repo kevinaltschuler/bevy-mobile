@@ -21,8 +21,6 @@ var {
 var Icon = require('react-native-vector-icons/Ionicons');
 var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
-var BackButton = require('./../../../shared/components/ios/BackButton.ios.js');
 var CommentList = require('./CommentList.ios.js');
 
 var _ = require('underscore');
@@ -94,6 +92,10 @@ var CommentView = React.createClass({
   componentDidMount() {
     DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShowed);
     DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHid);
+  },
+
+  goBack() {
+    this.props.mainNavigator.pop();
   },
 
   onReply(comment) {
@@ -313,39 +315,31 @@ var CommentView = React.createClass({
     }
     return (
       <View style={ styles.container }>
-        <Navbar
-          styleParent={{
-            backgroundColor: '#2CB673',
-            flexDirection: 'column',
-            paddingTop: 0
-          }}
-          styleBottom={{
-            backgroundColor: '#2CB673',
-            height: 48,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-          left={
-            <BackButton
-              color='#fff'
-              text='Back'
-              onPress={()=>{
-                this.props.mainNavigator.pop();
-              }}
-            />
-          }
-          center={
-            <View style={ styles.navTitle }>
-              <Text style={ styles.navTitleText }>
-
-              </Text>
-            </View>
-          }
-          right={
-            <View style={ styles.navButtonRight } />
-          }
-        />
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+            </Text>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+          </View>
+        </View>
         {content}
         { this._renderReplyBar() }
       </View>
@@ -360,32 +354,30 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginTop: 0
   },
-
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    marginLeft: 8
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17
-  },
-  navButtonTextRight: {
-    color: '#ddd',
     fontSize: 17,
-    textAlign: 'right'
+    textAlign: 'center',
+    color: '#FFF'
   },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   scrollView: {

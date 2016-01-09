@@ -1,3 +1,10 @@
+/**
+ * BevyPickerView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -14,12 +21,12 @@ var {
   TouchableHighlight,
   DeviceEventEmitter
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
@@ -54,51 +61,40 @@ var BevyPickerView = React.createClass({
   render() {
     return (
       <View style={ styles.container }>
-        <Navbar
-            styleParent={{
-              backgroundColor: '#2CB673',
-              flexDirection: 'column',
-              paddingTop: 0
-            }}
-            styleBottom={{
-              backgroundColor: '#2CB673',
-              height: 48,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-            left={
-              <TouchableHighlight
-                underlayColor={'rgba(0,0,0,0)'}
-                onPress={() => {
-                  this.props.newPostNavigator.pop();
-                }}
-                style={ styles.navButtonLeft }>
-                <Text style={ styles.navButtonTextLeft }>
-                  Cancel
-                </Text>
-              </TouchableHighlight>
-            }
-            center={
-              <View style={ styles.navTitle }>
-                <Text style={ styles.navTitleText }>
-                  Posting To...
-                </Text>
-              </View>
-            }
-            right={
-              <View/>
-            }
-          />
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              Posting To...
+            </Text>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+          </View>
+        </View>
         <ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
           renderRow={(bevy) => {
-            var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
-            var defaultBevies=['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
-            if(_.contains(defaultBevies, bevy._id)) {
-              imageUri = constants.apiurl + bevy.image_url;
-            }
+            var imageUri = (_.isEmpty(bevy.image))
+              ? constants.siteurl + '/img/logo_200.png'
+              : resizeImage(bevy.image, 64, 64).url;
+
             if(bevy._id == -1) return <View />; // disallow posting to frontpage
             return (
               <TouchableHighlight
@@ -130,32 +126,30 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    padding: 10,
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  navButtonTextLeft: {
-    color: '#fff',
     fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
   },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   body: {
     flex: 1,

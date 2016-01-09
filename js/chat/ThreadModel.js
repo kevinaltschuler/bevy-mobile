@@ -29,10 +29,9 @@ var ThreadModel = Backbone.Model.extend({
   getName() {
     if(!_.isEmpty(this.get('name'))) return this.get('name');
     switch(this.get('type')) {
-      case 'bevy':
-        if(!this.get('bevy')) return '';
-        var bevy = BevyStore.getBevy(this.get('bevy')._id);
-        return bevy.name;
+      case 'board':
+        var board = this.get('board');
+        return board.name;
         break;
       case 'group':
         var usernames = _.pluck(this.get('users'), 'displayName');
@@ -55,24 +54,26 @@ var ThreadModel = Backbone.Model.extend({
         if(otherUser == undefined) return '';
         return otherUser.displayName;
         break;
+      default:
+        return '';
+        break;
     }
     // something went wrong or there's no thread type/name
     return '';
   },
 
    getImageURL(width, height) {
-    var default_bevy_img = constants.siteurl + '/img/logo_100.png';
+    var default_bevy_img = constants.siteurl + '/img/default_board_img.png';
     var default_user_img = constants.siteurl + '/img/user-profile-icon.png';
 
     if(!_.isEmpty(this.get('image'))) {
       return resizeImage(this.get('image'), width, height).url;
     }
     switch(this.get('type')) {
-      case 'bevy':
-        if(!this.get('bevy')) return default_bevy_img;
-        var bevy = BevyStore.getBevy(this.get('bevy')._id);
-        if(_.isEmpty(bevy.image)) return default_bevy_img;
-        return resizeImage(bevy.image, width, height).url;
+      case 'board':
+        var board = this.get('board');
+        if(_.isEmpty(board.image)) return default_bevy_img;
+        return resizeImage(board.image, width, height).url;
         break;
       case 'group':
         // TODO: @kevin do some magic here

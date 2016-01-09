@@ -177,9 +177,8 @@ var CreateBevyView = React.createClass({
     var middle = (_.isEmpty(this.state.bevyImage))
     ? (
       <Icon
-        name='add'
+        name='add-a-photo'
         size={ 30 }
-        style={{ width: 30, height: 30 }}
         color='#ccc'
       />
     )
@@ -253,7 +252,6 @@ var CreateBevyView = React.createClass({
             marginBottom: 40
           }}
         >
-
           <Text style={{color: '#888'}}>
             {privacyText}
           </Text>
@@ -291,7 +289,7 @@ var CreateBevyView = React.createClass({
               onPress={ this.createBevy }
             >
               <Icon
-                name='add'
+                name='done'
                 size={ 30 }
                 color='#FFF'
               />

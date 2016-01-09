@@ -16,7 +16,6 @@ var {
   StyleSheet,
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
