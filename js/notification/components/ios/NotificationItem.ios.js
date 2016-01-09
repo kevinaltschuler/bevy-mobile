@@ -210,7 +210,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'stretch',
+    alignItems: 'center',
   },
   row: {
     flexDirection: 'row'
@@ -220,6 +220,7 @@ var styles = StyleSheet.create({
     height: 60,
     backgroundColor: '#eee',
     borderRadius: 30,
+    marginVertical: 10
   },
   rightRow: {
   	flex: 1,
@@ -231,7 +232,7 @@ var styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: 40,
+    height: 80,
     marginLeft: 15
   },
   titleText: {
