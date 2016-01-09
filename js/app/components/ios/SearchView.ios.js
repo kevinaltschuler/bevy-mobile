@@ -202,9 +202,9 @@ var SearchView = React.createClass({
          style ={{backgroundColor: '#2CB673'}}
         >
         </NavBar>
-        {/**
-        <SearchBar></SearchBar>
-        **/}
+        
+      
+        
 
         <View style={styles.tabBar}>
           <TouchableHighlight
