@@ -12,8 +12,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
-var BevyListButton = require('./../../../shared/components/ios/BevyListButton.ios.js');
-var BevyList = require('./../../../bevy/components/ios/BevyList.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');

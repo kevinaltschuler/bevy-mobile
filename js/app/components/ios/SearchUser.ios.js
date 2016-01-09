@@ -2,6 +2,7 @@
  * AddPeopleView.ios.js
  * @author kevin
  * algo sux
+ * @flow
  */
 
 'use strict';
@@ -152,7 +153,7 @@ var AddPeopleView = React.createClass({
       //addedUsers = _.reject(addedUsers, ($user) => $user._id == user._id);
     } else {
       // add user to list
-      addedUsers.push(user);  
+      addedUsers.push(user);
       // clear text field
       this.setState({
         toInput: ''
@@ -232,17 +233,17 @@ var AddPeopleView = React.createClass({
     if(this.state.searching) {
       return (
         <View style={ styles.progressContainer }>
-          <Spinner 
-            isVisible={true} 
-            size={40} 
-            type={'Arc'} 
+          <Spinner
+            isVisible={true}
+            size={40}
+            type={'Arc'}
             color={'#2cb673'}
           />
         </View>
       );
     } else if(!this.state.searching && _.isEmpty(this.state.searchUsers)) {
       return (
-        <View style={ styles.progressContainer }> 
+        <View style={ styles.progressContainer }>
           <Text style={ styles.noneFoundText }>
             No Users Found
           </Text>
@@ -262,7 +263,7 @@ var AddPeopleView = React.createClass({
               key={ 'searchuser:' + user._id }
               searchUser={ user }
               onSelect={ this.onSearchUserSelect }
-              selected={ 
+              selected={
                 _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
               }
             />

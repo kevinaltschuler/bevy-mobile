@@ -18,10 +18,7 @@ var {
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var PostList = require('./../../../post/components/ios/PostList.ios.js');
-var AddBevyModal = require('./AddBevyModal.ios.js');
 var BevyCard = require('./BevyCard.ios.js');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -102,7 +99,8 @@ var MyBevies = React.createClass({
           />
           <Text
             style={{
-              color: '#999'
+              color: '#999',
+              fontSize: 17
             }}
           >
             Create a New Bevy

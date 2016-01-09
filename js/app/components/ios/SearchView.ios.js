@@ -36,11 +36,6 @@ var UserStore = require('./../../../user/UserStore');
 
 var BEVY = constants.BEVY;
 
-var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
-var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
-var NavBar = require('./../../../shared/components/ios/Navbar.ios.js');
-var SearchBar = require('./../../../shared/components/ios/SearchBar.ios.js');
-
 var SearchView = React.createClass({
   propTypes: {
     searchRoute: React.PropTypes.object,
@@ -176,7 +171,7 @@ var SearchView = React.createClass({
       <ScrollView
         contentContainerStyle={ styles.bevyList }
         automaticallyAdjustContentInsets={true}
-        showsVerticalScrollIndicator={true}       
+        showsVerticalScrollIndicator={true}
       >
         { bevyList }
       </ScrollView>
@@ -197,14 +192,17 @@ var SearchView = React.createClass({
   render() {
     return (
       <View style={styles.container}>
-        <NavBar
-         center={<Text style={{color: '#FFF', fontSize: 18}}>Search</Text>}
-         style ={{backgroundColor: '#2CB673'}}
-        >
-        </NavBar>
-        {/**
-        <SearchBar></SearchBar>
-        **/}
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <Text style={ styles.title }>
+              Search
+            </Text>
+          </View>
+        </View>
 
         <View style={styles.tabBar}>
           <TouchableHighlight
@@ -239,7 +237,24 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     paddingTop: 0,
     backgroundColor: '#EEE',
-
+  },
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
+    flex: 1,
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
   },
   tabBar: {
     width: constants.width,

@@ -14,7 +14,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var routes = require('./../../../routes.js');
 
 var _ = require('underscore');
@@ -60,8 +60,7 @@ var UserSearchItem = React.createClass({
     if(!this.props.showIcon) return <View />;
     return (
       <Icon
-        name='ios-plus-empty'
-        //name={ (this.state.selected) ? 'check-box' : 'check-box-outline-blank' }
+        name='add'
         size={ 30 }
         color='#2CB673'
       />
@@ -87,7 +86,7 @@ var UserSearchItem = React.createClass({
             <Text style={ styles.name }>
               { this.props.searchUser.displayName }
             </Text>
-            
+
           </View>
         </View>
       </TouchableHighlight>
@@ -116,7 +115,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
 
     alignItems: 'center'
-    
+
   },
   name: {
     flex: 1,

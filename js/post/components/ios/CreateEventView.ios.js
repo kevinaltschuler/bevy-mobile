@@ -1,3 +1,9 @@
+/**
+ * CreateEventView.ios.js
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -15,8 +21,7 @@ var {
   DeviceEventEmitter,
   TouchableOpacity
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
@@ -181,7 +186,7 @@ var CreateEventView = React.createClass({
                   shadowColor: 'rgba(0,0,0,.3)',
                   shadowOffset: {width: 2, height: 2},
                   shadowOpacity: 1,
-                  shadowRadius: 5 
+                  shadowRadius: 5
               }}
               onPress={() => {
                 UIImagePickerManager.showImagePicker({
@@ -232,57 +237,39 @@ var CreateEventView = React.createClass({
     var tagName = (this.props.selected) ? this.props.tag.name : '';
     return (
       <View style={ containerStyle }>
-        <Navbar
-          styleParent={{
-            backgroundColor: '#2CB673',
-            flexDirection: 'column',
-            paddingTop: 0
-          }}
-          styleBottom={{
-            backgroundColor: '#2CB673',
-            height: 48,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-          left={
-            <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                this.refs.title.setNativeProps({ text: '' }); // clear text
-                this.refs.info.setNativeProps({ text: '' }); // clear text
-                this.refs.location.setNativeProps({ text: '' }); // clear text
-                this.refs.title.blur(); // unfocus text field
-                this.refs.info.blur(); // unfocus text field
-                this.refs.location.blur(); // unfocus text field
-                this.props.mainNavigator.pop();
-              }}
-              style={ styles.navButtonLeft }>
-              <Text style={ styles.navButtonTextLeft }>
-                Cancel
-              </Text>
-            </TouchableHighlight>
-          }
-          center={
-            <View style={ styles.navTitle }>
-              <Text style={ styles.navTitleText }>
-                New Event
-              </Text>
-            </View>
-          }
-          right={
-            <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                this.submit();
-              }}
-              style={ styles.navButtonRight }>
-              <Text style={ styles.navButtonTextRight }>
-                Post
-              </Text>
-            </TouchableHighlight>
-          }
-        />
+      <View style={ styles.topBarContainer }>
+        <View style={{
+          height: StatusBarSizeIOS.currentHeight,
+          backgroundColor: '#2CB673'
+        }}/>
+        <View style={ styles.topBar }>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            style={ styles.iconButton }
+            onPress={ this.goBack }
+          >
+            <Icon
+              name='arrow-back'
+              size={ 30 }
+              color='#FFF'
+            />
+          </TouchableHighlight>
+          <Text style={ styles.title }>
+            New Event
+          </Text>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            style={ styles.iconButton }
+            onPress={ this.goBack }
+          >
+            <Icon
+              name='arrow-back'
+              size={ 30 }
+              color='#FFF'
+            />
+          </TouchableHighlight>
+        </View>
+      </View>
         <View style={ styles.body }>
           <View style={ styles.bevyPicker }>
             <SettingsItem
@@ -342,32 +329,30 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    padding: 10,
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  navButtonTextLeft: {
-    color: '#fff',
     fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
   },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   body: {
     flex: 1,
