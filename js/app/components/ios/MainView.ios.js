@@ -24,6 +24,7 @@ var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
 var Loading = require('./../../../shared/components/ios/Loading.ios.js');
+var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -132,6 +133,14 @@ var MainView = React.createClass({
           />
         );
 
+      case routes.MAIN.NEWTHREAD.name:
+        return (
+          <NewThreadView
+            { ...this.props }
+          />
+        );
+        break;
+
       case routes.MAIN.TABBAR.name:
         return <MainTabBar { ...this.props } />
         break;
@@ -141,9 +150,9 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.LOGIN.name:
-        default:
-          return <LoginNavigator { ...this.props } />;
-          break;
+      default:
+        return <LoginNavigator { ...this.props } />;
+        break;
     }
   }
 });

@@ -53,8 +53,7 @@ var routes = {
     THREADLIST: { name: 'ThreadList' },
     ADDPEOPLE: { name: 'AddPeople' },
     THREADSETTINGS: { name: 'ThreadSettings' },
-    MESSAGEVIEW: { name: 'MessageView' },
-    NEWTHREAD: { name: 'NewThread' }
+    MESSAGEVIEW: { name: 'MessageView' }
   },
 
   PROFILE: {

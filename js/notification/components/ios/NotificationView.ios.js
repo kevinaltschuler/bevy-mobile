@@ -13,10 +13,8 @@ var {
   TouchableHighlight,
   Navigator
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var NotificationList = require('./NotificationList.ios.js');
-var BackButton = require('./../../../shared/components/ios/BackButton.ios.js');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');

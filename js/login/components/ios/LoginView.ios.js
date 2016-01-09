@@ -13,7 +13,6 @@ var {
   NativeAppEventEmitter
 } = React;
 
-var base64 = require('base-64');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var USER = constants.USER;
@@ -21,8 +20,6 @@ var routes = require('./../../../routes');
 var AppActions = require('./../../../app/AppActions');
 var UserActions = require('./../../../user/UserActions');
 var UserStore = require('./../../../user/UserStore');
-
-var GoogleSignIn = require('react-native-google-signin');
 
 var LoginView = React.createClass({
   propTypes: {
@@ -68,8 +65,7 @@ var LoginView = React.createClass({
   },
 
   onLoginSuccess() {
-    console.log('THE ROURE', routes.MAIN.TABBAR);
-    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
+    //this.props.mainNavigator.replace(routes.MAIN.TABBAR);
   },
 
   _renderError() {

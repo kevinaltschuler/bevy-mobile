@@ -13,9 +13,6 @@ var constants = require('./../constants');
 var Devices = require('./DeviceCollection');
 
 var User = Backbone.Model.extend({
-  defaults: {
-    image_url: constants.siteurl + '/img/user-profile-icon.png'
-  },
   idAttribute: '_id',
   initialize() {
     this.devices = new Devices;

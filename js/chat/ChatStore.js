@@ -40,15 +40,8 @@ _.extend(ChatStore, {
               if(this.active != -1) {
                 // if theres already an active thread set
                 // then fetch the messages asap
-                //
                 var thread = this.threads.get(this.active);
                 this.threads.sort();
-                thread.messages.fetch({
-                  success: function($collection, $response, $options) {
-                    this.trigger(CHAT.CHANGE_ALL);
-                    this.trigger(CHAT.CHANGE_ONE + this.active);
-                  }.bind(this)
-                });
               }
               this.threads.comparator = this.sortByLatest;
               this.threads.sort();
@@ -469,10 +462,10 @@ _.extend(ChatStore, {
     if(thread == undefined) return 'thread not found';
     return thread.getName();
   },
-  getThreadImageURL(thread_id) {
+  getThreadImageURL(thread_id, width, height) {
     var thread = this.threads.get(thread_id);
     if(thread == undefined) return '/img/logo_100.png';
-    return thread.getImageURL();
+    return thread.getImageURL(width, height);
   },
   getMessages(thread_id: String) {
     var thread = this.threads.get(thread_id);
@@ -489,8 +482,7 @@ _.extend(ChatStore, {
   },
 
   sortByLatest(thread) {
-    var thread = thread.toJSON();
-    var latest = thread.latest;
+    var latest = thread.get('latest');
     if(latest == null) {
       return -thread.created;
     }

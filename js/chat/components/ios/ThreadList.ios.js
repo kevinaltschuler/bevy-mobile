@@ -29,45 +29,73 @@ var ThreadList = React.createClass({
   propTypes: {
     allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object,
-    chatNavigator: React.PropTypes.object
+    chatNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
+    var threads = this.props.allThreads;
+    threads = this.pruneEmptyThreads(threads);
     return {
-      threads: this.props.allThreads
+      threads: threads,
+      ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+        .cloneWithRows(threads)
     };
   },
 
   componentWillReceiveProps(nextProps) {
-    console.log('rerender');
+    var threads = nextProps.allThreads;
+    threads = this.pruneEmptyThreads(threads);
     this.setState({
-      threads: nextProps.allThreads
+      threads: threads,
+      ds: this.state.ds.cloneWithRows(threads)
     })
   },
 
-  goToNewThread() {
-    this.props.chatNavigator.push(routes.CHAT.NEWTHREAD);
+  pruneEmptyThreads(threads) {
+    return _.reject(threads, thread => {
+      return _.isEmpty(ChatStore.getThreadName(thread._id));
+    });
   },
 
-  _renderThreads() {
-    var threadItems = [];
-    for(var key in this.state.threads) {
-      var thread = this.state.threads[key];
-      var active = false;
-      if(thread._id == this.props.activeThread._id) active = true;
-      if(_.isEmpty(ChatStore.getThreadName(thread._id)))
-        continue;
-      threadItems.push(
-        <ThreadItem
-          thread={ thread }
-          user={ this.props.user }
-          key={ 'threadItem:' + thread._id }
-          active={ active }
-          chatNavigator={ this.props.chatNavigator }
-        />
-      );
-    }
-    return threadItems;
+  goToNewThread() {
+    this.props.mainNavigator.push(routes.MAIN.NEWTHREAD);
+  },
+
+  renderThreadRow(thread) {
+    return (
+      <ThreadItem
+        key={ 'threadItem:' + thread._id }
+        thread={ thread }
+        user={ this.props.user }
+        chatNavigator={ this.props.chatNavigator }
+        chatRoute={ this.props.chatRoute }
+      />
+    );
+  },
+
+  renderThreadSeparator(sectionID, rowID, adjacentRowHighlighted) {
+    return (
+      <View
+        key={ 'separator:' + rowID }
+        style={{
+        width: constants.width,
+        height: 1,
+        flexDirection: 'row',
+        alignItems: 'center'
+      }}>
+        <View style={{
+          width: 90,
+          height: 1,
+          backgroundColor: '#FFF'
+        }}/>
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#EEE'
+        }}/>
+      </View>
+    );
   },
 
   render() {
@@ -99,13 +127,17 @@ var ThreadList = React.createClass({
             </TouchableHighlight>
           </View>
         </View>
-        <ScrollView
-          dataSource={ this.state.threads }
-          style={ styles.list }
+
+        <ListView
+          ref={(ref) => { this.ThreadList = ref; }}
+          style={ styles.threadList }
+          dataSource={ this.state.ds }
+          decelerationRate={ 0.9 }
           automaticallyAdjustContentInsets={ false }
-        >
-          { this._renderThreads() }
-        </ScrollView>
+          renderRow={ this.renderThreadRow }
+          renderSeparator={ this.renderThreadSeparator }
+        />
+
       </View>
     );
   }
@@ -114,7 +146,8 @@ var ThreadList = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#EEE'
   },
   topBarContainer: {
     flexDirection: 'column',
@@ -141,7 +174,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  list: {
+  threadList: {
     marginBottom: 48
   },
   noThreadsContainer: {

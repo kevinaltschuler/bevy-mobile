@@ -1,3 +1,10 @@
+/**
+ * ProfileView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -11,15 +18,17 @@ var {
 } = React;
 var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var POST = constants.POST;
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var ProfileView = React.createClass({
-
   propTypes: {
     mainNavigator: React.PropTypes.object,
     user: React.PropTypes.object,
@@ -29,7 +38,6 @@ var ProfileView = React.createClass({
 
   getInitialState() {
     return {
-
     };
   },
 
@@ -49,53 +57,52 @@ var ProfileView = React.createClass({
     );
   },
 
+  goBack() {
+    this.props.mainNavigator.pop();
+  },
+
   render() {
-    console.log(this.props.profileUser.image.filename);
-    var userImage = this.props.profileUser.image_url || constants.apiurl + this.props.profileUser.image.filename;
+    var userImageURL = (_.isEmpty(this.props.profileUser.image))
+      ? constants.siteurl + '/img/user-profile-icon.png'
+      : resizeImage(this.props.profileUser.image, 64, 64).url;
+
     return (
       <View style={ styles.container }>
-        <Navbar
-          styleParent={{
-            backgroundColor: '#2CB673',
-            flexDirection: 'column',
-            paddingTop: 0
-          }}
-          styleBottom={{
-            backgroundColor: '#2CB673',
-            height: 48,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}
-          left={
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
             <TouchableHighlight
-              underlayColor={'rgba(0,0,0,0)'}
-              onPress={() => {
-                this.props.mainNavigator.pop();
-              }}
-              style={ styles.navButtonLeft }>
-              <Text style={ styles.navButtonTextLeft }>
-                Back
-              </Text>
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
             </TouchableHighlight>
-          }
-          center={
-            <View style={ styles.navTitle }>
-              <Text style={ styles.navTitleText }>
-                { this.props.profileUser.displayName }'s Profile
-              </Text>
-            </View>
-          }
-          right={ <View /> }
-        />
+            <Text style={ styles.title }>
+              { this.props.profileUser.displayName }'s Profile
+            </Text>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+          </View>
+        </View>
 
-        <ScrollView>
-
+        <ScrollView
+          style={ styles.scrollView }
+          automaticallyAdjustContentInsets={ false }
+        >
           <View style={ styles.body }>
-
             <View style={ styles.profileCard }>
               <Image
-                source={{ uri: userImage }}
+                source={{ uri: userImageURL }}
                 style={ styles.profileImage }
               />
               <View style={ styles.profileDetails }>
@@ -111,7 +118,7 @@ var ProfileView = React.createClass({
             <View style={styles.generalItem}>
               <View style={styles.itemInner}>
                 <Text style={styles.generalTitle}>
-                  points
+                  Points
                 </Text>
                 <Text style={styles.generalText}>
                   {this.props.user.points}
@@ -122,7 +129,7 @@ var ProfileView = React.createClass({
             <View style={styles.generalItem}>
               <View style={styles.itemInner}>
                 <Text style={styles.generalTitle}>
-                  comments
+                  Comments
                 </Text>
                 <Text style={styles.generalText}>
                   {this.props.user.commentCount}
@@ -133,7 +140,7 @@ var ProfileView = React.createClass({
             <View style={styles.generalItem}>
               <View style={styles.itemInner}>
                 <Text style={styles.generalTitle}>
-                  posts
+                  Posts
                 </Text>
                 <Text style={styles.generalText}>
                   {this.props.user.postCount}
@@ -164,23 +171,30 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#eee'
   },
-
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673'
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    padding: 10
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
     fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   body: {
@@ -191,15 +205,17 @@ var styles = StyleSheet.create({
   },
 
   profileCard: {
+    height: 60,
     backgroundColor: '#fff',
     flexDirection: 'row',
+    alignItems: 'center',
     padding: 10,
     marginBottom: 10,
     borderRadius: 2,
     shadowColor: '#000',
     shadowRadius: 1,
     shadowOpacity: .3,
-    shadowOffset:  {width: 0, height: 0}
+    shadowOffset:  { width: 0, height: 0 }
   },
   profileImage: {
     width: 40,
@@ -213,11 +229,11 @@ var styles = StyleSheet.create({
   },
   profileName: {
     color: '#333',
-    fontSize: 15
+    fontSize: 17
   },
   profileEmail: {
     color: '#666',
-    fontSize: 12
+    fontSize: 15
   },
   generalItem: {
     flexDirection: 'row',
@@ -231,11 +247,12 @@ var styles = StyleSheet.create({
   generalTitle: {
     color: '#666',
     backgroundColor: '#fff',
-    fontSize: 16
+    fontSize: 17
   },
   generalText: {
     color: '#666',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    fontSize: 17
   },
   itemInner: {
     height: 48,
@@ -249,16 +266,16 @@ var styles = StyleSheet.create({
   },
   sectionTitle: {
     color: '#666',
+    fontSize: 17,
     marginLeft: 15,
     marginVertical: 10,
-    fontWeight: 'bold'
   },
   postsTitle: {
     color: '#666',
+    fontSize: 17,
     marginLeft: 15,
     marginTop: 15,
     marginBottom: 5,
-    fontWeight: 'bold'
   }
 });
 

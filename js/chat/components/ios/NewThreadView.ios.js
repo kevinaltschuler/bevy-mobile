@@ -48,7 +48,7 @@ var NewThreadView = React.createClass({
       searchUsers: [],
       ds: ds.cloneWithRows([]),
       addedUsers: [],
-      keyboardSpace: 48
+      keyboardSpace: 0
     };
   },
 
@@ -73,7 +73,7 @@ var NewThreadView = React.createClass({
     });
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
       this.setState({
-        keyboardSpace: 48
+        keyboardSpace: 0
       });
     });
   },
@@ -91,7 +91,7 @@ var NewThreadView = React.createClass({
     });
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
       this.setState({
-        keyboardSpace: 48
+        keyboardSpace: 0
       });
     });
   },
@@ -118,7 +118,7 @@ var NewThreadView = React.createClass({
 
   onSwitchToThread(thread_id) {
     // go to thread view
-    this.props.mainNavigator.replace(routes.CHAT.CHATVIEW);
+    //this.props.mainNavigator.replace(routes.CHAT.THREADLIST);
   },
 
   goBack() {
@@ -131,7 +131,7 @@ var NewThreadView = React.createClass({
       });
       return true;
     }
-    this.props.chatNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   onSearchUserSelect(user) {
@@ -247,13 +247,14 @@ var NewThreadView = React.createClass({
         dataSource={ this.state.ds }
         scrollRenderAheadDistance={ 300 }
         removeClippedSubviews={ true }
+        automaticallyAdjustContentInsets={ false }
         initialListSize={ 10 }
         pageSize={ 10 }
         renderRow={(user) => {
           return (
             <UserSearchItem
               key={ 'searchuser:' + user._id }
-              searchUser={ user }
+              user={ user }
               onSelect={ this.onSearchUserSelect }
               selected={
                 _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
@@ -312,9 +313,8 @@ var NewThreadView = React.createClass({
             value={ this.state.toInput }
             onChangeText={ this.onChangeToText }
             onSubmitEditing={ this.onSubmitToEditing }
-            placeholder=''
-            placeholderTextColor='#AAA'
-            underlineColorAndroid='#FFF'
+            placeholder='Search For Users'
+            placeholderTextColor='#CCC'
           />
         </View>
         { this._renderSearchUsers() }
@@ -369,13 +369,15 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   toText: {
-    color: '#AAA',
+    color: '#666',
+    fontSize: 17,
     marginRight: 10,
     marginBottom: 6
   },
   toInput: {
     flex: 1,
-    height: 36
+    height: 50,
+    fontSize: 17
   },
   progressContainer: {
     flex: 1,
