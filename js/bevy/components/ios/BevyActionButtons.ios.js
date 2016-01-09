@@ -21,6 +21,7 @@ var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
 
 var BevyActionButtons = React.createClass({
@@ -58,7 +59,7 @@ var BevyActionButtons = React.createClass({
   },
 
   showActionSheet() {
-  var bevy = this.props.bevy;
+    var bevy = this.props.bevy;
     if(this.state.joined) {
       var joinOptions = ['leave', 'cancel'];
     } else {
@@ -77,6 +78,10 @@ var BevyActionButtons = React.createClass({
     (buttonIndex) => {
       this._handleJoinLeave(buttonIndex);
     });
+  },
+
+  _onInvite() {
+    this.props.mainNavigator.push(routes.MAIN.INVITEUSERS); 
   },
 
   render() {
@@ -121,6 +126,7 @@ var BevyActionButtons = React.createClass({
             <TouchableHighlight 
               style={styles.actionWrapper} 
               underlayColor='rgba(0,0,0,.1)'
+              onPress={this._onInvite}
             >
               <View style={styles.action}>
                   <Icon name='person-add' size={24} color='#aaa'/>

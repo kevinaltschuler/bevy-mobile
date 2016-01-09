@@ -16,7 +16,7 @@ var {
   StatusBarIOS,
   TabBarIOS,
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
 var MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
@@ -121,8 +121,8 @@ var MainTabBar = React.createClass({
         >
           <Icon.TabBarItem
             title='Home'
-            iconName='ios-home-outline'
-            selectedIconName='ios-home'
+            iconName='home'
+            selectedIconName='home'
             color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Bevies }
@@ -137,8 +137,8 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Search'
-            iconName='ios-search'
-            selectedIconName='ios-search-strong'
+            iconName='search'
+            selectedIconName='search'
             color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Search }
@@ -153,8 +153,8 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Chat'
-            iconName='ios-chatbubble-outline'
-            selectedIconName='ios-chatbubble'
+            iconName='message'
+            selectedIconName='message'
             color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Chat }
@@ -169,8 +169,8 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Notifications'
-            iconName='ios-bell-outline'
-            selectedIconName='ios-bell'
+            iconName='notifications'
+            selectedIconName='notifications'
             color='rgba(0,0,0,.3)'
             size={ 28 }
             selected={ this.state.selectedTab === tabs.Notifications }
@@ -185,8 +185,8 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='More'
-            iconName='ios-more-outline'
-            selectedIconName='ios-more'
+            iconName='more-horiz'
+            selectedIconName='more-horiz'
             size={ 28 }
             color='rgba(0,0,0,.3)'
             selected={ this.state.selectedTab === tabs.More }

@@ -141,7 +141,11 @@ var PostList = React.createClass({
       return <View/>;
     }
     var newPostCard = ( _.isEmpty(this.props.activeBoard.name))
-    ? <BevyActionButtons bevy={bevy} user={user}/>
+    ? <BevyActionButtons 
+        bevy={bevy} 
+        user={user}
+        mainNavigator={this.props.mainNavigator}
+      />
     : (
       <View style={styles.cardContainer}>
         <BoardCard

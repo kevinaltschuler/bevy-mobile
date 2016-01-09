@@ -48,6 +48,7 @@ _.extend(UserStore, {
   tokensLoaded: false,
 
   handleDispatch(payload) {
+    console.log(payload.actionType);
     switch(payload.actionType) {
       case APP.LOAD:
         if(!this.loggedIn) break;
@@ -267,17 +268,6 @@ _.extend(UserStore, {
         if(_.contains(bevies, bevy_id)) break; // already joined
         bevies.push(bevy_id);
         _.uniq(bevies); // ensure that theres no dupes
-
-        var boards = this.user.get('boards'); // get all boards from bevy
-        var bevyBoards = BevyStore.getBevy(bevy_id);
-        console.log(bevyBoards);
-        for(var key in bevyBoards) {
-          var board = bevyBoards[key];
-          boards.push(board);
-        }
-        _.uniq(boards);
-
-        console.log(boards);
 
         this.user.save({
           bevies: bevies,

@@ -15,7 +15,8 @@ var routes = {
     EDITPOST: {name: 'EditPost'},
     NEWTHREAD: { name: 'NewThread' },
     THREADSETTINGS: { name: 'ThreadSettings' },
-    ADDUSER: { name: 'AddUser' } // FOR ANDROID
+    ADDUSER: { name: 'AddUser' }, // FOR ANDROID
+    INVITEUSERS: { name: 'InviteUsers'}
   },
 
   NEWPOST: {

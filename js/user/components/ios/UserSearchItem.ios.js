@@ -71,6 +71,12 @@ var UserSearchItem = React.createClass({
       ? constants.siteurl + '/img/user-profile-icon.png'
       : resizeImage(this.props.user.image, 64, 64).url;
 
+    console.log(this.props.selected)
+
+    if(this.props.selected) {
+      return <View/>;
+    }
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
