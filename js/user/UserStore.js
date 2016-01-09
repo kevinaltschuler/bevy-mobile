@@ -19,6 +19,7 @@ var APP = constants.APP;
 var CHAT = constants.CHAT;
 var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
+var BevyStore = require('./../bevy/BevyStore');
 var GCM = require('./../shared/apis/GCM.android.js');
 
 var React = require('react-native');
@@ -47,6 +48,7 @@ _.extend(UserStore, {
   tokensLoaded: false,
 
   handleDispatch(payload) {
+    console.log(payload.actionType);
     switch(payload.actionType) {
       case APP.LOAD:
         if(!this.loggedIn) break;
@@ -259,49 +261,42 @@ _.extend(UserStore, {
         }
         break;
 
-      case BEVY.SUBSCRIBE:
+      case BEVY.JOIN:
+        // add to users bevies array
         var bevy_id = payload.bevy_id;
+
         var bevies = this.user.get('bevies');
-        console.log(bevies);
-        bevies = _.reject(bevies, function(bevy) {
-          return bevy == null
-        });
-
-
-        if(_.find(bevies, function(bevy){ return bevy == bevy_id}) != undefined) break; // user is already subbed
-
+        if(_.contains(bevies, bevy_id)) break; // already joined
         bevies.push(bevy_id);
+        _.uniq(bevies); // ensure that theres no dupes
 
         this.user.save({
-          bevies: bevies
+          bevies: bevies,
+          boards: boards
         }, {
           patch: true,
           success: function(model, response, options) {
-            // update local storage user
-            AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
-            this.trigger(USER.LOADED);
+            console.log('join success');
           }.bind(this)
         });
         break;
-
-      case BEVY.UNSUBSCRIBE:
+      case BEVY.DESTROY:
+      case BEVY.LEAVE:
+        // remove from users bevies array
         var bevy_id = payload.bevy_id;
-        var bevies = this.user.get('bevies');
-        console.log(bevies);
-        bevies = _.reject(bevies, function(bevy) {
-          return bevy == null
-        });
 
-        // save user to server
+        var bevies = this.user.get('bevies');
+        bevies = _.reject(bevies, function($bevy_id) {
+          return $bevy_id == bevy_id;
+        });
+        _.uniq(bevies); // ensure that theres no dupes
+
         this.user.save({
           bevies: bevies
         }, {
           patch: true,
           success: function(model, response, options) {
-            // update local storage user
-            AsyncStorage.setItem('user', JSON.stringify(this.user.toJSON()));
-
-            this.trigger(USER.LOADED);
+            console.log('leave success')
           }.bind(this)
         });
         break;
@@ -502,6 +497,7 @@ _.extend(UserStore, {
     this.user = new User(user);
     this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
+    console.log(this.user);
     AsyncStorage.setItem('user', JSON.stringify(user));
     // register push notifications for android
     // get token if it exists

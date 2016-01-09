@@ -18,7 +18,7 @@ var {
 } = React;
 
 var Swiper = require('react-native-swiper-fork');
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var BoardActions = require('./../../../board/BoardActions');
@@ -89,8 +89,8 @@ var BoardCard = React.createClass({
     if(board.image)
       image_url = board.image.path;
     var typeIcon = (board.type == 'announcement')
-    ? 'android-warning'
-    : 'android-chat';
+    ? 'flag'
+    : 'forum';
     
     if(this.state.joined) {
       var joinedText = 'joined';
@@ -121,7 +121,7 @@ var BoardCard = React.createClass({
                 </Text>
               </View>
               <View style={styles.detailItem}>
-                <Icon name='android-people' size={18} color='#fff'/>
+                <Icon name='people' size={18} color='#fff'/>
                 <Text style={styles.itemText}>
                   {board.subCount} Subscribers
                 </Text>
@@ -129,55 +129,6 @@ var BoardCard = React.createClass({
             </View>
           </View>
         </Image>
-        <Swiper style={styles.boardActions} height={50} showsButtons={false} loop={false}>
-          <View style={styles.slide}>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              onPress={this.showActionSheet} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='android-done' size={24} color={joinedColor}/>
-                  <Text style={[styles.actionText, {color: joinedColor}]}>
-                    {joinedText}
-                  </Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='android-person-add' size={24} color='#aaa'/>
-                  <Text style={styles.actionText}>
-                    invite
-                  </Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='android-search' size={24} color='#aaa'/>
-                  <Text style={styles.actionText}>
-                    Search
-                  </Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='android-more-horizontal' size={24} color='#aaa'/>
-                  <Text style={styles.actionText}>
-                    Info
-                  </Text>
-              </View>
-            </TouchableHighlight>
-          </View>
-        </Swiper>
       </View>
     )
   }

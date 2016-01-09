@@ -155,7 +155,7 @@ var InputView = React.createClass({
       backgroundColor: '#eee'
     };
     if(board) {
-      var boardImageUrl = board.image_url || constants.apiurl + '/img/logo_100.png';
+      var boardImageUrl = board.image.path || constants.apiurl + '/img/default_board_img.png';
     }
     var boardName = (this.props.activeBoard) ? this.props.activeBoard.name : '';
     return (

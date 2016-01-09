@@ -59,21 +59,8 @@ _.extend(PostStore, {
         var user = UserStore.getUser()._id;
         var loggedIn = UserStore.loggedIn;
 
-        if(bevy_id == null) {
-          // fetch user profile posts
-          this.posts.url =
-            constants.apiurl + '/users/' + profile_user_id + '/posts';
-        } else if(bevy_id == -1 && loggedIn) {
-          // fetch user frontpage posts
-          this.posts.url =
-            constants.apiurl + '/users/' + UserStore.getUser()._id + '/frontpage';
-        } else if(bevy_id == -1 && !loggedIn) {
-          // fetch public frontpage posts
-          this.posts.url = constants.apiurl + '/frontpage';
-        } else {
-          // fetch bevy posts
-          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
-        }
+        this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
+
         // reset all posts first, and trigger loading
         this.posts.reset();
         this.trigger(POST.LOADING);
@@ -83,6 +70,7 @@ _.extend(PostStore, {
         this.posts.fetch({
           success: function(posts, response, options) {
             // trigger sort which will trigger loaded and change all
+            console.log(posts);
             this.posts.sort();
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
@@ -287,6 +275,7 @@ _.extend(PostStore, {
         this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         this.posts.fetch({
           success: function(collection, response, options) {
+            console.log(collection);
             this.posts.sort();
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)

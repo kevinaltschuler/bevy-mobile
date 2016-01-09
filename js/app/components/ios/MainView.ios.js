@@ -25,6 +25,7 @@ var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js
 var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
 var Loading = require('./../../../shared/components/ios/Loading.ios.js');
 var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
+var InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -139,6 +140,10 @@ var MainView = React.createClass({
             { ...this.props }
           />
         );
+        break;
+
+      case routes.MAIN.INVITEUSERS.name: 
+        return <InviteUserView { ...this.props }/>
         break;
 
       case routes.MAIN.TABBAR.name:

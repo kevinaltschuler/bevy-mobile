@@ -10,7 +10,7 @@ var {
   createElement,
   TouchableHighlight
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
 var BevyListButton = require('./../../../shared/components/ios/BevyListButton.ios.js');
 var BevyList = require('./../../../bevy/components/ios/BevyList.ios.js');
@@ -102,8 +102,8 @@ var BevyNavbar = React.createClass({
       );
     }
     var publicPrivateIcon = (bevy.settings.privacy == 'Private')
-      ?'android-lock'
-      :'android-globe';
+      ?'lock'
+      :'public';
     var bevyBottom = (_.isEmpty(this.props.activeBoard.name))
     ? (<View style={styles.bevyBottom}>
         <View style={styles.detailItem}>
@@ -113,13 +113,13 @@ var BevyNavbar = React.createClass({
           </Text>
         </View>
         <View style={styles.detailItem}>
-          <Icon name='android-people' size={18} color='#fff'/>
+          <Icon name='group' size={18} color='#fff'/>
           <Text style={styles.itemText}>
             {bevy.subCount} Subscribers
           </Text>
         </View>
         <View style={styles.detailItem}>
-          <Icon name='android-person' size={18} color='#fff'/>
+          <Icon name='person' size={18} color='#fff'/>
           <Text style={styles.itemText}>
             {bevy.admins.length} Admins
           </Text>

@@ -247,6 +247,35 @@ _.extend(BevyStore, {
         this.trigger(BEVY.CHANGE_ALL);
         break;
 
+      case BEVY.LEAVE:
+        // remove bevy from mybevies collection
+        var bevy_id = payload.bevy_id;
+
+        var bevy = this.myBevies.get(bevy_id);
+        if(bevy == undefined) break; // we havent joined yet
+
+        this.myBevies.remove(bevy_id);
+        this.trigger(BEVY.CHANGE_ALL);
+        break;
+
+      case BEVY.JOIN:
+        // add bevy to mybevies collection
+        var bevy_id = payload.bevy_id;
+        if(this.myBevies.get(bevy_id) != undefined) break; // already joined
+
+        // fetch new bevy from server
+        var new_bevy = new Bevy;
+        new_bevy.url = constants.apiurl + '/bevies/' + bevy_id;
+        new_bevy.fetch({
+          success: function(model, response, options) {
+            // add to collection
+            this.myBevies.add(new_bevy);
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+
+        break;
+
       case BEVY.REQUEST_JOIN:
         var bevy = payload.bevy;
         var user = payload.user;

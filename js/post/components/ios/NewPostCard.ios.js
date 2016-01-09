@@ -60,12 +60,12 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop: 5,
+    marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
     padding: 10,
     borderRadius: 3,
-    marginBottom: 10
+    marginBottom: 15
   },
   image: {
     width: 30,

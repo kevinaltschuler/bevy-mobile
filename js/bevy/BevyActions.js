@@ -113,6 +113,20 @@ var BevyActions = {
       admin_id: admin_id
     });
   },
+
+  join(bevy_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.JOIN,
+      bevy_id: bevy_id
+    });
+  },
+
+  leave(bevy_id) {
+    Dispatcher.dispatch({
+      actionType: BEVY.LEAVE,
+      bevy_id: bevy_id
+    });
+  }
 };
 
 module.exports = BevyActions;

@@ -104,6 +104,7 @@ exports.BEVY = {
   REMOVE_ADMIN: 'bevy_remove_admin',
   ADD_RELATED: 'bevy_add_related',
   REMOVE_RELATED: 'bevy_remove_related',
+  JOIN: 'bevy_join',
 
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
@@ -122,7 +123,7 @@ exports.BEVY = {
 };
 
 exports.BOARD = {
-  SWITCH: 'board_switch_board',
+  SWITCH_BOARD: 'board_switch_board',
   CLEAR: 'board_clear',
   LEAVE: 'board_leave',
   JOIN: 'board_join'

@@ -16,7 +16,7 @@ var {
   TouchableHighlight
 } = React;
 
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 
@@ -44,8 +44,8 @@ var BoardItem = React.createClass({
     if(board.image)
       image_url = board.image.path;
     var typeIcon = (board.type == 'announcement')
-    ? 'android-warning'
-    : 'android-chat';
+    ? 'flag'
+    : 'forum';
 
     return (
       <TouchableHighlight 
@@ -63,7 +63,7 @@ var BoardItem = React.createClass({
                 <Icon name={typeIcon} size={18} color='#fff'/>
               </View>
               <View style={styles.detailItem}>
-                <Icon name='android-people' size={18} color='#fff'/>
+                <Icon name='people' size={18} color='#fff'/>
                 <Text style={styles.itemText}>
                   {board.subCount}
                 </Text>

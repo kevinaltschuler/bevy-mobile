@@ -228,7 +228,7 @@ var App = React.createClass({
   },
 
   getUserState() {
-    console.log('get user state', UserStore.getUser());
+    //console.log('get user state', UserStore.getUser());
     return {
       user: UserStore.getUser(),
       loggedIn: UserStore.loggedIn

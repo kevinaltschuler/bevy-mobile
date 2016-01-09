@@ -75,6 +75,12 @@ var ImageOverlay = React.createClass({
 
   render() {
     if(!this.state.isVisible) return null;
+    var post = this.props.post;
+    var title = post.title || '';
+    if(title.length > 40) {
+      title = title.substring(0,40);
+      title = title.concat('...');
+    }
 
     var leftButton = (this.props.images.length == 1)
     ? <View />
@@ -155,7 +161,7 @@ var ImageOverlay = React.createClass({
             <View>
               <View style={styles.topBar}>
                 <Text style={styles.title}>
-                  {this.props.post.title}
+                  {title}
                 </Text>
               </View>
               <Swiper
@@ -234,7 +240,7 @@ var styles = StyleSheet.create({
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 20,
+    marginLeft: 10,
     marginTop: 20,
     position: 'absolute'
   },
@@ -271,12 +277,13 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#333',
-    width: constants.width
+    width: constants.width,
   },
   title: {
     color: '#fff',
     fontSize: 20,
-    marginTop: 8
+    marginTop: 8,
+    width: constants.width * .65
   }
 });
 
