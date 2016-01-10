@@ -1,3 +1,9 @@
+/**
+ * BevyNavbar.ios.js
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -7,7 +13,6 @@ var {
   TextInput,
   Image,
   StyleSheet,
-  createElement,
   TouchableHighlight
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -16,13 +21,11 @@ var SideMenu = require('react-native-side-menu');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
-var window = require('Dimensions').get('window');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyNavbar = React.createClass({
   propTypes: {
     styleParent: React.PropTypes.object,
-    styleBottom: React.PropTypes.object,
     center: React.PropTypes.node,
     left: React.PropTypes.node,
     right: React.PropTypes.node,
@@ -31,22 +34,12 @@ var BevyNavbar = React.createClass({
   },
 
   getDefaultProps() {
-
     return {
       styleParent: {
         flexDirection: 'column',
         paddingTop: 0,
         overflow: 'visible',
         backgroundColor: '#eee'
-      },
-      styleBottom: {
-        backgroundColor: '#fff',
-        height: 40,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
       },
       center: 'Default',
       left: <View />,
@@ -67,7 +60,6 @@ var BevyNavbar = React.createClass({
   },
 
   _renderLeft() {
-    //var left = createElement(this.props.left, {});
     return this.props.left;
   },
 
@@ -79,13 +71,11 @@ var BevyNavbar = React.createClass({
         </Text>
       );
     } else {
-      //var center = createElement(this.props.center, {});
       return this.props.center;
     }
   },
 
   _renderRight() {
-    //var right = createElement(this.props.right, {});
     return this.props.right;
   },
 
@@ -110,16 +100,18 @@ var BevyNavbar = React.createClass({
             {bevy.settings.privacy}
           </Text>
         </View>
-        <View style={styles.detailItem}>
+        <View style={ styles.detailItem }>
           <Icon name='group' size={18} color='#fff'/>
           <Text style={styles.itemText}>
-            {bevy.subCount} Subscribers
+            { bevy.subCount + ' ' + ((bevy.subCount == 1)
+              ? 'Subscriber' : 'Subscribers') }
           </Text>
         </View>
-        <View style={styles.detailItem}>
+        <View style={ styles.detailItem }>
           <Icon name='person' size={18} color='#fff'/>
           <Text style={styles.itemText}>
-            {bevy.admins.length} Admins
+            { bevy.admins.length + ' ' + ((bevy.admins.length == 1)
+              ? 'Admin' : 'Admins') }
           </Text>
         </View>
       </View>)
@@ -148,7 +140,7 @@ var BevyNavbar = React.createClass({
       }
     }
     return (
-      <View style={ this.props.styleBottom }>
+      <View style={ styles.styleBottom }>
         <View style={ styles.left }>
           { this._renderLeft() }
         </View>
@@ -172,18 +164,13 @@ var BevyNavbar = React.createClass({
           height: StatusBarSizeIOS.currentHeight,
           backgroundColor: '#2CB673',
         }}/>
-        {this._renderBottom()}
+        { this._renderBottom() }
       </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  navbarText: {
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: '500'
-  },
   imageBottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -196,24 +183,6 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     borderBottomWidth: .5,
     borderBottomColor: '#ddd',
-  },
-  settingItemContainer: {
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    height: 48,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
-  },
-  navbarTextLight: {
-    color: '#888',
-    textAlign: 'center',
-    paddingRight: 10,
-    fontSize: 14,
-    fontWeight: '400'
   },
   left: {
     flex: 1,
@@ -233,31 +202,6 @@ var styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'flex-end',
     backgroundColor: 'rgba(0,0,0,0)'
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    padding: 5,
-    height: 39,
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  profileImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 10
-  },
-  profileDetails: {
-    flex: 1,
-    flexDirection: 'column',
-    marginTop: -2
-  },
-  profileName: {
-    color: '#000',
-    fontSize: 15
-  },
-  profileEmail: {
-    color: '#888',
-    fontSize: 12
   },
   bevyTop: {
     flex: 1,
@@ -284,6 +228,16 @@ var styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 12
   },
+  styleBottom: {
+    backgroundColor: '#fff',
+    height: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: '#eee',
+    marginTop: 0
+  }
 });
 
 module.exports = BevyNavbar;

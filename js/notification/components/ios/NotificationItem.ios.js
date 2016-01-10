@@ -2,6 +2,7 @@
  * NotificationItem.ios.js
  * @author albert
  * @author kevin
+ * @flow
  */
 
 'use strict';
@@ -203,22 +204,23 @@ var styles = StyleSheet.create({
 		backgroundColor: 'white',
     justifyContent: 'space-between',
     alignItems: 'stretch',
-    height: 60,
+    height: 80,
   },
   notificationBody: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'stretch',
+    alignItems: 'center',
   },
   row: {
     flexDirection: 'row'
   },
   titleImage: {
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
     backgroundColor: '#eee',
-    borderRadius: 20,
+    borderRadius: 30,
+    marginVertical: 10
   },
   rightRow: {
   	flex: 1,
@@ -230,15 +232,16 @@ var styles = StyleSheet.create({
     flexWrap: 'wrap',
     flexDirection: 'column',
     justifyContent: 'center',
-    height: 40,
-    marginLeft: 10
+    height: 80,
+    marginLeft: 15
   },
   titleText: {
     color: '#282929',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    fontSize: 17
   },
   subTitleText: {
-    fontSize: 10,
+    fontSize: 15,
     fontStyle: 'italic',
     color: '#282929'
   },

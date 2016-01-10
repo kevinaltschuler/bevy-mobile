@@ -33,7 +33,6 @@ var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var window = require('Dimensions').get('window');
 var PostActions = require('./../../../post/PostActions');
 var FILE = constants.FILE;
 
@@ -426,7 +425,7 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
-    width: window.width,
+    width: constants.width,
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,
