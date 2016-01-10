@@ -15,7 +15,6 @@ var {
 } = React;
 
 var MainTabBar = require('./MainTabBar.ios.js');
-var SearchBar = require('./../../../shared/components/ios/SearchBar.ios.js');
 var LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
 var NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
 var CreateBevyView = require('./../../../bevy/components/ios/CreateBevyView.ios.js');
@@ -23,7 +22,7 @@ var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
 var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
-var Loading = require('./../../../shared/components/ios/Loading.ios.js');
+var Loading = require('./Loading.ios.js');
 var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
 var InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
 
@@ -142,7 +141,7 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.INVITEUSERS.name: 
+      case routes.MAIN.INVITEUSERS.name:
         return <InviteUserView { ...this.props }/>
         break;
 

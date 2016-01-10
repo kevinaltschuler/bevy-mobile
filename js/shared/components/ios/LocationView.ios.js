@@ -1,7 +1,9 @@
-/* MapView.ios.js
-* made by @kevin
-* the girl to our left has iphone in hand, ipad in lap and imac on desk.
+/**
+ * MapView.ios.js
+ * @author kevin
+ * @flow
 */
+
 'use strict';
 
 var React = require('react-native');
@@ -12,72 +14,65 @@ var {
   WebView,
   TouchableHighlight
 } = React;
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
-var SearchBar = require('./../../../shared/components/ios/SearchBar.ios.js');
-var NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
-var CreateBevyView = require('./../../../bevy/components/ios/CreateBevyView.ios.js');
-var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
-var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 
 var LocationView = React.createClass({
-
-	getInitialState: function() {
+	getInitialState() {
 		return {
 			mapRegion: this.props.location
 		};
 	},
 
-	render: function() {
+  goBack() {
+    this.props.mainNavigator.pop();
+  },
+
+	render() {
 		return (
 			<View style={styles.container}>
-		        <Navbar
-		          styleParent={{
-		            backgroundColor: '#2CB673',
-		            flexDirection: 'column',
-		            paddingTop: 0
-		          }}
-		          styleBottom={{
-		            backgroundColor: '#2CB673',
-		            height: 48,
-		            flexDirection: 'row',
-		            justifyContent: 'space-between',
-		            alignItems: 'center',
-		          }}
-		          left={
-		            <TouchableHighlight
-		              underlayColor={'rgba(0,0,0,0)'}
-		              onPress={() => {
-		                // blur all text inputs
-		                // go back
-		                this.props.mainNavigator.pop();
-		              }}
-		              style={ styles.navButtonLeft }>
-		              <Text style={ styles.navButtonTextLeft }>
-		                back
-		              </Text>
-		            </TouchableHighlight>
-		          }
-		          center={
-		            <View style={ styles.navTitle }>
-		              <Text style={ styles.navTitleText }>
-		                {this.props.location}
-		              </Text>
-		            </View>
-		          }
-		          right={
-		          	<View style={ styles.navButtonRight } />
-		          }
-		        />
-		        <WebView
-		        	style={styles.map}
-		        	url={'https://www.google.com/maps/search/' + this.props.location.replace(/ /g, '+')}
-		        	scrollEnabled={false}
-		        	scalePageToFit={true}
-		        	contentInset={{top: -20,left: 0,bottom: 0,right: 0}}
-		        />
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              { this.props.location }
+            </Text>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+          </View>
+        </View>
+        <WebView
+        	style={ styles.map }
+        	url={ 'https://www.google.com/maps/search/'
+            + this.props.location.replace(/ /g, '+') }
+        	scrollEnabled={ false }
+        	scalePageToFit={ true }
+        	contentInset={{
+            top: -20,
+            left: 0,
+            bottom: 0,
+            right: 0
+          }}
+        />
 			</View>
 		);
 	}
@@ -87,38 +82,32 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee',
-    height: 500
+    backgroundColor: '#eee'
   },
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    marginLeft: 8
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17
-  },
-  navButtonTextRight: {
-    color: '#ddd',
     fontSize: 17,
-    textAlign: 'right'
+    textAlign: 'center',
+    color: '#FFF'
   },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  scrollView: {
-    flex: 1,
-    flexDirection: 'column'
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   map: {
   	flex: 1,

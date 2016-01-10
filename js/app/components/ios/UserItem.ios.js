@@ -13,7 +13,6 @@ var {
   TouchableOpacity,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
 
 var AddedUserItem = React.createClass({
   propTypes: {

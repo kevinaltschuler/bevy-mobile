@@ -16,7 +16,6 @@ var {
   StyleSheet,
   ScrollView
 } = React;
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 

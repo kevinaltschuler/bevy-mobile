@@ -1,34 +1,29 @@
+/**
+ * BevyPickerView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
 var {
   View,
-  ScrollView,
   ListView,
   Text,
-  TextInput,
   Image,
   StyleSheet,
-  StatusBarIOS,
-  Navigator,
   TouchableHighlight,
-  DeviceEventEmitter
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
+var Icon = require('react-native-vector-icons/MaterialIcons');
+var BevyPickerItem = require('./BevyPickerItem.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
-var FileStore = require('./../../../file/FileStore');
-var FileActions = require('./../../../file/FileActions');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var window = require('Dimensions').get('window');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
-var PostActions = require('./../../../post/PostActions');
-var FILE = constants.FILE;
 
 var BevyPickerView = React.createClass({
   propTypes: {
@@ -47,76 +42,56 @@ var BevyPickerView = React.createClass({
   componentWillReceiveProps(nextProps) {
     var bevies = nextProps.myBevies;
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(bevies)
+      dataSource: this.state.dataSource.cloneWithRows(bevies),
+      selected: nextProps.selected
+    });
+  },
+
+  onSwitchBevy(bevy) {
+    this.setState({
+      selected: bevy
     });
   },
 
   render() {
     return (
       <View style={ styles.container }>
-        <Navbar
-            styleParent={{
-              backgroundColor: '#2CB673',
-              flexDirection: 'column',
-              paddingTop: 0
-            }}
-            styleBottom={{
-              backgroundColor: '#2CB673',
-              height: 48,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-            left={
-              <TouchableHighlight
-                underlayColor={'rgba(0,0,0,0)'}
-                onPress={() => {
-                  this.props.newPostNavigator.pop();
-                }}
-                style={ styles.navButtonLeft }>
-                <Text style={ styles.navButtonTextLeft }>
-                  Cancel
-                </Text>
-              </TouchableHighlight>
-            }
-            center={
-              <View style={ styles.navTitle }>
-                <Text style={ styles.navTitleText }>
-                  Posting To...
-                </Text>
-              </View>
-            }
-            right={
-              <View/>
-            }
-          />
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              Posting To...
+            </Text>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+          </View>
+        </View>
         <ListView
           dataSource={ this.state.dataSource }
           style={ styles.bevyPickerList }
           renderRow={(bevy) => {
-            var imageUri = bevy.image_url || constants.apiurl + '/img/logo_100.png';
-            var defaultBevies=['11sports', '22gaming', '3333pics', '44videos', '555music', '6666news', '777books'];
-            if(_.contains(defaultBevies, bevy._id)) {
-              imageUri = constants.apiurl + bevy.image_url;
-            }
-            if(bevy._id == -1) return <View />; // disallow posting to frontpage
             return (
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,.1)'
-                onPress={() => {
-                  this.props.onSwitchBevy(bevy);
-                }}
-              >
-                <View style={ styles.bevyPickerItem }>
-                  <Image
-                    style={ styles.bevyPickerImage }
-                    source={{ uri: imageUri }}
-                  />
-                  <Text style={ styles.bevyPickerName }>
-                    { bevy.name }
-                  </Text>
-                </View>
-              </TouchableHighlight>
+              <BevyPickerItem
+                key={ 'bevypickeritem:' + bevy._id }
+                bevy={ bevy }
+                onSwitchBevy={ this.onSwitchBevy }
+              />
             );
           }}
         />
@@ -130,79 +105,35 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  navButtonLeft: {
-    flex: 1,
-    padding: 10,
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
   },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17,
-  },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  body: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  bevyPicker: {
-    backgroundColor: '#eee',
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
-    padding: 10
   },
-  postingTo: {
-    fontSize: 15,
-    marginRight: 10
-  },
-  bevyName: {
+  title: {
     flex: 1,
-    color: '#2CB673',
-    fontSize: 15,
-    fontWeight: 'bold'
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   bevyPickerList: {
     backgroundColor: '#fff',
     flex: 1,
     flexDirection: 'column'
-  },
-  bevyPickerItem: {
-    backgroundColor: '#fff',
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 48,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
-  },
-  bevyPickerImage: {
-    width: 36,
-    height: 36,
-    borderRadius: 18
-  },
-  bevyPickerName: {
-    flex: 1,
-    textAlign: 'left',
-    fontSize: 17,
-    paddingLeft: 15
   }
 });
 

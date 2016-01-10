@@ -1,43 +1,32 @@
+/**
+ * DatePickerView.ios.js
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
 var {
   View,
-  ScrollView,
-  ListView,
   Text,
-  TextInput,
   Image,
   StyleSheet,
-  StatusBarIOS,
-  Navigator,
   TouchableHighlight,
-  DeviceEventEmitter,
   DatePickerIOS,
-  Modal
 } = React;
-var { BlurView, VibrancyView } = require('react-native-blur');
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var Calendar = require('react-native-calendar');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 
 var _ = require('underscore');
-var routes = require('./../../../routes');
 var constants = require('./../../../constants');
-var FileStore = require('./../../../file/FileStore');
-var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var window = require('Dimensions').get('window');
-var PostActions = require('./../../../post/PostActions');
-var FILE = constants.FILE;
 
 var DatePickerModal = React.createClass({
   propTypes: {
     onSetDate: React.PropTypes.func,
     selected: React.PropTypes.object,
+    newPostNavigator: React.PropTypes.object
   },
 
   getInitialState() {
@@ -45,104 +34,106 @@ var DatePickerModal = React.createClass({
       isVisible: this.props.isVisible,
       date: this.props.date,
       time: this.props.time
-    }
+    };
   },
 
   componentWillReceiveProps(nextProps) {
-      this.setState({
-        isVisible: nextProps.isVisible,
-        date: nextProps.date,
-        time: nextProps.time
-      });
+    this.setState({
+      isVisible: nextProps.isVisible,
+      date: nextProps.date,
+      time: nextProps.time
+    });
+  },
+
+  goBack() {
+    //do not send date back, just close
+    this.props.newPostNavigator.pop();
+  },
+
+  submit() {
+    //send the date back to createeventview
+    this.props.onSetDate(this.state.date);
+    this.props.onSetTime(this.state.time);
+    //close
+    this.props.newPostNavigator.pop();
   },
 
   render() {
     return (
-          <View style={ styles.container }>
-            <Navbar
-              styleParent={{
-                backgroundColor: '#2CB673',
-                flexDirection: 'column',
-                paddingTop: 0
-              }}
-              styleBottom={{
-                backgroundColor: '#2CB673',
-                height: 48,
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center'
-              }}
-              left={
-                <TouchableHighlight
-                  underlayColor={'rgba(0,0,0,0)'}
-                  onPress={() => {
-                    //do not send date back, just close
-                    this.props.newPostNavigator.pop();
-                  }}
-                  style={ styles.navButtonLeft }>
-                  <Text style={ styles.navButtonTextLeft }>
-                    Cancel
-                  </Text>
-                </TouchableHighlight>
-              }
-              center={
-                <View style={ styles.navTitle }>
-                  <Text style={ styles.navTitleText }>
-                    Select Date
-                  </Text>
-                </View>
-              }
-              right={
-                <TouchableHighlight
-                  underlayColor={'rgba(0,0,0,0)'}
-                  onPress={() => {
-                    //send the date back to createeventview
-                    this.props.onSetDate(this.state.date);
-                    this.props.onSetTime(this.state.time);
-                    //close
-                    this.props.newPostNavigator.pop();
-                  }}
-                  style={ styles.navButtonRight }>
-                  <Text style={ styles.navButtonTextRight }>
-                    Done
-                  </Text>
-                </TouchableHighlight>
-              }
-            />
-            <View style={styles.dateString}>
-              <Text style={{fontSize: 18, color: '#555'}}>
-                {this.state.date.toLocaleDateString()} at {this.state.time.toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'}).replace(/(:\d{2}| )$/, "")}
-              </Text>
-            </View>
-            <View style={{height: 5, width: constants.width, backgroundColor: 'rgba(247,247,247,1)'}}/>
-            <Calendar
-              eventDates={[]}
-              showControls={true}
-              titleFormat={'MMMM YYYY'}
-              dayHeadings={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
-              prevButtonText={''}
-              nextButtonText={''}
-              scrollEnabled={true}
-              customStyle={calendarStyles}
-              onDateSelect={(date) => {
-                this.setState({
-                  date: new Date(date)
-                })
-              }}
-            />
-            <View style={styles.pickers}>
-              <DatePickerIOS
-                mode={'time'}
-                date={ this.state.time }
-                onDateChange={(time) => {
-                  this.setState({
-                    time: new Date(time)
-                  })
-                }}
+      <View style={ styles.container }>
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
               />
-            </View>
-
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+            </Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.submit }
+            >
+              <Icon
+                name='done'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
           </View>
+        </View>
+        <View style={ styles.dateString }>
+          <Text style={{fontSize: 18, color: '#555'}}>
+            { this.state.date.toLocaleDateString() }
+            &nbsp;at&nbsp;
+            { this.state.time.toLocaleTimeString(
+              navigator.language,
+              { hour: '2-digit', minute:'2-digit' }).replace(/(:\d{2}| )$/, "") }
+          </Text>
+        </View>
+        <View style={{
+          height: 5,
+          width: constants.width,
+          backgroundColor: 'rgba(247,247,247,1)'
+        }}/>
+        <Calendar
+          eventDates={[]}
+          showControls={true}
+          titleFormat={'MMMM YYYY'}
+          dayHeadings={['S', 'M', 'T', 'W', 'T', 'F', 'S']}
+          prevButtonText={''}
+          nextButtonText={''}
+          scrollEnabled={true}
+          customStyle={calendarStyles}
+          onDateSelect={(date) => {
+            this.setState({
+              date: new Date(date)
+            })
+          }}
+        />
+        <View style={styles.pickers}>
+          <DatePickerIOS
+            mode={'time'}
+            date={ this.state.time }
+            onDateChange={(time) => {
+              this.setState({
+                time: new Date(time)
+              })
+            }}
+          />
+        </View>
+      </View>
     );
   }
 });
@@ -152,39 +143,30 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  modal: {
-    flexDirection: 'row',
-    marginTop: constants.height / 4
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
   },
   topBar: {
-    height: 42,
-    width: constants.width - 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginTop: 10
-  },
-  pickers: {
-    backgroundColor: 'rgba(247,247,247,1)',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  closeButton: {
     height: 48,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderRadius: 24,
+    backgroundColor: '#2CB673',
     flexDirection: 'row',
     alignItems: 'center',
   },
-  panel: {
-    backgroundColor: '#fff',
-    flexDirection: 'column',
+  title: {
+    flex: 1,
+    fontSize: 17,
+    textAlign: 'center',
+    color: '#FFF'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 20,
-    width: constants.width,
-    height: 400,
+    justifyContent: 'center'
   },
   dateString: {
     justifyContent: 'center',
@@ -193,32 +175,11 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee'
   },
-  navButtonLeft: {
+  pickers: {
+    backgroundColor: 'rgba(247,247,247,1)',
     flex: 1,
-    padding: 10,
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17,
-  },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
 });
 

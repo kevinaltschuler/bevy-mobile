@@ -98,6 +98,18 @@ var ThreadList = React.createClass({
     );
   },
 
+  _renderNoThreads() {
+    if(_.isEmpty(this.state.threads)) {
+      return (
+        <View style={ styles.noThreadsContainer }>
+          <Text style={ styles.noThreadsText }>
+            No Chats Yet
+          </Text>
+        </View>
+      );
+    }
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -127,6 +139,8 @@ var ThreadList = React.createClass({
             </TouchableHighlight>
           </View>
         </View>
+
+        { this._renderNoThreads() }
 
         <ListView
           ref={(ref) => { this.ThreadList = ref; }}

@@ -16,7 +16,7 @@ var {
   TouchableHighlight,
   ScrollView
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -42,8 +42,8 @@ var BevyCard = React.createClass({
       : resizeImage(this.props.bevy.image, 256, 256).url;
 
     var publicPrivateIcon = (this.props.bevy.settings.privacy == 'Private')
-      ? 'android-lock'
-      : 'android-globe';
+      ? 'lock'
+      : 'public';
 
     var bevyName = bevy.name;
 
@@ -71,7 +71,7 @@ var BevyCard = React.createClass({
                   { this.props.bevy.subCount }
                 </Text>
                 <Icon
-                  name='android-people'
+                  name='people'
                   size={ 24 }
                   color='#555'
                 />

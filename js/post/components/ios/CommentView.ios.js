@@ -18,17 +18,16 @@ var {
   TouchableOpacity,
   DeviceEventEmitter
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
-var Navbar = require('./../../../shared/components/ios/Navbar.ios.js');
-var BackButton = require('./../../../shared/components/ios/BackButton.ios.js');
 var CommentList = require('./CommentList.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var PostStore = require('./../../../post/PostStore');
 var CommentActions = require('./../../../post/CommentActions');
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var CommentView = React.createClass({
   propTypes: {
@@ -71,6 +70,11 @@ var CommentView = React.createClass({
     };
   },
 
+  componentDidMount() {
+    DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHide);
+  },
+
   componentWillReceiveProps(nextProps) {
     this.setState({
       post: nextProps.post,
@@ -78,22 +82,21 @@ var CommentView = React.createClass({
     });
   },
 
-  _onKeyboardShowed(ev) {
+  _onKeyboardShow(ev) {
     var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
     this.setState({
       keyboardSpace: height
     });
   },
 
-  _onKeyboardHid(ev) {
+  _onKeyboardHide(ev) {
     this.setState({
       keyboardSpace: 0
     });
   },
 
-  componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShowed);
-    DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHid);
+  goBack() {
+    this.props.mainNavigator.pop();
   },
 
   onReply(comment) {
@@ -103,6 +106,20 @@ var CommentView = React.createClass({
     });
     // focus the text field
     this.refs.reply.focus();
+  },
+
+  onReplyBlur() {
+    // cancel the comment reply if unfocused
+    if(!_.isEmpty(this.state.replyToComment)) {
+      this.setState({
+        replyToComment: {},
+        replyText: this.state.replyText // set again because of set state lag
+      });
+    }
+  },
+
+  onReplyChange(text) {
+    this.setState({ replyText: text });
   },
 
   postReply() {
@@ -212,7 +229,6 @@ var CommentView = React.createClass({
   },
 
   _renderReplyBar() {
-
     var replyInfo = (_.isEmpty(this.state.replyToComment))
     ? <View />
     : (
@@ -241,57 +257,51 @@ var CommentView = React.createClass({
         <View style={ styles.replyBar }>
           <TextInput
             ref='reply'
+            style={ styles.replyInput }
             placeholder='Reply'
             returnKeyType='send'
             clearButtonMode='while-editing'
             value={ this.state.replyText }
-            onChangeText={(text) => {
-              this.setState({
-                replyText: text
-              });
-            }}
-            onSubmitEditing={(ev) => {
-              // post comment
-              this.postReply();
-            }}
-            onBlur={() => {
-              // cancel the comment reply if unfocused
-              if(!_.isEmpty(this.state.replyToComment)) {
-                this.setState({
-                  replyToComment: {},
-                  replyText: this.state.replyText // set again because of set state lag
-                });
-              }
-            }}
-            style={ styles.replyInput }
+            onChangeText={ this.onReplyChange }
+            onSubmitEditing={ this.postReply }
+            onBlur={ this.onReplyBlur }
           />
           <TouchableOpacity
-            onPress={() => {
-              this.postReply();
-            }}
+            activeOpacity={ 0.5 }
+            onPress={ this.postReply }
             style={ styles.replyButton }
           >
-            <Text style={ styles.replyButtonText }>
-              Post
-            </Text>
+            <Icon
+              name='send'
+              size={ 30 }
+              color='#2CB673'
+            />
           </TouchableOpacity>
         </View>
       </View>
     );
   },
 
-  render() {
-    var content = (_.isEmpty(this.state.post))
-    ? (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{color: '#555', fontWeight: '600'}}>
-          post was not found
-        </Text>
-      </View>
-      )
-    : (
+  _renderContent() {
+    if(this.state.loading) {
+      return (
+        <View>
+          <Text>Loading</Text>
+        </View>
+      );
+    }
+    if(_.isEmpty(this.state.post)) {
+      return (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{color: '#555', fontWeight: '600'}}>
+            post was not found
+          </Text>
+        </View>
+      );
+    }
+    return (
       <View>
-        <ScrollView style={ styles.scrollView}>
+        <ScrollView style={ styles.scrollView }>
           { this._renderPost() }
           <View style={ styles.commentsCard }>
             <CommentList
@@ -304,49 +314,38 @@ var CommentView = React.createClass({
         </ScrollView>
       </View>
     );
-    if(this.state.loading) {
-      content = (
-        <View>
-          <Text>Loading</Text>
-        </View>
-      );
-    }
+  },
+
+  render() {
     return (
       <View style={ styles.container }>
-        <Navbar
-          styleParent={{
-            backgroundColor: '#2CB673',
-            flexDirection: 'column',
-            paddingTop: 0
-          }}
-          styleBottom={{
-            backgroundColor: '#2CB673',
-            height: 48,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-          left={
-            <BackButton
-              color='#fff'
-              text='Back'
-              onPress={()=>{
-                this.props.mainNavigator.pop();
-              }}
-            />
-          }
-          center={
-            <View style={ styles.navTitle }>
-              <Text style={ styles.navTitleText }>
-
-              </Text>
-            </View>
-          }
-          right={
-            <View style={ styles.navButtonRight } />
-          }
-        />
-        {content}
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: StatusBarSizeIOS.currentHeight,
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              Post
+            </Text>
+            <View style={{
+              width: 48,
+              height: 48
+            }}/>
+          </View>
+        </View>
+        { this._renderContent() }
         { this._renderReplyBar() }
       </View>
     );
@@ -360,37 +359,34 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginTop: 0
   },
-
-  navButtonLeft: {
+  topBarContainer: {
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#2CB673',
+  },
+  topBar: {
+    height: 48,
+    backgroundColor: '#2CB673',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     flex: 1,
-    marginLeft: 8
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17
-  },
-  navButtonTextRight: {
-    color: '#ddd',
     fontSize: 17,
-    textAlign: 'right'
+    textAlign: 'center',
+    color: '#FFF'
   },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   scrollView: {
-    flex: 1,
-    height: constants.height - 110
+    flex: 1
   },
   commentsCard: {
     flexDirection: 'column',
@@ -443,7 +439,7 @@ var styles = StyleSheet.create({
     paddingLeft: 10
   },
   replyInput: {
-    flex: 3,
+    flex: 1,
     color: '#333',
     borderWidth: 1,
     borderColor: '#ccc',
@@ -454,9 +450,9 @@ var styles = StyleSheet.create({
     paddingRight: 16
   },
   replyButton: {
-    flex: 1,
     paddingTop: 0,
-    paddingBottom: 0
+    paddingBottom: 0,
+    paddingHorizontal: 8
   },
   replyButtonText: {
     paddingLeft: 10,
