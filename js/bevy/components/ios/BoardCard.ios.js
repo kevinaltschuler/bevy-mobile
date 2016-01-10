@@ -20,6 +20,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BoardActions = require('./../../../board/BoardActions');
 
 var BoardCard = React.createClass({
@@ -39,9 +40,10 @@ var BoardCard = React.createClass({
     if(_.isEmpty(board)) {
       return <View/>;
     }
-    var image_url = constants.siteurl + '/img/default_board_img.png';
-    if(board.image)
-      image_url = board.image.path;
+    var image_url = (_.isEmpty(board.image))
+      ? constants.siteurl + '/img/default_board_img.png'
+      : resizeImage(board.image, constants.width, 100).url;
+
     var typeIcon = (board.type == 'announcement') ? 'flag' : 'forum';
 
     return (

@@ -21,6 +21,7 @@ var SideMenu = require('react-native-side-menu');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyNavbar = React.createClass({
@@ -78,9 +79,9 @@ var BevyNavbar = React.createClass({
 
   _renderBottom() {
     var bevy = this.props.activeBevy;
-    var image_url = constants.siteurl + '/img/default_group_img.png';
-    if(!_.isEmpty(bevy))
-      image_url = bevy.image.path || '';
+    var image_url = (_.isEmpty(bevy.image))
+      ? constants.siteurl + '/img/default_group_img.png'
+      : resizeImage(bevy.image, constants.width, 100).url;
 
     var publicPrivateIcon = (bevy.settings.privacy == 'Private')
       ? 'lock'
