@@ -403,8 +403,8 @@ _.extend(BevyStore, {
         this.trigger(BOARD.CHANGE_ALL);
         break;
       case INVITE.INVITE_USER:
-        var user_id = payload.user_id;
-        console.log('bevy store', user_id);
+        var user = payload.user;
+        var user_id = user._id;
 
         var invite = this.bevyInvites.add({
           user: user_id,
@@ -412,16 +412,14 @@ _.extend(BevyStore, {
           requestType: 'invite',
           bevy: this.active.get('_id')
         });
-        console.log('BEVY STORE', invite);
         invite.url = constants.apiurl + '/invites';
-        /*invite.save(null, {
+        invite.save(null, {
           success: function(model, response, options) {
-            console.log(model);
             invite.set('user', user);
             invite.set('_id', model.get('_id'));
             this.trigger(BEVY.CHANGE_ALL);
           }.bind(this)
-        });*/
+        });
         break;
       case INVITE.DESTROY:
         console.log('got to here');

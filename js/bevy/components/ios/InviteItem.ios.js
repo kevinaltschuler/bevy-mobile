@@ -39,12 +39,11 @@ var InviteItem = React.createClass({
 
   render() {
     var invite = this.props.invite;
-    console.log(invite);
     var user = invite.user;
     var userImageURL = (_.isEmpty(user.image))
       ? constants.siteurl + '/img/user-profile-icon.png'
       : resizeImage(user.image, 64, 64).url;
-    var action = (invite.requestType = 'request_join')
+    var action = (invite.requestType == 'request_join')
     ? ( <TouchableOpacity
           activeOpacity={ 0.5 }
           onPress={ this.acceptRequest }

@@ -60,8 +60,6 @@ var InviteUserView = React.createClass({
     UserStore.on(USER.SEARCHING, this.onSearching);
     UserStore.on(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    // listen to chat store events
-    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     // populate list with random users for now
     UserActions.search('');
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
@@ -126,7 +124,7 @@ var InviteUserView = React.createClass({
   },
 
   onSearchUserSelect(user) {
-    BevyActions.inviteUser(user._id);
+    BevyActions.inviteUser(user);
   },
 
   onChangeToText(text) {
@@ -151,7 +149,7 @@ var InviteUserView = React.createClass({
 
   _renderPendingInvites() {
     var users = [];
-    var invites = this.props.bevyInvites
+    var invites = this.props.bevyInvites;
     for(var key in invites) {
       var invite = invites[key];
       if(invite.requestType == 'invite')
@@ -230,6 +228,11 @@ var InviteUserView = React.createClass({
         initialListSize={ 10 }
         pageSize={ 10 }
         renderRow={(user) => {
+          var invites = this.props.bevyInvites;
+          for(var key in invites) {
+            if ((user._id) == invites[key].user._id)
+              return <View/>;
+          }
           return (
             <UserSearchItem
               key={ 'searchuser:' + user._id }
@@ -243,7 +246,6 @@ var InviteUserView = React.createClass({
   },
 
   render() {
-    console.log(this.props.bevyInvites);
     var bevy = this.props.activeBevy;
     return (
       <View style={ styles.container }>
