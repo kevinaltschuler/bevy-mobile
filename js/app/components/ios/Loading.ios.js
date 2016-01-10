@@ -28,7 +28,6 @@ var Loading = React.createClass({
 	    AsyncStorage.getItem('user')
 	    .then((user) => {
 	      if(user) {
-	        console.log('user fetched', user);
 	        UserActions.loadUser(JSON.parse(user));
 	      } else {
 	        console.log('going to login screen...');

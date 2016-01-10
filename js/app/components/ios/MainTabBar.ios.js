@@ -16,7 +16,7 @@ var {
   StatusBarIOS,
   TabBarIOS,
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
+var Icon = require('react-native-vector-icons/Ionicons');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
 var MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
@@ -121,10 +121,9 @@ var MainTabBar = React.createClass({
         >
           <Icon.TabBarItem
             title='Home'
-            iconName='home'
-            selectedIconName='home'
-            color='rgba(0,0,0,.3)'
-            size={ 28 }
+            iconName='android-home'
+            selectedIconName='android-home'
+            color='rgba(0,0,0,.2)'
             selected={ this.state.selectedTab === tabs.Bevies }
             style={ styles.tabIcon }
             onPress={() => {
@@ -137,10 +136,9 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Search'
-            iconName='search'
-            selectedIconName='search'
-            color='rgba(0,0,0,.3)'
-            size={ 28 }
+            iconName='android-search'
+            selectedIconName='android-search'
+            color='rgba(0,0,0,.2)'
             selected={ this.state.selectedTab === tabs.Search }
             style={ styles.tabIcon }
             onPress={() => {
@@ -153,10 +151,9 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Chat'
-            iconName='message'
-            selectedIconName='message'
-            color='rgba(0,0,0,.3)'
-            size={ 28 }
+            iconName='android-textsms'
+            selectedIconName='android-textsms'
+            color='rgba(0,0,0,.2)'
             selected={ this.state.selectedTab === tabs.Chat }
             style={ styles.tabIcon }
             onPress={() => {
@@ -169,10 +166,9 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='Notifications'
-            iconName='notifications'
-            selectedIconName='notifications'
-            color='rgba(0,0,0,.3)'
-            size={ 28 }
+            iconName='android-notifications'
+            selectedIconName='android-notifications'
+            color='rgba(0,0,0,.2)'
             selected={ this.state.selectedTab === tabs.Notifications }
             style={ styles.tabIcon }
             onPress={() => {
@@ -185,8 +181,8 @@ var MainTabBar = React.createClass({
           </Icon.TabBarItem>
           <Icon.TabBarItem
             title='More'
-            iconName='more-horiz'
-            selectedIconName='more-horiz'
+            iconName='android-more-horizontal'
+            selectedIconName='android-more-horizontal'
             size={ 28 }
             color='rgba(0,0,0,.3)'
             selected={ this.state.selectedTab === tabs.More }

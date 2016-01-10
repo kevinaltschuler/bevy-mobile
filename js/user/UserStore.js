@@ -48,7 +48,6 @@ _.extend(UserStore, {
   tokensLoaded: false,
 
   handleDispatch(payload) {
-    console.log(payload.actionType);
     switch(payload.actionType) {
       case APP.LOAD:
         if(!this.loggedIn) break;
@@ -456,7 +455,6 @@ _.extend(UserStore, {
   },
 
   login(username, password) {
-    console.log(username, password)
     fetch(constants.siteurl + '/login', {
       method: 'POST',
       headers: {
@@ -497,7 +495,6 @@ _.extend(UserStore, {
     this.user = new User(user);
     this.user.url = constants.apiurl + '/users/' + this.user.get('_id');
     this.loggedIn = true;
-    console.log(this.user);
     AsyncStorage.setItem('user', JSON.stringify(user));
     // register push notifications for android
     // get token if it exists

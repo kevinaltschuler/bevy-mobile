@@ -70,7 +70,6 @@ _.extend(PostStore, {
         this.posts.fetch({
           success: function(posts, response, options) {
             // trigger sort which will trigger loaded and change all
-            console.log(posts);
             this.posts.sort();
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
@@ -275,7 +274,6 @@ _.extend(PostStore, {
         this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
         this.posts.fetch({
           success: function(collection, response, options) {
-            console.log(collection);
             this.posts.sort();
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
