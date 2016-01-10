@@ -1,7 +1,8 @@
 /**
- * BevyNavigator.js
- * kevin made this
- * yo that party was tight
+ * BevyNavigator.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
  */
 
 'use strict';
@@ -13,10 +14,8 @@ var {
   View,
   Navigator,
   TouchableHighlight,
-  TouchableOpacity,
-  ActionSheetIOS
+  TouchableOpacity
 } = React;
-var InfoButton = require('./InfoButton.ios.js');
 var BevyNavbar = require('./BevyNavbar.ios.js');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var InfoView = require('./InfoView.ios.js');
@@ -48,10 +47,6 @@ var BevyView = React.createClass({
       navHeight: 0,
       sideMenuOpen: false,
     }
-  },
-
-  componentWillReceiveProps(nextProps) {
-
   },
 
   closeSideMenu() {
@@ -138,21 +133,18 @@ var BevyView = React.createClass({
         var center = 'Info';
         var left = (
           <TouchableOpacity
-              activeOpacity={ 0.5 }
-              onPress={() => {
-                this.props.bevyNavigator.pop();
-              }}
-              style={ styles.backButtonContainer }
-            >
-              <View style={ styles.backButton }>
-                <Icon
-                  name='ios-arrow-left'
-                  size={ 30 }
-                  color={ fontColor }
-                  style={ styles.backButtonIcon }
-                />
-              </View>
-            </TouchableOpacity>
+            activeOpacity={ 0.5 }
+            style={ styles.backButton }
+            onPress={() => {
+              this.props.mainNavigator.pop();
+            }}
+          >
+            <Icon
+              name='arrow-back'
+              size={ 30 }
+              color={ fontColor }
+            />
+          </TouchableOpacity>
         );
         break;
       case routes.BEVY.SETTINGS.name:
@@ -177,27 +169,6 @@ var BevyView = React.createClass({
       case routes.BEVY.POSTLIST.name:
         var fontColor = '#fff';
         var bottomHeight = 80;
-        var tagButton = (
-          <TouchableHighlight
-            underlayColor={'rgba(0,0,0,0.1)'}
-            onPress={() => {
-              this.setState({
-                showTags: true
-              });
-            }}
-            style={{
-              marginRight: 10,
-              borderRadius: 2,
-              paddingHorizontal: 5,
-              paddingVertical: 5,
-              backgroundColor: fontColor
-            }}
-          >
-            <Text style={{ fontSize: 12, color: this.state.inverseColor }}>
-              Tags
-            </Text>
-          </TouchableHighlight>
-        );
 
         var sideMenuButton = (
           <TouchableHighlight
@@ -215,7 +186,7 @@ var BevyView = React.createClass({
             }}
           >
               <Icon
-                name='ios-drag'
+                name='menu'
                 size={ 30 }
                 color={ fontColor }
                 style={{}}
@@ -223,39 +194,6 @@ var BevyView = React.createClass({
           </TouchableHighlight>
         )
 
-        var sortButton = (
-          <TouchableHighlight
-            underlayColor={'rgba(0,0,0,0.1)'}
-            onPress={() => {
-              ActionSheetIOS.showActionSheetWithOptions({
-                options: ['Top', 'New', 'Cancel'],
-                cancelButtonIndex: 2
-              },
-              (buttonIndex) => {
-                switch(buttonIndex) {
-                  case 0:
-                    var sortType = 'top';
-                    break;
-                  case 1:
-                    var sortType = 'new';
-                    break;
-                }
-                PostActions.sort(sortType);
-              });
-            }}
-            style={{
-              marginRight: 10,
-              borderRadius: 2,
-              paddingHorizontal: 5,
-              paddingVertical: 5,
-              backgroundColor: fontColor
-            }}
-          >
-            <Text style={{ fontSize: 12, color: this.state.inverseColor }}>
-              {PostStore.sortType.charAt(0).toUpperCase() + PostStore.sortType.slice(1)}
-            </Text>
-          </TouchableHighlight>
-        );
         var right = (
           <View
             style={{
@@ -265,10 +203,7 @@ var BevyView = React.createClass({
               justifyContent: 'flex-end'
             }}
           >
-            {/* tagButton }
-            { sortButton */}
-            {/* infoButton */}
-            {sideMenuButton}
+            { sideMenuButton }
           </View>
         );
         var center = this.props.activeBevy.name || '';
@@ -276,7 +211,10 @@ var BevyView = React.createClass({
           <View style={{height: 47}}>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0.1)'
-              onPress={() => { this.props.bevyNavigator.pop() }}
+              style={ styles.backButton }
+              onPress={() => {
+                this.props.bevyNavigator.pop()
+              }}
             >
               <Icon
                 name='arrow-back'
@@ -287,19 +225,6 @@ var BevyView = React.createClass({
           </View>
         );
         break;
-    }
-
-    if(this.props.activeBevy._id == -1)
-      tagButton = <View/>;
-
-    if(this.props.bevyRoute.setting) {
-      switch(this.props.bevyRoute.setting) {
-        case 'posts_expire_in':
-          center = 'Posts Expire In...';
-          break;
-        default:
-          break;
-      }
     }
 
     if(center.length > 30) {
@@ -326,30 +251,29 @@ var BevyView = React.createClass({
       >
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
           <BevyNavbar
-            bottomHeight={bottomHeight}
+            bottomHeight={ bottomHeight }
             bevyRoute={ this.props.bevyRoute }
             bevyNavigator={ this.props.bevyNavigator }
             left={ left }
-            center={<Text style={{color: fontColor, fontSize: 18, marginLeft: 10, fontWeight: 'bold'}}>{center}</Text>}
+            center={
+              <Text style={{
+                color: fontColor,
+                fontSize: 18,
+                marginLeft: 10,
+                fontWeight: 'bold'
+              }}>
+                {center}
+              </Text>
+            }
             right={ right }
             activeBevy={ this.props.activeBevy }
             activeBoard={ this.props.activeBoard }
             route={ this.props.bevyRoute.name }
             fontColor={ fontColor }
-            { ...this.props }
             styleParent={{
               height: bottomHeight + 20
             }}
-            styleBottom={{
-              backgroundColor: '#fff',
-              height: 40,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              borderBottomWidth: 2,
-              borderBottomColor: '#eee',
-              marginTop: 0
-            }}
+            { ...this.props }
           />
             { view }
         </View>
@@ -359,7 +283,6 @@ var BevyView = React.createClass({
 });
 
 var BevyNavigator = React.createClass({
-
   propTypes: {
     myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
@@ -400,24 +323,12 @@ var styles = StyleSheet.create({
     width: 30,
     height: 30
   },
-  backButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 39,
-    backgroundColor: 'rgba(0,0,0,0)',
-    marginLeft: 5
-  },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  backButtonIcon: {
-    paddingLeft: 5,
-    paddingRight: 5,
-    width: 30,
-    height: 30
-  },
+    backgroundColor: 'rgba(0,0,0,0)',
+    height: 40
+  }
 });
 
 module.exports = BevyNavigator;
