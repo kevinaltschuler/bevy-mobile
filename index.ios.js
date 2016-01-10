@@ -203,7 +203,8 @@ var App = React.createClass({
       activeBevy: BevyStore.getActive(),
       publicBevies: BevyStore.getPublicBevies(),
       bevyBoards: BevyStore.getBevyBoards(),
-      activeBoard: BevyStore.getActiveBoard()
+      activeBoard: BevyStore.getActiveBoard(),
+      bevyInvites: BevyStore.getBevyInvites()
     };
   },
 

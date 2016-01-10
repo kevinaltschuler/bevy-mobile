@@ -14,11 +14,12 @@ var {
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
-var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js');
+var InviteItem = require('./InviteItem.ios.js');
 var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
@@ -31,6 +32,7 @@ var ChatActions = require('./../../../chat/ChatActions');
 var ChatStore = require('./../../../chat/ChatStore');
 var UserActions = require('./../../../user/UserActions');
 var UserStore = require('./../../../user/UserStore');
+var BevyActions = require('./../../BevyActions');
 var USER = constants.USER;
 var CHAT = constants.CHAT;
 
@@ -49,7 +51,6 @@ var InviteUserView = React.createClass({
       searching: false,
       searchUsers: [],
       ds: ds.cloneWithRows([]),
-      addedUsers: [],
       keyboardSpace: 48
     };
   },
@@ -113,7 +114,6 @@ var InviteUserView = React.createClass({
 
   onSearchComplete() {
     var searchUsers = UserStore.getUserSearchResults();
-    console.log('search complete, ', searchUsers);
     this.setState({
       searching: false,
       searchUsers: searchUsers,
@@ -126,37 +126,10 @@ var InviteUserView = React.createClass({
   },
 
   onSearchUserSelect(user) {
-    var addedUsers = this.state.addedUsers;
-    if(_.findWhere(this.state.addedUsers, { _id: user._id }) != undefined) {
-      // user already exists
-      // remove user from the list
-      //addedUsers = _.reject(addedUsers, ($user) => $user._id == user._id);
-    } else {
-      // add user to list
-      addedUsers.push(user);
-      // clear text field
-      this.setState({
-        toInput: ''
-      });
-    }
-    this.setState({
-      addedUsers: addedUsers
-    });
+    BevyActions.inviteUser(user._id);
   },
 
   onChangeToText(text) {
-    if(_.isEmpty(text) && _.isEmpty(this.state.toInput)) {
-      // new and old text is empty
-      // user probably pressed backspace on an empty field
-      // so lets remove an added user if it exists
-      var addedUsers = this.state.addedUsers;
-      addedUsers.pop();
-      this.setState({
-        addedUsers: addedUsers
-      });
-      return;
-    }
-
     // update state
     this.setState({
       toInput: text
@@ -176,37 +149,56 @@ var InviteUserView = React.createClass({
     });
   },
 
-  onRemoveAddedUser(user) {
-    var addedUsers = this.state.addedUsers;
-    addedUsers = _.reject(addedUsers, ($user) => $user._id == user._id);
-    this.setState({
-      addedUsers: addedUsers
-    });
-  },
-
-  submit() {
-    // dont allow for no added users
-    if(_.isEmpty(this.state.addedUsers)) {
-      return;
-    }
-    BevyActions.inviteUsers(this.state.addedUsers)
-    // call action
-    this.props.chatNavigator.pop();
-  },
-
-  _renderAddedUsers() {
+  _renderPendingInvites() {
     var users = [];
-    for(var key in this.state.addedUsers) {
-      var addedUser = this.state.addedUsers[key];
-      users.push(
-        <AddedUserItem
-          key={ 'addeduser:' + addedUser._id }
-          user={ addedUser }
-          onRemove={ this.onRemoveAddedUser }
-        />
-      );
+    var invites = this.props.bevyInvites
+    for(var key in invites) {
+      var invite = invites[key];
+      if(invite.requestType == 'invite')
+        users.push(
+          <InviteItem
+            key={ 'invite:' + invite._id }
+            invite={ invite }
+          />
+        );
     }
-    return users;
+    if(_.isEmpty(users)) {
+      return <View/>;
+    }
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>
+          Pending Invitations
+        </Text>
+        { users }
+      </View>
+    );
+  },
+
+  _renderPendingRequests() {
+    var users = [];
+    var invites = this.props.bevyInvites
+    for(var key in invites) {
+      var invite = invites[key];
+      if(invite.requestType == 'request_join') 
+        users.push(
+          <InviteItem
+            key={ 'invite:' + invite._id }
+            invite={ invite }
+          />
+        );
+    }
+    if(_.isEmpty(users)) {
+      return <View/>;
+    }
+    return (
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>
+          Pending Requests
+        </Text>
+        { users }
+      </View>
+    );
   },
 
   _renderSearchUsers() {
@@ -238,15 +230,11 @@ var InviteUserView = React.createClass({
         initialListSize={ 10 }
         pageSize={ 10 }
         renderRow={(user) => {
-          console.log(this.state.addedUsers, user._id);
           return (
             <UserSearchItem
               key={ 'searchuser:' + user._id }
               user={ user }
               onSelect={ this.onSearchUserSelect }
-              selected={
-                _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
-              }
             />
           );
         }}
@@ -255,6 +243,7 @@ var InviteUserView = React.createClass({
   },
 
   render() {
+    console.log(this.props.bevyInvites);
     var bevy = this.props.activeBevy;
     return (
       <View style={ styles.container }>
@@ -276,37 +265,35 @@ var InviteUserView = React.createClass({
             />
           </TouchableHighlight>
             <Text style={ styles.title }>
-              Add People to { bevy.name }
+              Invite a user to { bevy.name }
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.iconButton }
-              onPress={ this.submit }
-            >
-              <Icon
-                name='done'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
+            <View style={{height: 30, width: 30}}/>
           </View>
         </View>
-        <View style={ styles.toBar }>
-          <Text style={ styles.toText }>
-            Search: 
+        <ScrollView
+          style={{
+            flex: 1,
+            paddingTop: 15
+          }}
+        >
+          { this._renderPendingRequests() }
+          { this._renderPendingInvites() }
+          <Text style={styles.sectionTitle}>
+            Search For Users
           </Text>
-          { this._renderAddedUsers() }
-          <TextInput
-            ref='ToInput'
-            style={ styles.toInput }
-            value={ this.state.toInput }
-            onChangeText={ this.onChangeToText }
-            placeholder=''
-            placeholderTextColor='#AAA'
-            underlineColorAndroid='#FFF'
-          />
-        </View>
-        { this._renderSearchUsers() }
+          <View style={ styles.toBar }>
+            <TextInput
+              ref='ToInput'
+              style={ styles.toInput }
+              value={ this.state.toInput }
+              onChangeText={ this.onChangeToText }
+              placeholder=''
+              placeholderTextColor='#AAA'
+              underlineColorAndroid='#FFF'
+            />
+          </View>
+          { this._renderSearchUsers() }
+        </ScrollView>
       </View>
     );
   }
@@ -366,7 +353,8 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 50
   },
   noneFoundText: {
     color: '#AAA',
@@ -374,7 +362,16 @@ var styles = StyleSheet.create({
   },
   userList: {
     flex: 1,
-  }
+  },
+  section: {
+    paddingVertical: 10,
+  },
+  sectionTitle: {
+    color: '#888',
+    fontSize: 15,
+    marginLeft: 10,
+    marginBottom: 5
+  },
 });
 
 module.exports = InviteUserView;

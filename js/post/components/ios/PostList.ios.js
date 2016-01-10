@@ -145,6 +145,7 @@ var PostList = React.createClass({
         bevy={bevy} 
         user={user}
         mainNavigator={this.props.mainNavigator}
+        bevyInvites={this.props.bevyInvites}
       />
     : (
       <View style={styles.cardContainer}>
@@ -214,7 +215,6 @@ var PostList = React.createClass({
               return <View style={{height: 52}}/>
             }}
             renderRow={(post) => {
-              console.log(post);
               if(this.state.loading) {
                 return (
                 <View style={styles.spinnerContainer}>

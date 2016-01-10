@@ -204,6 +204,13 @@ exports.NOTIFICATION = {
   FETCHED: 'notification_fetched'
 };
 
+exports.INVITE = {
+  INVITE_USER: 'invite_invite_user',
+  DESTROY: 'invite_destroy',
+  ACCEPT_REQUEST: 'invite_accept_request',
+  REJECT_INVITE: 'invite_reject_invite'
+};
+
 exports.setSearchNavigator = function(navigator) {
 	searchNavigator = navigator;
 };

@@ -67,12 +67,12 @@ var SearchBar = React.createClass({
   },
 
   onSearchFocus() {
-    if(this.state.activeRoute.name === routes.SEARCH.OUT.name) {
+    /*if(this.state.activeRoute.name === routes.SEARCH.OUT.name) {
       this.props.navigator.push(routes.SEARCH.IN);
       this.setState({
         activeRoute: routes.SEARCH.IN
       });
-    }
+    }*/
   },
 
   onSearch(query) {
