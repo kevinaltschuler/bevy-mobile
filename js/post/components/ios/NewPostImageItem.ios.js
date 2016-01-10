@@ -47,7 +47,10 @@ var NewPostImageItem = React.createClass({
           width: 75,
           height: 75,
           borderRadius: 5,
-          marginHorizontal: 5
+          marginHorizontal: 5,
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-start'
         }}>
           <Image
             source={{ uri: image.url }}
@@ -60,22 +63,23 @@ var NewPostImageItem = React.createClass({
           />
           <TouchableOpacity
             onPress={ this.remove }
-          >
-            <View style={{
+            style={{
               position: 'absolute',
               top: 0,
               right: 0,
               width: 30,
               height: 30,
+              paddingTop: 5,
               flexDirection: 'row',
-              alignItems: 'center'
-            }}>
-              <Icon
-                name='close'
-                size={ 30 }
-                color='#FFF'
-              />
-            </View>
+              alignItems: 'center',
+              backgroundColor: 'rgba(0,0,0,0)'
+            }}
+          >
+            <Icon
+              name='close'
+              size={ 30 }
+              color='#FFF'
+            />
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
