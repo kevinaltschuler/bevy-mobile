@@ -1,6 +1,7 @@
 /**
- * MyBevies.js
+ * MyBevies.ios.js
  * @author kevin
+ * @author albert
  * @flow
  */
 
@@ -12,21 +13,19 @@ var {
   Text,
   View,
   Image,
-  ListView,
   TouchableHighlight,
   TouchableOpacity,
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var BevyCard = require('./BevyCard.ios.js');
+var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var BevyActions = require('./../../../bevy/BevyActions');
-var UserActions = require('./../../../user/UserActions');
-var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
+var UserStore = require('./../../../user/UserStore');
 var BEVY = constants.BEVY;
 
 var MyBevies = React.createClass({
@@ -36,18 +35,6 @@ var MyBevies = React.createClass({
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     mainNavigator: React.PropTypes.object
-  },
-
-  getInitialState() {
-    return {
-      showAddBevyModal: false
-    };
-  },
-
-  onHideModal() {
-    this.setState({
-      showAddBevyModal: false
-    })
   },
 
   changeBevy(rowData) {
@@ -67,7 +54,6 @@ var MyBevies = React.createClass({
 
     for(var key in bevies) {
       var bevy = bevies[key];
-
       bevyList.push(
         <BevyCard
           bevy={ bevy }
@@ -128,7 +114,7 @@ var MyBevies = React.createClass({
             </Text>
             <TouchableHighlight
               underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.plusButton }
+              style={ styles.iconButton }
               onPress={ this.goToNewBevy }
             >
               <Icon
@@ -178,7 +164,7 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFF'
   },
-  plusButton: {
+  iconButton: {
     width: 48,
     height: 48,
     flexDirection: 'row',

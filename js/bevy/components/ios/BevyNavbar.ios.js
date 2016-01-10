@@ -47,16 +47,16 @@ var BevyNavbar = React.createClass({
     };
   },
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      bottomHeight: nextProps.bottomHeight
-    })
-  },
-
   getInitialState() {
     return {
       bottomHeight: this.props.bottomHeight || 40
-    }
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      bottomHeight: nextProps.bottomHeight
+    });
   },
 
   _renderLeft() {
@@ -66,7 +66,12 @@ var BevyNavbar = React.createClass({
   _renderCenter() {
     if(typeof this.props.center === 'string') {
       return (
-        <Text style={{textAlign: 'center', fontSize: 17, fontWeight: '500', color: this.props.fontColor}}>
+        <Text style={{
+          textAlign: 'center',
+          fontSize: 17,
+          fontWeight: '500',
+          color: this.props.fontColor
+        }}>
           { this.props.center }
         </Text>
       );
@@ -90,14 +95,18 @@ var BevyNavbar = React.createClass({
       );
     }
     var publicPrivateIcon = (bevy.settings.privacy == 'Private')
-      ?'lock'
-      :'public';
+      ? 'lock'
+      : 'public';
     var bevyBottom = (_.isEmpty(this.props.activeBoard.name))
-    ? (<View style={styles.bevyBottom}>
-        <View style={styles.detailItem}>
-          <Icon name={publicPrivateIcon} size={18} color='#fff'/>
-          <Text style={styles.itemText}>
-            {bevy.settings.privacy}
+    ? (<View style={ styles.bevyBottom }>
+        <View style={ styles.detailItem }>
+          <Icon
+            name={ publicPrivateIcon }
+            size={ 18 }
+            color='#fff'
+          />
+          <Text style={ styles.itemText }>
+            { bevy.settings.privacy }
           </Text>
         </View>
         <View style={ styles.detailItem }>
@@ -120,9 +129,18 @@ var BevyNavbar = React.createClass({
     if(this.props.activeBevy) {
       if((this.props.route == routes.BEVY.POSTLIST.name)) {
         return (
-          <Image source={{uri: image_url}} style={[styles.imageBottom, {height: this.state.bottomHeight}]}>
-            <View style={[styles.imageWrapper, {height: this.state.bottomHeight}]}>
-              <View style={styles.bevyTop}>
+          <Image
+            source={{ uri: image_url }}
+            style={[ styles.imageBottom, {
+              height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
+            }]}
+          >
+            <View style={[ styles.imageWrapper, {
+              height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
+            }]}>
+              <View style={[ styles.bevyTop, {
+                paddingTop: StatusBarSizeIOS.currentHeight
+              }]}>
                 <View style={ styles.left }>
                   { this._renderLeft() }
                 </View>
@@ -140,7 +158,7 @@ var BevyNavbar = React.createClass({
       }
     }
     return (
-      <View style={ styles.styleBottom }>
+      <View style={[ styles.styleBottom ]}>
         <View style={ styles.left }>
           { this._renderLeft() }
         </View>
@@ -159,11 +177,7 @@ var BevyNavbar = React.createClass({
       return <View/>;
     }
     return (
-      <View style={ this.props.styleParent }>
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight,
-          backgroundColor: '#2CB673',
-        }}/>
+      <View style={[ this.props.styleParent ]}>
         { this._renderBottom() }
       </View>
     );
@@ -175,9 +189,10 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    //tintColor: 'rgba(0,0,0,0.1)'
   },
   imageWrapper: {
-    backgroundColor: 'rgba(0,0,0,.3)',
+    backgroundColor: 'rgba(0,0,0,.5)',
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -224,13 +239,12 @@ var styles = StyleSheet.create({
   },
   itemText: {
     color: '#fff',
-    fontWeight: 'bold',
     marginLeft: 5,
-    fontSize: 12
+    fontSize: 14
   },
   styleBottom: {
-    backgroundColor: '#fff',
     height: 40,
+    backgroundColor: '#fff',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

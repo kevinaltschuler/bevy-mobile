@@ -23,12 +23,13 @@ var SettingsView = require('./BevySettingsView.ios.js');
 var MyBevies = require('./MyBevies.ios.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
+var BevySideMenu = require('./BevySideMenu.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
-var BevySideMenu = require('./BevySideMenu.ios.js');
+var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyView = React.createClass({
   propTypes: {
@@ -108,16 +109,12 @@ var BevyView = React.createClass({
             user={ this.props.user }
             showTags={ this.state.showTags }
             onHideTags={() => {
-              this.setState({
-                showTags: false
-              })
+              this.setState({ showTags: false })
             }}
             onScroll={this.onScroll}
             showSort={ this.state.showSort }
             onHideSort={()=>{
-              this.setState({
-                showSort: false
-              })
+              this.setState({ showSort: false })
             }}
           />
         );
@@ -136,7 +133,7 @@ var BevyView = React.createClass({
             activeOpacity={ 0.5 }
             style={ styles.backButton }
             onPress={() => {
-              this.props.mainNavigator.pop();
+              this.props.bevyNavigator.pop();
             }}
           >
             <Icon
@@ -208,21 +205,19 @@ var BevyView = React.createClass({
         );
         var center = this.props.activeBevy.name || '';
         var left = (
-          <View style={{height: 47}}>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.backButton }
-              onPress={() => {
-                this.props.bevyNavigator.pop()
-              }}
-            >
-              <Icon
-                name='arrow-back'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
-          </View>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            style={ styles.backButton }
+            onPress={() => {
+              this.props.mainNavigator.pop()
+            }}
+          >
+            <Icon
+              name='arrow-back'
+              size={ 30 }
+              color='#FFF'
+            />
+          </TouchableHighlight>
         );
         break;
     }
@@ -259,8 +254,7 @@ var BevyView = React.createClass({
               <Text style={{
                 color: fontColor,
                 fontSize: 18,
-                marginLeft: 10,
-                fontWeight: 'bold'
+                marginLeft: 10
               }}>
                 {center}
               </Text>
@@ -275,7 +269,7 @@ var BevyView = React.createClass({
             }}
             { ...this.props }
           />
-            { view }
+          { view }
         </View>
       </SideMenu>
     );
@@ -327,7 +321,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0)',
-    height: 40
+    height: 40,
+    paddingHorizontal: 8
   }
 });
 
