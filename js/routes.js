@@ -8,6 +8,7 @@ var routes = {
     NEWBEVY: { name: 'NewBevy' },
     COMMENT: { name: 'Comment' },
     PROFILE: { name: 'Profile' },
+    BEVYNAV: { name: 'BevyNav' },
     MAP: { name: 'Map' },
     LOGIN: { name: 'Login' },
     MESSAGEVIEW: { name: 'Messages' },
@@ -39,15 +40,10 @@ var routes = {
   },
 
   BEVY: {
-    POSTLIST: { name: 'PostList' },
+    BEVYVIEW: { name: 'BevyView' },
     INFO: { name: 'InfoView' },
-    RELATED: { name: 'related' },
-    TAGS: { name: 'tags' },
     SETTINGS: { name: 'BevySettings' },
-    MYBEVIES: { name: 'MyBevies' },
-    NEWTAG: { name: 'NewTag' },
-    ADDRELATED: { name: 'AddRelated' },
-    BOARDVIEW: { name: 'BoardView'}
+    MYBEVIES: { name: 'MyBevies' }
   },
 
   CHAT: {

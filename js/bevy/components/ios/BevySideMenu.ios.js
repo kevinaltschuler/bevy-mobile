@@ -98,13 +98,18 @@ var BevySideMenu = React.createClass({
                 <Text style={ styles.bevyName }>
                   { bevy.name }
                 </Text>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row'}}>
                   <View style={ styles.detailItem }>
                     <Icon
                       name={ publicPrivateIcon }
                       size={ 18 }
                       color='#fff'
                     />
+                    <Text style={ styles.itemText }>
+                      {(bevy.settings.privacy == 'Private')
+                        ? 'Private'
+                        : 'Public' }
+                    </Text>
                   </View>
                   <View style={ styles.detailItem }>
                     <Icon
@@ -160,6 +165,7 @@ var styles = StyleSheet.create({
     borderBottomColor: '#666',
   },
   top: {
+    height: 70,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -170,7 +176,7 @@ var styles = StyleSheet.create({
   },
   bevyName: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 19,
     marginBottom: 5,
     flex: 1
   },

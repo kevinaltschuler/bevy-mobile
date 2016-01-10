@@ -30,7 +30,9 @@ var BevyNavbar = React.createClass({
     left: React.PropTypes.node,
     right: React.PropTypes.node,
     bottomHeight: React.PropTypes.number,
-    activeBoard: React.PropTypes.object
+    fontColor: React.PropTypes.string,
+    activeBoard: React.PropTypes.object,
+    activeBevy: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -43,20 +45,10 @@ var BevyNavbar = React.createClass({
       },
       center: 'Default',
       left: <View />,
-      right: <View />
+      right: <View />,
+      bottomHeight: 60,
+      fontColor: '#FFF'
     };
-  },
-
-  getInitialState() {
-    return {
-      bottomHeight: this.props.bottomHeight || 40
-    };
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      bottomHeight: nextProps.bottomHeight
-    });
   },
 
   _renderLeft() {
@@ -86,89 +78,65 @@ var BevyNavbar = React.createClass({
 
   _renderBottom() {
     var bevy = this.props.activeBevy;
-    var image_url = '/img/default_group_img.png';
+    var image_url = constants.siteurl + '/img/default_group_img.png';
     if(!_.isEmpty(bevy))
       image_url = bevy.image.path || '';
-    if(this.props.center == 'Settings' && this.props.loggedIn) {
-      return (
-        <View/>
-      );
-    }
+
     var publicPrivateIcon = (bevy.settings.privacy == 'Private')
       ? 'lock'
       : 'public';
-    var bevyBottom = (_.isEmpty(this.props.activeBoard.name))
-    ? (<View style={ styles.bevyBottom }>
-        <View style={ styles.detailItem }>
-          <Icon
-            name={ publicPrivateIcon }
-            size={ 18 }
-            color='#fff'
-          />
-          <Text style={ styles.itemText }>
-            { bevy.settings.privacy }
-          </Text>
-        </View>
-        <View style={ styles.detailItem }>
-          <Icon name='group' size={18} color='#fff'/>
-          <Text style={styles.itemText}>
-            { bevy.subCount + ' ' + ((bevy.subCount == 1)
-              ? 'Subscriber' : 'Subscribers') }
-          </Text>
-        </View>
-        <View style={ styles.detailItem }>
-          <Icon name='person' size={18} color='#fff'/>
-          <Text style={styles.itemText}>
-            { bevy.admins.length + ' ' + ((bevy.admins.length == 1)
-              ? 'Admin' : 'Admins') }
-          </Text>
-        </View>
-      </View>)
-    : <View/>;
 
-    if(this.props.activeBevy) {
-      if((this.props.route == routes.BEVY.POSTLIST.name)) {
-        return (
-          <Image
-            source={{ uri: image_url }}
-            style={[ styles.imageBottom, {
-              height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
-            }]}
-          >
-            <View style={[ styles.imageWrapper, {
-              height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
-            }]}>
-              <View style={[ styles.bevyTop, {
-                paddingTop: StatusBarSizeIOS.currentHeight
-              }]}>
-                <View style={ styles.left }>
-                  { this._renderLeft() }
-                </View>
-                <View style={ styles.center }>
-                  { this._renderCenter() }
-                </View>
-                <View style={ styles.right }>
-                  { this._renderRight() }
-                </View>
-              </View>
-              { bevyBottom }
-            </View>
-          </Image>
-        );
-      }
-    }
     return (
-      <View style={[ styles.styleBottom ]}>
-        <View style={ styles.left }>
-          { this._renderLeft() }
+      <Image
+        source={{ uri: image_url }}
+        style={[ styles.imageBottom, {
+          height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+        }]}
+      >
+        <View style={[ styles.imageWrapper, {
+          height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+        }]}>
+          <View style={[ styles.bevyTop, {
+            paddingTop: StatusBarSizeIOS.currentHeight
+          }]}>
+            <View style={ styles.left }>
+              { this._renderLeft() }
+            </View>
+            <View style={ styles.center }>
+              { this._renderCenter() }
+            </View>
+            <View style={ styles.right }>
+              { this._renderRight() }
+            </View>
+          </View>
+          <View style={ styles.bevyBottom }>
+            <View style={ styles.detailItem }>
+              <Icon
+                name={ publicPrivateIcon }
+                size={ 18 }
+                color='#fff'
+              />
+              <Text style={ styles.itemText }>
+                { bevy.settings.privacy }
+              </Text>
+            </View>
+            <View style={ styles.detailItem }>
+              <Icon name='group' size={18} color='#fff'/>
+              <Text style={styles.itemText}>
+                { bevy.subCount + ' ' + ((bevy.subCount == 1)
+                  ? 'Subscriber' : 'Subscribers') }
+              </Text>
+            </View>
+            <View style={ styles.detailItem }>
+              <Icon name='person' size={18} color='#fff'/>
+              <Text style={styles.itemText}>
+                { bevy.admins.length + ' ' + ((bevy.admins.length == 1)
+                  ? 'Admin' : 'Admins') }
+              </Text>
+            </View>
+          </View>
         </View>
-        <View style={ styles.center }>
-          { this._renderCenter() }
-        </View>
-        <View style={ styles.right }>
-          { this._renderRight() }
-        </View>
-      </View>
+      </Image>
     );
   },
 
@@ -177,7 +145,7 @@ var BevyNavbar = React.createClass({
       return <View/>;
     }
     return (
-      <View style={[ this.props.styleParent ]}>
+      <View style={ this.props.styleParent }>
         { this._renderBottom() }
       </View>
     );
@@ -195,9 +163,7 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,.5)',
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
-    borderBottomWidth: .5,
-    borderBottomColor: '#ddd',
+    justifyContent: 'flex-start'
   },
   left: {
     flex: 1,
@@ -240,7 +206,7 @@ var styles = StyleSheet.create({
   itemText: {
     color: '#fff',
     marginLeft: 5,
-    fontSize: 14
+    fontSize: 15
   },
   styleBottom: {
     height: 40,

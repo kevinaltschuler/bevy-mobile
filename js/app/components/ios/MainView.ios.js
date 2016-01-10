@@ -126,13 +126,13 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.BEVY.POSTLIST.name:
+      case routes.MAIN.BEVYNAV.name:
         return (
           <BevyNavigator
             { ...this.props }
           />
         );
-
+        break;
       case routes.MAIN.NEWTHREAD.name:
         return (
           <NewThreadView

@@ -25,12 +25,12 @@ var BoardActions = require('./../../../board/BoardActions');
 
 var BoardItem = React.createClass({
   propTypes: {
-    board: React.PropTypes.object
+    board: React.PropTypes.object,
+    bevyNavigator: React.PropTypes.object
   },
 
   switchBoard() {
     BoardActions.switchBoard(this.props.board._id);
-    //this.props.bevyNavigator.replace(routes.BEVY.BOARDVIEW)
     this.props.closeSideMenu();
   },
 

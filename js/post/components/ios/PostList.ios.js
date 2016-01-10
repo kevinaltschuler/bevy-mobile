@@ -1,7 +1,9 @@
 /**
  * PostList.ios.js
- * kevin made this
+ * @author kevin
+ * @flow
  */
+
 'use strict';
 
 var React = require('react-native');
@@ -20,9 +22,7 @@ var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
-var BoardCard = require('./../../../bevy/components/ios/BoardCard.ios.js');
 var Swiper = require('react-native-swiper-fork');
-//var TagModal = require('./TagModal.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -31,7 +31,6 @@ var POST = constants.POST;
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostActions = require('./../../../post/PostActions');
-var BevyActionButtons = require('./../../../bevy/components/ios/BevyActionButtons.ios.js');
 
 var SCROLLVIEW = 'ScrollView';
 var LISTVIEW = 'ListView';
@@ -40,21 +39,21 @@ var PostList = React.createClass({
   propTypes: {
     allPosts: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
+    activeBoard: React.PropTypes.object,
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool,
     showNewPostCard: React.PropTypes.bool,
     profileUser: React.PropTypes.object,
-    showTags: React.PropTypes.bool,
-    onHideTags: React.PropTypes.func,
-    frontpageFilters: React.PropTypes.array,
-    activeTags: React.PropTypes.array,
-    myBevies: React.PropTypes.array
+    myBevies: React.PropTypes.array,
+    onScroll: React.PropTypes.func,
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object
   },
 
   getDefaultProps() {
     return {
       showNewPostCard: true,
       profileUser: null,
+      onScroll: _.noop
     };
   },
 
@@ -80,7 +79,6 @@ var PostList = React.createClass({
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
     BevyStore.on(POST.LOADING, this.setLoading);
-    PostStore.on(POST.LOADING, this.setLoading);
     PostStore.on(POST.REFRESH, this.onRefresh);
   },
 
@@ -88,7 +86,6 @@ var PostList = React.createClass({
     PostStore.off(POST.LOADED, this._onPostsLoaded);
     BevyStore.off(POST.LOADED, this._rerender);
     BevyStore.off(POST.LOADING, this.setLoading);
-    PostStore.off(POST.LOADING, this.setLoading);
     PostStore.off(POST.POST_CREATED, this.toComments);
     PostStore.off(POST.REFRESH, this.onRefresh);
   },
@@ -137,33 +134,20 @@ var PostList = React.createClass({
   _renderHeader() {
     var bevy = this.props.activeBevy;
     var user = this.props.user;
-    if(_.isEmpty(bevy)) {
+    if(_.isEmpty(bevy) || !this.props.showNewPostCard ) {
       return <View/>;
     }
-    var newPostCard = ( _.isEmpty(this.props.activeBoard.name))
-    ? <BevyActionButtons 
-        bevy={bevy} 
-        user={user}
-        mainNavigator={this.props.mainNavigator}
-      />
-    : (
+    return (
       <View style={styles.cardContainer}>
-        <BoardCard
-          board={this.props.activeBoard}
-          user={this.props.user}
-        />
         <NewPostCard
           user={ this.props.user }
-          loggedIn={ this.props.loggedIn }
           mainNavigator={ this.props.mainNavigator }
         />
       </View>
     );
-    return newPostCard;
   },
 
   render() {
-
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>;
     }
@@ -237,7 +221,6 @@ var PostList = React.createClass({
                   mainRoute={ this.props.mainRoute }
                   mainNavigator={ this.props.mainNavigator }
                   user={ this.props.user }
-                  loggedIn={ this.props.loggedIn }
                 />
               </View>;
             }}
