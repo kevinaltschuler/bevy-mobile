@@ -2,12 +2,12 @@
  * BoardItem.ios.js
  * @author kevin
  * i can see maxs bulge
- */ 
+ * @flow
+ */
 
 'use strict';
 
 var React = require('react-native');
-
 var {
   View,
   Text,
@@ -15,11 +15,10 @@ var {
   StyleSheet,
   TouchableHighlight
 } = React;
-
 var Icon = require('react-native-vector-icons/MaterialIcons');
+
 var _ = require('underscore');
 var routes = require('./../../../routes');
-
 var constants = require('./../../../constants');
 var BevyActions = require('./../../BevyActions');
 var BoardActions = require('./../../../board/BoardActions');
@@ -48,24 +47,35 @@ var BoardItem = React.createClass({
     : 'forum';
 
     return (
-      <TouchableHighlight 
+      <TouchableHighlight
         underlayColor='rgba(255,255,255,.2)'
-        onPress={this.switchBoard}
+        onPress={ this.switchBoard }
       >
-        <View style={styles.boardItem}>
-          <Image source={{uri: image_url}} style={styles.boardImage}/>
-          <View style={styles.boardRight}>
-            <Text style={styles.boardText}>
-              {board.name}
+        <View style={ styles.boardItem }>
+          <Image
+            source={{ uri: image_url }}
+            style={ styles.boardImage }
+          />
+          <View style={ styles.boardRight }>
+            <Text style={ styles.boardText }>
+              { board.name }
             </Text>
-            <View style={styles.boardDetails}> 
-              <View style={styles.detailItem}>
-                <Icon name={typeIcon} size={18} color='#fff'/>
+            <View style={ styles.boardDetails }>
+              <View style={ styles.detailItem }>
+                <Icon
+                  name={ typeIcon }
+                  size={ 18 }
+                  color='#fff'
+                />
               </View>
-              <View style={styles.detailItem}>
-                <Icon name='people' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  {board.subCount}
+              <View style={ styles.detailItem }>
+                <Icon
+                  name='people'
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  { board.subCount }
                 </Text>
               </View>
             </View>
@@ -79,27 +89,29 @@ var BoardItem = React.createClass({
 var styles = StyleSheet.create({
   boardItem: {
     flexDirection: 'row',
-    height: 48,
+    height: 70,
     paddingLeft: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#aaa',
+    borderBottomColor: '#666',
     alignItems: 'center'
   },
   boardImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    marginRight: 10
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 15
   },
   boardText: {
     color: '#fff',
-    fontWeight: 'bold'
+    fontSize: 17,
+    marginBottom: 3
   },
   boardRight: {
+    flex: 1,
     flexDirection: 'column',
   },
   boardDetails: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   detailItem: {
     flexDirection: 'row',
@@ -108,9 +120,8 @@ var styles = StyleSheet.create({
   },
   itemText: {
     color: '#fff',
-    fontWeight: 'bold',
     marginLeft: 5,
-    fontSize: 12
+    fontSize: 17
   },
 })
 

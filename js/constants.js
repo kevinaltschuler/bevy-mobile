@@ -48,7 +48,7 @@ var window = require('Dimensions').get('window');
 exports.width = window.width
 exports.height = window.height
 
-exports.sideMenuWidth = ((window.width * (2/3)) >= 300) ? 300 : (window.width * (2/3));
+exports.sideMenuWidth = ((window.width * (4/5)) >= 300) ? 300 : (window.width * (4/5));
 
 exports.APP = {
   LOAD: 'app_load',

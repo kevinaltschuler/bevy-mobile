@@ -151,7 +151,7 @@ var BevyNavbar = React.createClass({
                   { this._renderRight() }
                 </View>
               </View>
-              {bevyBottom}
+              { bevyBottom }
             </View>
           </Image>
         );

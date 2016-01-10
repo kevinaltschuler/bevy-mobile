@@ -2,12 +2,12 @@
  * BoardCard.ios.js
  * @author kevin
  * this card is gonna look so good
+ * @flow
  */
 
 'use strict';
 
 var React = require('react-native');
-
 var {
   View,
   TouchableHighlight,
@@ -16,9 +16,9 @@ var {
   StyleSheet,
   ActionSheetIOS
 } = React;
-
 var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
+
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var BoardActions = require('./../../../board/BoardActions');
@@ -91,7 +91,7 @@ var BoardCard = React.createClass({
     var typeIcon = (board.type == 'announcement')
     ? 'flag'
     : 'forum';
-    
+
     if(this.state.joined) {
       var joinedText = 'joined';
       var joinedColor = '#2cb673';
@@ -107,23 +107,34 @@ var BoardCard = React.createClass({
 
 
     return (
-      <View style={styles.container}>
-        <Image source={{uri: image_url}} style={styles.boardImage}>
-          <View style={styles.imageWrapper}>
-            <Text style={styles.boardTitle}>
-              {board.name}
+      <View style={ styles.container }>
+        <Image
+          source={{ uri: image_url }}
+          style={ styles.boardImage }
+        >
+          <View style={ styles.imageWrapper }>
+            <Text style={ styles.boardTitle }>
+              { board.name }
             </Text>
-            <View style={styles.boardDetails}> 
-              <View style={styles.detailItem}>
-                <Icon name={typeIcon} size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  {board.type}
+            <View style={ styles.boardDetails }>
+              <View style={ styles.detailItem }>
+                <Icon
+                  name={ typeIcon }
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  { board.type }
                 </Text>
               </View>
-              <View style={styles.detailItem}>
-                <Icon name='people' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  {board.subCount} Subscribers
+              <View style={ styles.detailItem }>
+                <Icon
+                  name='people'
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  { board.subCount } Subscribers
                 </Text>
               </View>
             </View>
@@ -148,12 +159,11 @@ var styles = StyleSheet.create({
     color: '#fff',
     paddingLeft: 10,
     paddingBottom: 0,
-    fontSize: 20,
-    fontWeight: 'bold'
+    fontSize: 18,
   },
   imageWrapper: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.3)',
+    backgroundColor: 'rgba(0,0,0,.5)',
     height: 100,
     flexDirection: 'column',
     justifyContent: 'flex-end',

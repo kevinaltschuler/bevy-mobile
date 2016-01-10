@@ -26,6 +26,7 @@ var SideMenu = require('react-native-side-menu');
 var BevySideMenu = require('./BevySideMenu.ios.js');
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
@@ -161,8 +162,8 @@ var BevyView = React.createClass({
           </TouchableHighlight>
         );
         break;
-      default:
       case routes.BEVY.BOARDVIEW.name:
+
       case routes.BEVY.POSTLIST.name:
         var fontColor = '#fff';
         var bottomHeight = 80;
@@ -231,18 +232,18 @@ var BevyView = React.createClass({
       bottomHeight = 40;
     }
 
-    var menu = <BevySideMenu {...this.props} closeSideMenu={this.closeSideMenu}/>;
-
     return (
       <SideMenu
-        menu={menu}
+        menu={
+          <BevySideMenu
+            closeSideMenu={this.closeSideMenu}
+            {...this.props}
+          />
+        }
         menuPosition='right'
-        onChange={(isOpen) => {
-          this.setState({
-            sideMenuOpen: isOpen
-          })
-        }}
-        isOpen={this.state.sideMenuOpen}
+        openMenuOffset={ constants.width * (4/5) }
+        onChange={ isOpen => this.setState({ sideMenuOpen: isOpen })}
+        isOpen={ this.state.sideMenuOpen }
       >
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
           <BevyNavbar
