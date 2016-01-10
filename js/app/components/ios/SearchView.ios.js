@@ -15,7 +15,8 @@ var {
   TouchableHighlight,
   SwitchIOS,
   TabBarIOS,
-  ScrollView
+  ScrollView,
+  TextInput
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var SubSwitch = require('./SubSwitch.ios.js');
@@ -33,6 +34,7 @@ var UserActions = require('./../../../user/UserActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
+//var SearchBar = require('./../../../app/components/ios/SearchBar.ios.js');
 
 var BEVY = constants.BEVY;
 
@@ -191,15 +193,7 @@ var SearchView = React.createClass({
 
   render() {
     return (
-      <View style={styles.container}>
-        <NavBar
-         center={<Text style={{color: '#FFF', fontSize: 18}}>Search</Text>}
-         style ={{backgroundColor: '#2CB673'}}
-        >
-        </NavBar>
-        
-      
-        
+      <View style={styles.container}>          
         <View style={ styles.topBarContainer }>
           <View style={{
             height: StatusBarSizeIOS.currentHeight,
@@ -212,6 +206,15 @@ var SearchView = React.createClass({
           </View>
         </View>
 
+        <View style={styles.searchBox}>
+         <TextInput
+             ref='ToInput'
+             style={ styles.Input }
+             placeholder='search...'
+             placeholderTextColor='#AAA'
+             underlineColorAndroid='#FFF'
+           />
+        </View>
 
         <View style={styles.tabBar}>
           <TouchableHighlight
@@ -247,6 +250,11 @@ var styles = StyleSheet.create({
     paddingTop: 0,
     backgroundColor: '#EEE',
   },
+  Input: {
+    backgroundColor: '#FFF',
+    height: 36
+  },
+
   topBarContainer: {
     flexDirection: 'column',
     paddingTop: 0,
@@ -273,6 +281,15 @@ var styles = StyleSheet.create({
     borderBottomColor: '#EEE',
     backgroundColor: '#FFF',
     borderBottomWidth: 1
+  },
+  searchBox: {
+    backgroundColor: '#FFF',
+    width: constants.width, 
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDD',
+    paddingTop: 6,
+    paddingHorizontal: 10
   },
   searchTab: {
     flex: 1,
@@ -340,7 +357,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10,
-    marginTop: -10
+    marginTop: 10
   }
 });
 
