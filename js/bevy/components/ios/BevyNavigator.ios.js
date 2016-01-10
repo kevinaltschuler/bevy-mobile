@@ -24,8 +24,10 @@ var MyBevies = require('./MyBevies.ios.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
 var BevySideMenu = require('./BevySideMenu.ios.js');
+var $BevyView = require('./BevyView.ios.js');
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
@@ -50,10 +52,24 @@ var BevyView = React.createClass({
     }
   },
 
+  openSideMenu() {
+    this.setState({ sideMenuOpen: true });
+  },
+
   closeSideMenu() {
-    this.setState({
-      sideMenuOpen: false
-    })
+    this.setState({ sideMenuOpen: false });
+  },
+
+  toggleSideMenu() {
+    this.setState({ sideMenuOpen: !this.state.sideMenuOpen });
+  },
+
+  goBackMain() {
+    this.props.mainNavigator.pop();
+  },
+
+  goBackBevy() {
+    this.props.bevyNavigator.pop();
   },
 
   onScroll(y) {
@@ -82,7 +98,45 @@ var BevyView = React.createClass({
     })
   },
 
+  _renderSideMenuButton() {
+    return (
+      <TouchableHighlight
+        underlayColor={'rgba(0,0,0,0.1)'}
+        style={ styles.sideMenuButton }
+        onPress={ this.toggleSideMenu }
+      >
+          <Icon
+            name='menu'
+            size={ 30 }
+            color='#FFF'
+          />
+      </TouchableHighlight>
+    );
+  },
+
+  _renderBackButton(func) {
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        style={ styles.backButton }
+        onPress={ func }
+      >
+        <Icon
+          name='arrow-back'
+          size={ 30 }
+          color='#FFF'
+        />
+      </TouchableOpacity>
+    );
+  },
+
   render: function() {
+    var sideMenuActions = {
+      open: this.openSideMenu,
+      close: this.closeSideMenu,
+      toggle: this.toggleSideMenu
+    };
+
     var view;
     switch(this.props.bevyRoute.name) {
       case routes.BEVY.INFO.name:
@@ -100,22 +154,11 @@ var BevyView = React.createClass({
           />
         );
         break;
-      case routes.BEVY.POSTLIST.name:
-      case routes.BEVY.BOARDVIEW.name:
-      default:
+      case routes.BEVY.BEVYVIEW.name:
         view = (
-          <PostList
+          <$BevyView
             { ...this.props }
-            user={ this.props.user }
-            showTags={ this.state.showTags }
-            onHideTags={() => {
-              this.setState({ showTags: false })
-            }}
-            onScroll={this.onScroll}
-            showSort={ this.state.showSort }
-            onHideSort={()=>{
-              this.setState({ showSort: false })
-            }}
+            sideMenuActions={ sideMenuActions }
           />
         );
         break;
@@ -132,9 +175,7 @@ var BevyView = React.createClass({
           <TouchableOpacity
             activeOpacity={ 0.5 }
             style={ styles.backButton }
-            onPress={() => {
-              this.props.bevyNavigator.pop();
-            }}
+            onPress={ this.goBackBevy }
           >
             <Icon
               name='arrow-back'
@@ -151,7 +192,7 @@ var BevyView = React.createClass({
         var left = (
           <TouchableHighlight
             underlayColor='rgba(0,0,0,0.1)'
-            onPress={() => { this.props.bevyNavigator.pop() }}
+            onPress={ this.goBackBevy }
           >
             <Icon
               name='arrow-back'
@@ -161,56 +202,17 @@ var BevyView = React.createClass({
           </TouchableHighlight>
         );
         break;
-      default:
-      case routes.BEVY.BOARDVIEW.name:
-      case routes.BEVY.POSTLIST.name:
+      case routes.BEVY.BEVYVIEW.name:
         var fontColor = '#fff';
         var bottomHeight = 80;
 
-        var sideMenuButton = (
-          <TouchableHighlight
-            underlayColor={'rgba(0,0,0,0.1)'}
-            onPress={() => {
-              this.setState({
-                sideMenuOpen: !this.state.sideMenuOpen
-              })
-            }}
-            style={{
-              marginRight: 10,
-              borderRadius: 2,
-              paddingHorizontal: 5,
-              paddingVertical: 5,
-            }}
-          >
-              <Icon
-                name='menu'
-                size={ 30 }
-                color={ fontColor }
-                style={{}}
-              />
-          </TouchableHighlight>
-        )
-
-        var right = (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-end'
-            }}
-          >
-            { sideMenuButton }
-          </View>
-        );
+        var right = this._renderSideMenuButton()
         var center = this.props.activeBevy.name || '';
         var left = (
           <TouchableHighlight
             underlayColor='rgba(0,0,0,0.1)'
             style={ styles.backButton }
-            onPress={() => {
-              this.props.mainNavigator.pop()
-            }}
+            onPress={ this.goBackMain }
           >
             <Icon
               name='arrow-back'
@@ -231,46 +233,21 @@ var BevyView = React.createClass({
       bottomHeight = 40;
     }
 
-    var menu = <BevySideMenu {...this.props} closeSideMenu={this.closeSideMenu}/>;
 
     return (
       <SideMenu
-        menu={menu}
-        menuPosition='right'
-        onChange={(isOpen) => {
-          this.setState({
-            sideMenuOpen: isOpen
-          })
-        }}
-        isOpen={this.state.sideMenuOpen}
-      >
-        <View style={{ flex: 1, backgroundColor: '#fff' }}>
-          <BevyNavbar
-            bottomHeight={ bottomHeight }
-            bevyRoute={ this.props.bevyRoute }
-            bevyNavigator={ this.props.bevyNavigator }
-            left={ left }
-            center={
-              <Text style={{
-                color: fontColor,
-                fontSize: 18,
-                marginLeft: 10
-              }}>
-                {center}
-              </Text>
-            }
-            right={ right }
-            activeBevy={ this.props.activeBevy }
-            activeBoard={ this.props.activeBoard }
-            route={ this.props.bevyRoute.name }
-            fontColor={ fontColor }
-            styleParent={{
-              height: bottomHeight + 20
-            }}
+        menu={
+          <BevySideMenu
+            closeSideMenu={ this.closeSideMenu }
             { ...this.props }
           />
-          { view }
-        </View>
+        }
+        menuPosition='right'
+        openMenuOffset={ constants.width * (4/5) }
+        onChange={ isOpen => this.setState({ sideMenuOpen: isOpen })}
+        isOpen={ this.state.sideMenuOpen }
+      >
+        { view }
       </SideMenu>
     );
   }
@@ -287,9 +264,8 @@ var BevyNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.searchNavigator }
-        initialRoute={ routes.BEVY.POSTLIST }
         initialRouteStack={[
-          routes.BEVY.POSTLIST
+          routes.BEVY.BEVYVIEW
         ]}
         renderScene={(route, navigator) =>
           <BevyView
@@ -323,6 +299,12 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0)',
     height: 40,
     paddingHorizontal: 8
+  },
+  sideMenuButton: {
+    marginRight: 10,
+    borderRadius: 2,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
   }
 });
 

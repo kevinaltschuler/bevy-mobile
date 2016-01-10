@@ -17,14 +17,13 @@ var routes = require('./../../../routes');
 var NewPostCard = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool,
     mainNavigator: React.PropTypes.object
   },
 
   render() {
 
-    var image_url = (this.props.loggedIn && !_.isEmpty(this.props.user.image_url))
-    ? this.props.user.image_url
+    var image_url = (!_.isEmpty(this.props.user.image))
+    ? this.props.user.image.path
     : constants.siteurl + '/img/user-profile-icon.png';
 
     return (
