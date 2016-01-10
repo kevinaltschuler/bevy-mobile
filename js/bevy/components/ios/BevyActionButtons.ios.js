@@ -2,12 +2,12 @@
  * BevyUserButtons.ios.js
  * @author kevin
  * the actions for a bevy
+ * @flow
  */
 
 'use strict';
 
 var React = require('react-native');
-
 var {
   View,
   TouchableHighlight,
@@ -16,9 +16,9 @@ var {
   StyleSheet,
   ActionSheetIOS
 } = React;
-
 var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
+
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -61,13 +61,13 @@ var BevyActionButtons = React.createClass({
   showActionSheet() {
     var bevy = this.props.bevy;
     if(this.state.joined) {
-      var joinOptions = ['leave', 'cancel'];
+      var joinOptions = ['Leave', 'Cancel'];
     } else {
       if(bevy.settings.privacy == 'private') {
-       var joinOptions = ['request', 'cancel'];
+       var joinOptions = ['Request To Join', 'Cancel'];
       }
       else {
-        var joinOptions = ['join', 'cancel'];
+        var joinOptions = ['Join', 'Cancel'];
       }
     }
 
@@ -81,7 +81,7 @@ var BevyActionButtons = React.createClass({
   },
 
   _onInvite() {
-    this.props.mainNavigator.push(routes.MAIN.INVITEUSERS); 
+    this.props.mainNavigator.push(routes.MAIN.INVITEUSERS);
   },
 
   render() {
@@ -93,71 +93,92 @@ var BevyActionButtons = React.createClass({
     var typeIcon = (bevy.settings.privacy == 'Private')
     ? 'lock'
     : 'public';
-    
+
     if(this.state.joined) {
-      var joinedText = 'joined';
+      var joinedText = 'Joined';
       var joinedColor = '#2cb673';
     } else {
       if(bevy.settings.privacy == 'Private') {
-        var joinedText = 'request';
+        var joinedText = 'Request To Join';
       }
       else {
-        var joinedText = 'join';
+        var joinedText = 'Join';
       }
       var joinedColor = '#aaa'
     }
 
 
     return (
-      <Swiper style={styles.boardActions} height={50} showsButtons={false} loop={false}>
-          <View style={styles.slide}>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              onPress={this.showActionSheet} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='done' size={24} color={joinedColor}/>
-                  <Text style={[styles.actionText, {color: joinedColor}]}>
-                    {joinedText}
-                  </Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              underlayColor='rgba(0,0,0,.1)'
-              onPress={this._onInvite}
-            >
-              <View style={styles.action}>
-                  <Icon name='person-add' size={24} color='#aaa'/>
-                  <Text style={styles.actionText}>
-                    invite
-                  </Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='search' size={24} color='#aaa'/>
-                  <Text style={styles.actionText}>
-                    Search
-                  </Text>
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight 
-              style={styles.actionWrapper} 
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <View style={styles.action}>
-                  <Icon name='more-horiz' size={24} color='#aaa'/>
-                  <Text style={styles.actionText}>
-                    Info
-                  </Text>
-              </View>
-            </TouchableHighlight>
-          </View>
+      <Swiper
+        style={ styles.boardActions }
+        height={ 50 }
+        showsButtons={ false }
+        loop={ false }
+      >
+        <View style={ styles.slide }>
+          <TouchableHighlight
+            style={ styles.actionWrapper }
+            onPress={ this.showActionSheet }
+            underlayColor='rgba(0,0,0,.1)'
+          >
+            <View style={ styles.action }>
+                <Icon
+                  name='done'
+                  size={ 24 }
+                  color={ joinedColor }
+                />
+                <Text style={[styles.actionText, { color: joinedColor }]}>
+                  { joinedText }
+                </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.actionWrapper }
+            underlayColor='rgba(0,0,0,.1)'
+            onPress={ this._onInvite }
+          >
+            <View style={ styles.action }>
+                <Icon
+                  name='person-add'
+                  size={ 24 }
+                  color='#aaa'
+                />
+                <Text style={ styles.actionText }>
+                  Invite
+                </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.actionWrapper }
+            underlayColor='rgba(0,0,0,.1)'
+          >
+            <View style={ styles.action }>
+                <Icon
+                  name='search'
+                  size={ 24 }
+                  color='#aaa'
+                />
+                <Text style={ styles.actionText }>
+                  Search
+                </Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            style={ styles.actionWrapper }
+            underlayColor='rgba(0,0,0,.1)'
+          >
+            <View style={ styles.action }>
+              <Icon
+                name='more-horiz'
+                size={ 24 }
+                color='#aaa'
+              />
+              <Text style={ styles.actionText }>
+                Info
+              </Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </Swiper>
     )
   }
@@ -168,41 +189,6 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     marginTop: -25
-  },
-  boardImage: {
-    flex: 1,
-    height: 100,
-  },
-  boardTitle: {
-    color: '#fff',
-    paddingLeft: 10,
-    paddingBottom: 0,
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  imageWrapper: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,.3)',
-    height: 100,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start'
-  },
-  boardDetails: {
-    flexDirection: 'row',
-    marginBottom: 5,
-    marginLeft: 10
-  },
-  detailItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 10
-  },
-  itemText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginLeft: 5,
-    fontSize: 12
   },
   boardActions: {
     backgroundColor: '#fff'
@@ -221,7 +207,8 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   actionText: {
-    color: '#aaa'
+    color: '#aaa',
+    fontSize: 15
   }
 });
 
