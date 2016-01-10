@@ -50,6 +50,7 @@ var CHAT = constants.CHAT;
 var APP = constants.APP;
 var USER = constants.USER;
 var BOARD = constants.BOARD;
+var INVITE = constants.INVITE;
 
 var BevyActions = require('./BevyActions');
 var UserStore = require('./../user/UserStore');
@@ -123,6 +124,7 @@ _.extend(BevyStore, {
         var bevy_id_or_slug = payload.bevy_id;
         var user = UserStore.getUser();
         this.active.url = constants.apiurl + '/bevies/' + bevy_id_or_slug;
+        this.bevyInvites.url = constants.apiurl + '/bevies/' + bevy_id_or_slug + '/invites';
         this.active.fetch({
           success: function(model, response, options) {
             this.bevyBoards.url = constants.apiurl + '/bevies/' + this.active.attributes._id + '/boards';
@@ -141,8 +143,7 @@ _.extend(BevyStore, {
               })
             ])
           }.bind(this)
-        });
-
+        })
         break;
 
       case BEVY.CREATE:
@@ -401,6 +402,43 @@ _.extend(BevyStore, {
         this.activeBoard = new Board;
         this.trigger(BOARD.CHANGE_ALL);
         break;
+      case INVITE.INVITE_USER:
+        var user = payload.user;
+        var user_id = user._id;
+
+        var invite = this.bevyInvites.add({
+          user: user_id,
+          type: 'bevy',
+          requestType: 'invite',
+          bevy: this.active.get('_id')
+        });
+        invite.url = constants.apiurl + '/invites';
+        invite.save(null, {
+          success: function(model, response, options) {
+            invite.set('user', user);
+            invite.set('_id', model.get('_id'));
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+      case INVITE.DESTROY:
+        console.log('got to here');
+        var invite_id = payload.invite_id;
+        var invite = this.bevyInvites.remove(invite_id);
+        this.trigger(BEVY.CHANGE_ALL);
+        if(invite == undefined)
+          break;
+        invite.url = constants.apiurl + '/invites/' + invite_id;
+        invite.destroy();
+
+        break;
+      case INVITE.ACCEPT_REQUEST:
+        var invite_id = payload.invite_id;
+        fetch(constants.apiurl + '/invites/' + invite_id + '/accept')
+        .then(function(data){
+          this.trigger(BEVY.CHANGE_ALL);
+        }.bind(this))
+        break;
     }
   },
 
@@ -453,6 +491,10 @@ _.extend(BevyStore, {
     return (bevy)
     ? bevy.toJSON()
     : {};
+  },
+
+  getBevyInvites() {
+    return this.bevyInvites.toJSON() || [];
   },
 
   getBevyBoards() {

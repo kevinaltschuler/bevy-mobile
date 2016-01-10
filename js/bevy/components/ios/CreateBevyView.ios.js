@@ -262,48 +262,50 @@ var CreateBevyView = React.createClass({
 
   render() {
     return (
-      <ScrollView style={ styles.container }>
+      <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
             height: StatusBarSizeIOS.currentHeight,
             backgroundColor: '#2CB673'
           }}/>
-          <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.iconButton }
-              onPress={ this.goBack }
-            >
-              <Icon
-                name='arrow-back'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
-            <Text style={ styles.title }>
-              New Bevy
-            </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.iconButton }
-              onPress={ this.createBevy }
-            >
-              <Icon
-                name='done'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
+            <View style={ styles.topBar }>
+              <TouchableHighlight
+                underlayColor='rgba(0,0,0,0.1)'
+                style={ styles.iconButton }
+                onPress={ this.goBack }
+              >
+                <Icon
+                  name='arrow-back'
+                  size={ 30 }
+                  color='#FFF'
+                />
+              </TouchableHighlight>
+              <Text style={ styles.title }>
+                New Bevy
+              </Text>
+              <TouchableHighlight
+                underlayColor='rgba(0,0,0,0.1)'
+                style={ styles.iconButton }
+                onPress={ this.createBevy }
+              >
+                <Icon
+                  name='done'
+                  size={ 30 }
+                  color='#FFF'
+                />
+              </TouchableHighlight>
+            </View>
           </View>
-        </View>
-        <View style={ styles.body }>
-          { this._renderLoadingView() }
-          { this._renderTitleDescription() }
-          { this._renderSlug() }
-          { this._renderImageInput() }
-          { this._renderPrivatePublic() }
-        </View>
-      </ScrollView>
+          <ScrollView>
+            <View style={ styles.body }>
+              { this._renderLoadingView() }
+              { this._renderTitleDescription() }
+              { this._renderSlug() }
+              { this._renderImageInput() }
+              { this._renderPrivatePublic() }
+            </View>
+          </ScrollView>
+      </View>
     );
   }
 });
@@ -420,7 +422,7 @@ var styles = StyleSheet.create({
   },
   sectionTitle: {
     color: '#888',
-    fontSize: 15,
+    fontSize: 17,
     marginLeft: 10,
     marginBottom: 5
   },

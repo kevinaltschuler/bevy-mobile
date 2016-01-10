@@ -115,7 +115,8 @@ var LoginView = React.createClass({
         <TouchableHighlight
           style={ styles.loginButtonGoogle }
           underlayColor='rgba(223,74,50,0.8)'
-          onPress={ this.loginGoogle }>
+          onPress={ this.loginGoogle }
+        >
           <Text style={ styles.loginButtonTextGoogle }>
             Login With Google
           </Text>

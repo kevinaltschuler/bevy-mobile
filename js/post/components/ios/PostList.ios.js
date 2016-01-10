@@ -198,7 +198,6 @@ var PostList = React.createClass({
               return <View style={{height: 52}}/>
             }}
             renderRow={(post) => {
-              console.log(post);
               if(this.state.loading) {
                 return (
                 <View style={styles.spinnerContainer}>

@@ -81,6 +81,7 @@ var MainView = React.createClass({
   },
 
   render() {
+
     switch(this.props.mainRoute.name) {
       case routes.MAIN.NEWPOST.name:
         return <NewPostView { ...this.props } />;

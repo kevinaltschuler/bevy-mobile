@@ -203,7 +203,8 @@ var App = React.createClass({
       activeBevy: BevyStore.getActive(),
       publicBevies: BevyStore.getPublicBevies(),
       bevyBoards: BevyStore.getBevyBoards(),
-      activeBoard: BevyStore.getActiveBoard()
+      activeBoard: BevyStore.getActiveBoard(),
+      bevyInvites: BevyStore.getBevyInvites()
     };
   },
 
@@ -288,7 +289,6 @@ var App = React.createClass({
     this.setState(_.extend(this.state, this.getNotificationState()));
   },
   _onUserChange() {
-    console.log('user changed');
     this.setState(_.extend(this.state, this.getUserState()));
   },
 

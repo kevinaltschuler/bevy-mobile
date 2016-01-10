@@ -12,6 +12,7 @@
 var Dispatcher = require('./../shared/dispatcher');
 var BEVY = require('./../constants').BEVY;
 var BOARD = require('./../constants').BOARD;
+var INVITE = require('./../constants').INVITE;
 var getSlug = require('speakingurl');
 
 var BevyActions = {
@@ -126,7 +127,28 @@ var BevyActions = {
       actionType: BEVY.LEAVE,
       bevy_id: bevy_id
     });
-  }
+  },
+
+  inviteUser(user) {
+    Dispatcher.dispatch({
+      actionType: INVITE.INVITE_USER,
+      user: (user == undefined) ? null : user
+    });
+  },
+
+  destroyInvite(invite_id) {
+    Dispatcher.dispatch({
+      actionType: INVITE.DESTROY,
+      invite_id: (invite_id == undefined) ? null : invite_id
+    });
+  },
+
+  acceptRequest(invite_id) {
+    Dispatcher.dispatch({
+      actionType: INVITE.ACCEPT_REQUEST,
+      invite_id: (invite_id == undefined) ? null : invite_id
+    });
+  }, 
 };
 
 module.exports = BevyActions;
