@@ -281,6 +281,7 @@ _.extend(PostStore, {
           success: function(collection, response, options) {
             this.posts.sort();
             this.trigger(POST.CHANGE_ALL);
+            this.trigger(POST.LOADED);
           }.bind(this)
         });
         break;

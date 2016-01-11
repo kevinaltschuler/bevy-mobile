@@ -64,42 +64,24 @@ var PostList = React.createClass({
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
-      isRefreshing: true,
       loading: true,
       joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
     };
   },
 
-  setLoading() {
-    this.setState({
-      loading: true,
-      dataSource: this.state.dataSource.cloneWithRows(['loading']),
-    });
-  },
-
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
-    BevyStore.on(POST.LOADED, this._rerender);
-    PostStore.on(POST.LOADING, this.setLoading);
+    PostStore.on(POST.LOADING, this._onPostsLoading);
   },
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
-    BevyStore.off(POST.LOADED, this._rerender);
-    PostStore.off(POST.LOADING, this.setLoading);
+    PostStore.off(POST.LOADING, this._onPostsLoading);
   },
 
-  componentWillReceiveProps(nextProps) {
+  _onPostsLoading() {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts),
-      loading: false
-    });
-  },
-
-  _rerender() {
-    var allPosts = JSON.parse(JSON.stringify(PostStore.getAll()));
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(allPosts),
-      loading: false
+      loading: true,
+      dataSource: this.state.dataSource.cloneWithRows([]),
     });
   },
 
@@ -156,81 +138,92 @@ var PostList = React.createClass({
     } else return <View />;
   },
 
+  _renderLoading() {
+    if(this.state.loading) {
+      return (
+        <View style={ styles.spinnerContainer }>
+          <Spinner
+            isVisible={ true }
+            size={ 40 }
+            type={ 'Arc' }
+            color={ '#2cb673' }
+          />
+        </View>
+      );
+    } else return <View />
+  },
+
+  _renderPrivate() {
+    return (
+      <View style={ styles.privateContainer }>
+        <Image
+          style={ styles.privateImage }
+          source={{ uri: constants.siteurl + '/img/private.png' }}
+        />
+        <Text style={ styles.privateText }>
+          This Bevy is Private
+        </Text>
+        <TouchableHighlight
+          onPress={ this.requestJoin }
+        >
+          <View style={ styles.requestJoinButton }>
+            <Text style={ styles.requestJoinButtonText }>
+              Request to Join this Bevy
+            </Text>
+          </View>
+        </TouchableHighlight>
+      </View>
+    );
+  },
+
+  _renderPosts() {
+    if(this.state.loading) return <View />;
+    return (
+      <ListView
+        ref={(ref) => { this.ListView = ref; }}
+        dataSource={ this.state.dataSource }
+        style={ styles.postContainer }
+        onScroll={(data) => {
+          this.props.onScroll(data.nativeEvent.contentOffset.y);
+        }}
+        scrollRenderAheadDistance={100}
+        renderHeader={() => {
+          return this._renderHeader();
+        }}
+        renderFooter={() => {
+          return <View style={{height: 20}}/>
+        }}
+        renderRow={(post) => {
+          return (
+            <Post
+              key={ 'postlist:' + post._id }
+              post={ post }
+              mainRoute={ this.props.mainRoute }
+              mainNavigator={ this.props.mainNavigator }
+              user={ this.props.user }
+            />
+          );
+        }}
+      />
+    );
+  },
+
   render() {
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>;
     }
-
     if(this.props.activeBevy.settings.privacy == 'Private'
       && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
       // if this is a private bevy that the user is not a part of
       // dont show any posts. only show a request join view
-      return (
-        <View style={ styles.privateContainer }>
-          <Image
-            style={ styles.privateImage }
-            source={{ uri: constants.siteurl + '/img/private.png' }}
-          />
-          <Text style={ styles.privateText }>
-            This Bevy is Private
-          </Text>
-          <TouchableHighlight
-            onPress={ this.requestJoin }
-          >
-            <View style={ styles.requestJoinButton }>
-              <Text style={ styles.requestJoinButtonText }>
-                Request to Join this Bevy
-              </Text>
-            </View>
-          </TouchableHighlight>
-        </View>
-      );
+      return this._renderPrivate();
     }
 
     return (
       <View style={ styles.postContainer }>
         { this._renderNoPosts() }
-        <ListView
-          ref={(ref) => { this.ListView = ref; }}
-          dataSource={ this.state.dataSource }
-          style={ styles.postContainer }
-          onScroll={(data) => {
-            this.props.onScroll(data.nativeEvent.contentOffset.y);
-          }}
-          scrollRenderAheadDistance={100}
-          renderHeader={() => {
-            return this._renderHeader();
-          }}
-          renderFooter={() => {
-            return <View style={{height: 20}}/>
-          }}
-          renderRow={(post) => {
-            if(this.state.loading) {
-              return (
-                <View style={styles.spinnerContainer}>
-                  <Spinner
-                    isVisible={ true }
-                    size={ 40 }
-                    type={ 'Arc' }
-                    color={ '#2cb673' }
-                  />
-                </View>
-              );
-            }
-            if(_.isEmpty(post.board)) {
-              return <View/>
-            }
-            return <View style={{ backgroundColor: '#eee' }}>
-              <Post
-                key={ 'postlist:' + post._id }
-                post={ post }
-                mainRoute={ this.props.mainRoute }
-                mainNavigator={ this.props.mainNavigator }
-                user={ this.props.user }
-              />
-            </View>;
-          }}
-        />
+        { this._renderLoading() }
+        { this._renderPosts() }
       </View>
     );
   }
