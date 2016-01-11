@@ -1,9 +1,10 @@
 /**
  * Post.ios.js
- * kevin made this
- * yo that party was tight
+ * @author albert
+ * @flow
  */
- 'use strict';
+
+'use strict';
 
 var React = require('react-native');
 var {
@@ -19,6 +20,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
 var PostActionList = require('./PostActionList.ios.js');
 var Collapsible = require('react-native-collapsible');
+var PostHeader = require('./PostHeader.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -201,119 +203,98 @@ var Post = React.createClass({
 
   render() {
     var post = this.state.post;
-    var authorImage = constants.siteurl + '/img/user-profile-icon.png';
-    if(!_.isEmpty(post.author.image)) {
-      var authorImage = post.author.image.path;
-    }
 
     return (
-        <View style={styles.postCard}>
-          <View style={styles.titleRow}>
-            <Image
-              style={styles.titleImage}
-              source={{ uri: authorImage }}
-            />
-            <View style={styles.titleTextColumn}>
-              <View style={styles.titleTextView}>
-                <Text numberOfLines={ 1 } style={styles.titleText}>
-                  { post.author.displayName } 
-                </Text>
-                <Icon name='chevron-right' style={{marginTop: 2}} color='#333' size={12}/> 
-                <Text numberOfLines={ 1 } style={styles.titleText}> 
-                  { post.board.name }
-                </Text>
-              </View>
-              <Text style={styles.subTitleText}>
-                { timeAgo(Date.parse(post.created)) }
+      <View style={styles.postCard}>
+        <PostHeader
+          post={ this.props.post }
+          user={ this.props.user }
+        />
+        { this._renderPostTitle() }
+
+        { this._renderImageOverlay() }
+
+        { this._renderPostImage() }
+        <View style={styles.postActionsRow}>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.actionTouchable, { flex: 2 } ]}
+            onPress={() => {
+              PostActions.vote(post._id);
+              this.setState({
+                voted: !this.state.voted,
+                overlayVisible: false
+              });
+            }}
+          >
+            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
+              <Text style={ styles.pointCountText }>
+                { this.countVotes() }
               </Text>
-            </View>
-          </View>
-
-          { this._renderPostTitle() }
-
-          { this._renderImageOverlay() }
-
-          { this._renderPostImage() }
-          <View style={styles.postActionsRow}>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={[ styles.actionTouchable, { flex: 2 } ]}
-              onPress={() => {
-                PostActions.vote(post._id);
-                this.setState({
-                  voted: !this.state.voted,
-                  overlayVisible: false
-                });
-              }}
-            >
-              <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-                <Text style={ styles.pointCountText }>
-                  { this.countVotes() }
-                </Text>
-                <Icon
-                  name={ (this.state.voted) ? 'favorite' : 'favorite-border' }
-                  size={20}
-                  color={ (this.state.voted) ? '#2cb673' : '#rgba(0,0,0,.35)' }
-                  style={styles.actionIcon}
-                />
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={[ styles.actionTouchable, { flex: 2 } ]}
-              onPress={() => {
-                // go to comment view
-                // return if we're already in comment view
-                if(this.props.inCommentView) return;
-
-                var commentRoute = routes.MAIN.COMMENT;
-                commentRoute.postID = this.state.post._id;
-                this.props.mainNavigator.push(commentRoute);
-              }}
-            >
-              <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-                <Text style={ styles.commentCountText }>
-                  { post.comments.length }
-                </Text>
-                <Icon
-                  name='chat-bubble'
-                  size={20}
-                  color='rgba(0,0,0,.3)'
-                  style={styles.actionIcon}
-                />
-              </View>
-            </TouchableHighlight>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={[ styles.actionTouchable, { flex: 1 } ]}
-              onPress={() => {
-                this.setState({
-                  collapsed: !this.state.collapsed
-                })
-              }}
-            >
               <Icon
-                name='more-horiz'
+                name={ (this.state.voted) ? 'favorite' : 'favorite-border' }
+                size={20}
+                color={ (this.state.voted) ? '#2cb673' : '#rgba(0,0,0,.35)' }
+                style={styles.actionIcon}
+              />
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.actionTouchable, { flex: 2 } ]}
+            onPress={() => {
+              // go to comment view
+              // return if we're already in comment view
+              if(this.props.inCommentView) return;
+
+              var commentRoute = routes.MAIN.COMMENT;
+              commentRoute.postID = this.state.post._id;
+              this.props.mainNavigator.push(commentRoute);
+            }}
+          >
+            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
+              <Text style={ styles.commentCountText }>
+                { post.comments.length }
+              </Text>
+              <Icon
+                name='chat-bubble'
                 size={20}
                 color='rgba(0,0,0,.3)'
                 style={styles.actionIcon}
               />
-            </TouchableHighlight>
-          </View>
-          <Collapsible collapsed={this.state.collapsed} >
-            <PostActionList
-              post={ this.state.post }
-              { ...this.props }
-              user={this.props.user}
-              onEdit={this.onEdit}
-              toggleCollapsed={() => {
-                this.setState({
-                  collapsed: !this.state.collapsed
-                })
-              }}
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0.1)'
+            style={[ styles.actionTouchable, { flex: 1 } ]}
+            onPress={() => {
+              this.setState({
+                collapsed: !this.state.collapsed
+              })
+            }}
+          >
+            <Icon
+              name='more-horiz'
+              size={20}
+              color='rgba(0,0,0,.3)'
+              style={styles.actionIcon}
             />
-          </Collapsible>
+          </TouchableHighlight>
         </View>
+        <Collapsible collapsed={this.state.collapsed} >
+          <PostActionList
+            post={ this.state.post }
+            { ...this.props }
+            user={this.props.user}
+            onEdit={this.onEdit}
+            toggleCollapsed={() => {
+              this.setState({
+                collapsed: !this.state.collapsed
+              })
+            }}
+          />
+        </Collapsible>
+      </View>
     );
   },
 });
@@ -329,44 +310,8 @@ var styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: sideMargins,
     marginRight: sideMargins,
-    paddingTop: 8,
     backgroundColor: 'white',
     borderRadius: 2,
-  },
-  titleRow: {
-    flexDirection: 'row',
-    width: cardWidth,
-    paddingLeft: 8,
-    paddingRight: 8,
-    marginBottom: 10
-  },
-  titleImage: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#eee',
-    borderRadius: 15,
-    marginLeft: 0
-  },
-  titleTextColumn: {
-    flex: 1,
-    width: cardWidth - 40 - 10 - 16,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    height: 26,
-    marginLeft: 10,
-    alignItems: 'flex-start'
-  },
-  titleText: {
-    color: '#282929',
-    fontSize: 12
-  },
-  titleTextView: {
-    width: cardWidth - 40 - 10 - 16,
-    flexDirection: 'row'
-  },
-  subTitleText: {
-    fontSize: 9,
-    color: '#282929'
   },
 
   body: {
