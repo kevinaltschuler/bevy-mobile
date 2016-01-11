@@ -1,4 +1,4 @@
-/**
+ /**
  * ProfileView.ios.js
  * @author albert
  * @author kevin
@@ -204,7 +204,7 @@ var styles = StyleSheet.create({
   },
 
   profileCard: {
-    height: 60,
+    height: 80,
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
@@ -217,9 +217,9 @@ var styles = StyleSheet.create({
     shadowOffset:  { width: 0, height: 0 }
   },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     marginRight: 10
   },
   profileDetails: {
