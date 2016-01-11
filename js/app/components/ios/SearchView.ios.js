@@ -1,6 +1,6 @@
 /**
  * SearchBar.ios.js
- * @author albert kevin
+ * @author albert kevin ben
  */
 
 'use strict';
@@ -34,6 +34,7 @@ var UserActions = require('./../../../user/UserActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
+var Spinner = require('react-native-spinkit');
 
 var BEVY = constants.BEVY;
 var USER = constants.USER;
@@ -52,6 +53,7 @@ var SearchView = React.createClass({
         .cloneWithRows(bevies),
       userDataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         .cloneWithRows(users),
+      input: '',
       bevies: BevyStore.getPublicBevies(),
       fetching: false,
       searchQuery: BevyStore.getSearchQuery(),
@@ -117,6 +119,7 @@ var SearchView = React.createClass({
     });
   },
 
+
   switchSearchType(index) {
     var data;
     switch(index) {
@@ -179,8 +182,29 @@ var SearchView = React.createClass({
   },
 
   _renderSearchBevies() {
-    var bevies = (this.state.bevies)
+    var bevies = (BevyStore.getSearchList());
     var bevyList = [];
+
+    if(this.state.fetching) {
+      return (
+        <View style={ styles.progressContainer }>
+          <Spinner
+            isVisible={true}
+            size={40}
+            type={'Arc'}
+            color={'#2cb673'}
+          />
+        </View>
+      );
+    } else if(!this.state.fetching && _.isEmpty(bevies)) {
+      return (
+        <View style={ styles.progressContainer }>
+          <Text style={ styles.noneFoundText }>
+            No Bevies Found
+          </Text>
+        </View>
+      );
+    } 
 
     for(var key in bevies) {
       var bevy = bevies[key];
@@ -207,36 +231,74 @@ var SearchView = React.createClass({
       );
   },
 
+  // there is probably a better way of doing this
   switchSearchTab(index) {
-    if(index == 0)
+    if(index == 0){
+      //BevyActions.search(this.state.input);
       return(
         <View>
         {this._renderSearchBevies()}
         </View>
         );
-    else
+    }
+    else{
+      //UserActions.search(this.state.input);
       return(<SearchUser mainNavigator={this.props.mainNavigator}/>);
+    }
   },
 
-  _search() {
+  _searchUsers() {
     UserActions.search(this.state.userQuery);
     this.setState({
       fetching: true
     });
   },
 
-  _onChangeText(ev) {
+  _searchBevies() {
+    BevyActions.search(this.state.searchQuery);
     this.setState({
-      userQuery: ev
+      fetching: true
     });
-    if(this.searchTimeout != undefined) {
-      clearTimeout(this.searchTimeout);
-      delete this.searchTimeout;
+  },
+
+  _onChangeText(ev) {
+    // if bevy tab
+    if(this.state.activeTab == 0) {
+      //in user tab
+      this.setState({
+        searchQuery: ev
+      });
+      if(this.searchTimeout != undefined) {
+        clearTimeout(this.searchTimeout);
+        delete this.searchTimeout;
+      }
+      this.searchTimeout = setTimeout(this._searchBevies, 300);
+    } else {
+      //in user tab
+      this.setState({
+        userQuery: ev
+      });
+      if(this.searchTimeout != undefined) {
+        clearTimeout(this.searchTimeout);
+        delete this.searchTimeout;
+      }
+      this.searchTimeout = setTimeout(this._searchUsers, 300);
     }
-    this.searchTimeout = setTimeout(this._search, 300);
   },
 
   render() {
+    var bevyTabStyles = (this.state.activeTab == 0)
+      ? { backgroundColor: '#eee'}
+      : { backgroundColor: '#2cb673'};
+    var userTabStyles = (this.state.activeTab == 1)
+      ? { backgroundColor: '#fff'}
+      : { backgroundColor: '#2cb673'};
+    var bevyText = (this.state.activeTab == 0)
+      ? { color: '#333'}
+      : { color: '#fff'};
+    var userText = (this.state.activeTab == 1)
+      ? { color: '#333'}
+      : { color: '#fff'};  
     return (
       <View style={styles.container}>
         <View style={ styles.topBarContainer }>
@@ -255,12 +317,12 @@ var SearchView = React.createClass({
          <TextInput
              ref='ToInput'
              style={ styles.Input }
+             placeholderTextColor='rgba(255,255,255,.6)'
              onChangeText={(ev) => {
               this._onChangeText(ev);
              }}
+             value={ this.state.input }
              placeholder='search...'
-             placeholderTextColor='#AAA'
-             underlineColorAndroid='#FFF'
            />
         </View>
 
@@ -269,20 +331,20 @@ var SearchView = React.createClass({
             onPress = {() =>{
               this.setState({activeTab: 0});
             }}
-            style={styles.searchTab}
+            style={[styles.searchTab, bevyTabStyles]}
             underlayColor = 'rgba(0,0,0,.1)'
           >
-            <Text>bevies</Text>
+            <Text style={bevyText}>bevies</Text>
           </TouchableHighlight>
 
           <TouchableHighlight
             onPress = {() =>{
               this.setState({activeTab: 1});
             }}
-            style={styles.searchTab}
+            style={[styles.searchTab, userTabStyles]}
             underlayColor = 'rgba(0,0,0,.1)'
           >
-            <Text>users</Text>
+            <Text style={userText}>users</Text>
           </TouchableHighlight>
         </View>
         {this.switchSearchTab(this.state.activeTab)}
@@ -302,7 +364,9 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     height: 36,
     borderRadius: 4,
-    backgroundColor: 'rgba(255,255,255,.3)'
+    backgroundColor: 'rgba(255,255,255,.3)',
+    paddingLeft: 10,
+    color: '#fff'
   },
 
   topBarContainer: {
@@ -336,8 +400,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#2cb673',
     width: constants.width,
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#DDD',
     paddingVertical: 6,
     paddingHorizontal: 10
   },
@@ -407,8 +469,18 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10,
-    marginTop: 10
-  }
+    marginTop: 0
+  },
+  progressContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  noneFoundText: {
+    color: '#AAA',
+    fontSize: 22
+  },
 });
 
 module.exports = SearchView;
