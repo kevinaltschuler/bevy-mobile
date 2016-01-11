@@ -20,6 +20,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../BevyActions');
 var BoardActions = require('./../../../board/BoardActions');
 
@@ -39,12 +40,11 @@ var BoardItem = React.createClass({
     if(_.isEmpty(board)) {
       return <View/>;
     }
-    var image_url = constants.siteurl + '/img/default_board_img.png';
-    if(board.image)
-      image_url = board.image.path;
-    var typeIcon = (board.type == 'announcement')
-    ? 'flag'
-    : 'forum';
+    var boardImageURL = (_.isEmpty(board.image))
+      ? constants.siteurl + '/img/default_board_img.png'
+      : resizeImage(board.image, 64, 64).url;
+
+    var typeIcon = (board.type == 'announcement') ? 'flag' : 'forum';
 
     return (
       <TouchableHighlight
@@ -53,7 +53,7 @@ var BoardItem = React.createClass({
       >
         <View style={ styles.boardItem }>
           <Image
-            source={{ uri: image_url }}
+            source={{ uri: boardImageURL }}
             style={ styles.boardImage }
           />
           <View style={ styles.boardRight }>
@@ -67,6 +67,9 @@ var BoardItem = React.createClass({
                   size={ 18 }
                   color='#fff'
                 />
+                <Text style={ styles.itemText }>
+                  { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
+                </Text>
               </View>
               <View style={ styles.detailItem }>
                 <Icon
