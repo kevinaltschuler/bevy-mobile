@@ -245,7 +245,7 @@ _.extend(UserStore, {
               }.bind(this)
             });
             this.user.set('image_url', filename);
-            this.trigger(USER.LOADED);
+            this.trigger(USER.CHANGE_ALL);
           });
         } else {
           this.user.save({
@@ -256,7 +256,7 @@ _.extend(UserStore, {
             }.bind(this)
           });
           this.user.set('image', image);
-          this.trigger(USER.LOADED);
+          this.trigger(USER.CHANGE_ALL);
         }
         break;
 

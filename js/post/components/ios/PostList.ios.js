@@ -51,6 +51,8 @@ var PostList = React.createClass({
 
   getDefaultProps() {
     return {
+      activeBevy: {},
+      allPosts: [],
       showNewPostCard: true,
       profileUser: null,
       onScroll: _.noop
@@ -63,7 +65,7 @@ var PostList = React.createClass({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
-      loading: false,
+      loading: true,
       joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
     };
   },
@@ -78,30 +80,26 @@ var PostList = React.createClass({
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
-    BevyStore.on(POST.LOADING, this.setLoading);
-    PostStore.on(POST.REFRESH, this.onRefresh);
+    PostStore.on(POST.LOADING, this.setLoading);
   },
-
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
     BevyStore.off(POST.LOADED, this._rerender);
-    BevyStore.off(POST.LOADING, this.setLoading);
-    PostStore.off(POST.POST_CREATED, this.toComments);
-    PostStore.off(POST.REFRESH, this.onRefresh);
-  },
-
-  _rerender() {
-    console.log('rerender');
-    var allPosts = JSON.parse(JSON.stringify(PostStore.getAll()));
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(allPosts),
-      loading: false
-    });
+    PostStore.off(POST.LOADING, this.setLoading);
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts),
+      loading: false
+    });
+  },
+
+  _rerender() {
+    var allPosts = JSON.parse(JSON.stringify(PostStore.getAll()));
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(allPosts),
+      loading: false
     });
   },
 
@@ -110,20 +108,19 @@ var PostList = React.createClass({
       dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
       loading: false
     });
+    this.forceUpdate();
   },
 
   onRefresh(stopRefresh) {
     PostActions.fetch(
       this.props.activeBevy._id,
-      (this.props.profileUser) ? this.props.profileUser._id : null
+      (!_.isEmpty(this.props.profileUser)) ? this.props.profileUser._id : null
     );
     setTimeout(stopRefresh, 2000);
   },
 
   handleScroll(y) {
-    this.setState({
-      scrollY: y
-    })
+    this.setState({ scrollY: y });
   },
 
   requestJoin() {
@@ -145,6 +142,18 @@ var PostList = React.createClass({
         />
       </View>
     );
+  },
+
+  _renderNoPosts() {
+    if(!this.state.loading && _.isEmpty(this.props.allPosts)) {
+      return (
+        <View style={ styles.noPostsContainer }>
+          <Text style={ styles.noPostsText }>
+            No Posts Yet
+          </Text>
+        </View>
+      );
+    } else return <View />;
   },
 
   render() {
@@ -180,10 +189,9 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
+        { this._renderNoPosts() }
         <ListView
-          ref={(ref) => {
-            this.ListView = ref;
-          }}
+          ref={(ref) => { this.ListView = ref; }}
           dataSource={ this.state.dataSource }
           style={ styles.postContainer }
           onScroll={(data) => {
@@ -201,10 +209,10 @@ var PostList = React.createClass({
               return (
               <View style={styles.spinnerContainer}>
                 <Spinner
-                  isVisible={true}
-                  size={40}
-                  type={'Arc'}
-                  color={'#2cb673'}
+                  isVisible={ true }
+                  size={ 40 }
+                  type={ 'Arc' }
+                  color={ '#2cb673' }
                 />
               </View>
               );
@@ -212,7 +220,7 @@ var PostList = React.createClass({
             if(_.isEmpty(post.board)) {
               return <View/>
             }
-            return <View style={{backgroundColor: '#eee'}}>
+            return <View style={{ backgroundColor: '#eee' }}>
               <Post
                 key={ 'postlist:' + post._id }
                 post={ post }
@@ -236,13 +244,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     paddingTop: 1
   },
-  postListHeader: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  tagOverlay: {
-
-  },
   spinnerContainer: {
     flexDirection: 'column',
     flex: 1,
@@ -255,9 +256,6 @@ var styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: '#eee',
     marginBottom: -10
-  },
-  listContainer: {
-    flex: 1,
   },
   privateContainer: {
     flex: 1,
@@ -277,34 +275,18 @@ var styles = StyleSheet.create({
     fontSize: 22,
     marginBottom: 15
   },
-  requestJoinButton: {
-    borderColor: '#2cb673',
-    borderWidth: 1,
-    borderRadius: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 10
-  },
-  requestJoinButtonText: {
-    color: '#2cb673'
-  },
-  boardActions: {
-    backgroundColor: '#fff'
-  },
-  slide: {
+
+
+
+  noPostsContainer: {
+    flex: 1,
     flexDirection: 'row',
-  },
-  actionWrapper: {
-    flex: 1,
-    height: 50
-  },
-  action: {
-    flexDirection: 'column',
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  actionText: {
-    color: '#aaa'
+  noPostsText: {
+    color: '#AAA',
+    fontSize: 22
   }
 })
 

@@ -15,6 +15,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
+var _ = require('underscore');
+var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 
@@ -23,6 +25,20 @@ var PostActionList = React.createClass({
     mainNavigator: React.PropTypes.object,
     post: React.PropTypes.object,
     user: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      isAuthor: this.props.user._id == this.props.post.author._id,
+      isAdmin: _.contains(this.props.post.board.admins, this.props.user._id)
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      isAuthor: nextProps.user._id == nextProps.post.author._id,
+      isAdmin: _.contains(nextProps.post.board.admins, nextProps.user._id)
+    });
   },
 
   _renderShareButton() {
@@ -51,7 +67,7 @@ var PostActionList = React.createClass({
   },
 
   _renderEditButton() {
-    if(this.props.user._id != this.props.post.author._id) {
+    if(!this.state.isAuthor && !this.state.isAdmin) {
       return <View/>
     }
     return (
@@ -130,7 +146,7 @@ var PostActionList = React.createClass({
   },
 
   _renderDeleteButton() {
-    if(this.props.user._id != this.props.post.author._id) {
+    if(!this.state.isAuthor && !this.state.isAdmin) {
       return <View/>;
     }
     else {
@@ -156,6 +172,14 @@ var PostActionList = React.createClass({
         </TouchableHighlight>
       );
     }
+  },
+
+  _renderBoardButton() {
+
+  },
+
+  _renderBevyButton() {
+
   },
 
   render() {

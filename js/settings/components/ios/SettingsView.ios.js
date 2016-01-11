@@ -53,6 +53,45 @@ var SettingsView = React.createClass({
     UserActions.logOut();
   },
 
+  showImagePicker() {
+    UIImagePickerManager.showImagePicker({
+      title: 'Change Profile Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Library...',
+      returnBase64Image: false,
+      returnIsVertical: true
+    }, (type, response) => {
+      if (type !== 'cancel' && response) {
+        UserActions.changeProfilePicture(response.uri);
+        this.setState({
+          profilePicture: response.uri
+        });
+      }
+    });
+  },
+
+  _renderSeparator() {
+    return (
+      <View style={{
+        width: constants.width,
+        height: 1,
+        flexDirection: 'row'
+      }}>
+        <View style={{
+          width: 30 + 36,
+          height: 1,
+          backgroundColor: '#FFF'
+        }}/>
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#EEE'
+        }}/>
+      </View>
+    );
+  },
+
   _renderUserHeader() {
     return (
       <View style={ styles.profileHeader }>
@@ -80,34 +119,19 @@ var SettingsView = React.createClass({
           icon={
             <Icon
               name='camera-alt'
-              size={ 30 }
+              size={ 36 }
               color='rgba(0,0,0,.3)'
             />
           }
-          onPress={() => {
-            UIImagePickerManager.showImagePicker({
-              title: 'Change Profile Picture',
-              cancelButtonTitle: 'Cancel',
-              takePhotoButtonTitle: 'Take Photo...',
-              chooseFromLibraryButtonTitle: 'Choose from Library...',
-              returnBase64Image: false,
-              returnIsVertical: true
-            }, (type, response) => {
-              if (type !== 'cancel' && response) {
-                UserActions.changeProfilePicture(response.uri);
-                this.setState({
-                  profilePicture: response.uri
-                });
-              }
-            });
-          }}
+          onPress={ this.showImagePicker }
         />
+        { this._renderSeparator() }
         <SettingsItem
           title='View Profile'
           icon={
             <Icon
               name='person'
-              size={30}
+              size={ 36 }
               color='rgba(0,0,0,.3)'
             />
           }
@@ -117,12 +141,13 @@ var SettingsView = React.createClass({
             this.props.mainNavigator.push(route);
           }}
         />
+        { this._renderSeparator() }
         <SettingsItem
           title='Sign Out'
           icon= {
             <Icon
               name='exit-to-app'
-              size={ 30 }
+              size={ 36 }
               color='rgba(0,0,0,.3)'
             />
           }
@@ -150,7 +175,7 @@ var SettingsView = React.createClass({
           height: StatusBarSizeIOS.currentHeight
         }} />
         <ScrollView
-          style={{ flex: 1, marginTop: -20 }}
+          style={{ flex: 1 }}
           automaticallyAdjustContentInsets={ false }
         >
           { this._renderUserHeader() }
@@ -164,7 +189,7 @@ var SettingsView = React.createClass({
             icon={
               <Icon
                 name='flag'
-                size={ 30 }
+                size={ 36 }
                 color='rgba(0,0,0,.3)'
               />
             }
