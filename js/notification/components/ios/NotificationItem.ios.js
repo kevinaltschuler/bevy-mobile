@@ -16,7 +16,6 @@ var {
   TouchableHighlight,
   TouchableOpacity
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
 
 var _ = require('underscore');
 var BevyStore = require('./../../../bevy/BevyStore');

@@ -18,7 +18,7 @@ var {
   TouchableWithoutFeedback,
   TouchableOpacity
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var { BlurView, VibrancyView } = require('react-native-blur');
 var Swiper = require('react-native-swiper-fork');
 
@@ -150,7 +150,7 @@ var ImageOverlay = React.createClass({
             }}
           >
             <Icon
-              name='ios-close-empty'
+              name='close'
               size={ 40 }
               style={{ width: 40, height: 40, fontWeight: 'bold' }}
               color='#fff'

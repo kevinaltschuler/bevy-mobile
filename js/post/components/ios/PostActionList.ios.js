@@ -1,3 +1,9 @@
+/**
+ * PostActionList.ios.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -7,7 +13,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
@@ -31,7 +37,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='ios-redo'
+            name='share'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }
@@ -84,7 +90,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='pin'
+            name='bookmark'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }
@@ -110,7 +116,7 @@ var PostActionList = React.createClass({
       >
         <View style={ styles.postOptionsButton }>
           <Icon
-            name='ios-person'
+            name='person'
             color='#fff'
             size={ 30 }
             style={ styles.postOptionsIcon }
@@ -138,7 +144,7 @@ var PostActionList = React.createClass({
         >
           <View style={ styles.postOptionsButton }>
             <Icon
-              name='ios-trash'
+              name='delete'
               color='#fff'
               size={ 30 }
               style={ styles.postOptionsIcon }
