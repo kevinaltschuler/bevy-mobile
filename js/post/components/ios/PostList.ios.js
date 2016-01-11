@@ -65,7 +65,7 @@ var PostList = React.createClass({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
       isRefreshing: true,
-      loading: false,
+      loading: true,
       joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
     };
   },
@@ -90,7 +90,8 @@ var PostList = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts),
+      loading: false
     });
   },
 
@@ -143,6 +144,18 @@ var PostList = React.createClass({
     );
   },
 
+  _renderNoPosts() {
+    if(!this.state.loading && _.isEmpty(this.props.allPosts)) {
+      return (
+        <View style={ styles.noPostsContainer }>
+          <Text style={ styles.noPostsText }>
+            No Posts Yet
+          </Text>
+        </View>
+      );
+    } else return <View />;
+  },
+
   render() {
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>;
@@ -176,6 +189,7 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
+        { this._renderNoPosts() }
         <ListView
           ref={(ref) => { this.ListView = ref; }}
           dataSource={ this.state.dataSource }
@@ -299,6 +313,17 @@ var styles = StyleSheet.create({
   },
   actionText: {
     color: '#aaa'
+  },
+
+  noPostsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noPostsText: {
+    color: '#AAA',
+    fontSize: 22
   }
 })
 
