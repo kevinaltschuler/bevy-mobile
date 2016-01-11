@@ -28,9 +28,11 @@ var $BevyView = require('./BevyView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var BOARD = constants.BOARD;
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var BevyStore = require('./../../../bevy/BevyStore')
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyView = React.createClass({
@@ -50,6 +52,16 @@ var BevyView = React.createClass({
       navHeight: 0,
       sideMenuOpen: false,
     }
+  },
+
+  componentDidMount() {
+    BevyStore.on(BOARD.CREATED, (board) => {
+      this.closeSideMenu();
+    });
+  },
+
+  componentWillUnmount() {
+    BevyStore.off(BOARD.CREATED);
   },
 
   openSideMenu() {
@@ -163,76 +175,6 @@ var BevyView = React.createClass({
         );
         break;
     }
-
-    var bottomHeight = 40;
-
-    switch(this.props.bevyRoute.name) {
-      case routes.BEVY.INFO.name:
-        var right = <View/>;
-        var fontColor = '#999';
-        var center = 'Info';
-        var left = (
-          <TouchableOpacity
-            activeOpacity={ 0.5 }
-            style={ styles.backButton }
-            onPress={ this.goBackBevy }
-          >
-            <Icon
-              name='arrow-back'
-              size={ 30 }
-              color={ fontColor }
-            />
-          </TouchableOpacity>
-        );
-        break;
-      case routes.BEVY.SETTINGS.name:
-        var right = <View/>;
-        var fontColor = '#999';
-        var center = 'Settings';
-        var left = (
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
-            onPress={ this.goBackBevy }
-          >
-            <Icon
-              name='arrow-back'
-              size={ 30 }
-              color='#FFF'
-            />
-          </TouchableHighlight>
-        );
-        break;
-      case routes.BEVY.BEVYVIEW.name:
-        var fontColor = '#fff';
-        var bottomHeight = 80;
-
-        var right = this._renderSideMenuButton()
-        var center = this.props.activeBevy.name || '';
-        var left = (
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
-            style={ styles.backButton }
-            onPress={ this.goBackMain }
-          >
-            <Icon
-              name='arrow-back'
-              size={ 30 }
-              color='#FFF'
-            />
-          </TouchableHighlight>
-        );
-        break;
-    }
-
-    if(center.length > 30) {
-      center = center.substr(0,30);
-      center = center.concat('...');
-    }
-
-    if(!_.isEmpty(this.props.activeBoard.name)) {
-      bottomHeight = 40;
-    }
-
 
     return (
       <SideMenu

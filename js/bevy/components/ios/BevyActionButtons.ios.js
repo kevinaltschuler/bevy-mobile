@@ -27,13 +27,20 @@ var BevyActions = require('./../../../bevy/BevyActions');
 var BevyActionButtons = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
-    bevy: React.PropTypes.object
+    bevy: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   getInitialState() {
     return {
       joined: _.contains(this.props.user.bevies, this.props.bevy._id)
     }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      joined: _.contains(nextProps.user.bevies, nextProps.bevy._id)
+    });
   },
 
   _handleJoinLeave(index) {
@@ -80,8 +87,12 @@ var BevyActionButtons = React.createClass({
     });
   },
 
-  _onInvite() {
+  inviteUsers() {
     this.props.mainNavigator.push(routes.MAIN.INVITEUSERS);
+  },
+
+  goToInfoView() {
+    this.props.bevyNavigator.push(routes.BEVY.INFO);
   },
 
   render() {
@@ -90,9 +101,6 @@ var BevyActionButtons = React.createClass({
     if(_.isEmpty(bevy)) {
       return <View/>;
     }
-    var typeIcon = (bevy.settings.privacy == 'Private')
-    ? 'lock'
-    : 'public';
 
     if(this.state.joined) {
       var joinedText = 'Joined';
@@ -135,7 +143,7 @@ var BevyActionButtons = React.createClass({
           <TouchableHighlight
             style={ styles.actionWrapper }
             underlayColor='rgba(0,0,0,.1)'
-            onPress={ this._onInvite }
+            onPress={ this.inviteUsers }
           >
             <View style={ styles.action }>
                 <Icon
@@ -166,6 +174,7 @@ var BevyActionButtons = React.createClass({
           <TouchableHighlight
             style={ styles.actionWrapper }
             underlayColor='rgba(0,0,0,.1)'
+            onPress={ this.goToInfoView }
           >
             <View style={ styles.action }>
               <Icon
