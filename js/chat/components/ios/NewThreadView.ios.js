@@ -295,7 +295,7 @@ var NewThreadView = React.createClass({
               onPress={ this.onSubmit }
             >
               <Icon
-                name='add'
+                name='done'
                 size={ 30 }
                 color='#FFF'
               />

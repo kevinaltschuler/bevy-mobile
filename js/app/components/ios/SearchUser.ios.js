@@ -58,8 +58,6 @@ var AddPeopleView = React.createClass({
     UserStore.on(USER.SEARCHING, this.onSearching);
     UserStore.on(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    // listen to chat store events
-    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     // populate list with random users for now
     UserActions.search('');
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
@@ -120,11 +118,6 @@ var AddPeopleView = React.createClass({
     });
   },
 
-  onSwitchToThread(thread_id) {
-    // go to thread view
-    this.props.mainNavigator.replace(routes.CHAT.CHATVIEW);
-  },
-
   onBackButton() {
     if(!_.isEmpty(this.state.addedUsers)) {
       // if theres added users, use back button to pop them
@@ -145,88 +138,11 @@ var AddPeopleView = React.createClass({
     this.props.mainNavigator.pop();
   },
 
-  onSearchUserSelect(user) {
-    var addedUsers = this.state.addedUsers;
-    if(_.findWhere(this.state.addedUsers, { _id: user._id }) != undefined) {
-      // user already exists
-      // remove user from the list
-      //addedUsers = _.reject(addedUsers, ($user) => $user._id == user._id);
-    } else {
-      // add user to list
-      addedUsers.push(user);
-      // clear text field
-      this.setState({
-        toInput: ''
-      });
-    }
-    this.setState({
-      addedUsers: addedUsers
-    });
-  },
-
-  onChangeToText(text) {
-    if(_.isEmpty(text) && _.isEmpty(this.state.toInput)) {
-      // new and old text is empty
-      // user probably pressed backspace on an empty field
-      // so lets remove an added user if it exists
-      var addedUsers = this.state.addedUsers;
-      addedUsers.pop();
-      this.setState({
-        addedUsers: addedUsers
-      });
-      return;
-    }
-
-    // update state
-    this.setState({
-      toInput: text
-    });
-    // set search delay
-    if(this.searchTimeout != undefined) {
-      clearTimeout(this.searchTimeout);
-      delete this.searchTimeout;
-    }
-    this.searchTimeout = setTimeout(this.search, 500);
-  },
-
   search() {
     UserActions.search(this.state.toInput);
     this.setState({
       searching: true
     });
-  },
-
-  onRemoveAddedUser(user) {
-    var addedUsers = this.state.addedUsers;
-    addedUsers = _.reject(addedUsers, ($user) => $user._id == user._id);
-    this.setState({
-      addedUsers: addedUsers
-    });
-  },
-
-  submit() {
-    // dont allow for no added users
-    if(_.isEmpty(this.state.addedUsers)) {
-      return;
-    }
-    // call action
-    ChatActions.addUsers(this.props.activeThread._id, this.state.addedUsers);
-    this.props.chatNavigator.pop();
-  },
-
-  _renderAddedUsers() {
-    var users = [];
-    for(var key in this.state.addedUsers) {
-      var addedUser = this.state.addedUsers[key];
-      users.push(
-        <AddedUserItem
-          key={ 'addeduser:' + addedUser._id }
-          user={ addedUser }
-          onRemove={ this.onRemoveAddedUser }
-        />
-      );
-    }
-    return users;
   },
 
   _renderSearchUsers() {
@@ -263,9 +179,7 @@ var AddPeopleView = React.createClass({
               key={ 'searchuser:' + user._id }
               searchUser={ user }
               onSelect={ this.onSearchUserSelect }
-              selected={
-                _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
-              }
+              mainNavigator={this.props.mainNavigator}
             />
           );
         }}

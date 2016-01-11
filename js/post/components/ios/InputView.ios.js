@@ -156,6 +156,14 @@ var InputView = React.createClass({
     //this.props.mainNavigator.pop(); // navigate back to main tab bar
   },
 
+  onImageItemRemove(image) {
+    var images = this.state.images;
+    images = _.reject(images, ($image) => $image.filename == image.filename);
+    this.setState({
+      images: images
+    });
+  },
+
   _renderImages() {
     if(_.isEmpty(this.state.images)) {
       return (
@@ -236,7 +244,7 @@ var InputView = React.createClass({
               onPress={ this.submit }
             >
               <Icon
-                name='add'
+                name='done'
                 size={ 30 }
                 color='#FFF'
               />
@@ -247,7 +255,7 @@ var InputView = React.createClass({
           <View style={ styles.bevyPicker }>
             <Text style={ styles.sectionTitle }>Board</Text>
             <View style={styles.bevyNameContainer}>
-              <Image source={{uri: boardImageUrl}} style={{borderRadius: 15, width: 30, height: 30}}/>
+              <Image source={{uri: boardImageUrl}} style={{borderRadius: 30, width: 60, height: 60}}/>
               <Text style={styles.bevyTitle}>
                 {boardName}
               </Text>
@@ -379,16 +387,16 @@ var styles = StyleSheet.create({
   bevyNameContainer: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    height: 48,
+    height: 80,
     alignItems: 'center',
     paddingLeft: 16,
     paddingRight: 16,
   },
   bevyTitle: {
     flex: 1,
-    fontSize: 17,
+    fontSize: 18,
     color: '#222',
-    marginLeft: 10
+    marginLeft: 10,
   },
   toBevyPicker: {
     flex: 1,
