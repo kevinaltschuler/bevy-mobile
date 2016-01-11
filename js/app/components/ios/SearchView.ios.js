@@ -36,6 +36,7 @@ var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
 
 var BEVY = constants.BEVY;
+var USER = constants.USER;
 
 var SearchView = React.createClass({
   propTypes: {
@@ -62,11 +63,38 @@ var SearchView = React.createClass({
   componentDidMount() {
     BevyStore.on(BEVY.SEARCHING, this.handleSearching);
     BevyStore.on(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+    UserStore.on(USER.SEARCHING, this.onUserSearching);
+    UserStore.on(USER.SEARCH_ERROR, this.onUserSearchError);
+    UserStore.on(USER.SEARCH_COMPLETE, this.onUserSearchComplete);
   },
 
   componentWillUnmount() {
     BevyStore.off(BEVY.SEARCHING, this.handleSearching);
     BevyStore.off(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+    UserStore.off(USER.SEARCHING, this.onUserSearching);
+    UserStore.off(USER.SEARCH_ERROR, this.onUserSearchError);
+    UserStore.off(USER.SEARCH_COMPLETE, this.onUserSearchComplete);
+  },
+
+  onUserSearching() {
+    this.setState({
+      fetching: true
+    });
+  },
+
+  onUserSearchError() {
+    this.setState({
+      fetching: false,
+      searchUsers: []
+    });
+  },
+
+  onUserSearchComplete() {
+    var searchUsers = UserStore.getUserSearchResults();
+    this.setState({
+      fetching: false,
+      userDataSource: this.state.userDataSource.cloneWithRows(searchUsers),
+    });
   },
 
   handleSearching() {
@@ -190,6 +218,24 @@ var SearchView = React.createClass({
       return(<SearchUser mainNavigator={this.props.mainNavigator}/>);
   },
 
+  _search() {
+    UserActions.search(this.state.userQuery);
+    this.setState({
+      fetching: true
+    });
+  },
+
+  _onChangeText(ev) {
+    this.setState({
+      userQuery: ev
+    });
+    if(this.searchTimeout != undefined) {
+      clearTimeout(this.searchTimeout);
+      delete this.searchTimeout;
+    }
+    this.searchTimeout = setTimeout(this._search, 300);
+  },
+
   render() {
     return (
       <View style={styles.container}>
@@ -209,6 +255,9 @@ var SearchView = React.createClass({
          <TextInput
              ref='ToInput'
              style={ styles.Input }
+             onChangeText={(ev) => {
+              this._onChangeText(ev);
+             }}
              placeholder='search...'
              placeholderTextColor='#AAA'
              underlineColorAndroid='#FFF'
@@ -251,7 +300,9 @@ var styles = StyleSheet.create({
   },
   Input: {
     backgroundColor: '#FFF',
-    height: 36
+    height: 36,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255,255,255,.3)'
   },
 
   topBarContainer: {
@@ -282,12 +333,12 @@ var styles = StyleSheet.create({
     borderBottomWidth: 1
   },
   searchBox: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#2cb673',
     width: constants.width,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#DDD',
-    paddingTop: 6,
+    paddingVertical: 6,
     paddingHorizontal: 10
   },
   searchTab: {
