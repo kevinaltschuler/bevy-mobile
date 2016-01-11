@@ -59,6 +59,28 @@ var BevySideMenu = React.createClass({
         />
       );
     }
+    boardViews.push(
+      <TouchableHighlight 
+        underlayColor='rgba(255,255,255,.1)'
+        style={{
+          height: 70,
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderBottomWidth: 1,
+          borderBottomColor: '#666',
+        }}
+        onPress={() => {
+          this.props.mainNavigator.push(routes.MAIN.NEWBOARD);
+        }}
+        key={'boarditem:new'}
+      >
+        <Icon
+          name='add'
+          color='#eee'
+          size={30}
+        />
+      </TouchableHighlight> 
+    )
     return boardViews;
   },
 

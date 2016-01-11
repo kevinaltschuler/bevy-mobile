@@ -28,9 +28,11 @@ var $BevyView = require('./BevyView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var BOARD = constants.BOARD;
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var BevyStore = require('./../../../bevy/BevyStore')
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyView = React.createClass({
@@ -50,6 +52,16 @@ var BevyView = React.createClass({
       navHeight: 0,
       sideMenuOpen: false,
     }
+  },
+
+  componentDidMount() {
+    BevyStore.on(BOARD.CREATED, (board) => {
+      this.closeSideMenu();
+    });
+  },
+
+  componentWillUnmount() {
+    BevyStore.off(BOARD.CREATED);
   },
 
   openSideMenu() {

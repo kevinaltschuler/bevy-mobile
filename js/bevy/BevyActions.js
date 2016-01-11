@@ -15,6 +15,8 @@ var BOARD = require('./../constants').BOARD;
 var INVITE = require('./../constants').INVITE;
 var getSlug = require('speakingurl');
 
+var _ = require('underscore');
+
 var BevyActions = {
 
   fetch(user) {
@@ -126,6 +128,29 @@ var BevyActions = {
     Dispatcher.dispatch({
       actionType: BEVY.LEAVE,
       bevy_id: bevy_id
+    });
+  },
+
+  createBoard(name, description, image, parent_id, type) {
+    if(_.isEmpty(name)) return;
+    if(_.isEmpty(parent_id)) return;
+    if(_.isEmpty(type)) {
+      type = 'discussion';
+    }
+    if(_.isEmpty(image)) {
+      image = {
+        filename: constants.siteurl + '/img/default_board_img.png',
+        foreign: true
+      };
+    }
+
+    Dispatcher.dispatch({
+      actionType: BOARD.CREATE,
+      name: name,
+      description: (description == undefined) ? '' : description,
+      image: image,
+      parent_id: parent_id,
+      type: type
     });
   },
 
