@@ -51,6 +51,8 @@ var PostList = React.createClass({
 
   getDefaultProps() {
     return {
+      activeBevy: {},
+      allPosts: [],
       showNewPostCard: true,
       profileUser: null,
       onScroll: _.noop
@@ -78,13 +80,18 @@ var PostList = React.createClass({
   componentDidMount() {
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
-    BevyStore.on(POST.LOADING, this.setLoading);
+    PostStore.on(POST.LOADING, this.setLoading);
   },
-
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
     BevyStore.off(POST.LOADED, this._rerender);
-    BevyStore.off(POST.LOADING, this.setLoading);
+    PostStore.off(POST.LOADING, this.setLoading);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
+    });
   },
 
   _rerender() {
@@ -95,17 +102,12 @@ var PostList = React.createClass({
     });
   },
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(nextProps.allPosts)
-    });
-  },
-
   _onPostsLoaded() {
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
       loading: false
     });
+    this.forceUpdate();
   },
 
   onRefresh(stopRefresh) {
@@ -117,9 +119,7 @@ var PostList = React.createClass({
   },
 
   handleScroll(y) {
-    this.setState({
-      scrollY: y
-    })
+    this.setState({ scrollY: y });
   },
 
   requestJoin() {
@@ -177,9 +177,7 @@ var PostList = React.createClass({
     return (
       <View style={ styles.postContainer }>
         <ListView
-          ref={(ref) => {
-            this.ListView = ref;
-          }}
+          ref={(ref) => { this.ListView = ref; }}
           dataSource={ this.state.dataSource }
           style={ styles.postContainer }
           onScroll={(data) => {
@@ -197,10 +195,10 @@ var PostList = React.createClass({
               return (
               <View style={styles.spinnerContainer}>
                 <Spinner
-                  isVisible={true}
-                  size={40}
-                  type={'Arc'}
-                  color={'#2cb673'}
+                  isVisible={ true }
+                  size={ 40 }
+                  type={ 'Arc' }
+                  color={ '#2cb673' }
                 />
               </View>
               );
@@ -208,7 +206,7 @@ var PostList = React.createClass({
             if(_.isEmpty(post.board)) {
               return <View/>
             }
-            return <View style={{backgroundColor: '#eee'}}>
+            return <View style={{ backgroundColor: '#eee' }}>
               <Post
                 key={ 'postlist:' + post._id }
                 post={ post }

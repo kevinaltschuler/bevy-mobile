@@ -73,6 +73,7 @@ _.extend(PostStore, {
         this.posts.fetch({
           reset: true,
           success: function(posts, response, options) {
+            console.log('fetched posts');
             // trigger sort which will trigger loaded and change all
             this.posts.sort();
             this.trigger(POST.LOADED);

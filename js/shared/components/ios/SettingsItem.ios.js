@@ -64,9 +64,7 @@ var SettingsItem = React.createClass({
   _renderBody() {
     return (
       <View style={ styles.settingItem }>
-        <View style={{width: 35, height: 35, alignItems: 'center', justifyContent: 'center'}}>
-          { this._renderIcon() }
-        </View>
+        { this._renderIcon() }
         <Text style={ styles.settingTitle }>
           { this.props.title }
         </Text>
@@ -95,25 +93,22 @@ var styles = StyleSheet.create({
   settingItemContainer: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    height: 48,
+    height: 60,
     alignItems: 'center',
   },
   settingItem: {
     backgroundColor: '#FFF',
     flex: 1,
     flexDirection: 'row',
-    height: 48,
+    height: 60,
     alignItems: 'center',
-    paddingLeft: 16,
-    paddingRight: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
+    paddingHorizontal: 15
   },
   settingTitle: {
     flex: 1,
     fontSize: 17,
     color: '#222',
-    marginLeft: 10
+    marginLeft: 15
   },
   settingValue: {
     alignSelf: 'flex-end',

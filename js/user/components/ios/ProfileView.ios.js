@@ -157,7 +157,9 @@ var ProfileView = React.createClass({
             </Text>
             <PostList
               showNewPostCard={ false }
-              profileUser={ this.props.profileUser }
+              profileUser={ (_.isEmpty(this.props.profileUser))
+                ? this.props.user
+                : this.props.profileUser }
               { ...this.props }
             />
           </View>
