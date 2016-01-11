@@ -211,9 +211,7 @@ var Post = React.createClass({
           user={ this.props.user }
         />
         { this._renderPostTitle() }
-
         { this._renderImageOverlay() }
-
         { this._renderPostImage() }
         <View style={styles.postActionsRow}>
           <TouchableHighlight
@@ -322,10 +320,9 @@ var styles = StyleSheet.create({
     paddingRight: 15
   },
   bodyText: {
-    fontSize: 13,
-    color: '#282929'
+    fontSize: 17,
+    color: '#666'
   },
-
   postImage: {
     height: 75,
     flexDirection: 'row',
@@ -339,7 +336,6 @@ var styles = StyleSheet.create({
     color: '#eee',
     fontSize: 17
   },
-
   postActionsRow: {
     height: 36,
     flexDirection: 'row',
