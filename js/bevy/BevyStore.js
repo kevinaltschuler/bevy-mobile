@@ -402,6 +402,30 @@ _.extend(BevyStore, {
         this.activeBoard = new Board;
         this.trigger(BOARD.CHANGE_ALL);
         break;
+      case BOARD.CREATE:
+        var name = payload.name;
+        var description = payload.description;
+        var image = payload.image;
+        var user = UserStore.getUser();
+        var type = payload.type;
+        var parent_id = payload.parent_id;
+
+        var board = new Board({
+          name: name,
+          description: description,
+          image: image,
+          admins: [user._id],
+          type: type,
+          parent: parent_id
+        });
+        board.url = constants.apiurl + '/boards';
+        board.save(null, {
+          success: function(model, response, options) {
+            BevyStore.addBoard(board);
+            UserStore.addBoard(board);
+          }.bind(this)
+        });
+        break;
       case INVITE.INVITE_USER:
         var user = payload.user;
         var user_id = user._id;
@@ -440,6 +464,12 @@ _.extend(BevyStore, {
         }.bind(this))
         break;
     }
+  },
+
+  addBoard(board) {
+    this.bevyBoards.add(board);
+    this.trigger(BOARD.CREATED, board.toJSON());
+    this.trigger(BEVY.CHANGE_ALL);
   },
 
   getMyBevies() {
@@ -521,20 +551,9 @@ _.extend(BevyStore, {
     if(bevy_id == -1) return default_img;
     var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
     if(bevy == undefined) return default_img;
-    var default_bevies = [
-      '11sports',
-      '22gaming',
-      '3333pics',
-      '44videos',
-      '555music',
-      '6666news',
-      '777books'
-    ];
-
     var source = { uri: (_.isEmpty(bevy.get('image')))
       ? ''
       : bevy.get('image').path };
-    var default_bevy_index = default_bevies.indexOf(bevy_id);
 
     if(source.uri.slice(7, 23) == 'api.joinbevy.com'
       && width != undefined
@@ -543,31 +562,6 @@ _.extend(BevyStore, {
     }
     if(_.isEmpty(source.uri)) {
       source = default_img;
-    }
-    if(default_bevy_index > -1) {
-      switch(default_bevy_index) {
-        case 0:
-          source = require('./../images/default_groups/sports.png');
-          break;
-        case 1:
-          source = require('./../images/default_groups/gaming.png');
-          break;
-        case 2:
-          source = require('./../images/default_groups/pictures.png');
-          break;
-        case 3:
-          source = require('./../images/default_groups/videos.png');
-          break;
-        case 4:
-          source = require('./../images/default_groups/music.png');
-          break;
-        case 5:
-          source = require('./../images/default_groups/news.png');
-          break;
-        case 6:
-          source = require('./../images/default_groups/books.png');
-          break;
-      }
     }
     return source;
   },

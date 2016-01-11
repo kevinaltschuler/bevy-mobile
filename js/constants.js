@@ -137,7 +137,9 @@ exports.BOARD = {
   SWITCH_BOARD: 'board_switch_board',
   CLEAR: 'board_clear',
   LEAVE: 'board_leave',
-  JOIN: 'board_join'
+  JOIN: 'board_join',
+  CREATE: 'board_create',
+  CREATED: 'board_created'
 };
 
 exports.CHAT = {

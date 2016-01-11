@@ -89,6 +89,7 @@ var BoardActions = {
   },
 
   switchBoard(board_id) {
+    console.log(board_id);
     if(_.isEmpty(board_id)) return;
     Dispatcher.dispatch({
       actionType: BOARD.SWITCH_BOARD,

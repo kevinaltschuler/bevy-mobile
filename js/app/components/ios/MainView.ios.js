@@ -18,6 +18,7 @@ var MainTabBar = require('./MainTabBar.ios.js');
 var LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
 var NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
 var CreateBevyView = require('./../../../bevy/components/ios/CreateBevyView.ios.js');
+var NewBoardView = require('./../../../bevy/components/ios/NewBoardView.ios.js');
 var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
 var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
@@ -89,6 +90,10 @@ var MainView = React.createClass({
 
       case routes.MAIN.NEWBEVY.name:
         return <CreateBevyView { ...this.props } />;
+        break;
+
+      case routes.MAIN.NEWBOARD.name:
+        return <NewBoardView {...this.props}/>;
         break;
 
       case routes.MAIN.COMMENT.name:
