@@ -1,6 +1,6 @@
 /**
  * SearchBar.ios.js
- * @author albert kevin
+ * @author albert kevin ben
  */
 
 'use strict';
@@ -52,6 +52,7 @@ var SearchView = React.createClass({
         .cloneWithRows(bevies),
       userDataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
         .cloneWithRows(users),
+      input: '',
       bevies: BevyStore.getPublicBevies(),
       fetching: false,
       searchQuery: BevyStore.getSearchQuery(),
@@ -89,6 +90,7 @@ var SearchView = React.createClass({
       bevies: BevyStore.getSearchList()
     });
   },
+
 
   switchSearchType(index) {
     var data;
@@ -152,7 +154,7 @@ var SearchView = React.createClass({
   },
 
   _renderSearchBevies() {
-    var bevies = (this.state.bevies)
+    var bevies = (BevyStore.getSearchList());
     var bevyList = [];
 
     for(var key in bevies) {
@@ -180,15 +182,20 @@ var SearchView = React.createClass({
       );
   },
 
+  // there is probably a better way of doing this
   switchSearchTab(index) {
-    if(index == 0)
+    if(index == 0){
+      //BevyActions.search(this.state.input);
       return(
         <View>
         {this._renderSearchBevies()}
         </View>
         );
-    else
+    }
+    else{
+      //UserActions.search(this.state.input);
       return(<SearchUser mainNavigator={this.props.mainNavigator}/>);
+    }
   },
 
   render() {
@@ -210,7 +217,7 @@ var SearchView = React.createClass({
          <TextInput
              ref='ToInput'
              style={ styles.Input }
-             value={ this.state.toInput }
+             value={ this.state.input }
              placeholder='search...'
              placeholderTextColor='#AAA'
            />
