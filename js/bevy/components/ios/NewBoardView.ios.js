@@ -66,9 +66,9 @@ var NewBoardView = React.createClass({
       });
     });
 
-    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
+    FileStore.on(FILE.UPLOAD_COMPLETE, (file) => {
       this.setState({
-        boardImage: filename
+        boardImage: file
       });
     });
   },
@@ -91,7 +91,7 @@ var NewBoardView = React.createClass({
       this.state.name, // bevy name
       this.state.description,
       (_.isEmpty(this.state.boardImage))
-        ? constants.siteurl + '/img/default_board_img.png'
+        ? { filename: constants.siteurl + '/img/default_board_img.png', foreign: true }
         : this.state.boardImage, // bevy image
       this.props.activeBevy._id,
       this.state.type

@@ -164,20 +164,12 @@ var InfoView = React.createClass({
     return (
       <View style={[ styles.actionRow ]}>
         <Text style={ styles.settingsTitle }>Bevy Settings</Text>
-        <View style={ styles.switchContainer }>
-          <Text style={ styles.switchDescription }>Public</Text>
-          <SwitchIOS
-            value={ this.state.public }
-            onValueChange={(value) => {
-              this.setState({ public: value });
-            }}
-          />
-        </View>
         <TouchableOpacity
           activeOpacity={ 0.5 }
           onPress={ this.showImagePicker }
         >
           <View style={ styles.settingContainer }>
+            <Icon name='camera-alt' size={30} color='#666' style={{marginLeft: 10, marginRight: 10}}/>
             <Text style={ styles.settingDescription }>
               Change Bevy Picture
             </Text>
@@ -189,6 +181,7 @@ var InfoView = React.createClass({
           onPress={ this.deleteBevy }
         >
           <View style={ styles.deleteButton }>
+            <Icon name='delete' size={30} color='#fff' style={{marginLeft: 10}}/>
             <Text style={ styles.deleteButtonText }>
               Delete Bevy
             </Text>
@@ -281,7 +274,6 @@ var styles = StyleSheet.create({
     paddingBottom: 0,
     backgroundColor: '#fff',
     height: 60,
-    paddingHorizontal: 15
   },
   settingsTitle: {
     color: '#888',
@@ -322,7 +314,7 @@ var styles = StyleSheet.create({
     flex: 1,
     color: '#FFF',
     fontSize: 17,
-    marginLeft: 15
+    marginLeft: 10
   }
 })
 

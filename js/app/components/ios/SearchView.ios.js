@@ -16,7 +16,8 @@ var {
   SwitchIOS,
   TabBarIOS,
   ScrollView,
-  TextInput
+  TextInput,
+  SegmentedControlIOS
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var SubSwitch = require('./SubSwitch.ios.js');
@@ -236,8 +237,8 @@ var SearchView = React.createClass({
     if(index == 0){
       //BevyActions.search(this.state.input);
       return(
-        <View>
-        {this._renderSearchBevies()}
+        <View >
+          {this._renderSearchBevies()}
         </View>
         );
     }
@@ -287,18 +288,6 @@ var SearchView = React.createClass({
   },
 
   render() {
-    var bevyTabStyles = (this.state.activeTab == 0)
-      ? { backgroundColor: '#eee'}
-      : { backgroundColor: '#2cb673'};
-    var userTabStyles = (this.state.activeTab == 1)
-      ? { backgroundColor: '#fff'}
-      : { backgroundColor: '#2cb673'};
-    var bevyText = (this.state.activeTab == 0)
-      ? { color: '#333'}
-      : { color: '#fff'};
-    var userText = (this.state.activeTab == 1)
-      ? { color: '#333'}
-      : { color: '#fff'};  
     return (
       <View style={styles.container}>
         <View style={ styles.topBarContainer }>
@@ -306,11 +295,6 @@ var SearchView = React.createClass({
             height: StatusBarSizeIOS.currentHeight,
             backgroundColor: '#2CB673'
           }}/>
-          <View style={ styles.topBar }>
-            <Text style={ styles.title }>
-              Search
-            </Text>
-          </View>
         </View>
 
         <View style={styles.searchBox}>
@@ -327,25 +311,23 @@ var SearchView = React.createClass({
         </View>
 
         <View style={styles.tabBar}>
-          <TouchableHighlight
-            onPress = {() =>{
-              this.setState({activeTab: 0});
+          <SegmentedControlIOS
+            style={{
+              backgroundColor: '#2cb673',
+              marginBottom: 7,
+              marginHorizontal: 10,
+              flex: 1
             }}
-            style={[styles.searchTab, bevyTabStyles]}
-            underlayColor = 'rgba(0,0,0,.1)'
-          >
-            <Text style={bevyText}>bevies</Text>
-          </TouchableHighlight>
-
-          <TouchableHighlight
-            onPress = {() =>{
-              this.setState({activeTab: 1});
+            tintColor='#fff'
+            values={['Bevies', 'Users']}
+            selectedIndex={this.state.activeTab}
+            onValueChange={(ev) => {
+              var tabIndex = (ev == 'Bevies') ? 0 : 1;
+              this.setState({
+                activeTab: tabIndex
+              }) 
             }}
-            style={[styles.searchTab, userTabStyles]}
-            underlayColor = 'rgba(0,0,0,.1)'
-          >
-            <Text style={userText}>users</Text>
-          </TouchableHighlight>
+          />
         </View>
         {this.switchSearchTab(this.state.activeTab)}
       </View>
@@ -393,7 +375,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#EEE',
-    backgroundColor: '#FFF',
+    backgroundColor: '#2cb673',
     borderBottomWidth: 1
   },
   searchBox: {
@@ -408,7 +390,8 @@ var styles = StyleSheet.create({
     height: 40,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderRadius: 4
   },
   searchTabText: {
     color: '#EEE'
@@ -468,14 +451,15 @@ var styles = StyleSheet.create({
     width: constants.width,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 0
+    marginTop: 0,
+    marginBottom: -140
   },
   progressContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: constants.height * .7
   },
   noneFoundText: {
     color: '#AAA',
