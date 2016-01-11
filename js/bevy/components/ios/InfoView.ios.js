@@ -15,12 +15,11 @@ var {
   ScrollView,
   View,
   Image,
-  SwitchIOS,
+  Switch,
   TouchableOpacity,
   AlertIOS
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var SubSwitch = require('./../../../app/components/ios/SubSwitch.ios.js');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
 var BevyNavbar = require('./BevyNavbar.ios.js');
 var AdminItem = require('./AdminItem.ios.js');
@@ -46,8 +45,7 @@ var InfoView = React.createClass({
 
   getInitialState() {
     return {
-      subscribed: _.findWhere(this.props.user.bevies,
-        { _id: this.props.activeBevy._id }) != undefined,
+      subscribed: _.contains(this.props.user.bevies, this.props.activeBevy._id),
       isAdmin: _.findWhere(this.props.activeBevy.admins,
         { _id: this.props.user._id }) != undefined,
       public: true
@@ -56,8 +54,7 @@ var InfoView = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      subscribed: _.findWhere(nextProps.user.bevies,
-        { _id: nextProps.activeBevy._id }) != undefined,
+      subscribed: _.contains(nextProps.user.bevies, nextProps.activeBevy._id),
       isAdmin: _.findWhere(nextProps.activeBevy.admins,
         { _id: nextProps.user._id }) != undefined,
     });
@@ -81,6 +78,17 @@ var InfoView = React.createClass({
 
   goBack() {
     this.props.bevyNavigator.pop();
+  },
+
+  changeSubscribed(value) {
+    this.setState({
+      subscribed: value
+    });
+    if(value) {
+      BevyActions.subscribe(this.props.activeBevy._id);
+    } else {
+      BevyActions.unsubscribe(this.props.activeBevy._id);
+    }
   },
 
   deleteBevy() {
@@ -148,11 +156,10 @@ var InfoView = React.createClass({
           paddingHorizontal: 16
         }]}>
           <Text style={ styles.switchDescription }>Subscribed</Text>
-          <SubSwitch
-            subbed={ this.state.subscribed }
-            loggedIn={ this.props.loggedIn }
-            bevy={ this.props.bevy }
-            user={ this.props.user }
+          <Switch
+            value={ this.state.subscribed }
+            onValueChange={ this.changeSubscribed }
+
           />
         </View>
       </View>
