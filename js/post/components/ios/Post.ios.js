@@ -82,6 +82,16 @@ var Post = React.createClass({
     return sum;
   },
 
+  goToCommentView() {
+    // go to comment view
+    // return if we're already in comment view
+    if(this.props.inCommentView) return;
+
+    var commentRoute = routes.MAIN.COMMENT;
+    commentRoute.postID = this.state.post._id;
+    this.props.mainNavigator.push(commentRoute);
+  },
+
   onEdit() {
     this.setState({
       isEditing: true
@@ -214,7 +224,7 @@ var Post = React.createClass({
         { this._renderPostTitle() }
         { this._renderImageOverlay() }
         { this._renderPostImage() }
-        <View style={styles.postActionsRow}>
+        <View style={ styles.postActionsRow }>
           <TouchableHighlight
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
@@ -241,15 +251,7 @@ var Post = React.createClass({
           <TouchableHighlight
             underlayColor='rgba(0,0,0,0.1)'
             style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={() => {
-              // go to comment view
-              // return if we're already in comment view
-              if(this.props.inCommentView) return;
-
-              var commentRoute = routes.MAIN.COMMENT;
-              commentRoute.postID = this.state.post._id;
-              this.props.mainNavigator.push(commentRoute);
-            }}
+            onPress={ this.goToCommentView }
           >
             <View style={[ styles.actionTouchable, { flex: 1 } ]}>
               <Text style={ styles.commentCountText }>
@@ -312,7 +314,6 @@ var styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 2,
   },
-
   body: {
     flex: 1,
     flexDirection: 'column',

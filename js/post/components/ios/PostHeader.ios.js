@@ -105,7 +105,6 @@ var styles = StyleSheet.create({
     width: cardWidth,
     height: 60,
     paddingHorizontal: 10,
-    marginBottom: 10,
     alignItems: 'center'
   },
   authorImage: {
