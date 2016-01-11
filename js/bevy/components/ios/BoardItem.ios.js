@@ -63,22 +63,22 @@ var BoardItem = React.createClass({
             <View style={ styles.boardDetails }>
               <View style={ styles.detailItem }>
                 <Icon
-                  name={ typeIcon }
+                  name='people'
                   size={ 18 }
-                  color='#fff'
+                  color='#bbb'
                 />
                 <Text style={ styles.itemText }>
-                  { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
+                  { board.subCount }
                 </Text>
               </View>
               <View style={ styles.detailItem }>
                 <Icon
-                  name='people'
+                  name={ typeIcon }
                   size={ 18 }
-                  color='#fff'
+                  color='#bbb'
                 />
                 <Text style={ styles.itemText }>
-                  { board.subCount }
+                  { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
                 </Text>
               </View>
             </View>
@@ -122,7 +122,7 @@ var styles = StyleSheet.create({
     marginRight: 10
   },
   itemText: {
-    color: '#fff',
+    color: '#bbb',
     marginLeft: 5,
     fontSize: 17
   },
