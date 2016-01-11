@@ -18,6 +18,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var BevyNavbar = require('./BevyNavbar.ios.js');
 var BoardCard = require('./BoardCard.ios.js');
+var BevyActionButtons = require('./BevyActionButtons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -86,6 +87,18 @@ var BevyView = React.createClass({
     );
   },
 
+  _renderBevyActions() {
+    if(!_.isEmpty(this.props.activeBoard)) return <View />;
+    return (
+      <BevyActionButtons
+        bevy={ this.props.activeBevy }
+        user={ this.props.user }
+        mainNavigator={ this.props.mainNavigator }
+        bevyNavigator={ this.props.bevyNavigator }
+      />
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -97,6 +110,7 @@ var BevyView = React.createClass({
           right={ this._renderMenuButton() }
         />
         { this._renderBoardCard() }
+        { this._renderBevyActions() }
         <PostList
           allPosts={ this.props.allPosts }
           activeBevy={ this.props.activeBevy }
