@@ -13,7 +13,6 @@ var {
   StyleSheet,
   Navigator,
 } = React;
-var BevyPickerView = require('./BevyPickerView.ios.js');
 var InputView = require('./InputView.ios.js');
 var CreateEventView = require('./CreateEventView.ios.js');
 var DatePickerView = require('./DatePickerView.ios.js');

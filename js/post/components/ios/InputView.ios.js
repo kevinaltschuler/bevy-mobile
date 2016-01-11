@@ -25,7 +25,7 @@ var NewPostImageItem = require('./NewPostImageItem.ios.js');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
-
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
@@ -212,9 +212,14 @@ var InputView = React.createClass({
       marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace,
       backgroundColor: '#eee'
     };
-    if(board) {
-      var boardImageUrl = board.image.path || constants.apiurl + '/img/default_board_img.png';
-    }
+    var authorImageURL = (_.isEmpty(this.props.user.image))
+      ? constants.siteurl + '/img/user-profile-icon.png'
+      : resizeImage(this.props.user.image, 64, 64).url;
+
+    var boardImageURL = (_.isEmpty(this.props.activeBoard.image))
+      ? constants.siteurl + '/img/default_group_img.png'
+      : resizeImage(this.props.activeBoard.image, 80, 80).url;
+
     var boardName = (this.props.activeBoard) ? this.props.activeBoard.name : '';
     return (
       <View style={ containerStyle }>
@@ -251,13 +256,18 @@ var InputView = React.createClass({
             </TouchableHighlight>
           </View>
         </View>
-        <ScrollView style={ styles.body } contentContainerStyle={{flex: 1, marginBottom: 50}}>
+        <ScrollView
+          style={ styles.body }
+        >
           <View style={ styles.bevyPicker }>
             <Text style={ styles.sectionTitle }>Board</Text>
             <View style={styles.bevyNameContainer}>
-              <Image source={{uri: boardImageUrl}} style={{borderRadius: 30, width: 60, height: 60}}/>
+              <Image
+                source={{ uri: boardImageURL }}
+                style={{borderRadius: 30, width: 60, height: 60}}
+              />
               <Text style={styles.bevyTitle}>
-                {boardName}
+                { boardName }
               </Text>
             </View>
           </View>
@@ -265,7 +275,7 @@ var InputView = React.createClass({
           <View style={ styles.input }>
             <Image
               style={styles.inputProfileImage}
-              source={{ uri: user.image_url }}
+              source={{ uri: authorImageURL }}
             />
             <TextInput
               ref='input'
@@ -291,9 +301,8 @@ var InputView = React.createClass({
           >
             <Icon
               name='photo'
-              size={30}
+              size={ 36 }
               color='rgba(0,0,0,.3)'
-              style={ styles.contentBarIcon }
             />
           </TouchableHighlight>
           <TouchableHighlight
@@ -303,9 +312,8 @@ var InputView = React.createClass({
           >
             <Icon
               name='add-a-photo'
-              size={32}
+              size={ 36 }
               color='rgba(0,0,0,.3)'
-              style={ styles.contentBarIcon }
             />
           </TouchableHighlight>
             {/*<TouchableHighlight
@@ -396,7 +404,7 @@ var styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     color: '#222',
-    marginLeft: 10,
+    marginLeft: 15,
   },
   toBevyPicker: {
     flex: 1,
@@ -426,7 +434,7 @@ var styles = StyleSheet.create({
   },
   textInput: {
     flex: 2,
-    fontSize: 15,
+    fontSize: 17,
   },
   contentBar: {
     backgroundColor: '#fff',
@@ -437,50 +445,21 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,
-    height: 48,
+    height: 60,
     alignItems: 'center',
     borderTopWidth: 1,
     borderTopColor: '#eee'
   },
   contentBarItem: {
-    height: 30,
+    height: 60,
     paddingLeft: 15,
     paddingRight: 15,
-    alignItems: 'center'
-  },
-  contentBarIcon: {
-    width: 30,
-    height: 30
-  },
-  bevyPickerList: {
-    backgroundColor: '#fff',
-    flex: 1,
-    flexDirection: 'column'
-  },
-  bevyPickerItem: {
-    backgroundColor: '#fff',
-    flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    height: 48,
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
-  },
-  bevyPickerImage: {
-    width: 36,
-    height: 36,
-    borderRadius: 18
-  },
-  bevyPickerName: {
-    flex: 1,
-    textAlign: 'left',
-    fontSize: 17,
-    paddingLeft: 15
+    alignItems: 'center'
   },
   sectionTitle: {
     color: '#888',
-    fontSize: 15,
+    fontSize: 17,
     marginLeft: 10,
     marginBottom: 5
   },
