@@ -119,14 +119,18 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     height: 60,
+    width: cardWidth - 20 - 40 - 10,
     marginLeft: 10,
     alignItems: 'flex-start'
   },
   titleContainer: {
+    width: cardWidth - 20 - 40 - 10,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden'
   },
   titleText: {
+    overflow: 'hidden',
     color: '#282929',
     fontSize: 17
   },
