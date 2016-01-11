@@ -68,9 +68,11 @@ var UserSearchItem = React.createClass({
   },
 
   render() {
-    var image_url = this.props.searchUser.image_url;
-    if(_.isEmpty(image_url)) {
-      image_url = constants.siteurl + '/img/user-profile-icon.png';
+    var image = this.props.searchUser.image;
+    if(_.isEmpty(image)) {
+      var image_url = constants.siteurl + '/img/user-profile-icon.png';
+    } else {
+      var image_url = image.path;
     }
     return (
       <TouchableHighlight
@@ -86,7 +88,6 @@ var UserSearchItem = React.createClass({
             <Text style={ styles.name }>
               { this.props.searchUser.displayName }
             </Text>
-
           </View>
         </View>
       </TouchableHighlight>
@@ -97,30 +98,31 @@ var UserSearchItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     width: constants.width,
-    height: 48,
+    height: 80,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   image: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     marginRight: 10
   },
   details: {
-    height: 48,
+    height: 80,
     flex: 1,
     flexDirection: 'row',
-
-    alignItems: 'center'
+    borderBottomWidth: 1,
+    alignItems: 'center',
+    borderBottomColor: '#eee'
 
   },
   name: {
     flex: 1,
     fontSize: 17,
-    color: '#000'
+    color: '#333'
   }
 });
 

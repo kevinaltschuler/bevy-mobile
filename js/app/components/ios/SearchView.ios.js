@@ -188,7 +188,7 @@ var SearchView = React.createClass({
         </View>
         );
     else
-      return(<SearchUser></SearchUser>);
+      return(<SearchUser mainNavigator={this.props.mainNavigator}/>);
   },
 
   render() {
