@@ -11,6 +11,8 @@ var {
   View,
   Text,
   Image,
+  TouchableOpacity,
+  ActionSheetIOS,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -24,7 +26,28 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var PostHeader = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
+  },
+
+  goToAuthorProfile() {
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = this.props.post.author;
+    this.props.mainNavigator.push(route);
+  },
+
+  showProfileActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: [
+        'View ' + this.props.post.author.displayName + "'s Profile",
+        'Cancel'
+      ],
+      cancelButtonIndex: 1
+    }, buttonIndex => {
+      if(buttonIndex == 0) {
+        this.goToAuthorProfile();
+      }
+    });
   },
 
   render() {
@@ -34,10 +57,15 @@ var PostHeader = React.createClass({
 
     return (
       <View style={ styles.container }>
-        <Image
-          style={ styles.authorImage }
-          source={{ uri: authorImageURL }}
-        />
+        <TouchableOpacity
+          activeOpacity={ 0.7 }
+          onPress={ this.showProfileActionSheet }
+        >
+          <Image
+            style={ styles.authorImage }
+            source={{ uri: authorImageURL }}
+          />
+        </TouchableOpacity>
         <View style={ styles.detailsRow }>
           <View style={ styles.titleContainer }>
             <Text

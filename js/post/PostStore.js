@@ -55,19 +55,23 @@ _.extend(PostStore, {
 
       case POST.FETCH:
         var bevy_id = payload.bevy_id;
-        var profile_user_id = payload.user_id;
-        var user = UserStore.getUser()._id;
-        var loggedIn = UserStore.loggedIn;
+        var user_id = payload.user_id;
 
-        this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
+        if(user_id)
+          this.posts.url = constants.apiurl + '/users/' + user_id + '/posts';
+        else
+          this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
 
         // reset all posts first, and trigger loading
         this.posts.reset();
         this.trigger(POST.LOADING);
         this.trigger(POST.CHANGE_ALL);
 
+        console.log('fetching posts from...', this.posts.url);
+
         // then fetch
         this.posts.fetch({
+          reset: true,
           success: function(posts, response, options) {
             // trigger sort which will trigger loaded and change all
             this.posts.sort();

@@ -79,19 +79,15 @@ var PostList = React.createClass({
     PostStore.on(POST.LOADED, this._onPostsLoaded);
     BevyStore.on(POST.LOADED, this._rerender);
     BevyStore.on(POST.LOADING, this.setLoading);
-    PostStore.on(POST.REFRESH, this.onRefresh);
   },
 
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this._onPostsLoaded);
     BevyStore.off(POST.LOADED, this._rerender);
     BevyStore.off(POST.LOADING, this.setLoading);
-    PostStore.off(POST.POST_CREATED, this.toComments);
-    PostStore.off(POST.REFRESH, this.onRefresh);
   },
 
   _rerender() {
-    console.log('rerender');
     var allPosts = JSON.parse(JSON.stringify(PostStore.getAll()));
     this.setState({
       dataSource: this.state.dataSource.cloneWithRows(allPosts),
@@ -115,7 +111,7 @@ var PostList = React.createClass({
   onRefresh(stopRefresh) {
     PostActions.fetch(
       this.props.activeBevy._id,
-      (this.props.profileUser) ? this.props.profileUser._id : null
+      (!_.isEmpty(this.props.profileUser)) ? this.props.profileUser._id : null
     );
     setTimeout(stopRefresh, 2000);
   },

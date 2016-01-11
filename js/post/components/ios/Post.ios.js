@@ -209,6 +209,7 @@ var Post = React.createClass({
         <PostHeader
           post={ this.props.post }
           user={ this.props.user }
+          mainNavigator={ this.props.mainNavigator }
         />
         { this._renderPostTitle() }
         { this._renderImageOverlay() }
@@ -231,7 +232,7 @@ var Post = React.createClass({
               </Text>
               <Icon
                 name={ (this.state.voted) ? 'favorite' : 'favorite-border' }
-                size={20}
+                size={ 20 }
                 color={ (this.state.voted) ? '#2cb673' : '#rgba(0,0,0,.35)' }
                 style={styles.actionIcon}
               />

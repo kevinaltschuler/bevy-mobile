@@ -51,13 +51,18 @@ var ProfileView = React.createClass({
   componentWillUnmount() {
     // reset posts
     PostActions.fetch(
-      this.props.activeBevy,
+      this.props.activeBevy._id,
       null
     );
   },
 
   goBack() {
     this.props.mainNavigator.pop();
+    // reset posts
+    PostActions.fetch(
+      this.props.activeBevy._id,
+      null
+    );
   },
 
   render() {
@@ -153,10 +158,8 @@ var ProfileView = React.createClass({
             <PostList
               showNewPostCard={ false }
               profileUser={ this.props.profileUser }
-              onScroll={() => {}}
               { ...this.props }
             />
-
           </View>
         </ScrollView>
       </View>
@@ -210,11 +213,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     marginBottom: 10,
-    borderRadius: 2,
-    shadowColor: '#000',
-    shadowRadius: 1,
-    shadowOpacity: .3,
-    shadowOffset:  { width: 0, height: 0 }
   },
   profileImage: {
     width: 60,
@@ -239,8 +237,6 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 48,
-    borderWidth: .5,
-    borderColor: 'rgba(0,0,0,.2)',
     backgroundColor: '#fff'
   },
   generalTitle: {
