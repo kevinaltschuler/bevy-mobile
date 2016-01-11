@@ -210,9 +210,9 @@ var SearchView = React.createClass({
          <TextInput
              ref='ToInput'
              style={ styles.Input }
+             value={ this.state.toInput }
              placeholder='search...'
              placeholderTextColor='#AAA'
-             underlineColorAndroid='#FFF'
            />
         </View>
 
