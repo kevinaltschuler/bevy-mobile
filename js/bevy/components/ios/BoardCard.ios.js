@@ -40,6 +40,7 @@ var BoardCard = React.createClass({
     if(_.isEmpty(board)) {
       return <View/>;
     }
+    
     var image_url = (_.isEmpty(board.image))
       ? constants.siteurl + '/img/default_board_img.png'
       : resizeImage(board.image, constants.width, 100).url;

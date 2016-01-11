@@ -14,7 +14,8 @@ var {
   Text,
   StyleSheet,
   TouchableHighlight,
-  ScrollView
+  ScrollView,
+  SegmentedControlIOS
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadItem = require('./ThreadItem.ios.js');
@@ -145,18 +146,7 @@ var ThreadList = React.createClass({
 
   render() {
 
-    var boardTabStyle = (this.state.tab == 'Board Chats')
-      ? { backgroundColor: '#fff'}
-      : {};
-    var userTabStyle = (this.state.tab == 'User Chats')
-      ? { backgroundColor: '#fff'}
-      : {};  
-    var boardText = (this.state.tab == 'Board Chats')
-      ? { color: '#333'}
-      : { color: '#fff'};
-    var userText = (this.state.tab == 'User Chats')
-      ? { color: '#333'}
-      : { color: '#fff'};  
+    var tabIndex = (this.state.tab == 'Board Chats') ? 0 : 1;
 
     return (
       <View style={ styles.container }>
@@ -186,28 +176,20 @@ var ThreadList = React.createClass({
             </TouchableHighlight>
           </View>
           <View style={styles.tabs}>
-            <TouchableHighlight
-              style={[styles.tab, boardTabStyle]}
-              onPress={()=> {
-                this.changeTab('Board Chats')
+            <SegmentedControlIOS
+              style={{
+                backgroundColor: '#2cb673',
+                marginTop: 10,
+                marginHorizontal: 20,
+                flex: 1
               }}
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <Text style={[styles.tabText, boardText]}>
-                Board Chats
-              </Text>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={[styles.tab, userTabStyle]}
-              onPress={()=> {
-                this.changeTab('User Chats')
+              tintColor='#fff'
+              values={['Board Chats', 'User Chats']}
+              selectedIndex={tabIndex}
+              onValueChange={(ev) => {
+                this.changeTab(ev);
               }}
-              underlayColor='rgba(0,0,0,.1)'
-            >
-              <Text style={[styles.tabText, userText]}>
-                User Chats
-              </Text>
-            </TouchableHighlight>
+            />
           </View>
         </View>
 
@@ -275,7 +257,8 @@ var styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: 'row',
-    height: 48
+    height: 48,
+    backgroundColor: '#2cb673'
   },
   tab: {
     flex: 1,

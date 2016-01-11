@@ -126,21 +126,23 @@ _.extend(BevyStore, {
         this.bevyInvites.url = constants.apiurl + '/bevies/' + bevy_id_or_slug + '/invites';
         this.active.fetch({
           success: function(model, response, options) {
-            this.bevyBoards.url = constants.apiurl + '/bevies/' + this.active.attributes._id + '/boards';
-            this.bevyInvites.url = constants.apiurl + '/bevies/' + this.active.attributes._id + '/invites';
+            this.bevyBoards.url = constants.apiurl + '/bevies/' + response._id + '/boards';
+            this.bevyInvites.url = constants.apiurl + '/bevies/' + response._id + '/invites';
             async.series([
               this.bevyBoards.fetch({
                 success: function(collection, response, options) {
+                  this.bevyBoards = new Boards(response);
                   this.trigger(BEVY.LOADED);
                   this.trigger(BEVY.CHANGE_ALL);
                 }.bind(this)
               }),
               this.bevyInvites.fetch({
                 success: function(collection, response, options) {
+                  this.bevyInvites = new Invites(response);
                   this.trigger(BEVY.CHANGE_ALL);
                 }.bind(this)
               })
-            ])
+            ]);
           }.bind(this)
         })
         break;
