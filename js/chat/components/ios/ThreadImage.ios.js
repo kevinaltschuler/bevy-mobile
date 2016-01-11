@@ -71,14 +71,13 @@ var ThreadImage = React.createClass({
             padding: 0,
             backgroundColor: '#eee'
           };
-          switch(threadUsers.length) {
-            case 1:
+          var length = threadUsers.length;
+          if(length == 1) {
               // only one other user
               iconStyle.width = this.props.width;
               iconStyle.height = this.props.height;
               iconStyle.borderRadius = Math.floor(this.props.width / 2);
-              break;
-            case 2:
+          } else if(length == 2) {
               // two other users
               iconStyle.width = Math.floor(this.props.width * 0.65);
               iconStyle.height = Math.floor(this.props.height * 0.65);
@@ -93,8 +92,7 @@ var ThreadImage = React.createClass({
                 iconStyle.bottom = 0;
                 iconStyle.right = 0;
               }
-              break;
-            case 3:
+          } else if(length == 3) {
               // 3 other users
               iconStyle.width = Math.floor(this.props.width / 2);
               iconStyle.height = Math.floor(this.props.width / 2);
@@ -113,8 +111,7 @@ var ThreadImage = React.createClass({
                 iconStyle.bottom = 0;
                 iconStyle.right = 0;
               }
-              break;
-            case 4:
+          } else if(length >= 4) {
               // 4 other users
               iconStyle.width = Math.floor(this.props.width / 2);
               iconStyle.height = Math.floor(this.props.height / 2);
@@ -137,7 +134,6 @@ var ThreadImage = React.createClass({
                 iconStyle.bottom = 0;
                 iconStyle.right = 0;
               }
-              break;
           }
           users.push(
             <Image

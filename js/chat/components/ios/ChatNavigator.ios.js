@@ -78,13 +78,6 @@ var ChatNavigator = React.createClass({
                 />
               );
               break;
-            default:
-              return (
-                <View>
-                  <Text>DEFAULT CHAT ROUTE</Text>
-                </View>
-              );
-              break;
           }
         }}
       />

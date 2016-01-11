@@ -16,7 +16,6 @@ var {
   TouchableHighlight,
   TouchableOpacity
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
 
 var _ = require('underscore');
 var BevyStore = require('./../../../bevy/BevyStore');
@@ -211,9 +210,11 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 80
   },
   row: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    flex: 1
   },
   titleImage: {
     width: 60,
@@ -246,8 +247,7 @@ var styles = StyleSheet.create({
     color: '#282929'
   },
   left: {
-    padding: 10,
-    flex: 3,
+    flex: 1,
     paddingLeft: 17
   },
   right: {

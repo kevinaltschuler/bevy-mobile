@@ -434,6 +434,7 @@ _.extend(ChatStore, {
           author: author._id,
           body: body
         });
+        message.url = constants.apiurl + '/messages';
         message.save(null, {
           success: function(model, response, options) {
             message.set('_id', model.get('_id'));

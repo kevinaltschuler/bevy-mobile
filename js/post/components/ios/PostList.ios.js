@@ -180,51 +180,50 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-
-          <ListView
-            ref={(ref) => {
-              this.ListView = ref;
-            }}
-            dataSource={ this.state.dataSource }
-            style={ styles.postContainer }
-            onScroll={(data) => {
-              this.props.onScroll(data.nativeEvent.contentOffset.y);
-            }}
-            scrollRenderAheadDistance={100}
-            renderHeader={() => {
-              return this._renderHeader();
-            }}
-            renderFooter={() => {
-              return <View style={{height: 52}}/>
-            }}
-            renderRow={(post) => {
-              if(this.state.loading) {
-                return (
-                <View style={styles.spinnerContainer}>
-                  <Spinner
-                    isVisible={true}
-                    size={40}
-                    type={'Arc'}
-                    color={'#2cb673'}
-                  />
-                </View>
-                );
-              }
-              if(_.isEmpty(post.board)) {
-                return <View/>
-              }
-              return <View style={{backgroundColor: '#eee'}}>
-                <Post
-                  key={ 'postlist:' + post._id }
-                  post={ post }
-                  mainRoute={ this.props.mainRoute }
-                  mainNavigator={ this.props.mainNavigator }
-                  user={ this.props.user }
+        <ListView
+          ref={(ref) => {
+            this.ListView = ref;
+          }}
+          dataSource={ this.state.dataSource }
+          style={ styles.postContainer }
+          onScroll={(data) => {
+            this.props.onScroll(data.nativeEvent.contentOffset.y);
+          }}
+          scrollRenderAheadDistance={100}
+          renderHeader={() => {
+            return this._renderHeader();
+          }}
+          renderFooter={() => {
+            return <View style={{height: 20}}/>
+          }}
+          renderRow={(post) => {
+            if(this.state.loading) {
+              return (
+              <View style={styles.spinnerContainer}>
+                <Spinner
+                  isVisible={true}
+                  size={40}
+                  type={'Arc'}
+                  color={'#2cb673'}
                 />
-              </View>;
-            }}
-          />
-        </View>
+              </View>
+              );
+            }
+            if(_.isEmpty(post.board)) {
+              return <View/>
+            }
+            return <View style={{backgroundColor: '#eee'}}>
+              <Post
+                key={ 'postlist:' + post._id }
+                post={ post }
+                mainRoute={ this.props.mainRoute }
+                mainNavigator={ this.props.mainNavigator }
+                user={ this.props.user }
+              />
+            </View>;
+          }}
+        />
+      </View>
     );
   }
 });
@@ -255,7 +254,6 @@ var styles = StyleSheet.create({
   },
   cardContainer: {
     backgroundColor: '#eee',
-    marginTop: 22,
     marginBottom: -10
   },
   listContainer: {

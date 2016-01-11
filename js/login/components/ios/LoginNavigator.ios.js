@@ -16,8 +16,6 @@ var {
   Navigator,
   TouchableHighlight
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
-var BlurView = require('react-native-blur').BlurView;
 var LoginView = require('./LoginView.ios.js');
 var RegisterView = require('./RegisterView.ios.js');
 var ForgotView = require('./ForgotView.ios.js');

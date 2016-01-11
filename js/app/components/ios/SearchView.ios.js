@@ -34,7 +34,6 @@ var UserActions = require('./../../../user/UserActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
-//var SearchBar = require('./../../../app/components/ios/SearchBar.ios.js');
 
 var BEVY = constants.BEVY;
 
@@ -200,7 +199,7 @@ var SearchView = React.createClass({
 
   render() {
     return (
-      <View style={styles.container}>          
+      <View style={styles.container}>
         <View style={ styles.topBarContainer }>
           <View style={{
             height: StatusBarSizeIOS.currentHeight,
@@ -291,7 +290,7 @@ var styles = StyleSheet.create({
   },
   searchBox: {
     backgroundColor: '#FFF',
-    width: constants.width, 
+    width: constants.width,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#DDD',

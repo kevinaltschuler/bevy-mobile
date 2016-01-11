@@ -81,6 +81,7 @@ var NewThreadView = React.createClass({
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
+    ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
 
       if (frames.end) {
@@ -118,19 +119,10 @@ var NewThreadView = React.createClass({
 
   onSwitchToThread(thread_id) {
     // go to thread view
-    //this.props.mainNavigator.replace(routes.CHAT.THREADLIST);
+    this.props.mainNavigator.pop();
   },
 
   goBack() {
-    if(!_.isEmpty(this.state.addedUsers)) {
-      // if theres added users, use back button to pop them
-      var addedUsers = this.state.addedUsers;
-      addedUsers.pop();
-      this.setState({
-        addedUsers: addedUsers
-      });
-      return true;
-    }
     this.props.mainNavigator.pop();
   },
 
