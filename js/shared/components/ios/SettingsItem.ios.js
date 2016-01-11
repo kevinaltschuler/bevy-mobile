@@ -17,7 +17,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 
@@ -53,7 +53,7 @@ var SettingsItem = React.createClass({
     if(!this.props.checked) return <View />;
     return (
       <Icon
-        name='ios-checkmark-empty'
+        name='check-circle'
         color='#2CB673'
         size={ 35 }
         style={{ width: 35, height: 35 }}

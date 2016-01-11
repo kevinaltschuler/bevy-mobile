@@ -1,3 +1,9 @@
+/**
+ * CommentList.ios.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -7,7 +13,7 @@ var {
   TouchableHighlight,
   StyleSheet
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var Collapsible = require('react-native-collapsible');
 
 var _ = require('underscore');
@@ -63,7 +69,7 @@ var CommentItem = React.createClass({
         <View style={[ styles.commentItem, commentStyle ]}>
             <View style={ styles.header }>
               <Icon
-                name='ios-plus-empty'
+                name='add'
                 size={ 20 }
                 color='#AAA'
                 style={ styles.plusIcon }
@@ -136,7 +142,7 @@ var CommentItem = React.createClass({
                 style={ styles.commentItemAction }
               >
                 <Icon
-                  name='ios-undo'
+                  name='reply'
                   size={ 20 }
                   color='#fff'
                   style={{ width: 20, height: 20 }}
@@ -152,7 +158,7 @@ var CommentItem = React.createClass({
                 style={ styles.commentItemAction }
               >
                 <Icon
-                  name='ios-person'
+                  name='person'
                   size={ 20 }
                   color='#fff'
                   style={{ width: 20, height: 20 }}

@@ -17,6 +17,7 @@ var {
   Image,
   SwitchIOS,
   TouchableOpacity,
+  AlertIOS
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SubSwitch = require('./../../../app/components/ios/SubSwitch.ios.js');
@@ -44,17 +45,12 @@ var InfoView = React.createClass({
   },
 
   getInitialState() {
-    var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(this.props.activeBevy.image, 64, 64).url;
-
     return {
       subscribed: _.findWhere(this.props.user.bevies,
         { _id: this.props.activeBevy._id }) != undefined,
       isAdmin: _.findWhere(this.props.activeBevy.admins,
         { _id: this.props.user._id }) != undefined,
-      public: true,
-      bevyImageURI: bevyImageURL
+      public: true
     };
   },
 
@@ -68,15 +64,12 @@ var InfoView = React.createClass({
   },
 
   componentDidMount() {
-    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
-      this.setState({
-        bevyImageURI: filename
-      });
+    FileStore.on(FILE.UPLOAD_COMPLETE, image => {
       BevyActions.update(
         this.props.activeBevy._id, // bevy id
         null, // name
         null, // description
-        filename, // image_url
+        image, // image
         null // settings
       );
     });
@@ -88,6 +81,42 @@ var InfoView = React.createClass({
 
   goBack() {
     this.props.bevyNavigator.pop();
+  },
+
+  deleteBevy() {
+    AlertIOS.alert(
+      'Are you sure you want to delete this bevy?',
+      "Deleting a bevy will also delete all of it's associated boards and posts",
+      [{
+        text: 'Confirm',
+        onPress: this.deleteBevyForSure
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    );
+  },
+
+  deleteBevyForSure() {
+    BevyActions.destroy(this.props.activeBevy._id);
+  },
+
+  showImagePicker() {
+    UIImagePickerManager.showImagePicker({
+      title: 'Choose Bevy Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Library...',
+      returnBase64Image: false,
+      returnIsVertical: false
+    }, (type, response) => {
+      if(response) {
+        //console.log(response);
+        FileActions.upload(response);
+      } else {
+        //console.log('Cancel');
+      }
+    });
   },
 
   _renderBackButton() {
@@ -106,50 +135,11 @@ var InfoView = React.createClass({
     );
   },
 
-  _renderImageButton() {
-    // dont render this if you're not an admin
-    if(!_.contains(this.props.activeBevy.admins, this.props.user._id)) return <View />;
-    return (
-      <TouchableOpacity
-        activeOpacity={ .8 }
-        style={ styles.cameraTouchable }
-        onPress={() => {
-          UIImagePickerManager.showImagePicker({
-            title: 'Choose Bevy Picture',
-            cancelButtonTitle: 'Cancel',
-            takePhotoButtonTitle: 'Take Photo...',
-            chooseFromLibraryButtonTitle: 'Choose from Library...',
-            returnBase64Image: false,
-            returnIsVertical: false
-          }, (type, response) => {
-            if (type !== 'cancel') {
-              //console.log(response);
-              FileActions.upload(response);
-            } else {
-              //console.log('Cancel');
-            }
-          });
-        }}
-      >
-        <Icon
-          name='camera-alt'
-          size={ 40 }
-          color='#FFF'
-        />
-      </TouchableOpacity>
-    );
-  },
-
   _renderSubSwitch() {
-    var user = this.props.user;
-    var bevy = this.props.activeBevy;
-    var subbed = _.find(this.props.user.bevies, function(bevyId){ return bevyId == bevy._id }) != undefined;
     // dont render this if you're an admin
-    if(_.contains(bevy.admins, user._id)) return null;
+    if(this.state.isAdmin) return <View />;
     return (
-      <View style={[ styles.actionRow, {
-        marginTop: 15
-      }]}>
+      <View style={ styles.actionRow }>
         <Text style={ styles.settingsTitle }>Subscribe</Text>
         <View style={[ styles.switchContainer, {
           marginTop: 0,
@@ -159,10 +149,10 @@ var InfoView = React.createClass({
         }]}>
           <Text style={ styles.switchDescription }>Subscribed</Text>
           <SubSwitch
-            subbed={subbed}
+            subbed={ this.state.subscribed }
             loggedIn={ this.props.loggedIn }
-            bevy={bevy}
-            user={user}
+            bevy={ this.props.bevy }
+            user={ this.props.user }
           />
         </View>
       </View>
@@ -170,15 +160,10 @@ var InfoView = React.createClass({
   },
 
   _renderAdminSettings() {
-    // only render these for admins
-    var user = this.props.user;
-    var bevy = this.props.activeBevy;
     if(!this.state.isAdmin) return <View />;
     return (
-      <View style={[ styles.actionRow, {
-        marginTop: 15
-      }]}>
-        <Text style={ styles.settingsTitle }>Admin Settings</Text>
+      <View style={[ styles.actionRow ]}>
+        <Text style={ styles.settingsTitle }>Bevy Settings</Text>
         <View style={ styles.switchContainer }>
           <Text style={ styles.switchDescription }>Public</Text>
           <SwitchIOS
@@ -188,15 +173,35 @@ var InfoView = React.createClass({
             }}
           />
         </View>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          onPress={ this.showImagePicker }
+        >
+          <View style={ styles.settingContainer }>
+            <Text style={ styles.settingDescription }>
+              Change Bevy Picture
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ 0.7 }
+          style={ styles.deleteButton }
+          onPress={ this.deleteBevy }
+        >
+          <View style={ styles.deleteButton }>
+            <Text style={ styles.deleteButtonText }>
+              Delete Bevy
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     );
   },
 
   _renderAdmins() {
     var admins = this.props.activeBevy.admins;
-    var adminList = <View/>;
+    var adminList = [];
     if(!_.isEmpty(admins)) {
-      adminList = [];
       for(var key in admins) {
         var admin = admins[key];
         adminList.push(
@@ -225,7 +230,12 @@ var InfoView = React.createClass({
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
         />
-        <ScrollView style={ styles.actionRow }>
+        <ScrollView
+          style={ styles.scrollView }
+          contentContainerStyle={{
+            paddingTop: 15
+          }}
+        >
           { this._renderSubSwitch() }
           { this._renderAdmins() }
           { this._renderAdminSettings() }
@@ -250,6 +260,9 @@ var styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 8
   },
+  scrollView: {
+    //paddingTop: 15
+  },
   cameraTouchable: {
     backgroundColor: 'rgba(0,0,0,0)'
   },
@@ -267,9 +280,8 @@ var styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     backgroundColor: '#fff',
-    height: 47,
-    paddingLeft: 16,
-    paddingRight: 16,
+    height: 60,
+    paddingHorizontal: 15
   },
   settingsTitle: {
     color: '#888',
@@ -290,7 +302,8 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48,
+    height: 60,
+    paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
   },
@@ -299,8 +312,17 @@ var styles = StyleSheet.create({
     fontSize: 17,
     color: '#222'
   },
-  switch: {
-
+  deleteButton: {
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#D9534F'
+  },
+  deleteButtonText: {
+    flex: 1,
+    color: '#FFF',
+    fontSize: 17,
+    marginLeft: 15
   }
 })
 

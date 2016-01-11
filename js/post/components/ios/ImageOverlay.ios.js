@@ -1,3 +1,9 @@
+/**
+ * ImageOverlay.ios.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -12,11 +18,13 @@ var {
   TouchableWithoutFeedback,
   TouchableOpacity
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var { BlurView, VibrancyView } = require('react-native-blur');
 var Swiper = require('react-native-swiper-fork');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var toleranceX = 10;
 var toleranceY = 10;
@@ -36,37 +44,6 @@ var ImageOverlay = React.createClass({
     };
   },
 
-  componentDidMount() {
-    this._panResponder = PanResponder.create({
-      // permission to use the responder
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        //var direction = (gestureState.dx > 0) ? 'right' : 'left';
-        console.log('testing 1 2 3');
-        var x = Math.round(Math.abs(gestureState.dx));
-        var y = Math.round(Math.abs(gestureState.dy));
-        return this.state.isVisible && x > toleranceX && y < toleranceY;
-      },
-
-      onPanResponderGrant: (evt, gestureState) => {
-        // The guesture has started. Show visual feedback so the user knows
-        // what is happening!
-
-        // gestureState.{x,y}0 will be set to zero now
-        console.log('image overlay gesture started');
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        // The most recent move distance is gestureState.move{X,Y}
-
-        // The accumulated gesture distance since becoming responder is
-        // gestureState.d{x,y}
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        // The user has released all touches while this view is the
-        // responder. This typically means a gesture has succeeded
-      }
-    });
-  },
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       isVisible: nextProps.isVisible
@@ -82,73 +59,40 @@ var ImageOverlay = React.createClass({
       title = title.concat('...');
     }
 
-    var leftButton = (this.props.images.length == 1)
-    ? <View />
-    : <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.2)'
-        style={ styles.rightArrow }
-        onPress={() => {
-          this.setState({
-            imageIndex: (this.state.imageIndex == 0) ? this.props.images.length - 1 : --this.state.imageIndex
-          });
-        }}
-      >
-        <Icon
-          name='ios-arrow-left'
-          size={ 30 }
-          style={{ width: 30, height: 30 }}
-          color='#333'
-        />
-      </TouchableHighlight>;
-    var rightButton = (this.props.images.length == 1)
+    var imageCount = (this.props.images.length == 1)
     ? <View/>
-    :  <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.2)'
-        style={ styles.rightArrow }
-        onPress={() => {
-          this.setState({
-            imageIndex: (this.state.imageIndex == this.props.images.length - 1) ? 0 : ++this.state.imageIndex
-          });
-        }}
-      >
-        <Icon
-          name='ios-arrow-right'
-          size={ 30 }
-          style={{ width: 30, height: 30 }}
-          color='#333'
-        />
-      </TouchableHighlight>;
-      var imageCount = (this.props.images.length == 1)
-      ? <View/>
-      : <Text style={ styles.imageCountText }>
-          { this.state.imageIndex + 1 }/{ this.props.images.length }
-        </Text>;
+    : <Text style={ styles.imageCountText }>
+        { this.state.imageIndex + 1 }/{ this.props.images.length }
+      </Text>;
 
-      var imageCards = [];
-      for (var key in this.props.images) {
-        var image = this.props.images[key].path;
-        imageCards.push(
-          <View style={styles.card}>
-            <Image
-              style={ styles.image }
-              source={{ uri: image }}
-              resizeMode='contain'
-            >
-            </Image>
-            <TouchableWithoutFeedback
-              style={{width: constants.width, height: constants.height}}
-              onPress={() => {
-                this.setState({
-                  isVisible: false
-                });
-              }}
-            >
-              <View/>
-            </TouchableWithoutFeedback>
-          </View>
-        );
-      }
-
+    var imageCards = [];
+    for (var key in this.props.images) {
+      var imageURL = resizeImage(this.props.images[key],
+        constants.width, constants.height).url;
+      imageCards.push(
+        <View
+          style={ styles.card }
+          key={ 'image:' + key }
+        >
+          <Image
+            style={ styles.image }
+            source={{ uri: imageURL }}
+            resizeMode='contain'
+          >
+          </Image>
+          <TouchableWithoutFeedback
+            style={{width: constants.width, height: constants.height}}
+            onPress={() => {
+              this.setState({
+                isVisible: false
+              });
+            }}
+          >
+            <View/>
+          </TouchableWithoutFeedback>
+        </View>
+      );
+    }
 
     return (
       <Modal
@@ -157,24 +101,42 @@ var ImageOverlay = React.createClass({
         Visible={ this.state.isVisible }
       >
         <View>
-          <BlurView blurType='dark' style={styles.container}>
+          <BlurView blurType='dark' style={ styles.container }>
             <View>
-              <View style={styles.topBar}>
-                <Text style={styles.title}>
-                  {title}
+              <View style={ styles.topBar }>
+                <Text style={ styles.title }>
+                  { title }
                 </Text>
               </View>
               <Swiper
-                contentContainerStyle={styles.container}
-                showsButtons={false}
-                dot={<View style={{backgroundColor:'rgba(255,255,255,.3)', width: 13, height: 13,borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
-                activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+                contentContainerStyle={ styles.container }
+                showsButtons={ false }
+                dot={
+                  <View style={{
+                    backgroundColor:'rgba(255,255,255,.3)',
+                    width: 13,
+                    height: 13,
+                    borderRadius: 7,
+                    marginLeft: 7,
+                    marginRight: 7
+                  }} />
+                }
+                activeDot={
+                  <View style={{
+                    backgroundColor: '#fff',
+                    width: 13,
+                    height: 13,
+                    borderRadius: 7,
+                    marginLeft: 7,
+                    marginRight: 7
+                  }} />
+                }
                 paginationStyle={{
                   bottom: 70,
                 }}
-                loop={true}
+                loop={ true }
               >
-                {imageCards}
+                { imageCards }
               </Swiper>
             </View>
           </BlurView>
@@ -188,7 +150,7 @@ var ImageOverlay = React.createClass({
             }}
           >
             <Icon
-              name='ios-close-empty'
+              name='close'
               size={ 40 }
               style={{ width: 40, height: 40, fontWeight: 'bold' }}
               color='#fff'

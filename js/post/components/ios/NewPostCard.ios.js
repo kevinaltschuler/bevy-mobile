@@ -1,3 +1,9 @@
+/**
+ * NewPostCard.ios.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -8,11 +14,11 @@ var {
   Text,
   TouchableHighlight
 } = React;
-var Icon = require('react-native-vector-icons/Ionicons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 
 var NewPostCard = React.createClass({
   propTypes: {
@@ -21,9 +27,8 @@ var NewPostCard = React.createClass({
   },
 
   render() {
-
-    var image_url = (!_.isEmpty(this.props.user.image))
-    ? this.props.user.image.path
+    var userImageURL = (!_.isEmpty(this.props.user.image))
+    ? resizeImage(this.props.user.image, 64, 64).url
     : constants.siteurl + '/img/user-profile-icon.png';
 
     return (
@@ -36,7 +41,7 @@ var NewPostCard = React.createClass({
       >
         <View style={ styles.container }>
           <Image
-            source={{ uri: image_url }}
+            source={{ uri: userImageURL }}
             style={ styles.image }
           />
           <View style={ styles.textContainer }>
@@ -51,8 +56,6 @@ var NewPostCard = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  touchContainer: {
-  },
   container: {
     flex: 1,
     flexDirection: 'row',
