@@ -96,9 +96,9 @@ var styles = StyleSheet.create({
   },
   boardTitle: {
     color: '#fff',
-    paddingLeft: 10,
-    paddingBottom: 0,
+    paddingLeft: 20,
     fontSize: 18,
+    marginBottom: 5
   },
   imageWrapper: {
     flex: 1,
@@ -110,8 +110,8 @@ var styles = StyleSheet.create({
   },
   boardDetails: {
     flexDirection: 'row',
-    marginBottom: 5,
-    marginLeft: 10
+    marginBottom: 15,
+    marginLeft: 20
   },
   detailItem: {
     flexDirection: 'row',
