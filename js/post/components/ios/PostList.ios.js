@@ -207,14 +207,14 @@ var PostList = React.createClass({
           renderRow={(post) => {
             if(this.state.loading) {
               return (
-              <View style={styles.spinnerContainer}>
-                <Spinner
-                  isVisible={ true }
-                  size={ 40 }
-                  type={ 'Arc' }
-                  color={ '#2cb673' }
-                />
-              </View>
+                <View style={styles.spinnerContainer}>
+                  <Spinner
+                    isVisible={ true }
+                    size={ 40 }
+                    type={ 'Arc' }
+                    color={ '#2cb673' }
+                  />
+                </View>
               );
             }
             if(_.isEmpty(post.board)) {
