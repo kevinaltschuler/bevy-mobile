@@ -24,6 +24,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatStore = require('./../../../chat/ChatStore');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
+var CHAT = constants.CHAT;
 
 var ThreadList = React.createClass({
   propTypes: {
@@ -36,16 +37,47 @@ var ThreadList = React.createClass({
   getInitialState() {
     var threads = this.props.allThreads;
     threads = this.pruneEmptyThreads(threads);
+    threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
     return {
       threads: threads,
       ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-        .cloneWithRows(threads)
+        .cloneWithRows(threads),
+      tab: 'Board Chats'
     };
+  },
+
+  componentDidMount() {
+    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.switchToThread)
+  },
+
+  switchToThread(thread_id) {
+    this.props.chatNavigator.push(routes.CHAT.MESSAGEVIEW);
+  },
+
+  changeTab(tab) {
+    var threads = this.pruneEmptyThreads(this.props.allThreads);
+    if(tab == 'Board Chats') {
+      threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
+    }
+    else {
+      threads = _.filter(threads, function(thread) {return _.isEmpty(thread.board)});
+    }
+    this.setState({
+      tab: tab,
+      ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+        .cloneWithRows(threads),
+    })
   },
 
   componentWillReceiveProps(nextProps) {
     var threads = nextProps.allThreads;
     threads = this.pruneEmptyThreads(threads);
+    if(this.state.tab == 'Board Chats') {
+      threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
+    }
+    else {
+      threads = _.filter(threads, function(thread) {return _.isEmpty(thread.board)});
+    }
     this.setState({
       threads: threads,
       ds: this.state.ds.cloneWithRows(threads)
@@ -63,6 +95,7 @@ var ThreadList = React.createClass({
   },
 
   renderThreadRow(thread) {
+
     return (
       <ThreadItem
         key={ 'threadItem:' + thread._id }
@@ -111,6 +144,20 @@ var ThreadList = React.createClass({
   },
 
   render() {
+
+    var boardTabStyle = (this.state.tab == 'Board Chats')
+      ? { backgroundColor: '#fff'}
+      : {};
+    var userTabStyle = (this.state.tab == 'User Chats')
+      ? { backgroundColor: '#fff'}
+      : {};  
+    var boardText = (this.state.tab == 'Board Chats')
+      ? { color: '#333'}
+      : { color: '#fff'};
+    var userText = (this.state.tab == 'User Chats')
+      ? { color: '#333'}
+      : { color: '#fff'};  
+
     return (
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
@@ -136,6 +183,30 @@ var ThreadList = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
+            </TouchableHighlight>
+          </View>
+          <View style={styles.tabs}>
+            <TouchableHighlight
+              style={[styles.tab, boardTabStyle]}
+              onPress={()=> {
+                this.changeTab('Board Chats')
+              }}
+              underlayColor='rgba(0,0,0,.1)'
+            >
+              <Text style={[styles.tabText, boardText]}>
+                Board Chats
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              style={[styles.tab, userTabStyle]}
+              onPress={()=> {
+                this.changeTab('User Chats')
+              }}
+              underlayColor='rgba(0,0,0,.1)'
+            >
+              <Text style={[styles.tabText, userText]}>
+                User Chats
+              </Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -201,6 +272,16 @@ var styles = StyleSheet.create({
   noThreadsText: {
     fontSize: 22,
     color: '#aaa'
+  },
+  tabs: {
+    flexDirection: 'row',
+    height: 48
+  },
+  tab: {
+    flex: 1,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
 
