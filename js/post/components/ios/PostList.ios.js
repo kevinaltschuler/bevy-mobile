@@ -244,13 +244,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     paddingTop: 1
   },
-  postListHeader: {
-    flex: 1,
-    flexDirection: 'column'
-  },
-  tagOverlay: {
-
-  },
   spinnerContainer: {
     flexDirection: 'column',
     flex: 1,
@@ -263,9 +256,6 @@ var styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: '#eee',
     marginBottom: -10
-  },
-  listContainer: {
-    flex: 1,
   },
   privateContainer: {
     flex: 1,
@@ -285,35 +275,8 @@ var styles = StyleSheet.create({
     fontSize: 22,
     marginBottom: 15
   },
-  requestJoinButton: {
-    borderColor: '#2cb673',
-    borderWidth: 1,
-    borderRadius: 3,
-    paddingVertical: 5,
-    paddingHorizontal: 10
-  },
-  requestJoinButtonText: {
-    color: '#2cb673'
-  },
-  boardActions: {
-    backgroundColor: '#fff'
-  },
-  slide: {
-    flexDirection: 'row',
-  },
-  actionWrapper: {
-    flex: 1,
-    height: 50
-  },
-  action: {
-    flexDirection: 'column',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  actionText: {
-    color: '#aaa'
-  },
+
+
 
   noPostsContainer: {
     flex: 1,
