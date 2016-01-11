@@ -357,7 +357,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 0
   }
 });
 
