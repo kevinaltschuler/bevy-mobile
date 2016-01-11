@@ -241,7 +241,7 @@ var Post = React.createClass({
                 { this.countVotes() }
               </Text>
               <Icon
-                name={ (this.state.voted) ? 'favorite' : 'favorite-border' }
+                name={ 'thumb-up' }
                 size={ 20 }
                 color={ (this.state.voted) ? '#2cb673' : '#rgba(0,0,0,.35)' }
                 style={styles.actionIcon}
