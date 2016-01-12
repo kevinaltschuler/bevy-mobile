@@ -1,15 +1,12 @@
 /**
  * PostStore.js
- *
- * Backbone and React and Flux confluence
- * for bevies
- *
- * @author kevins armpit hair
+ * @author kevin
+ * @author albert
+ * @flow
  */
 
 'use strict';
 
-// imports
 var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react-native');

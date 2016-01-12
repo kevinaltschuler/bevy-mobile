@@ -168,7 +168,9 @@ var PostFooter = React.createClass({
           onPress={ this.vote }
         >
           <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-            <Text style={ styles.pointCountText }>
+            <Text style={[ styles.pointCountText, {
+              color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
+            }]}>
               { this.countVotes() }
             </Text>
             <Icon
@@ -177,7 +179,9 @@ var PostFooter = React.createClass({
               color={ (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)' }
               style={{ marginBottom: 2 }}
             />
-            <Text style={ styles.buttonText }>
+            <Text style={[ styles.buttonText, {
+              color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
+            }]}>
               {(this.countVotes() == 1) ? 'Like' : 'Likes' }
             </Text>
           </View>
