@@ -19,7 +19,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
-var NativeModules = require('NativeModules');
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
@@ -54,32 +53,36 @@ var NewBoardView = React.createClass({
   },
 
   componentDidMount() {
-    BevyStore.on(BOARD.CREATED, (board) => {
-      // switch bevies
-      BoardActions.switchBoard(board._id);
-      console.log('made it here');
-      // navigate back
-      this.props.mainNavigator.pop();
-
-      this.setState({
-        creating: false
-      });
-    });
-
-    FileStore.on(FILE.UPLOAD_COMPLETE, (file) => {
-      this.setState({
-        boardImage: file
-      });
-    });
+    BevyStore.on(BOARD.CREATED, this.onBoardCreate);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onFileUpload);
   },
 
   componentWillUnmount() {
-    BevyStore.off(BOARD.CREATED);
-    FileStore.off(FILE.UPLOAD_COMPLETE);
+    BevyStore.off(BOARD.CREATED, this.onBoardCreate);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onFileUpload);
+  },
+
+  onBoardCreate(board) {
+    // switch bevies
+    BoardActions.switchBoard(board._id);
+    console.log('made it here');
+    // navigate back
+    this.props.mainNavigator.pop();
+
+    this.setState({
+      creating: false
+    });
+  },
+
+  onFileUpload(file) {
+    this.setState({
+      boardImage: file
+    });
   },
 
   goBack() {
-    this.refs.boardName.blur();
+    this.BoardNameInput.blur();
+    this.BoardDescInput.blur();
     this.props.mainNavigator.pop();
   },
 
@@ -94,13 +97,34 @@ var NewBoardView = React.createClass({
         ? { filename: constants.siteurl + '/img/default_board_img.png', foreign: true }
         : this.state.boardImage, // bevy image
       this.props.activeBevy._id,
-      this.state.type
+      this.state.type.toLowerCase()
     );
 
     // blur all text inputs
-    this.refs.boardName.blur();
+    this.BoardNameInput.blur();
+    this.BoardDescInput.blur();
     this.setState({
       creating: true
+    });
+  },
+
+  showImagePicker() {
+    UIImagePickerManager.showImagePicker({
+      title: 'Choose Board Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Library...',
+      returnBase64Image: false,
+      returnIsVertical: false
+    }, (didCancel, response) => {
+      if (didCancel) {
+        //console.log(response);
+
+      } else {
+        //console.log('Cancel');
+        FileActions.upload(response.uri);
+        //console.log(response.uri);
+      }
     });
   },
 
@@ -116,33 +140,56 @@ var NewBoardView = React.createClass({
     }
   },
 
+  _renderBevyItem() {
+    var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
+      ? constants.siteurl + '/img/logo_200.png'
+      : resizeImage(this.props.activeBevy.image, 128, 128).url;
+
+    return (
+      <View style={ styles.section }>
+        <Text style={ styles.sectionTitle }>
+          Creating Board For
+        </Text>
+        <View style={ styles.bevyItem }>
+          <Image
+            source={{ uri: bevyImageURL }}
+            style={ styles.bevyImage }
+          />
+          <Text style={ styles.bevyName }>
+            { this.props.activeBevy.name }
+          </Text>
+        </View>
+      </View>
+    );
+  },
+
   _renderTitleDescription() {
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>General</Text>
-
         <View style={ styles.generalCard} >
           <TextInput
-            style={ styles.bevyNameInput }
-            ref='boardName'
+            style={ styles.boardNameInput }
+            ref={ ref => { this.BoardNameInput = ref; }}
             value={ this.state.name }
-            onChangeText={(text) => {
-              this.setState({
-                name: text,
-              });
+            onChangeText={text => {
+              this.setState({ name: text });
             }}
             autoCorrect={ false }
             placeholder='Board Name'
             placeholderTextColor='#AAA'
           />
+          <View style={{
+            width: constants.width,
+            height: 1,
+            backgroundColor: '#EEE'
+          }}/>
           <TextInput
-            style={ styles.bevyNameInput }
-            ref='boardDescription'
+            style={ styles.boardDescriptionInput }
+            ref={ ref => { this.BoardDescInput = ref; }}
             value={ this.state.description }
-            onChangeText={(text) => {
-              this.setState({
-                description: text,
-              });
+            onChangeText={text => {
+              this.setState({ description: text });
             }}
             autoCorrect={ false }
             placeholder='Board Description'
@@ -154,7 +201,7 @@ var NewBoardView = React.createClass({
   },
 
   _renderImageInput() {
-    var image = resizeImage(this.state.boardImage, constants.width, constants.height);
+    var image = resizeImage(this.state.boardImage, constants.width, 200);
     var middle = (_.isEmpty(this.state.boardImage))
     ? (
       <Icon
@@ -162,8 +209,7 @@ var NewBoardView = React.createClass({
         size={ 30 }
         color='#ccc'
       />
-    )
-    : (
+    ) : (
       <Image
         style={ styles.boardImage }
         source={{ uri: image.url }}
@@ -173,27 +219,9 @@ var NewBoardView = React.createClass({
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Board Image</Text>
         <TouchableHighlight
-          style={ styles.bevyImageButton }
+          style={ styles.boardImageButton }
           underlayColor='rgba(0,0,0,0)'
-          onPress={() => {
-            UIImagePickerManager.showImagePicker({
-              title: 'Choose Board Picture',
-              cancelButtonTitle: 'Cancel',
-              takePhotoButtonTitle: 'Take Photo...',
-              chooseFromLibraryButtonTitle: 'Choose from Library...',
-              returnBase64Image: false,
-              returnIsVertical: false
-            }, (didCancel, response) => {
-              if (didCancel) {
-                //console.log(response);
-
-              } else {
-                //console.log('Cancel');
-                FileActions.upload(response.uri);
-                //console.log(response.uri);
-              }
-            });
-          }}
+          onPress={ this.showImagePicker }
         >
           { middle }
         </TouchableHighlight>
@@ -202,11 +230,22 @@ var NewBoardView = React.createClass({
   },
 
   _renderType() {
-    var typeIndex = (this.state.type == 'discussion') ? 1 : 0;
-    var typeIcon = (this.state.type == 'discussion') ? 'forum' : 'flag';
-    var typeText = (this.state.type == 'discussion')
-    ? 'Anybody may post content to a Discussion Board'
-    : 'Only admins may post content to an announcements Board'
+    var typeIndex, typeIcon, typeText;
+    switch(this.state.type) {
+      case 'discussion':
+        typeIndex = 1;
+        typeIcon = 'forum';
+        typeText = 'Anybody may post content to a Discussion Board';
+        break;
+      case 'announcement':
+        typeIndex = 0;
+        typeIcon = 'flag';
+        typeText = 'Only admins may post content to an announcements Board';
+        break;
+      case 'event':
+        break;
+    }
+
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Board Type</Text>
@@ -217,11 +256,11 @@ var NewBoardView = React.createClass({
             marginHorizontal: 20
           }}
           tintColor='#aaa'
-          values={['announcement', 'discussion']}
-          selectedIndex={typeIndex}
-          onValueChange={(ev) => {
+          values={['Announcement', 'Discussion']}
+          selectedIndex={ typeIndex }
+          onValueChange={ev => {
             this.setState({
-              type: ev
+              type: ev.toLowerCase()
             });
           }}
         />
@@ -248,43 +287,44 @@ var NewBoardView = React.createClass({
           <View style={{
             height: StatusBarSizeIOS.currentHeight,
             backgroundColor: '#2CB673'
-          }}/>
-            <View style={ styles.topBar }>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
-                style={ styles.iconButton }
-                onPress={ this.goBack }
-              >
-                <Icon
-                  name='arrow-back'
-                  size={ 30 }
-                  color='#FFF'
-                />
-              </TouchableHighlight>
-              <Text style={ styles.title }>
-                New Board
-              </Text>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
-                style={ styles.iconButton }
-                onPress={ this.createBoard }
-              >
-                <Icon
-                  name='done'
-                  size={ 30 }
-                  color='#FFF'
-                />
-              </TouchableHighlight>
-            </View>
+          }} />
+          <View style={ styles.topBar }>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
+            <Text style={ styles.title }>
+              New Board
+            </Text>
+            <TouchableHighlight
+              underlayColor='rgba(0,0,0,0.1)'
+              style={ styles.iconButton }
+              onPress={ this.createBoard }
+            >
+              <Icon
+                name='done'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableHighlight>
           </View>
-          <ScrollView>
-            <View style={ styles.body }>
-              { this._renderLoadingView() }
-              { this._renderTitleDescription() }
-              { this._renderImageInput() }
-              { this._renderType() }
-            </View>
-          </ScrollView>
+        </View>
+        <ScrollView>
+          <View style={ styles.body }>
+            { this._renderLoadingView() }
+            { this._renderBevyItem() }
+            { this._renderTitleDescription() }
+            { this._renderImageInput() }
+            { this._renderType() }
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -328,61 +368,30 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-
-  subBevyHeader: {
-    backgroundColor: '#eee',
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15
-  },
-  subBevyFor: {
-    marginRight: 10,
-    fontSize: 17,
-    textAlign: 'left'
-  },
-  subBevyName: {
-    flex: 1,
-    textAlign: 'left',
-    color: '#2CB673',
-    fontWeight: 'bold',
-    fontSize: 17
-  },
-
-  navButtonLeft: {
-    flex: 1,
-    marginLeft: 10
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginRight: 10
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17
-  },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
   body: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#eee',
   },
-  bevyImageButton: {
+  bevyItem: {
+    backgroundColor: '#FFF',
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10
+  },
+  bevyImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10
+  },
+  bevyName: {
+    flex: 1,
+    fontSize: 17,
+    color: '#222'
+  },
+  boardImageButton: {
     width: constants.width,
     height: 120,
     flexDirection: 'row',
@@ -391,11 +400,11 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginTop: 0
   },
-  bevyImage: {
+  boardImage: {
     width: constants.width,
     height: 120
   },
-  bevyNameInput: {
+  boardNameInput: {
     fontSize: 17,
     height: 48,
     width: constants.width,
@@ -406,7 +415,7 @@ var styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 5
   },
-  descriptionInput: {
+  boardDescriptionInput: {
     fontSize: 17,
     height: 48,
     width: constants.width,
