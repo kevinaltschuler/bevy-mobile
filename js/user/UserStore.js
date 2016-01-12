@@ -101,7 +101,7 @@ _.extend(UserStore, {
         );
         // called on signin error
         NativeAppEventEmitter.addListener('googleSignInError', error => {
-          console.log('google sign in error', error);
+          console.log('google sign in error', error.toString());
         });
 
         // called on signin success, you get user data (email), access token and idToken
@@ -133,6 +133,12 @@ _.extend(UserStore, {
           .then(res => res.json())
           .then(res => {
             console.log('got response from our server', res);
+            if(typeof res === 'string') {
+              console.log('our server error', res);
+              this.trigger(USER.LOGIN_ERROR, res);
+              return;
+            }
+
             var user = res.user;
             var access_token = res.access_token;
             var refresh_token = res.refresh_token;
@@ -145,6 +151,7 @@ _.extend(UserStore, {
           })
           .catch(err => {
             console.log('our server error', err);
+            this.trigger(USER.LOGIN_ERROR, err.toString());
           });
         });
         // call this method when user clicks the 'Signin with google' button
@@ -470,7 +477,7 @@ _.extend(UserStore, {
     .then(res => res.json())
     .then(res => {
       if(typeof res === 'string') {
-        console.log('login error', err);
+        console.log('login error', res);
         this.trigger(USER.LOGIN_ERROR, res);
         return;
       }

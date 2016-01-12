@@ -144,13 +144,14 @@ var MyBevies = React.createClass({
 
   _renderNoBevies() {
     if(!this.state.loading && _.isEmpty(this.state.myBevies)) {
-      return (
+      /*return (
         <View style={ styles.noBeviesContainer }>
           <Text style={ styles.noBeviesText }>
             No Bevies Yet
           </Text>
         </View>
-      );
+      );*/
+      return <View />;
     } else return <View />;
   },
 
