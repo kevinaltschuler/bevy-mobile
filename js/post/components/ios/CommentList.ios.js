@@ -38,6 +38,30 @@ var CommentItem = React.createClass({
     };
   },
 
+  onPress() {
+    if(this.state.isCompact)
+      this.setState({ isCompact: false });
+    else
+      this.setState({ collapsed: !this.state.collapsed });
+  },
+
+  toggleCompact() {
+    this.setState({ isCompact: !this.state.isCompact })
+  },
+
+  goToAuthorProfile() {
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = this.props.comment.author;
+    this.props.mainNavigator.push(route);
+  },
+
+  onReply() {
+    // bubble this comment up
+    this.props.onReply(this.props.comment);
+    // unselect self
+    this.setState({ collapsed: true });
+  },
+
   _renderCommentList() {
     if(_.isEmpty(this.props.comment.comments) || this.state.isCompact) return <View />;
     return (
@@ -63,6 +87,7 @@ var CommentItem = React.createClass({
       (this.state.showActionBar)
       ? '#eee'
       : '#fff';
+    commentStyle.height = 40;
 
     if (this.state.isCompact) {
       return (
@@ -83,10 +108,16 @@ var CommentItem = React.createClass({
     else {
       return (
         <View style={[ styles.commentItem, {
-          //marginLeft: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth - 1) * 3,
+          //marginLeft: (this.props.comment.depth == 0)
+          //  ? 0
+          //  : (this.props.comment.depth - 1) * 3,
           backgroundColor: (this.state.selected) ? '#eee' : '#fff',
-          borderLeftColor: (this.props.comment.depth == 0) ? 'transparent' : colorMap[(this.props.comment.depth - 1) % colorMap.length],
-          borderLeftWidth: (this.props.comment.depth == 0) ? 0 : (this.props.comment.depth) * 5
+          borderLeftColor: (this.props.comment.depth == 0)
+            ? 'transparent'
+            : colorMap[(this.props.comment.depth - 1) % colorMap.length],
+          borderLeftWidth: (this.props.comment.depth == 0)
+            ? 0
+            : (this.props.comment.depth) * 10
         }]}>
           <View style={ styles.commentItemTop }>
             <Text style={ styles.commentItemAuthor }>
@@ -107,62 +138,48 @@ var CommentItem = React.createClass({
   },
 
   render() {
-
-
     return (
       <View>
         <View style={ styles.commentItemComments }>
           <TouchableHighlight
             underlayColor='rgba(0,0,0,0.1)'
-            onPress={() => {
-                if(this.state.isCompact)
-                  this.setState({ isCompact: false });
-                else
-                  this.setState({
-                    collapsed: !this.state.collapsed
-                  });
-            }}
+            onPress={ this.onPress }
             delayLongPress={ 750 }
-            onLongPress={() => this.setState({ isCompact: !this.state.isCompact })}
+            onLongPress={ this.toggleCompact }
           >
-            {this._renderCommentBody()}
+            { this._renderCommentBody() }
           </TouchableHighlight>
           <Collapsible collapsed={this.state.collapsed} >
             <View style={ styles.commentItemActions }>
               <TouchableHighlight
                 underlayColor='rgba(0,0,0,0.1)'
-                onPress={() => {
-                  // bubble this comment up
-                  this.props.onReply(this.props.comment);
-                  // unselect self
-                  this.setState({
-                    collapsed: true
-                  });
-                }}
-                style={ styles.commentItemAction }
+                onPress={ this.onReply }
               >
-                <Icon
-                  name='reply'
-                  size={ 20 }
-                  color='#fff'
-                  style={{ width: 20, height: 20 }}
-                />
+                <View style={ styles.commentItemAction }>
+                  <Icon
+                    name='reply'
+                    size={ 30 }
+                    color='#fff'
+                  />
+                  <Text style={ styles.commentItemActionText }>
+                    Reply To Comment
+                  </Text>
+                </View>
               </TouchableHighlight>
               <TouchableHighlight
                 underlayColor='rgba(0,0,0,0.1)'
-                onPress={() => {
-                  var route = routes.MAIN.PROFILE;
-                  route.profileUser = this.props.comment.author;
-                  this.props.mainNavigator.push(route);
-                }}
-                style={ styles.commentItemAction }
+                onPress={ this.goToAuthorProfile }
               >
-                <Icon
-                  name='person'
-                  size={ 20 }
-                  color='#fff'
-                  style={{ width: 20, height: 20 }}
-                />
+                <View style={ styles.commentItemAction }>
+                  <Icon
+                    name='person'
+                    size={ 30 }
+                    color='#fff'
+                  />
+                  <Text style={ styles.commentItemActionText }>
+                    View { this.props.comment.author.displayName }'s Profile
+                  </Text>
+                </View>
               </TouchableHighlight>
             </View>
           </Collapsible>
@@ -209,53 +226,57 @@ var styles = StyleSheet.create({
   commentList: {
     flexDirection: 'column'
   },
-
   commentItem: {
     flexDirection: 'column',
-    paddingTop: 5,
-    paddingBottom: 5
+    height: 60,
+    justifyContent: 'center'
   },
   commentItemTop: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingLeft: 10
+    paddingHorizontal: 15
   },
   commentItemAuthor: {
-    fontSize: 12,
-    fontWeight: 'bold',
+    color: '#282828',
+    fontSize: 17,
     marginRight: 5
   },
   commentItemDetails: {
-    fontSize: 12
+    fontSize: 15,
+    color: '#888'
   },
   commentItemBody: {
-    paddingLeft: 10
+    paddingHorizontal: 15
   },
   commentItemBodyText: {
-    fontSize: 14
+    fontSize: 17,
+    color: '#666'
   },
   commentItemComments: {
 
   },
   commentItemActions: {
-    flexDirection: 'row',
-    height: 36,
+    flexDirection: 'column',
     backgroundColor: '#2CB673',
-    alignItems: 'center',
   },
   commentItemAction: {
-    height: 36,
+    height: 48,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    paddingHorizontal: 10
+  },
+  commentItemActionText: {
+    fontSize: 15,
+    color: '#FFF',
+    marginLeft: 10
   },
   plusIcon: {
     marginRight: 8
   },
   author: {
-    fontWeight: 'bold',
+    fontSize: 17,
     marginRight: 4,
     color: '#888'
   },

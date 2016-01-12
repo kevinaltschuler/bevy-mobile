@@ -96,7 +96,6 @@ var ThreadList = React.createClass({
   },
 
   renderThreadRow(thread) {
-
     return (
       <ThreadItem
         key={ 'threadItem:' + thread._id }

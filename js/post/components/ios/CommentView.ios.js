@@ -300,19 +300,20 @@ var CommentView = React.createClass({
       );
     }
     return (
-      <View>
-        <ScrollView style={ styles.scrollView }>
-          { this._renderPost() }
-          <View style={ styles.commentsCard }>
-            <CommentList
-              comments={ this.state.comments }
-              onReply={ this.onReply }
-              mainNavigator={ this.props.mainNavigator }
-            />
-            { this._renderNoCommentsText() }
-          </View>
-        </ScrollView>
-      </View>
+      <ScrollView style={ styles.scrollView }>
+        { this._renderPost() }
+        <Text style={ styles.commentsTitle }>
+          Comments
+        </Text>
+        <View style={ styles.commentsCard }>
+          <CommentList
+            comments={ this.state.comments }
+            onReply={ this.onReply }
+            mainNavigator={ this.props.mainNavigator }
+          />
+          { this._renderNoCommentsText() }
+        </View>
+      </ScrollView>
     );
   },
 
@@ -388,13 +389,17 @@ var styles = StyleSheet.create({
   scrollView: {
     flex: 1
   },
+  commentsTitle: {
+    fontSize: 17,
+    color: '#AAA',
+    marginTop: 5,
+    marginLeft: 10
+  },
   commentsCard: {
     flexDirection: 'column',
-    margin: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    backgroundColor: 'white',
-    borderRadius: 2,
+    marginTop: 5,
+    marginBottom: 10,
+    backgroundColor: 'white'
   },
 
   noCommentsText: {
