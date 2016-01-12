@@ -19,13 +19,15 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var BevyCard = require('./BevyCard.ios.js');
-var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
+var Spinner = require('react-native-spinkit');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 var UserStore = require('./../../../user/UserStore');
+var BevyStore = require('./../../../bevy/BevyStore');
+var BevyActions = require('./../../../bevy/BevyActions');
 var BEVY = constants.BEVY;
 
 var MyBevies = React.createClass({
@@ -33,12 +35,43 @@ var MyBevies = React.createClass({
     myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
     user: React.PropTypes.object,
-    loggedIn: React.PropTypes.bool,
     mainNavigator: React.PropTypes.object
   },
 
-  changeBevy(rowData) {
+  getInitialState() {
+    return {
+      loading: true,
+      myBevies: this.props.myBevies
+    };
+  },
 
+  componentDidMount() {
+    BevyStore.on(BEVY.LOADING, this._onLoading);
+    BevyStore.on(BEVY.LOADED, this._onLoaded);
+  },
+  componentWillUnmount() {
+    BevyStore.off(BEVY.LOADING, this._onLoading);
+    BevyStore.off(BEVY.LOADED, this._onLoaded);
+  },
+
+  _onLoading() {
+    this.setState({
+      loading: true
+    });
+  },
+
+  _onLoaded() {
+    this.setState({
+      myBevies: BevyStore.getMyBevies(),
+      loading: true
+    });
+    // make sure mybevies is flushed to the state before we display it
+    // just to make sure "no bevies" doesn't flash for a second
+    setTimeout(() => {
+      this.setState({
+        loading: false
+      });
+    }, 500);
   },
 
   goToNewBevy() {
@@ -46,14 +79,11 @@ var MyBevies = React.createClass({
   },
 
   _renderBevyList() {
-    var bevies = (this.props.loggedIn)
-    ? _.filter(this.props.myBevies, function(bevy) { return bevy.parent == null })
-    : this.props.publicBevies;
-
+    if(this.state.loading) return [];
     var bevyList = [];
-
-    for(var key in bevies) {
-      var bevy = bevies[key];
+    for(var key in this.state.myBevies) {
+      var bevy = this.state.myBevies[key];
+      if(!bevy) continue
       bevyList.push(
         <BevyCard
           bevy={ bevy }
@@ -67,6 +97,7 @@ var MyBevies = React.createClass({
   },
 
   _renderNewBevyCard() {
+    if(this.state.loading) return <View />;
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
@@ -96,7 +127,34 @@ var MyBevies = React.createClass({
     );
   },
 
-  render: function() {
+  _renderLoading() {
+    if(this.state.loading) {
+      return (
+        <View style={ styles.spinnerContainer }>
+          <Spinner
+            isVisible={ true }
+            size={ 40 }
+            type={ 'Arc' }
+            color={ '#2cb673' }
+          />
+        </View>
+      );
+    } else return <View />;
+  },
+
+  _renderNoBevies() {
+    if(!this.state.loading && _.isEmpty(this.state.myBevies)) {
+      return (
+        <View style={ styles.noBeviesContainer }>
+          <Text style={ styles.noBeviesText }>
+            No Bevies Yet
+          </Text>
+        </View>
+      );
+    } else return <View />;
+  },
+
+  render() {
     return (
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
@@ -131,6 +189,8 @@ var MyBevies = React.createClass({
           automaticallyAdjustContentInsets={ false }
           showsVerticalScrollIndicator={ true }
         >
+          { this._renderNoBevies() }
+          { this._renderLoading() }
           { this._renderBevyList() }
           { this._renderNewBevyCard() }
         </ScrollView>
@@ -190,6 +250,26 @@ var styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 10,
     marginBottom: 70
+  },
+  spinnerContainer: {
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: '#eee',
+    paddingTop: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: constants.height - 300
+  },
+  noBeviesContainer: {
+    flex: 1,
+    height: constants.height - 300,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  noBeviesText: {
+    color: '#AAA',
+    fontSize: 22
   }
 });
 

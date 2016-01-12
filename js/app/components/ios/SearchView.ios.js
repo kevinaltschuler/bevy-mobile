@@ -20,7 +20,6 @@ var {
   SegmentedControlIOS
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
-var SubSwitch = require('./SubSwitch.ios.js');
 var SearchUser = require('./SearchUser.ios.js');
 var BevyCard = require('./../../../bevy/components/ios/BevyCard.ios.js');
 var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
@@ -205,7 +204,7 @@ var SearchView = React.createClass({
           </Text>
         </View>
       );
-    } 
+    }
 
     for(var key in bevies) {
       var bevy = bevies[key];
@@ -325,7 +324,7 @@ var SearchView = React.createClass({
               var tabIndex = (ev == 'Bevies') ? 0 : 1;
               this.setState({
                 activeTab: tabIndex
-              }) 
+              })
             }}
           />
         </View>

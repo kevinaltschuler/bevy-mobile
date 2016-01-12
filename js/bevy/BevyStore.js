@@ -62,7 +62,6 @@ var BevyStore = _.extend({}, Backbone.Events);
 
 // now add some custom functions
 _.extend(BevyStore, {
-
   myBevies: new Bevies,
   publicBevies: new Bevies,
   searchQuery: '',
@@ -91,7 +90,7 @@ _.extend(BevyStore, {
             reset: true,
             success: function(bevies, response, options) {
               this.myBevies.sort();
-              
+
               // trigger finished events
               this.trigger(BEVY.CHANGE_ALL);
               this.trigger(BEVY.LOADED);

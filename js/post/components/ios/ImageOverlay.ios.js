@@ -21,6 +21,7 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var { BlurView, VibrancyView } = require('react-native-blur');
 var Swiper = require('react-native-swiper-fork');
+var ImageOverlayItem = require('./ImageOverlayItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -30,7 +31,6 @@ var toleranceX = 10;
 var toleranceY = 10;
 
 var ImageOverlay = React.createClass({
-
   propTypes: {
     isVisible: React.PropTypes.bool,
     images: React.PropTypes.array,
@@ -47,6 +47,12 @@ var ImageOverlay = React.createClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       isVisible: nextProps.isVisible
+    });
+  },
+
+  onImagePress() {
+    this.setState({
+      isVisible: false
     });
   },
 
@@ -67,30 +73,12 @@ var ImageOverlay = React.createClass({
 
     var imageCards = [];
     for (var key in this.props.images) {
-      var imageURL = resizeImage(this.props.images[key],
-        constants.width, constants.height).url;
       imageCards.push(
-        <View
-          style={ styles.card }
+        <ImageOverlayItem
           key={ 'image:' + key }
-        >
-          <Image
-            style={ styles.image }
-            source={{ uri: imageURL }}
-            resizeMode='contain'
-          >
-          </Image>
-          <TouchableWithoutFeedback
-            style={{width: constants.width, height: constants.height}}
-            onPress={() => {
-              this.setState({
-                isVisible: false
-              });
-            }}
-          >
-            <View/>
-          </TouchableWithoutFeedback>
-        </View>
+          image={ this.props.images[key] }
+          onPress={ this.onImagePress }
+        />
       );
     }
 
@@ -172,14 +160,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  card: {
-    backgroundColor: 'rgba(0,0,0,0)',
-    height: constants.height,
-    width: constants.width,
-    flexDirection: 'column',
-    shadowColor: '#000',
-    borderRadius: 20,
-  },
+
   blur: {
     flex: 1
   },
@@ -212,25 +193,7 @@ var styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center'
   },
-  leftArrow: {
-    height: 48,
-    paddingLeft: 20,
-    paddingRight: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  rightArrow: {
-    height: 48,
-    paddingLeft: 20,
-    paddingRight: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  image: {
-    flex: 1,
-    width: constants.width,
-    height: constants.height - 48 - 10 - 10 // top bar plus padding
-  },
+
   topBar: {
     position: 'absolute',
     top: 0,

@@ -23,6 +23,7 @@ var BevyActionButtons = require('./BevyActionButtons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var BoardActions = require('./../../../board/BoardActions');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyView = React.createClass({
@@ -38,7 +39,15 @@ var BevyView = React.createClass({
   },
 
   goBack() {
+    if(!_.isEmpty(this.props.activeBoard)) {
+      this.clearBoard();
+      return;
+    }
     this.props.mainNavigator.pop();
+  },
+
+  clearBoard() {
+    BoardActions.clearBoard();
   },
 
   toggleSideMenu() {
