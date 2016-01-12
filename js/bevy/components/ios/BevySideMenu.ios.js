@@ -24,6 +24,7 @@ var StatusBarSizeIOS = require('react-native-status-bar-size');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
+var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../BevyActions');
 var BoardActions = require('./../../../board/BoardActions');
 
@@ -45,6 +46,79 @@ var BevySideMenu = React.createClass({
     this.props.closeSideMenu();
   },
 
+  clearBoard() {
+    BoardActions.clearBoard();
+    this.props.closeSideMenu();
+  },
+
+  goToNewBoard() {
+    this.props.mainNavigator.push(routes.MAIN.NEWBOARD);
+  },
+
+  _renderBevyItem() {
+    var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
+      ? constants.siteurl + '/img/default_group_img.png'
+      : resizeImage(this.props.activeBevy.image, 64, 64).url;
+
+    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
+      ? 'lock'
+      : 'public';
+
+    return (
+      <TouchableHighlight
+        underlayColor='rgba(255,255,255,.2)'
+        style={styles.bevyCard}
+        onPress={ this.clearBoard }
+      >
+        <View style={ styles.top }>
+          <Image
+            source={{ uri: bevyImageURL }}
+            style={ styles.bevyImage }
+          />
+          <View style={ styles.bottom }>
+            <Text style={ styles.bevyName }>
+              { this.props.activeBevy.name }
+            </Text>
+            <View style={{ flexDirection: 'row'}}>
+              <View style={ styles.detailItem }>
+                <Icon
+                  name={ publicPrivateIcon }
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  {(this.props.activeBevy.settings.privacy == 'Private')
+                    ? 'Private'
+                    : 'Public' }
+                </Text>
+              </View>
+              <View style={ styles.detailItem }>
+                <Icon
+                  name='people'
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  { this.props.activeBevy.subCount }
+                </Text>
+              </View>
+              <View style={ styles.detailItem }>
+                <Icon
+                  name='person'
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  { this.props.activeBevy.admins.length }
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  },
+
   _renderBoards() {
     var boards = this.props.bevyBoards;
     var boardViews = [];
@@ -59,43 +133,37 @@ var BevySideMenu = React.createClass({
         />
       );
     }
-    boardViews.push(
-      <TouchableHighlight 
-        underlayColor='rgba(255,255,255,.1)'
-        style={{
-          height: 70,
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderBottomWidth: 1,
-          borderBottomColor: '#666',
-        }}
-        onPress={() => {
-          this.props.mainNavigator.push(routes.MAIN.NEWBOARD);
-        }}
-        key={'boarditem:new'}
-      >
-        <Icon
-          name='add'
-          color='#eee'
-          size={30}
-        />
-      </TouchableHighlight> 
-    )
     return boardViews;
+  },
+
+  _renderNewBoardItem() {
+    return (
+      <TouchableHighlight
+        underlayColor='rgba(255,255,255,0.2)'
+        style={[ styles.newBoardItem, {
+          borderBottomWidth: 1,
+          borderBottomColor: '#666'
+        }]}
+        onPress={ this.goToNewBoard }
+      >
+        <View style={ styles.newBoardItem }>
+          <Icon
+            name='add'
+            color='#eee'
+            size={ 30 }
+          />
+          <Text style={ styles.newBoardText }>
+            Create New Board
+          </Text>
+        </View>
+      </TouchableHighlight>
+    );
   },
 
   render() {
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>
     }
-    var bevy = this.props.activeBevy;
-    var image_url = constants.siteurl + '/img/default_group_img.png';
-    if(bevy.image)
-      image_url = bevy.image.path;
-
-    var publicPrivateIcon = (bevy.settings.privacy == 'Private')
-      ? 'lock'
-      : 'public';
 
     return (
       <View style={ styles.container }>
@@ -103,62 +171,10 @@ var BevySideMenu = React.createClass({
           height: StatusBarSizeIOS.currentHeight,
         }}/>
         <ScrollView style={styles.menuContainer}>
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,.2)'
-            style={styles.bevyCard}
-            onPress={() => {
-              BoardActions.clearBoard();
-              this.props.closeSideMenu();
-            }}
-          >
-            <View style={ styles.top }>
-              <Image
-                source={{ uri: image_url }}
-                style={ styles.bevyImage }
-              />
-              <View style={ styles.bottom }>
-                <Text style={ styles.bevyName }>
-                  { bevy.name }
-                </Text>
-                <View style={{ flexDirection: 'row'}}>
-                  <View style={ styles.detailItem }>
-                    <Icon
-                      name={ publicPrivateIcon }
-                      size={ 18 }
-                      color='#fff'
-                    />
-                    <Text style={ styles.itemText }>
-                      {(bevy.settings.privacy == 'Private')
-                        ? 'Private'
-                        : 'Public' }
-                    </Text>
-                  </View>
-                  <View style={ styles.detailItem }>
-                    <Icon
-                      name='people'
-                      size={ 18 }
-                      color='#fff'
-                    />
-                    <Text style={ styles.itemText }>
-                      { bevy.subCount }
-                    </Text>
-                  </View>
-                  <View style={ styles.detailItem }>
-                    <Icon
-                      name='person'
-                      size={ 18 }
-                      color='#fff'
-                    />
-                    <Text style={ styles.itemText }>
-                      { bevy.admins.length }
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </TouchableHighlight>
+          { this._renderBevyItem() }
           <View style={ styles.boardList }>
             { this._renderBoards() }
+            { this._renderNewBoardItem() }
           </View>
         </ScrollView>
       </View>
@@ -207,10 +223,6 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     flex: 1
   },
-  bottomItem: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
   detailItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -221,6 +233,16 @@ var styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 17
   },
+  newBoardItem: {
+    height: 70,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  newBoardText: {
+    fontSize: 17,
+    color: '#FFF'
+  }
 })
 
 module.exports = BevySideMenu;
