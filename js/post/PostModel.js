@@ -34,11 +34,6 @@ var Post = Backbone.Model.extend({
   },
 
   sync(method, model, options) {
-    if(method == 'patch' || method == 'update') {
-      var bevy_id = model.get('bevy');
-      bevy_id = (_.isObject(bevy_id)) ? bevy_id._id : bevy_id;
-      model.url = constants.apiurl + '/bevies/' + bevy_id + '/posts/' + model.id;
-    }
     Backbone.Model.prototype.sync.apply(this, arguments);
   },
 
