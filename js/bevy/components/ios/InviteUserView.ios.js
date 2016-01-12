@@ -178,7 +178,7 @@ var InviteUserView = React.createClass({
     var invites = this.props.bevyInvites
     for(var key in invites) {
       var invite = invites[key];
-      if(invite.requestType == 'request_join') 
+      if(invite.requestType == 'request_join')
         users.push(
           <InviteItem
             key={ 'invite:' + invite._id }
@@ -255,8 +255,8 @@ var InviteUserView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
             style={ styles.iconButton }
             onPress={ this.goBack }
           >
@@ -265,7 +265,7 @@ var InviteUserView = React.createClass({
               size={ 30 }
               color='#FFF'
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
             <Text style={ styles.title }>
               Invite a user to { bevy.name }
             </Text>

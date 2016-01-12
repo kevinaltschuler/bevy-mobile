@@ -75,8 +75,8 @@ var NotificationItem = React.createClass({
 
         body = (
           <View style={ styles.notificationBody }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.left }
               onPress={ this.goToPost }
             >
@@ -97,7 +97,7 @@ var NotificationItem = React.createClass({
                   </View>
                 </View>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         );
         break;
@@ -112,8 +112,8 @@ var NotificationItem = React.createClass({
 
         body = (
           <View style={ styles.notificationBody }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.left }
               onPress={ this.goToPost }
             >
@@ -137,7 +137,7 @@ var NotificationItem = React.createClass({
                   </View>
                 </View>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         );
         break;
@@ -151,8 +151,8 @@ var NotificationItem = React.createClass({
 
         body = (
           <View style={ styles.notificationBody }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.left }
               onPress={ this.goToPost }
             >
@@ -174,7 +174,7 @@ var NotificationItem = React.createClass({
                   </View>
                 </View>
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         );
         break;

@@ -129,6 +129,8 @@ var ThreadSettingsView = React.createClass({
       <View style={ styles.header }>
         <ThreadImage
           thread={ this.props.activeThread }
+          width={ 60 }
+          height={ 60 }
         />
         <View style={ styles.headerDetails }>
           <Text style={ styles.threadName }>
@@ -206,8 +208,8 @@ var ThreadSettingsView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -216,7 +218,7 @@ var ThreadSettingsView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               Chat Settings
             </Text>
@@ -278,7 +280,7 @@ var styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    height: 48,
+    height: 80,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
