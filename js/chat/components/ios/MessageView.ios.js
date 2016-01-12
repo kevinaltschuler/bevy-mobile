@@ -16,14 +16,11 @@ var {
   ListView,
   TextInput,
   Image,
-  createElement,
   TouchableHighlight,
   TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var Spinner = require('react-native-spinkit');
-var RefreshingIndicator =
-  require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var MessageItem = require('./MessageItem.ios.js');
 
 var _ = require('underscore');
@@ -46,7 +43,7 @@ var MessageView = React.createClass({
     user: React.PropTypes.object
   },
 
-  getInitialState: function() {
+  getInitialState() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -55,70 +52,47 @@ var MessageView = React.createClass({
       keyboardSpace: 48,
       messageValue: '',
       messages: messages,
-      dataSource: ds.cloneWithRows(messages),
+      ds: ds.cloneWithRows(messages),
       scrollY: 0,
       end: false
     };
   },
 
-  componentWillReceiveProps(nextProps: Object) {
-    if(this.props.activeThread._id != nextProps.activeThread._id) {
-      // switched threads
-      console.log('switched threads');
-      var messages = ChatStore.getMessages(nextProps.activeThread._id);
-      this.setState({
-        messages: messages,
-        dataSource: this.state.dataSource.cloneWithRows(messages),
-        messageValue: '' // reset text field as well
-      });
-    }
-  },
-
-  componentDidMount: function() {
+  componentDidMount() {
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
 
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 48
-      });
-    });
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
-
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 48
-      });
-    });
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
   },
 
-  _onChatChange: function() {
+  keyboardWillShow(frames) {
+    if(frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+  },
+  keyboardWillHide(frames) {
+    this.setState({ keyboardSpace: 48 });
+  },
+
+  _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     this.setState({
       isRefreshing: false,
       messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages)
+      ds: this.state.ds.cloneWithRows(messages)
     });
   },
 
-  handleScroll: function(e) {
+  handleScroll(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
     //console.log(scrollY);
     if(this.state.scrollY == null) {
@@ -147,31 +121,29 @@ var MessageView = React.createClass({
     }
     this.setState({
       scrollY: scrollY
-    })
+    });
   },
 
-  handleResponderGrant: function() {
+  handleResponderGrant() {
     this.isTouching = true;
   },
 
-  handleResponderRelease: function() {
+  handleResponderRelease() {
     this.isTouching = false;
   },
 
-  onRefresh: function() {
+  onRefresh() {
     this.setState({
       isRefreshing: true
     });
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
-  onChange: function(text) {
-    this.setState({
-      messageValue: text
-    });
+  onChange(text) {
+    this.setState({ messageValue: text });
   },
 
-  onSubmitEditing: function() {
+  onSubmitEditing() {
     var text = this.state.messageValue;
     var user = this.props.user;
     // dont send an empty message
@@ -213,30 +185,33 @@ var MessageView = React.createClass({
     this.props.chatNavigator.push(routes.CHAT.THREADSETTINGS);
   },
 
-  renderHeader: function() {
+  clearAndRetainFocus() {
+    this.setState({ messageValue: '' });
+    setTimeout(function() {
+      this.setState({ messageValue: this.getInitialState().messageValue });
+      this.refs.MessageInput.focus();
+    }.bind(this), 50);
+  },
+
+  scrollToBottom() {
+    var scrollProperties = this.MessageList.scrollProperties;
+    var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
+    requestAnimationFrame(() => {
+      //this.MessageList.getScrollResponder().scrollTo(scrollOffset);
+    });
+  },
+
+  renderHeader() {
     if(_.isEmpty(this.state.messages)) return <View />;
     if(!this.state.isRefreshing) {
       return (
         <TouchableOpacity
           activeOpacity={.5}
-          style={{
-            backgroundColor: 'rgba(0,0,0,.1)',
-            borderRadius: 2,
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginVertical: 10
-          }}
-          onPress={() => {
-            this.onRefresh();
-          }}
+          style={ styles.loadMoreButton }
+          onPress={ this.onRefresh }
         >
-          <Text style={{
-            color: '#fff',
-            fontWeight: 'bold'
-          }}>
-            Load More
+          <Text style={ styles.loadMoreButtonText }>
+            Load More Messages
           </Text>
         </TouchableOpacity>
       );
@@ -254,27 +229,7 @@ var MessageView = React.createClass({
     }
   },
 
-  clearAndRetainFocus: function() {
-    this.setState({
-      messageValue: ''
-    });
-    setTimeout(function() {
-      this.setState({
-        messageValue: this.getInitialState().messageValue
-      });
-      this.refs.MessageInput.focus();
-    }.bind(this), 0);
-  },
-
-  scrollToBottom() {
-    var scrollProperties = this.MessageList.scrollProperties;
-    var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
-    requestAnimationFrame(() => {
-      //this.MessageList.getScrollResponder().scrollTo(scrollOffset);
-    });
-  },
-
-  _renderMessageRow(message, sectionID, rowID, highlightRow) {
+  renderMessageRow(message, sectionID, rowID, highlightRow) {
     var hidePic = false;
     var showName = true;
     var rowID = parseInt(rowID);
@@ -305,15 +260,7 @@ var MessageView = React.createClass({
 
   render() {
     return (
-      <View
-        style={styles.container}
-        onStartShouldSetResponder={() => {
-          this.refs.MessageInput.blur();
-          this.setState({
-            keyboardSpace: 48
-          });
-        }}
-      >
+      <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
             height: StatusBarSizeIOS.currentHeight,
@@ -354,11 +301,11 @@ var MessageView = React.createClass({
           onResponderGrant={ this.handleResponderGrant }
           onResponderRelease={ this.handleResponderRelease }
           decelerationRate={ 0.9 }
-          scrollRenderAheadDistance={500}
-          dataSource={ this.state.dataSource }
-          showsVerticalScrollIndicator={true}
+          scrollRenderAheadDistance={ 500 }
+          dataSource={ this.state.ds }
+          showsVerticalScrollIndicator={ true }
           onEndReached={ this.onEndReached }
-          renderRow={ this._renderMessageRow }
+          renderRow={ this.renderMessageRow }
           renderHeader={ this.renderHeader }
           renderFooter={() => {
             return <View style={{ height: 20 }}/>;
@@ -371,14 +318,9 @@ var MessageView = React.createClass({
             ref='MessageInput'
             value={ this.state.messageValue }
             style={ styles.messageInput }
-            onChangeText={(text) => { this.onChange(text); }}
-            onSubmitEditing={(ev) => { this.onSubmitEditing(); }}
-            onFocus={() => {
-              this.scrollToBottom();
-            }}
-            onLayout={(x,y,width,height) => {
-              console.log(height);
-            }}
+            onChangeText={ text => { this.onChange(text) }}
+            onSubmitEditing={ ev => { this.onSubmitEditing() }}
+            onFocus={ this.scrollToBottom }
             clearButtonMode={ 'while-editing' }
             placeholder='Chat'
             placeholderTextColor='#AAA'
@@ -441,15 +383,6 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  textInput: {
-    height: 40,
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-    paddingLeft: 16,
-    backgroundColor: '#fff',
-    color: '#000',
-    marginBottom: 0
-  },
   loading: {
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -479,6 +412,19 @@ var styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12,
     paddingVertical: 12
+  },
+  loadMoreButton: {
+    backgroundColor: 'rgba(0,0,0,.3)',
+    borderRadius: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10
+  },
+  loadMoreButtonText: {
+    color: '#fff',
+    fontSize: 17
   }
 })
 
