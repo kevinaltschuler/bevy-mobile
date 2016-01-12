@@ -15,11 +15,12 @@ var {
   Image,
   StyleSheet,
   TouchableHighlight,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var NewPostImageItem = require('./NewPostImageItem.ios.js');
 
 var _ = require('underscore');

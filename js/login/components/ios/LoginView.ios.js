@@ -71,7 +71,9 @@ var LoginView = React.createClass({
   _renderError() {
     if(_.isEmpty(this.state.error)) return <View />;
     return (
+      <View style={{padding: 5, backgroundColor: '#df4a32', borderRadius: 3, marginBottom: 10}}>
       <Text style={ styles.errorText }>{ this.state.error }</Text>
+      </View>
     );
   },
 
@@ -178,8 +180,8 @@ var styles = StyleSheet.create({
   },
   errorText: {
     textAlign: 'center',
-    color: '#df4a32',
-    marginBottom: 5
+    color: '#fff',
+    fontWeight: 'bold'
   },
   loginInput: {
     height: 50,
@@ -196,6 +198,8 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 50,
     flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 25,
     marginBottom: 10,
     marginHorizontal: 20,
@@ -211,6 +215,8 @@ var styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 50,
     borderRadius: 25,
     marginHorizontal: 20,

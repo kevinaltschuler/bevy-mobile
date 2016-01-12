@@ -12,7 +12,7 @@
     "base-64": "^0.1.0",
     "flux": "^2.0.3",
     "jquery": "^2.1.4",
-    "react-native": "^0.17.0",
+    "react-native": "0.17.0",
     "react-native-audioplayer": "^0.2.0",
     "react-native-blur": "^0.7.3",
     "react-native-calendar": "^0.6.0",

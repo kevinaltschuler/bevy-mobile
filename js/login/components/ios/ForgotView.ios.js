@@ -49,7 +49,7 @@ var ForgotView = React.createClass({
       if(res.object == undefined) {
         // success
         AlertIOS.alert('Forgot Password',
-          'Email Sent! Please check your email and go to'
+          'Email Sent! Please check your email and go to '
           + 'the link provided to reset your password.');
         // clear text field
         this.setState({
@@ -150,6 +150,8 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 50,
     flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 25,
     marginBottom: 10,
     marginHorizontal: 20,

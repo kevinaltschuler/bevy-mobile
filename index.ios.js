@@ -13,13 +13,12 @@ var {
   Navigator,
   AsyncStorage,
   PushNotificationIOS,
-  AlertIOS
+  AlertIOS,
 } = React;
 
 var MainView = require('./js/app/components/ios/MainView.ios.js');
 var LoginNavigator = require('./js/login/components/ios/LoginNavigator.ios.js');
 var NotificationActions = require('./js/notification/NotificationActions');
-var NativeModules = require('NativeModules');
 
 var Backbone = require('backbone');
 var _ = require('underscore');
@@ -302,16 +301,8 @@ var App = React.createClass({
     // disable gestures
     sceneConfig.gestures = null;
 
-    PushNotificationIOS.requestPermissions();/*
+    PushNotificationIOS.requestPermissions();
     //PushNotificationIOS.checkPermissions(data => {console.log(data)})
-
-    NativeModules.CameraManager.checkDeviceAuthorizationStatus(function(err, isAuthorized) {
-      if(isAuthorized) {
-        //console.log('you have permissions');
-      } else {
-        //console.log('you dont');
-      }
-    });*/
 
     var initialRoute = routes.MAIN.LOADING;
 

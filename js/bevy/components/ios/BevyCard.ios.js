@@ -105,7 +105,7 @@ var styles = StyleSheet.create({
     height: 160,
     backgroundColor: '#fff',
     borderRadius: 5,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   bevyImage: {
     flex: 2

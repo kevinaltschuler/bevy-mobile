@@ -473,6 +473,10 @@ _.extend(UserStore, {
     .then(res => res.json())
     .then(res => {
       console.log('login success');
+      if(res == 'User not found') {
+        this.trigger(USER.LOGIN_ERROR, res);
+        return;
+      }
       // set the new user
       this.setUser(res.user);
       // set the access and refresh tokens

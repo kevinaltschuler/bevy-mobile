@@ -14,10 +14,11 @@ var {
   Image,
   TouchableHighlight,
   StyleSheet,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -171,9 +172,6 @@ var SettingsView = React.createClass({
             </Text>
           </View>
         </View>
-        <View style={{
-          height: StatusBarSizeIOS.currentHeight
-        }} />
         <ScrollView
           style={{ flex: 1 }}
           automaticallyAdjustContentInsets={ false }
@@ -240,14 +238,14 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 16,
     alignItems: 'center',
-    height: 60,
+    height: 80,
     backgroundColor: '#FFF',
     marginBottom: 10
   },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     marginRight: 10,
   },
   profileDetails: {

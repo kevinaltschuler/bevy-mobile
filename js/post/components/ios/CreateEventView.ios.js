@@ -19,11 +19,12 @@ var {
   Navigator,
   TouchableHighlight,
   DeviceEventEmitter,
-  TouchableOpacity
+  TouchableOpacity,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 
 var _ = require('underscore');
 var routes = require('./../../../routes');

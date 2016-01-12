@@ -17,11 +17,12 @@ var {
   Image,
   SwitchIOS,
   TouchableOpacity,
-  AlertIOS
+  AlertIOS,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SubSwitch = require('./../../../app/components/ios/SubSwitch.ios.js');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var BevyNavbar = require('./BevyNavbar.ios.js');
 var AdminItem = require('./AdminItem.ios.js');
 
