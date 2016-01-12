@@ -64,16 +64,6 @@ var BoardItem = React.createClass({
             <View style={ styles.boardDetails }>
               <View style={ styles.detailItem }>
                 <Icon
-                  name='people'
-                  size={ 18 }
-                  color='#bbb'
-                />
-                <Text style={ styles.itemText }>
-                  { board.subCount }
-                </Text>
-              </View>
-              <View style={ styles.detailItem }>
-                <Icon
                   name={ typeIcon }
                   size={ 18 }
                   color='#bbb'

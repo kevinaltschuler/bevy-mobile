@@ -74,6 +74,7 @@ var MessageView = React.createClass({
   },
 
   componentDidMount: function() {
+    //ChatActions.fetchMore(this.props.activeThread._id);
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
 
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
@@ -88,7 +89,7 @@ var MessageView = React.createClass({
         keyboardSpace: 48
       });
     });
-    ChatActions.fetchMore(this.props.activeThread._id);
+    
   },
 
   componentWillUnmount: function() {
@@ -107,6 +108,7 @@ var MessageView = React.createClass({
       });
     });
   },
+
 
   _onChatChange: function() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);

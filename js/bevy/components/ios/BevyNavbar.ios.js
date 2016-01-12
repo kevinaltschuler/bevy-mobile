@@ -53,6 +53,24 @@ var BevyNavbar = React.createClass({
     };
   },
 
+  componentWillReceiveProps() {
+    if(!_.isEmpty(this.props.activeBoard)) {
+      this.setState({
+        bottomHeight: 40
+      });
+    } else {
+      this.setState({
+        bottomHeight: 78
+      })
+    }
+  },
+
+  getInitialState() {
+    return {
+      bottomHeight: this.props.bottomHeight
+    }
+  },
+
   _renderLeft() {
     return this.props.left;
   },
@@ -78,6 +96,47 @@ var BevyNavbar = React.createClass({
     return this.props.right;
   },
 
+  _renderBottom() {
+    if(!_.isEmpty(this.props.activeBoard)) {
+      return <View/>;
+    }
+
+    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
+      ? 'lock'
+      : 'public';
+
+    return (
+      <View style={ styles.bevyBottom }>
+        <View style={ styles.detailItem }>
+          <Icon
+            name={ publicPrivateIcon }
+            size={ 18 }
+            color='#fff'
+          />
+          <Text style={ styles.itemText }>
+            { this.props.activeBevy.settings.privacy }
+          </Text>
+        </View>
+        <View style={ styles.detailItem }>
+          <Icon name='group' size={18} color='#fff'/>
+          <Text style={styles.itemText}>
+            { this.props.activeBevy.subCount + ' '
+              + ((this.props.activeBevy.subCount == 1)
+              ? 'Subscriber' : 'Subscribers') }
+          </Text>
+        </View>
+        <View style={ styles.detailItem }>
+          <Icon name='person' size={18} color='#fff'/>
+          <Text style={styles.itemText}>
+            { this.props.activeBevy.admins.length + ' '
+              + ((this.props.activeBevy.admins.length == 1)
+              ? 'Admin' : 'Admins') }
+          </Text>
+        </View>
+      </View>
+    );
+  },
+
   render() {
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>;
@@ -87,20 +146,16 @@ var BevyNavbar = React.createClass({
       ? constants.siteurl + '/img/default_group_img.png'
       : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
 
-    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
-      ? 'lock'
-      : 'public';
-
     return (
       <View style={ this.props.styleParent }>
         <Image
           source={{ uri: image_url }}
           style={[ styles.imageBottom, {
-            height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+            height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
           }]}
         >
           <View style={[ styles.imageWrapper, {
-            height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+            height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
           }]}>
             <View style={[ styles.bevyTop, {
               paddingTop: StatusBarSizeIOS.currentHeight
@@ -115,34 +170,7 @@ var BevyNavbar = React.createClass({
                 { this._renderRight() }
               </View>
             </View>
-            <View style={ styles.bevyBottom }>
-              <View style={ styles.detailItem }>
-                <Icon
-                  name={ publicPrivateIcon }
-                  size={ 18 }
-                  color='#fff'
-                />
-                <Text style={ styles.itemText }>
-                  { this.props.activeBevy.settings.privacy }
-                </Text>
-              </View>
-              <View style={ styles.detailItem }>
-                <Icon name='group' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  { this.props.activeBevy.subCount + ' '
-                    + ((this.props.activeBevy.subCount == 1)
-                    ? 'Subscriber' : 'Subscribers') }
-                </Text>
-              </View>
-              <View style={ styles.detailItem }>
-                <Icon name='person' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  { this.props.activeBevy.admins.length + ' '
-                    + ((this.props.activeBevy.admins.length == 1)
-                    ? 'Admin' : 'Admins') }
-                </Text>
-              </View>
-            </View>
+            { this._renderBottom() }
           </View>
         </Image>
       </View>
