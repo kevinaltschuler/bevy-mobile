@@ -32,8 +32,7 @@ var ImageOverlayItem = React.createClass({
       progress: 0,
       imageURL: (this.props.image.foreign)
         ? this.props.image.path
-        //: resizeImage(this.props.image, constants.width, constants.height).url
-        : this.props.image.path
+        : resizeImage(this.props.image, constants.width, constants.height).url
     };
   },
 
