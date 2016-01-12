@@ -34,6 +34,12 @@ var PostHeader = React.createClass({
   },
 
   goToAuthorProfile() {
+    if(this.props.mainRoute.name == routes.MAIN.PROFILE.name
+      && this.props.mainRoute.profileUser._id == this.props.post.author._id) {
+      // we're already viewing the author's profile, do nothing
+      return;
+    }
+    
     var route = routes.MAIN.PROFILE;
     route.profileUser = this.props.post.author;
     this.props.mainNavigator.push(route);

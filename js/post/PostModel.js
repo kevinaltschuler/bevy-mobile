@@ -21,18 +21,6 @@ var UserStore = require('./../user/UserStore');
 
 // backbone model
 var Post = Backbone.Model.extend({
-  defaults: {
-    _id: null,
-    body: null,
-    images: [],
-    author: null,
-    bevy: null,
-    votes: [],
-    voted: false,
-    created: new Date(),
-    updated: new Date()
-  },
-
   idAttribute: '_id',
 
   initialize() {
