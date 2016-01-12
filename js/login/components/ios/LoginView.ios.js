@@ -1,3 +1,10 @@
+/**
+ * LoginView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -6,9 +13,8 @@ var {
   View,
   StyleSheet,
   TextInput,
-  AsyncStorage,
-  LinkingIOS,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   NativeAppEventEmitter
 } = React;
@@ -37,42 +43,78 @@ var LoginView = React.createClass({
   },
 
   componentDidMount() {
-    UserStore.on(USER.LOGIN_SUCCESS, this.onLoginSuccess);
-    UserStore.on(USER.LOGIN_ERROR, this.updateError);
+    UserStore.on(USER.LOGIN_ERROR, this.onError);
   },
 
   componentWillUnmount() {
-    UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
-    UserStore.off(USER.LOGIN_ERROR, this.updateError);
+    UserStore.off(USER.LOGIN_ERROR, this.onError);
   },
 
-  updateError(error) {
-    this.setState({
-      error: error
-    })
+  onError(error) {
+    this.setState({ error: error });
   },
 
   loginEmail() {
+    if(_.isEmpty(this.state.username)) {
+      this.setState({
+        error: 'Please enter a username'
+      });
+      this.UsernameInput.focus();
+      return;
+    }
+
+    if(_.isEmpty(this.state.pass)) {
+      this.setState({
+        error: 'Please enter a password'
+      });
+      this.PasswordInput.focus();
+      return;
+    }
+
     UserActions.logIn(this.state.username, this.state.pass);
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
   },
 
   loginGoogle() {
     if(this.state.loading) return;
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+
     UserActions.logInGoogle();
     this.setState({
+      error: '',
+      username: '',
+      pass: '',
       loading: true
     });
   },
 
-  onLoginSuccess() {
-    //this.props.mainNavigator.replace(routes.MAIN.TABBAR);
+  goToRegister() {
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+
+    this.props.loginNavigator.push(routes.LOGIN.REGISTER);
+  },
+
+  goToForgot() {
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+
+    this.props.loginNavigator.push(routes.LOGIN.FORGOT);
   },
 
   _renderError() {
     if(_.isEmpty(this.state.error)) return <View />;
     return (
-      <View style={{padding: 5, backgroundColor: '#df4a32', borderRadius: 3, marginBottom: 10}}>
-      <Text style={ styles.errorText }>{ this.state.error }</Text>
+      <View style={ styles.errorContainer }>
+        <Text style={ styles.errorText }>
+          { this.state.error }
+        </Text>
       </View>
     );
   },
@@ -89,59 +131,59 @@ var LoginView = React.createClass({
         </View>
         { this._renderError() }
         <TextInput
+          ref={ref => { this.UsernameInput = ref; }}
           autoCorrect={ false }
           autoCapitalize='none'
-          placeholder='username'
-          keyboardType='default'
+          placeholder='Username'
           style={ styles.loginInput }
-          onChangeText={ (text) => this.setState({ username: text }) }
+          onChangeText={text => this.setState({ username: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TextInput
+          ref={ref => { this.PasswordInput = ref; }}
           autoCorrect={ false }
           autoCapitalize='none'
-          password={ true }
-          placeholder='•••••••'
+          secureTextEntry={ true }
+          placeholder='Password'
           style={ styles.loginInput }
-          onChangeText={ (text) => this.setState({ pass: text }) }
+          onChangeText={text => this.setState({ pass: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
-        <TouchableHighlight
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={ styles.loginButton }
-          underlayColor='rgba(255,255,255,.8)'
           onPress={ this.loginEmail }>
           <Text style={ styles.loginButtonText }>
             Login
           </Text>
-        </TouchableHighlight>
-        <TouchableHighlight
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={ styles.loginButtonGoogle }
-          underlayColor='rgba(223,74,50,0.8)'
           onPress={ this.loginGoogle }
         >
           <Text style={ styles.loginButtonTextGoogle }>
             Login With Google
           </Text>
-        </TouchableHighlight>
-        <View style={styles.textButtons}>
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,.1)'
-            style={[styles.textButton, {borderRightWidth: 1, borderRightColor: '#fff'}]}
-            onPress={() => {
-              this.props.loginNavigator.change('register');
-            }}
+        </TouchableOpacity>
+        <View style={ styles.textButtons }>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={[ styles.textButton, {
+              borderRightWidth: 1,
+              borderRightColor: '#fff'
+            }]}
+            onPress={ this.goToRegister }
           >
-            <Text style={[styles.textButtonText, ]}>Create An Account</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,.1)'
+            <Text style={ styles.textButtonText }>Create An Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
             style={ styles.textButton }
-            onPress={() => {
-              this.props.loginNavigator.change('forgot');
-            }}
+            onPress={ this.goToForgot }
           >
             <Text style={ styles.textButtonText }>Forgot Password?</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -157,12 +199,13 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 3,
+    paddingTop: constants.width / 4,
     paddingHorizontal: constants.width / 12
   },
   logo: {
     width: 60,
-    height: 60
+    height: 60,
+    marginBottom: 10
   },
   title: {
     alignItems: 'center',
@@ -178,10 +221,17 @@ var styles = StyleSheet.create({
     color: '#666',
     marginBottom: 10
   },
+  errorContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    backgroundColor: '#df4a32',
+    borderRadius: 5,
+    marginBottom: 10
+  },
   errorText: {
     textAlign: 'center',
     color: '#fff',
-    fontWeight: 'bold'
+    fontSize: 17
   },
   loginInput: {
     height: 50,
@@ -241,7 +291,7 @@ var styles = StyleSheet.create({
   },
   textButtonText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 17,
     color: '#eee'
   }
 });

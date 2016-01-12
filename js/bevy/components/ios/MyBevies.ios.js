@@ -133,8 +133,8 @@ var MyBevies = React.createClass({
         <View style={ styles.spinnerContainer }>
           <Spinner
             isVisible={ true }
-            size={ 40 }
-            type={ 'Arc' }
+            size={ 60 }
+            type={ '9CubeGrid' }
             color={ '#2cb673' }
           />
         </View>

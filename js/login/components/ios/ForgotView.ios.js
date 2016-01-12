@@ -1,104 +1,150 @@
 /**
-*    ForgotView.js
-*    description: the forgotten password page on IOS
-*    by Ben
-*/
+ * ForgotView.ios.js
+ * description: the forgotten password page on IOS
+ * @author Ben
+ */
 
 'use strict';
 
-// get modules
 var React = require('react-native');
 var {
   View,
   StyleSheet,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
   Text,
+  Image,
   AlertIOS
 } = React;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var UserActions = require('./../../../user/UserActions');
+var UserStore = require('./../../../user/UserStore');
+var USER = constants.USER;
 
 var ForgotView = React.createClass({
   propTypes: {
-    message: React.PropTypes.string,
-    loginNavigator: React.PropTypes.object
+    loginNavigator: React.PropTypes.object,
+    loginRoute: React.PropTypes.object
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
-      subTitle: 'we can help with that',
+      error: '',
       email: ''
     };
   },
 
-  handleSubmit: function() {
-    fetch(constants.siteurl + '/forgot', {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: this.state.email
-      })
-    })
-    .then((res) => (res.json()))
-    .then((res) => {
-      if(res.object == undefined) {
-        // success
-        AlertIOS.alert('Forgot Password',
-          'Email Sent! Please check your email and go to '
-          + 'the link provided to reset your password.');
-        // clear text field
-        this.setState({
-          email: ''
-        });
-      } else {
-        // error
-        this.setState({
-          subTitle: res.message
-        });
-      }
+  componentDidMount() {
+    UserStore.on(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
+    UserStore.on(USER.RESET_PASSWORD_ERROR, this.onError);
+  },
+  componentWillUnmount() {
+    UserStore.off(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
+    UserStore.off(USER.RESET_PASSWORD_ERROR, this.onError);
+  },
+
+  onSuccess() {
+    // success
+    AlertIOS.alert('Forgot Password',
+      'Email Sent! Please check your email and go to '
+      + 'the link provided to reset your password.');
+    // clear text field
+    this.setState({
+      email: ''
     });
   },
 
-  render: function() {
+  onError(error) {
+    // error
+    this.setState({
+      error: error
+    });
+  },
+
+  goBack() {
+    // blur inputs
+    this.EmailInput.blur();
+    // pop navigator
+    this.props.loginNavigator.pop();
+  },
+
+  submit() {
+    if(_.isEmpty(this.state.email)) {
+      this.setState({
+        error: 'Please enter an email address'
+      });
+      return;
+    }
+
+    UserActions.resetPassword(this.state.email);
+
+    // clear error
+    this.setState({
+      error: ''
+    });
+    // blur inputs
+    this.EmailInput.blur();
+  },
+
+  _renderError() {
+    if(_.isEmpty(this.state.error)) return <View />;
     return (
-      <View style={styles.container}>
-        <View style={styles.title}>
-          <Text style={styles.titleText}>
-            {this.state.subTitle}
+      <View style={ styles.errorContainer }>
+        <Text style={ styles.errorText }>
+          { this.state.error }
+        </Text>
+      </View>
+    );
+  },
+
+  render() {
+    return (
+      <View style={ styles.container }>
+        <Image
+          style={ styles.logo }
+          source={{ uri: constants.siteurl + '/img/logo_100_reversed.png' }}
+        />
+        <View style={ styles.title }>
+          <Text style={ styles.titleText }>
+            Forgot Password?
+          </Text>
+          <Text style={ styles.subTitleText }>
+            We can help with that
           </Text>
         </View>
+        { this._renderError() }
         <TextInput
-          autoCorrect={false}
+          ref={ref => { this.EmailInput = ref; }}
+          autoCorrect={ false }
           autoCapitalize='none'
+          autoFocus={ true }
           placeholder='Email Address'
           keyboardType='email-address'
           placeholderTextColor='rgba(255,255,255,.5)'
-          style={ styles.loginInput }
+          style={ styles.textInput }
           value={ this.state.email }
-          onChangeText={(text) => this.setState({email: text})}
+          onChangeText={text => this.setState({email: text})}
         />
-        <TouchableHighlight
-          style={ styles.loginButton }
-          underlayColor='rgba(44,182,105,0.8)'
-          onPress={ this.handleSubmit }>
-          <Text style={ styles.loginButtonText }>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          style={ styles.sendButton }
+          onPress={ this.submit }>
+          <Text style={ styles.sendButtonText }>
             Send
           </Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          underlayColor='rgba(255,255,255,.5)'
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={ styles.textButton }
-          onPress={() => {
-            this.props.loginNavigator.change('login');
-          }}
+          onPress={ this.goBack }
         >
-          <Text style={ styles.textButtonText }>Back To Login</Text>
-        </TouchableHighlight>
+          <Text style={ styles.textButtonText }>
+            Back To Login
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -113,29 +159,40 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 2,
+    paddingTop: constants.width / 3,
     paddingHorizontal: constants.width / 12
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginBottom: 10
   },
   title: {
     alignItems: 'center',
-    marginBottom: 20
+    marginBottom: 10
   },
   titleText: {
     fontSize: 28,
-    color: '#fff'
+    color: '#fff',
+    marginBottom: 8
   },
-  loginTitle: {
-    textAlign: 'center',
-    fontSize: 17,
-    color: '#666'
+  subTitleText: {
+    fontSize: 18,
+    color: '#FFF'
   },
-  loginSubTitle: {
-    textAlign: 'center',
-    fontSize: 14,
-    color: '#666',
+  errorContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 8,
+    backgroundColor: '#df4a32',
+    borderRadius: 5,
     marginBottom: 10
   },
-  loginInput: {
+  errorText: {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize: 17
+  },
+  textInput: {
     height: 50,
     paddingLeft: 16,
     borderColor: '#fff',
@@ -145,7 +202,7 @@ var styles = StyleSheet.create({
     width: constants.width / 1.2,
     color: '#fff'
   },
-  loginButton: {
+  sendButton: {
     padding: 10,
     backgroundColor: '#fff',
     height: 50,
@@ -157,7 +214,7 @@ var styles = StyleSheet.create({
     marginHorizontal: 20,
     width: constants.width / 1.2
   },
-  loginButtonText: {
+  sendButtonText: {
     fontSize: 17,
     textAlign: 'center',
     color: '#666'
@@ -172,7 +229,7 @@ var styles = StyleSheet.create({
   },
   textButtonText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 17,
     color: '#eee'
   }
 });

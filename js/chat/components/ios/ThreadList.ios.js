@@ -175,20 +175,13 @@ var ThreadList = React.createClass({
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.tabs}>
+          <View style={ styles.tabs }>
             <SegmentedControlIOS
-              style={{
-                backgroundColor: '#2cb673',
-                marginTop: 10,
-                marginHorizontal: 20,
-                flex: 1
-              }}
+              style={ styles.segmentedControl }
               tintColor='#fff'
               values={['Board Chats', 'User Chats']}
-              selectedIndex={tabIndex}
-              onValueChange={(ev) => {
-                this.changeTab(ev);
-              }}
+              selectedIndex={ tabIndex }
+              onValueChange={ ev => { this.changeTab(ev) }}
             />
           </View>
         </View>
@@ -259,6 +252,12 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 48,
     backgroundColor: '#2cb673'
+  },
+  segmentedControl: {
+    backgroundColor: '#2cb673',
+    marginTop: 10,
+    marginHorizontal: 10,
+    flex: 1
   },
   tab: {
     flex: 1,

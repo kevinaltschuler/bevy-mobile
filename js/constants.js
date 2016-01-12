@@ -155,6 +155,7 @@ exports.CHAT = {
   EDIT_THREAD: 'chat_edit_thread',
   START_PM: 'chat_start_pm',
   FETCH_THREADS: 'chat_fetch_threads',
+  DELETE_MESSAGE: 'chat_delete_message',
 
   // events
   FETCHING_THREADS: 'chat_fetching_threads',

@@ -56,7 +56,7 @@ var ThreadItem = React.createClass({
       var ampm = (createDate.getHours() <= 11) ? 'am' : 'pm';
       var hours = (createDate.getHours() > 12)
         ? createDate.getHours() - 12
-        : (createDateDate.getHours() < 11)
+        : (createDate.getHours() < 11)
           ? '0' + (createDate.getHours() + 1)
           : '12';
       var minutes = (createDate.getMinutes() < 10)
