@@ -220,6 +220,7 @@ var Post = React.createClass({
           post={ this.props.post }
           user={ this.props.user }
           mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
         />
         { this._renderPostTitle() }
         { this._renderImageOverlay() }

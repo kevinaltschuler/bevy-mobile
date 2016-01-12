@@ -24,6 +24,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BoardActions = require('./../../../board/BoardActions');
+var PostActions = require('./../../../post/PostActions')
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyView = React.createClass({
@@ -48,6 +49,7 @@ var BevyView = React.createClass({
 
   clearBoard() {
     BoardActions.clearBoard();
+    PostActions.fetch(this.props.activeBevy._id, null);
   },
 
   toggleSideMenu() {
@@ -109,6 +111,7 @@ var BevyView = React.createClass({
   },
 
   render() {
+    console.log('active board', this.props.activeBoard);
     return (
       <View style={ styles.container }>
         <BevyNavbar

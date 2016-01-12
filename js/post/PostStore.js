@@ -24,6 +24,7 @@ var Posts = require('./PostCollection');
 
 var constants = require('./../constants');
 var BEVY = constants.BEVY;
+var BOARD = constants.BOARD;
 var POST = constants.POST;
 var CHAT = constants.CHAT;
 var APP = constants.APP;
@@ -49,7 +50,6 @@ _.extend(PostStore, {
   // these are created from BevyActions.js
   handleDispatch(payload) {
     switch(payload.actionType) {
-
       case APP.LOAD:
         break;
 
@@ -277,11 +277,40 @@ _.extend(PostStore, {
         var bevy_id = payload.bevy_id;
         this.posts.comparator = this.sortByNew;
         this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
+
+        console.log('fetching posts from...', this.posts.url);
+
+        this.posts.reset([]);
+        this.trigger(POST.LOADING);
+        this.trigger(POST.CHANGE_ALL);
+
         this.posts.fetch({
+          reset: true,
           success: function(collection, response, options) {
             this.posts.sort();
-            this.trigger(POST.CHANGE_ALL);
             this.trigger(POST.LOADED);
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
+      case BOARD.SWITCH:
+        var board_id = payload.board_id;
+        this.posts.comparator = this.sortByNew;
+        this.posts.url = constants.apiurl + '/boards/' + board_id + '/posts';
+
+        console.log('fetching posts from...', this.posts.url);
+
+        this.posts.reset([]);
+        this.trigger(POST.LOADING);
+        this.trigger(POST.CHANGE_ALL);
+
+        this.posts.fetch({
+          reset: true,
+          success: function(collection, response, options) {
+            this.posts.sort();
+            this.trigger(POST.LOADED);
+            this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
         break;

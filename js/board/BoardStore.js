@@ -79,24 +79,19 @@ _.extend(BoardStore, {
         this.active.url = constants.apiurl + '/boards/' + board_id;
         this.active.fetch({
           success: function(model, response, options) {
-            this.active = model;
             this.trigger(BOARD.CHANGE_ALL);
           }.bind(this)
         });
-
-        break;  
+        break;
 
       case BOARD.SWITCH:
         var board_id = payload.board_id;
-        console.log(board_id);
         this.active.url = constants.apiurl + '/boards/' + board_id;
         this.active.fetch({
           success: function(model, response, options) {
-            console.log(model);
-            this.active = model;
             this.trigger(BOARD.CHANGE_ALL);
           }.bind(this)
-        })
+        });
         break;
 
       case BOARD.UPDATE:

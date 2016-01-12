@@ -42,27 +42,18 @@ var ProfileView = React.createClass({
 
   componentDidMount() {
     // get user posts
-    PostActions.fetch(
-      null,
-      this.props.profileUser._id
-    );
+    PostActions.fetch(null, this.props.profileUser._id);
   },
 
   componentWillUnmount() {
     // reset posts
-    PostActions.fetch(
-      this.props.activeBevy._id,
-      null
-    );
+    PostActions.fetch(this.props.activeBevy._id, null);
   },
 
   goBack() {
     this.props.mainNavigator.pop();
     // reset posts
-    PostActions.fetch(
-      this.props.activeBevy._id,
-      null
-    );
+    PostActions.fetch(this.props.activeBevy._id, null);
   },
 
   render() {
