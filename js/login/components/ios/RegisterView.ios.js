@@ -88,9 +88,15 @@ var RegisterView = React.createClass({
       return;
     }
 
+    // clear error
     this.setState({
       error: ''
     });
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+    this.EmailInput.blur();
+    // send action
     UserActions.register(this.state.username, this.state.pass, this.state.email)
   },
 
@@ -132,6 +138,13 @@ var RegisterView = React.createClass({
   },
 
   goBack() {
+    // clear state
+    this.setState(this.getInitialState());
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+    this.EmailInput.blur();
+    // pop navigator
     this.props.loginNavigator.pop();
   },
 
@@ -203,7 +216,8 @@ var RegisterView = React.createClass({
       <View style={ styles.container }>
         <Image
           style={ styles.logo }
-          source={{ uri: constants.siteurl + '/img/logo_100_reversed.png' }}/>
+          source={{ uri: constants.siteurl + '/img/logo_100_reversed.png' }}
+        />
         <View style={ styles.title }>
           <Text style={ styles.titleText }>
             Register
@@ -244,6 +258,7 @@ var RegisterView = React.createClass({
             autoCapitalize='none'
             placeholder='Email (Optional)'
             placeholderTextColor='rgba(255,255,255,.6)'
+            keyboardType='email-address'
             style={ styles.textInput }
             value={ this.state.email }
             onChangeText={text => this.setState({ email: text })}
