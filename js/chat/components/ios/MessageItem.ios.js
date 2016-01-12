@@ -2,6 +2,10 @@
  * MessageItem.ios.js
  * @author albert
  * @author kevin
+ *
+ * using inline styles here because they rely so much on
+ * its props and state
+ *
  * @flow
  */
 
@@ -13,6 +17,8 @@ var {
   Text,
   View,
   Image,
+  ActionSheetIOS,
+  Clipboard,
   TouchableHighlight,
   TouchableOpacity
 } = React;
@@ -20,14 +26,17 @@ var Collapsible = require('react-native-collapsible');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var ChatActions = require('./../../../chat/ChatActions');
 
 var MessageItem = React.createClass({
   propTypes: {
     message: React.PropTypes.object,
     user: React.PropTypes.object,
     hidePic: React.PropTypes.bool,
-    showName: React.PropTypes.bool
+    showName: React.PropTypes.bool,
+    mainNavigator: React.PropTypes.object
   },
 
   getDefaultProps() {
@@ -68,6 +77,46 @@ var MessageItem = React.createClass({
 
   toggleCollapsed() {
     this.setState({ collapsed: !this.state.collapsed });
+  },
+
+  longPress() {
+    var options = ['Cancel', 'Copy Message'];
+    if(this.state.isMe) {
+      options.push('Delete Message');
+    } else {
+      options.push('View ' + this.props.message.author.displayName + "'s Profile");
+    }
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: options,
+      cancelButtonIndex: 0
+    }, buttonIndex => {
+      if(buttonIndex == 1) {
+        this.copyMessage();
+      }
+      if(this.state.isMe) {
+        if(buttonIndex == 2) {
+          this.deleteMessage();
+        }
+      } else {
+        if(buttonIndex == 2) {
+          this.goToAuthorProfile();
+        }
+      }
+    })
+  },
+
+  copyMessage() {
+    Clipboard.setString(this.props.message.body);
+  },
+
+  deleteMessage() {
+    ChatActions.deleteMessage(this.props.message._id);
+  },
+
+  goToAuthorProfile() {
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = this.props.message.author;
+    this.props.mainNavigator.push(route);
   },
 
   _renderCreated() {
@@ -112,7 +161,12 @@ var MessageItem = React.createClass({
     return (
       <Image
         source={{ uri: authorImageURL }}
-        style={ styles.authorImage }
+        style={{
+          width: 50,
+          height: 50,
+          borderRadius: 25,
+          backgroundColor: 'rgba(0,0,0,0)'
+        }}
       />
     );
   },
@@ -121,9 +175,14 @@ var MessageItem = React.createClass({
     if(!this.props.showName) return <View />;
     return (
       <Text
-        style={[ styles.authorName, {
+        style={{
+          width: constants.width,
+          flexDirection: 'column',
           textAlign: (this.state.isMe) ? 'right' : 'left',
-        }]}
+          paddingHorizontal: 60,
+          color: 'rgba(0,0,0,.3)',
+          fontSize: 15
+        }}
       >
         { (this.state.isMe) ? 'Me' : this.props.message.author.displayName }
       </Text>
@@ -135,29 +194,48 @@ var MessageItem = React.createClass({
       <TouchableOpacity
         activeOpacity={ .5 }
         onPress={ this.toggleCollapsed }
+        delayLongPress={ 750 }
+        onLongPress={ this.longPress }
       >
-        <View style={[ styles.container, {
+        <View style={{
+          flexDirection: 'column',
           alignItems: (this.state.isMe) ? 'flex-end' : 'flex-start',
           justifyContent: (this.state.isMe) ? 'flex-end' : 'flex-start',
-        }]}>
+          backgroundColor: 'rgba(0,0,0,0)'
+        }}>
           { this._renderName() }
-          <View style={[ styles.messageContainer, {
+          <View style={{
+            flexDirection: 'row',
             justifyContent: (this.state.isMe) ? 'flex-end' : 'flex-start',
+            alignItems: 'center',
+            paddingBottom: 0,
+            borderRadius: 2,
+            backgroundColor: 'rgba(0,0,0,0)',
+            width: constants.width - 80,
             marginTop: (this.props.hidePic) ? 8 : 0
-          }]}>
+          }}>
             { (this.state.isMe) ? <View /> : this._renderImage() }
             { (this.state.isMe) ? <View /> : <View style={{ width: 10 }} /> }
             <View
-              style={[ styles.messageBody, {
+              style={{
+                backgroundColor: '#rgba(0,0,0,.2)',
+                paddingTop: 5,
+                paddingBottom: 5,
+                paddingLeft: 8,
+                paddingRight: 8,
+                borderRadius: 14,
+                flexWrap: 'wrap',
                 flex: (this.state.wrap) ? 1 : 0,
                 backgroundColor: (this.state.isMe) ? '#2CB673' : '#EEE'
-              }]}
+              }}
               ref={ref => { this.MessageBody = ref; }}
             >
-              <Text style={[ styles.messageBodyText, {
+              <Text style={{
                 textAlign: (this.state.isMe) ? 'right' : 'left',
                 color: (this.state.isMe) ? '#fff' : '#333',
-              }]}>
+                flex: 1,
+                fontSize: 17
+              }}>
                 { this.props.message.body}
               </Text>
             </View>
@@ -165,10 +243,14 @@ var MessageItem = React.createClass({
             { (this.state.isMe) ? this._renderImage() : <View /> }
           </View>
           <Collapsible collapsed={ this.state.collapsed } >
-            <Text style={[ styles.collapseText, {
+            <Text style={{
+              fontSize: 15,
+              color: '#888',
+              marginBottom: 5,
+              marginTop: 5,
               marginRight: (this.state.isMe) ? 50 : 0,
               marginLeft: (this.state.isMe) ? 0 : 50
-            }]}>
+            }}>
               {(this.state.isMe) ? 'Me' : this.props.message.author.displayName }
               &nbsp;·&nbsp;
               { this._renderCreated() }
@@ -181,50 +263,6 @@ var MessageItem = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  authorName: {
-    width: constants.width,
-    flexDirection: 'column',
-    paddingHorizontal: 60,
-    color: 'rgba(0,0,0,.3)',
-    fontSize: 15
-  },
-  authorImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: 'rgba(0,0,0,0)'
-  },
-  messageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingBottom: 0,
-    borderRadius: 2,
-    backgroundColor: 'rgba(0,0,0,0)',
-    width: constants.width - 80,
-  },
-  messageBody: {
-    backgroundColor: '#rgba(0,0,0,.2)',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 14,
-    flexWrap: 'wrap'
-  },
-  messageBodyText: {
-    flex: 1,
-    fontSize: 17
-  },
-  collapseText: {
-    fontSize: 15,
-    color: '#888',
-    marginBottom: 5,
-    marginTop: 5,
-  },
 });
 
 module.exports = MessageItem;

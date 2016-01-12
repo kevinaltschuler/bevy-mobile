@@ -40,6 +40,7 @@ var MessageView = React.createClass({
   propTypes: {
     chatRoute: React.PropTypes.object,
     chatNavigator: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
     allThreads: React.PropTypes.array,
     activeThread: React.PropTypes.object,
     user: React.PropTypes.object
@@ -297,6 +298,7 @@ var MessageView = React.createClass({
         user={ this.props.user }
         hidePic={ hidePic }
         showName={ showName }
+        mainNavigator={ this.props.mainNavigator }
       />
     )
   },
