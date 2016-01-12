@@ -75,15 +75,15 @@ var BevyView = React.createClass({
   _renderMenuButton() {
     return (
       <TouchableOpacity
-        underlayColor={0.5}
+        underlayColor={ 0.5 }
         style={ styles.sideMenuButton }
         onPress={ this.toggleSideMenu }
       >
-          <Icon
-            name='menu'
-            size={ 30 }
-            color='#FFF'
-          />
+        <Icon
+          name='menu'
+          size={ 30 }
+          color='#FFF'
+        />
       </TouchableOpacity>
     );
   },

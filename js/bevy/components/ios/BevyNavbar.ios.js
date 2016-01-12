@@ -13,7 +13,8 @@ var {
   TextInput,
   Image,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
@@ -47,7 +48,7 @@ var BevyNavbar = React.createClass({
       center: 'Default',
       left: <View />,
       right: <View />,
-      bottomHeight: 60,
+      bottomHeight: 78,
       fontColor: '#FFF'
     };
   },
@@ -77,77 +78,73 @@ var BevyNavbar = React.createClass({
     return this.props.right;
   },
 
-  _renderBottom() {
-    var bevy = this.props.activeBevy;
-    var image_url = (_.isEmpty(bevy.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(bevy.image, constants.width, 100).url;
-
-    var publicPrivateIcon = (bevy.settings.privacy == 'Private')
-      ? 'lock'
-      : 'public';
-
-    return (
-      <Image
-        source={{ uri: image_url }}
-        style={[ styles.imageBottom, {
-          height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
-        }]}
-      >
-        <View style={[ styles.imageWrapper, {
-          height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
-        }]}>
-          <View style={[ styles.bevyTop, {
-            paddingTop: StatusBarSizeIOS.currentHeight
-          }]}>
-            <View style={ styles.left }>
-              { this._renderLeft() }
-            </View>
-            <View style={ styles.center }>
-              { this._renderCenter() }
-            </View>
-            <View style={ styles.right }>
-              { this._renderRight() }
-            </View>
-          </View>
-          <View style={ styles.bevyBottom }>
-            <View style={ styles.detailItem }>
-              <Icon
-                name={ publicPrivateIcon }
-                size={ 18 }
-                color='#fff'
-              />
-              <Text style={ styles.itemText }>
-                { bevy.settings.privacy }
-              </Text>
-            </View>
-            <View style={ styles.detailItem }>
-              <Icon name='group' size={18} color='#fff'/>
-              <Text style={styles.itemText}>
-                { bevy.subCount + ' ' + ((bevy.subCount == 1)
-                  ? 'Subscriber' : 'Subscribers') }
-              </Text>
-            </View>
-            <View style={ styles.detailItem }>
-              <Icon name='person' size={18} color='#fff'/>
-              <Text style={styles.itemText}>
-                { bevy.admins.length + ' ' + ((bevy.admins.length == 1)
-                  ? 'Admin' : 'Admins') }
-              </Text>
-            </View>
-          </View>
-        </View>
-      </Image>
-    );
-  },
-
   render() {
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>;
     }
+
+    var image_url = (_.isEmpty(this.props.activeBevy.image))
+      ? constants.siteurl + '/img/default_group_img.png'
+      : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
+
+    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
+      ? 'lock'
+      : 'public';
+
     return (
       <View style={ this.props.styleParent }>
-        { this._renderBottom() }
+        <Image
+          source={{ uri: image_url }}
+          style={[ styles.imageBottom, {
+            height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+          }]}
+        >
+          <View style={[ styles.imageWrapper, {
+            height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+          }]}>
+            <View style={[ styles.bevyTop, {
+              paddingTop: StatusBarSizeIOS.currentHeight
+            }]}>
+              <View style={ styles.left }>
+                { this._renderLeft() }
+              </View>
+              <View style={ styles.center }>
+                { this._renderCenter() }
+              </View>
+              <View style={ styles.right }>
+                { this._renderRight() }
+              </View>
+            </View>
+            <View style={ styles.bevyBottom }>
+              <View style={ styles.detailItem }>
+                <Icon
+                  name={ publicPrivateIcon }
+                  size={ 18 }
+                  color='#fff'
+                />
+                <Text style={ styles.itemText }>
+                  { this.props.activeBevy.settings.privacy }
+                </Text>
+              </View>
+              <View style={ styles.detailItem }>
+                <Icon name='group' size={18} color='#fff'/>
+                <Text style={styles.itemText}>
+                  { this.props.activeBevy.subCount + ' '
+                    + ((this.props.activeBevy.subCount == 1)
+                    ? 'Subscriber' : 'Subscribers') }
+                </Text>
+              </View>
+              <View style={ styles.detailItem }>
+                <Icon name='person' size={18} color='#fff'/>
+                <Text style={styles.itemText}>
+                  { this.props.activeBevy.admins.length + ' '
+                    + ((this.props.activeBevy.admins.length == 1)
+                    ? 'Admin' : 'Admins') }
+                </Text>
+              </View>
+            </View>
+          </View>
+        </Image>
       </View>
     );
   }
@@ -190,12 +187,12 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 48
+    height: 60
   },
   bevyBottom: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    height: 30,
     width: constants.width,
     justifyContent: 'center'
   },
