@@ -15,6 +15,7 @@ var {
   Image,
   StyleSheet,
   TouchableHighlight,
+  TouchableOpacity,
   DeviceEventEmitter,
   NativeModules
 } = React;
@@ -35,6 +36,29 @@ var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var FILE = constants.FILE;
 var PostActions = require('./../../../post/PostActions');
 
+var hintTexts = [
+  "What's on your mind?",
+  "What's up?",
+  "How's it going?",
+  "What's new?",
+  "How are you doing today?",
+  "Share your thoughts",
+  "Drop some knowledge buddy",
+  "Drop a line",
+  "What's good?",
+  "What do you have to say?",
+  "Spit a verse",
+  "What would your mother think?",
+  "Tell me about yourself",
+  "What are you thinking about?",
+  "Gimme a bar",
+  "Lets talk about our feelings",
+  "Tell me how you really feel",
+  "How was last night?",
+  "What's gucci?",
+  "Anything worth sharing?",
+];
+
 var InputView = React.createClass({
   propTypes: {
     user: React.PropTypes.object
@@ -44,7 +68,7 @@ var InputView = React.createClass({
     return {
       keyboardSpace: 0,
       title: '',
-      placeholderText: 'Drop a Line',
+      placeholderText: hintTexts[Math.floor(Math.random() * hintTexts.length)],
       images: [],
     };
   },
@@ -230,8 +254,8 @@ var InputView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -240,12 +264,12 @@ var InputView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               New Post
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.submit }
             >
@@ -254,7 +278,7 @@ var InputView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView
@@ -421,17 +445,18 @@ var styles = StyleSheet.create({
   input: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     flex: 1,
     marginBottom: 20,
     marginTop: 0,
     backgroundColor: '#fff'
   },
   inputProfileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15
   },
   textInput: {
     flex: 2,

@@ -67,7 +67,7 @@ var PostActions = {
 	vote(post_id) {
 		Dispatcher.dispatch({
 			actionType: POST.VOTE,
-			post_id: (post_id == undefined) ? '' : post_id
+			post_id: post_id
 		});
 	},
 

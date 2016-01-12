@@ -22,18 +22,48 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo')
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var BoardActions = require('./../../../board/BoardActions');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var PostHeader = React.createClass({
   propTypes: {
     post: React.PropTypes.object,
     user: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object
   },
 
   goToAuthorProfile() {
+    if(this.props.mainRoute.name == routes.MAIN.PROFILE.name
+      && this.props.mainRoute.profileUser._id == this.props.post.author._id) {
+      // we're already viewing the author's profile, do nothing
+      return;
+    }
+    
     var route = routes.MAIN.PROFILE;
     route.profileUser = this.props.post.author;
     this.props.mainNavigator.push(route);
+  },
+
+  goToPostBoard() {
+    //console.log(this.props.mainNavigator.getCurrentRoutes());
+
+    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV.name) {
+      // already in bevy view, do nothing
+    } else if (_.findWhere(this.props.mainNavigator.getCurrentRoutes(),
+      { name: routes.MAIN.BEVYNAV.name }) != undefined) {
+      // the bevy nav route is somewhere back in the route stack
+      // so lets pop to it
+      this.props.mainNavigator.popToRoute(routes.MAIN.BEVYNAV);
+    } else {
+      // the route isn't in the history, so push to it
+      this.props.mainNavigator.push(routes.MAIN.BEVYNAV);
+    }
+
+    // switch bevies
+    BevyActions.switchBevy(this.props.post.board.parent);
+    // switch boards
+    BoardActions.switchBoard(this.props.post.board._id);
   },
 
   showProfileActionSheet() {
@@ -46,6 +76,20 @@ var PostHeader = React.createClass({
     }, buttonIndex => {
       if(buttonIndex == 0) {
         this.goToAuthorProfile();
+      }
+    });
+  },
+
+  showBoardActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: [
+        'View Board "' + this.props.post.board.name + '"',
+        'Cancel'
+      ],
+      cancelButtonIndex: 1
+    }, buttonIndex => {
+      if(buttonIndex == 0) {
+        this.goToPostBoard()
       }
     });
   },
@@ -68,24 +112,34 @@ var PostHeader = React.createClass({
         </TouchableOpacity>
         <View style={ styles.detailsRow }>
           <View style={ styles.titleContainer }>
-            <Text
-              numberOfLines={ 1 }
-              style={ styles.titleText }
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              onPress={ this.showProfileActionSheet }
             >
-              { this.props.post.author.displayName }
-            </Text>
+              <Text
+                numberOfLines={ 1 }
+                style={ styles.titleText }
+              >
+                { this.props.post.author.displayName }
+              </Text>
+            </TouchableOpacity>
             <Icon
               name='chevron-right'
               style={{ marginTop: 2 }}
               color='#333'
               size={ 16 }
             />
-            <Text
-              numberOfLines={ 1 }
-              style={ styles.titleText }
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              onPress={ this.showBoardActionSheet }
             >
-              { this.props.post.board.name }
-            </Text>
+              <Text
+                numberOfLines={ 1 }
+                style={ styles.titleText }
+              >
+                { this.props.post.board.name }
+              </Text>
+            </TouchableOpacity>
           </View>
           <Text style={ styles.subTitleText }>
             { timeAgo(Date.parse(this.props.post.created)) }

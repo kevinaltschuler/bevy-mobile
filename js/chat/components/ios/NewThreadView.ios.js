@@ -267,8 +267,8 @@ var NewThreadView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -277,12 +277,12 @@ var NewThreadView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               New Chat
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.onSubmit }
             >
@@ -291,7 +291,7 @@ var NewThreadView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={ styles.toBar }>

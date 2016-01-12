@@ -318,8 +318,8 @@ var MessageView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -328,12 +328,12 @@ var MessageView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               { ChatStore.getThreadName(this.props.activeThread._id) }
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goToSettings }
             >
@@ -342,7 +342,7 @@ var MessageView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
         <ListView
@@ -385,10 +385,13 @@ var MessageView = React.createClass({
           <TouchableOpacity
             activeOpacity={.5}
             onPress={ this.onSubmitEditing }
+            style={ styles.sendButton }
           >
-            <Text style={ styles.sendMessageButton }>
-              Send
-            </Text>
+            <Icon
+              name='send'
+              size={ 30 }
+              color='#2CB673'
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -466,17 +469,14 @@ var styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 10
   },
-  sendMessageButton: {
+  sendButton: {
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 8,
     paddingLeft: 12,
     paddingRight: 12,
-    paddingVertical: 12,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2cb673'
+    paddingVertical: 12
   }
 })
 

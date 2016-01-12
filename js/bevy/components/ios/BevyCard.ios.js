@@ -14,6 +14,7 @@ var {
   Image,
   ListView,
   TouchableHighlight,
+  TouchableOpacity,
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -51,8 +52,8 @@ var BevyCard = React.createClass({
     }
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(255,255,255,.5)'
+      <TouchableOpacity
+        activeOpacity={ 0.7 }
         style={ styles.container }
         onPress={ this.goToBevy }
       >
@@ -85,7 +86,7 @@ var BevyCard = React.createClass({
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

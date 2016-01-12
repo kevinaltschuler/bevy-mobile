@@ -99,8 +99,8 @@ var MyBevies = React.createClass({
   _renderNewBevyCard() {
     if(this.state.loading) return <View />;
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.goToNewBevy }
         style={ styles.newBevyCard }
       >
@@ -123,7 +123,7 @@ var MyBevies = React.createClass({
             Create a New Bevy
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -170,8 +170,8 @@ var MyBevies = React.createClass({
             <Text style={ styles.title }>
               My Bevies
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goToNewBevy }
             >
@@ -180,7 +180,7 @@ var MyBevies = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
 

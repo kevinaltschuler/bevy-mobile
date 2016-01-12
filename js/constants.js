@@ -134,7 +134,7 @@ exports.BEVY = {
 };
 
 exports.BOARD = {
-  SWITCH_BOARD: 'board_switch_board',
+  SWITCH: 'board_switch',
   CLEAR: 'board_clear',
   LEAVE: 'board_leave',
   JOIN: 'board_join',

@@ -15,6 +15,7 @@ var {
   View,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -78,13 +79,13 @@ var SettingsItem = React.createClass({
       return this._renderBody();
     }
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.1)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         style={[ styles.settingItemContainer ]}
         onPress={ this.onPress }
       >
         { this._renderBody() }
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

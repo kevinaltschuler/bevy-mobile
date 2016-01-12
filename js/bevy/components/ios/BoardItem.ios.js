@@ -13,7 +13,8 @@ var {
   Text,
   Image,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
@@ -47,8 +48,8 @@ var BoardItem = React.createClass({
     var typeIcon = (board.type == 'announcement') ? 'flag' : 'forum';
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(255,255,255,.2)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.switchBoard }
       >
         <View style={ styles.boardItem }>
@@ -84,7 +85,7 @@ var BoardItem = React.createClass({
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     )
   }
 });

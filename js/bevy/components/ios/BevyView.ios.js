@@ -24,6 +24,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BoardActions = require('./../../../board/BoardActions');
+var PostActions = require('./../../../post/PostActions')
 var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyView = React.createClass({
@@ -48,6 +49,7 @@ var BevyView = React.createClass({
 
   clearBoard() {
     BoardActions.clearBoard();
+    PostActions.fetch(this.props.activeBevy._id, null);
   },
 
   toggleSideMenu() {
@@ -73,15 +75,15 @@ var BevyView = React.createClass({
   _renderMenuButton() {
     return (
       <TouchableOpacity
-        underlayColor={0.5}
+        underlayColor={ 0.5 }
         style={ styles.sideMenuButton }
         onPress={ this.toggleSideMenu }
       >
-          <Icon
-            name='menu'
-            size={ 30 }
-            color='#FFF'
-          />
+        <Icon
+          name='menu'
+          size={ 30 }
+          color='#FFF'
+        />
       </TouchableOpacity>
     );
   },

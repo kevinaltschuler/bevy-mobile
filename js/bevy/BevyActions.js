@@ -18,7 +18,6 @@ var getSlug = require('speakingurl');
 var _ = require('underscore');
 
 var BevyActions = {
-
   fetch(user) {
     Dispatcher.dispatch({
       actionType: BEVY.FETCH,
@@ -173,7 +172,7 @@ var BevyActions = {
       actionType: INVITE.ACCEPT_REQUEST,
       invite_id: (invite_id == undefined) ? null : invite_id
     });
-  }, 
+  },
 };
 
 module.exports = BevyActions;

@@ -389,20 +389,22 @@ _.extend(BevyStore, {
         });
         this.trigger(BEVY.CHANGE_ALL);
         break;
-      case BOARD.SWITCH_BOARD:
+
+      case BOARD.SWITCH:
         var board_id = payload.board_id;
         this.activeBoard.url = constants.apiurl + '/boards/' + board_id;
         this.activeBoard.fetch({
           success: function(model, response, options) {
-            this.activeBoard = model;
             this.trigger(BOARD.CHANGE_ALL);
           }.bind(this)
-        })
+        });
         break;
+
       case BOARD.CLEAR:
         this.activeBoard = new Board;
         this.trigger(BOARD.CHANGE_ALL);
         break;
+        
       case BOARD.CREATE:
         var name = payload.name;
         var description = payload.description;

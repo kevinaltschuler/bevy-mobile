@@ -1,5 +1,5 @@
 /**
- * ThreadItem.ios.js
+ * ThreadList.ios.js
  * @author albert
  * @author kevin
  * @flow
@@ -14,6 +14,7 @@ var {
   Text,
   StyleSheet,
   TouchableHighlight,
+  TouchableOpacity,
   ScrollView,
   SegmentedControlIOS
 } = React;
@@ -96,7 +97,6 @@ var ThreadList = React.createClass({
   },
 
   renderThreadRow(thread) {
-
     return (
       <ThreadItem
         key={ 'threadItem:' + thread._id }
@@ -163,8 +163,8 @@ var ThreadList = React.createClass({
             <Text style={ styles.title }>
               Chat
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.newThreadButton }
               onPress={ this.goToNewThread }
             >
@@ -173,7 +173,7 @@ var ThreadList = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
           <View style={styles.tabs}>
             <SegmentedControlIOS

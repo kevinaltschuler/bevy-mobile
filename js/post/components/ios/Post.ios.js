@@ -18,9 +18,9 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
-var PostActionList = require('./PostActionList.ios.js');
-var Collapsible = require('react-native-collapsible');
 var PostHeader = require('./PostHeader.ios.js');
+var PostFooter = require('./PostFooter.ios.js');
+var PostImage = require('./PostImage.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -49,9 +49,6 @@ var Post = React.createClass({
   getInitialState() {
     return {
       post: this.props.post,
-      overlayVisible: false,
-      voted: this.props.post.voted,
-      collapsed: true,
       editTitle: this.props.post.title
     };
   },
@@ -72,24 +69,6 @@ var Post = React.createClass({
     this.setState({
       post: nextProps.post
     });
-  },
-
-  countVotes: function() {
-    var sum = 0;
-    this.state.post.votes.forEach(function(vote) {
-      sum += vote.score;
-    });
-    return sum;
-  },
-
-  goToCommentView() {
-    // go to comment view
-    // return if we're already in comment view
-    if(this.props.inCommentView) return;
-
-    var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = this.state.post._id;
-    this.props.mainNavigator.push(commentRoute);
   },
 
   onEdit() {
@@ -167,134 +146,28 @@ var Post = React.createClass({
     );
   },
 
-  _renderImageOverlay() {
-    if(this.state.post.images.length <= 0) return null;
-    return (
-      <ImageOverlay
-        images={ this.state.post.images }
-        isVisible={ this.state.overlayVisible }
-        post={ this.state.post }
-      />
-    );
-  },
-
-  _renderPostImage() {
-    if(_.isEmpty(this.state.post.images)) {
-      return <View />;
-    }
-    var imageCount = this.state.post.images.length;
-    var imageCountText = (imageCount > 1)
-    ? (
-      <Text style={ styles.postImageCountText }>
-        + { imageCount - 1 } more
-      </Text>
-    )
-    : null;
-
-    return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.1)'
-        onPress={() => {
-          this.setState({
-            overlayVisible: true
-          });
-        }}
-      >
-        <Image
-          style={ styles.postImage }
-          source={{ uri: this.state.post.images[0].path }}
-          resizeMode='cover'
-        >
-          { imageCountText }
-        </Image>
-      </TouchableHighlight>
-    );
-  },
-
   render() {
     var post = this.state.post;
 
     return (
       <View style={styles.postCard}>
         <PostHeader
-          post={ this.props.post }
+          post={ this.state.post }
           user={ this.props.user }
           mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
         />
         { this._renderPostTitle() }
-        { this._renderImageOverlay() }
-        { this._renderPostImage() }
-        <View style={ styles.postActionsRow }>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={() => {
-              PostActions.vote(post._id);
-              this.setState({
-                voted: !this.state.voted,
-                overlayVisible: false
-              });
-            }}
-          >
-            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-              <Text style={ styles.pointCountText }>
-                { this.countVotes() }
-              </Text>
-              <Icon
-                name={ 'thumb-up' }
-                size={ 20 }
-                color={ (this.state.voted) ? '#2cb673' : '#rgba(0,0,0,.35)' }
-                style={styles.actionIcon}
-              />
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 2 } ]}
-            onPress={ this.goToCommentView }
-          >
-            <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-              <Text style={ styles.commentCountText }>
-                { post.comments.length }
-              </Text>
-              <Icon
-                name='chat-bubble'
-                size={20}
-                color='rgba(0,0,0,.3)'
-                style={styles.actionIcon}
-              />
-            </View>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
-            style={[ styles.actionTouchable, { flex: 1 } ]}
-            onPress={() => {
-              this.setState({
-                collapsed: !this.state.collapsed
-              })
-            }}
-          >
-            <Icon
-              name='more-horiz'
-              size={20}
-              color='rgba(0,0,0,.3)'
-              style={styles.actionIcon}
-            />
-          </TouchableHighlight>
-        </View>
-        <Collapsible collapsed={this.state.collapsed} >
-          <PostActionList
-            post={ this.state.post }
-            { ...this.props }
-            user={this.props.user}
-            onEdit={this.onEdit}
-            toggleCollapsed={() => {
-              this.setState({
-                collapsed: !this.state.collapsed
-              })
-            }}
-          />
-        </Collapsible>
+        <PostImage
+          post={ this.state.post }
+        />
+        <PostFooter
+          post={ this.state.post }
+          user={ this.props.user }
+          inCommentView={ this.props.inCommentView }
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
+        />
       </View>
     );
   },
@@ -325,47 +198,7 @@ var styles = StyleSheet.create({
     fontSize: 17,
     color: '#666'
   },
-  postImage: {
-    height: 75,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end'
-  },
-  postImageCountText: {
-    marginTop: 5,
-    marginRight: 10,
-    backgroundColor: 'rgba(0,0,0,0)',
-    color: '#eee',
-    fontSize: 17
-  },
-  postActionsRow: {
-    height: 36,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#eee'
-  },
-  pointCountText: {
-    color: '#757d83',
-    fontSize: 15,
-    marginRight: 10
-  },
-  commentCountText: {
-    color: '#757d83',
-    fontSize: 15,
-    marginRight: 10
-  },
-  actionTouchable: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 36
-  },
-  actionIcon: {
-    width: 20,
-    height: 20
-  },
+
   cancelButton: {
     padding: 5,
     borderRadius: 4,

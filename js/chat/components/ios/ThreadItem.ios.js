@@ -1,21 +1,22 @@
 /**
- * ChatItem.js
+ * ThreadItem.ios.js
  * kevin made this
  * max is a weiner
+ * @author kevin
+ * @author albert
+ * @flow
  */
+
 'use strict';
 
 var React = require('react-native');
 var {
-  AppRegistry,
   StyleSheet,
-  TabBarIOS,
   Text,
   View,
-  NavigatorIOS,
-  SegmentedControlIOS,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 var ThreadImage = require('./ThreadImage.ios.js');
 
@@ -90,8 +91,8 @@ var ThreadItem = React.createClass({
 
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,.2)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.goToMessageView }
       >
         <View style={ styles.container } >
@@ -114,7 +115,7 @@ var ThreadItem = React.createClass({
             </Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

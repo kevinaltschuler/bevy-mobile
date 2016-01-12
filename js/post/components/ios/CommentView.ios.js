@@ -300,19 +300,20 @@ var CommentView = React.createClass({
       );
     }
     return (
-      <View>
-        <ScrollView style={ styles.scrollView }>
-          { this._renderPost() }
-          <View style={ styles.commentsCard }>
-            <CommentList
-              comments={ this.state.comments }
-              onReply={ this.onReply }
-              mainNavigator={ this.props.mainNavigator }
-            />
-            { this._renderNoCommentsText() }
-          </View>
-        </ScrollView>
-      </View>
+      <ScrollView style={ styles.scrollView }>
+        { this._renderPost() }
+        <Text style={ styles.commentsTitle }>
+          Comments
+        </Text>
+        <View style={ styles.commentsCard }>
+          <CommentList
+            comments={ this.state.comments }
+            onReply={ this.onReply }
+            mainNavigator={ this.props.mainNavigator }
+          />
+          { this._renderNoCommentsText() }
+        </View>
+      </ScrollView>
     );
   },
 
@@ -325,8 +326,8 @@ var CommentView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -335,7 +336,7 @@ var CommentView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               Post
             </Text>
@@ -388,17 +389,24 @@ var styles = StyleSheet.create({
   scrollView: {
     flex: 1
   },
+  commentsTitle: {
+    fontSize: 17,
+    color: '#AAA',
+    marginTop: 5,
+    marginLeft: 10
+  },
   commentsCard: {
     flexDirection: 'column',
-    margin: 10,
-    paddingTop: 8,
-    paddingBottom: 8,
-    backgroundColor: 'white',
-    borderRadius: 2,
+    marginTop: 5,
+    marginBottom: 10,
+    backgroundColor: 'white'
   },
 
   noCommentsText: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginVertical: 10,
+    fontSize: 17,
+    color: '#888'
   },
 
   reply: {

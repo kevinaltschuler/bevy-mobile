@@ -11,6 +11,7 @@ var React = require('react-native');
 var {
   View,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   Text,
   StyleSheet,
@@ -124,10 +125,10 @@ var BevyActionButtons = React.createClass({
         loop={ false }
       >
         <View style={ styles.slide }>
-          <TouchableHighlight
+          <TouchableOpacity
             style={ styles.actionWrapper }
             onPress={ this.showActionSheet }
-            underlayColor='rgba(0,0,0,.1)'
+            activeOpacity={0.5}
           >
             <View style={ styles.action }>
                 <Icon
@@ -139,10 +140,10 @@ var BevyActionButtons = React.createClass({
                   { joinedText }
                 </Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             style={ styles.actionWrapper }
-            underlayColor='rgba(0,0,0,.1)'
+            activeOpacity={0.5}
             onPress={ this.inviteUsers }
           >
             <View style={ styles.action }>
@@ -155,10 +156,10 @@ var BevyActionButtons = React.createClass({
                   Invite
                 </Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             style={ styles.actionWrapper }
-            underlayColor='rgba(0,0,0,.1)'
+            activeOpacity={0.5}
           >
             <View style={ styles.action }>
                 <Icon
@@ -170,10 +171,10 @@ var BevyActionButtons = React.createClass({
                   Search
                 </Text>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </TouchableOpacity>
+          <TouchableOpacity
             style={ styles.actionWrapper }
-            underlayColor='rgba(0,0,0,.1)'
+            activeOpacity={0.5}
             onPress={ this.goToInfoView }
           >
             <View style={ styles.action }>
@@ -186,7 +187,7 @@ var BevyActionButtons = React.createClass({
                 Info
               </Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </Swiper>
     )

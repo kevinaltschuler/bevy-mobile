@@ -107,7 +107,7 @@ var styles = StyleSheet.create({
   image: {
     flex: 1,
     width: constants.width,
-    height: constants.height - 48 - 10 - 10 // top bar plus padding
+    height: constants.height - 48 - 10 - 10 - 20 // top bar plus padding
   },
   loadingContainer: {
     width: constants.width,
