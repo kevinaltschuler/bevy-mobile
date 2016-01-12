@@ -469,11 +469,12 @@ _.extend(UserStore, {
     })
     .then(res => res.json())
     .then(res => {
-      console.log('login success');
-      if(res == 'User not found') {
+      if(typeof res === 'string') {
+        console.log('login error', err);
         this.trigger(USER.LOGIN_ERROR, res);
         return;
       }
+      console.log('login success');
       // set the new user
       this.setUser(res.user);
       // set the access and refresh tokens
@@ -486,9 +487,10 @@ _.extend(UserStore, {
       this.trigger(USER.LOGIN_SUCCESS);
     })
     .catch(err => {
-      console.log('login error', err.toString());
+      console.log('login error', err);
       // trigger error and pass along error message
-      this.trigger(USER.LOGIN_ERROR, err.toString());
+      if(err) err = err.toString();
+      this.trigger(USER.LOGIN_ERROR, err);
     });
   },
 

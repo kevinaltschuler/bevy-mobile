@@ -43,42 +43,68 @@ var LoginView = React.createClass({
   },
 
   componentDidMount() {
-    UserStore.on(USER.LOGIN_SUCCESS, this.onLoginSuccess);
-    UserStore.on(USER.LOGIN_ERROR, this.updateError);
+    UserStore.on(USER.LOGIN_ERROR, this.onError);
   },
 
   componentWillUnmount() {
-    UserStore.off(USER.LOGIN_SUCCESS, this.onLoginSuccess);
-    UserStore.off(USER.LOGIN_ERROR, this.updateError);
+    UserStore.off(USER.LOGIN_ERROR, this.onError);
   },
 
-  updateError(error) {
-    this.setState({
-      error: error
-    })
+  onError(error) {
+    this.setState({ error: error });
   },
 
   loginEmail() {
+    if(_.isEmpty(this.state.username)) {
+      this.setState({
+        error: 'Please enter a username'
+      });
+      this.UsernameInput.focus();
+      return;
+    }
+
+    if(_.isEmpty(this.state.pass)) {
+      this.setState({
+        error: 'Please enter a password'
+      });
+      this.PasswordInput.focus();
+      return;
+    }
+
     UserActions.logIn(this.state.username, this.state.pass);
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
   },
 
   loginGoogle() {
     if(this.state.loading) return;
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+
     UserActions.logInGoogle();
     this.setState({
+      error: '',
+      username: '',
+      pass: '',
       loading: true
     });
   },
 
-  onLoginSuccess() {
-    //this.props.mainNavigator.replace(routes.MAIN.TABBAR);
-  },
-
   goToRegister() {
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+
     this.props.loginNavigator.push(routes.LOGIN.REGISTER);
   },
 
   goToForgot() {
+    // blur inputs
+    this.UsernameInput.blur();
+    this.PasswordInput.blur();
+
     this.props.loginNavigator.push(routes.LOGIN.FORGOT);
   },
 
@@ -105,21 +131,22 @@ var LoginView = React.createClass({
         </View>
         { this._renderError() }
         <TextInput
+          ref={ref => { this.UsernameInput = ref; }}
           autoCorrect={ false }
           autoCapitalize='none'
-          placeholder='username'
-          keyboardType='default'
+          placeholder='Username'
           style={ styles.loginInput }
-          onChangeText={ (text) => this.setState({ username: text }) }
+          onChangeText={text => this.setState({ username: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TextInput
+          ref={ref => { this.PasswordInput = ref; }}
           autoCorrect={ false }
           autoCapitalize='none'
-          password={ true }
-          placeholder='•••••••'
+          secureTextEntry={ true }
+          placeholder='Password'
           style={ styles.loginInput }
-          onChangeText={ (text) => this.setState({ pass: text }) }
+          onChangeText={text => this.setState({ pass: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TouchableOpacity
@@ -172,7 +199,7 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 3,
+    paddingTop: constants.width / 4,
     paddingHorizontal: constants.width / 12
   },
   logo: {
@@ -195,9 +222,10 @@ var styles = StyleSheet.create({
     marginBottom: 10
   },
   errorContainer: {
-    padding: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 8,
     backgroundColor: '#df4a32',
-    borderRadius: 3,
+    borderRadius: 5,
     marginBottom: 10
   },
   errorText: {
