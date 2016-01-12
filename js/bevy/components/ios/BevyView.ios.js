@@ -111,7 +111,6 @@ var BevyView = React.createClass({
   },
 
   render() {
-    console.log('active board', this.props.activeBoard);
     return (
       <View style={ styles.container }>
         <BevyNavbar

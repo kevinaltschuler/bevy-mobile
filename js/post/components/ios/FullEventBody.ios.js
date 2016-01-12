@@ -16,7 +16,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
-var PostActionList = require('./PostActionList.ios.js');
 var Collapsible = require('react-native-collapsible');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 

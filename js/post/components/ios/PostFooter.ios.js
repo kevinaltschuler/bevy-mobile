@@ -140,15 +140,14 @@ var PostFooter = React.createClass({
     if(this.props.inCommentView) return;
 
     var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = this.state.post._id;
+    commentRoute.postID = this.props.post._id;
     this.props.mainNavigator.push(commentRoute);
   },
 
   vote() {
-    PostActions.vote(post._id);
+    PostActions.vote(this.props.post._id);
     this.setState({
-      voted: !this.state.voted,
-      overlayVisible: false
+      voted: !this.state.voted
     });
   },
 
@@ -163,8 +162,8 @@ var PostFooter = React.createClass({
   render() {
     return (
       <View style={ styles.postActionsRow }>
-        <TouchableHighlight
-          underlayColor='rgba(0,0,0,0.1)'
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={[ styles.actionTouchable, { flex: 2 } ]}
           onPress={ this.vote }
         >
@@ -176,12 +175,15 @@ var PostFooter = React.createClass({
               name={ 'thumb-up' }
               size={ 20 }
               color={ (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)' }
-              style={ styles.actionIcon }
+              style={{ marginBottom: 2 }}
             />
+            <Text style={ styles.buttonText }>
+              {(this.countVotes() == 1) ? 'Like' : 'Likes' }
+            </Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          underlayColor='rgba(0,0,0,0.1)'
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={[ styles.actionTouchable, { flex: 2 } ]}
           onPress={ this.goToCommentView }
         >
@@ -193,22 +195,25 @@ var PostFooter = React.createClass({
               name='chat-bubble'
               size={ 20 }
               color='rgba(0,0,0,.3)'
-              style={ styles.actionIcon }
+              style={{ marginTop: 3 }}
             />
+            <Text style={ styles.buttonText }>
+              {(this.props.post.comments.length == 1) ? 'Comment' : 'Comments' }
+            </Text>
           </View>
-        </TouchableHighlight>
-        <TouchableHighlight
-          underlayColor='rgba(0,0,0,0.1)'
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={[ styles.actionTouchable, { flex: 1 } ]}
           onPress={ this.openActionSheet }
         >
           <Icon
             name='more-horiz'
-            size={ 20 }
+            size={ 24 }
             color='rgba(0,0,0,.3)'
             style={ styles.actionIcon }
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -216,7 +221,7 @@ var PostFooter = React.createClass({
 
 var styles = StyleSheet.create({
   postActionsRow: {
-    height: 36,
+    height: 48,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
@@ -225,23 +230,24 @@ var styles = StyleSheet.create({
   },
   pointCountText: {
     color: '#757d83',
-    fontSize: 15,
-    marginRight: 10
+    fontSize: 17,
+    marginRight: 6
   },
   commentCountText: {
     color: '#757d83',
-    fontSize: 15,
-    marginRight: 10
+    fontSize: 17,
+    marginRight: 6
+  },
+  buttonText: {
+    color: '#757d83',
+    fontSize: 17,
+    marginLeft: 6
   },
   actionTouchable: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 36
-  },
-  actionIcon: {
-    width: 20,
-    height: 20
+    height: 48
   },
 });
 
