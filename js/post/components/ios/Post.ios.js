@@ -20,6 +20,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var ImageOverlay = require('./ImageOverlay.ios.js');
 var PostHeader = require('./PostHeader.ios.js');
 var PostFooter = require('./PostFooter.ios.js');
+var PostImage = require('./PostImage.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -48,7 +49,6 @@ var Post = React.createClass({
   getInitialState() {
     return {
       post: this.props.post,
-      overlayVisible: false,
       editTitle: this.props.post.title
     };
   },
@@ -146,50 +146,6 @@ var Post = React.createClass({
     );
   },
 
-  _renderImageOverlay() {
-    if(this.state.post.images.length <= 0) return null;
-    return (
-      <ImageOverlay
-        images={ this.state.post.images }
-        isVisible={ this.state.overlayVisible }
-        post={ this.state.post }
-      />
-    );
-  },
-
-  _renderPostImage() {
-    if(_.isEmpty(this.state.post.images)) {
-      return <View />;
-    }
-    var imageCount = this.state.post.images.length;
-    var imageCountText = (imageCount > 1)
-    ? (
-      <Text style={ styles.postImageCountText }>
-        + { imageCount - 1 } more
-      </Text>
-    )
-    : null;
-
-    return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.1)'
-        onPress={() => {
-          this.setState({
-            overlayVisible: true
-          });
-        }}
-      >
-        <Image
-          style={ styles.postImage }
-          source={{ uri: this.state.post.images[0].path }}
-          resizeMode='cover'
-        >
-          { imageCountText }
-        </Image>
-      </TouchableHighlight>
-    );
-  },
-
   render() {
     var post = this.state.post;
 
@@ -202,8 +158,9 @@ var Post = React.createClass({
           mainRoute={ this.props.mainRoute }
         />
         { this._renderPostTitle() }
-        { this._renderImageOverlay() }
-        { this._renderPostImage() }
+        <PostImage
+          post={ this.state.post }
+        />
         <PostFooter
           post={ this.state.post }
           user={ this.props.user }
@@ -241,19 +198,7 @@ var styles = StyleSheet.create({
     fontSize: 17,
     color: '#666'
   },
-  postImage: {
-    height: 75,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-end'
-  },
-  postImageCountText: {
-    marginTop: 5,
-    marginRight: 10,
-    backgroundColor: 'rgba(0,0,0,0)',
-    color: '#eee',
-    fontSize: 17
-  },
+
   cancelButton: {
     padding: 5,
     borderRadius: 4,
