@@ -1,7 +1,5 @@
 /**
  * LoginNavigator.ios.js
- * not using native navigator because of height/layout issues
- * so no fancy animations here
  * @author kevin
  * @flow
  */
@@ -32,56 +30,56 @@ var LoginNavigator = React.createClass({
 
   getInitialState() {
     return {
-      currentRoute: 'login'
     };
   },
 
-  changeRoute(route) {
-    this.setState({
-      currentRoute: route
-    });
-  },
+  render() {
+    var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
+    // disable gestures
+    sceneConfig.gestures = null;
 
-  render: function () {
-    var navigator = {
-      change: this.changeRoute
-    };
+    return (
+      <Navigator
+        navigator={ this.props.mainNavigator }
+        configureScene={() => sceneConfig }
+        initialRouteStack={[
+          routes.LOGIN.LOGIN
+        ]}
+        renderScene={(route, navigator) => {
+          switch(route.name) {
+            case routes.LOGIN.LOGIN.name:
+              return (
+                <LoginView
+                  { ...this.props }
+                  loginNavigator={ navigator }
+                  loginRoute={ route }
+                />
+              );
+              break;
 
-    var title = 'log in';
+            case routes.LOGIN.REGISTER.name:
+              return (
+                <RegisterView
+                  { ...this.props }
+                  loginNavigator={ navigator }
+                  loginRoute={ route }
+                />
+              );
+              break;
 
-    switch(this.state.currentRoute) {
-      case 'register':
-        title = 'register';
-        return (
-          <RegisterView
-            { ...this.props }
-            close={ this.props.close }
-            loginNavigator={ navigator }
-          />
-        );
-        break;
-      case 'forgot':
-        title = 'forgot my password';
-        return (
-          <ForgotView
-            { ...this.props }
-            close={this.props.close}
-            loginNavigator={ navigator }
-          />
-        );
-        break;
-      case 'login':
-      default:
-        title = 'login';
-        return (
-          <LoginView
-            { ...this.props }
-            close={ this.props.close }
-            loginNavigator={ navigator }
-          />
-        );
-        break;
-    }
+            case routes.LOGIN.FORGOT.name:
+              return (
+                <ForgotView
+                  { ...this.props }
+                  loginNavigator={ navigator }
+                  loginRoute={ route }
+                />
+              );
+              break;
+          }
+        }}
+      />
+    );
   }
 });
 

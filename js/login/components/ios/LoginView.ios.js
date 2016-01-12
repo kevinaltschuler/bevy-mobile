@@ -1,3 +1,10 @@
+/**
+ * LoginView.ios.js
+ * @author albert
+ * @author kevin
+ * @flow
+ */
+
 'use strict';
 
 var React = require('react-native');
@@ -6,9 +13,8 @@ var {
   View,
   StyleSheet,
   TextInput,
-  AsyncStorage,
-  LinkingIOS,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   NativeAppEventEmitter
 } = React;
@@ -68,11 +74,21 @@ var LoginView = React.createClass({
     //this.props.mainNavigator.replace(routes.MAIN.TABBAR);
   },
 
+  goToRegister() {
+    this.props.loginNavigator.push(routes.LOGIN.REGISTER);
+  },
+
+  goToForgot() {
+    this.props.loginNavigator.push(routes.LOGIN.FORGOT);
+  },
+
   _renderError() {
     if(_.isEmpty(this.state.error)) return <View />;
     return (
-      <View style={{padding: 5, backgroundColor: '#df4a32', borderRadius: 3, marginBottom: 10}}>
-      <Text style={ styles.errorText }>{ this.state.error }</Text>
+      <View style={ styles.errorContainer }>
+        <Text style={ styles.errorText }>
+          { this.state.error }
+        </Text>
       </View>
     );
   },
@@ -106,42 +122,41 @@ var LoginView = React.createClass({
           onChangeText={ (text) => this.setState({ pass: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
-        <TouchableHighlight
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={ styles.loginButton }
-          underlayColor='rgba(255,255,255,.8)'
           onPress={ this.loginEmail }>
           <Text style={ styles.loginButtonText }>
             Login
           </Text>
-        </TouchableHighlight>
-        <TouchableHighlight
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           style={ styles.loginButtonGoogle }
-          underlayColor='rgba(223,74,50,0.8)'
           onPress={ this.loginGoogle }
         >
           <Text style={ styles.loginButtonTextGoogle }>
             Login With Google
           </Text>
-        </TouchableHighlight>
-        <View style={styles.textButtons}>
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,.1)'
-            style={[styles.textButton, {borderRightWidth: 1, borderRightColor: '#fff'}]}
-            onPress={() => {
-              this.props.loginNavigator.change('register');
-            }}
+        </TouchableOpacity>
+        <View style={ styles.textButtons }>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={[ styles.textButton, {
+              borderRightWidth: 1,
+              borderRightColor: '#fff'
+            }]}
+            onPress={ this.goToRegister }
           >
-            <Text style={[styles.textButtonText, ]}>Create An Account</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor='rgba(255,255,255,.1)'
+            <Text style={ styles.textButtonText }>Create An Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
             style={ styles.textButton }
-            onPress={() => {
-              this.props.loginNavigator.change('forgot');
-            }}
+            onPress={ this.goToForgot }
           >
             <Text style={ styles.textButtonText }>Forgot Password?</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -162,7 +177,8 @@ var styles = StyleSheet.create({
   },
   logo: {
     width: 60,
-    height: 60
+    height: 60,
+    marginBottom: 10
   },
   title: {
     alignItems: 'center',
@@ -178,10 +194,16 @@ var styles = StyleSheet.create({
     color: '#666',
     marginBottom: 10
   },
+  errorContainer: {
+    padding: 5,
+    backgroundColor: '#df4a32',
+    borderRadius: 3,
+    marginBottom: 10
+  },
   errorText: {
     textAlign: 'center',
     color: '#fff',
-    fontWeight: 'bold'
+    fontSize: 17
   },
   loginInput: {
     height: 50,
@@ -241,7 +263,7 @@ var styles = StyleSheet.create({
   },
   textButtonText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 17,
     color: '#eee'
   }
 });

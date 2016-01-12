@@ -183,11 +183,8 @@ _.extend(UserStore, {
         .then(res => res.json())
         .then(res => {
           var user = res;
-          this.setUser(user);
-          AsyncStorage.setItem('user', JSON.stringify(user))
-          .then((err, result) => {
-          });
-          this.trigger(USER.LOGIN_SUCCESS, user);
+          console.log('register success. logging in...');
+          this.login(username, password);
         })
         .catch(error => {
           error = JSON.parse(error);
