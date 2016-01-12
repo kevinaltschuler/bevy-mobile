@@ -53,6 +53,22 @@ var BevyNavbar = React.createClass({
     };
   },
 
+  getInitialState() {
+    return {
+      bottomHeight: (_.isEmpty(this.props.activeBoard))
+        ? this.props.bottomHeight
+        : this.props.bottomHeight - 30
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      bottomHeight: (_.isEmpty(nextProps.activeBoard))
+        ? nextProps.bottomHeight
+        : nextProps.bottomHeight - 30
+    });
+  },
+
   _renderLeft() {
     return this.props.left;
   },
@@ -78,29 +94,72 @@ var BevyNavbar = React.createClass({
     return this.props.right;
   },
 
-  render() {
-    if(_.isEmpty(this.props.activeBevy)) {
-      return <View/>;
-    }
-
-    var image_url = (_.isEmpty(this.props.activeBevy.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
+  _renderInfo() {
+    if(!_.isEmpty(this.props.activeBoard)) return <View />;
 
     var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
       ? 'lock'
       : 'public';
 
     return (
+      <View style={ styles.bevyBottom }>
+        <View style={ styles.detailItem }>
+          <Icon
+            name={ publicPrivateIcon }
+            size={ 18 }
+            color='#fff'
+          />
+          <Text style={ styles.itemText }>
+            { this.props.activeBevy.settings.privacy }
+          </Text>
+        </View>
+        <View style={ styles.detailItem }>
+          <Icon
+            name='group'
+            size={ 18 }
+            color='#fff'
+          />
+          <Text style={styles.itemText}>
+            { this.props.activeBevy.subCount + ' '
+              + ((this.props.activeBevy.subCount == 1)
+              ? 'Subscriber' : 'Subscribers') }
+          </Text>
+        </View>
+        <View style={ styles.detailItem }>
+          <Icon
+            name='person'
+            size={ 18 }
+            color='#fff'
+          />
+          <Text style={styles.itemText}>
+            { this.props.activeBevy.admins.length + ' '
+              + ((this.props.activeBevy.admins.length == 1)
+              ? 'Admin' : 'Admins') }
+          </Text>
+        </View>
+      </View>
+    );
+  },
+
+  render() {
+    if(_.isEmpty(this.props.activeBevy)) {
+      return <View/>;
+    }
+
+    var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
+      ? constants.siteurl + '/img/default_group_img.png'
+      : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
+
+    return (
       <View style={ this.props.styleParent }>
         <Image
-          source={{ uri: image_url }}
+          source={{ uri: bevyImageURL }}
           style={[ styles.imageBottom, {
-            height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+            height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
           }]}
         >
           <View style={[ styles.imageWrapper, {
-            height: this.props.bottomHeight + StatusBarSizeIOS.currentHeight
+            height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
           }]}>
             <View style={[ styles.bevyTop, {
               paddingTop: StatusBarSizeIOS.currentHeight
@@ -115,34 +174,7 @@ var BevyNavbar = React.createClass({
                 { this._renderRight() }
               </View>
             </View>
-            <View style={ styles.bevyBottom }>
-              <View style={ styles.detailItem }>
-                <Icon
-                  name={ publicPrivateIcon }
-                  size={ 18 }
-                  color='#fff'
-                />
-                <Text style={ styles.itemText }>
-                  { this.props.activeBevy.settings.privacy }
-                </Text>
-              </View>
-              <View style={ styles.detailItem }>
-                <Icon name='group' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  { this.props.activeBevy.subCount + ' '
-                    + ((this.props.activeBevy.subCount == 1)
-                    ? 'Subscriber' : 'Subscribers') }
-                </Text>
-              </View>
-              <View style={ styles.detailItem }>
-                <Icon name='person' size={18} color='#fff'/>
-                <Text style={styles.itemText}>
-                  { this.props.activeBevy.admins.length + ' '
-                    + ((this.props.activeBevy.admins.length == 1)
-                    ? 'Admin' : 'Admins') }
-                </Text>
-              </View>
-            </View>
+            { this._renderInfo() }
           </View>
         </Image>
       </View>
