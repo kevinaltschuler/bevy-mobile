@@ -342,7 +342,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE',
   },
   Input: {
-    backgroundColor: '#FFF',
     height: 36,
     borderRadius: 4,
     backgroundColor: 'rgba(255,255,255,.3)',
