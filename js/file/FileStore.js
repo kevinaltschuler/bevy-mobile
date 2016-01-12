@@ -4,13 +4,14 @@ var Backbone = require('backbone');
 var _ = require('underscore');
 var {
   StatusBarIOS,
-  Platform
+  Platform,
+  NativeModules
 } = require('react-native');
 
 var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var FILE = constants.FILE;
-var FileTransfer = require('NativeModules').FileTransfer;
+var FileTransfer = NativeModules.FileTransfer;
 
 var FileStore = _.extend({}, Backbone.Events);
 _.extend(FileStore, {

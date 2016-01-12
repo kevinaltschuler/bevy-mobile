@@ -175,6 +175,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#fff',
     height: 50,
     flexDirection: 'column',
+    justifyContent: 'center',
     borderRadius: 25,
     marginBottom: 10,
     marginHorizontal: 20,

@@ -15,11 +15,11 @@ var {
   TouchableHighlight,
   StyleSheet,
   ScrollView,
-  SegmentedControlIOS
+  SegmentedControlIOS,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
-var NativeModules = require('NativeModules');
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
@@ -93,7 +93,7 @@ var CreateBevyView = React.createClass({
     BevyActions.create(
       this.state.name, // bevy name
       (_.isEmpty(this.state.bevyImage))
-        ? constants.siteurl + '/img/logo_100.png'
+        ? { filename: constants.siteurl + '/img/default_group_img.png', foreign: true }
         : this.state.bevyImage, // bevy image
       this.state.slug,
       this.state.privacy

@@ -15,10 +15,11 @@ var {
   TouchableHighlight,
   StyleSheet,
   ScrollView,
-  SegmentedControlIOS
+  SegmentedControlIOS,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var UIImagePickerManager = require('NativeModules').UIImagePickerManager;
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var StatusBarSizeIOS = require('react-native-status-bar-size');
