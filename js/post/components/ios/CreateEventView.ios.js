@@ -31,7 +31,6 @@ var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var PostActions = require('./../../../post/PostActions');
@@ -239,7 +238,7 @@ var CreateEventView = React.createClass({
       <View style={ containerStyle }>
       <View style={ styles.topBarContainer }>
         <View style={{
-          height: StatusBarSizeIOS.currentHeight,
+          height: constants.getStatusBarHeight(),
           backgroundColor: '#2CB673'
         }}/>
         <View style={ styles.topBar }>

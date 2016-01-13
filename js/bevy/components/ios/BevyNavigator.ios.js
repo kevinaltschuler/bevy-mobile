@@ -32,8 +32,7 @@ var BOARD = constants.BOARD;
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
-var BevyStore = require('./../../../bevy/BevyStore')
-var StatusBarSizeIOS = require('react-native-status-bar-size');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var BevyView = React.createClass({
   propTypes: {

@@ -52,12 +52,19 @@ exports.sideMenuWidth = ((window.width * (4/5)) >= 300) ? 300 : (window.width * 
 
 var React = require('react-native');
 var {
-  Platform
+  Platform,
+  StatusBarIOS,
+  NativeModules
 } = React;
 if(Platform.OS == 'ios') {
-  var StatusBarSizeIOS = require('react-native-status-bar-size');
+  this.height = 20;
+  var RCTStatusBarManager = NativeModules.StatusBarManager;
+  RCTStatusBarManager.getHeight(res => {
+    this.height = res.height;
+  });
+  //console.log(this.height);
   exports.getStatusBarHeight = function() {
-    return StatusBarSizeIOS.currentHeight
+    return height;
   };
 }
 

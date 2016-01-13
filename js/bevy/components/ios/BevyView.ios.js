@@ -24,8 +24,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BoardActions = require('./../../../board/BoardActions');
-var PostActions = require('./../../../post/PostActions')
-var StatusBarSizeIOS = require('react-native-status-bar-size');
+var PostActions = require('./../../../post/PostActions');
 
 var BevyView = React.createClass({
   propTypes: {

@@ -25,7 +25,6 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var POST = constants.POST;
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var ProfileView = React.createClass({
   propTypes: {
@@ -65,7 +64,7 @@ var ProfileView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>

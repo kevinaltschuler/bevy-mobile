@@ -27,7 +27,6 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var PostStore = require('./../../../post/PostStore');
 var CommentActions = require('./../../../post/CommentActions');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var CommentView = React.createClass({
   propTypes: {
@@ -322,7 +321,7 @@ var CommentView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>

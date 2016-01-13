@@ -25,7 +25,6 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatStore = require('./../../../chat/ChatStore');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var CHAT = constants.CHAT;
 
 var ThreadList = React.createClass({
@@ -152,7 +151,7 @@ var ThreadList = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
