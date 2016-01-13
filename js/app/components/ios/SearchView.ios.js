@@ -451,7 +451,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 0,
-    marginBottom: -140
+    marginBottom: 0
   },
   progressContainer: {
     flex: 1,
