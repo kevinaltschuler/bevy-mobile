@@ -296,7 +296,7 @@ var AddPeopleView = React.createClass({
               onPress={ this.goToNewThread }
             >
               <Icon
-                name='create'
+                name='done'
                 size={ 30 }
                 color='#FFF'
               />

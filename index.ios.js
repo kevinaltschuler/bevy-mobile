@@ -258,7 +258,6 @@ var App = React.createClass({
     sceneConfig.gestures = null;
 
     PushNotificationIOS.requestPermissions();
-    //PushNotificationIOS.checkPermissions(data => {console.log(data)})
 
     var initialRoute = routes.MAIN.LOADING;
 

@@ -316,6 +316,26 @@ _.extend(PostStore, {
         });
         break;
 
+      case BOARD.CLEAR:
+        var bevy = BevyStore.getActive();
+        var bevy_id = bevy._id;
+        this.posts.comparator = this.sortByNew;
+        this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
+
+        this.posts.reset([]);
+        this.trigger(POST.LOADING);
+        this.trigger(POST.CHANGE_ALL);
+
+        this.posts.fetch({
+          reset: true,
+          success: function(collection, response, options) {
+            this.posts.sort();
+            this.trigger(POST.LOADED);
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
       case COMMENT.CREATE:
         var body = payload.body;
         var author_id = payload.author_id;

@@ -70,12 +70,12 @@ var BoardCard = React.createClass({
               </View>
               <View style={ styles.detailItem }>
                 <Icon
-                  name='people'
+                  name='person'
                   size={ 24 }
                   color='#fff'
                 />
                 <Text style={ styles.itemText }>
-                  { board.subCount } Subscribers
+                  { board.admins.length } Admins
                 </Text>
               </View>
             </View>
@@ -97,13 +97,13 @@ var styles = StyleSheet.create({
   },
   boardTitle: {
     color: '#fff',
-    paddingLeft: 20,
+    paddingLeft: 10,
     fontSize: 18,
     marginBottom: 5
   },
   imageWrapper: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.6)',
+    backgroundColor: 'rgba(0,0,0,.4)',
     height: 100,
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -111,8 +111,8 @@ var styles = StyleSheet.create({
   },
   boardDetails: {
     flexDirection: 'row',
-    marginBottom: 15,
-    marginLeft: 20
+    marginBottom: 5,
+    marginLeft: 10
   },
   detailItem: {
     flexDirection: 'row',

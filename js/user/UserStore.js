@@ -26,7 +26,8 @@ var React = require('react-native');
 var {
   AsyncStorage,
   Platform,
-  NativeAppEventEmitter
+  NativeAppEventEmitter,
+  AlertIOS
 } = React;
 var DeviceInfo = require('react-native-device-info');
 var GoogleSignIn = require('react-native-google-signin');
@@ -101,7 +102,8 @@ _.extend(UserStore, {
         );
         // called on signin error
         NativeAppEventEmitter.addListener('googleSignInError', error => {
-          console.log('google sign in error', error.toString());
+          console.log('google sign in error', error);
+          AlertIOS.alert(error.error);
         });
 
         // called on signin success, you get user data (email), access token and idToken
@@ -231,37 +233,24 @@ _.extend(UserStore, {
         break;
 
       case USER.CHANGE_PROFILE_PICTURE:
-        var uri = payload.uri;
-        var image = payload.image;
+        var file = payload.file;
 
-        console.log(uri);
+        console.log(file);
 
-        if(uri) {
-          FileStore.upload(uri, (err, filename) => {
-            console.log('USER STORE', err, filename);
-            if(err) return;
-            this.user.save({
-              image_url: filename
-            }, {
-              patch: true,
-              success: function(model, response, options) {
-                //console.log(response);
-              }.bind(this)
-            });
-            this.user.set('image_url', filename);
-            this.trigger(USER.CHANGE_ALL);
-          });
-        } else {
-          this.user.save({
-            image: image
-          }, {
-            patch: true,
-            success: function(model, response, options) {
-            }.bind(this)
-          });
-          this.user.set('image', image);
-          this.trigger(USER.CHANGE_ALL);
+        if(_.isEmpty(file)) {
+          break;
         }
+
+        this.user.save({
+          image: file
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+            //console.log(response);
+          }.bind(this)
+        });
+        this.user.set('image', file);
+        this.trigger(USER.CHANGE_ALL);
         break;
 
       case BEVY.JOIN:

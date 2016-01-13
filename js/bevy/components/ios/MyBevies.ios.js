@@ -141,19 +141,6 @@ var MyBevies = React.createClass({
     } else return <View />;
   },
 
-  _renderNoBevies() {
-    if(!this.state.loading && _.isEmpty(this.state.myBevies)) {
-      /*return (
-        <View style={ styles.noBeviesContainer }>
-          <Text style={ styles.noBeviesText }>
-            No Bevies Yet
-          </Text>
-        </View>
-      );*/
-      return <View />;
-    } else return <View />;
-  },
-
   render() {
     return (
       <View style={ styles.container }>
@@ -189,7 +176,6 @@ var MyBevies = React.createClass({
           automaticallyAdjustContentInsets={ false }
           showsVerticalScrollIndicator={ true }
         >
-          { this._renderNoBevies() }
           { this._renderLoading() }
           { this._renderBevyList() }
           { this._renderNewBevyCard() }

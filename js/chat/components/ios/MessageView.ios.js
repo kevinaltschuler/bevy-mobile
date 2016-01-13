@@ -57,6 +57,7 @@ var MessageView = React.createClass({
     };
   },
 
+
   componentDidMount() {
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);

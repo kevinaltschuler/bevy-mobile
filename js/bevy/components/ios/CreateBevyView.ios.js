@@ -58,27 +58,30 @@ var CreateBevyView = React.createClass({
   },
 
   componentDidMount() {
-    BevyStore.on(BEVY.CREATED, (bevy) => {
-      // switch bevies
-      BevyActions.switchBevy(bevy._id);
-      // navigate back
-      this.props.mainNavigator.pop();
-
-      this.setState({
-        creating: false
-      });
-    });
-
-    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
-      this.setState({
-        bevyImage: filename
-      });
-    });
+    BevyStore.on(BEVY.CREATED, this.onCreated);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
   },
 
   componentWillUnmount() {
-    BevyStore.off(BEVY.CREATED);
-    FileStore.off(FILE.UPLOAD_COMPLETE);
+    BevyStore.off(BEVY.CREATED, this.onCreated);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
+  },
+
+  onUpload(filename) {
+    this.setState({
+      bevyImage: filename
+    });
+  },
+
+  onCreated(bevy) {
+    // switch bevies
+    BevyActions.switchBevy(bevy._id);
+    // navigate back
+    this.props.mainNavigator.pop();
+
+    this.setState({
+      creating: false
+    });
   },
 
   goBack() {

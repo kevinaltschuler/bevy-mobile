@@ -280,17 +280,6 @@ var NewThreadView = React.createClass({
             <Text style={ styles.title }>
               New Chat
             </Text>
-            <TouchableOpacity
-              activeOpacity={ 0.5 }
-              style={ styles.iconButton }
-              onPress={ this.onSubmit }
-            >
-              <Icon
-                name='done'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableOpacity>
           </View>
         </View>
         <View style={ styles.toBar }>
@@ -339,7 +328,8 @@ var styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     textAlign: 'center',
-    color: '#FFF'
+    color: '#FFF',
+    paddingRight: 40
   },
   iconButton: {
     width: 48,

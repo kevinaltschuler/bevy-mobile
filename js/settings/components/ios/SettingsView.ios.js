@@ -18,6 +18,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
+var FileStore = require('./../../../file/FileStore');
+var FileActions = require('./../../../file/FileActions');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
 
 var _ = require('underscore');
@@ -25,6 +27,8 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var UserActions = require('./../../../user/UserActions');
+
+var FILE = constants.FILE;
 
 var SettingsView = React.createClass({
   propTypes: {
@@ -49,6 +53,21 @@ var SettingsView = React.createClass({
     });
   },
 
+  componentDidMount() {
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
+  },
+
+  componentWillUnmount() {
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
+  },
+
+  onUpload(file) {
+    this.setState({
+      profilePicture: file.path
+    });
+    UserActions.changeProfilePicture(file);
+  },
+
   logOut() {
     UserActions.logOut();
   },
@@ -63,10 +82,7 @@ var SettingsView = React.createClass({
       returnIsVertical: true
     }, (type, response) => {
       if (type !== 'cancel' && response) {
-        UserActions.changeProfilePicture(response.uri);
-        this.setState({
-          profilePicture: response.uri
-        });
+        FileActions.upload(response.uri);
       }
     });
   },
