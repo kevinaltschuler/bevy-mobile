@@ -144,9 +144,7 @@ var ThreadList = React.createClass({
   },
 
   render() {
-
     var tabIndex = (this.state.tab == 'Board Chats') ? 0 : 1;
-
     return (
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
@@ -184,9 +182,7 @@ var ThreadList = React.createClass({
             />
           </View>
         </View>
-
         { this._renderNoThreads() }
-
         <ListView
           ref={(ref) => { this.ThreadList = ref; }}
           style={ styles.threadList }
@@ -196,7 +192,6 @@ var ThreadList = React.createClass({
           renderRow={ this.renderThreadRow }
           renderSeparator={ this.renderThreadSeparator }
         />
-
       </View>
     );
   }

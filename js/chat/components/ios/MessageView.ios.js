@@ -96,17 +96,13 @@ var MessageView = React.createClass({
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
     //console.log(scrollY);
     if(this.state.scrollY == null) {
-      this.setState({
-        scrollY: scrollY
-      });
+      this.setState({ scrollY: scrollY });
       return;
     }
     if(this.isTouching) {
       if(scrollY < -60) {
         if(!this.state.isRefreshing) {
-          this.setState({
-            isRefreshing: true
-          });
+          this.setState({ isRefreshing: true });
           this.onRefresh();
         }
       }
@@ -119,15 +115,12 @@ var MessageView = React.createClass({
       //console.log('focusing');
       //this.refs.MessageInput.focus();
     }
-    this.setState({
-      scrollY: scrollY
-    });
+    this.setState({ scrollY: scrollY });
   },
 
   handleResponderGrant() {
     this.isTouching = true;
   },
-
   handleResponderRelease() {
     this.isTouching = false;
   },
@@ -232,23 +225,23 @@ var MessageView = React.createClass({
   renderMessageRow(message, sectionID, rowID, highlightRow) {
     var hidePic = false;
     var showName = true;
-    var rowID = parseInt(rowID);
-    if(rowID < (this.state.dataSource._dataBlob.s1.length - 1)) {
+    rowID = parseInt(rowID);
+    if(rowID < (this.state.ds._dataBlob.s1.length - 1)) {
       hidePic = true;
-      if(this.state.dataSource._dataBlob.s1[rowID + 1].author._id
+      if(this.state.ds._dataBlob.s1[rowID + 1].author._id
       != message.author._id) {
         hidePic = false;
       }
     }
     if(rowID > 0) {
-      if(this.state.dataSource._dataBlob.s1[rowID - 1].author._id
+      if(this.state.ds._dataBlob.s1[rowID - 1].author._id
       == message.author._id) {
         showName = false;
       }
     }
     return (
       <MessageItem
-        key={ message._id }
+        key={ 'message:' + message._id }
         message={ message }
         user={ this.props.user }
         hidePic={ hidePic }
@@ -295,14 +288,14 @@ var MessageView = React.createClass({
           </View>
         </View>
         <ListView
-          ref={(ref) => { this.MessageList = ref; }}
+          ref={ ref => { this.MessageList = ref; }}
           style={ styles.messageList }
+          dataSource={ this.state.ds }
           onScroll={ this.handleScroll }
           onResponderGrant={ this.handleResponderGrant }
           onResponderRelease={ this.handleResponderRelease }
           decelerationRate={ 0.9 }
           scrollRenderAheadDistance={ 500 }
-          dataSource={ this.state.ds }
           showsVerticalScrollIndicator={ true }
           onEndReached={ this.onEndReached }
           renderRow={ this.renderMessageRow }
