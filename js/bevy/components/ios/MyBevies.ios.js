@@ -24,7 +24,6 @@ var Spinner = require('react-native-spinkit');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var UserStore = require('./../../../user/UserStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BevyActions = require('./../../../bevy/BevyActions');
@@ -147,7 +146,7 @@ var MyBevies = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>

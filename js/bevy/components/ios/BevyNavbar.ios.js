@@ -23,7 +23,6 @@ var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var BevyNavbar = React.createClass({
   propTypes: {
@@ -155,14 +154,14 @@ var BevyNavbar = React.createClass({
         <Image
           source={{ uri: bevyImageURL }}
           style={[ styles.imageBottom, {
-            height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
+            height: this.state.bottomHeight + constants.getStatusBarHeight()
           }]}
         >
           <View style={[ styles.imageWrapper, {
-            height: this.state.bottomHeight + StatusBarSizeIOS.currentHeight
+            height: this.state.bottomHeight + constants.getStatusBarHeight()
           }]}>
             <View style={[ styles.bevyTop, {
-              paddingTop: StatusBarSizeIOS.currentHeight
+              paddingTop: constants.getStatusBarHeight()
             }]}>
               <View style={ styles.left }>
                 { this._renderLeft() }

@@ -15,10 +15,10 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var NotificationList = require('./NotificationList.ios.js');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
+var constants = require('./../../../constants');
 var NotificationActions = require('./../../../notification/NotificationActions');
 
 var NotificationView = React.createClass({
@@ -31,7 +31,7 @@ var NotificationView = React.createClass({
       <View style={{ flex: 1 }}>
       <View style={ styles.topBarContainer }>
         <View style={{
-          height: StatusBarSizeIOS.currentHeight,
+          height: constants.getStatusBarHeight(),
           backgroundColor: '#2CB673'
         }}/>
         <View style={ styles.topBar }>

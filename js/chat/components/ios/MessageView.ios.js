@@ -30,7 +30,6 @@ var ChatStore = require('./../../../chat/ChatStore');
 var ChatActions = require('./../../../chat/ChatActions');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var CHAT = constants.CHAT;
 
 var MessageView = React.createClass({
@@ -264,7 +263,7 @@ var MessageView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>

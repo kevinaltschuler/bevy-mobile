@@ -19,7 +19,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var BoardItem = require('./BoardItem.ios.js');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -169,7 +168,7 @@ var BevySideMenu = React.createClass({
     return (
       <View style={ styles.container }>
         <View style={{
-          height: StatusBarSizeIOS.currentHeight,
+          height: constants.getStatusBarHeight()
         }}/>
         <ScrollView style={styles.menuContainer}>
           { this._renderBevyItem() }

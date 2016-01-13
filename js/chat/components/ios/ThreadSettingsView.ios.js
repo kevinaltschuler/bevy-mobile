@@ -25,7 +25,6 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadImage = require('./ThreadImage.ios.js');
 var PersonItem = require('./PersonItem.ios.js');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -204,7 +203,7 @@ var ThreadSettingsView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>

@@ -36,7 +36,7 @@ var LocationView = React.createClass({
 			<View style={styles.container}>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>

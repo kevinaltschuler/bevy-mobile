@@ -30,7 +30,6 @@ var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var FILE = constants.FILE;
@@ -74,24 +73,20 @@ var InputView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShowed);
-    DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHid);
+    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
   },
 
-  _onKeyboardShowed(ev) {
+  onKeyboardShow(ev) {
     var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
-    this.setState({
-      keyboardSpace: height
-    });
+    this.setState({ keyboardSpace: height });
   },
 
-  _onKeyboardHid(ev) {
-    this.setState({
-      keyboardSpace: 0
-    });
+  onKeyboardHide(ev) {
+    this.setState({ keyboardSpace: 0 });
   },
 
   componentWillUnmount() {
@@ -100,14 +95,9 @@ var InputView = React.createClass({
   },
 
   onUploadComplete(file) {
-    console.log(file);
     var images = this.state.images;
-    console.log(images);
     images.push(file);
-    console.log(images);
-    this.setState({
-      images: images
-    });
+    this.setState({ images: images });
   },
 
   onUploadError(error) {
@@ -250,7 +240,7 @@ var InputView = React.createClass({
       <View style={ containerStyle }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
@@ -281,17 +271,15 @@ var InputView = React.createClass({
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView
-          style={ styles.body }
-        >
-          <View style={ styles.bevyPicker }>
+        <ScrollView style={ styles.body }>
+          <View style={ styles.boardItem }>
             <Text style={ styles.sectionTitle }>Board</Text>
-            <View style={styles.bevyNameContainer}>
+            <View style={styles.boardItemDetails}>
               <Image
                 source={{ uri: boardImageURL }}
-                style={{borderRadius: 30, width: 60, height: 60}}
+                style={ styles.boardImage }
               />
-              <Text style={styles.bevyTitle}>
+              <Text style={styles.boardName}>
                 { boardName }
               </Text>
             </View>
@@ -305,10 +293,8 @@ var InputView = React.createClass({
             <TextInput
               ref='input'
               multiline={ true }
-              onChange={(ev) => {
-                this.setState({
-                  title: ev.nativeEvent.text
-                });
+              onChange={ev => {
+                this.setState({ title: ev.nativeEvent.text });
               }}
               placeholder={ this.state.placeholderText }
               style={ styles.textInput }
@@ -341,20 +327,20 @@ var InputView = React.createClass({
               color='rgba(0,0,0,.3)'
             />
           </TouchableHighlight>
-            {/*<TouchableHighlight
-              underlayColor='rgba(0,0,0,0)'
-              onPress={() => {
-                this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
-              }}
-              style={ styles.contentBarItem }
-            >
-              <Icon
-                name='calendar'
-                size={30}
-                color='rgba(0,0,0,.3)'
-                style={ styles.contentBarIcon }
-              />
-            </TouchableHighlight>*/}
+          {/*<TouchableHighlight
+            underlayColor='rgba(0,0,0,0)'
+            onPress={() => {
+              this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
+            }}
+            style={ styles.contentBarItem }
+          >
+            <Icon
+              name='calendar'
+              size={30}
+              color='rgba(0,0,0,.3)'
+              style={ styles.contentBarIcon }
+            />
+          </TouchableHighlight>*/}
           </View>
       </View>
     );
@@ -396,28 +382,24 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column'
   },
-  bevyPicker: {
+  boardItem: {
     flexDirection: 'column',
     padding: 0,
     marginTop: 10,
     marginBottom: 15
   },
-  bevyPickerButton: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start'
+  boardName: {
+    flex: 1,
+    fontSize: 18,
+    color: '#222',
+    marginLeft: 15,
   },
-  postingTo: {
-    fontSize: 15,
-    marginRight: 10,
-    color: '#fff'
+  boardImage: {
+    borderRadius: 30,
+    width: 60,
+    height: 60
   },
-  bevyName: {
-    color: '#2CB673',
-    fontSize: 15,
-    fontWeight: 'bold',
-    flex: 1
-  },
-  bevyNameContainer: {
+  boardItemDetails: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     height: 80,
@@ -425,29 +407,12 @@ var styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
-  bevyTitle: {
-    flex: 1,
-    fontSize: 18,
-    color: '#222',
-    marginLeft: 15,
-  },
-  toBevyPicker: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 5,
-    marginRight: 10,
-    borderRadius: 3,
-    height: 84,
-    width: constants.width,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee'
-  },
   input: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    flex: 1,
     marginBottom: 20,
     marginTop: 0,
     backgroundColor: '#fff'

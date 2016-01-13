@@ -8,15 +8,15 @@
  */
 
 #import "AppDelegate.h"
-#import "RCTPushNotificationManager.h"
+//#import "RCTPushNotificationManager.h"
 #import "RCTRootView.h"
-#import "RCTLinkingManager.h"
+//#import "RCTLinkingManager.h"
 #import "RNGoogleSignin.h"
 
 @implementation AppDelegate
 
   // Required for the register event.
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+/*- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     {
      [RCTPushNotificationManager application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
     }
@@ -24,7 +24,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
     {
        [RCTPushNotificationManager application:application didReceiveRemoteNotification:notification];
-    }
+    }*/
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -67,7 +67,7 @@
                                                    launchOptions:launchOptions];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [[UIViewController alloc] init];
+  UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];

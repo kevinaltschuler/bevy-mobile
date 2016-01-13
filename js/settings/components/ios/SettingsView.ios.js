@@ -27,7 +27,6 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var UserActions = require('./../../../user/UserActions');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var FILE = constants.FILE;
 
@@ -179,7 +178,7 @@ var SettingsView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
