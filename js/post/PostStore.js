@@ -54,6 +54,7 @@ _.extend(PostStore, {
         var bevy_id = payload.bevy_id;
         var user_id = payload.user_id;
 
+        this.posts.comparator = this.sortByNew;
         if(user_id)
           this.posts.url = constants.apiurl + '/users/' + user_id + '/posts';
         else
@@ -71,7 +72,6 @@ _.extend(PostStore, {
           reset: true,
           success: function(posts, response, options) {
             console.log('fetched posts');
-            // trigger sort which will trigger loaded and change all
             this.posts.sort();
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);

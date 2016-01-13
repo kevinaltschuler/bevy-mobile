@@ -13,6 +13,7 @@ var {
   Image,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
   ScrollView
 } = React;
@@ -34,16 +35,12 @@ var ProfileView = React.createClass({
     activeBevy: React.PropTypes.object
   },
 
-  getInitialState() {
-    return {
-    };
-  },
-
   componentDidMount() {
     // get user posts
-    PostActions.fetch(null, this.props.profileUser._id);
+    setTimeout(() => {
+      PostActions.fetch(null, this.props.profileUser._id);
+    }, 100);
   },
-
   componentWillUnmount() {
     // reset posts
     PostActions.fetch(this.props.activeBevy._id, null);
@@ -68,8 +65,8 @@ var ProfileView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -78,7 +75,7 @@ var ProfileView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               { this.props.profileUser.displayName }'s Profile
             </Text>

@@ -18,5 +18,6 @@ var constants = require('./../constants');
 
 // backbone collection
 module.exports = Backbone.Collection.extend({
-	model: Post
+	model: Post,
+	comparator: '-created'
 });
