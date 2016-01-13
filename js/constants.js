@@ -22,7 +22,7 @@ var protocol = 'http:';
 exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
-exports.ios_version = '1.0.0';
+exports.ios_version = '1.3.0';
 
 //exports.siteurl = protocol + slashes + hostname;
 //exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
@@ -52,12 +52,19 @@ exports.sideMenuWidth = ((window.width * (4/5)) >= 300) ? 300 : (window.width * 
 
 var React = require('react-native');
 var {
-  Platform
+  Platform,
+  StatusBarIOS,
+  NativeModules
 } = React;
 if(Platform.OS == 'ios') {
-  var StatusBarSizeIOS = require('react-native-status-bar-size');
+  this.height = 20;
+  var RCTStatusBarManager = NativeModules.StatusBarManager;
+  RCTStatusBarManager.getHeight(res => {
+    this.height = res.height;
+  });
+  //console.log(this.height);
   exports.getStatusBarHeight = function() {
-    return StatusBarSizeIOS.currentHeight
+    return height;
   };
 }
 
@@ -155,6 +162,7 @@ exports.CHAT = {
   EDIT_THREAD: 'chat_edit_thread',
   START_PM: 'chat_start_pm',
   FETCH_THREADS: 'chat_fetch_threads',
+  DELETE_MESSAGE: 'chat_delete_message',
 
   // events
   FETCHING_THREADS: 'chat_fetching_threads',

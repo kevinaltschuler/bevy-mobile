@@ -13,6 +13,7 @@ var {
   Text,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   SegmentedControlIOS,
@@ -22,7 +23,6 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -58,32 +58,55 @@ var CreateBevyView = React.createClass({
   },
 
   componentDidMount() {
-    BevyStore.on(BEVY.CREATED, (bevy) => {
-      // switch bevies
-      BevyActions.switchBevy(bevy._id);
-      // navigate back
-      this.props.mainNavigator.pop();
-
-      this.setState({
-        creating: false
-      });
-    });
-
-    FileStore.on(FILE.UPLOAD_COMPLETE, (filename) => {
-      this.setState({
-        bevyImage: filename
-      });
-    });
+    BevyStore.on(BEVY.CREATED, this.onCreated);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
   },
 
   componentWillUnmount() {
-    BevyStore.off(BEVY.CREATED);
-    FileStore.off(FILE.UPLOAD_COMPLETE);
+    BevyStore.off(BEVY.CREATED, this.onCreated);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
+  },
+
+  onUpload(filename) {
+    this.setState({
+      bevyImage: filename
+    });
+  },
+
+  onCreated(bevy) {
+    // switch bevies
+    BevyActions.switchBevy(bevy._id);
+    // navigate back
+    this.props.mainNavigator.pop();
+
+    this.setState({
+      creating: false
+    });
   },
 
   goBack() {
     this.refs.bevyName.blur();
     this.props.mainNavigator.pop();
+  },
+
+  showImagePicker() {
+    UIImagePickerManager.showImagePicker({
+      title: 'Choose Bevy Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Library...',
+      returnBase64Image: false,
+      returnIsVertical: false
+    }, (didCancel, response) => {
+      if (didCancel) {
+        //console.log(response);
+
+      } else {
+        //console.log('Cancel');
+        FileActions.upload(response.uri);
+        //console.log(response.uri);
+      }
+    });
   },
 
   createBevy() {
@@ -191,31 +214,13 @@ var CreateBevyView = React.createClass({
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Bevy Image</Text>
-        <TouchableHighlight
+        <TouchableOpacity
           style={ styles.bevyImageButton }
-          underlayColor='rgba(0,0,0,0)'
-          onPress={() => {
-            UIImagePickerManager.showImagePicker({
-              title: 'Choose Bevy Picture',
-              cancelButtonTitle: 'Cancel',
-              takePhotoButtonTitle: 'Take Photo...',
-              chooseFromLibraryButtonTitle: 'Choose from Library...',
-              returnBase64Image: false,
-              returnIsVertical: false
-            }, (didCancel, response) => {
-              if (didCancel) {
-                //console.log(response);
-
-              } else {
-                //console.log('Cancel');
-                FileActions.upload(response.uri);
-                //console.log(response.uri);
-              }
-            });
-          }}
+          activeOpacity={ 0.5 }
+          onPress={ this.showImagePicker }
         >
           { middle }
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   },
@@ -265,12 +270,12 @@ var CreateBevyView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
             <View style={ styles.topBar }>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
                 style={ styles.iconButton }
                 onPress={ this.goBack }
               >
@@ -279,12 +284,12 @@ var CreateBevyView = React.createClass({
                   size={ 30 }
                   color='#FFF'
                 />
-              </TouchableHighlight>
+              </TouchableOpacity>
               <Text style={ styles.title }>
                 New Bevy
               </Text>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
                 style={ styles.iconButton }
                 onPress={ this.createBevy }
               >
@@ -293,7 +298,7 @@ var CreateBevyView = React.createClass({
                   size={ 30 }
                   color='#FFF'
                 />
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
           </View>
           <ScrollView>

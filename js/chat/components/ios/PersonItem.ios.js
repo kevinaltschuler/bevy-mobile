@@ -12,7 +12,8 @@ var {
   Text,
   Image,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 
 var _ = require('underscore');
@@ -30,8 +31,8 @@ var PersonItem = React.createClass({
       : resizeImage(this.props.user.image, 64, 64).url;
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.onSelect }
       >
         <View style={ styles.container }>
@@ -43,7 +44,7 @@ var PersonItem = React.createClass({
             { this.props.user.displayName }
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

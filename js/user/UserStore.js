@@ -26,7 +26,8 @@ var React = require('react-native');
 var {
   AsyncStorage,
   Platform,
-  NativeAppEventEmitter
+  NativeAppEventEmitter,
+  AlertIOS
 } = React;
 var DeviceInfo = require('react-native-device-info');
 var GoogleSignIn = require('react-native-google-signin');
@@ -102,6 +103,7 @@ _.extend(UserStore, {
         // called on signin error
         NativeAppEventEmitter.addListener('googleSignInError', error => {
           console.log('google sign in error', error);
+          AlertIOS.alert(error.error);
         });
 
         // called on signin success, you get user data (email), access token and idToken
@@ -133,6 +135,12 @@ _.extend(UserStore, {
           .then(res => res.json())
           .then(res => {
             console.log('got response from our server', res);
+            if(typeof res === 'string') {
+              console.log('our server error', res);
+              this.trigger(USER.LOGIN_ERROR, res);
+              return;
+            }
+
             var user = res.user;
             var access_token = res.access_token;
             var refresh_token = res.refresh_token;
@@ -145,6 +153,7 @@ _.extend(UserStore, {
           })
           .catch(err => {
             console.log('our server error', err);
+            this.trigger(USER.LOGIN_ERROR, err.toString());
           });
         });
         // call this method when user clicks the 'Signin with google' button
@@ -183,11 +192,8 @@ _.extend(UserStore, {
         .then(res => res.json())
         .then(res => {
           var user = res;
-          this.setUser(user);
-          AsyncStorage.setItem('user', JSON.stringify(user))
-          .then((err, result) => {
-          });
-          this.trigger(USER.LOGIN_SUCCESS, user);
+          console.log('register success. logging in...');
+          this.login(username, password);
         })
         .catch(error => {
           error = JSON.parse(error);
@@ -227,37 +233,24 @@ _.extend(UserStore, {
         break;
 
       case USER.CHANGE_PROFILE_PICTURE:
-        var uri = payload.uri;
-        var image = payload.image;
+        var file = payload.file;
 
-        console.log(uri);
+        console.log(file);
 
-        if(uri) {
-          FileStore.upload(uri, (err, filename) => {
-            console.log('USER STORE', err, filename);
-            if(err) return;
-            this.user.save({
-              image_url: filename
-            }, {
-              patch: true,
-              success: function(model, response, options) {
-                //console.log(response);
-              }.bind(this)
-            });
-            this.user.set('image_url', filename);
-            this.trigger(USER.CHANGE_ALL);
-          });
-        } else {
-          this.user.save({
-            image: image
-          }, {
-            patch: true,
-            success: function(model, response, options) {
-            }.bind(this)
-          });
-          this.user.set('image', image);
-          this.trigger(USER.CHANGE_ALL);
+        if(_.isEmpty(file)) {
+          break;
         }
+
+        this.user.save({
+          image: file
+        }, {
+          patch: true,
+          success: function(model, response, options) {
+            //console.log(response);
+          }.bind(this)
+        });
+        this.user.set('image', file);
+        this.trigger(USER.CHANGE_ALL);
         break;
 
       case BEVY.JOIN:
@@ -472,11 +465,12 @@ _.extend(UserStore, {
     })
     .then(res => res.json())
     .then(res => {
-      console.log('login success');
-      if(res == 'User not found') {
+      if(typeof res === 'string') {
+        console.log('login error', res);
         this.trigger(USER.LOGIN_ERROR, res);
         return;
       }
+      console.log('login success');
       // set the new user
       this.setUser(res.user);
       // set the access and refresh tokens
@@ -489,9 +483,10 @@ _.extend(UserStore, {
       this.trigger(USER.LOGIN_SUCCESS);
     })
     .catch(err => {
-      console.log('login error', err.toString());
+      console.log('login error', err);
       // trigger error and pass along error message
-      this.trigger(USER.LOGIN_ERROR, err.toString());
+      if(err) err = err.toString();
+      this.trigger(USER.LOGIN_ERROR, err);
     });
   },
 

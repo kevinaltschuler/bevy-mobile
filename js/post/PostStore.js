@@ -1,15 +1,12 @@
 /**
  * PostStore.js
- *
- * Backbone and React and Flux confluence
- * for bevies
- *
- * @author kevins armpit hair
+ * @author kevin
+ * @author albert
+ * @flow
  */
 
 'use strict';
 
-// imports
 var Backbone = require('backbone');
 var _ = require('underscore');
 var React = require('react-native');
@@ -131,13 +128,14 @@ _.extend(PostStore, {
       case POST.VOTE:
         var post_id = payload.post_id;
         var post = this.posts.get(post_id);
-        var user = UserStore.getUser();
         if(post == undefined) break;
 
-        // cant vote if user is not part of the bevy (DONT DO THIS YET ACTUALLY)
+        var user = UserStore.getUser();
+
+        //cant vote if user is not part of the bevy (DONT DO THIS YET ACTUALLY)
         //if(!_.contains(user.bevies, post.get('bevy'))) break;
 
-        var votes = post.get('votes');
+        var votes = post.get('votes') || [];
         var vote = _.findWhere(votes, { voter: user._id });
         if(vote == undefined) {
           // vote not found. create one
@@ -157,17 +155,20 @@ _.extend(PostStore, {
             post.set('voted', false);
           }
         }
+        post.url = constants.apiurl + '/posts/' + post_id;
         post.save({
           votes: votes
         }, {
           patch: true,
-          success: function(post, response, options) {
+          success: function(model, response, options) {
             // sort posts
             //this.posts.sort();
             this.trigger(POST.CHANGE_ONE + post_id);
-          }.bind(this)
+          }.bind(this),
+          error: function(error) {
+            console.log('post save error', error);
+          }
         });
-
         break;
 
       case POST.DESTROY:
@@ -300,6 +301,26 @@ _.extend(PostStore, {
         this.posts.url = constants.apiurl + '/boards/' + board_id + '/posts';
 
         console.log('fetching posts from...', this.posts.url);
+
+        this.posts.reset([]);
+        this.trigger(POST.LOADING);
+        this.trigger(POST.CHANGE_ALL);
+
+        this.posts.fetch({
+          reset: true,
+          success: function(collection, response, options) {
+            this.posts.sort();
+            this.trigger(POST.LOADED);
+            this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
+      case BOARD.CLEAR:
+        var bevy = BevyStore.getActive();
+        var bevy_id = bevy._id;
+        this.posts.comparator = this.sortByNew;
+        this.posts.url = constants.apiurl + '/bevies/' + bevy_id + '/posts';
 
         this.posts.reset([]);
         this.trigger(POST.LOADING);

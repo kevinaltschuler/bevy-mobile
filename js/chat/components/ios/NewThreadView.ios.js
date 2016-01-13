@@ -23,7 +23,6 @@ var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js
 var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -263,12 +262,12 @@ var NewThreadView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -277,21 +276,10 @@ var NewThreadView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
             <Text style={ styles.title }>
               New Chat
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.iconButton }
-              onPress={ this.onSubmit }
-            >
-              <Icon
-                name='done'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
           </View>
         </View>
         <View style={ styles.toBar }>
@@ -340,7 +328,8 @@ var styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     textAlign: 'center',
-    color: '#FFF'
+    color: '#FFF',
+    paddingRight: 40
   },
   iconButton: {
     width: 48,

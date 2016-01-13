@@ -52,52 +52,6 @@ window.fetch = function(input, init) {
   return $fetch(url, options);
 };
 
-Backbone.sync = function(method, model, options) {
-
-  var headers = {
-    'Accept': 'application/json'
-  };
-  var body = '';
-
-  var url = model.url;
-  if (!options.url) {
-    url = _.result(model, 'url');
-  } else {
-    url = options.url;
-  }
-
-  if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-    headers['Content-Type'] = 'application/json';
-    body = JSON.stringify(options.attrs || model.toJSON(options));
-  }
-
-  var methodMap = {
-    'create': 'POST',
-    'update': 'PUT',
-    'patch':  'PATCH',
-    'delete': 'DELETE',
-    'read':   'GET'
-  };
-  method = methodMap[method];
-
-  //console.log(url, method);
-
-  return fetch(url, {
-    method: method,
-    headers: headers,
-    body: body
-  })
-  .then(res => {
-    var response = JSON.parse(res._bodyText);
-
-    //console.log('model', model);
-    //console.log('response', response);
-    //console.log('options', options);
-
-    options.success(response, options);
-  });
-};
-
 var constants = require('./js/constants');
 var routes = require('./js/routes');
 var BEVY = constants.BEVY;
@@ -141,7 +95,8 @@ Backbone.sync = function(method, model, options) {
     url = options.url;
   }
 
-  if(options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
+  if(options.data == null && model &&
+    (method === 'create' || method === 'update' || method === 'patch')) {
     headers['Content-Type'] = 'application/json';
     body = options.attrs || model.toJSON(options);
   }
@@ -156,25 +111,26 @@ Backbone.sync = function(method, model, options) {
   method = methodMap[method];
 
   var startTime = Date.now();
-  //console.log('START ' + method + ' ' + url);
 
   var opts = {
     method: method,
     headers: headers,
     body: JSON.stringify(body)
   };
-  if(method === 'GET' || method === 'HEAD')
+  if(method === 'GET' || method === 'HEAD' || method === 'OPTIONS')
     delete opts.body;
+
 
   return fetch(url, opts)
   .then(res => res.json())
   .then(res => {
+    //console.log('fetch success');
     var endTime = Date.now();
     var deltaTime = endTime - startTime;
-    //console.log('END', method, url);
     options.success(res, options);
   })
   .catch(error => {
+    console.log('fetch error', error);
     options.error(error.toString())
   });
 };
@@ -302,7 +258,6 @@ var App = React.createClass({
     sceneConfig.gestures = null;
 
     PushNotificationIOS.requestPermissions();
-    //PushNotificationIOS.checkPermissions(data => {console.log(data)})
 
     var initialRoute = routes.MAIN.LOADING;
 

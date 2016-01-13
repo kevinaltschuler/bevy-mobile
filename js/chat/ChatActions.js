@@ -81,6 +81,13 @@ var ChatActions = {
     });
   },
 
+  deleteMessage(message_id) {
+    Dispatcher.dispatch({
+      actionType: CHAT.DELETE_MESSAGE,
+      message_id: message_id
+    });
+  },
+
   fetchThreads() {
     Dispatcher.dispatch({
       actionType: CHAT.FETCH_THREADS

@@ -8,15 +8,15 @@
  */
 
 #import "AppDelegate.h"
-#import "RCTPushNotificationManager.h"
+//#import "RCTPushNotificationManager.h"
 #import "RCTRootView.h"
-#import "RCTLinkingManager.h"
+//#import "RCTLinkingManager.h"
 #import "RNGoogleSignin.h"
 
 @implementation AppDelegate
 
   // Required for the register event.
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+/*- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     {
      [RCTPushNotificationManager application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
     }
@@ -24,7 +24,7 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
     {
        [RCTPushNotificationManager application:application didReceiveRemoteNotification:notification];
-    }
+    }*/
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -44,7 +44,7 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+  //jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
   // ALBERTS HOUSE
   //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.19:8081/index.ios.bundle"];
   // KEVINS HOUSE
@@ -59,7 +59,7 @@
    * see http://facebook.github.io/react-native/docs/runningondevice.html
    */
 
-   //jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"bevyios"
@@ -67,7 +67,7 @@
                                                    launchOptions:launchOptions];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [[UIViewController alloc] init];
+  UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];

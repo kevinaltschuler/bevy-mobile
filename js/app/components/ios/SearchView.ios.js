@@ -1,6 +1,9 @@
 /**
  * SearchBar.ios.js
- * @author albert kevin ben
+ * @author albert
+ * @author kevin
+ * @author ben
+ * @flow
  */
 
 'use strict';
@@ -31,7 +34,6 @@ var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
 var AppActions = require('./../../../app/AppActions');
 var UserActions = require('./../../../user/UserActions');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var BevyStore = require('./../../../bevy/BevyStore');
 var UserStore = require('./../../../user/UserStore');
 var Spinner = require('react-native-spinkit');
@@ -291,7 +293,7 @@ var SearchView = React.createClass({
       <View style={styles.container}>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
         </View>
@@ -342,7 +344,6 @@ var styles = StyleSheet.create({
     backgroundColor: '#EEE',
   },
   Input: {
-    backgroundColor: '#FFF',
     height: 36,
     borderRadius: 4,
     backgroundColor: 'rgba(255,255,255,.3)',

@@ -12,6 +12,7 @@ var {
   Text,
   Image,
   TouchableHighlight,
+  TouchableOpacity,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -76,8 +77,8 @@ var UserSearchItem = React.createClass({
     }
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.onSelect }
       >
         <View style={ styles.container }>
@@ -92,7 +93,7 @@ var UserSearchItem = React.createClass({
             { this._renderIcon() }
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

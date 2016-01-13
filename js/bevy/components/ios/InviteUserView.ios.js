@@ -23,7 +23,6 @@ var InviteItem = require('./InviteItem.ios.js');
 var Spinner = require('react-native-spinkit');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -178,7 +177,7 @@ var InviteUserView = React.createClass({
     var invites = this.props.bevyInvites
     for(var key in invites) {
       var invite = invites[key];
-      if(invite.requestType == 'request_join') 
+      if(invite.requestType == 'request_join')
         users.push(
           <InviteItem
             key={ 'invite:' + invite._id }
@@ -251,12 +250,12 @@ var InviteUserView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
             style={ styles.iconButton }
             onPress={ this.goBack }
           >
@@ -265,7 +264,7 @@ var InviteUserView = React.createClass({
               size={ 30 }
               color='#FFF'
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
             <Text style={ styles.title }>
               Invite a user to { bevy.name }
             </Text>

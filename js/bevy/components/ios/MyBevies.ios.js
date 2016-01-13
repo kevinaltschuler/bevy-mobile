@@ -24,7 +24,6 @@ var Spinner = require('react-native-spinkit');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var UserStore = require('./../../../user/UserStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BevyActions = require('./../../../bevy/BevyActions');
@@ -99,8 +98,8 @@ var MyBevies = React.createClass({
   _renderNewBevyCard() {
     if(this.state.loading) return <View />;
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,.1)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         onPress={ this.goToNewBevy }
         style={ styles.newBevyCard }
       >
@@ -123,7 +122,7 @@ var MyBevies = React.createClass({
             Create a New Bevy
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -133,22 +132,10 @@ var MyBevies = React.createClass({
         <View style={ styles.spinnerContainer }>
           <Spinner
             isVisible={ true }
-            size={ 40 }
-            type={ 'Arc' }
+            size={ 60 }
+            type={ '9CubeGrid' }
             color={ '#2cb673' }
           />
-        </View>
-      );
-    } else return <View />;
-  },
-
-  _renderNoBevies() {
-    if(!this.state.loading && _.isEmpty(this.state.myBevies)) {
-      return (
-        <View style={ styles.noBeviesContainer }>
-          <Text style={ styles.noBeviesText }>
-            No Bevies Yet
-          </Text>
         </View>
       );
     } else return <View />;
@@ -159,7 +146,7 @@ var MyBevies = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
@@ -170,8 +157,8 @@ var MyBevies = React.createClass({
             <Text style={ styles.title }>
               My Bevies
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goToNewBevy }
             >
@@ -180,7 +167,7 @@ var MyBevies = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -189,7 +176,6 @@ var MyBevies = React.createClass({
           automaticallyAdjustContentInsets={ false }
           showsVerticalScrollIndicator={ true }
         >
-          { this._renderNoBevies() }
           { this._renderLoading() }
           { this._renderBevyList() }
           { this._renderNewBevyCard() }

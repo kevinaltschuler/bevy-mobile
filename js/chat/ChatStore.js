@@ -445,6 +445,23 @@ _.extend(ChatStore, {
           }.bind(this)
         });
         break;
+
+      case CHAT.DELETE_MESSAGE:
+        var message_id = payload.message_id;
+
+        if(this.active == -1) break;
+        var thread = this.threads.get(this.active);
+        if(thread == undefined) break;
+
+        var message = thread.messages.remove(message_id);
+        if(message == undefined) return;
+
+        message.url = constants.apiurl + '/messages/' + message_id;
+        message.destroy();
+
+        //this.trigger(CHAT.CHANGE_ALL);
+        this.trigger(CHAT.CHANGE_ONE + thread.get('id'));
+        break;
     }
 	},
 

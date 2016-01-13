@@ -18,11 +18,10 @@ var UserActions = {
     });
   },
 
-  changeProfilePicture(uri, image) {
+  changeProfilePicture(file) {
     Dispatcher.dispatch({
       actionType: USER.CHANGE_PROFILE_PICTURE,
-      uri: uri,
-      image: image
+      file: file
     });
   },
 

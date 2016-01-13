@@ -46,7 +46,6 @@ _.extend(FileStore, {
       }
       if(Platform.OS == 'ios') {
         var file = res.data;
-        console.log(res);
         file = JSON.parse(file);
       } else {
         var file = JSON.parse(res);

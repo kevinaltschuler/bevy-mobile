@@ -19,7 +19,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var BoardItem = require('./BoardItem.ios.js');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -65,8 +64,8 @@ var BevySideMenu = React.createClass({
       : 'public';
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(255,255,255,.2)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         style={styles.bevyCard}
         onPress={ this.clearBoard }
       >
@@ -115,7 +114,7 @@ var BevySideMenu = React.createClass({
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -138,11 +137,12 @@ var BevySideMenu = React.createClass({
 
   _renderNewBoardItem() {
     return (
-      <TouchableHighlight
-        underlayColor='rgba(255,255,255,0.2)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         style={[ styles.newBoardItem, {
           borderBottomWidth: 1,
-          borderBottomColor: '#666'
+          borderBottomColor: '#666',
+          height: 70
         }]}
         onPress={ this.goToNewBoard }
       >
@@ -156,7 +156,7 @@ var BevySideMenu = React.createClass({
             Create New Board
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   },
 
@@ -168,7 +168,7 @@ var BevySideMenu = React.createClass({
     return (
       <View style={ styles.container }>
         <View style={{
-          height: StatusBarSizeIOS.currentHeight,
+          height: constants.getStatusBarHeight()
         }}/>
         <ScrollView style={styles.menuContainer}>
           { this._renderBevyItem() }
@@ -203,14 +203,14 @@ var styles = StyleSheet.create({
     borderBottomColor: '#666',
   },
   top: {
-    height: 70,
+    height: 69,
     flexDirection: 'row',
     alignItems: 'center',
   },
   bevyImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30
+    width: 50,
+    height: 50,
+    borderRadius: 25
   },
   bevyName: {
     color: '#fff',
@@ -234,7 +234,7 @@ var styles = StyleSheet.create({
     fontSize: 17
   },
   newBoardItem: {
-    height: 70,
+    height: 68,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center'

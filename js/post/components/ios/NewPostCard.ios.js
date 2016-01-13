@@ -12,7 +12,8 @@ var {
   Image,
   StyleSheet,
   Text,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 
 var _ = require('underscore');
@@ -20,23 +21,54 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 
+var hintTexts = [
+  "What's on your mind?",
+  "What's up?",
+  "How's it going?",
+  "What's new?",
+  "How are you doing today?",
+  "Share your thoughts",
+  "Drop some knowledge buddy",
+  "Drop a line",
+  "What's good?",
+  "What do you have to say?",
+  "Spit a verse",
+  "What would your mother think?",
+  "Tell me about yourself",
+  "What are you thinking about?",
+  "Gimme a bar",
+  "Lets talk about our feelings",
+  "Tell me how you really feel",
+  "How was last night?",
+  "What's gucci?",
+  "Anything worth sharing?",
+];
+
 var NewPostCard = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
     mainNavigator: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      hintText: hintTexts[Math.floor(Math.random() * hintTexts.length)]
+    }
+  },
+
+  goToNewPost() {
+    this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+  },
+
   render() {
     var userImageURL = (!_.isEmpty(this.props.user.image))
-    ? resizeImage(this.props.user.image, 64, 64).url
-    : constants.siteurl + '/img/user-profile-icon.png';
+      ? resizeImage(this.props.user.image, 64, 64).url
+      : constants.siteurl + '/img/user-profile-icon.png';
 
     return (
-      <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0)'}
-        onPress={() => {
-          this.props.mainNavigator.push(routes.MAIN.NEWPOST);
-        }}
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        onPress={ this.goToNewPost }
         style={ styles.touchContainer }
       >
         <View style={ styles.container }>
@@ -46,11 +78,11 @@ var NewPostCard = React.createClass({
           />
           <View style={ styles.textContainer }>
             <Text style={ styles.text }>
-              Drop a Line
+              { this.state.hintText }
             </Text>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });
@@ -65,23 +97,25 @@ var styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
-    padding: 10,
+    height: 60,
+    paddingHorizontal: 10,
     borderRadius: 3,
     marginBottom: 15
   },
   image: {
-    width: 30,
-    height: 30,
-    borderRadius: 15
+    width: 40,
+    height: 40,
+    borderRadius: 20
   },
   textContainer: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 15,
     //borderBottomWidth: 1,
     //borderBottomColor: '#ccc'
   },
   text: {
-    color: '#aaa'
+    color: '#888',
+    fontSize: 17
   }
 });
 

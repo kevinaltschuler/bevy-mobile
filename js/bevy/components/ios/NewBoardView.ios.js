@@ -22,7 +22,6 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var RefreshingIndicator =
   require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -286,7 +285,7 @@ var NewBoardView = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }} />
           <View style={ styles.topBar }>

@@ -12,7 +12,8 @@ var {
   Text,
   Image,
   StyleSheet,
-  TouchableHighlight
+  TouchableHighlight,
+  TouchableOpacity
 } = React;
 
 var _ = require('underscore');
@@ -38,8 +39,8 @@ var AdminItem = React.createClass({
       : resizeImage(this.props.admin.image, 64, 64).url;
 
     return (
-      <TouchableHighlight
-        underlayColor='rgba(0,0,0,0.1)'
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
         style={ styles.container }
         onPress={ this.goToProfile }
       >
@@ -52,7 +53,7 @@ var AdminItem = React.createClass({
             { this.props.admin.displayName }
           </Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 });

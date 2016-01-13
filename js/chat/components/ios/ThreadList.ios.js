@@ -1,5 +1,5 @@
 /**
- * ThreadItem.ios.js
+ * ThreadList.ios.js
  * @author albert
  * @author kevin
  * @flow
@@ -14,6 +14,7 @@ var {
   Text,
   StyleSheet,
   TouchableHighlight,
+  TouchableOpacity,
   ScrollView,
   SegmentedControlIOS
 } = React;
@@ -24,7 +25,6 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatStore = require('./../../../chat/ChatStore');
-var StatusBarSizeIOS = require('react-native-status-bar-size');
 var CHAT = constants.CHAT;
 
 var ThreadList = React.createClass({
@@ -151,7 +151,7 @@ var ThreadList = React.createClass({
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
           <View style={{
-            height: StatusBarSizeIOS.currentHeight,
+            height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
@@ -162,8 +162,8 @@ var ThreadList = React.createClass({
             <Text style={ styles.title }>
               Chat
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.newThreadButton }
               onPress={ this.goToNewThread }
             >
@@ -172,22 +172,15 @@ var ThreadList = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
-          <View style={styles.tabs}>
+          <View style={ styles.tabs }>
             <SegmentedControlIOS
-              style={{
-                backgroundColor: '#2cb673',
-                marginTop: 10,
-                marginHorizontal: 20,
-                flex: 1
-              }}
+              style={ styles.segmentedControl }
               tintColor='#fff'
               values={['Board Chats', 'User Chats']}
-              selectedIndex={tabIndex}
-              onValueChange={(ev) => {
-                this.changeTab(ev);
-              }}
+              selectedIndex={ tabIndex }
+              onValueChange={ ev => { this.changeTab(ev) }}
             />
           </View>
         </View>
@@ -258,6 +251,12 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 48,
     backgroundColor: '#2cb673'
+  },
+  segmentedControl: {
+    backgroundColor: '#2cb673',
+    marginTop: 10,
+    marginHorizontal: 10,
+    flex: 1
   },
   tab: {
     flex: 1,
