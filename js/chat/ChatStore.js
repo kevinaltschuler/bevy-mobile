@@ -426,7 +426,6 @@ _.extend(ChatStore, {
         var body = payload.body;
 
         var thread = this.threads.get(thread_id);
-
         if(thread == undefined) break;
 
         var message = thread.messages.add({
@@ -440,8 +439,9 @@ _.extend(ChatStore, {
             message.set('_id', model.get('_id'));
             message.set('author', model.get('author'));
             message.set('created', model.get('created'));
-            this.trigger(CHAT.CHANGE_ALL);
+
             this.trigger(CHAT.CHANGE_ONE + thread_id);
+            this.trigger(CHAT.CHANGE_ALL);
           }.bind(this)
         });
         break;

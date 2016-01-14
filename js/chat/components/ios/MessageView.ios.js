@@ -53,8 +53,7 @@ var MessageView = React.createClass({
       messageValue: '',
       messages: messages,
       ds: ds.cloneWithRows(messages),
-      scrollY: 0,
-      end: false
+      scrollY: 0
     };
   },
 
@@ -100,26 +99,19 @@ var MessageView = React.createClass({
   handleScroll(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
     //console.log(scrollY);
-    if(this.state.scrollY == null) {
-      this.setState({ scrollY: scrollY });
+    if(this.scrollY == null) {
+      this.scrollY = scrollY
       return;
     }
-    if((this.state.scrollY - scrollY) > 3 && this.state.scrollY < -5) {
+    if((this.scrollY - scrollY) > 3) {
       //console.log('blurring');
-      this.refs.MessageInput.blur();
+      //this.refs.MessageInput.blur();
     }
-    if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
+    if((this.scrollY - scrollY) < -5 && this.scrollY > 0) {
       //console.log('focusing');
-      this.refs.MessageInput.focus();
+      //this.refs.MessageInput.focus();
     }
-    this.setState({ scrollY: scrollY });
-  },
-
-  handleResponderGrant() {
-    this.isTouching = true;
-  },
-  handleResponderRelease() {
-    this.isTouching = false;
+    this.scrollY = scrollY;
   },
 
   onRefresh() {
@@ -141,6 +133,7 @@ var MessageView = React.createClass({
       return;
     }
     ChatActions.postMessage(this.props.activeThread._id, user, text);
+
     //reset the field
     this.setState({
       messageValue: ''
@@ -156,15 +149,25 @@ var MessageView = React.createClass({
     });
     this.setState({
       messages: messages,
-      dataSource: this.state.dataSource.cloneWithRows(messages)
+      ds: this.state.ds.cloneWithRows(messages)
     });
-    this.clearAndRetainFocus();
+    setTimeout(this.scrollToBottom, 300);
   },
 
-  onEndReached() {
-    this.setState({
-      end: true
-    })
+  onBlur() {
+    setTimeout(this.scrollToBottom, 300);
+  },
+  onFocus() {
+    setTimeout(this.scrollToBottom, 300);
+  },
+
+  scrollToBottom() {
+    var scrollProperties = this.MessageList.scrollProperties;
+    var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
+    scrollOffset += 15;
+    requestAnimationFrame(() => {
+      this.MessageList.scrollResponderScrollTo(0, scrollOffset);
+    });
   },
 
   goBack() {
@@ -173,22 +176,6 @@ var MessageView = React.createClass({
 
   goToSettings() {
     this.props.chatNavigator.push(routes.CHAT.THREADSETTINGS);
-  },
-
-  clearAndRetainFocus() {
-    this.setState({ messageValue: '' });
-    setTimeout(function() {
-      this.setState({ messageValue: this.getInitialState().messageValue });
-      this.refs.MessageInput.focus();
-    }.bind(this), 50);
-  },
-
-  scrollToBottom() {
-    var scrollProperties = this.MessageList.scrollProperties;
-    var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
-    requestAnimationFrame(() => {
-      //this.MessageList.getScrollResponder().scrollTo(scrollOffset);
-    });
   },
 
   renderHeader() {
@@ -263,14 +250,11 @@ var MessageView = React.createClass({
         <ListView
           ref={ ref => { this.MessageList = ref; }}
           style={ styles.messageList }
+          contentContainerStyle={ styles.messageListInner }
           dataSource={ this.state.ds }
           onScroll={ this.handleScroll }
-          onResponderGrant={ this.handleResponderGrant }
-          onResponderRelease={ this.handleResponderRelease }
-          decelerationRate={ 0.9 }
           scrollRenderAheadDistance={ 500 }
           showsVerticalScrollIndicator={ true }
-          onEndReached={ this.onEndReached }
           renderRow={ this.renderMessageRow }
           renderHeader={ this.renderHeader }
           refreshControl={
@@ -291,7 +275,9 @@ var MessageView = React.createClass({
             style={ styles.messageInput }
             onChangeText={ text => { this.onChange(text) }}
             onSubmitEditing={ ev => { this.onSubmitEditing() }}
-            onFocus={ this.scrollToBottom }
+            blurOnSubmit={ false }
+            onFocus={ this.onFocus }
+            onBlur={ this.onBlur }
             clearButtonMode={ 'while-editing' }
             placeholder='Chat'
             placeholderTextColor='#AAA'
@@ -354,6 +340,9 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
+  messageListInner: {
+    paddingBottom: 15
+  },
   loading: {
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -383,19 +372,6 @@ var styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12,
     paddingVertical: 12
-  },
-  loadMoreButton: {
-    backgroundColor: 'rgba(0,0,0,.3)',
-    borderRadius: 2,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginVertical: 10
-  },
-  loadMoreButtonText: {
-    color: '#fff',
-    fontSize: 17
   }
 })
 

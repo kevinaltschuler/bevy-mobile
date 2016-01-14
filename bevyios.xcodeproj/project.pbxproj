@@ -24,7 +24,6 @@
 		4D0433DE1B475D7100CD5250 /* libRNKeyboardEvents.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D0433DD1B475D6100CD5250 /* libRNKeyboardEvents.a */; };
 		4D19E2451B79240900BCD97C /* RCTFileTransfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D19E2441B79240900BCD97C /* RCTFileTransfer.m */; };
 		4D7764F91B58085E005FE588 /* RCTReadImageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D7764F81B58085E005FE588 /* RCTReadImageData.m */; };
-		4D7765001B59810D005FE588 /* libRNStatusBarSize.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D7764FF1B5980F7005FE588 /* libRNStatusBarSize.a */; };
 		50CA68AD1C3EF61000FF8C54 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 50CA68A91C3EF61000FF8C54 /* GoogleSignIn.bundle */; };
 		50CA68AE1C3EF61000FF8C54 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50CA68AA1C3EF61000FF8C54 /* GoogleSignIn.framework */; };
 		50CA68AF1C3EF61000FF8C54 /* RNGoogleSignin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50CA68AC1C3EF61000FF8C54 /* RNGoogleSignin.m */; };
@@ -266,7 +265,6 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
-				4D7765001B59810D005FE588 /* libRNStatusBarSize.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -930,6 +928,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;
 				PROVISIONING_PROFILE = "9136e426-33a6-4e31-9064-36885326a050";
+				SWIFT_OBJC_BRIDGING_HEADER = "node_modules/react-native-swift-socketio/RNSwiftSocketIO/SocketBridge.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -963,6 +962,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;
 				PROVISIONING_PROFILE = "9136e426-33a6-4e31-9064-36885326a050";
+				SWIFT_OBJC_BRIDGING_HEADER = "node_modules/react-native-swift-socketio/RNSwiftSocketIO/SocketBridge.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
