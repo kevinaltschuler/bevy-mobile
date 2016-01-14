@@ -67,6 +67,7 @@ var MessageItem = React.createClass({
 
   measureMessageBody() {
     setTimeout(() => {
+      if(!this.MessageBody) return;
       this.MessageBody.measure((ox, oy, width, height, px, py) => {
         if(width >= (constants.width - 80)) {
           this.setState({ wrap: true });
