@@ -34,11 +34,10 @@ var UserStore = require('./../user/UserStore');
 var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
-/*
-window.navigator.userAgent = "react-native";
-var io = require('socket.io-client/socket.io');
-*/
 
+//window.navigator.userAgent = "react-native";
+//console.log(window, window.navigator);
+//var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
@@ -64,18 +63,12 @@ _.extend(NotificationStore, {
           success: function(collection, response, options) {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
-              (notification) => notification.read == false).length; 
+              (notification) => notification.read == false).length;
 
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
         });
-
-        //var ws_url = 'ws://' + constants.hostname + '/socket.io/';
-        //console.log('ws connecting to', ws_url);
-        //var ws = new WebSocket(ws_url);
-
-        //console.log(io.connect);
 
         var ws = io(constants.siteurl);
 
