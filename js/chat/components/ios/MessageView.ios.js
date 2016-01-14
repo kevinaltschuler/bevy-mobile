@@ -15,6 +15,7 @@ var {
   ScrollView,
   ListView,
   TextInput,
+  RefreshControl,
   Image,
   TouchableHighlight,
   TouchableOpacity
@@ -57,7 +58,6 @@ var MessageView = React.createClass({
     };
   },
 
-
   componentDidMount() {
     ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
@@ -91,6 +91,11 @@ var MessageView = React.createClass({
       ds: this.state.ds.cloneWithRows(messages)
     });
   },
+  onRefresh() {
+    this.setState({
+      isRefreshing: true
+    });
+  },
 
   handleScroll(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
@@ -99,21 +104,13 @@ var MessageView = React.createClass({
       this.setState({ scrollY: scrollY });
       return;
     }
-    if(this.isTouching) {
-      if(scrollY < -60) {
-        if(!this.state.isRefreshing) {
-          this.setState({ isRefreshing: true });
-          this.onRefresh();
-        }
-      }
-    }
     if((this.state.scrollY - scrollY) > 3 && this.state.scrollY < -5) {
       //console.log('blurring');
-      //this.refs.MessageInput.blur();
+      this.refs.MessageInput.blur();
     }
     if((this.state.scrollY - scrollY) < -5 && this.state.scrollY > 0) {
       //console.log('focusing');
-      //this.refs.MessageInput.focus();
+      this.refs.MessageInput.focus();
     }
     this.setState({ scrollY: scrollY });
   },
@@ -195,31 +192,7 @@ var MessageView = React.createClass({
   },
 
   renderHeader() {
-    if(_.isEmpty(this.state.messages)) return <View />;
-    if(!this.state.isRefreshing) {
-      return (
-        <TouchableOpacity
-          activeOpacity={.5}
-          style={ styles.loadMoreButton }
-          onPress={ this.onRefresh }
-        >
-          <Text style={ styles.loadMoreButtonText }>
-            Load More Messages
-          </Text>
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <View style={ styles.loading }>
-          <Spinner
-            isVisible={ true }
-            size={ 40 }
-            type={ 'Arc' }
-            color={ '#2cb673' }
-          />
-        </View>
-      );
-    }
+    return <View style={{ height: 20 }}/>;
   },
 
   renderMessageRow(message, sectionID, rowID, highlightRow) {
@@ -300,9 +273,14 @@ var MessageView = React.createClass({
           onEndReached={ this.onEndReached }
           renderRow={ this.renderMessageRow }
           renderHeader={ this.renderHeader }
-          renderFooter={() => {
-            return <View style={{ height: 20 }}/>;
-          }}
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.isRefreshing }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading More Messages...'
+            />
+          }
         />
         <View style={[styles.inputContainer, {
           marginBottom: this.state.keyboardSpace - 48

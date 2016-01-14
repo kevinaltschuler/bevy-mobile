@@ -57,12 +57,16 @@ _.extend(NotificationStore, {
         this.notifications.url =
           constants.apiurl + '/users/' + user._id + '/notifications';
 
+        this.trigger(NOTIFICATION.FETCHING);
+
         this.notifications.fetch({
           reset: true,
           success: function(collection, response, options) {
+            // count all notifications that are unread
             this.unread = this.notifications.filter(
-              (notification) => notification.read == false)
-            .length; // count all notifications that are unread
+              (notification) => notification.read == false).length; 
+
+            this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
         });
@@ -134,7 +138,7 @@ _.extend(NotificationStore, {
           success: function(collection, response, options) {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
-              (notification) => notification.read == false).length; 
+              (notification) => notification.read == false).length;
 
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
@@ -212,7 +216,6 @@ if(Platform.OS == 'android') {
     console.log('got remote notification', data);
   });
 }
-
 
 var dispatchToken = Dispatcher.register(NotificationStore.handleDispatch.bind(NotificationStore));
 NotificationStore.dispatchToken = dispatchToken;
