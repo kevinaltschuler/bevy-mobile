@@ -32,36 +32,36 @@ _.extend(ChatStore, {
 	handleDispatch(payload) {
 		switch(payload.actionType) {
       case APP.LOAD:
-        if(UserStore.loggedIn) {
-          // get all threads of the user
-          this.threads.fetch({
-            reset: true,
-            success: function(collection, response, options) {
-              if(this.active != -1) {
-                // if theres already an active thread set
-                // then fetch the messages asap
-                var thread = this.threads.get(this.active);
-                this.threads.sort();
-              }
-              this.threads.comparator = this.sortByLatest;
+        // get all threads of the user
+        this.trigger(CHAT.FETCHING_THREADS);
+        this.threads.fetch({
+          reset: true,
+          success: function(collection, response, options) {
+            if(this.active != -1) {
+              // if theres already an active thread set
+              // then fetch the messages asap
+              var thread = this.threads.get(this.active);
               this.threads.sort();
+            }
+            this.threads.comparator = this.sortByLatest;
+            this.threads.sort();
+            this.trigger(CHAT.THREADS_FETCHED);
+            this.trigger(CHAT.CHANGE_ALL);
+          }.bind(this)
+        });
+        // check for launched intent of chat message
+        if(Platform.OS == 'android') {
+          console.log('GETTING BEVY INTENT');
+          BevyIntent.getIntent(data => {
+            var payload = data.extras;
+            console.log('BEVYINTENT', data);
+            if(payload.event == 'chat_message') {
+              // if so, then set the active thread to the chat message thread
+              this.active = payload.thread_id;
               this.trigger(CHAT.CHANGE_ALL);
-            }.bind(this)
+              this.trigger(CHAT.SWITCH_TO_THREAD_INTENT, payload.thread_id);
+            }
           });
-          // check for launched intent of chat message
-          if(Platform.OS == 'android') {
-            console.log('GETTING BEVY INTENT');
-            BevyIntent.getIntent(data => {
-              var payload = data.extras;
-              console.log('BEVYINTENT', data);
-              if(payload.event == 'chat_message') {
-                // if so, then set the active thread to the chat message thread
-                this.active = payload.thread_id;
-                this.trigger(CHAT.CHANGE_ALL);
-                this.trigger(CHAT.SWITCH_TO_THREAD_INTENT, payload.thread_id);
-              }
-            });
-          }
         }
         break;
 
@@ -71,8 +71,8 @@ _.extend(ChatStore, {
           success: function(collection, response, options) {
             this.threads.comparator = this.sortByLatest;
             this.threads.sort();
-            this.trigger(CHAT.CHANGE_ALL);
             this.trigger(CHAT.THREADS_FETCHED);
+            this.trigger(CHAT.CHANGE_ALL);
           }.bind(this)
         });
         break;

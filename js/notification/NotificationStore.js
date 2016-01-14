@@ -70,9 +70,9 @@ _.extend(NotificationStore, {
         //var ws_url = 'ws://' + constants.hostname + '/socket.io/';
         //console.log('ws connecting to', ws_url);
         //var ws = new WebSocket(ws_url);
-        
+
         //console.log(io.connect);
-        
+
         var ws = io(constants.siteurl);
 
         ws.on('error', function(error) {
@@ -123,14 +123,21 @@ _.extend(NotificationStore, {
         break;
 
       case NOTIFICATION.FETCH:
+        var user = UserStore.getUser();
+
+        this.notifications.url =
+          constants.apiurl + '/users/' + user._id + '/notifications';
+
         this.trigger(NOTIFICATION.FETCHING);
+
         this.notifications.fetch({
           success: function(collection, response, options) {
+            // count all notifications that are unread
             this.unread = this.notifications.filter(
-              (notification) => notification.read == false)
-            .length; // count all notifications that are unread
-            this.trigger(NOTIFICATION.CHANGE_ALL);
+              (notification) => notification.read == false).length; 
+
             this.trigger(NOTIFICATION.FETCHED);
+            this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
         });
         break;

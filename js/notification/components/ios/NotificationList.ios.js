@@ -13,12 +13,16 @@ var {
   Text,
   View,
   ListView,
+  RefreshControl,
   ScrollView
 } = React;
 var NotificationItem = require('./NotificationItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants.js');
+var NotificationActions = require('./../../../notification/NotificationActions');
+var NotificationStore = require('./../../../notification/NotificationStore');
+var NOTIFICATION = constants.NOTIFICATION;
 
 var NotificationList = React.createClass({
   propTypes: {
@@ -27,14 +31,33 @@ var NotificationList = React.createClass({
 
   getInitialState() {
     return {
-      notes: this.props.allNotifications
+      notes: this.props.allNotifications,
+      loading: true
     };
   },
 
-  componentWillReceiveProps(nextProps) {
+  componentDidMount() {
+    NotificationStore.on(NOTIFICATION.FETCHING, this.onLoading);
+    NotificationStore.on(NOTIFICATION.FETCHED, this.onLoaded);
+  },
+  componentWillUnmount() {
+    NotificationStore.off(NOTIFICATION.FETCHING, this.onLoading);
+    NotificationStore.off(NOTIFICATION.FETCHED, this.onLoaded);
+  },
+
+  onLoading() {
     this.setState({
-      notes: nextProps.allNotifications
+      loading: true
     });
+  },
+  onLoaded() {
+    this.setState({
+      loading: false,
+      notes: NotificationStore.getAll()
+    });
+  },
+  onRefresh() {
+    NotificationActions.fetch();
   },
 
   _renderNoNotificationsText() {
@@ -75,6 +98,14 @@ var NotificationList = React.createClass({
           contentContainerStyle={{
             paddingBottom: 48
           }}
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.loading }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         >
           { this._renderNotes() }
         </ScrollView>
