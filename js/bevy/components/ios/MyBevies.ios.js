@@ -15,6 +15,7 @@ var {
   Image,
   TouchableHighlight,
   TouchableOpacity,
+  RefreshControl,
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -39,38 +40,35 @@ var MyBevies = React.createClass({
 
   getInitialState() {
     return {
-      loading: true,
+      loading: false,
+      loadingInitial: true,
       myBevies: this.props.myBevies
     };
   },
 
   componentDidMount() {
-    BevyStore.on(BEVY.LOADING, this._onLoading);
-    BevyStore.on(BEVY.LOADED, this._onLoaded);
+    BevyStore.on(BEVY.LOADING, this.onLoading);
+    BevyStore.on(BEVY.LOADED, this.onLoaded);
   },
   componentWillUnmount() {
-    BevyStore.off(BEVY.LOADING, this._onLoading);
-    BevyStore.off(BEVY.LOADED, this._onLoaded);
+    BevyStore.off(BEVY.LOADING, this.onLoading);
+    BevyStore.off(BEVY.LOADED, this.onLoaded);
   },
 
-  _onLoading() {
-    this.setState({
-      loading: true
-    });
+  onLoading() {
+    this.setState({ loading: true });
   },
 
-  _onLoaded() {
+  onLoaded() {
     this.setState({
       myBevies: BevyStore.getMyBevies(),
-      loading: true
+      loading: false,
+      loadingInitial: false
     });
-    // make sure mybevies is flushed to the state before we display it
-    // just to make sure "no bevies" doesn't flash for a second
-    setTimeout(() => {
-      this.setState({
-        loading: false
-      });
-    }, 500);
+  },
+
+  onRefresh() {
+    BevyActions.fetch();
   },
 
   goToNewBevy() {
@@ -78,7 +76,7 @@ var MyBevies = React.createClass({
   },
 
   _renderBevyList() {
-    if(this.state.loading) return [];
+    if(this.state.loadingInitial) return [];
     var bevyList = [];
     for(var key in this.state.myBevies) {
       var bevy = this.state.myBevies[key];
@@ -96,7 +94,7 @@ var MyBevies = React.createClass({
   },
 
   _renderNewBevyCard() {
-    if(this.state.loading) return <View />;
+    if(this.state.loadingInitial) return <View />;
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
@@ -127,7 +125,7 @@ var MyBevies = React.createClass({
   },
 
   _renderLoading() {
-    if(this.state.loading) {
+    if(this.state.loadingInitial) {
       return (
         <View style={ styles.spinnerContainer }>
           <Spinner
@@ -175,6 +173,14 @@ var MyBevies = React.createClass({
           contentContainerStyle={ styles.bevyList }
           automaticallyAdjustContentInsets={ false }
           showsVerticalScrollIndicator={ true }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.loading }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         >
           { this._renderLoading() }
           { this._renderBevyList() }

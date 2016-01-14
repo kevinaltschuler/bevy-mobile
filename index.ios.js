@@ -49,7 +49,14 @@ window.fetch = function(input, init) {
     // include the cookie it sent to maintain the session
     options.credentials = 'include';
   }
-  return $fetch(url, options);
+  // set the network activity indicator to true
+  StatusBarIOS.setNetworkActivityIndicatorVisible(true);
+
+  return $fetch(url, options).then(res => {
+    // clear the network activity indicator
+    StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+    return res;
+  });
 };
 
 var constants = require('./js/constants');
@@ -130,7 +137,7 @@ Backbone.sync = function(method, model, options) {
     options.success(res, options);
   })
   .catch(error => {
-    console.log('fetch error', error);
+    console.log('fetch error', error.toString());
     options.error(error.toString())
   });
 };

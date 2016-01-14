@@ -103,7 +103,7 @@ var NotificationList = React.createClass({
             scrollRenderAheadDistance={ 300 }
             removeClippedSubviews={ true }
             initialListSize={ 10 }
-            pageSize={ 10 }         
+            pageSize={ 10 }
             renderRow={(notification) => {
               return (
                 <NotificationItem

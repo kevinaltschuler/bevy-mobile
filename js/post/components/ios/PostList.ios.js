@@ -86,11 +86,13 @@ var PostList = React.createClass({
   },
 
   _onPostsLoaded() {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
-      loading: false
-    });
-    this.forceUpdate();
+    setTimeout(() => {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
+        loading: false
+      });
+      this.forceUpdate();
+    }, 300);
   },
 
   onRefresh(stopRefresh) {
@@ -177,7 +179,9 @@ var PostList = React.createClass({
   },
 
   _renderPosts() {
+    console.log(this.state.loading, this.state.dataSource)
     if(this.state.loading) return <View />;
+
     return (
       <ListView
         ref={(ref) => { this.ListView = ref; }}
@@ -193,7 +197,7 @@ var PostList = React.createClass({
         renderFooter={() => {
           return <View style={{height: 20}}/>
         }}
-        renderRow={(post) => {
+        renderRow={ post => {
           return (
             <Post
               key={ 'postlist:' + post._id }
@@ -209,10 +213,10 @@ var PostList = React.createClass({
   },
 
   render() {
-    if(_.isEmpty(this.props.activeBevy)) {
+    if(_.isEmpty(this.props.activeBevy) && _.isEmpty(this.props.profileUser)) {
       return <View/>;
     }
-    if(this.props.activeBevy.settings.privacy == 'Private'
+    if(!_.isEmpty(this.props.activeBevy) && this.props.activeBevy.settings.privacy == 'Private'
       && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
       // if this is a private bevy that the user is not a part of
       // dont show any posts. only show a request join view

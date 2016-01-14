@@ -87,6 +87,7 @@ _.extend(UserStore, {
         var password = payload.password;
         console.log('logging in');
         this.login(username, password);
+        GoogleSignIn.signOut();
         break;
 
       case USER.LOGIN_GOOGLE:
@@ -98,12 +99,19 @@ _.extend(UserStore, {
           // SCOPES - array of authorization names:
           // eg ['https://www.googleapis.com/auth/calendar']
           // for requesting access to user calendar
-          ['profile email']
+          ['profile email openid']
+          /*[
+            'https://www.googleapis.com/auth/plus.login',
+            'https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email',
+            'https://www.googleapis.com/auth/plus.me',
+            'openid'
+          ]*/
         );
         // called on signin error
         NativeAppEventEmitter.addListener('googleSignInError', error => {
           console.log('google sign in error', error);
-          AlertIOS.alert(error.error);
+          //AlertIOS.alert(error.error);
         });
 
         // called on signin success, you get user data (email), access token and idToken
@@ -119,6 +127,7 @@ _.extend(UserStore, {
           var idToken = user.idToken;
           var jot_guts = idToken.split('.');
           var payload = JSON.parse(base64.decode(jot_guts[1]).toString());
+          console.log('google sign in payload', payload)
           fetch(constants.siteurl + '/login/google', {
             method: 'POST',
             headers: {
@@ -157,7 +166,7 @@ _.extend(UserStore, {
           });
         });
         // call this method when user clicks the 'Signin with google' button
-        //GoogleSignIn.signIn();
+        GoogleSignIn.signIn();
         break;
 
       case USER.LOGOUT:

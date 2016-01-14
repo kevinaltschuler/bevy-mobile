@@ -305,6 +305,7 @@ var styles = StyleSheet.create({
   },
   sectionTitle: {
     color: '#AAA',
+    fontSize: 17,
     marginLeft: 10,
     marginBottom: 5,
     marginTop: 10
@@ -319,6 +320,7 @@ var styles = StyleSheet.create({
   settingText: {
     flex: 1,
     color: '#000',
+    fontSize: 17,
     marginLeft: 10
   },
   editInput: {

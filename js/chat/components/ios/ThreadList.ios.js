@@ -16,15 +16,18 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
   SegmentedControlIOS
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadItem = require('./ThreadItem.ios.js');
+var Spinner = require('react-native-spinkit');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatStore = require('./../../../chat/ChatStore');
+var ChatActions = require('./../../../chat/ChatActions');
 var CHAT = constants.CHAT;
 
 var ThreadList = React.createClass({
@@ -38,21 +41,70 @@ var ThreadList = React.createClass({
   getInitialState() {
     var threads = this.props.allThreads;
     threads = this.pruneEmptyThreads(threads);
-    threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
+    threads = _.filter(threads, function(thread) { return !_.isEmpty(thread.board) });
     return {
       threads: threads,
       ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
         .cloneWithRows(threads),
-      tab: 'Board Chats'
+      tab: 'Board Chats',
+      loading: false
     };
   },
 
+  /*componentWillReceiveProps(nextProps) {
+    var threads = nextProps.allThreads;
+    threads = this.pruneEmptyThreads(threads);
+    if(this.state.tab == 'Board Chats') {
+      threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
+    }
+    else {
+      threads = _.filter(threads, function(thread) {return _.isEmpty(thread.board)});
+    }
+    this.setState({
+      threads: threads,
+      ds: this.state.ds.cloneWithRows(threads),
+      loading: false
+    })
+  },*/
+
   componentDidMount() {
-    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.switchToThread)
+    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.switchToThread);
+    ChatStore.on(CHAT.FETCHING_THREADS, this.onLoading);
+    ChatStore.on(CHAT.THREADS_FETCHED, this.onLoaded);
+  },
+  componentWillUnmount() {
+    ChatStore.off(CHAT.SWITCH_TO_THREAD, this.switchToThread);
+    ChatStore.off(CHAT.FETCHING_THREADS, this.onLoading);
+    ChatStore.off(CHAT.THREADS_FETCHED, this.onLoaded);
   },
 
   switchToThread(thread_id) {
     this.props.chatNavigator.push(routes.CHAT.MESSAGEVIEW);
+  },
+
+  onLoading() {
+    this.setState({
+      //ds: this.state.ds.cloneWithRows([]),
+      loading: true
+    });
+  },
+  onLoaded() {
+    var threads = ChatStore.getAll();
+    threads = this.pruneEmptyThreads(threads);
+    if(this.state.tab == 'Board Chats') {
+      threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
+    }
+    else {
+      threads = _.filter(threads, function(thread) {return _.isEmpty(thread.board)});
+    }
+    this.setState({
+      loading: false,
+      threads: threads,
+      ds: this.state.ds.cloneWithRows(threads)
+    });
+  },
+  onRefresh() {
+    ChatActions.fetchThreads();
   },
 
   changeTab(tab) {
@@ -67,21 +119,6 @@ var ThreadList = React.createClass({
       tab: tab,
       ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
         .cloneWithRows(threads),
-    })
-  },
-
-  componentWillReceiveProps(nextProps) {
-    var threads = nextProps.allThreads;
-    threads = this.pruneEmptyThreads(threads);
-    if(this.state.tab == 'Board Chats') {
-      threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
-    }
-    else {
-      threads = _.filter(threads, function(thread) {return _.isEmpty(thread.board)});
-    }
-    this.setState({
-      threads: threads,
-      ds: this.state.ds.cloneWithRows(threads)
     })
   },
 
@@ -143,10 +180,46 @@ var ThreadList = React.createClass({
     }
   },
 
+  _renderLoading() {
+    if(this.state.loading) {
+      return (
+        <View style={ styles.spinnerContainer }>
+          <Spinner
+            isVisible={ true }
+            size={ 60 }
+            type={ '9CubeGrid' }
+            color={ '#2cb673' }
+          />
+        </View>
+      );
+    } else return <View />;
+  },
+
+  _renderThreads() {
+    //if(this.state.loading) return <View />;
+    return (
+      <ListView
+        ref={ ref => { this.ThreadList = ref; }}
+        style={ styles.threadList }
+        dataSource={ this.state.ds }
+        decelerationRate={ 0.9 }
+        automaticallyAdjustContentInsets={ false }
+        refreshControl={
+          <RefreshControl
+            refreshing={ this.state.loading }
+            onRefresh={ this.onRefresh }
+            tintColor='#AAA'
+            title='Loading...'
+          />
+        }
+        renderRow={ this.renderThreadRow }
+        renderSeparator={ this.renderThreadSeparator }
+      />
+    )
+  },
+
   render() {
-
     var tabIndex = (this.state.tab == 'Board Chats') ? 0 : 1;
-
     return (
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>
@@ -184,19 +257,9 @@ var ThreadList = React.createClass({
             />
           </View>
         </View>
-
         { this._renderNoThreads() }
-
-        <ListView
-          ref={(ref) => { this.ThreadList = ref; }}
-          style={ styles.threadList }
-          dataSource={ this.state.ds }
-          decelerationRate={ 0.9 }
-          automaticallyAdjustContentInsets={ false }
-          renderRow={ this.renderThreadRow }
-          renderSeparator={ this.renderThreadSeparator }
-        />
-
+        {/* this._renderLoading() */}
+        { this._renderThreads() }
       </View>
     );
   }
@@ -246,6 +309,15 @@ var styles = StyleSheet.create({
   noThreadsText: {
     fontSize: 22,
     color: '#aaa'
+  },
+  spinnerContainer: {
+    flexDirection: 'column',
+    flex: 1,
+    backgroundColor: '#eee',
+    paddingTop: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: constants.height - 300
   },
   tabs: {
     flexDirection: 'row',

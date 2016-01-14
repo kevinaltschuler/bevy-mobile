@@ -113,8 +113,21 @@ _.extend(BevyStore, {
         });
         // trigger immediately anyways
         this.trigger(BEVY.CHANGE_ALL);
-
         break;
+
+      case BEVY.FETCH:
+        var user = UserStore.getUser();
+        this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
+        this.trigger(BEVY.LOADING);
+        this.myBevies.fetch({
+          success: function(collection, response, options) {
+            this.myBevies.sort();
+            this.trigger(BEVY.LOADED);
+            this.trigger(BEVY.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
       case USER.LOGOUT:
         this.myBevies.reset();
         break;
@@ -404,7 +417,7 @@ _.extend(BevyStore, {
         this.activeBoard = new Board;
         this.trigger(BOARD.CHANGE_ALL);
         break;
-        
+
       case BOARD.CREATE:
         var name = payload.name;
         var description = payload.description;

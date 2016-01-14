@@ -18,10 +18,9 @@ var getSlug = require('speakingurl');
 var _ = require('underscore');
 
 var BevyActions = {
-  fetch(user) {
+  fetch() {
     Dispatcher.dispatch({
-      actionType: BEVY.FETCH,
-      user: (user == undefined) ? {} : user
+      actionType: BEVY.FETCH
     });
   },
 
