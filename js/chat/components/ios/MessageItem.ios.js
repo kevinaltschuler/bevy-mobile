@@ -253,7 +253,7 @@ var MessageItem = React.createClass({
               marginLeft: (this.state.isMe) ? 0 : 50
             }}>
               {(this.state.isMe) ? 'Me' : this.props.message.author.displayName }
-              &nbsp;·&nbsp;
+              {' · '}
               { this._renderCreated() }
             </Text>
           </Collapsible>

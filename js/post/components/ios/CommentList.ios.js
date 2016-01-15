@@ -11,17 +11,23 @@ var {
   View,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
+  AlertIOS,
+  ActionSheetIOS,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var Collapsible = require('react-native-collapsible');
 
 var _ = require('underscore');
+var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
+var CommentActions = require('./../../../post/CommentActions');
+// bleached rainbow for adobe color
 var colorMap = [
   '#97FF80', '#52C0FF', '#9A5DE8', '#FF5757', '#E8A341'
-]; // bleached rainbow for adobe color
+];
 
 var CommentItem = React.createClass({
   propTypes: {
@@ -34,8 +40,17 @@ var CommentItem = React.createClass({
   getInitialState() {
     return {
       collapsed: true,
-      isCompact: false
+      isCompact: false,
+      isAuthor: this.props.comment.author._id == this.props.user._id,
+      commentBody: this.props.comment.body
     };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      isAuthor: nextProps.comment.author._id == nextProps.user._id,
+      commentBody: nextProps.comment.body
+    });
   },
 
   onPress() {
@@ -55,6 +70,45 @@ var CommentItem = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  editComment() {
+    AlertIOS.prompt(
+      'Edit Comment',
+      null,
+      [{
+        text: 'Save',
+        onPress: this.saveComment
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    );
+  },
+
+  saveComment(body) {
+    this.setState({
+      commentBody: body
+    });
+    CommentActions.edit(this.props.comment._id, body);
+  },
+
+  deleteComment() {
+    AlertIOS.alert(
+      'Are you sure?',
+      'Deleting a comment will remove all comments under it',
+      [{
+        text: 'Confirm',
+        onPress: this.deleteCommentForSure
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    );
+  },
+
+  deleteCommentForSure() {
+    CommentActions.destroy(this.props.comment.postId, this.props.comment._id);
+  },
+
   onReply() {
     // bubble this comment up
     this.props.onReply(this.props.comment);
@@ -69,6 +123,7 @@ var CommentItem = React.createClass({
         comments={ this.props.comment.comments }
         onReply={ this.props.onReply }
         mainNavigator={ this.props.mainNavigator }
+        user={ this.props.user }
       />
     );
   },
@@ -89,7 +144,7 @@ var CommentItem = React.createClass({
       : '#fff';
     commentStyle.height = 40;
 
-    if (this.state.isCompact) {
+    if(this.state.isCompact) {
       return (
         <View style={[ styles.commentItem, commentStyle ]}>
             <View style={ styles.header }>
@@ -99,8 +154,12 @@ var CommentItem = React.createClass({
                 color='#AAA'
                 style={ styles.plusIcon }
               />
-              <Text style={ styles.author }>{ this.props.comment.author.displayName }</Text>
-              <Text style={ styles.timeAgo }>{ timeAgo(Date.parse(this.props.comment.created)) }</Text>
+              <Text style={ styles.author }>
+                { this.props.comment.author.displayName }
+              </Text>
+              <Text style={ styles.timeAgo }>
+                { timeAgo(Date.parse(this.props.comment.created)) }
+              </Text>
             </View>
           </View>
         );
@@ -129,12 +188,54 @@ var CommentItem = React.createClass({
           </View>
           <View style={ styles.commentItemBody }>
             <Text style={ styles.commentItemBodyText }>
-              { this.props.comment.body.trim() }
+              { this.state.commentBody.trim() }
             </Text>
           </View>
         </View>
       );
     }
+  },
+
+  _renderEditButton() {
+    if(!this.state.isAuthor) return <View />;
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        onPress={ this.editComment }
+      >
+        <View style={ styles.commentItemAction }>
+          <Icon
+            name='edit'
+            size={ 30 }
+            color='#fff'
+          />
+          <Text style={ styles.commentItemActionText }>
+            Edit Comment
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+
+  _renderDeleteButton() {
+    if(!this.state.isAuthor) return <View />;
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        onPress={ this.deleteComment }
+      >
+        <View style={ styles.commentItemAction }>
+          <Icon
+            name='delete'
+            size={ 30 }
+            color='#fff'
+          />
+          <Text style={ styles.commentItemActionText }>
+            Delete Comment
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
   },
 
   render() {
@@ -151,8 +252,8 @@ var CommentItem = React.createClass({
           </TouchableHighlight>
           <Collapsible collapsed={this.state.collapsed} >
             <View style={ styles.commentItemActions }>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
                 onPress={ this.onReply }
               >
                 <View style={ styles.commentItemAction }>
@@ -165,9 +266,9 @@ var CommentItem = React.createClass({
                     Reply To Comment
                   </Text>
                 </View>
-              </TouchableHighlight>
-              <TouchableHighlight
-                underlayColor='rgba(0,0,0,0.1)'
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
                 onPress={ this.goToAuthorProfile }
               >
                 <View style={ styles.commentItemAction }>
@@ -180,7 +281,9 @@ var CommentItem = React.createClass({
                     View { this.props.comment.author.displayName }'s Profile
                   </Text>
                 </View>
-              </TouchableHighlight>
+              </TouchableOpacity>
+              {/* this._renderEditButton() */}
+              { this._renderDeleteButton() }
             </View>
           </Collapsible>
         </View>
@@ -214,6 +317,7 @@ var CommentList = React.createClass({
               comment={ comment }
               onReply={ this.props.onReply }
               mainNavigator={ this.props.mainNavigator }
+              user={ this.props.user }
             />
           );
         }.bind(this)) }
@@ -229,13 +333,16 @@ var styles = StyleSheet.create({
   commentItem: {
     flexDirection: 'column',
     height: 60,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE'
   },
   commentItemTop: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 15
+    justifyContent: 'flex-start'
   },
   commentItemAuthor: {
     color: '#282828',
@@ -247,7 +354,7 @@ var styles = StyleSheet.create({
     color: '#888'
   },
   commentItemBody: {
-    paddingHorizontal: 15
+    flex: 1
   },
   commentItemBodyText: {
     fontSize: 17,

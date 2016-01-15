@@ -89,9 +89,9 @@ var NotificationItem = React.createClass({
                   <View style={styles.titleTextColumn}>
                     <Text style={styles.titleText}>
                       <Text style={{ fontWeight: 'bold' }}>{ author_name }</Text>
-                      &nbsp;posted to&nbsp;
+                      {' posted to '}
                       <Text style={{ fontWeight: 'bold' }}>{ board_name }</Text>
-                      &nbsp;-&nbsp;
+                      {' - '}
                       { timeAgo(Date.parse(post_created)) }
                     </Text>
                   </View>
@@ -128,8 +128,7 @@ var NotificationItem = React.createClass({
                       <Text style={{ fontWeight: 'bold' }}>
                         { author_name }
                       </Text>
-                      &nbsp;replied to your post
-                      &nbsp;In&nbsp;
+                      {' replied to your post In '};
                       <Text style={{ fontWeight: 'bold' }}>
                         { board_name }
                       </Text>
@@ -165,8 +164,7 @@ var NotificationItem = React.createClass({
                   <View style={styles.titleTextColumn}>
                     <Text style={styles.titleText}>
                       { author_name }
-                      &nbsp;replied to your comment
-                      &nbsp;In&nbsp;
+                      {' replied to your comment In '}
                       <Text style={{ fontWeight: 'bold' }}>
                         { board_name }
                       </Text>

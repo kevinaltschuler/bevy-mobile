@@ -95,7 +95,7 @@ var DatePickerModal = React.createClass({
         <View style={ styles.dateString }>
           <Text style={{fontSize: 18, color: '#555'}}>
             { this.state.date.toLocaleDateString() }
-            &nbsp;at&nbsp;
+            {' at '};
             { this.state.time.toLocaleTimeString(
               navigator.language,
               { hour: '2-digit', minute:'2-digit' }).replace(/(:\d{2}| )$/, "") }

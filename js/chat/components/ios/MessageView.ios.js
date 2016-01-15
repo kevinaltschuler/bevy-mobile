@@ -84,11 +84,16 @@ var MessageView = React.createClass({
 
   _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
+    if(this.state.messages.length < messages.length) {
+      // new messages have been added
+      setTimeout(this.scrollToBottom, 300);
+    }
     this.setState({
       isRefreshing: false,
       messages: messages,
       ds: this.state.ds.cloneWithRows(messages)
     });
+
   },
   onRefresh() {
     this.setState({
@@ -164,7 +169,7 @@ var MessageView = React.createClass({
   scrollToBottom() {
     var scrollProperties = this.MessageList.scrollProperties;
     var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
-    scrollOffset += 15;
+    scrollOffset += 30;
     requestAnimationFrame(() => {
       this.MessageList.scrollResponderScrollTo(0, scrollOffset);
     });

@@ -34,10 +34,11 @@ var UserStore = require('./../user/UserStore');
 var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
+window.navigator.__defineGetter__('userAgent', function(){
+    return 'react-native' // customized user agent
+});
 
-//window.navigator.userAgent = "react-native";
-//console.log(window, window.navigator);
-//var io = require('socket.io-client/socket.io');
+var io = require('socket.io-client/socket.io');
 
 var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
@@ -70,27 +71,21 @@ _.extend(NotificationStore, {
           }.bind(this)
         });
 
-        var ws = io(constants.siteurl);
+        var ws = io(constants.siteurl, { jsonp: false });
 
         ws.on('error', function(error) {
           console.log(error);
           console.log('error');
         });
-        console.log('2');
         ws.on('connect', function() {
           console.log('websocket client connected');
           console.log('setting user id', user._id);
           ws.emit('set_user_id', user._id);
         });
-        console.log('3');
 
-        ws.on('kitty cats', function(data) {
-          //console.log(data);
-        });
-
-        ws.on('chat:' + user._id, function(message) {
+        ws.on('chat.' + user._id, function(message) {
           message = JSON.parse(message);
-          //console.log('ws got message', message);
+          console.log('ws got message', message);
 
           // TODO: play audio
           if(Platform.OS == 'android') {
@@ -106,12 +101,10 @@ _.extend(NotificationStore, {
             VibrationIOS.vibrate();
           }
 
-          console.log('eyyyyy');
-
           ChatStore.addMessage(message);
         }.bind(this));
 
-        ws.on('notification:' + user._id, function(notification) {
+        ws.on('notification.' + user._id, function(notification) {
           console.log('ws got notification', notification);
           this.notifications.add(notification);
           this.trigger(NOTIFICATION.CHANGE_ALL);

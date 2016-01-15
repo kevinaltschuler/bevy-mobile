@@ -78,7 +78,7 @@ var ThreadSettingsView = React.createClass({
         text: 'Cancel',
         style: 'cancel'
       }]
-    )
+    );
   },
   saveName(newName) {
 
