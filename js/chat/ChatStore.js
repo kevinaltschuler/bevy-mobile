@@ -503,9 +503,9 @@ _.extend(ChatStore, {
   sortByLatest(thread) {
     var latest = thread.get('latest');
     if(latest == null) {
-      return -thread.created;
+      return -(new Date(thread.get('created')));
     }
-    return -latest.created;
+    return -(new Date(latest.created));
   },
 
   addMessage(message) {
