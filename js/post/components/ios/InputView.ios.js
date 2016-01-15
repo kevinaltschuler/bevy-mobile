@@ -271,7 +271,10 @@ var InputView = React.createClass({
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView style={ styles.body }>
+        <ScrollView 
+          style={ styles.body }
+          contentContainerStyle={{flex: 1}}
+        >
           <View style={ styles.boardItem }>
             <Text style={ styles.sectionTitle }>Board</Text>
             <View style={styles.boardItemDetails}>
@@ -408,7 +411,7 @@ var styles = StyleSheet.create({
     paddingRight: 16,
   },
   input: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: 10,
