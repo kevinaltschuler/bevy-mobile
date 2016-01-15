@@ -127,13 +127,6 @@
 			remoteGlobalIDString = F12AFB9B1ADAF8F800E0535D;
 			remoteInfo = RNKeyboardEvents;
 		};
-		4D7764FE1B5980F7005FE588 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4D7764FA1B5980F6005FE588 /* RNStatusBarSize.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BB0DB4A31AE891EC002306E6;
-			remoteInfo = RNStatusBarSize;
-		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -200,7 +193,6 @@
 		4D0433D81B475D6100CD5250 /* RNKeyboardEvents.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNKeyboardEvents.xcodeproj; path = "node_modules/react-native-keyboardevents/RNKeyboardEvents.xcodeproj"; sourceTree = "<group>"; };
 		4D19E2441B79240900BCD97C /* RCTFileTransfer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTFileTransfer.m; path = "node_modules/react-native-file-transfer/RCTFileTransfer.m"; sourceTree = "<group>"; };
 		4D7764F81B58085E005FE588 /* RCTReadImageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RCTReadImageData.m; path = iOS/RCTReadImageData.m; sourceTree = "<group>"; };
-		4D7764FA1B5980F6005FE588 /* RNStatusBarSize.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNStatusBarSize.xcodeproj; path = "node_modules/react-native-status-bar-size/RNStatusBarSize.xcodeproj"; sourceTree = "<group>"; };
 		50CA68A91C3EF61000FF8C54 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
 		50CA68AA1C3EF61000FF8C54 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
 		50CA68AB1C3EF61000FF8C54 /* RNGoogleSignin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGoogleSignin.h; sourceTree = "<group>"; };
@@ -366,14 +358,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		4D7764FB1B5980F6005FE588 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				4D7764FF1B5980F7005FE588 /* libRNStatusBarSize.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		50CA68A81C3EF61000FF8C54 /* RNGoogleSignin */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,7 +404,6 @@
 				CE0E4E9E1BDD60A900330EF8 /* RNSpinkit.xcodeproj */,
 				CE38740F1BC6C5F800C7BCD6 /* RNBlur.xcodeproj */,
 				CEC226ED1BBEF50A005FAC9B /* RNVectorIcons.xcodeproj */,
-				4D7764FA1B5980F6005FE588 /* RNStatusBarSize.xcodeproj */,
 				4D0433D81B475D6100CD5250 /* RNKeyboardEvents.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -641,10 +624,6 @@
 					ProjectRef = CE0E4E9E1BDD60A900330EF8 /* RNSpinkit.xcodeproj */;
 				},
 				{
-					ProductGroup = 4D7764FB1B5980F6005FE588 /* Products */;
-					ProjectRef = 4D7764FA1B5980F6005FE588 /* RNStatusBarSize.xcodeproj */;
-				},
-				{
 					ProductGroup = CEC226EE1BBEF50A005FAC9B /* Products */;
 					ProjectRef = CEC226ED1BBEF50A005FAC9B /* RNVectorIcons.xcodeproj */;
 				},
@@ -726,13 +705,6 @@
 			fileType = archive.ar;
 			path = libRNKeyboardEvents.a;
 			remoteRef = 4D0433DC1B475D6100CD5250 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		4D7764FF1B5980F7005FE588 /* libRNStatusBarSize.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNStatusBarSize.a;
-			remoteRef = 4D7764FE1B5980F7005FE588 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
