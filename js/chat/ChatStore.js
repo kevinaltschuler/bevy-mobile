@@ -18,7 +18,8 @@ var BEVY = constants.BEVY;
 
 var React = require('react-native');
 var {
-  Platform
+  Platform,
+  PushNotificationIOS
 } = React;
 var BevyIntent = require('./../shared/apis/BevyIntent.android.js');
 
@@ -527,6 +528,14 @@ _.extend(ChatStore, {
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
     this.trigger(CHAT.CHANGE_ONE + thread.id);
+
+    if(this.active == thread_id) {
+
+    } else {
+      PushNotificationIOS.presentLocalNotification({
+        alertBody: message.author.displayName + ': ' + message.body
+      });
+    }
   }
 });
 

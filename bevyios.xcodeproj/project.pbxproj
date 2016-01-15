@@ -899,7 +899,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;
-				PROVISIONING_PROFILE = "9136e426-33a6-4e31-9064-36885326a050";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "node_modules/react-native-swift-socketio/RNSwiftSocketIO/SocketBridge.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -933,7 +933,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.joinbevy.ios;
 				PRODUCT_NAME = bevyios;
-				PROVISIONING_PROFILE = "9136e426-33a6-4e31-9064-36885326a050";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "node_modules/react-native-swift-socketio/RNSwiftSocketIO/SocketBridge.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
