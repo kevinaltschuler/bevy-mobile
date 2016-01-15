@@ -367,11 +367,10 @@ _.extend(PostStore, {
         break;
 
       case COMMENT.EDIT:
-        var post_id = payload.post_id;
         var comment_id = payload.comment_id;
         var body = payload.body;
 
-        var url = constants.apiurl + '/posts/' + post_id + '/comments/' + comment_id;
+        var url = constants.apiurl + '/comments/' + comment_id;
         fetch(url, {
           method: 'PATCH',
           headers: {
@@ -384,8 +383,8 @@ _.extend(PostStore, {
         })
         .then(res => res.json())
         .then(res => {
-          this.trigger(POST.CHANGE_ALL);
           this.trigger(POST.CHANGE_ONE + post_id);
+          this.trigger(POST.CHANGE_ALL);
         });
         break;
 

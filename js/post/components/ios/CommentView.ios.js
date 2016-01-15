@@ -309,6 +309,7 @@ var CommentView = React.createClass({
             comments={ this.state.comments }
             onReply={ this.onReply }
             mainNavigator={ this.props.mainNavigator }
+            user={ this.props.user }
           />
           { this._renderNoCommentsText() }
         </View>
