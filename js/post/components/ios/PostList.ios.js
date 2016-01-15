@@ -14,10 +14,10 @@ var {
   ListView,
   TouchableHighlight,
   ActivityIndicatorIOS,
-  Image
+  Image,
+  RefreshControl
 } = React;
 var Spinner = require('react-native-spinkit');
-var RCTRefreshControl = require('react-native-refresh-control');
 var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
@@ -100,7 +100,6 @@ var PostList = React.createClass({
       this.props.activeBevy._id,
       (!_.isEmpty(this.props.profileUser)) ? this.props.profileUser._id : null
     );
-    setTimeout(stopRefresh, 2000);
   },
 
   handleScroll(y) {
@@ -197,6 +196,14 @@ var PostList = React.createClass({
         renderFooter={() => {
           return <View style={{height: 20}}/>
         }}
+        refreshControl={
+            <RefreshControl
+              refreshing={ this.state.loading }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         renderRow={ post => {
           return (
             <Post
@@ -225,9 +232,9 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-        { this._renderNoPosts() }
         { this._renderLoading() }
         { this._renderPosts() }
+        { this._renderNoPosts() }
       </View>
     );
   }
@@ -273,8 +280,6 @@ var styles = StyleSheet.create({
     marginBottom: 15
   },
 
-
-
   noPostsContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -283,7 +288,8 @@ var styles = StyleSheet.create({
   },
   noPostsText: {
     color: '#AAA',
-    fontSize: 22
+    fontSize: 22,
+    marginTop: -100
   }
 })
 
