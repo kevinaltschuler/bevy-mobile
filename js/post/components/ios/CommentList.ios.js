@@ -92,7 +92,21 @@ var CommentItem = React.createClass({
   },
 
   deleteComment() {
+    AlertIOS.alert(
+      'Are you sure?',
+      'Deleting a comment will remove all comments under it',
+      [{
+        text: 'Confirm',
+        onPress: this.deleteCommentForSure
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    );
+  },
 
+  deleteCommentForSure() {
+    CommentActions.destroy(this.props.comment.postId, this.props.comment._id);
   },
 
   onReply() {
@@ -319,14 +333,16 @@ var styles = StyleSheet.create({
   commentItem: {
     flexDirection: 'column',
     height: 60,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE'
   },
   commentItemTop: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 15
+    justifyContent: 'flex-start'
   },
   commentItemAuthor: {
     color: '#282828',
@@ -338,8 +354,7 @@ var styles = StyleSheet.create({
     color: '#888'
   },
   commentItemBody: {
-    flex: 1,
-    paddingHorizontal: 15
+    flex: 1
   },
   commentItemBodyText: {
     fontSize: 17,
