@@ -879,7 +879,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/node_modules/react-native/React/**",
 					"$(SRCROOT)/node_modules/react-native/Libraries/LinkingIOS",
-					"$(SRCROOT)/node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/node_modules/react-native/Libraries/PushNotificationIOS/**",
 				);
 				"HEADER_SEARCH_PATHS[arch=*]" = (
 					"$(inherited)",
@@ -921,7 +921,7 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/node_modules/react-native/React/**",
 					"$(SRCROOT)/node_modules/react-native/Libraries/LinkingIOS",
-					"$(SRCROOT)/node_modules/react-native/Libraries/PushNotificationIOS",
+					"$(SRCROOT)/node_modules/react-native/Libraries/PushNotificationIOS/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
