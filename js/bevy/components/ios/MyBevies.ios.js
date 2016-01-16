@@ -171,7 +171,7 @@ var MyBevies = React.createClass({
 
         <ScrollView
           contentContainerStyle={ styles.bevyList }
-          automaticallyAdjustContentInsets={ false }
+          automaticallyAdjustContentInsets={ true }
           showsVerticalScrollIndicator={ true }
           refreshControl={
             <RefreshControl
