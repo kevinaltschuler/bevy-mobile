@@ -341,8 +341,7 @@ _.extend(UserStore, {
         .then(res => {
           this.userSearchQuery = query;
           this.userSearchResults.reset(res);
-          if(this.loggedIn)
-            this.userSearchResults.remove(this.user._id); // remove self from search results
+          this.userSearchResults.remove(this.user.get('_id')); // remove self from search results
           this.trigger(USER.SEARCH_COMPLETE);
         });
         break;
