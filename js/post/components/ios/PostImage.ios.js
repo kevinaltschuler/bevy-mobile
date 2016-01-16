@@ -32,13 +32,22 @@ var PostImage = React.createClass({
     };
   },
 
+  showOverlay() {
+    this.setState({ showOverlay: true });
+  },
+
+  hideOverlay() {
+    this.setState({ showOverlay: false });
+  },
+
   _renderImageOverlay() {
     if(this.props.post.images.length <= 0) return null;
     return (
       <ImageOverlay
         images={ this.props.post.images }
-        isVisible={ this.state.overlayVisible }
+        isVisible={ this.state.showOverlay }
         post={ this.props.post }
+        onHide={ this.hideOverlay }
       />
     );
   },
@@ -63,9 +72,7 @@ var PostImage = React.createClass({
         { this._renderImageOverlay() }
         <TouchableOpacity
           activeOpacity={ 0.5 }
-          onPress={() => {
-            this.setState({ overlayVisible: true });
-          }}
+          onPress={ this.showOverlay }
         >
           <Image
             style={ styles.postImage }

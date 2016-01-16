@@ -34,30 +34,28 @@ var ImageOverlay = React.createClass({
   propTypes: {
     isVisible: React.PropTypes.bool,
     images: React.PropTypes.array,
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    onHide: React.PropTypes.func
+  },
+
+  getDefaultProps() {
+    return {
+      onHide: _.noop
+    };
   },
 
   getInitialState() {
     return {
-      isVisible: this.props.isVisible,
       imageIndex: 0
     };
   },
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      isVisible: nextProps.isVisible
-    });
-  },
-
-  onImagePress() {
-    this.setState({
-      isVisible: false
-    });
+  hide() {
+    this.props.onHide();
   },
 
   render() {
-    if(!this.state.isVisible) return null;
+    if(!this.props.isVisible) return null;
     var post = this.props.post;
     var title = post.title || '';
     if(title.length > 40) {
@@ -77,7 +75,7 @@ var ImageOverlay = React.createClass({
         <ImageOverlayItem
           key={ 'image:' + key }
           image={ this.props.images[key] }
-          onPress={ this.onImagePress }
+          onPress={ this.hide }
         />
       );
     }
@@ -86,7 +84,7 @@ var ImageOverlay = React.createClass({
       <Modal
         animated={true}
         transparent={true}
-        Visible={ this.state.isVisible }
+        Visible={ this.props.isVisible }
       >
         <View>
           <BlurView blurType='dark' style={ styles.container }>
@@ -131,11 +129,7 @@ var ImageOverlay = React.createClass({
           <TouchableOpacity
             activeOpacity={.6}
             style={ styles.closeButton }
-            onPress={() => {
-              this.setState({
-                isVisible: false
-              });
-            }}
+            onPress={ this.hide }
           >
             <Icon
               name='close'

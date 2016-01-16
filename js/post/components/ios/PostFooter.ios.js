@@ -36,6 +36,7 @@ var PostFooter = React.createClass({
   getInitialState() {
     return {
       voted: this.props.post.voted,
+      votes: this.countVotes(this.props.post),
       isAuthor: this.props.user._id == this.props.post.author._id,
       isAdmin: _.contains(this.props.post.board.admins, this.props.user._id)
     };
@@ -44,6 +45,7 @@ var PostFooter = React.createClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       voted: nextProps.post.voted,
+      votes: this.countVotes(nextProps.post),
       isAuthor: nextProps.user._id == nextProps.post.author._id,
       isAdmin: _.contains(nextProps.post.board.admins, nextProps.user._id)
     });
@@ -151,9 +153,10 @@ var PostFooter = React.createClass({
     });
   },
 
-  countVotes: function() {
+  countVotes(post) {
+    if(!post) return 0;
     var sum = 0;
-    this.props.post.votes.forEach(vote => {
+    post.votes.forEach(vote => {
       sum += vote.score;
     });
     return sum;
@@ -171,7 +174,7 @@ var PostFooter = React.createClass({
             <Text style={[ styles.pointCountText, {
               color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
             }]}>
-              { this.countVotes() }
+              { this.state.votes }
             </Text>
             <Icon
               name={ 'thumb-up' }
