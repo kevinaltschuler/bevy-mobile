@@ -8,23 +8,27 @@
  */
 
 #import "AppDelegate.h"
-//#import "RCTPushNotificationManager.h"
+#import "RCTPushNotificationManager.h"
 #import "RCTRootView.h"
-//#import "RCTLinkingManager.h"
 #import "RNGoogleSignin.h"
 
 @implementation AppDelegate
 
-  // Required for the register event.
-/*- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-    {
-     [RCTPushNotificationManager application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-    }
-  // Required for the notification event.
+// Required to register for notifications
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+  [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
+}
+// Required for the register event.
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+  [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+// Required for the notification event.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
-    {
-       [RCTPushNotificationManager application:application didReceiveRemoteNotification:notification];
-    }*/
+{
+  [RCTPushNotificationManager didReceiveRemoteNotification:notification];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -44,7 +48,8 @@
    * on the same Wi-Fi network.
    */
 
-  jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.9:8081/index.ios.bundle"];
+  jsCodeLocation = [NSURL URLWithString:@"http://localhost:8081/index.ios.bundle?platform=ios&dev=true"];
+    
   // ALBERTS HOUSE
   //jsCodeLocation = [NSURL URLWithString:@"http://192.168.1.19:8081/index.ios.bundle"];
   // KEVINS HOUSE

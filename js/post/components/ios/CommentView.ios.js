@@ -70,8 +70,10 @@ var CommentView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardDidShow', this._onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillShow', this._onKeyboardShow);
     DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHide);
+  },
+  componentWillUnmount() {
   },
 
   componentWillReceiveProps(nextProps) {
@@ -227,13 +229,15 @@ var CommentView = React.createClass({
     return null;
   },
 
-  _renderReplyBar() {
-    var replyInfo = (_.isEmpty(this.state.replyToComment))
-    ? <View />
-    : (
+  _renderReplyInfo() {
+    if(_.isEmpty(this.state.replyToComment)) {
+      return <View />;
+    }
+
+    return (
       <View style={ styles.replyInfo }>
         <Text style={ styles.replyingTo }>
-          Replying to...
+          Replying to:
         </Text>
         <Text style={ styles.replyAuthor }>
           { this.state.replyToComment.author.displayName }:
@@ -241,42 +245,6 @@ var CommentView = React.createClass({
         <Text style={ styles.replyBody }>
           { this.state.replyToComment.body.trim() }
         </Text>
-      </View>
-    );
-
-    return (
-      <View
-        style={{
-          position: 'absolute',
-          width: constants.width,
-          bottom: this.state.keyboardSpace
-        }}
-      >
-        { replyInfo }
-        <View style={ styles.replyBar }>
-          <TextInput
-            ref='reply'
-            style={ styles.replyInput }
-            placeholder='Reply'
-            returnKeyType='send'
-            clearButtonMode='while-editing'
-            value={ this.state.replyText }
-            onChangeText={ this.onReplyChange }
-            onSubmitEditing={ this.postReply }
-            onBlur={ this.onReplyBlur }
-          />
-          <TouchableOpacity
-            activeOpacity={ 0.5 }
-            onPress={ this.postReply }
-            style={ styles.replyButton }
-          >
-            <Icon
-              name='send'
-              size={ 30 }
-              color='#2CB673'
-            />
-          </TouchableOpacity>
-        </View>
       </View>
     );
   },
@@ -309,6 +277,7 @@ var CommentView = React.createClass({
             comments={ this.state.comments }
             onReply={ this.onReply }
             mainNavigator={ this.props.mainNavigator }
+            user={ this.props.user }
           />
           { this._renderNoCommentsText() }
         </View>
@@ -346,7 +315,40 @@ var CommentView = React.createClass({
           </View>
         </View>
         { this._renderContent() }
-        { this._renderReplyBar() }
+        <View
+          style={{
+            position: 'absolute',
+            width: constants.width,
+            bottom: this.state.keyboardSpace
+          }}
+        >
+          { this._renderReplyInfo() }
+          <View style={ styles.replyBar }>
+            <TextInput
+              ref='reply'
+              style={ styles.replyInput }
+              placeholder='Reply'
+              placeholderTextColor='#AAA'
+              returnKeyType='send'
+              clearButtonMode='while-editing'
+              value={ this.state.replyText }
+              onChangeText={ this.onReplyChange }
+              onSubmitEditing={ this.postReply }
+              onBlur={ this.onReplyBlur }
+            />
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              onPress={ this.postReply }
+              style={ styles.replyButton }
+            >
+              <Icon
+                name='send'
+                size={ 30 }
+                color='#2CB673'
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     );
   }
@@ -414,7 +416,7 @@ var styles = StyleSheet.create({
     borderTopWidth: 1
   },
   replyInfo: {
-    height: 32,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
@@ -423,38 +425,37 @@ var styles = StyleSheet.create({
     paddingRight: 10
   },
   replyingTo: {
-    fontSize: 12,
+    fontSize: 17,
     color: '#fff',
     marginRight: 5
   },
   replyAuthor: {
-    fontSize: 12,
+    fontSize: 17,
     color: '#fff',
-    fontWeight: 'bold',
-    marginRight: 5
+    marginRight: 5,
+    fontWeight: 'bold'
   },
   replyBody: {
-    fontSize: 12,
-    color: '#fff'
+    fontSize: 15,
+    color: '#fff',
+    fontStyle: 'italic'
   },
   replyBar: {
     backgroundColor: '#fff',
-    height: 46,
+    height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingLeft: 10
+    paddingLeft: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#DDD'
   },
   replyInput: {
     flex: 1,
     color: '#333',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    height: 38,
-    marginTop: 4,
-    paddingLeft: 16,
-    paddingRight: 16
+    height: 48,
+    fontSize: 17,
+    paddingHorizontal: 10
   },
   replyButton: {
     paddingTop: 0,

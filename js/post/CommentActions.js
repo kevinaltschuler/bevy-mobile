@@ -21,10 +21,9 @@ var CommentActions = {
     });
   },
 
-  edit(post_id, comment_id, body) {
+  edit(comment_id, body) {
     Dispatcher.dispatch({
       actionType: COMMENT.EDIT,
-      post_id: post_id,
       comment_id: comment_id,
       body: body
     });
