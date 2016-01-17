@@ -62,13 +62,28 @@ var MessageView = React.createClass({
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
 
-    ChatActions.fetchMore(this.props.activeThread._id);
+    setTimeout(() => {
+      //this.onRefresh();
+      //this.scrollToBottom();
+    }, 1000);
   },
 
   componentWillUnmount() {
     ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
+  },
+
+  componentWillReceiveProps(nextProps) {
+    console.log('got next props', nextProps);
+    var messages = ChatStore.getMessages(nextProps.activeThread._id);
+    console.log('got new messages', messages);
+    this.setState({
+      isRefreshing: false,
+      messages: messages,
+      ds: this.state.ds.cloneWithRows(messages)
+    });
+    //setTimeout(this.onRefresh, 250);
   },
 
   keyboardWillShow(frames) {
@@ -84,20 +99,15 @@ var MessageView = React.createClass({
 
   _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
-    if(this.state.messages.length < messages.length) {
+    console.log('got messages from the refresh');
+    if(this.state.messages.length != messages.length) {
       // new messages have been added
-      setTimeout(this.scrollToBottom, 300);
+      //setTimeout(this.scrollToBottom, 300);
     }
     this.setState({
       isRefreshing: false,
       messages: messages,
       ds: this.state.ds.cloneWithRows(messages)
-    });
-
-  },
-  onRefresh() {
-    this.setState({
-      isRefreshing: true
     });
   },
 
@@ -120,9 +130,8 @@ var MessageView = React.createClass({
   },
 
   onRefresh() {
-    this.setState({
-      isRefreshing: true
-    });
+    this.setState({ isRefreshing: true });
+    console.log('refreshing messages for', this.props.activeThread._id);
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
@@ -168,8 +177,15 @@ var MessageView = React.createClass({
 
   scrollToBottom() {
     var scrollProperties = this.MessageList.scrollProperties;
-    var scrollOffset = scrollProperties.contentLength - scrollProperties.visibleLength;
-    scrollOffset += 30;
+    var contentLength = scrollProperties.contentLength;
+    var visibleLength = scrollProperties.visibleLength;
+
+    if(contentLength <= visibleLength) {
+      return;
+    }
+
+    var scrollOffset = contentLength - visibleLength;
+    scrollOffset += 15;
     requestAnimationFrame(() => {
       this.MessageList.scrollResponderScrollTo(0, scrollOffset);
     });
@@ -190,6 +206,7 @@ var MessageView = React.createClass({
   renderMessageRow(message, sectionID, rowID, highlightRow) {
     var hidePic = false;
     var showName = true;
+    var onMount = _.noop;
     rowID = parseInt(rowID);
     if(rowID < (this.state.ds._dataBlob.s1.length - 1)) {
       hidePic = true;
@@ -204,6 +221,13 @@ var MessageView = React.createClass({
         showName = false;
       }
     }
+
+    if(rowID == this.state.messages.length - 1) {
+      onMount = function() {
+        setTimeout(this.scrollToBottom, 100);
+      }.bind(this);
+    }
+
     return (
       <MessageItem
         key={ 'message:' + message._id }
@@ -212,6 +236,7 @@ var MessageView = React.createClass({
         hidePic={ hidePic }
         showName={ showName }
         mainNavigator={ this.props.mainNavigator }
+        onMount={ onMount }
       />
     )
   },
@@ -278,8 +303,8 @@ var MessageView = React.createClass({
             ref='MessageInput'
             value={ this.state.messageValue }
             style={ styles.messageInput }
-            onChangeText={ text => { this.onChange(text) }}
-            onSubmitEditing={ ev => { this.onSubmitEditing() }}
+            onChangeText={ this.onChange }
+            onSubmitEditing={ this.onSubmitEditing }
             blurOnSubmit={ false }
             onFocus={ this.onFocus }
             onBlur={ this.onBlur }

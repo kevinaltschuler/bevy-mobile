@@ -57,15 +57,15 @@ var MainView = React.createClass({
   },
 
   componentDidMount() {
-    UserStore.on(USER.LOGIN_SUCCESS, this._onLogin);
+    UserStore.on(USER.LOADED, this._onLogin);
     UserStore.on(USER.LOGOUT, this._onLogout);
     UserStore.on(USER.TOKENS_LOADED, this._onTokens);
   },
 
   componentWillUnmount() {
-    UserStore.off(USER.LOGIN_SUCCESS, this._onLogin);
+    UserStore.off(USER.LOADED, this._onLogin);
     UserStore.off(USER.LOGOUT, this._onLogout);
-    UserStore.on(USER.TOKENS_LOADED, this._onTokens);
+    UserStore.off(USER.TOKENS_LOADED, this._onTokens);
   },
 
   _onLogin() {

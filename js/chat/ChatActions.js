@@ -7,6 +7,7 @@
 'use strict';
 
 var Dispatcher = require('./../shared/dispatcher');
+var _ = require('underscore');
 var constants = require('./../constants');
 var CHAT = constants.CHAT;
 
@@ -19,10 +20,13 @@ var ChatActions = {
   },
 
   createThreadAndMessage(addedUsers, messageBody) {
+    if(addedUsers == undefined || addedUsers.length <= 0) return;
+    if(messageBody == undefined || _.isEmpty(messageBody)) return;
+
     Dispatcher.dispatch({
       actionType: CHAT.CREATE_THREAD_AND_MESSAGE,
-      addedUsers: addedUsers || [],
-      messageBody: messageBody || ''
+      addedUsers: addedUsers,
+      messageBody: messageBody
     });
   },
 

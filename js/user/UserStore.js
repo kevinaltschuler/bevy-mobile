@@ -59,6 +59,7 @@ _.extend(UserStore, {
           }.bind(this)
         });
         break;
+
       case USER.LOAD_USER:
         var user = payload.user;
         if(_.isEmpty(user)) {
@@ -70,7 +71,7 @@ _.extend(UserStore, {
         }
         // check if auth tokens have been passed in from the server
         AsyncStorage.multiGet(['access_token', 'refresh_token', 'expires_in'])
-        .then((response) => {
+        .then( response => {
             var access = response[0][1];
             var refresh = response[1][1];
             var expires = response[2][1];
@@ -513,7 +514,6 @@ _.extend(UserStore, {
     }
 
     this.trigger(USER.LOADED);
-    this.trigger(USER.LOGIN_SUCCESS)
   },
 
   getAccessToken() {
@@ -581,6 +581,7 @@ _.extend(UserStore, {
     return results == null ? null : results[1];
   }
 });
+
 var dispatchToken = Dispatcher.register(UserStore.handleDispatch.bind(UserStore));
 UserStore.dispatchToken = dispatchToken;
 
