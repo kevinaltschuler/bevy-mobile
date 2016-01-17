@@ -246,18 +246,17 @@ _.extend(ChatStore, {
         var thread = this.threads.get(thread_id);
         if(thread == undefined) break;
         // dont add users to bevy threads. shouldnt happen anyways
-        if(thread.get('type') == 'bevy') break;
+        if(thread.get('type') == 'board') break;
 
         // merge user lists
         var thread_users = thread.get('users');
-
         for(var key in users) {
-          var user = users[key]
-          if(_.contains(thread_users, user))
-            break;
+          var $user = users[key];
+          if(_.contains(_.pluck(thread_users, '_id'), $user._id)) {
+            continue;
+          }
+          thread_users.push($user);
         }
-
-        thread_users = _.union(thread_users, users);
 
         if(thread.get('type') == 'pm') {
           // keep the pm and create a new group chat thread
@@ -283,6 +282,7 @@ _.extend(ChatStore, {
           });
         } else {
           // just add the user and save to server
+          thread.url = constants.apiurl + '/threads';
           thread.save({
             users: _.pluck(thread_users, '_id')
           }, {

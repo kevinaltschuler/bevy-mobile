@@ -41,7 +41,7 @@ var NewThreadView = React.createClass({
   },
 
   getInitialState() {
-    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
       toInput: '',
       searching: false,
@@ -183,7 +183,7 @@ var NewThreadView = React.createClass({
       var addedUser = this.state.addedUsers[key];
       // dont render self
       if(addedUser._id == this.props.user._id) continue;
-      
+
       users.push(
         <AddedUserItem
           key={ 'addeduser:' + addedUser._id }

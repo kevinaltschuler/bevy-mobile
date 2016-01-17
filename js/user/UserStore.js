@@ -344,6 +344,9 @@ _.extend(UserStore, {
           this.userSearchResults.reset(res);
           this.userSearchResults.remove(this.user.get('_id')); // remove self from search results
           this.trigger(USER.SEARCH_COMPLETE);
+        })
+        .catch(err => {
+          this.trigger(USER.SEARCH_ERROR, err.toString());
         });
         break;
 
