@@ -83,6 +83,16 @@ var ProfileView = React.createClass({
               width: 48,
               height: 48
             }}/>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+            >
+              <Icon
+                name='create'
+                size={ 30 }
+                color='#FFF'
+                style={{marginRight: 10}}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
