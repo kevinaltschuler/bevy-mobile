@@ -279,7 +279,8 @@ var styles = StyleSheet.create({
   },
   textButtons: {
     flexDirection: 'row',
-    marginTop: 10
+    marginTop: 10,
+    width: constants.width
   },
   textButton: {
     flexDirection: 'column',
@@ -291,7 +292,7 @@ var styles = StyleSheet.create({
   },
   textButtonText: {
     textAlign: 'center',
-    fontSize: 17,
+    fontSize: 14,
     color: '#eee'
   }
 });

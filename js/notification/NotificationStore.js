@@ -55,6 +55,7 @@ _.extend(NotificationStore, {
         }
         var user = UserStore.getUser();
 
+        this.notifications.comparator = this.sortByNew;
         this.notifications.url =
           constants.apiurl + '/users/' + user._id + '/notifications';
 
@@ -66,6 +67,8 @@ _.extend(NotificationStore, {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
               (notification) => notification.read == false).length;
+
+            this.notifications.sort()
 
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
@@ -121,6 +124,7 @@ _.extend(NotificationStore, {
 
         this.notifications.url =
           constants.apiurl + '/users/' + user._id + '/notifications';
+        this.notifications.comparator = this.sortByNew;
 
         this.trigger(NOTIFICATION.FETCHING);
 
@@ -129,6 +133,8 @@ _.extend(NotificationStore, {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
               (notification) => notification.read == false).length;
+
+            this.notifications.sort();
 
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
@@ -190,6 +196,11 @@ _.extend(NotificationStore, {
         }
         break;
     }
+  },
+
+  sortByNew(note) {
+    var date = Date.parse(note.get('created'));
+    return -date;
   },
 
   getAll() {

@@ -37,7 +37,6 @@ var NewPostImageItem = React.createClass({
 
   render() {
     var image = resizeImage(this.props.image, 75, 75);
-    console.log(image);
     return (
       <TouchableWithoutFeedback
         onPress={ this.showImageModal }

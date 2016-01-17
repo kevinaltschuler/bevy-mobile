@@ -30,7 +30,6 @@ var BevyActions = require('./../../../bevy/BevyActions');
 var AppActions = require('./../../../app/AppActions');
 var UserStore = require('./../../../user/UserStore');
 var UserActions = require('./../../../user/UserActions');
-var ViewPager = require('react-native-viewpager');
 var BEVY = constants.BEVY;
 var USER = constants.USER;
 

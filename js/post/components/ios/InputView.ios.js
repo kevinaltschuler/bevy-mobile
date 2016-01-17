@@ -95,6 +95,7 @@ var InputView = React.createClass({
   },
 
   onUploadComplete(file) {
+    console.log(file);
     var images = this.state.images;
     images.push(file);
     this.setState({ images: images });
@@ -127,8 +128,8 @@ var InputView = React.createClass({
     UIImagePickerManager.launchImageLibrary({
       returnBase64Image: false,
       returnIsVertical: true
-    }, (didCancel, response) => {
-      if (!didCancel) {
+    }, (response) => {
+      if (!response.didCancel) {
         FileActions.upload(response.uri);
       } else {
         console.log('Cancel');
@@ -141,9 +142,8 @@ var InputView = React.createClass({
     UIImagePickerManager.launchCamera({
       returnBase64Image: false,
       returnIsVertical: true
-    }, (didCancel, response) => {
-      if (!didCancel) {
-        console.log(response);
+    }, (response) => {
+      if (!response.didCancel) {
         FileActions.upload(response.uri);
       } else {
         console.log('Cancel');
@@ -201,7 +201,9 @@ var InputView = React.createClass({
       <View style={{
         flexDirection: 'column',
         paddingHorizontal: 10,
-        marginBottom: 6
+        marginBottom: 6,
+        flex: 1,
+        minHeight: 100,
       }}>
         <Text style={ styles.sectionTitle }>Images</Text>
         <ScrollView
@@ -303,9 +305,7 @@ var InputView = React.createClass({
               style={ styles.textInput }
             />
           </View>
-          <View style={ styles.image }>
-            { this._renderImages() }
-          </View>
+          { this._renderImages() }
         </ScrollView>
         <View style={ styles.contentBar }>
           <TouchableHighlight
@@ -383,7 +383,8 @@ var styles = StyleSheet.create({
   },
   body: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    paddingBottom: 40
   },
   boardItem: {
     flexDirection: 'column',
@@ -411,7 +412,7 @@ var styles = StyleSheet.create({
     paddingRight: 16,
   },
   input: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingVertical: 10,

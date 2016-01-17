@@ -27,6 +27,13 @@ var PostActions = {
 		});
 	},
 
+	fetchBoard(board_id) {
+		Dispatcher.dispatch({
+			actionType: POST.FETCH_BOARD,
+			board_id: board_id
+		});
+	},
+
 	/**
 	* create a post
 	* @param  {string} title

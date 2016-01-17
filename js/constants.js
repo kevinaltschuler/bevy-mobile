@@ -87,6 +87,7 @@ exports.POST = {
   UPDATE: 'post_update',
 
   FETCH: 'post_fetch',
+  FETCH_BOARD: 'post_fetch_board',
 
   LOADING: 'post_loading',
   LOADED: 'post_loaded',

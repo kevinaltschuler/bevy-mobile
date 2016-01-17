@@ -96,10 +96,14 @@ var PostList = React.createClass({
   },
 
   onRefresh(stopRefresh) {
-    PostActions.fetch(
-      this.props.activeBevy._id,
-      (!_.isEmpty(this.props.profileUser)) ? this.props.profileUser._id : null
-    );
+    if(_.isEmpty(this.props.activeBoard)) {
+      PostActions.fetch(
+        this.props.activeBevy._id,
+        (!_.isEmpty(this.props.profileUser)) ? this.props.profileUser._id : null
+      );
+    } else {
+       PostActions.fetchBoard(this.props.activeBoard._id);     
+    }
   },
 
   handleScroll(y) {
@@ -178,7 +182,6 @@ var PostList = React.createClass({
   },
 
   _renderPosts() {
-    console.log(this.state.loading, this.state.dataSource)
     if(this.state.loading) return <View />;
 
     return (
@@ -194,7 +197,9 @@ var PostList = React.createClass({
           return this._renderHeader();
         }}
         renderFooter={() => {
-          return <View style={{height: 20}}/>
+          return <View>
+            { this._renderNoPosts() }
+          </View>
         }}
         refreshControl={
             <RefreshControl
@@ -234,7 +239,6 @@ var PostList = React.createClass({
       <View style={ styles.postContainer }>
         { this._renderLoading() }
         { this._renderPosts() }
-        { this._renderNoPosts() }
       </View>
     );
   }
@@ -284,12 +288,13 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginTop: 100
   },
   noPostsText: {
     color: '#AAA',
     fontSize: 22,
-    marginTop: -100
+    marginTop: 0
   }
 })
 

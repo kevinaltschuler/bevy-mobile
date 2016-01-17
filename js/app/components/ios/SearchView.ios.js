@@ -224,8 +224,9 @@ var SearchView = React.createClass({
     }
     return(
       <ScrollView
+        style={{paddingBottom: 40}}
         contentContainerStyle={ styles.bevyList }
-        automaticallyAdjustContentInsets={true}
+        automaticallyAdjustContentInsets={false}
         showsVerticalScrollIndicator={true}
       >
         { bevyList }
@@ -238,7 +239,7 @@ var SearchView = React.createClass({
     if(index == 0){
       //BevyActions.search(this.state.input);
       return(
-        <View >
+        <View style={{flex: 1, paddingBottom: 48}}>
           {this._renderSearchBevies()}
         </View>
         );
@@ -268,7 +269,8 @@ var SearchView = React.createClass({
     if(this.state.activeTab == 0) {
       //in user tab
       this.setState({
-        searchQuery: ev
+        searchQuery: ev,
+        input: ev
       });
       if(this.searchTimeout != undefined) {
         clearTimeout(this.searchTimeout);
@@ -278,7 +280,8 @@ var SearchView = React.createClass({
     } else {
       //in user tab
       this.setState({
-        userQuery: ev
+        userQuery: ev,
+        input: ev
       });
       if(this.searchTimeout != undefined) {
         clearTimeout(this.searchTimeout);
@@ -452,7 +455,6 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: 0,
-    marginBottom: -140
   },
   progressContainer: {
     flex: 1,

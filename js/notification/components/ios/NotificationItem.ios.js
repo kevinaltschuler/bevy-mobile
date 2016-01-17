@@ -208,11 +208,11 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 80
+    height: 80,
   },
   row: {
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
   },
   titleImage: {
     width: 60,
@@ -224,7 +224,7 @@ var styles = StyleSheet.create({
   rightRow: {
   	flex: 1,
   	flexDirection: 'row',
-  	justifyContent: 'space-between'
+  	justifyContent: 'space-between',
   },
   titleTextColumn: {
     flex: 1,
@@ -232,7 +232,10 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     height: 80,
-    marginLeft: 15
+    marginLeft: 15,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1,
+    borderStyle: 'solid',
   },
   titleText: {
     color: '#282929',

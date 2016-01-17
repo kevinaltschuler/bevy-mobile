@@ -171,16 +171,8 @@ var MyBevies = React.createClass({
 
         <ScrollView
           contentContainerStyle={ styles.bevyList }
-          automaticallyAdjustContentInsets={ false }
+          automaticallyAdjustContentInsets={ true }
           showsVerticalScrollIndicator={ true }
-          refreshControl={
-            <RefreshControl
-              refreshing={ this.state.loading }
-              onRefresh={ this.onRefresh }
-              tintColor='#AAA'
-              title='Loading...'
-            />
-          }
         >
           { this._renderLoading() }
           { this._renderBevyList() }
@@ -229,7 +221,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginBottom: 10,
-    paddingTop: 10,
+    marginTop: -10,
   },
   newBevyCard: {
     alignItems: 'center',
