@@ -36,7 +36,8 @@ var CHAT = constants.CHAT;
 
 var NewThreadView = React.createClass({
   propTypes: {
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -180,6 +181,9 @@ var NewThreadView = React.createClass({
     var users = [];
     for(var key in this.state.addedUsers) {
       var addedUser = this.state.addedUsers[key];
+      // dont render self
+      if(addedUser._id == this.props.user._id) continue;
+      
       users.push(
         <AddedUserItem
           key={ 'addeduser:' + addedUser._id }

@@ -138,7 +138,7 @@ _.extend(ChatStore, {
             remove: false,
             success: function(collection, response, options) {
               thread.messages.sort();
-              this.trigger(CHAT.CHANGE_ONE + thread_id);
+              this.trigger(CHAT.MESSAGES_FETCHED);
             }.bind(this)
           });
         }
@@ -309,15 +309,17 @@ _.extend(ChatStore, {
           thread.messages.url += ('?skip=' + message_count);
 
         console.log(thread.messages.url);
+        this.trigger(CHAT.FETCHING_MESSAGES)
 
         thread.messages.fetch({
           remove: false,
           success: function(collection, response, options) {
             thread.messages.sort();
-            this.trigger(CHAT.CHANGE_ONE + thread_id);
+            this.trigger(CHAT.MESSAGES_FETCHED);
           }.bind(this),
           error: function(error) {
             console.log('fetch message error', error.toString());
+            this.trigger(CHAT.MESSAGES_FETCHED);
           }
         });
         // reset url
@@ -465,7 +467,7 @@ _.extend(ChatStore, {
             message.set('author', model.get('author'));
             message.set('created', model.get('created'));
 
-            this.trigger(CHAT.CHANGE_ONE + thread_id);
+            this.trigger(CHAT.MESSAGES_FETCHED);
             this.trigger(CHAT.CHANGE_ALL);
           }.bind(this)
         });
@@ -485,7 +487,7 @@ _.extend(ChatStore, {
         message.destroy();
 
         //this.trigger(CHAT.CHANGE_ALL);
-        this.trigger(CHAT.CHANGE_ONE + thread.get('id'));
+        this.trigger(CHAT.MESSAGES_FETCHED);
         break;
     }
 	},
@@ -551,7 +553,7 @@ _.extend(ChatStore, {
     this.threads.sort();
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
-    this.trigger(CHAT.CHANGE_ONE + thread.id);
+    this.trigger(CHAT.MESSAGES_FETCHED);
 
     if(this.active == thread_id) {
 

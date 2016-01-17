@@ -58,7 +58,7 @@ var MessageView = React.createClass({
   },
 
   componentDidMount() {
-    ChatStore.on(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
+    ChatStore.on(CHAT.MESSAGES_FETCHED, this._onChatChange);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
 
@@ -69,7 +69,7 @@ var MessageView = React.createClass({
   },
 
   componentWillUnmount() {
-    ChatStore.off(CHAT.CHANGE_ONE + this.props.activeThread._id, this._onChatChange);
+    ChatStore.off(CHAT.MESSAGES_FETCHED, this._onChatChange);
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
   },
