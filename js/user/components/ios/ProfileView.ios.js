@@ -226,17 +226,19 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 48,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    paddingLeft: 20
   },
   generalTitle: {
-    color: '#666',
+    color: '#aaa',
     backgroundColor: '#fff',
     fontSize: 17
   },
   generalText: {
-    color: '#666',
+    color: '#aaa',
     backgroundColor: '#fff',
-    fontSize: 17
+    fontSize: 17,
+
   },
   itemInner: {
     height: 48,
@@ -246,7 +248,10 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    paddingHorizontal: 16,
+    paddingRight: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    borderStyle: 'solid'
   },
   sectionTitle: {
     color: '#666',

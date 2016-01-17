@@ -80,9 +80,11 @@ var SettingsView = React.createClass({
       chooseFromLibraryButtonTitle: 'Choose from Library...',
       returnBase64Image: false,
       returnIsVertical: true
-    }, (type, response) => {
-      if (type !== 'cancel' && response) {
+    }, (response) => {
+      if (!response.didCancel) {
         FileActions.upload(response.uri);
+      } else {
+        console.log('Cancel');
       }
     });
   },

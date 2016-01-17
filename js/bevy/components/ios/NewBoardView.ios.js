@@ -116,14 +116,11 @@ var NewBoardView = React.createClass({
       chooseFromLibraryButtonTitle: 'Choose from Library...',
       returnBase64Image: false,
       returnIsVertical: false
-    }, (didCancel, response) => {
-      if (didCancel) {
-        //console.log(response);
-
-      } else {
-        //console.log('Cancel');
+    }, (response) => {
+      if (!response.didCancel) {
         FileActions.upload(response.uri);
-        //console.log(response.uri);
+      } else {
+        console.log('Cancel');
       }
     });
   },

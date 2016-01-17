@@ -199,7 +199,8 @@ var AddPeopleView = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EEE'
+    backgroundColor: '#EEE',
+    paddingBottom: 50
   },
   navBar: {
     height: 48,
