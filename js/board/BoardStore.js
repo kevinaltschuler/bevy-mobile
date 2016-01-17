@@ -12,7 +12,6 @@
 
 // imports
 var Backbone = require('backbone');
-var $ = require('jquery');
 var _ = require('underscore');
 var async = require('async');
 var getSlug = require('speakingurl');

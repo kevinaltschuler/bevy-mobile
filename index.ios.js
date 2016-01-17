@@ -52,7 +52,14 @@ window.fetch = function(input, init) {
   // set the network activity indicator to true
   StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
+  var startTime = Date.now();
+  console.log('START', options.method, url);
+
   return $fetch(url, options).then(res => {
+    var endTime = Date.now();
+    var delta = endTime - startTime;
+    console.log('END', options.method, url, delta + ' MS');
+
     // clear the network activity indicator
     StatusBarIOS.setNetworkActivityIndicatorVisible(false);
     return res;
@@ -83,6 +90,8 @@ var ChatStore = require('./js/chat/ChatStore');
 var FileStore = require('./js/file/FileStore');
 var NotificationStore = require('./js/notification/NotificationStore');
 var UserStore = require('./js/user/UserStore');
+
+var Dispatcher = require('./js/shared/dispatcher');
 
 var AppActions = require('./js/app/AppActions');
 
@@ -117,8 +126,6 @@ Backbone.sync = function(method, model, options) {
   };
   method = methodMap[method];
 
-  var startTime = Date.now();
-
   var opts = {
     method: method,
     headers: headers,
@@ -132,8 +139,6 @@ Backbone.sync = function(method, model, options) {
   .then(res => res.json())
   .then(res => {
     //console.log('fetch success');
-    var endTime = Date.now();
-    var deltaTime = endTime - startTime;
     options.success(res, options);
   })
   .catch(error => {
@@ -177,7 +182,6 @@ var App = React.createClass({
   },
 
   getChatState() {
-    //console.log(ChatStore.getAll());
     return {
       allThreads: ChatStore.getAll(),
       activeThread: ChatStore.getActive()
@@ -191,7 +195,6 @@ var App = React.createClass({
   },
 
   getUserState() {
-    //console.log('get user state', UserStore.getUser());
     return {
       user: UserStore.getUser(),
       loggedIn: UserStore.loggedIn
@@ -259,7 +262,6 @@ var App = React.createClass({
   },
 
   render() {
-
     var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
     // disable gestures
     sceneConfig.gestures = null;
@@ -272,24 +274,20 @@ var App = React.createClass({
       <View style={{ flex: 1 }}>
         <Navigator
           configureScene={() => sceneConfig }
-          initialRoute={ initialRoute }
-          initialRouteStack={[
-            initialRoute
-          ]}
+          initialRouteStack={[ initialRoute ]}
           renderScene={(route, navigator) => {
-              switch(route.name) {
-                default:
-                  return (
-                    <MainView
-                      mainRoute={ route }
-                      mainNavigator={ navigator }
-                      { ...this.state }
-                    />
-                  )
-                  break;
-              }
+            switch(route.name) {
+              default:
+                return (
+                  <MainView
+                    mainRoute={ route }
+                    mainNavigator={ navigator }
+                    { ...this.state }
+                  />
+                )
+                break;
             }
-          }
+          }}
         />
       </View>
     );

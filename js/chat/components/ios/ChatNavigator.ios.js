@@ -25,6 +25,10 @@ var AddPeopleView = require('./AddPeopleView.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
+var constants = require('./../../../constants');
+var ChatStore = require('./../../../chat/ChatStore');
+var ChatActions = require('./../../../chat/ChatActions');
+var CHAT = constants.CHAT;
 
 var ChatNavigator = React.createClass({
   propTypes: {
@@ -37,51 +41,84 @@ var ChatNavigator = React.createClass({
       <Navigator
         navigator={ this.props.mainNavigator }
         initialRoute={ routes.CHAT.THREADLIST }
-        initialRouteStack={[
-          routes.CHAT.THREADLIST
-        ]}
+        initialRouteStack={[ routes.CHAT.THREADLIST ]}
         renderScene={(route, navigator) => {
-          switch(route.name) {
-            case routes.CHAT.THREADLIST.name:
-              return (
-                <ThreadList
-                  { ...this.props }
-                  chatNavigator={ navigator }
-                  chatRoute={ route }
-                />
-              );
-              break;
-            case routes.CHAT.MESSAGEVIEW.name:
-              return (
-                <MessageView
-                  { ...this.props }
-                  chatNavigator={ navigator }
-                  chatRoute={ route }
-                />
-              );
-              break;
-            case routes.CHAT.THREADSETTINGS.name:
-              return (
-                <ThreadSettingsView
-                  { ...this.props }
-                  chatNavigator={ navigator }
-                  chatRoute={ route }
-                />
-              );
-              break;
-            case routes.CHAT.ADDPEOPLE.name:
-              return (
-                <AddPeopleView
-                  { ...this.props }
-                  chatNavigator={ navigator }
-                  chatRoute={ route }
-                />
-              );
-              break;
-          }
+          return (
+            <ChatView
+              chatNavigator={ navigator }
+              chatRoute={ route }
+              { ...this.props }
+            />
+          );
         }}
       />
     );
+  }
+});
+
+var ChatView = React.createClass({
+  propTypes: {
+    mainNavigator: React.PropTypes.object,
+    mainRoute: React.PropTypes.object,
+    chatNavigator: React.PropTypes.object,
+    chatRoute: React.PropTypes.object
+  },
+
+  componentDidMount() {
+    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onThreadChange);
+  },
+  componentWillUnmount() {
+    ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onThreadChange);
+  },
+
+  onThreadChange(thread_id) {
+    console.log('thread change', thread_id);
+    var route = routes.CHAT.MESSAGEVIEW;
+    route.threadID = thread_id;
+    this.props.chatNavigator.push(route);
+
+    var $routes = this.props.mainNavigator.getCurrentRoutes();
+    var currentRoute = $routes[$routes.length - 1];
+    console.log('current route:', currentRoute.name);
+    if(currentRoute.name == routes.MAIN.NEWTHREAD.name) {
+      setTimeout(() => {
+        this.props.mainNavigator.pop();
+      }, 500);
+    }
+  },
+
+  render() {
+    switch(this.props.chatRoute.name) {
+      case routes.CHAT.THREADLIST.name:
+        return (
+          <ThreadList
+            { ...this.props }
+          />
+        );
+        break;
+      case routes.CHAT.MESSAGEVIEW.name:
+        return (
+          <MessageView
+            { ...this.props }
+            threadID={ this.props.chatRoute.threadID }
+          />
+        );
+        break;
+      case routes.CHAT.THREADSETTINGS.name:
+        return (
+          <ThreadSettingsView
+            { ...this.props }
+          />
+        );
+        break;
+      case routes.CHAT.ADDPEOPLE.name:
+        return (
+          <AddPeopleView
+            { ...this.props }
+          />
+        );
+        break;
+    }
   }
 });
 

@@ -45,6 +45,7 @@ _.extend(NotificationStore, {
 
   notifications: new Notifications,
   unread: 0,
+  ws: null,
 
   handleDispatch: function(payload) {
     switch(payload.actionType) {
@@ -74,19 +75,22 @@ _.extend(NotificationStore, {
           }.bind(this)
         });
 
-        var ws = io(constants.siteurl, { jsonp: false });
+        // if websockets have already been initialized
+        // then break out here.
+        if(this.ws) break;
 
-        ws.on('error', function(error) {
-          console.log(error);
-          console.log('error');
+        this.ws = io(constants.siteurl, { jsonp: false });
+
+        this.ws.on('error', function(error) {
+          console.log('error', error);
         });
-        ws.on('connect', function() {
+        this.ws.on('connect', function() {
           console.log('websocket client connected');
           console.log('setting user id', user._id);
-          ws.emit('set_user_id', user._id);
-        });
+          this.ws.emit('set_user_id', user._id);
+        }.bind(this));
 
-        ws.on('chat.' + user._id, function(message) {
+        this.ws.on('chat.' + user._id, function(message) {
           message = JSON.parse(message);
           console.log('ws got message', message);
 
@@ -107,7 +111,7 @@ _.extend(NotificationStore, {
           ChatStore.addMessage(message);
         }.bind(this));
 
-        ws.on('notification.' + user._id, function(notification) {
+        this.ws.on('notification.' + user._id, function(notification) {
           console.log('ws got notification', notification);
           this.notifications.add(notification);
           this.trigger(NOTIFICATION.CHANGE_ALL);

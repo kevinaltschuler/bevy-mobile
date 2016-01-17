@@ -170,6 +170,8 @@ exports.CHAT = {
   THREADS_FETCHED: 'chat_threads_fetched',
   CHANGE_ALL: 'chat_change_all',
   CHANGE_ONE: 'chat_change_one:',
+  FETCHING_MESSAGES: 'chat_fetching_messages',
+  MESSAGES_FETCHED: 'chat_messages_fetched',
   THREAD_CREATED: 'chat_thread_created',
   SWITCH_TO_THREAD: 'chat_switch_to_thread',
   SWITCH_TO_THREAD_INTENT: 'chat_switch_to_thread_intent',

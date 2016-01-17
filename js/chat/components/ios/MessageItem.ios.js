@@ -36,14 +36,16 @@ var MessageItem = React.createClass({
     user: React.PropTypes.object,
     hidePic: React.PropTypes.bool,
     showName: React.PropTypes.bool,
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    onMount: React.PropTypes.func
   },
 
   getDefaultProps() {
     return {
       message: {},
       hidePic: false,
-      showName: true
+      showName: true,
+      onMount: _.noop
     }
   },
 
@@ -63,6 +65,7 @@ var MessageItem = React.createClass({
 
   componentDidMount() {
     this.measureMessageBody();
+    this.props.onMount();
   },
 
   measureMessageBody() {

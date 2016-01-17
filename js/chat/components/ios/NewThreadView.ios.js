@@ -36,7 +36,8 @@ var CHAT = constants.CHAT;
 
 var NewThreadView = React.createClass({
   propTypes: {
-    mainNavigator: React.PropTypes.object
+    mainNavigator: React.PropTypes.object,
+    user: React.PropTypes.object
   },
 
   getInitialState() {
@@ -56,50 +57,34 @@ var NewThreadView = React.createClass({
     UserStore.on(USER.SEARCHING, this.onSearching);
     UserStore.on(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    // listen to chat store events
-    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     // populate list with random users for now
     UserActions.search('');
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
 
-      console.log(frames);
-
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 0
-      });
-    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.onKeyboardShow);
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.onKeyboardHide);
   },
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
 
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 0
-      });
-    });
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.onKeyboardShow);
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.onKeyboardHide);
+  },
+
+  onKeyboardShow(frames) {
+    if(frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 0 });
   },
 
   onSearching() {
-    this.setState({
-      searching: true
-    });
+    this.setState({ searching: true });
   },
   onSearchError() {
     this.setState({
@@ -114,11 +99,6 @@ var NewThreadView = React.createClass({
       searchUsers: searchUsers,
       ds: this.state.ds.cloneWithRows(searchUsers)
     });
-  },
-
-  onSwitchToThread(thread_id) {
-    // go to thread view
-    this.props.mainNavigator.pop();
   },
 
   goBack() {
@@ -201,6 +181,9 @@ var NewThreadView = React.createClass({
     var users = [];
     for(var key in this.state.addedUsers) {
       var addedUser = this.state.addedUsers[key];
+      // dont render self
+      if(addedUser._id == this.props.user._id) continue;
+      
       users.push(
         <AddedUserItem
           key={ 'addeduser:' + addedUser._id }
@@ -241,7 +224,7 @@ var NewThreadView = React.createClass({
         automaticallyAdjustContentInsets={ false }
         initialListSize={ 10 }
         pageSize={ 10 }
-        renderRow={(user) => {
+        renderRow={ user => {
           return (
             <UserSearchItem
               key={ 'searchuser:' + user._id }
@@ -289,6 +272,8 @@ var NewThreadView = React.createClass({
           { this._renderAddedUsers() }
           <TextInput
             ref='ToInput'
+            autoCorrect={ false }
+            autoCapitalize={ 'none' }
             style={ styles.toInput }
             value={ this.state.toInput }
             onChangeText={ this.onChangeToText }
@@ -350,10 +335,10 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   toText: {
-    color: '#666',
+    color: '#AAA',
     fontSize: 17,
     marginRight: 10,
-    marginBottom: 6
+    marginBottom: 3
   },
   toInput: {
     flex: 1,

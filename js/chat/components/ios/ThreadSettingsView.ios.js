@@ -198,6 +198,26 @@ var ThreadSettingsView = React.createClass({
     }
   },
 
+  _renderDelete() {
+    if(_.contains(['group', 'pm'], this.props.activeThread.type)) {
+      return (
+        <SettingsItem
+          icon={
+            <Icon
+              name='delete'
+              size={ 30 }
+              color='#AAA'
+            />
+          }
+          onPress={ this.deleteConversation }
+          title='Delete Conversation'
+        />
+      );
+    } else {
+      return <View/>;
+    }
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -230,10 +250,11 @@ var ThreadSettingsView = React.createClass({
         <ScrollView style={ styles.contentContainer }>
           { this._renderName() }
           <Text style={ styles.sectionTitle }>
-            {(this.props.activeThread.type == 'group') ? 'Settings' : ''}
+            Settings
           </Text>
           { this._renderEditName() }
           { this._renderLeave() }
+          { this._renderDelete() }
           <Text style={ styles.sectionTitle }>
             People
           </Text>
@@ -286,13 +307,6 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10
   },
 
-  editHeader: {
-    height: 80,
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10
-  },
   headerDetails: {
     height: 48,
     flexDirection: 'column',

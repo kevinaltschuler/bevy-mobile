@@ -23,8 +23,6 @@ var ThreadModel = Backbone.Model.extend({
   initialize() {
     this.messages = new Messages;
     this.messages.url = constants.apiurl + '/threads/' + this.id + '/messages';
-
-    // get bevy members later
   },
   getName() {
     if(!_.isEmpty(this.get('name'))) return this.get('name');

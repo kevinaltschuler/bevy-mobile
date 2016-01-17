@@ -1,3 +1,9 @@
+/**
+ * ThreadCollection.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 // imports
@@ -10,7 +16,7 @@ var UserStore = require('./../user/UserStore');
 
 // backbone collection
 var ThreadCollection = Backbone.Collection.extend({
-  model: Thread, 
+  model: Thread,
   // sort alphabetically by name
   comparator: thread => {
     if(thread.get('latest') == null) {

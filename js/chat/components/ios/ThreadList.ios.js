@@ -68,18 +68,12 @@ var ThreadList = React.createClass({
   },*/
 
   componentDidMount() {
-    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.switchToThread);
     ChatStore.on(CHAT.FETCHING_THREADS, this.onLoading);
     ChatStore.on(CHAT.THREADS_FETCHED, this.onLoaded);
   },
   componentWillUnmount() {
-    ChatStore.off(CHAT.SWITCH_TO_THREAD, this.switchToThread);
     ChatStore.off(CHAT.FETCHING_THREADS, this.onLoading);
     ChatStore.off(CHAT.THREADS_FETCHED, this.onLoaded);
-  },
-
-  switchToThread(thread_id) {
-    this.props.chatNavigator.push(routes.CHAT.MESSAGEVIEW);
   },
 
   onLoading() {

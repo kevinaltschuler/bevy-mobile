@@ -1,6 +1,11 @@
+/**
+ * ChatStore.js
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
-// imports
 var Backbone = require('backbone');
 var _ = require('underscore');
 
@@ -24,9 +29,7 @@ var {
 var BevyIntent = require('./../shared/apis/BevyIntent.android.js');
 
 var ChatStore = _.extend({}, Backbone.Events);
-
 _.extend(ChatStore, {
-
   threads: new Threads,
   active: -1,
 
@@ -135,7 +138,7 @@ _.extend(ChatStore, {
             remove: false,
             success: function(collection, response, options) {
               thread.messages.sort();
-              this.trigger(CHAT.CHANGE_ONE + thread_id);
+              this.trigger(CHAT.MESSAGES_FETCHED);
             }.bind(this)
           });
         }
@@ -159,7 +162,7 @@ _.extend(ChatStore, {
           return (
             _.difference(
               _.pluck(addedUsers, '_id'),
-                _.pluck($thread.get('users'), '_id')
+              _.pluck($thread.get('users'), '_id')
             ).length <= 0)
             && addedUsers.length == $thread.get('users').length;
         });
@@ -174,14 +177,22 @@ _.extend(ChatStore, {
             author: user._id,
             body: messageBody
           });
-          newMessage.save();
-          // self populate message
-          newMessage.set('author', user);
+          console.log(newMessage);
+          newMessage.url = constants.apiurl + '/messages';
+          newMessage.save(null, {
+            success: function(model, response, options) {
+              // self populate message
+              newMessage.set('author', user);
 
-          // switch to the new thread
-          this.active = duplicate.get('_id');
-          this.trigger(CHAT.CHANGE_ALL);
-          this.trigger(CHAT.SWITCH_TO_THREAD, duplicate.get('_id'));
+              // switch to the new thread
+              this.active = duplicate.get('_id');
+              this.trigger(CHAT.CHANGE_ALL);
+              this.trigger(CHAT.FETCHED_THREADS);
+              setTimeout(() => {
+                this.trigger(CHAT.SWITCH_TO_THREAD, duplicate.get('_id'));
+              }, 250);
+            }.bind(this)
+          });
           break;
         }
 
@@ -198,18 +209,21 @@ _.extend(ChatStore, {
             thread.set('_id', model.get('_id'));
             thread.set('users', addedUsers);
 
+            console.log('created new thread', model);
+
             // push and save the new message
             var newMessage = thread.messages.add({
               thread: thread.get('_id'),
               author: user._id,
               body: messageBody
             });
+            newMessage.url = constants.apiurl + '/messages';
+            newMessage.save();
 
             // set the urls
             thread.url = constants.apiurl + '/threads/' + thread.get('_id');
             thread.messages.url = constants.apiurl + '/threads/' +
               thread.get('_id') + '/messages';
-            newMessage.save();
 
             // self populate message
             newMessage.set('author', user);
@@ -217,10 +231,12 @@ _.extend(ChatStore, {
             // open thread
             this.active = thread.get('_id');
             this.trigger(CHAT.CHANGE_ALL);
-            this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
+            this.trigger(CHAT.FETCHED_THREADS);
+            setTimeout(() => {
+              this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
+            }, 250);
           }.bind(this)
         });
-
         break;
 
       case CHAT.ADD_USERS:
@@ -287,18 +303,27 @@ _.extend(ChatStore, {
         if(thread == undefined) break;
 
         var message_count = thread.messages.length;
-        var temp_url = thread.messages.url;
-        thread.messages.url += ('?skip=' + message_count);
+        var url = constants.apiurl + '/threads/' + thread_id + '/messages';
+        thread.messages.url = url;
+        if(message_count > 0)
+          thread.messages.url += ('?skip=' + message_count);
+
+        console.log(thread.messages.url);
+        this.trigger(CHAT.FETCHING_MESSAGES)
 
         thread.messages.fetch({
           remove: false,
           success: function(collection, response, options) {
             thread.messages.sort();
-            this.trigger(CHAT.CHANGE_ONE + thread_id);
-          }.bind(this)
+            this.trigger(CHAT.MESSAGES_FETCHED);
+          }.bind(this),
+          error: function(error) {
+            console.log('fetch message error', error.toString());
+            this.trigger(CHAT.MESSAGES_FETCHED);
+          }
         });
         // reset url
-        thread.messages.url = temp_url;
+        thread.messages.url = url;
 
         break;
 
@@ -344,6 +369,7 @@ _.extend(ChatStore, {
         thread.destroy({
           success: function(model, response, options) {
             this.trigger(CHAT.CHANGE_ALL);
+            this.trigger(CHAT.THREADS_FETCHED);
           }.bind(this)
         });
         break;
@@ -441,7 +467,7 @@ _.extend(ChatStore, {
             message.set('author', model.get('author'));
             message.set('created', model.get('created'));
 
-            this.trigger(CHAT.CHANGE_ONE + thread_id);
+            this.trigger(CHAT.MESSAGES_FETCHED);
             this.trigger(CHAT.CHANGE_ALL);
           }.bind(this)
         });
@@ -461,7 +487,7 @@ _.extend(ChatStore, {
         message.destroy();
 
         //this.trigger(CHAT.CHANGE_ALL);
-        this.trigger(CHAT.CHANGE_ONE + thread.get('id'));
+        this.trigger(CHAT.MESSAGES_FETCHED);
         break;
     }
 	},
@@ -503,9 +529,9 @@ _.extend(ChatStore, {
   sortByLatest(thread) {
     var latest = thread.get('latest');
     if(latest == null) {
-      return -thread.created;
+      return -(new Date(thread.get('created')));
     }
-    return -latest.created;
+    return -(new Date(latest.created));
   },
 
   addMessage(message) {
@@ -527,7 +553,7 @@ _.extend(ChatStore, {
     this.threads.sort();
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
-    this.trigger(CHAT.CHANGE_ONE + thread.id);
+    this.trigger(CHAT.MESSAGES_FETCHED);
 
     if(this.active == thread_id) {
 
