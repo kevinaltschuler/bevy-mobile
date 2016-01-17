@@ -199,6 +199,23 @@ var MessageView = React.createClass({
     this.props.chatNavigator.push(routes.CHAT.THREADSETTINGS);
   },
 
+  _renderInfoButton() {
+    if(this.props.activeThread.type == 'board') return <View />;
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        style={ styles.iconButton }
+        onPress={ this.goToSettings }
+      >
+        <Icon
+          name='info'
+          size={ 30 }
+          color='#FFF'
+        />
+      </TouchableOpacity>
+    );
+  },
+
   renderHeader() {
     return <View style={{ height: 20 }}/>;
   },
@@ -264,17 +281,7 @@ var MessageView = React.createClass({
             <Text style={ styles.title }>
               { ChatStore.getThreadName(this.props.activeThread._id) }
             </Text>
-            <TouchableOpacity
-              activeOpacity={ 0.5 }
-              style={ styles.iconButton }
-              onPress={ this.goToSettings }
-            >
-              <Icon
-                name='info'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableOpacity>
+            { this._renderInfoButton() }
           </View>
         </View>
         <ListView

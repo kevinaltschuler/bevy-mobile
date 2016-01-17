@@ -337,17 +337,17 @@ _.extend(ChatStore, {
 
         // remove user
         var thread_users = _.reject(thread.get('users'), function($user) {
-          return $user._id == user_id;
+          if(_.isObject($user)) return $user._id == user_id;
+          else return $user == user_id;
         });
         if(thread_users.length == thread.get('users').length) break; // nothing changed
 
         // save to server
+        thread.url = constants.apiurl + '/threads/' + thread.get('_id');
         thread.save({
           users: _.pluck(thread_users, '_id')
         }, {
-          patch: true,
-          success: function(model, response, options) {
-          }.bind(this)
+          patch: true
         });
 
         // simulate population of users field

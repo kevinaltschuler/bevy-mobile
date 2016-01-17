@@ -43,7 +43,13 @@ var ThreadSettingsView = React.createClass({
   getInitialState() {
     return {
       threadName: ChatStore.getThreadName(this.props.activeThread._id)
-    }
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      threadName: ChatStore.getThreadName(nextProps.activeThread._id)
+    });
   },
 
   componentDidMount() {
@@ -85,12 +91,40 @@ var ThreadSettingsView = React.createClass({
   },
 
   leaveConversation() {
+    AlertIOS.alert(
+      'Are you sure?',
+      'If you leave this chat, you will have to be added back by one of its members.',
+      [{
+        text: 'Confirm',
+        onPress: this.leaveConversationForSure
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    );
+  },
+
+  leaveConversationForSure() {
     ChatActions.removeUser(this.props.activeThread._id, this.props.user._id);
     // go back to tab bar
     this.props.chatNavigator.popToTop();
   },
 
   deleteConversation() {
+    AlertIOS.alert(
+      'Are you sure?',
+      'Deleting a chat will also delete all messages posted to that chat.',
+      [{
+        text: 'Confirm',
+        onPress: this.deleteConversationForSure
+      }, {
+        text: 'Cancel',
+        style: 'cancel'
+      }]
+    );
+  },
+
+  deleteConversationForSure() {
     ChatActions.deleteThread(this.props.activeThread._id);
     // go back to tab bar
     this.props.chatNavigator.popToTop();
@@ -106,6 +140,7 @@ var ThreadSettingsView = React.createClass({
         <PersonItem
           key={ 'personitem:' + key }
           user={ person }
+          activeThread={ this.props.activeThread }
         />
       );
     }
@@ -140,6 +175,15 @@ var ThreadSettingsView = React.createClass({
     );
   },
 
+  _renderSettingsTitle() {
+    if(this.props.activeThread.type == 'board') return <View />;
+    return (
+      <Text style={ styles.sectionTitle }>
+        Settings
+      </Text>
+    );
+  },
+
   _renderEditName() {
     if(this.props.activeThread.type != 'group')
       return <View/>;
@@ -159,23 +203,20 @@ var ThreadSettingsView = React.createClass({
   },
 
   _renderAddPeople() {
-    if(this.props.activeThread.type != 'bevy') {
-      return (
-        <SettingsItem
-          icon={
-            <Icon
-              name='person-add'
-              size={ 30 }
-              color='#AAA'
-            />
-          }
-          onPress={ this.addPeople }
-          title='Add People'
-        />
-      );
-    } else {
-      return <View/>;
-    }
+    if(this.props.activeThread.type == 'board') return <View />;
+    return (
+      <SettingsItem
+        icon={
+          <Icon
+            name='person-add'
+            size={ 30 }
+            color='#AAA'
+          />
+        }
+        onPress={ this.addPeople }
+        title='Add People'
+      />
+    );
   },
 
   _renderLeave() {
@@ -218,6 +259,15 @@ var ThreadSettingsView = React.createClass({
     }
   },
 
+  _renderPeopleTitle() {
+    if(this.props.activeThread.type == 'board') return <View />;
+    return (
+      <Text style={ styles.sectionTitle }>
+        People
+      </Text>
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -249,15 +299,11 @@ var ThreadSettingsView = React.createClass({
         </View>
         <ScrollView style={ styles.contentContainer }>
           { this._renderName() }
-          <Text style={ styles.sectionTitle }>
-            Settings
-          </Text>
+          { this._renderSettingsTitle() }
           { this._renderEditName() }
           { this._renderLeave() }
           { this._renderDelete() }
-          <Text style={ styles.sectionTitle }>
-            People
-          </Text>
+          { this._renderPeopleTitle() }
           { this._renderAddPeople() }
           { this._renderPeople() }
         </ScrollView>
