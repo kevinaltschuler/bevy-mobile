@@ -137,8 +137,8 @@ Backbone.sync = function(method, model, options) {
     options.success(res, options);
   })
   .catch(error => {
-    console.log('fetch error', error.toString());
-    options.error(error.toString())
+    console.log(error.toString());
+    //options.error(error.toString())
   });
 };
 

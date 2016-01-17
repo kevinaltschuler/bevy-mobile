@@ -152,8 +152,10 @@ _.extend(NotificationStore, {
       case NOTIFICATION.READ:
         var id = payload.id;
         var notification = this.notifications.get(id);
-        if(notification == null)
+        if(notification == null) {
+          console.log('note not found');
           break;
+        }
         notification.read = true;
         this.unread -= 1;
         notification.save({read: true}, {patch: true});
