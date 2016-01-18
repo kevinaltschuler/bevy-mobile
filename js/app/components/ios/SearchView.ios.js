@@ -310,7 +310,8 @@ var SearchView = React.createClass({
               this._onChangeText(ev);
              }}
              value={ this.state.input }
-             placeholder='search...'
+             placeholder='Search'
+             returnKeyType='search'
            />
         </View>
 
