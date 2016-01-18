@@ -1,6 +1,7 @@
 /**
  * AddPeopleView.ios.js
  * @author kevin
+ * @author albert
  * @flow
  */
 
@@ -10,6 +11,7 @@ var React = require('react-native');
 var {
   View,
   ListView,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -17,7 +19,6 @@ var {
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var MessageInput = require('./MessageInput.ios.js');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js');
 var Spinner = require('react-native-spinkit');
@@ -43,10 +44,10 @@ var AddPeopleView = React.createClass({
   },
 
   getInitialState() {
-    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });
+    var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
       toInput: '',
-      searching: false,
+      searching: true,
       searchUsers: [],
       ds: ds.cloneWithRows([]),
       addedUsers: [],
@@ -59,61 +60,48 @@ var AddPeopleView = React.createClass({
     UserStore.on(USER.SEARCHING, this.onSearching);
     UserStore.on(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    // listen to chat store events
-    ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
     // populate list with random users for now
     UserActions.search('');
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
 
-      console.log(frames);
-
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 48
-      });
-    });
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.onKeyboardShow);
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.onKeyboardHide);
   },
 
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
 
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 48
-      });
-    });
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.onKeyboardShow);
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.onKeyboardHide);
+  },
+
+  onKeyboardShow(frames) {
+    if (frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 48 });
   },
 
   onSearching() {
-    this.setState({
-      searching: true
-    });
+    this.setState({ searching: true });
   },
-
   onSearchError() {
     this.setState({
       searching: false,
       searchUsers: []
     });
   },
-
   onSearchComplete() {
     var searchUsers = UserStore.getUserSearchResults();
+    searchUsers = _.reject(searchUsers, user => {
+      if(user._id == this.props.user._id) return true;
+      return (_.contains(_.pluck(this.props.activeThread.users, '_id'), user._id));
+    });
     this.setState({
       searching: false,
       searchUsers: searchUsers,
@@ -121,21 +109,7 @@ var AddPeopleView = React.createClass({
     });
   },
 
-  onSwitchToThread(thread_id) {
-    // go to thread view
-    this.props.mainNavigator.replace(routes.CHAT.CHATVIEW);
-  },
-
   goBack() {
-    if(!_.isEmpty(this.state.addedUsers)) {
-      // if theres added users, use back button to pop them
-      var addedUsers = this.state.addedUsers;
-      addedUsers.pop();
-      this.setState({
-        addedUsers: addedUsers
-      });
-      return true;
-    }
     this.props.chatNavigator.pop();
   },
 
@@ -200,11 +174,10 @@ var AddPeopleView = React.createClass({
 
   submit() {
     // dont allow for no added users
-    if(_.isEmpty(this.state.addedUsers)) {
-      return;
-    }
+    if(_.isEmpty(this.state.addedUsers)) return;
     // call action
     ChatActions.addUsers(this.props.activeThread._id, this.state.addedUsers);
+    // go back to settings view
     this.props.chatNavigator.pop();
   },
 
@@ -223,19 +196,22 @@ var AddPeopleView = React.createClass({
     return users;
   },
 
-  _renderSearchUsers() {
-    if(this.state.searching) {
-      return (
-        <View style={ styles.progressContainer }>
-          <Spinner
-            isVisible={true}
-            size={40}
-            type={'Arc'}
-            color={'#2cb673'}
-          />
-        </View>
-      );
-    } else if(!this.state.searching && _.isEmpty(this.state.searchUsers)) {
+  _renderLoading() {
+    if(!this.state.searching) return <View />;
+    return (
+      <View style={ styles.progressContainer }>
+        <Spinner
+          isVisible={ true }
+          size={ 40 }
+          type={ 'Arc' }
+          color={ '#2CB673' }
+        />
+      </View>
+    );
+  },
+
+  _renderNoneFound() {
+    if(!this.state.searching && _.isEmpty(this.state.searchUsers)) {
       return (
         <View style={ styles.progressContainer }>
           <Text style={ styles.noneFoundText }>
@@ -243,27 +219,32 @@ var AddPeopleView = React.createClass({
           </Text>
         </View>
       );
-    } else return (
-      <ListView
-        style={ styles.userList }
-        dataSource={ this.state.ds }
-        scrollRenderAheadDistance={ 300 }
-        removeClippedSubviews={ true }
-        initialListSize={ 10 }
-        pageSize={ 10 }
-        renderRow={(user) => {
-          return (
-            <UserSearchItem
-              key={ 'searchuser:' + user._id }
-              searchUser={ user }
-              onSelect={ this.onSearchUserSelect }
-              selected={
-                _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
-              }
-            />
-          );
-        }}
-      />
+    }
+    return <View />;
+  },
+
+  _renderSearchUsers() {
+    if(this.state.searching) return <View />;
+    // use scrollview here because for some reason listview likes to break
+
+    var users = [];
+    for(var key in this.state.searchUsers) {
+      var user = this.state.searchUsers[key];
+      users.push(
+        <UserSearchItem
+          key={ 'searchuser:' + user._id }
+          user={ user }
+          onSelect={ this.onSearchUserSelect }
+          selected={
+            _.findWhere(this.state.addedUsers, { _id: user._id }) != undefined
+          }
+        />
+      );
+    }
+    return (
+      <ScrollView>
+        { users }
+      </ScrollView>
     );
   },
 
@@ -276,8 +257,8 @@ var AddPeopleView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0.1)'
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
             style={ styles.iconButton }
             onPress={ this.goBack }
           >
@@ -286,21 +267,21 @@ var AddPeopleView = React.createClass({
               size={ 30 }
               color='#FFF'
             />
-          </TouchableHighlight>
+          </TouchableOpacity>
             <Text style={ styles.title }>
-              Add People to { ChatStore.getThreadName(this.props.activeThread._id) }
+              Add People To This Chat
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
-              onPress={ this.goToNewThread }
+              onPress={ this.submit }
             >
               <Icon
                 name='done'
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={ styles.toBar }>
@@ -310,15 +291,18 @@ var AddPeopleView = React.createClass({
           { this._renderAddedUsers() }
           <TextInput
             ref='ToInput'
+            autoCorrect={ false }
+            autoCapitalize={ 'none' }
             style={ styles.toInput }
             value={ this.state.toInput }
             onChangeText={ this.onChangeToText }
             onSubmitEditing={ this.onSubmitToEditing }
             placeholder=''
             placeholderTextColor='#AAA'
-            underlineColorAndroid='#FFF'
           />
         </View>
+        { this._renderLoading() }
+        { this._renderNoneFound() }
         { this._renderSearchUsers() }
       </View>
     );
@@ -368,12 +352,14 @@ var styles = StyleSheet.create({
   },
   toText: {
     color: '#AAA',
+    fontSize: 17,
     marginRight: 10,
     marginBottom: 6
   },
   toInput: {
     flex: 1,
-    height: 36
+    height: 48,
+    fontSize: 17
   },
   progressContainer: {
     flex: 1,

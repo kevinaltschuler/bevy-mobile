@@ -12,6 +12,7 @@ var {
   Text,
   Image,
   StyleSheet,
+  ActionSheetIOS,
   TouchableHighlight,
   TouchableOpacity
 } = React;
@@ -19,10 +20,39 @@ var {
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var ChatActions = require('./../../../chat/ChatActions');
 
 var PersonItem = React.createClass({
   propTypes: {
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    activeThread: React.PropTypes.object,
+    onSelect: React.PropTypes.func
+  },
+
+  getDefaultProps() {
+    return {
+      onSelect: _.noop
+    };
+  },
+
+  onSelect() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: [
+        'Cancel',
+        'Remove "' + this.props.user.displayName + '" from this chat'
+      ],
+      cancelButtonIndex: 0,
+    }, buttonIndex => {
+      switch(buttonIndex) {
+        case 1:
+          this.removeUser();
+          break;
+      }
+    });
+  },
+
+  removeUser() {
+    ChatActions.removeUser(this.props.activeThread._id, this.props.user._id);
   },
 
   render() {
@@ -52,15 +82,15 @@ var PersonItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     width: constants.width,
-    height: 48,
+    height: 60,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16
   },
   image: {
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     borderRadius: 18,
     marginRight: 10
   },
