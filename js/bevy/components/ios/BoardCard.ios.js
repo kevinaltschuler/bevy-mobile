@@ -64,6 +64,12 @@ var BoardCard = React.createClass({
             <Text style={ styles.boardTitle }>
               { board.name }
             </Text>
+            <Text
+              style={ styles.boardDescription }
+              numberOfLines={ 1 }
+            >
+              { board.description }
+            </Text>
             <View style={ styles.boardDetails }>
               <View style={ styles.detailItem }>
                 <Icon
@@ -119,9 +125,17 @@ var styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5
   },
+  boardDescription: {
+    color: '#fff',
+    paddingLeft: 10,
+    fontSize: 16,
+    marginBottom: 5,
+    flexWrap: 'nowrap',
+    overflow: 'hidden'
+  },
   imageWrapper: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.4)',
+    backgroundColor: 'rgba(0,0,0,.6)',
     height: 100,
     flexDirection: 'column',
     justifyContent: 'flex-end',
