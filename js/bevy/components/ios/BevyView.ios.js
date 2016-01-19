@@ -87,17 +87,6 @@ var BevyView = React.createClass({
     );
   },
 
-  _renderBoardCard() {
-    if(_.isEmpty(this.props.activeBoard)) return <View />;
-    return (
-      <BoardCard
-        user={ this.props.user }
-        board={ this.props.activeBoard }
-        bevyNavigator={ this.props.bevyNavigator }
-      />
-    );
-  },
-
   _renderBevyActions() {
     if(!_.isEmpty(this.props.activeBoard)) return <View />;
     return (
@@ -120,7 +109,6 @@ var BevyView = React.createClass({
           center={ this.props.activeBevy.name }
           right={ this._renderMenuButton() }
         />
-        { this._renderBoardCard() }
         { this._renderBevyActions() }
         <PostList
           allPosts={ this.props.allPosts }
