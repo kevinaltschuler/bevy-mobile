@@ -142,6 +142,7 @@ _.extend(PostStore, {
             // trigger events
             this.trigger(POST.CHANGE_ALL);
             this.trigger(POST.POST_CREATED, newPost.toJSON());
+            this.trigger(POST.LOADED);
           }.bind(this)
         });
         break;
