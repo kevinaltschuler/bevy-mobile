@@ -442,6 +442,35 @@ _.extend(BevyStore, {
           }.bind(this)
         });
         break;
+
+        case BOARD.UPDATE:
+          var board_id = payload.board_id;
+          var board = this.activeBoard;
+
+          var name = payload.name || board.get('name');
+          var description = payload.description || board.get('description');
+          var image = payload.image || board.get('image');
+          var settings = payload.settings || board.get('settings');
+
+          board.url = constants.apiurl + '/boards/' + board_id;
+          board.save({
+            name: name,
+            description: description,
+            image: image,
+            settings: settings
+          }, {
+            patch: true
+          });
+
+          board.set({
+            name: name,
+            description: description,
+            image: image,
+            settings: settings
+          });
+          this.trigger(BOARD.CHANGE_ALL);
+          break;
+
       case INVITE.INVITE_USER:
         var user = payload.user;
         var user_id = user._id;
@@ -461,6 +490,7 @@ _.extend(BevyStore, {
           }.bind(this)
         });
         break;
+
       case INVITE.DESTROY:
         console.log('got to here');
         var invite_id = payload.invite_id;
@@ -470,8 +500,8 @@ _.extend(BevyStore, {
           break;
         invite.url = constants.apiurl + '/invites/' + invite_id;
         invite.destroy();
-
         break;
+
       case INVITE.ACCEPT_REQUEST:
         var invite_id = payload.invite_id;
         fetch(constants.apiurl + '/invites/' + invite_id + '/accept')

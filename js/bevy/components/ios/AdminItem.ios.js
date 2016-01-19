@@ -13,6 +13,7 @@ var {
   Image,
   StyleSheet,
   TouchableHighlight,
+  ActionSheetIOS,
   TouchableOpacity
 } = React;
 
@@ -25,6 +26,22 @@ var AdminItem = React.createClass({
   propTypes: {
     admin: React.PropTypes.object,
     mainNavigator: React.PropTypes.object
+  },
+
+  showActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: [
+        'Cancel',
+        'View ' + this.props.admin.displayName + "'s Profile"
+      ],
+      cancelButtonIndex: 0
+    }, buttonIndex => {
+      switch(buttonIndex) {
+        case 1:
+          this.goToProfile();
+          break;
+      }
+    })
   },
 
   goToProfile() {
@@ -42,7 +59,7 @@ var AdminItem = React.createClass({
       <TouchableOpacity
         activeOpacity={ 0.5 }
         style={ styles.container }
-        onPress={ this.goToProfile }
+        onPress={ this.showActionSheet }
       >
         <View style={ styles.container }>
           <Image

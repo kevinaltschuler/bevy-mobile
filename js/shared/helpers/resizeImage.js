@@ -36,6 +36,8 @@ module.exports = function(image, w_limit, h_limit) {
     height = h_limit;
     width = i_width * ratio;
   }
+  width = Math.floor(width);
+  height = Math.floor(height);
   //console.log('adjusted dimensions', width, height);
   /*return {
     width: width,

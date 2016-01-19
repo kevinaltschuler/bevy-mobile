@@ -11,6 +11,7 @@ var React = require('react-native');
 var {
   View,
   TouchableHighlight,
+  TouchableOpacity,
   Image,
   Text,
   StyleSheet
@@ -20,17 +21,66 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BoardActions = require('./../../../board/BoardActions');
 
 var BoardCard = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
-    board: React.PropTypes.object
+    board: React.PropTypes.object,
+    bevyNavigator: React.PropTypes.object
   },
 
   getInitialState() {
     return {
+      isAdmin: _.contains(this.props.board.admins, this.props.user._id)
+    }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      isAdmin: _.contains(nextProps.board.admins, nextProps.user._id)
+    });
+  },
+
+  goToBoardSettings() {
+    this.props.bevyNavigator.push(routes.BEVY.BOARDSETTINGS);
+  },
+
+  goToBoardInfo() {
+    this.props.bevyNavigator.push(routes.BEVY.BOARDINFO);
+  },
+
+  _renderSettingsOrInfo() {
+    if(this.state.isAdmin) {
+      return (
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          onPress={ this.goToBoardSettings }
+          style={ styles.settingButton }
+        >
+          <Icon
+            name='settings'
+            size={ 24 }
+            color='#FFF'
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          onPress={ this.goToBoardInfo }
+          style={ styles.settingButton }
+        >
+          <Icon
+            name='info'
+            size={ 24 }
+            color='#FFF'
+          />
+        </TouchableOpacity>
+      );
     }
   },
 
@@ -40,7 +90,7 @@ var BoardCard = React.createClass({
     if(_.isEmpty(board)) {
       return <View/>;
     }
-    
+
     var image_url = (_.isEmpty(board.image))
       ? constants.siteurl + '/img/default_board_img.png'
       : resizeImage(board.image, constants.width, 100).url;
@@ -57,11 +107,17 @@ var BoardCard = React.createClass({
             <Text style={ styles.boardTitle }>
               { board.name }
             </Text>
+            <Text
+              style={ styles.boardDescription }
+              numberOfLines={ 1 }
+            >
+              { board.description }
+            </Text>
             <View style={ styles.boardDetails }>
               <View style={ styles.detailItem }>
                 <Icon
                   name={ typeIcon }
-                  size={ 24 }
+                  size={ 16 }
                   color='#fff'
                 />
                 <Text style={ styles.itemText }>
@@ -71,13 +127,14 @@ var BoardCard = React.createClass({
               <View style={ styles.detailItem }>
                 <Icon
                   name='person'
-                  size={ 24 }
+                  size={ 16 }
                   color='#fff'
                 />
                 <Text style={ styles.itemText }>
                   { board.admins.length } Admins
                 </Text>
               </View>
+              { this._renderSettingsOrInfo() }
             </View>
           </View>
         </Image>
@@ -89,21 +146,34 @@ var BoardCard = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    height: 100
+    height: 100,
+    paddingHorizontal: 10,
+    marginTop: 6,
   },
   boardImage: {
     flex: 1,
     height: 100,
+    borderRadius: 4,
+    overflow: 'hidden'
   },
   boardTitle: {
     color: '#fff',
-    paddingLeft: 10,
+    paddingLeft: 5,
     fontSize: 18,
-    marginBottom: 5
+    marginBottom: 5,
+    fontWeight: 'bold'
+  },
+  boardDescription: {
+    color: '#fff',
+    paddingLeft: 10,
+    fontSize: 16,
+    marginBottom: 5,
+    flexWrap: 'nowrap',
+    overflow: 'hidden'
   },
   imageWrapper: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,.4)',
+    backgroundColor: 'rgba(0,0,0,.6)',
     height: 100,
     flexDirection: 'column',
     justifyContent: 'flex-end',
@@ -112,7 +182,7 @@ var styles = StyleSheet.create({
   boardDetails: {
     flexDirection: 'row',
     marginBottom: 5,
-    marginLeft: 10
+    marginLeft: 5
   },
   detailItem: {
     flexDirection: 'row',
@@ -122,7 +192,7 @@ var styles = StyleSheet.create({
   itemText: {
     color: '#fff',
     marginLeft: 5,
-    fontSize: 15
+    fontSize: 14
   },
 });
 

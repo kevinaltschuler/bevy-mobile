@@ -25,6 +25,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
 var BevySideMenu = require('./BevySideMenu.ios.js');
 var $BevyView = require('./BevyView.ios.js');
+var BoardInfoView = require('./BoardInfoView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -169,6 +170,23 @@ var BevyView = React.createClass({
         view = (
           <$BevyView
             { ...this.props }
+            sideMenuActions={ sideMenuActions }
+          />
+        );
+        break;
+      case routes.BEVY.BOARDINFO.name:
+        view = (
+          <BoardInfoView
+            { ...this.props }
+            sideMenuActions={ sideMenuActions }
+          />
+        );
+        break;
+      case routes.BEVY.BOARDSETTINGS.name:
+        view = (
+          <BoardInfoView
+            { ...this.props }
+            editing={ true }
             sideMenuActions={ sideMenuActions }
           />
         );
