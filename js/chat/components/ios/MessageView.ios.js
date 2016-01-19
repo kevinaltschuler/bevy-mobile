@@ -77,9 +77,7 @@ var MessageView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    console.log('got next props', nextProps);
     var messages = ChatStore.getMessages(nextProps.activeThread._id);
-    console.log('got new messages', messages);
     this.setState({
       isRefreshing: false,
       messages: messages,
@@ -101,7 +99,6 @@ var MessageView = React.createClass({
 
   _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
-    console.log('got messages from the refresh');
     if(this.state.messages.length != messages.length) {
       // new messages have been added
       //setTimeout(this.scrollToBottom, 300);
@@ -115,7 +112,6 @@ var MessageView = React.createClass({
 
   handleScroll(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
-    //console.log(scrollY);
     if(this.scrollY == null) {
       this.scrollY = scrollY
       return;
@@ -133,28 +129,25 @@ var MessageView = React.createClass({
 
   onRefresh() {
     this.setState({ isRefreshing: true });
-    console.log('refreshing messages for', this.props.activeThread._id);
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
   onChange(text) {
-    this.setState({ messageValue: text });
+    this.messageValue = text;
   },
 
   onSubmitEditing() {
-    var text = this.state.messageValue;
+    var text = this.messageValue;
     var user = this.props.user;
+
+    this.messageValue = '';
+    this.MessageInput.clear();
+
     // dont send an empty message
-    console.log(this.MessageInput);
     if(text == '') {
       return;
     }
     ChatActions.postMessage(this.props.activeThread._id, user, text);
-
-    //reset the field
-    this.setState({
-      messageValue: ''
-    });
 
     // instant gratification
     var messages = this.state.messages;
@@ -299,16 +292,11 @@ var MessageView = React.createClass({
             blurOnSubmit={ false }
             onFocus={ this.onFocus }
             onBlur={ this.onBlur }
-            onChangeText={(text) => {
-              this.setState({
-                messageValue: text
-              })
-            }}
+            onChangeText={this.onChange}
             clearButtonMode={ 'while-editing' }
             placeholder='Chat'
             placeholderTextColor='#AAA'
             returnKeyType='send'
-            value={this.state.messageValue}
           />
           <TouchableOpacity
             activeOpacity={.5}

@@ -92,7 +92,6 @@ _.extend(NotificationStore, {
 
         this.ws.on('chat.' + user._id, function(message) {
           message = JSON.parse(message);
-          console.log('ws got message', message);
 
           // TODO: play audio
           if(Platform.OS == 'android') {
