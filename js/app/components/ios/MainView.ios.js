@@ -142,6 +142,7 @@ var MainView = React.createClass({
       case routes.MAIN.NEWTHREAD.name:
         return (
           <NewThreadView
+            defaultUser={this.props.mainRoute.defaultUser}
             { ...this.props }
           />
         );

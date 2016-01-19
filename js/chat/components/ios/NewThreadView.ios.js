@@ -37,17 +37,27 @@ var CHAT = constants.CHAT;
 var NewThreadView = React.createClass({
   propTypes: {
     mainNavigator: React.PropTypes.object,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    defaultUser: React.PropTypes.object
   },
 
   getInitialState() {
+    var added = [];
+
+    if(this.props.defaultUser != undefined){
+      added.push(this.props.defaultUser);
+
+    }
+    else
+      console.log('no default message receiver');
+
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
       toInput: '',
       searching: false,
       searchUsers: [],
       ds: ds.cloneWithRows([]),
-      addedUsers: [],
+      addedUsers: added,
       keyboardSpace: 0
     };
   },
@@ -178,6 +188,7 @@ var NewThreadView = React.createClass({
   },
 
   _renderAddedUsers() {
+    console.log(this.state.addedUsers);
     var users = [];
     for(var key in this.state.addedUsers) {
       var addedUser = this.state.addedUsers[key];
