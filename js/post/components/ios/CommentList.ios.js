@@ -144,6 +144,14 @@ var CommentItem = React.createClass({
       : '#fff';
     commentStyle.height = 40;
 
+    var borderLeftWidth = (this.props.comment.depth == 0)
+      ? 0
+      : (this.props.comment.depth) * 10;
+
+    if(!this.state.collapsed) {
+      borderLeftWidth = 0;
+    }
+
     if(this.state.isCompact) {
       return (
         <View style={[ styles.commentItem, commentStyle ]}>
@@ -174,9 +182,7 @@ var CommentItem = React.createClass({
           borderLeftColor: (this.props.comment.depth == 0)
             ? 'transparent'
             : colorMap[(this.props.comment.depth - 1) % colorMap.length],
-          borderLeftWidth: (this.props.comment.depth == 0)
-            ? 0
-            : (this.props.comment.depth) * 10
+          borderLeftWidth: borderLeftWidth
         }]}>
           <View style={ styles.commentItemTop }>
             <Text style={ styles.commentItemAuthor }>

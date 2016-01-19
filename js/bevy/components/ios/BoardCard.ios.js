@@ -61,7 +61,7 @@ var BoardCard = React.createClass({
               <View style={ styles.detailItem }>
                 <Icon
                   name={ typeIcon }
-                  size={ 24 }
+                  size={ 16 }
                   color='#fff'
                 />
                 <Text style={ styles.itemText }>
@@ -71,7 +71,7 @@ var BoardCard = React.createClass({
               <View style={ styles.detailItem }>
                 <Icon
                   name='person'
-                  size={ 24 }
+                  size={ 16 }
                   color='#fff'
                 />
                 <Text style={ styles.itemText }>
@@ -89,17 +89,22 @@ var BoardCard = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    height: 100
+    height: 100,
+    paddingHorizontal: 10,
+    marginTop: 6,
   },
   boardImage: {
     flex: 1,
     height: 100,
+    borderRadius: 4,
+    overflow: 'hidden'
   },
   boardTitle: {
     color: '#fff',
-    paddingLeft: 10,
+    paddingLeft: 5,
     fontSize: 18,
-    marginBottom: 5
+    marginBottom: 5,
+    fontWeight: 'bold'
   },
   imageWrapper: {
     flex: 1,
@@ -112,7 +117,7 @@ var styles = StyleSheet.create({
   boardDetails: {
     flexDirection: 'row',
     marginBottom: 5,
-    marginLeft: 10
+    marginLeft: 5
   },
   detailItem: {
     flexDirection: 'row',
@@ -122,7 +127,7 @@ var styles = StyleSheet.create({
   itemText: {
     color: '#fff',
     marginLeft: 5,
-    fontSize: 15
+    fontSize: 14
   },
 });
 
