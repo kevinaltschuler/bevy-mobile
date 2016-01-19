@@ -248,6 +248,8 @@ _.extend(ChatStore, {
         // dont add users to bevy threads. shouldnt happen anyways
         if(thread.get('type') == 'board') break;
 
+        console.log(thread);
+
         // merge user lists
         var thread_users = thread.get('users');
         for(var key in users) {
@@ -277,7 +279,7 @@ _.extend(ChatStore, {
 
               this.active = thread.get('_id');
               this.trigger(CHAT.CHANGE_ALL);
-              this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
+              //this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
             }.bind(this)
           });
         } else {

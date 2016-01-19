@@ -47,6 +47,8 @@ var MessageView = React.createClass({
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+    this.messageValue = '';
+
     return {
       isRefreshing: false,
       keyboardSpace: 48,
@@ -64,7 +66,7 @@ var MessageView = React.createClass({
 
     setTimeout(() => {
       //this.onRefresh();
-      //this.scrollToBottom();
+      this.scrollToBottom();
     }, 1000);
   },
 
@@ -143,6 +145,7 @@ var MessageView = React.createClass({
     var text = this.state.messageValue;
     var user = this.props.user;
     // dont send an empty message
+    console.log(this.MessageInput);
     if(text == '') {
       return;
     }
@@ -221,23 +224,8 @@ var MessageView = React.createClass({
   },
 
   renderMessageRow(message, sectionID, rowID, highlightRow) {
-    var hidePic = false;
-    var showName = true;
     var onMount = _.noop;
     rowID = parseInt(rowID);
-    if(rowID < (this.state.ds._dataBlob.s1.length - 1)) {
-      hidePic = true;
-      if(this.state.ds._dataBlob.s1[rowID + 1].author._id
-      != message.author._id) {
-        hidePic = false;
-      }
-    }
-    if(rowID > 0) {
-      if(this.state.ds._dataBlob.s1[rowID - 1].author._id
-      == message.author._id) {
-        showName = false;
-      }
-    }
 
     if(rowID == this.state.messages.length - 1) {
       onMount = function() {
@@ -250,8 +238,6 @@ var MessageView = React.createClass({
         key={ 'message:' + message._id }
         message={ message }
         user={ this.props.user }
-        hidePic={ hidePic }
-        showName={ showName }
         mainNavigator={ this.props.mainNavigator }
         onMount={ onMount }
       />
@@ -307,18 +293,22 @@ var MessageView = React.createClass({
           marginBottom: this.state.keyboardSpace - 48
         }]}>
           <TextInput
-            ref='MessageInput'
-            value={ this.state.messageValue }
+            ref={ ref => { this.MessageInput = ref; }}
             style={ styles.messageInput }
-            onChangeText={ this.onChange }
             onSubmitEditing={ this.onSubmitEditing }
             blurOnSubmit={ false }
             onFocus={ this.onFocus }
             onBlur={ this.onBlur }
+            onChangeText={(text) => {
+              this.setState({
+                messageValue: text
+              })
+            }}
             clearButtonMode={ 'while-editing' }
             placeholder='Chat'
             placeholderTextColor='#AAA'
             returnKeyType='send'
+            value={this.state.messageValue}
           />
           <TouchableOpacity
             activeOpacity={.5}
@@ -373,9 +363,7 @@ var styles = StyleSheet.create({
   messageList: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
-    paddingLeft: 10,
-    paddingRight: 10,
+    backgroundColor: '#eee',
   },
   messageListInner: {
     paddingBottom: 15
