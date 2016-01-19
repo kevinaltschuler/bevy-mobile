@@ -471,6 +471,17 @@ _.extend(BevyStore, {
           this.trigger(BOARD.CHANGE_ALL);
           break;
 
+      case BOARD.DESTROY:
+        var board_id = payload.board_id;
+
+        board = this.activeBoard;
+        board.url = constants.apiurl + '/boards/' + board_id;
+        board.destroy();
+
+        this.activeBoard = new Board;
+        this.trigger(BOARD.CHANGE_ALL);
+        break;
+
       case INVITE.INVITE_USER:
         var user = payload.user;
         var user_id = user._id;

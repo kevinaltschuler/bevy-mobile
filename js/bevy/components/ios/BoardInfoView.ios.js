@@ -15,6 +15,7 @@ var {
   Image,
   StyleSheet,
   NativeModules,
+  AlertIOS,
   TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -100,6 +101,26 @@ var BoardSettingsView = React.createClass({
         console.log('Cancel');
       }
     });
+  },
+
+  deleteBoard() {
+    AlertIOS.alert(
+      'Are you sure?',
+      'Deleting a board will also delete all posts under it',
+      [{
+        text: 'Cancel',
+        style: 'cancel'
+      }, {
+        text: 'Confirm',
+        onPress: this.deleteBoardForSure
+      }]
+    );
+  },
+
+  deleteBoardForSure() {
+    BoardActions.destroy(this.props.activeBoard._id);
+    BoardActions.clearBoard();
+    this.goBack();
   },
 
   submit() {
@@ -242,6 +263,26 @@ var BoardSettingsView = React.createClass({
     return admins;
   },
 
+  _renderDangerZone() {
+    if(!this.props.editing) return <View />;
+    return (
+      <View>
+        <Text style={ styles.sectionTitle }>
+          Danger Zone
+        </Text>
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          onPress={ this.deleteBoard }
+          style={ styles.deleteButton }
+        >
+          <Text style={ styles.deleteButtonText }>
+            Save Changes
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  },
+
   _renderSaveButton() {
     if(!this.props.editing) return <View />;
     return (
@@ -336,6 +377,7 @@ var BoardSettingsView = React.createClass({
             Board Admins
           </Text>
           { this._renderAdmins() }
+          { this._renderDangerZone() }
           { this._renderSaveButton() }
         </ScrollView>
       </View>
@@ -480,6 +522,20 @@ var styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   saveButtonText: {
+    color: '#FFF',
+    fontSize: 17
+  },
+  deleteButton: {
+    width: constants.width,
+    height: 60,
+    backgroundColor: '#DF4A32',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    paddingHorizontal: 15
+  },
+  deleteButtonText: {
     color: '#FFF',
     fontSize: 17
   }
