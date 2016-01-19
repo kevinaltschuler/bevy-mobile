@@ -166,10 +166,10 @@ var MessageItem = React.createClass({
       <Image
         source={{ uri: authorImageURL }}
         style={{
-          width: 50,
-          height: 50,
-          borderRadius: 25,
-          backgroundColor: 'rgba(0,0,0,0)'
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: 'rgba(0,0,0,0)',
         }}
       />
     );
@@ -205,9 +205,10 @@ var MessageItem = React.createClass({
           flexDirection: 'column',
           alignItems: (this.state.isMe) ? 'flex-end' : 'flex-start',
           justifyContent: (this.state.isMe) ? 'flex-end' : 'flex-start',
-          backgroundColor: 'rgba(0,0,0,0)'
+          backgroundColor:  (this.state.isMe) ? 'rgba(44,182,115,.1)' : 'rgba(0,0,0,0)',
+          paddingHorizontal: 10,
+          paddingVertical: 3
         }}>
-          { this._renderName() }
           <View style={{
             flexDirection: 'row',
             justifyContent: (this.state.isMe) ? 'flex-end' : 'flex-start',
@@ -216,13 +217,11 @@ var MessageItem = React.createClass({
             borderRadius: 2,
             backgroundColor: 'rgba(0,0,0,0)',
             width: constants.width - 80,
-            marginTop: (this.props.hidePic) ? 8 : 0
           }}>
             { (this.state.isMe) ? <View /> : this._renderImage() }
             { (this.state.isMe) ? <View /> : <View style={{ width: 10 }} /> }
             <View
               style={{
-                backgroundColor: '#rgba(0,0,0,.2)',
                 paddingTop: 5,
                 paddingBottom: 5,
                 paddingLeft: 8,
@@ -230,13 +229,23 @@ var MessageItem = React.createClass({
                 borderRadius: 14,
                 flexWrap: 'wrap',
                 flex: (this.state.wrap) ? 1 : 0,
-                backgroundColor: (this.state.isMe) ? '#2CB673' : '#EEE'
+                flexDirection: 'column',
+                alignItems: (this.state.isMe) ? 'flex-end' : 'flex-start',
               }}
               ref={ref => { this.MessageBody = ref; }}
             >
               <Text style={{
                 textAlign: (this.state.isMe) ? 'right' : 'left',
-                color: (this.state.isMe) ? '#fff' : '#333',
+                color: (this.state.isMe) ? '#aaa' : '#aaa',
+                flex: 1,
+                fontSize: 17,
+              }}>
+                { (this.state.isMe) ? 'Me' : this.props.message.author.displayName }
+              </Text>
+              
+              <Text style={{
+                textAlign: (this.state.isMe) ? 'right' : 'left',
+                color: (this.state.isMe) ? '#333' : '#333',
                 flex: 1,
                 fontSize: 17
               }}>
@@ -249,11 +258,11 @@ var MessageItem = React.createClass({
           <Collapsible collapsed={ this.state.collapsed } >
             <Text style={{
               fontSize: 15,
-              color: '#888',
+              color: '#aaa',
               marginBottom: 5,
               marginTop: 5,
-              marginRight: (this.state.isMe) ? 50 : 0,
-              marginLeft: (this.state.isMe) ? 0 : 50
+              marginRight: (this.state.isMe) ? 60 : 0,
+              marginLeft: (this.state.isMe) ? 0 : 60
             }}>
               {(this.state.isMe) ? 'Me' : this.props.message.author.displayName }
               {' · '}

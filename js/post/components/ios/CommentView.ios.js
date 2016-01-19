@@ -77,6 +77,9 @@ var CommentView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
+    if(_.isEmpty(nextProps.post)) {
+      return;
+    }
     this.setState({
       post: nextProps.post,
       comments: this.nestComments(nextProps.post.comments)

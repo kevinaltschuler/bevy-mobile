@@ -177,7 +177,6 @@ _.extend(ChatStore, {
             author: user._id,
             body: messageBody
           });
-          console.log(newMessage);
           newMessage.url = constants.apiurl + '/messages';
           newMessage.save(null, {
             success: function(model, response, options) {
@@ -248,6 +247,8 @@ _.extend(ChatStore, {
         // dont add users to bevy threads. shouldnt happen anyways
         if(thread.get('type') == 'board') break;
 
+        console.log(thread);
+
         // merge user lists
         var thread_users = thread.get('users');
         for(var key in users) {
@@ -277,7 +278,7 @@ _.extend(ChatStore, {
 
               this.active = thread.get('_id');
               this.trigger(CHAT.CHANGE_ALL);
-              this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
+              //this.trigger(CHAT.SWITCH_TO_THREAD, thread.get('_id'));
             }.bind(this)
           });
         } else {
@@ -535,7 +536,6 @@ _.extend(ChatStore, {
   },
 
   addMessage(message) {
-    console.log('adding message...');
     // get the thread the message is posted to
     // and account for a potentially populated thread object inside the message
     var thread_id = (_.isObject(message.thread))

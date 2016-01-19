@@ -47,6 +47,8 @@ var MessageView = React.createClass({
     var messages = ChatStore.getMessages(this.props.activeThread._id);
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
+    this.messageValue = '';
+
     return {
       isRefreshing: false,
       keyboardSpace: 48,
@@ -64,7 +66,7 @@ var MessageView = React.createClass({
 
     setTimeout(() => {
       //this.onRefresh();
-      //this.scrollToBottom();
+      this.scrollToBottom();
     }, 1000);
   },
 
@@ -75,9 +77,7 @@ var MessageView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    console.log('got next props', nextProps);
     var messages = ChatStore.getMessages(nextProps.activeThread._id);
-    console.log('got new messages', messages);
     this.setState({
       isRefreshing: false,
       messages: messages,
@@ -99,7 +99,6 @@ var MessageView = React.createClass({
 
   _onChatChange() {
     var messages = ChatStore.getMessages(this.props.activeThread._id);
-    console.log('got messages from the refresh');
     if(this.state.messages.length != messages.length) {
       // new messages have been added
       //setTimeout(this.scrollToBottom, 300);
@@ -113,7 +112,6 @@ var MessageView = React.createClass({
 
   handleScroll(e) {
     var scrollY = e.nativeEvent.contentInset.top + e.nativeEvent.contentOffset.y;
-    //console.log(scrollY);
     if(this.scrollY == null) {
       this.scrollY = scrollY
       return;
@@ -131,27 +129,25 @@ var MessageView = React.createClass({
 
   onRefresh() {
     this.setState({ isRefreshing: true });
-    console.log('refreshing messages for', this.props.activeThread._id);
     ChatActions.fetchMore(this.props.activeThread._id);
   },
 
   onChange(text) {
-    this.setState({ messageValue: text });
+    this.messageValue = text;
   },
 
   onSubmitEditing() {
-    var text = this.state.messageValue;
+    var text = this.messageValue;
     var user = this.props.user;
+
+    this.messageValue = '';
+    this.MessageInput.clear();
+
     // dont send an empty message
     if(text == '') {
       return;
     }
     ChatActions.postMessage(this.props.activeThread._id, user, text);
-
-    //reset the field
-    this.setState({
-      messageValue: ''
-    });
 
     // instant gratification
     var messages = this.state.messages;
@@ -221,23 +217,8 @@ var MessageView = React.createClass({
   },
 
   renderMessageRow(message, sectionID, rowID, highlightRow) {
-    var hidePic = false;
-    var showName = true;
     var onMount = _.noop;
     rowID = parseInt(rowID);
-    if(rowID < (this.state.ds._dataBlob.s1.length - 1)) {
-      hidePic = true;
-      if(this.state.ds._dataBlob.s1[rowID + 1].author._id
-      != message.author._id) {
-        hidePic = false;
-      }
-    }
-    if(rowID > 0) {
-      if(this.state.ds._dataBlob.s1[rowID - 1].author._id
-      == message.author._id) {
-        showName = false;
-      }
-    }
 
     if(rowID == this.state.messages.length - 1) {
       onMount = function() {
@@ -250,8 +231,6 @@ var MessageView = React.createClass({
         key={ 'message:' + message._id }
         message={ message }
         user={ this.props.user }
-        hidePic={ hidePic }
-        showName={ showName }
         mainNavigator={ this.props.mainNavigator }
         onMount={ onMount }
       />
@@ -307,14 +286,13 @@ var MessageView = React.createClass({
           marginBottom: this.state.keyboardSpace - 48
         }]}>
           <TextInput
-            ref='MessageInput'
-            value={ this.state.messageValue }
+            ref={ ref => { this.MessageInput = ref; }}
             style={ styles.messageInput }
-            onChangeText={ this.onChange }
             onSubmitEditing={ this.onSubmitEditing }
             blurOnSubmit={ false }
             onFocus={ this.onFocus }
             onBlur={ this.onBlur }
+            onChangeText={this.onChange}
             clearButtonMode={ 'while-editing' }
             placeholder='Chat'
             placeholderTextColor='#AAA'
@@ -373,9 +351,7 @@ var styles = StyleSheet.create({
   messageList: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#fff',
-    paddingLeft: 10,
-    paddingRight: 10,
+    backgroundColor: '#eee',
   },
   messageListInner: {
     paddingBottom: 15

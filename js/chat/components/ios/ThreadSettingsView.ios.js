@@ -343,7 +343,8 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   contentContainer: {
-    flex: 1
+    flex: 1,
+    marginBottom: 48
   },
   header: {
     height: 80,
