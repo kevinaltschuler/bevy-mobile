@@ -107,7 +107,7 @@ var CommentView = React.createClass({
       replyToComment: comment
     });
     // focus the text field
-    this.refs.reply.focus();
+    this.ReplyInput.focus();
   },
 
   onReplyBlur() {
@@ -120,25 +120,18 @@ var CommentView = React.createClass({
     }
   },
 
-  onReplyChange(text) {
-    this.setState({ replyText: text });
-  },
-
   postReply() {
     var text = this.state.replyText;
     // dont post empty reply
     if(_.isEmpty(text)) {
-      this.setState({
-        replyText: ''
-      });
+      this.setState({ replyText: '' });
       return;
     };
-    var user = this.props.user;
 
     // call action
     CommentActions.create(
       text, // body
-      user._id, // author id
+      this.props.user._id, // author id
       this.state.post._id, // post id
       (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id // parent id
     );
@@ -146,7 +139,7 @@ var CommentView = React.createClass({
     // optimistic update
     var comment = {
       _id: Date.now(), // temp id
-      author: user,
+      author: this.props.user,
       body: text,
       postId: this.state.post,
       parentId: (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id,
@@ -161,12 +154,7 @@ var CommentView = React.createClass({
       comments: comments
     });
 
-    // blur reply input
-    // buffer delay it so it blurs only when the set state clears up
-    setTimeout(
-      () => this.refs.reply.blur(), // this also clears the replyToComment state field
-      100
-    );
+    setTimeout(this.ReplyInput.blur, 500);
   },
 
   nestComments(comments, parentId, depth) {
@@ -326,14 +314,14 @@ var CommentView = React.createClass({
           { this._renderReplyInfo() }
           <View style={ styles.replyBar }>
             <TextInput
-              ref='reply'
+              ref={ ref => { this.ReplyInput = ref; }}
               style={ styles.replyInput }
               placeholder='Reply'
               placeholderTextColor='#AAA'
               returnKeyType='send'
               clearButtonMode='while-editing'
               value={ this.state.replyText }
-              onChangeText={ this.onReplyChange }
+              onChangeText={ text => this.setState({ replyText: text }) }
               onSubmitEditing={ this.postReply }
               onBlur={ this.onReplyBlur }
             />
