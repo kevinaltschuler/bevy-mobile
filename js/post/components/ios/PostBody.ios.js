@@ -24,15 +24,27 @@ var PostBody = React.createClass({
 
   render() {
     return (
-      <View />
+      <View style={ styles.body }>
+        <Text style={ styles.bodyText }>
+          { this.props.post.title }
+        </Text>
+      </View>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  container: {
-
-  }
+  body: {
+    flex: 1,
+    flexDirection: 'column',
+    marginBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15
+  },
+  bodyText: {
+    fontSize: 17,
+    color: '#666'
+  },
 });
 
 module.exports = PostBody;

@@ -30,49 +30,23 @@ var NewPostImageItem = React.createClass({
   },
 
   showImageModal() {
-    var actions = constants.getImageModalActions();
-    constants.setImageModalImages([this.props.image]);
-    actions.show();
   },
 
   render() {
-    var image = resizeImage(this.props.image, 75, 75);
+    var imageURL = resizeImage(this.props.image, 128, 128).url;
     return (
       <TouchableWithoutFeedback
         onPress={ this.showImageModal }
       >
-        <View style={{
-          backgroundColor: '#000',
-          width: 75,
-          height: 75,
-          borderRadius: 5,
-          marginHorizontal: 5,
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          justifyContent: 'flex-start'
-        }}>
+        <View style={ styles.container }>
           <Image
-            source={{ uri: image.url }}
-            style={{
-              width: 75,
-              height: 75,
-              borderRadius: 5
-            }}
+            source={{ uri: imageURL }}
+            style={ styles.image }
             resizeMode='cover'
           />
           <TouchableOpacity
             onPress={ this.remove }
-            style={{
-              position: 'absolute',
-              top: 0,
-              right: 0,
-              width: 30,
-              height: 30,
-              paddingTop: 5,
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: 'rgba(0,0,0,0)'
-            }}
+            style={ styles.closeButton }
           >
             <Icon
               name='close'
@@ -83,6 +57,35 @@ var NewPostImageItem = React.createClass({
         </View>
       </TouchableWithoutFeedback>
     );
+  }
+});
+
+var styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#000',
+    width: 75,
+    height: 75,
+    borderRadius: 5,
+    marginHorizontal: 5,
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start'
+  },
+  image: {
+    width: 75,
+    height: 75,
+    borderRadius: 5
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 30,
+    height: 30,
+    paddingTop: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0)'
   }
 });
 

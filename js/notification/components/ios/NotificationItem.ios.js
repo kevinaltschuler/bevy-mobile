@@ -41,10 +41,22 @@ var NotificationItem = React.createClass({
 
   goToPost() {
     this.markRead();
-    var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = this.props.notification.data.post_id;
-    console.log(commentRoute);
-    this.props.mainNavigator.push(commentRoute);
+    var route = routes.MAIN.COMMENT;
+    var post_id = this.props.notification.data.post_id;
+    var post = PostStore.getPost(post_id);
+    // if the post isnt already loaded, then load from the server
+    if(_.isEmpty(post)) {
+      fetch(constants.apiurl + '/posts/' + post_id)
+      .then(res => res.json())
+      .then(res => {
+        post = res;
+        route.post = post;
+        this.props.mainNavigator.push(route);
+      });
+    } else {
+      route.post = post;
+      this.props.mainNavigator.push(route);
+    }
   },
 
   render() {

@@ -23,7 +23,7 @@ var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../BevyActions');
-var BoardActions = require('./../../../board/BoardActions');
+var BoardActions = require('./../../../bevy/BoardActions');
 
 var BoardItem = React.createClass({
   propTypes: {

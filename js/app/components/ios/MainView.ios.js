@@ -84,6 +84,15 @@ var MainView = React.createClass({
   render() {
 
     switch(this.props.mainRoute.name) {
+      case routes.MAIN.EDITPOST.name:
+        return (
+          <NewPostView
+            { ...this.props }
+            editing={ true }
+            post={ this.props.mainRoute.post }
+          />
+        );
+        break;
       case routes.MAIN.NEWPOST.name:
         return <NewPostView { ...this.props } />;
         break;
@@ -99,7 +108,7 @@ var MainView = React.createClass({
       case routes.MAIN.COMMENT.name:
         return (
           <CommentView
-            postID={ this.props.mainRoute.postID || '-1' }
+            post={ this.props.mainRoute.post }
             { ...this.props }
           />
         );
@@ -123,15 +132,6 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.EDITPOST.name:
-        return (
-          <PostEditView
-            post={this.props.mainRoute.post}
-            { ...this.props }
-          />
-        );
-        break;
-
       case routes.MAIN.BEVYNAV.name:
         return (
           <BevyNavigator
@@ -142,6 +142,7 @@ var MainView = React.createClass({
       case routes.MAIN.NEWTHREAD.name:
         return (
           <NewThreadView
+            defaultUser={this.props.mainRoute.defaultUser}
             { ...this.props }
           />
         );

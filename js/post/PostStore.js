@@ -142,6 +142,7 @@ _.extend(PostStore, {
             // trigger events
             this.trigger(POST.CHANGE_ALL);
             this.trigger(POST.POST_CREATED, newPost.toJSON());
+            this.trigger(POST.LOADED);
           }.bind(this)
         });
         break;
@@ -195,23 +196,18 @@ _.extend(PostStore, {
       case POST.DESTROY:
         var post_id = payload.post_id;
         var post = this.posts.get(post_id);
-        if(_.isEmpty(post)) {
-          console.log('nothing to destroy');
-          break;
-        }
+        if(post == undefined) break;
 
-        post.url = constants.apiurl + '/bevies/' + post.bevy + '/posts/' + post_id;
-
+        post.url = constants.apiurl + '/posts/' + post_id;
         post.destroy({
           success: function(model, response) {
             this.trigger(POST.CHANGE_ALL);
-            this.trigger(POST.REFRESH);
+            this.trigger(POST.LOADED);
           }.bind(this),
           error: function(err) {
             console.log(err);
           }
         });
-
         break;
 
       case POST.UPDATE:
@@ -224,11 +220,7 @@ _.extend(PostStore, {
         var tag = payload.tag || post.get('tag');
         var event = payload.event || post.get('event');
 
-        post.set('title', title);
-        post.set('images', images);
-        post.set('tag', tag);
-        post.set('event', event);
-
+        post.url = constants.apiurl + '/posts/' + post_id;
         post.save({
           title: title,
           images: images,
@@ -236,10 +228,14 @@ _.extend(PostStore, {
           event: event,
           updated: Date.now()
         }, {
-          patch: true,
-          success: function($post, response, options) {
-          }.bind(this)
+          patch: true
         });
+
+        post.set('title', title);
+        post.set('images', images);
+        post.set('tag', tag);
+        post.set('event', event);
+
         // trigger update
         this.trigger(POST.CHANGE_ONE + post.get('_id'));
         this.trigger(POST.CHANGE_ALL);

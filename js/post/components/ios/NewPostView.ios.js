@@ -20,15 +20,23 @@ var DatePickerView = require('./DatePickerView.ios.js');
 var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
-var POST = constants.POST;
-var PostActions = require('./../../../post/PostActions');
-var PostStore = require('./../../../post/PostStore');
 
 var NewPostView = React.createClass({
   propTypes: {
     activeBoard: React.PropTypes.object,
     myBevies: React.PropTypes.array,
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+
+    // for when we are editing
+    editing: React.PropTypes.bool,
+    post: React.PropTypes.object
+  },
+
+  getDefaultProps() {
+    return {
+      editing: false,
+      post: {}
+    };
   },
 
   getInitialState() {
@@ -38,20 +46,6 @@ var NewPostView = React.createClass({
       time: new Date(),
       location: '',
     };
-  },
-
-  componentDidMount() {
-    PostStore.on(POST.POST_CREATED, this.toNewPost);
-  },
-
-  componentWillUnmount() {
-    PostStore.off(POST.POST_CREATED, this.toNewPost);
-  },
-
-  toNewPost(post) {
-    var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = post._id;
-    this.props.mainNavigator.replace(commentRoute);
   },
 
   renderScene(route, navigator) {
@@ -92,7 +86,6 @@ var NewPostView = React.createClass({
           <InputView
             newPostRoute={ route }
             newPostNavigator={ navigator }
-            activeBoard={ this.props.activeBoard }
             { ...this.props }
           />
         );
@@ -104,9 +97,7 @@ var NewPostView = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRouteStack={[
-          routes.NEWPOST.INPUT
-        ]}
+        initialRouteStack={[ routes.NEWPOST.INPUT ]}
         initialRoute={ routes.NEWPOST.INPUT }
         renderScene={ this.renderScene }
       />

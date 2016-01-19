@@ -16,6 +16,7 @@ var {
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
+  RefreshControl,
   DeviceEventEmitter
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -30,34 +31,14 @@ var CommentActions = require('./../../../post/CommentActions');
 
 var CommentView = React.createClass({
   propTypes: {
-    postID: React.PropTypes.string,
+    post: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     mainNavigator: React.PropTypes.object
   },
 
-  getDefaultProps() {
-    return {
-      postID: '-1'
-    };
-  },
-
   getInitialState() {
-    var post = PostStore.getPost(this.props.postID);
-    if(_.isEmpty(post)) {
-      this.setState({
-        loading: true
-      });
-      fetch(constants.apiurl + '/posts/' + this.props.postID)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          post: res,
-          comments: this.nestComments(post.comments),
-          loading: false
-        });
-      });
-    }
+    var post = this.props.post;
     var comments = this.nestComments(post.comments);
     return {
       post: post,
@@ -77,9 +58,6 @@ var CommentView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if(_.isEmpty(nextProps.post)) {
-      return;
-    }
     this.setState({
       post: nextProps.post,
       comments: this.nestComments(nextProps.post.comments)
@@ -99,6 +77,26 @@ var CommentView = React.createClass({
     });
   },
 
+  onRefresh() {
+    this.setState({
+      loading: true
+    });
+    fetch(constants.apiurl + '/posts/' + this.props.post._id)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        post: res,
+        comments: this.nestComments(res.comments),
+        loading: false
+      });
+    })
+    .catch(err => {
+      this.setState({
+        loading: false
+      });
+    })
+  },
+
   goBack() {
     this.props.mainNavigator.pop();
   },
@@ -109,7 +107,7 @@ var CommentView = React.createClass({
       replyToComment: comment
     });
     // focus the text field
-    this.refs.reply.focus();
+    this.ReplyInput.focus();
   },
 
   onReplyBlur() {
@@ -122,25 +120,18 @@ var CommentView = React.createClass({
     }
   },
 
-  onReplyChange(text) {
-    this.setState({ replyText: text });
-  },
-
   postReply() {
     var text = this.state.replyText;
     // dont post empty reply
     if(_.isEmpty(text)) {
-      this.setState({
-        replyText: ''
-      });
+      this.setState({ replyText: '' });
       return;
     };
-    var user = this.props.user;
 
     // call action
     CommentActions.create(
       text, // body
-      user._id, // author id
+      this.props.user._id, // author id
       this.state.post._id, // post id
       (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id // parent id
     );
@@ -148,7 +139,7 @@ var CommentView = React.createClass({
     // optimistic update
     var comment = {
       _id: Date.now(), // temp id
-      author: user,
+      author: this.props.user,
       body: text,
       postId: this.state.post,
       parentId: (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id,
@@ -163,12 +154,7 @@ var CommentView = React.createClass({
       comments: comments
     });
 
-    // blur reply input
-    // buffer delay it so it blurs only when the set state clears up
-    setTimeout(
-      () => this.refs.reply.blur(), // this also clears the replyToComment state field
-      100
-    );
+    setTimeout(this.ReplyInput.blur, 500);
   },
 
   nestComments(comments, parentId, depth) {
@@ -194,9 +180,6 @@ var CommentView = React.createClass({
   },
 
   _renderPost() {
-    if(_.isEmpty(this.state.post)) {
-      return null;
-    }
     if(this.state.post.type == 'event') {
       return (
         <View style={{marginTop: 0}}>
@@ -253,24 +236,27 @@ var CommentView = React.createClass({
   },
 
   _renderContent() {
-    if(this.state.loading) {
-      return (
-        <View>
-          <Text>Loading</Text>
-        </View>
-      );
-    }
     if(_.isEmpty(this.state.post)) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{color: '#555', fontWeight: '600'}}>
-            post was not found
+        <View style={ styles.notFoundContainer }>
+          <Text style={ styles.notFoundText }>
+            Post Not Found
           </Text>
         </View>
       );
     }
     return (
-      <ScrollView style={ styles.scrollView }>
+      <ScrollView
+        style={ styles.scrollView }
+        refreshControl={
+          <RefreshControl
+            refreshing={ this.state.loading }
+            onRefresh={ this.onRefresh }
+            tintColor='#AAA'
+            title='Loading...'
+          />
+        }
+      >
         { this._renderPost() }
         <Text style={ styles.commentsTitle }>
           Comments
@@ -328,14 +314,14 @@ var CommentView = React.createClass({
           { this._renderReplyInfo() }
           <View style={ styles.replyBar }>
             <TextInput
-              ref='reply'
+              ref={ ref => { this.ReplyInput = ref; }}
               style={ styles.replyInput }
               placeholder='Reply'
               placeholderTextColor='#AAA'
               returnKeyType='send'
               clearButtonMode='while-editing'
               value={ this.state.replyText }
-              onChangeText={ this.onReplyChange }
+              onChangeText={ text => this.setState({ replyText: text }) }
               onSubmitEditing={ this.postReply }
               onBlur={ this.onReplyBlur }
             />
@@ -475,6 +461,15 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 0,
     marginLeft: 5
+  },
+  notFoundContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  notFoundText: {
+    color: '#555',
+    fontWeight: 'bold'
   }
 });
 

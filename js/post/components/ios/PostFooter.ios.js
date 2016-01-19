@@ -23,7 +23,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var BevyActions = require('./../../../bevy/BevyActions');
-var BoardActions = require('./../../../board/BoardActions');
+var BoardActions = require('./../../../bevy/BoardActions');
 
 var PostFooter = React.createClass({
   propTypes: {
@@ -33,6 +33,7 @@ var PostFooter = React.createClass({
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object
   },
+
   getInitialState() {
     return {
       voted: this.props.post.voted,
@@ -75,7 +76,7 @@ var PostFooter = React.createClass({
           this.goToPostBoard();
           break;
         case 3:
-          // edit Post
+          this.goToEditPost();
           break;
         case 4:
           this.destroyPost();
@@ -101,6 +102,12 @@ var PostFooter = React.createClass({
 
   destroyPostForSure() {
     PostActions.destroy(this.props.post._id);
+  },
+
+  goToEditPost() {
+    var route = routes.MAIN.EDITPOST;
+    route.post = this.props.post;
+    this.props.mainNavigator.push(route);
   },
 
   goToAuthorProfile() {
@@ -142,7 +149,7 @@ var PostFooter = React.createClass({
     if(this.props.inCommentView) return;
 
     var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.postID = this.props.post._id;
+    commentRoute.post = this.props.post;
     this.props.mainNavigator.push(commentRoute);
   },
 

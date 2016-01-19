@@ -30,10 +30,12 @@ var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
+var PostActions = require('./../../../post/PostActions');
+var PostStore = require('./../../../post/PostStore');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var FILE = constants.FILE;
-var PostActions = require('./../../../post/PostActions');
+var POST = constants.POST;
 
 var hintTexts = [
   "What's on your mind?",
@@ -60,15 +62,24 @@ var hintTexts = [
 
 var InputView = React.createClass({
   propTypes: {
-    user: React.PropTypes.object
+    user: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
+
+    // used for editing
+    editing: React.PropTypes.bool,
+    post: React.PropTypes.object
   },
 
   getInitialState() {
     return {
       keyboardSpace: 0,
-      title: '',
+      title: (this.props.editing)
+        ? this.props.post.title
+        : '',
       placeholderText: hintTexts[Math.floor(Math.random() * hintTexts.length)],
-      images: [],
+      images: (this.props.editing)
+        ? this.props.post.images
+        : [],
     };
   },
 
@@ -78,29 +89,27 @@ var InputView = React.createClass({
 
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
+    PostStore.on(POST.POST_CREATED, this.onPostCreated);
+  },
+  componentWillUnmount() {
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
+    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+    PostStore.off(POST.POST_CREATED, this.onPostCreated);
   },
 
   onKeyboardShow(ev) {
     var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
     this.setState({ keyboardSpace: height });
   },
-
   onKeyboardHide(ev) {
     this.setState({ keyboardSpace: 0 });
   },
 
-  componentWillUnmount() {
-    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
-    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
-  },
-
-  onUploadComplete(file) {
-    console.log(file);
+  onUploadComplete(image) {
     var images = this.state.images;
-    images.push(file);
+    images.push(image);
     this.setState({ images: images });
   },
-
   onUploadError(error) {
     console.log(error);
   },
@@ -124,7 +133,6 @@ var InputView = React.createClass({
   },
 
   addImage() {
-    //this.uploadImage();
     UIImagePickerManager.launchImageLibrary({
       returnBase64Image: false,
       returnIsVertical: true
@@ -138,7 +146,6 @@ var InputView = React.createClass({
   },
 
   launchCamera() {
-    //this.uploadImage();
     UIImagePickerManager.launchCamera({
       returnBase64Image: false,
       returnIsVertical: true
@@ -152,23 +159,76 @@ var InputView = React.createClass({
   },
 
   goBack() {
-    this.refs.input.blur();
+    this.TitleInput.blur();
     this.props.mainNavigator.pop();
   },
 
   submit() {
-    if(this.state.title.length <= 0) return; // dont post if text is empty
-    PostActions.create( // send action
-      this.state.title,
-      (_.isEmpty(this.state.images)) ? [] : this.state.images,
-      this.props.user,
-      this.props.activeBoard,
-      null,
-      null,
-    );
-    this.refs.input.setNativeProps({ text: '' }); // clear text
-    this.refs.input.blur(); // unfocus text field
-    //this.props.mainNavigator.pop(); // navigate back to main tab bar
+    // dont post if text and images are empty
+    if(this.state.title.length <= 0 && this.state.images.length <= 0) return;
+
+    if(this.props.editing) {
+      PostActions.update(
+        this.props.post._id,
+        this.state.title,
+        this.state.images,
+        null //event
+      );
+    } else {
+      PostActions.create(
+        this.state.title,
+        (_.isEmpty(this.state.images)) ? [] : this.state.images,
+        this.props.user,
+        this.props.activeBoard,
+        null, // type
+        null, // event
+      );
+    }
+
+    // unfocus text field
+    this.TitleInput.blur();
+
+    // if we're editing the post, then go directly to the comment view
+    // because we already have the post that the comment view needs
+    //
+    // if we're creating a new post, then the onPostCreated function will
+    // go to the comment view once the new post has been created on the server
+    if(this.props.editing) {
+      var route = routes.MAIN.COMMENT;
+
+      // optimistic update
+      var post = this.props.post;
+      post.title = this.state.title;
+      post.images = this.state.images;
+
+      this.goToCommentView(post);
+    }
+  },
+
+  onPostCreated(newPost) {
+    // go to comment view
+    this.goToCommentView(newPost);
+  },
+
+  goToCommentView(post) {
+    var route = routes.MAIN.COMMENT;
+    route.post = post;
+
+    var currentRoutes = this.props.mainNavigator.getCurrentRoutes();
+    // if the comment route is already in the route stack,
+    // then pushing another copy of it will crash the app.
+    //
+    // remove that previous comment route and push it to
+    // the front of the stack
+    if(_.findWhere(currentRoutes, { name: routes.MAIN.COMMENT.name }) != undefined) {
+      var commentViewIndex = currentRoutes.length - 2;
+      // rerender the comment view with our fresh post
+      this.props.mainNavigator.replaceAtIndex(route, commentViewIndex);
+      // go back
+      this.props.mainNavigator.pop();
+    } else {
+      this.props.mainNavigator.replace(route);
+    }
   },
 
   onImageItemRemove(image) {
@@ -179,12 +239,30 @@ var InputView = React.createClass({
     });
   },
 
+  _renderBoardItem() {
+    var board = (this.props.editing)
+      ? this.props.post.board
+      : this.props.activeBoard;
+
+    var boardImageURL = (_.isEmpty(board.image))
+      ? constants.siteurl + '/img/default_group_img.png'
+      : resizeImage(board.image, 80, 80).url;
+
+    return (
+      <View style={ styles.boardItemDetails }>
+        <Image
+          source={{ uri: boardImageURL }}
+          style={ styles.boardImage }
+        />
+        <Text style={styles.boardName}>
+          { board.name }
+        </Text>
+      </View>
+    );
+  },
+
   _renderImages() {
-    if(_.isEmpty(this.state.images)) {
-      return (
-        <View />
-      );
-    }
+    if(_.isEmpty(this.state.images)) return <View />;
 
     var images = [];
     for(var key in this.state.images) {
@@ -198,21 +276,14 @@ var InputView = React.createClass({
       );
     }
     return (
-      <View style={{
-        flexDirection: 'column',
-        paddingHorizontal: 10,
-        marginBottom: 6,
-        flex: 1,
-        minHeight: 100,
-      }}>
-        <Text style={ styles.sectionTitle }>Images</Text>
+      <View style={ styles.imageBar }>
+        <Text style={ styles.sectionTitle }>
+          Images
+        </Text>
         <ScrollView
           horizontal={ true }
           showHorizontalScrollIndicator={ true }
-          contentContainerStyle={{
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}
+          contentContainerStyle={ styles.imageScrollBar }
         >
           { images }
         </ScrollView>
@@ -221,25 +292,14 @@ var InputView = React.createClass({
   },
 
   render() {
-    var user = this.props.user;
-    var board = this.props.activeBoard;
-    var containerStyle = {
-      flex: 1,
-      flexDirection: 'column',
-      marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace,
-      backgroundColor: '#eee'
-    };
     var authorImageURL = (_.isEmpty(this.props.user.image))
       ? constants.siteurl + '/img/user-profile-icon.png'
       : resizeImage(this.props.user.image, 64, 64).url;
 
-    var boardImageURL = (_.isEmpty(this.props.activeBoard.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(this.props.activeBoard.image, 80, 80).url;
-
-    var boardName = (this.props.activeBoard) ? this.props.activeBoard.name : '';
     return (
-      <View style={ containerStyle }>
+      <View style={[ styles.container, {
+        marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace
+      }]}>
         <View style={ styles.topBarContainer }>
           <View style={{
             height: constants.getStatusBarHeight(),
@@ -258,7 +318,9 @@ var InputView = React.createClass({
               />
             </TouchableOpacity>
             <Text style={ styles.title }>
-              New Post
+              {(this.props.editing)
+                ? 'Edit Post'
+                : 'New Post'}
             </Text>
             <TouchableOpacity
               activeOpacity={ 0.5 }
@@ -273,21 +335,16 @@ var InputView = React.createClass({
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView 
+        <ScrollView
           style={ styles.body }
-          contentContainerStyle={{flex: 1}}
+          contentContainerStyle={{
+            flex: 1,
+            paddingBottom: 20
+          }}
         >
           <View style={ styles.boardItem }>
             <Text style={ styles.sectionTitle }>Board</Text>
-            <View style={styles.boardItemDetails}>
-              <Image
-                source={{ uri: boardImageURL }}
-                style={ styles.boardImage }
-              />
-              <Text style={styles.boardName}>
-                { boardName }
-              </Text>
-            </View>
+            { this._renderBoardItem() }
           </View>
           <Text style={ styles.sectionTitle }>Post</Text>
           <View style={ styles.input }>
@@ -296,12 +353,12 @@ var InputView = React.createClass({
               source={{ uri: authorImageURL }}
             />
             <TextInput
-              ref='input'
+              ref={ ref => { this.TitleInput = ref; }}
               multiline={ true }
-              onChange={ev => {
-                this.setState({ title: ev.nativeEvent.text });
-              }}
+              value={ this.state.title }
+              onChangeText={ text => this.setState({ title: text }) }
               placeholder={ this.state.placeholderText }
+              placeholderTextColor='#AAA'
               style={ styles.textInput }
             />
           </View>
@@ -431,6 +488,19 @@ var styles = StyleSheet.create({
     flex: 2,
     fontSize: 17,
   },
+
+  imageBar: {
+    flexDirection: 'column',
+    paddingHorizontal: 10,
+    marginBottom: 6,
+    flex: 1,
+    minHeight: 100,
+  },
+  imageScrollBar: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
   contentBar: {
     backgroundColor: '#fff',
     position: 'absolute',

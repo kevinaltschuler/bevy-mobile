@@ -23,7 +23,7 @@ var BevyActionButtons = require('./BevyActionButtons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var BoardActions = require('./../../../board/BoardActions');
+var BoardActions = require('./../../../bevy/BoardActions');
 var PostActions = require('./../../../post/PostActions');
 
 var BevyView = React.createClass({
