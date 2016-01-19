@@ -5,6 +5,7 @@ var routes = {
     LOADING: { name: 'loading'},
     TABBAR: { name: 'MainTabBar' },
     NEWPOST: { name: 'NewPost' },
+    EDITPOST: { name: 'EditPost' },
     NEWBEVY: { name: 'NewBevy' },
     NEWBOARD: { name: 'NewBoard' },
     COMMENT: { name: 'Comment' },
@@ -14,7 +15,6 @@ var routes = {
     LOGIN: { name: 'Login' },
     MESSAGEVIEW: { name: 'Messages' },
     SWITCHACCOUNT: { name: 'SwitchAccount' },
-    EDITPOST: {name: 'EditPost'},
     NEWTHREAD: { name: 'NewThread' },
     THREADSETTINGS: { name: 'ThreadSettings' },
     ADDUSER: { name: 'AddUser' }, // FOR ANDROID

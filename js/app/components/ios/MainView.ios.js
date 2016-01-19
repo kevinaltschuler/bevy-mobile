@@ -84,6 +84,14 @@ var MainView = React.createClass({
   render() {
 
     switch(this.props.mainRoute.name) {
+      case routes.MAIN.EDITPOST.name:
+        return (
+          <NewPostView
+            { ...this.props }
+            editing={ true }
+          />
+        );
+        break;
       case routes.MAIN.NEWPOST.name:
         return <NewPostView { ...this.props } />;
         break;

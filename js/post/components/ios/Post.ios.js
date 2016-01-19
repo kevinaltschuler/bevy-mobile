@@ -10,23 +10,17 @@ var React = require('react-native');
 var {
   StyleSheet,
   Text,
-  View,
-  Image,
-  TouchableHighlight,
-  Animated,
-  TextInput
+  View
 } = React;
-var Icon = require('react-native-vector-icons/MaterialIcons');
-var ImageOverlay = require('./ImageOverlay.ios.js');
 var PostHeader = require('./PostHeader.ios.js');
 var PostFooter = require('./PostFooter.ios.js');
 var PostImage = require('./PostImage.ios.js');
+var PostBody = require('./PostBody.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var POST = constants.POST;
 var routes = require('./../../../routes');
-var timeAgo = require('./../../../shared/helpers/timeAgo');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
 
@@ -41,28 +35,14 @@ var Post = React.createClass({
   getDefaultProps() {
     return {
       inCommentView: false,
-      post: {},
-      isEditing: false
+      post: {}
     };
   },
 
   getInitialState() {
     return {
-      post: this.props.post,
-      editTitle: this.props.post.title
+      post: this.props.post
     };
-  },
-
-  componentDidMount() {
-    PostStore.on(POST.CHANGE_ONE + this.props.post._id, () => {
-      this.setState({
-        post: PostStore.getPost(this.props.post._id)
-      });
-    });
-  },
-
-  componentWillUnmount() {
-    PostStore.off(POST.CHANGE_ONE + this.props.post._id);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -71,93 +51,31 @@ var Post = React.createClass({
     });
   },
 
-  onEdit() {
+  componentDidMount() {
+    PostStore.on(POST.CHANGE_ONE + this.props.post._id, this.onPostUpdate);
+  },
+  componentWillUnmount() {
+    PostStore.off(POST.CHANGE_ONE + this.props.post._id, this.onPostUpdate);
+  },
+
+  onPostUpdate() {
     this.setState({
-      isEditing: true
+      post: PostStore.getPost(this.props.post._id)
     });
   },
 
-  _renderPostTitle() {
-    if(_.isEmpty(this.state.post.title)) return null;
-    if(this.state.isEditing) {
-      return (
-        <View style={styles.body}>
-          <TextInput
-            value={ this.state.editTitle }
-            onChangeText={(text) => {
-              this.setState({ editTitle: text})
-            }}
-            defaultValue={ this.state.editTitle}
-            autoFocus={true}
-            multiline={true}
-            clearButtonMode={'always'}
-            style={{
-              height: 100,
-              flex: 1,
-              borderWidth: 1,
-              borderColor: 'rgba(0,0,0,.1)',
-              borderRadius: 4,
-              marginBottom: 10,
-              padding: 10
-            }}
-          >
-          </TextInput>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end'}}>
-
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,.1)'
-              onPress={() => {
-                this.setState({
-                  editTitle: this.props.post.title,
-                  isEditing: false
-                });
-              }}
-              style={{marginRight: 10}}
-            >
-              <Text style={styles.cancelButton}>
-                cancel
-              </Text>
-            </TouchableHighlight>
-
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,.1)'
-              onPress={() => {
-                PostActions.update(this.props.post._id, this.state.editTitle);
-                this.setState({
-                  isEditing: false
-                });
-              }}
-            >
-              <Text style={styles.acceptButton}>
-                accept
-              </Text>
-            </TouchableHighlight>
-
-          </View>
-        </View>
-      );
-    }
-    return (
-      <View style={styles.body}>
-        <Text style={styles.bodyText}>
-          { this.state.editTitle }
-        </Text>
-      </View>
-    );
-  },
-
   render() {
-    var post = this.state.post;
-
     return (
-      <View style={styles.postCard}>
+      <View style={ styles.container }>
         <PostHeader
           post={ this.state.post }
           user={ this.props.user }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
         />
-        { this._renderPostTitle() }
+        <PostBody
+          post={ this.state.post }
+        />
         <PostImage
           post={ this.state.post }
         />
@@ -170,52 +88,18 @@ var Post = React.createClass({
         />
       </View>
     );
-  },
+  }
 });
 
-var sideMargins = 10;
-var cardWidth = constants.width - sideMargins * 2;
-
 var styles = StyleSheet.create({
-  postCard: {
+  container: {
     flexDirection: 'column',
-    width: cardWidth,
+    width: constants.width - 20,
     marginTop: 5,
     marginBottom: 5,
-    marginLeft: sideMargins,
-    marginRight: sideMargins,
+    marginHorizontal: 10,
     backgroundColor: 'white',
-    borderRadius: 2,
-  },
-  body: {
-    flex: 1,
-    flexDirection: 'column',
-    marginBottom: 15,
-    paddingLeft: 15,
-    paddingRight: 15
-  },
-  bodyText: {
-    fontSize: 17,
-    color: '#666'
-  },
-
-  cancelButton: {
-    padding: 5,
-    borderRadius: 4,
-    backgroundColor: '#fff',
-    color: 'rgba(0,0,0,.3)',
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,.3)',
-    fontWeight: 'bold'
-  },
-  acceptButton: {
-    padding: 5,
-    borderRadius: 4,
-    backgroundColor: '#fff',
-    color: '#2cb673',
-    borderColor: '#2cb673',
-    borderWidth: 1,
-    fontWeight: 'bold'
+    borderRadius: 2
   }
 });
 
