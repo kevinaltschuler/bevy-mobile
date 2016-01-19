@@ -28,7 +28,7 @@ var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var FileActions = require('./../../../file/FileActions');
 var FileStore = require('./../../../file/FileStore');
-var BoardActions = require('./../../../board/BoardActions');
+var BoardActions = require('./../../../bevy/BoardActions');
 var FILE = constants.FILE;
 
 var BoardSettingsView = React.createClass({

@@ -23,7 +23,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var BevyActions = require('./../../../bevy/BevyActions');
-var BoardActions = require('./../../../board/BoardActions');
+var BoardActions = require('./../../../bevy/BoardActions');
 
 var PostFooter = React.createClass({
   propTypes: {

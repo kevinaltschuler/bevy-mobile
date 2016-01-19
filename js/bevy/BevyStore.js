@@ -16,8 +16,8 @@ var getSlug = require('speakingurl');
 var React = require('react-native');
 
 var Bevies = require('./BevyCollection');
-var Boards = require('./../board/BoardCollection');
-var Board = require('./../board/BoardModel');
+var Boards = require('./BoardCollection');
+var Board = require('./BoardModel');
 var Invites = require('./InviteCollection');
 var Invite = require('./InviteModel');
 var {

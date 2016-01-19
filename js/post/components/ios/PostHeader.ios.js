@@ -22,7 +22,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo')
 var resizeImage = require('./../../../shared/helpers/resizeImage');
-var BoardActions = require('./../../../board/BoardActions');
+var BoardActions = require('./../../../bevy/BoardActions');
 var BevyActions = require('./../../../bevy/BevyActions');
 
 var PostHeader = React.createClass({
@@ -39,7 +39,7 @@ var PostHeader = React.createClass({
       // we're already viewing the author's profile, do nothing
       return;
     }
-    
+
     var route = routes.MAIN.PROFILE;
     route.profileUser = this.props.post.author;
     this.props.mainNavigator.push(route);
