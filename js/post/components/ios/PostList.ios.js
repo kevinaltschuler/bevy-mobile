@@ -64,7 +64,8 @@ var PostList = React.createClass({
       dataSource: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
-      loading: true,
+      loading: false,
+      loadingInitial: true,
       joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
     };
   },
@@ -81,18 +82,17 @@ var PostList = React.createClass({
   _onPostsLoading() {
     this.setState({
       loading: true,
-      dataSource: this.state.dataSource.cloneWithRows([]),
+      //dataSource: this.state.dataSource.cloneWithRows([]),
     });
   },
 
   _onPostsLoaded() {
-    setTimeout(() => {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
-        loading: false
-      });
-      this.forceUpdate();
-    }, 300);
+    this.setState({
+      loading: false,
+      loadingInitial: false,
+      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
+    });
+    this.forceUpdate();
   },
 
   onRefresh(stopRefresh) {
@@ -102,7 +102,7 @@ var PostList = React.createClass({
         (!_.isEmpty(this.props.profileUser)) ? this.props.profileUser._id : null
       );
     } else {
-       PostActions.fetchBoard(this.props.activeBoard._id);     
+       PostActions.fetchBoard(this.props.activeBoard._id);
     }
   },
 
@@ -132,7 +132,7 @@ var PostList = React.createClass({
   },
 
   _renderNoPosts() {
-    if(!this.state.loading && _.isEmpty(this.props.allPosts)) {
+    if(!this.state.loading && !this.state.loadingInitial && _.isEmpty(this.props.allPosts)) {
       return (
         <View style={ styles.noPostsContainer }>
           <Text style={ styles.noPostsText }>
@@ -144,7 +144,7 @@ var PostList = React.createClass({
   },
 
   _renderLoading() {
-    if(this.state.loading) {
+    if(this.state.loadingInitial) {
       return (
         <View style={ styles.spinnerContainer }>
           <Spinner
@@ -182,8 +182,6 @@ var PostList = React.createClass({
   },
 
   _renderPosts() {
-    if(this.state.loading) return <View />;
-
     return (
       <ListView
         ref={(ref) => { this.ListView = ref; }}
@@ -202,13 +200,13 @@ var PostList = React.createClass({
           </View>
         }}
         refreshControl={
-            <RefreshControl
-              refreshing={ this.state.loading }
-              onRefresh={ this.onRefresh }
-              tintColor='#AAA'
-              title='Loading...'
-            />
-          }
+          <RefreshControl
+            refreshing={ this.state.loading }
+            onRefresh={ this.onRefresh }
+            tintColor='#AAA'
+            title='Loading...'
+          />
+        }
         renderRow={ post => {
           return (
             <Post
