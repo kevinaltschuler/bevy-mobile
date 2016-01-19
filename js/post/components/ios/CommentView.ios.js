@@ -16,6 +16,7 @@ var {
   StyleSheet,
   TouchableHighlight,
   TouchableOpacity,
+  RefreshControl,
   DeviceEventEmitter
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -74,6 +75,26 @@ var CommentView = React.createClass({
     this.setState({
       keyboardSpace: 0
     });
+  },
+
+  onRefresh() {
+    this.setState({
+      loading: true
+    });
+    fetch(constants.apiurl + '/posts/' + this.props.post._id)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        post: res,
+        comments: this.nestComments(res.comments),
+        loading: false
+      });
+    })
+    .catch(err => {
+      this.setState({
+        loading: false
+      });
+    })
   },
 
   goBack() {
@@ -171,9 +192,6 @@ var CommentView = React.createClass({
   },
 
   _renderPost() {
-    if(_.isEmpty(this.state.post)) {
-      return null;
-    }
     if(this.state.post.type == 'event') {
       return (
         <View style={{marginTop: 0}}>
@@ -230,24 +248,27 @@ var CommentView = React.createClass({
   },
 
   _renderContent() {
-    if(this.state.loading) {
-      return (
-        <View>
-          <Text>Loading</Text>
-        </View>
-      );
-    }
     if(_.isEmpty(this.state.post)) {
       return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{color: '#555', fontWeight: '600'}}>
-            post was not found
+        <View style={ styles.notFoundContainer }>
+          <Text style={ styles.notFoundText }>
+            Post Not Found
           </Text>
         </View>
       );
     }
     return (
-      <ScrollView style={ styles.scrollView }>
+      <ScrollView
+        style={ styles.scrollView }
+        refreshControl={
+          <RefreshControl
+            refreshing={ this.state.loading }
+            onRefresh={ this.onRefresh }
+            tintColor='#AAA'
+            title='Loading...'
+          />
+        }
+      >
         { this._renderPost() }
         <Text style={ styles.commentsTitle }>
           Comments
@@ -452,6 +473,15 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 0,
     marginLeft: 5
+  },
+  notFoundContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  notFoundText: {
+    color: '#555',
+    fontWeight: 'bold'
   }
 });
 
