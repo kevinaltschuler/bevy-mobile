@@ -140,13 +140,11 @@ var styles = StyleSheet.create({
     paddingRight: 10,
     alignItems: 'center'
   },
-
   infoText: {
     color: '#555',
-    fontSize: 14,
+    fontSize: 17,
     marginRight: 5
   }
-
 });
 
 module.exports = BevyCard;
