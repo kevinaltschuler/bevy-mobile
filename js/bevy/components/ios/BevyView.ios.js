@@ -93,6 +93,7 @@ var BevyView = React.createClass({
       <BoardCard
         user={ this.props.user }
         board={ this.props.activeBoard }
+        bevyNavigator={ this.props.bevyNavigator }
       />
     );
   },

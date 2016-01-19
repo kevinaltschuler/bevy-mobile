@@ -44,7 +44,8 @@ var routes = {
     BEVYVIEW: { name: 'BevyView' },
     INFO: { name: 'InfoView' },
     SETTINGS: { name: 'BevySettings' },
-    MYBEVIES: { name: 'MyBevies' }
+    MYBEVIES: { name: 'MyBevies' },
+    BOARDSETTINGS: { name: 'BoardSettings' }
   },
 
   CHAT: {

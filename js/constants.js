@@ -146,6 +146,7 @@ exports.BOARD = {
   CLEAR: 'board_clear',
   LEAVE: 'board_leave',
   JOIN: 'board_join',
+  UPDATE: 'board_update',
   CREATE: 'board_create',
   CREATED: 'board_created'
 };
