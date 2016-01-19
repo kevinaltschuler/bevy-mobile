@@ -98,6 +98,32 @@ var BoardSettingsView = React.createClass({
     this.goBack();
   },
 
+  _renderBoardType() {
+    var iconName;
+    switch(this.props.activeBoard.type) {
+      case 'announcement':
+        iconName = 'flag';
+        break;
+      case 'discussion':
+        iconName = 'forum';
+        break;
+    }
+    return (
+      <View style={ styles.boardType }>
+        <Icon
+          name={ iconName }
+          size={ 30 }
+          color='#888'
+          style={ styles.boardTypeIcon }
+        />
+        <Text style={ styles.boardTypeText }>
+          { this.props.activeBoard.type.charAt(0).toUpperCase()
+            + this.props.activeBoard.type.slice(1) }
+        </Text>
+      </View>
+    );
+  },
+
   _renderImageButton() {
     var background = (_.isEmpty(this.state.image))
     ? (
@@ -184,6 +210,10 @@ var BoardSettingsView = React.createClass({
             placeholder='Board Description'
             placeholderTextColor='#AAA'
           />
+          <Text style={ styles.sectionTitle }>
+            Board Type
+          </Text>
+          { this._renderBoardType() }
           <Text style={ styles.sectionTitle }>
             Board Image
           </Text>
@@ -296,6 +326,23 @@ var styles = StyleSheet.create({
   },
   addIcon: {
     backgroundColor: 'transparent'
+  },
+  boardType: {
+    backgroundColor: '#FFF',
+    width: constants.width,
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15
+  },
+  boardTypeIcon: {
+    marginRight: 15
+  },
+  boardTypeText: {
+    flex: 1,
+    color: '#888',
+    fontSize: 17,
+    textAlign: 'left'
   },
   bevyItem: {
     backgroundColor: '#FFF',
