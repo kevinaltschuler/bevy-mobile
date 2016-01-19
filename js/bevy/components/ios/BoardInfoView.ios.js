@@ -20,6 +20,7 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var AdminItem = require('./AdminItem.ios.js');
+var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -324,6 +325,13 @@ var BoardSettingsView = React.createClass({
               { this.props.activeBevy.name }
             </Text>
           </View>
+          <Text style={ styles.sectionTitle }>
+            Board Settings
+          </Text>
+          <SettingsItem
+            title='Show Group Chat'
+            checked={ this.props.activeBoard.settings.group_chat }
+          />
           <Text style={ styles.sectionTitle }>
             Board Admins
           </Text>
