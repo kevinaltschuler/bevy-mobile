@@ -26,6 +26,8 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var POST = constants.POST;
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
+var routes = require('./../../../routes');
 
 var ProfileView = React.createClass({
   propTypes: {
@@ -50,6 +52,12 @@ var ProfileView = React.createClass({
     this.props.mainNavigator.pop();
     // reset posts
     PostActions.fetch(this.props.activeBevy._id, null);
+  },
+  goToNewThread() {
+    var route = routes.MAIN.NEWTHREAD;
+    route.defaultUser = this.props.profileUser;
+    this.props.mainNavigator.push(route);
+
   },
 
   render() {
@@ -83,8 +91,11 @@ var ProfileView = React.createClass({
               width: 48,
               height: 48
             }}/>
+
+          {/** message user **/}
             <TouchableOpacity
               activeOpacity={ 0.5 }
+              onPress={ this.goToNewThread}
             >
               <Icon
                 name='create'

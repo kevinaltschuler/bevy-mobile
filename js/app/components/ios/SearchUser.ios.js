@@ -14,7 +14,8 @@ var {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  RefreshControl
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
 //var MessageInput = require('./MessageInput.ios.js');
@@ -173,6 +174,14 @@ var AddPeopleView = React.createClass({
         removeClippedSubviews={ true }
         initialListSize={ 10 }
         pageSize={ 10 }
+        refreshControl={
+          <RefreshControl
+            refreshing={ this.state.loading }
+            onRefresh={ this.search }
+            tintColor='#AAA'
+            title='Loading...'
+          />
+        }
         renderRow={(user) => {
           return (
             <UserSearchItem
