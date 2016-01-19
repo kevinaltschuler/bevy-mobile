@@ -33,7 +33,14 @@ var BoardSettingsView = React.createClass({
   propTypes: {
     activeBevy: React.PropTypes.object,
     activeBoard: React.PropTypes.object,
-    bevyNavigator: React.PropTypes.object
+    bevyNavigator: React.PropTypes.object,
+    editing: React.PropTypes.bool
+  },
+
+  getDefaultProps() {
+    return {
+      editing: false
+    };
   },
 
   getInitialState() {
@@ -66,6 +73,11 @@ var BoardSettingsView = React.createClass({
   },
 
   goBack() {
+    // blur inputs if they exist
+    if(this.props.editing) {
+      this.NameInput.blur();
+      this.DescInput.blur();
+    }
     this.props.bevyNavigator.pop();
     this.setState(this.getInitialState());
   },
@@ -96,6 +108,56 @@ var BoardSettingsView = React.createClass({
       this.state.settings // settings
     );
     this.goBack();
+  },
+
+  _renderBoardName() {
+    if(this.props.editing) {
+      return (
+        <TextInput
+          ref={ ref => { this.NameInput = ref; }}
+          autoCorrect={ false }
+          autoCapitalize='none'
+          style={ styles.textInput }
+          value={ this.state.name }
+          onChangeText={ text => this.setState({ name: text }) }
+          placeholder='Board Name'
+          placeholderTextColor='#AAA'
+        />
+      );
+    } else {
+      return (
+        <View style={ styles.textContainer }>
+          <Text style={ styles.boardText }>
+            { this.state.name }
+          </Text>
+        </View>
+      );
+    }
+  },
+
+  _renderBoardDescription() {
+    if(this.props.editing) {
+      return (
+        <TextInput
+          ref={ ref => { this.DescInput = ref; }}
+          autoCorrect={ false }
+          autoCapitalize='none'
+          style={ styles.textInput }
+          value={ this.state.description }
+          onChangeText={ text => this.setState({ description: text }) }
+          placeholder='Board Description'
+          placeholderTextColor='#AAA'
+        />
+      );
+    } else {
+      return (
+        <View style={ styles.textContainer }>
+          <Text style={ styles.boardText }>
+            { this.state.description }
+          </Text>
+        </View>
+      );
+    }
   },
 
   _renderBoardType() {
@@ -134,22 +196,45 @@ var BoardSettingsView = React.createClass({
         source={{ uri: resizeImage(this.state.image, constants.width, 300).url }}
       />
     );
+    if(this.props.editing) {
+      return (
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          style={ styles.imageButton }
+          onPress={ this.showImagePicker }
+        >
+          <View style={ styles.imageButton }>
+            { background }
+            <View style={ styles.darkener } />
+            <Icon
+              name='add-a-photo'
+              size={ 48 }
+              color='#FFF'
+              style={ styles.addIcon }
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={ styles.imageButton }>
+          { background }
+        </View>
+      );
+    }
+  },
+
+  _renderSaveButton() {
+    if(!this.props.editing) return <View />;
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        style={ styles.imageButton }
-        onPress={ this.showImagePicker }
+        onPress={ this.submit }
+        style={ styles.saveButton }
       >
-        <View style={ styles.imageButton }>
-          { background }
-          <View style={ styles.darkener } />
-          <Icon
-            name='add-a-photo'
-            size={ 48 }
-            color='#FFF'
-            style={ styles.addIcon }
-          />
-        </View>
+        <Text style={ styles.saveButtonText }>
+          Save Changes
+        </Text>
       </TouchableOpacity>
     );
   },
@@ -175,7 +260,9 @@ var BoardSettingsView = React.createClass({
               />
             </TouchableOpacity>
             <Text style={ styles.title }>
-              Board Settings
+              {(this.props.editing)
+                ? 'Board Settings'
+                : 'Board Info'}
             </Text>
             <View style={{
               width: 48,
@@ -187,29 +274,11 @@ var BoardSettingsView = React.createClass({
           <Text style={ styles.sectionTitle }>
             Board Name
           </Text>
-          <TextInput
-            ref={ ref => { this.NameInput = ref; }}
-            autoCorrect={ false }
-            autoCapitalize='none'
-            style={ styles.textInput }
-            value={ this.state.name }
-            onChangeText={ text => this.setState({ name: text }) }
-            placeholder='Board Name'
-            placeholderTextColor='#AAA'
-          />
+          { this._renderBoardName() }
           <Text style={ styles.sectionTitle }>
             Board Description
           </Text>
-          <TextInput
-            ref={ ref => { this.DescInput = ref; }}
-            autoCorrect={ false }
-            autoCapitalize='none'
-            style={ styles.textInput }
-            value={ this.state.description }
-            onChangeText={ text => this.setState({ description: text }) }
-            placeholder='Board Description'
-            placeholderTextColor='#AAA'
-          />
+          { this._renderBoardDescription() }
           <Text style={ styles.sectionTitle }>
             Board Type
           </Text>
@@ -233,15 +302,7 @@ var BoardSettingsView = React.createClass({
               { this.props.activeBevy.name }
             </Text>
           </View>
-          <TouchableOpacity
-            activeOpacity={ 0.5 }
-            onPress={ this.submit }
-            style={ styles.saveButton }
-          >
-            <Text style={ styles.saveButtonText }>
-              Save Changes
-            </Text>
-          </TouchableOpacity>
+          { this._renderSaveButton() }
         </ScrollView>
       </View>
     );
@@ -293,6 +354,18 @@ var styles = StyleSheet.create({
     fontSize: 17,
     color: '#666',
     paddingHorizontal: 15
+  },
+  textContainer: {
+    backgroundColor: '#FFF',
+    width: constants.width,
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15
+  },
+  boardText: {
+    color: '#666',
+    fontSize: 17
   },
   imageButton: {
     width: constants.width,

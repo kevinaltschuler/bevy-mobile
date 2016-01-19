@@ -34,11 +34,54 @@ var BoardCard = React.createClass({
 
   getInitialState() {
     return {
+      isAdmin: _.contains(this.props.board.admins, this.props.user._id)
     }
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      isAdmin: _.contains(nextProps.board.admins, nextProps.user._id)
+    });
   },
 
   goToBoardSettings() {
     this.props.bevyNavigator.push(routes.BEVY.BOARDSETTINGS);
+  },
+
+  goToBoardInfo() {
+    this.props.bevyNavigator.push(routes.BEVY.BOARDINFO);
+  },
+
+  _renderSettingsOrInfo() {
+    if(this.state.isAdmin) {
+      return (
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          onPress={ this.goToBoardSettings }
+          style={ styles.settingButton }
+        >
+          <Icon
+            name='settings'
+            size={ 24 }
+            color='#FFF'
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          onPress={ this.goToBoardInfo }
+          style={ styles.settingButton }
+        >
+          <Icon
+            name='info'
+            size={ 24 }
+            color='#FFF'
+          />
+        </TouchableOpacity>
+      );
+    }
   },
 
   render() {
@@ -91,17 +134,7 @@ var BoardCard = React.createClass({
                   { board.admins.length } Admins
                 </Text>
               </View>
-              <TouchableOpacity
-                activeOpacity={ 0.5 }
-                onPress={ this.goToBoardSettings }
-                style={ styles.settingButton }
-              >
-                <Icon
-                  name='settings'
-                  size={ 24 }
-                  color='#FFF'
-                />
-              </TouchableOpacity>
+              { this._renderSettingsOrInfo() }
             </View>
           </View>
         </Image>
