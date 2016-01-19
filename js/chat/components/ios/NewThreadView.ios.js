@@ -193,7 +193,7 @@ var NewThreadView = React.createClass({
     for(var key in this.state.addedUsers) {
       var addedUser = this.state.addedUsers[key];
       // dont render self
-      //if(addedUser._id == this.props.user._id) continue;
+      if(addedUser._id == this.props.user._id) continue;
 
       users.push(
         <AddedUserItem
