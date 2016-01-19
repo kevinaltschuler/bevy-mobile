@@ -19,6 +19,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
+var AdminItem = require('./AdminItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -31,6 +32,7 @@ var FILE = constants.FILE;
 
 var BoardSettingsView = React.createClass({
   propTypes: {
+    mainNavigator: React.PropTypes.object,
     activeBevy: React.PropTypes.object,
     activeBoard: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
@@ -224,6 +226,21 @@ var BoardSettingsView = React.createClass({
     }
   },
 
+  _renderAdmins() {
+    var admins = [];
+    for(var key in this.props.activeBoard.admins) {
+      var admin = this.props.activeBoard.admins[key];
+      admins.push(
+        <AdminItem
+          key={ 'adminitem:' + key }
+          admin={ admin }
+          mainNavigator={ this.props.mainNavigator }
+        />
+      );
+    }
+    return admins;
+  },
+
   _renderSaveButton() {
     if(!this.props.editing) return <View />;
     return (
@@ -270,7 +287,12 @@ var BoardSettingsView = React.createClass({
             }}/>
           </View>
         </View>
-        <ScrollView style={ styles.container }>
+        <ScrollView
+          style={ styles.container }
+          contentContainerStyle={{
+            paddingBottom: 20
+          }}
+        >
           <Text style={ styles.sectionTitle }>
             Board Name
           </Text>
@@ -302,6 +324,10 @@ var BoardSettingsView = React.createClass({
               { this.props.activeBevy.name }
             </Text>
           </View>
+          <Text style={ styles.sectionTitle }>
+            Board Admins
+          </Text>
+          { this._renderAdmins() }
           { this._renderSaveButton() }
         </ScrollView>
       </View>
