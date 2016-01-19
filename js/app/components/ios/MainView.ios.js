@@ -89,6 +89,7 @@ var MainView = React.createClass({
           <NewPostView
             { ...this.props }
             editing={ true }
+            post={ this.props.mainRoute.post }
           />
         );
         break;
@@ -107,7 +108,7 @@ var MainView = React.createClass({
       case routes.MAIN.COMMENT.name:
         return (
           <CommentView
-            postID={ this.props.mainRoute.postID || '-1' }
+            post={ this.props.mainRoute.post }
             { ...this.props }
           />
         );
@@ -126,15 +127,6 @@ var MainView = React.createClass({
         return (
           <LocationView
             location={this.props.mainRoute.location || 'no location'}
-            { ...this.props }
-          />
-        );
-        break;
-
-      case routes.MAIN.EDITPOST.name:
-        return (
-          <PostEditView
-            post={this.props.mainRoute.post}
             { ...this.props }
           />
         );

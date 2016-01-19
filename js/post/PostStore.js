@@ -224,11 +224,7 @@ _.extend(PostStore, {
         var tag = payload.tag || post.get('tag');
         var event = payload.event || post.get('event');
 
-        post.set('title', title);
-        post.set('images', images);
-        post.set('tag', tag);
-        post.set('event', event);
-
+        post.url = constants.apiurl + '/posts/' + post_id;
         post.save({
           title: title,
           images: images,
@@ -236,10 +232,14 @@ _.extend(PostStore, {
           event: event,
           updated: Date.now()
         }, {
-          patch: true,
-          success: function($post, response, options) {
-          }.bind(this)
+          patch: true
         });
+
+        post.set('title', title);
+        post.set('images', images);
+        post.set('tag', tag);
+        post.set('event', event);
+
         // trigger update
         this.trigger(POST.CHANGE_ONE + post.get('_id'));
         this.trigger(POST.CHANGE_ALL);

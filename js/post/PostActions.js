@@ -66,7 +66,6 @@ var PostActions = {
 			post_id: (post_id == undefined) ? null : post_id,
 			title: (title == undefined) ? null : title,
 			images: (images == undefined) ? null : images,
-			tag: (tag == undefined) ? null : tag,
 			event: (event == undefined) ? null : event
 		});
 	},

@@ -30,34 +30,14 @@ var CommentActions = require('./../../../post/CommentActions');
 
 var CommentView = React.createClass({
   propTypes: {
-    postID: React.PropTypes.string,
+    post: React.PropTypes.object,
     user: React.PropTypes.object,
     loggedIn: React.PropTypes.bool,
     mainNavigator: React.PropTypes.object
   },
 
-  getDefaultProps() {
-    return {
-      postID: '-1'
-    };
-  },
-
   getInitialState() {
-    var post = PostStore.getPost(this.props.postID);
-    if(_.isEmpty(post)) {
-      this.setState({
-        loading: true
-      });
-      fetch(constants.apiurl + '/posts/' + this.props.postID)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({
-          post: res,
-          comments: this.nestComments(post.comments),
-          loading: false
-        });
-      });
-    }
+    var post = this.props.post;
     var comments = this.nestComments(post.comments);
     return {
       post: post,
@@ -77,9 +57,6 @@ var CommentView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if(_.isEmpty(nextProps.post)) {
-      return;
-    }
     this.setState({
       post: nextProps.post,
       comments: this.nestComments(nextProps.post.comments)
