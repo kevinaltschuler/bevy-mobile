@@ -195,23 +195,18 @@ _.extend(PostStore, {
       case POST.DESTROY:
         var post_id = payload.post_id;
         var post = this.posts.get(post_id);
-        if(_.isEmpty(post)) {
-          console.log('nothing to destroy');
-          break;
-        }
+        if(post == undefined) break;
 
-        post.url = constants.apiurl + '/bevies/' + post.bevy + '/posts/' + post_id;
-
+        post.url = constants.apiurl + '/posts/' + post_id;
         post.destroy({
           success: function(model, response) {
             this.trigger(POST.CHANGE_ALL);
-            this.trigger(POST.REFRESH);
+            this.trigger(POST.LOADED);
           }.bind(this),
           error: function(err) {
             console.log(err);
           }
         });
-
         break;
 
       case POST.UPDATE:
