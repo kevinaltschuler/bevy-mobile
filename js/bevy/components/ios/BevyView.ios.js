@@ -119,6 +119,7 @@ var BevyView = React.createClass({
           myBevies={ this.props.myBevies }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          bevyNavigator={this.props.bevyNavigator}
         />
       </View>
     );

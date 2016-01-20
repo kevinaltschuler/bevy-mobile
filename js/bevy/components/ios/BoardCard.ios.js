@@ -105,30 +105,32 @@ var BoardCard = React.createClass({
         >
           <View style={ styles.imageWrapper }>
             <View style={styles.boardLeft}>
-              <Text style={ styles.boardTitle }>
-                { board.name }
-              </Text>
+              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', width: constants.width* .8}}>
+                <Text style={ styles.boardTitle }>
+                  { board.name }
+                </Text>
 
-              <View style={ styles.boardDetails }>
-                <View style={ styles.detailItem }>
-                  <Icon
-                    name={ typeIcon }
-                    size={ 12 }
-                    color='#fff'
-                  />
-                  <Text style={ styles.itemText }>
-                    { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
-                  </Text>
-                </View>
-                <View style={ styles.detailItem }>
-                  <Icon
-                    name='person'
-                    size={ 12 }
-                    color='#fff'
-                  />
-                  <Text style={ styles.itemText }>
-                    { board.admins.length } Admins
-                  </Text>
+                <View style={ styles.boardDetails }>
+                  <View style={ styles.detailItem }>
+                    <Icon
+                      name={ typeIcon }
+                      size={ 12 }
+                      color='#fff'
+                    />
+                    <Text style={ styles.itemText }>
+                      { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
+                    </Text>
+                  </View>
+                  <View style={ styles.detailItem }>
+                    <Icon
+                      name='person'
+                      size={ 12 }
+                      color='#fff'
+                    />
+                    <Text style={ styles.itemText }>
+                      { board.admins.length } Admins
+                    </Text>
+                  </View>
                 </View>
               </View>
             </View>
@@ -167,12 +169,11 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,.6)',
     height: 100,
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   boardLeft: {
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
-    height: 100,
     flex: 6,
     flexWrap: 'wrap',
     flexDirection: 'column'
@@ -198,7 +199,6 @@ var styles = StyleSheet.create({
     fontSize: 12
   },
   settingButton: {
-
     marginTop: 10
   }
 });
