@@ -142,6 +142,8 @@ var BevySideMenu = React.createClass({
         style={[ styles.newBoardItem, {
           borderBottomWidth: 1,
           borderBottomColor: '#666',
+          borderTopWidth: 1,
+          borderTopColor: '#666',
           height: 70
         }]}
         onPress={ this.goToNewBoard }
@@ -171,7 +173,20 @@ var BevySideMenu = React.createClass({
           height: constants.getStatusBarHeight()
         }}/>
         <ScrollView style={styles.menuContainer}>
-          { this._renderBevyItem() }
+          <View>
+            <Text style={{
+              color: '#fff', 
+              paddingBottom: 5, 
+              paddingLeft: 10, 
+              alignItems: 'flex-start',
+              justifyContent: 'flex-start',
+              width: constants.width * (4/5),
+              fontWeight: 'bold',
+              fontSize: 20
+            }}>
+              Boards
+            </Text>
+          </View>
           <View style={ styles.boardList }>
             { this._renderBoards() }
             { this._renderNewBoardItem() }

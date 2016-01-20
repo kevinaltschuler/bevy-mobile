@@ -61,8 +61,8 @@ var BoardCard = React.createClass({
           style={ styles.settingButton }
         >
           <Icon
-            name='settings'
-            size={ 24 }
+            name='more-vert'
+            size={ 30 }
             color='#FFF'
           />
         </TouchableOpacity>
@@ -75,8 +75,8 @@ var BoardCard = React.createClass({
           style={ styles.settingButton }
         >
           <Icon
-            name='info'
-            size={ 24 }
+            name='more-vert'
+            size={ 30 }
             color='#FFF'
           />
         </TouchableOpacity>
@@ -104,36 +104,37 @@ var BoardCard = React.createClass({
           style={ styles.boardImage }
         >
           <View style={ styles.imageWrapper }>
-            <Text style={ styles.boardTitle }>
-              { board.name }
-            </Text>
-            <Text
-              style={ styles.boardDescription }
-              numberOfLines={ 1 }
-            >
-              { board.description }
-            </Text>
-            <View style={ styles.boardDetails }>
-              <View style={ styles.detailItem }>
-                <Icon
-                  name={ typeIcon }
-                  size={ 16 }
-                  color='#fff'
-                />
-                <Text style={ styles.itemText }>
-                  { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
+            <View style={styles.boardLeft}>
+              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', width: constants.width* .8}}>
+                <Text style={ styles.boardTitle }>
+                  { board.name }
                 </Text>
+
+                <View style={ styles.boardDetails }>
+                  <View style={ styles.detailItem }>
+                    <Icon
+                      name={ typeIcon }
+                      size={ 12 }
+                      color='#fff'
+                    />
+                    <Text style={ styles.itemText }>
+                      { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
+                    </Text>
+                  </View>
+                  <View style={ styles.detailItem }>
+                    <Icon
+                      name='person'
+                      size={ 12 }
+                      color='#fff'
+                    />
+                    <Text style={ styles.itemText }>
+                      { board.admins.length } Admins
+                    </Text>
+                  </View>
+                </View>
               </View>
-              <View style={ styles.detailItem }>
-                <Icon
-                  name='person'
-                  size={ 16 }
-                  color='#fff'
-                />
-                <Text style={ styles.itemText }>
-                  { board.admins.length } Admins
-                </Text>
-              </View>
+            </View>
+            <View style={styles.boardRight}>
               { this._renderSettingsOrInfo() }
             </View>
           </View>
@@ -161,23 +162,26 @@ var styles = StyleSheet.create({
     paddingLeft: 5,
     fontSize: 18,
     marginBottom: 5,
-    fontWeight: 'bold'
-  },
-  boardDescription: {
-    color: '#fff',
-    paddingLeft: 10,
-    fontSize: 16,
-    marginBottom: 5,
-    flexWrap: 'nowrap',
-    overflow: 'hidden'
+    fontWeight: 'bold',
   },
   imageWrapper: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.6)',
     height: 100,
-    flexDirection: 'column',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  boardLeft: {
     justifyContent: 'flex-end',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    flex: 6,
+    flexWrap: 'wrap',
+    flexDirection: 'column'
+  },
+  boardRight: {
+    width: 35,
+    flex: 1,
+    alignItems: 'flex-end'
   },
   boardDetails: {
     flexDirection: 'row',
@@ -192,8 +196,11 @@ var styles = StyleSheet.create({
   itemText: {
     color: '#fff',
     marginLeft: 5,
-    fontSize: 14
+    fontSize: 12
   },
+  settingButton: {
+    marginTop: 10
+  }
 });
 
 module.exports = BoardCard;

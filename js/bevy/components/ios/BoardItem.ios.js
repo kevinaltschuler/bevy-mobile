@@ -85,8 +85,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 70,
     paddingLeft: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#666',
+    borderTopWidth: 1,
+    borderTopColor: '#666',
     alignItems: 'center'
   },
   boardImage: {
