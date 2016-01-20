@@ -132,9 +132,8 @@ _.extend(NotificationStore, {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
               (notification) => notification.read == false).length;
-
+              
             this.notifications.sort();
-
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
@@ -147,9 +146,9 @@ _.extend(NotificationStore, {
         var notification = this.notifications.get(id);
         if(notification == undefined) break;
 
+        notification.url = constants.apiurl + '/notifications/' + notification.get('_id');
         notification.destroy();
         this.trigger(NOTIFICATION.CHANGE_ALL);
-
         break;
 
       case NOTIFICATION.READ:
@@ -167,13 +166,12 @@ _.extend(NotificationStore, {
         break;
 
       case NOTIFICATION.DISMISS_ALL:
-
         this.notifications.forEach(function(notification) {
           notification.destroy();
         });
         this.trigger(NOTIFICATION.CHANGE_ALL);
-
         break;
+
       case NOTIFICATION.REGISTER:
         var token = payload.token;
         var user_id = payload.user_id;
