@@ -29,17 +29,17 @@ var NotificationView = React.createClass({
   render: function() {
     return (
       <View style={{ flex: 1 }}>
-      <View style={ styles.topBarContainer }>
-        <View style={{
-          height: constants.getStatusBarHeight(),
-          backgroundColor: '#2CB673'
-        }}/>
-        <View style={ styles.topBar }>
-          <Text style={ styles.title }>
-            Notifications
-          </Text>
+        <View style={ styles.topBarContainer }>
+          <View style={{
+            height: constants.getStatusBarHeight(),
+            backgroundColor: '#2CB673'
+          }}/>
+          <View style={ styles.topBar }>
+            <Text style={ styles.title }>
+              Notifications
+            </Text>
+          </View>
         </View>
-      </View>
         <NotificationList
           { ...this.props }
         />

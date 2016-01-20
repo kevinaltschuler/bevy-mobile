@@ -18,7 +18,8 @@ var routes = {
     NEWTHREAD: { name: 'NewThread' },
     THREADSETTINGS: { name: 'ThreadSettings' },
     ADDUSER: { name: 'AddUser' }, // FOR ANDROID
-    INVITEUSERS: { name: 'InviteUsers'}
+    INVITEUSERS: { name: 'InviteUsers'},
+    WEBVIEW: { name: 'WebView' }
   },
 
   NEWPOST: {

@@ -19,6 +19,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
+var routes = require('./../../../routes');
+
 var PostLinkItem = React.createClass({
   propTypes: {
     link: React.PropTypes.string,
@@ -26,7 +28,9 @@ var PostLinkItem = React.createClass({
   },
 
   onPress() {
-
+    var route = routes.MAIN.WEBVIEW;
+    route.initialURL = this.props.link;
+    this.props.mainNavigator.push(route);
   },
 
   render() {
