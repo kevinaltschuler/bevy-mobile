@@ -161,7 +161,8 @@ _.extend(NotificationStore, {
         }
         notification.read = true;
         this.unread -= 1;
-        notification.save({read: true}, {patch: true});
+        notification.url = constants.apiurl + '/notifications/' + notification.get('_id');
+        notification.save({ read: true }, { patch: true });
         this.trigger(NOTIFICATION.CHANGE_ALL);
         break;
 
