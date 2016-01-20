@@ -78,7 +78,6 @@ var Browser = React.createClass({
   },
 
   onNavigate(ev) {
-    console.log('navigate', ev);
     this.setState({
       canGoBack: ev.canGoBack,
       canGoForward: ev.canGoForward,

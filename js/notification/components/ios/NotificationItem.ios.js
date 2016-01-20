@@ -13,6 +13,7 @@ var {
   Text,
   View,
   Image,
+  AlertIOS,
   TouchableHighlight,
   TouchableOpacity
 } = React;
@@ -49,9 +50,17 @@ var NotificationItem = React.createClass({
       fetch(constants.apiurl + '/posts/' + post_id)
       .then(res => res.json())
       .then(res => {
+        if(!_.isObject(res)) {
+          // probably just got an error fetching the post
+          AlertIOS.alert('Post not found');
+          return;
+        }
         post = res;
         route.post = post;
         this.props.mainNavigator.push(route);
+      })
+      .catch(err => {
+        console.log(err);
       });
     } else {
       route.post = post;
