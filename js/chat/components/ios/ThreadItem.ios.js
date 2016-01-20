@@ -1,7 +1,9 @@
 /**
  * ThreadItem.ios.js
- * kevin made this
- * max is a weiner
+ *
+ * Renders each thread item in the thread list
+ * also handles navigating to the message view
+ *
  * @author kevin
  * @author albert
  * @flow
@@ -110,7 +112,10 @@ var ThreadItem = React.createClass({
                 { this._renderTimeAgo() }
               </Text>
             </View>
-            <Text style={ styles.message }>
+            <Text
+              style={ styles.message }
+              numberOfLines={ 2 }
+            >
               { this._renderLatestMessage() }
             </Text>
           </View>
@@ -161,7 +166,8 @@ var styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    color: '#AAA'
+    color: '#AAA',
+    marginRight: 15
   },
 })
 
