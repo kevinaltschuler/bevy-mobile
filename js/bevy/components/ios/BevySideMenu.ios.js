@@ -139,13 +139,7 @@ var BevySideMenu = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        style={[ styles.newBoardItem, {
-          borderBottomWidth: 1,
-          borderBottomColor: '#666',
-          borderTopWidth: 1,
-          borderTopColor: '#666',
-          height: 70
-        }]}
+        style={ styles.newBoardItem }
         onPress={ this.goToNewBoard }
       >
         <View style={ styles.newBoardItem }>
@@ -172,18 +166,9 @@ var BevySideMenu = React.createClass({
         <View style={{
           height: constants.getStatusBarHeight()
         }}/>
-        <ScrollView style={styles.menuContainer}>
+        <ScrollView style={ styles.menuContainer }>
           <View>
-            <Text style={{
-              color: '#fff', 
-              paddingBottom: 5, 
-              paddingLeft: 10, 
-              alignItems: 'flex-start',
-              justifyContent: 'flex-start',
-              width: constants.width * (4/5),
-              fontWeight: 'bold',
-              fontSize: 20
-            }}>
+            <Text style={ styles.title }>
               Boards
             </Text>
           </View>
@@ -198,7 +183,7 @@ var BevySideMenu = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container:  {
+  container: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#282828',
@@ -209,6 +194,16 @@ var styles = StyleSheet.create({
   },
   menuContainer: {
     width: constants.width * (4/5),
+  },
+  title: {
+    color: '#fff',
+    paddingBottom: 5,
+    paddingLeft: 10,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    width: constants.width * (4/5),
+    fontWeight: 'bold',
+    fontSize: 20
   },
   bevyCard: {
     height: 70,
@@ -252,7 +247,11 @@ var styles = StyleSheet.create({
     height: 68,
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#666',
+    borderTopWidth: 1,
+    borderTopColor: '#666'
   },
   newBoardText: {
     fontSize: 17,
