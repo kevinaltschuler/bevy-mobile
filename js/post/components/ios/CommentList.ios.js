@@ -76,11 +76,15 @@ var CommentItem = React.createClass({
       null,
       [{
         text: 'Save',
-        onPress: this.saveComment
+        onPress: this.saveComment,
+        style: 'cancel'
       }, {
         text: 'Cancel',
+        onPress: () => {},
         style: 'cancel'
-      }]
+      }],
+      'plain-text',
+      this.state.commentBody
     );
   },
 
@@ -288,7 +292,7 @@ var CommentItem = React.createClass({
                   </Text>
                 </View>
               </TouchableOpacity>
-              {/* this._renderEditButton() */}
+              { this._renderEditButton() }
               { this._renderDeleteButton() }
             </View>
           </Collapsible>
