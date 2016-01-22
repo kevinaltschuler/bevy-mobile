@@ -387,6 +387,7 @@ _.extend(ChatStore, {
         var tempBevy = thread.get('bevy');
         var tempUsers = thread.get('users');
 
+        thread.url = constants.apiurl + '/threads/' + thread.get('_id');
         thread.save({
           name: name,
           image: image
