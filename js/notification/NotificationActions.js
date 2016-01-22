@@ -12,6 +12,7 @@ var NOTIFICATION = constants.NOTIFICATION;
 
 var NotificationActions = {
   fetch() {
+    console.log('fetching...');
     Dispatcher.dispatch({
       actionType: NOTIFICATION.FETCH
     });

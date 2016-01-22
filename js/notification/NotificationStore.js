@@ -35,7 +35,7 @@ var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
 window.navigator.__defineGetter__('userAgent', function(){
-    return 'react-native' // customized user agent
+  return 'react-native' // customized user agent
 });
 
 var io = require('socket.io-client/socket.io');
@@ -132,7 +132,7 @@ _.extend(NotificationStore, {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
               (notification) => notification.read == false).length;
-              
+
             this.notifications.sort();
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
