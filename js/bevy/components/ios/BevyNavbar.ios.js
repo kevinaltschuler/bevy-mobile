@@ -154,8 +154,12 @@ var BevyNavbar = React.createClass({
     }
 
     var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
-      ? constants.siteurl + '/img/default_group_img.png'
+      ? null
       : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
+
+    if(bevyImageURL == constants.siteurl + '/img/default_group_img.png') {
+      bevyImageURL = null;
+    }
 
     return (
       <View style={ this.props.styleParent }>
