@@ -126,7 +126,7 @@ var BevyNavbar = React.createClass({
             size={ 18 }
             color='#fff'
           />
-          <Text style={styles.itemText}>
+          <Text style={ styles.itemText }>
             { this.props.activeBevy.subCount + ' '
               + ((this.props.activeBevy.subCount == 1)
               ? 'Subscriber' : 'Subscribers') }
@@ -138,7 +138,7 @@ var BevyNavbar = React.createClass({
             size={ 18 }
             color='#fff'
           />
-          <Text style={styles.itemText}>
+          <Text style={ styles.itemText }>
             { this.props.activeBevy.admins.length + ' '
               + ((this.props.activeBevy.admins.length == 1)
               ? 'Admin' : 'Admins') }
