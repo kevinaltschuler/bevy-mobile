@@ -35,7 +35,7 @@ var Notifications = require('./NotificationCollection');
 
 // polyfill for socket.io
 window.navigator.__defineGetter__('userAgent', function(){
-    return 'react-native' // customized user agent
+  return 'react-native' // customized user agent
 });
 
 var io = require('socket.io-client/socket.io');
@@ -134,7 +134,6 @@ _.extend(NotificationStore, {
               (notification) => notification.read == false).length;
 
             this.notifications.sort();
-
             this.trigger(NOTIFICATION.FETCHED);
             this.trigger(NOTIFICATION.CHANGE_ALL);
           }.bind(this)
@@ -147,9 +146,9 @@ _.extend(NotificationStore, {
         var notification = this.notifications.get(id);
         if(notification == undefined) break;
 
+        notification.url = constants.apiurl + '/notifications/' + notification.get('_id');
         notification.destroy();
         this.trigger(NOTIFICATION.CHANGE_ALL);
-
         break;
 
       case NOTIFICATION.READ:
@@ -161,18 +160,18 @@ _.extend(NotificationStore, {
         }
         notification.read = true;
         this.unread -= 1;
-        notification.save({read: true}, {patch: true});
+        notification.url = constants.apiurl + '/notifications/' + notification.get('_id');
+        notification.save({ read: true }, { patch: true });
         this.trigger(NOTIFICATION.CHANGE_ALL);
         break;
 
       case NOTIFICATION.DISMISS_ALL:
-
         this.notifications.forEach(function(notification) {
           notification.destroy();
         });
         this.trigger(NOTIFICATION.CHANGE_ALL);
-
         break;
+
       case NOTIFICATION.REGISTER:
         var token = payload.token;
         var user_id = payload.user_id;

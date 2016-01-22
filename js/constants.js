@@ -144,6 +144,7 @@ exports.BEVY = {
 exports.BOARD = {
   SWITCH: 'board_switch',
   CLEAR: 'board_clear',
+  DESTROY: 'board_destroy',
   LEAVE: 'board_leave',
   JOIN: 'board_join',
   UPDATE: 'board_update',

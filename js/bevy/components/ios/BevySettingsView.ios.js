@@ -1,7 +1,9 @@
 /**
+ * BevySettingsView.ios.js
  * @author albert
  * kevin is a ween
-**/
+ * @flow
+ */
 
 'use strict';
 
@@ -79,7 +81,7 @@ var BevySettingsView = React.createClass({
               )
               : null;
               return (
-                <TouchableHighlight 
+                <TouchableHighlight
                   key={'setting:' + setting.value }
                   underlayColor='rgba(0,0,0,0.1)'
                   style={[ styles.switchContainer ]}

@@ -26,6 +26,7 @@ var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios
 var Loading = require('./Loading.ios.js');
 var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
 var InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
+var Browser = require('./Browser.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -150,6 +151,15 @@ var MainView = React.createClass({
 
       case routes.MAIN.INVITEUSERS.name:
         return <InviteUserView { ...this.props }/>
+        break;
+
+      case routes.MAIN.WEBVIEW.name:
+        return (
+          <Browser
+            initialURL={ this.props.mainRoute.initialURL }
+            { ...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.TABBAR.name:

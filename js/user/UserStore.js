@@ -62,25 +62,24 @@ _.extend(UserStore, {
 
       case USER.LOAD_USER:
         var user = payload.user;
-        if(_.isEmpty(user)) {
-          this.loggedIn = false;
-          break;
-        } else {
-          this.setUser(user);
-          this.loggedIn = true;
-        }
+        this.setUser(user);
+        this.loggedIn = true;
         // check if auth tokens have been passed in from the server
         AsyncStorage.multiGet(['access_token', 'refresh_token', 'expires_in'])
-        .then( response => {
-            var access = response[0][1];
-            var refresh = response[1][1];
-            var expires = response[2][1];
-            if(!_.isEmpty(access) && !_.isEmpty(refresh)) {
+        .then(response => {
+          var access = response[0][1];
+          var refresh = response[1][1];
+          var expires = response[2][1];
+          if(!_.isEmpty(access) && !_.isEmpty(refresh)) {
+            // check if access token has expired
+            if(new Date(expires).getTime() <= Date.now()) {
+              this.refreshTokens();
+            } else {
               this.setTokens(access, refresh, expires);
-              this.trigger(USER.LOADED);
             }
           }
-        );
+        });
+        this.trigger(USER.LOADED);
         break;
 
       case USER.LOGIN:
@@ -391,7 +390,7 @@ _.extend(UserStore, {
         }, {
           patch: true,
           success: function(model, response, options) {
-            console.log(model);
+            //console.log(model);
             this.trigger(CHAT.CHANGE_ALL);
             this.trigger(USER.CHANGE_ALL);
           }.bind(this)
@@ -540,8 +539,43 @@ _.extend(UserStore, {
     this.tokensLoaded = true;
     AsyncStorage.setItem('access_token', accessToken);
     AsyncStorage.setItem('refresh_token', refreshToken);
+    expires_in = Date.now() + expires_in;
     AsyncStorage.setItem('expires_in', expires_in.toString());
     this.trigger(USER.TOKENS_LOADED);
+  },
+
+  refreshTokens() {
+    console.log('refreshing tokens...');
+    AsyncStorage.getItem('refresh_token', token => {
+      if(!token) {
+        this.trigger(USER.LOGIN_ERROR);
+        return;
+      }
+
+      fetch(constants.siteurl + '/token', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          client_id: constants.client_id,
+          client_secret: constants.client_secret,
+          grant_type: 'refresh_token',
+          refresh_token: token
+        })
+      })
+      .then(res => res.json())
+      .then(res => {
+        console.log('got new tokens! setting now...');
+        var accessToken = res.access_token;
+        var refreshToken = res.refresh_token;
+        var expiresIn = res.expiresIn;
+        this.clearTokens();
+        this.setTokens(accessToken, refreshToken, expiresIn);
+      });
+    });
   },
 
   clearTokens() {

@@ -135,7 +135,7 @@ var PostList = React.createClass({
       return <View/>;
     }
     return (
-      <View style={styles.cardContainer}>
+      <View style={ styles.cardContainer }>
         { this._renderBoardCard() }
         <NewPostCard
           user={ this.props.user }
@@ -198,20 +198,22 @@ var PostList = React.createClass({
   _renderPosts() {
     return (
       <ListView
-        ref={(ref) => { this.ListView = ref; }}
+        ref={ ref => { this.ListView = ref; }}
         dataSource={ this.state.dataSource }
         style={ styles.postContainer }
-        onScroll={(data) => {
-          this.props.onScroll(data.nativeEvent.contentOffset.y);
+        onScroll={ ev => {
+          this.props.onScroll(ev.nativeEvent.contentOffset.y);
         }}
-        scrollRenderAheadDistance={100}
+        scrollRenderAheadDistance={ 100 }
         renderHeader={() => {
           return this._renderHeader();
         }}
         renderFooter={() => {
-          return <View>
-            { this._renderNoPosts() }
-          </View>
+          return (
+            <View>
+              { this._renderNoPosts() }
+            </View>
+          );
         }}
         refreshControl={
           <RefreshControl
@@ -262,13 +264,11 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#eee',
-    paddingTop: 1
   },
   spinnerContainer: {
     flexDirection: 'column',
     flex: 1,
     backgroundColor: '#eee',
-    paddingTop: 1,
     alignItems: 'center',
     justifyContent: 'center',
     height: constants.height - 300

@@ -16,6 +16,7 @@ var PostHeader = require('./PostHeader.ios.js');
 var PostFooter = require('./PostFooter.ios.js');
 var PostImage = require('./PostImage.ios.js');
 var PostBody = require('./PostBody.ios.js');
+var PostLinks = require('./PostLinks.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -75,6 +76,10 @@ var Post = React.createClass({
         />
         <PostBody
           post={ this.state.post }
+        />
+        <PostLinks
+          post={ this.state.post }
+          mainNavigator={ this.props.mainNavigator }
         />
         <PostImage
           post={ this.state.post }

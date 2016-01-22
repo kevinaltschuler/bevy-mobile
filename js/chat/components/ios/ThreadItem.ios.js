@@ -1,7 +1,9 @@
 /**
  * ThreadItem.ios.js
- * kevin made this
- * max is a weiner
+ *
+ * Renders each thread item in the thread list
+ * also handles navigating to the message view
+ *
  * @author kevin
  * @author albert
  * @flow
@@ -103,14 +105,20 @@ var ThreadItem = React.createClass({
           />
           <View style={ styles.threadDetails }>
             <View style={ styles.top }>
-              <Text style={ styles.name }>
+              <Text
+                style={ styles.name }
+                numberOfLines={ 1 }
+              >
                 { ChatStore.getThreadName(this.props.thread._id) }
               </Text>
               <Text style={ styles.time }>
                 { this._renderTimeAgo() }
               </Text>
             </View>
-            <Text style={ styles.message }>
+            <Text
+              style={ styles.message }
+              numberOfLines={ 2 }
+            >
               { this._renderLatestMessage() }
             </Text>
           </View>
@@ -152,7 +160,8 @@ var styles = StyleSheet.create({
     flex: 1,
     color: '#282929',
     fontSize: 18,
-    marginBottom: 5
+    marginBottom: 5,
+    marginRight: 8
   },
   time: {
     color: '#AAA',
@@ -161,7 +170,8 @@ var styles = StyleSheet.create({
   },
   message: {
     fontSize: 16,
-    color: '#AAA'
+    color: '#AAA',
+    marginRight: 15
   },
 })
 
