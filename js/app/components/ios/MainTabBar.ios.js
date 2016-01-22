@@ -46,16 +46,6 @@ var MainTabBar = React.createClass({
     };
   },
 
-  componentDidMount() {
-    BevyStore.on(BEVY.NAV_POSTVIEW, this.navPostView);
-  },
-
-  navPostView() {
-    this.setState({
-      selectedTab: tabs.Bevies,
-    });
-  },
-
   switchTab(tabName) {
     this.setState({
       selectedTab: tabs[tabName]
