@@ -104,37 +104,39 @@ var BoardCard = React.createClass({
           style={ styles.boardImage }
         >
           <View style={ styles.imageWrapper }>
-            <View style={styles.boardLeft}>
-              <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', width: constants.width* .8}}>
-                <Text style={ styles.boardTitle }>
-                  { board.name }
-                </Text>
-
-                <View style={ styles.boardDetails }>
-                  <View style={ styles.detailItem }>
-                    <Icon
-                      name={ typeIcon }
-                      size={ 12 }
-                      color='#fff'
-                    />
-                    <Text style={ styles.itemText }>
-                      { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
-                    </Text>
-                  </View>
-                  <View style={ styles.detailItem }>
-                    <Icon
-                      name='person'
-                      size={ 12 }
-                      color='#fff'
-                    />
-                    <Text style={ styles.itemText }>
-                      { board.admins.length } Admins
-                    </Text>
-                  </View>
+            <View style={ styles.boardLeft }>
+              <Text
+                numberOfLines={ 1 }
+                style={ styles.boardTitle }
+              >
+                { board.name }
+              </Text>
+              <View style={ styles.boardDetails }>
+                <View style={ styles.detailItem }>
+                  <Icon
+                    name={ typeIcon }
+                    size={ 12 }
+                    color='#fff'
+                    style={ styles.icon }
+                  />
+                  <Text style={ styles.itemText }>
+                    { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
+                  </Text>
+                </View>
+                <View style={ styles.detailItem }>
+                  <Icon
+                    name='person'
+                    size={ 12 }
+                    color='#fff'
+                    style={ styles.icon }
+                  />
+                  <Text style={ styles.itemText }>
+                    { board.admins.length } Admins
+                  </Text>
                 </View>
               </View>
             </View>
-            <View style={styles.boardRight}>
+            <View style={ styles.boardRight }>
               { this._renderSettingsOrInfo() }
             </View>
           </View>
@@ -147,46 +149,37 @@ var BoardCard = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    height: 100,
-    paddingHorizontal: 10,
-    marginTop: 6,
+    height: 60
   },
   boardImage: {
     flex: 1,
-    height: 100,
-    borderRadius: 4,
+    height: 60,
     overflow: 'hidden'
   },
   boardTitle: {
     color: '#fff',
-    paddingLeft: 5,
     fontSize: 18,
     marginBottom: 5,
-    fontWeight: 'bold',
   },
   imageWrapper: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.6)',
-    height: 100,
+    height: 60,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   boardLeft: {
-    justifyContent: 'flex-end',
+    flex: 1,
+    flexDirection: 'column',
     alignItems: 'flex-start',
-    flex: 6,
-    flexWrap: 'wrap',
-    flexDirection: 'column'
+    padding: 10
   },
   boardRight: {
-    width: 35,
-    flex: 1,
+    width: 36,
     alignItems: 'flex-end'
   },
   boardDetails: {
-    flexDirection: 'row',
-    marginBottom: 5,
-    marginLeft: 5
+    flexDirection: 'row'
   },
   detailItem: {
     flexDirection: 'row',
@@ -195,11 +188,13 @@ var styles = StyleSheet.create({
   },
   itemText: {
     color: '#fff',
-    marginLeft: 5,
-    fontSize: 12
+    fontSize: 15
   },
   settingButton: {
     marginTop: 10
+  },
+  icon: {
+    marginRight: 6
   }
 });
 

@@ -1,5 +1,5 @@
 /**
- * SearchBar.ios.js
+ * SearchView.ios.js
  * @author albert
  * @author kevin
  * @author ben
@@ -68,6 +68,7 @@ var SearchView = React.createClass({
     BevyStore.on(BEVY.SEARCHING, this.handleSearching);
     BevyStore.on(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
     UserStore.on(USER.SEARCHING, this.onUserSearching);
+
     UserStore.on(USER.SEARCH_ERROR, this.onUserSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onUserSearchComplete);
   },
@@ -75,6 +76,7 @@ var SearchView = React.createClass({
   componentWillUnmount() {
     BevyStore.off(BEVY.SEARCHING, this.handleSearching);
     BevyStore.off(BEVY.SEARCH_COMPLETE, this.handleSearchComplete);
+
     UserStore.off(USER.SEARCHING, this.onUserSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onUserSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onUserSearchComplete);

@@ -25,7 +25,10 @@ var PostBody = React.createClass({
   render() {
     return (
       <View style={ styles.body }>
-        <Text style={ styles.bodyText }>
+        <Text
+          accessible
+          style={ styles.bodyText }
+        >
           { this.props.post.title }
         </Text>
       </View>
