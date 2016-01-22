@@ -76,6 +76,9 @@ var Post = React.createClass({
         />
         <PostBody
           post={ this.state.post }
+          expandText={ this.props.inCommentView }
+          mainNavigator={ this.props.mainNavigator }
+          mainRoute={ this.props.mainRoute }
         />
         <PostLinks
           post={ this.state.post }
