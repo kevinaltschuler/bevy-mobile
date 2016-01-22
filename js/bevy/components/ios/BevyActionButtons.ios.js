@@ -1,5 +1,5 @@
 /**
- * BevyUserButtons.ios.js
+ * BevyActionButtons.ios.js
  * @author kevin
  * the actions for a bevy
  * @flow
@@ -83,7 +83,7 @@ var BevyActionButtons = React.createClass({
       options: joinOptions,
       cancelButtonIndex: 1,
     },
-    (buttonIndex) => {
+    buttonIndex => {
       this._handleJoinLeave(buttonIndex);
     });
   },
@@ -103,19 +103,14 @@ var BevyActionButtons = React.createClass({
       return <View/>;
     }
 
+    var joinedText, joinedColor;
     if(this.state.joined) {
-      var joinedText = 'Joined';
-      var joinedColor = '#2cb673';
+      joinedText = 'Joined';
+      joinedColor = '#2CB673';
     } else {
-      if(bevy.settings.privacy == 'Private') {
-        var joinedText = 'Request To Join';
-      }
-      else {
-        var joinedText = 'Join';
-      }
-      var joinedColor = '#aaa'
+      joinedText = 'Join';
+      joinedColor = '#AAA';
     }
-
 
     return (
       <Swiper
@@ -128,17 +123,17 @@ var BevyActionButtons = React.createClass({
           <TouchableOpacity
             style={ styles.actionWrapper }
             onPress={ this.showActionSheet }
-            activeOpacity={0.5}
+            activeOpacity={ 0.5 }
           >
             <View style={ styles.action }>
-                <Icon
-                  name='done'
-                  size={ 24 }
-                  color={ joinedColor }
-                />
-                <Text style={[styles.actionText, { color: joinedColor }]}>
-                  { joinedText }
-                </Text>
+              <Icon
+                name='done'
+                size={ 24 }
+                color={ joinedColor }
+              />
+              <Text style={[ styles.actionText, { color: joinedColor }]}>
+                { joinedText }
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -147,34 +142,34 @@ var BevyActionButtons = React.createClass({
             onPress={ this.inviteUsers }
           >
             <View style={ styles.action }>
-                <Icon
-                  name='person-add'
-                  size={ 24 }
-                  color='#aaa'
-                />
-                <Text style={ styles.actionText }>
-                  Invite
-                </Text>
+              <Icon
+                name='person-add'
+                size={ 24 }
+                color='#aaa'
+              />
+              <Text style={ styles.actionText }>
+                Invite
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={ styles.actionWrapper }
-            activeOpacity={0.5}
+            activeOpacity={ 0.5 }
           >
             <View style={ styles.action }>
-                <Icon
-                  name='search'
-                  size={ 24 }
-                  color='#aaa'
-                />
-                <Text style={ styles.actionText }>
-                  Search
-                </Text>
+              <Icon
+                name='search'
+                size={ 24 }
+                color='#aaa'
+              />
+              <Text style={ styles.actionText }>
+                Search
+              </Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
             style={ styles.actionWrapper }
-            activeOpacity={0.5}
+            activeOpacity={ 0.5 }
             onPress={ this.goToInfoView }
           >
             <View style={ styles.action }>

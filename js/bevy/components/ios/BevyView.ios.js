@@ -96,6 +96,13 @@ var BevyView = React.createClass({
 
   _renderBevyActions() {
     if(!_.isEmpty(this.props.activeBoard)) return <View />;
+    if(!_.isEmpty(this.props.activeBevy)) {
+      if(this.props.activeBevy.settings.privacy == 'Private') {
+        if(!_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+          return <View />;
+        }
+      }
+    }
     return (
       <BevyActionButtons
         bevy={ this.props.activeBevy }
