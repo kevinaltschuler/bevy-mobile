@@ -69,26 +69,26 @@ if(Platform.OS == 'ios') {
 }
 
 exports.APP = {
+  // actions
   LOAD: 'app_load',
   UNLOAD: 'app_unload',
   SWITCH_SEARCH_TYPE: 'app_switch_search_type',
 
+  // events
   CHANGE_ALL: 'app_change_all'
 };
 
 exports.POST = {
+  // actions
   CREATE: 'post_create',
   DESTROY: 'post_destroy',
   VOTE: 'post_vote',
   SORT: 'post_sort',
-  UPDATE_LIST: 'post_update_list',
-  POST_CREATED: 'post_created',
-  REFRESH: 'post_refresh',
   UPDATE: 'post_update',
-
   FETCH: 'post_fetch',
   FETCH_BOARD: 'post_fetch_board',
 
+  POST_CREATED: 'post_created',
   LOADING: 'post_loading',
   LOADED: 'post_loaded',
   CHANGE_ALL: 'post_change_all',
@@ -103,10 +103,10 @@ exports.COMMENT = {
 }
 
 exports.BEVY = {
+  // actions
   CREATE: 'bevy_create',
   DESTROY: 'bevy_destroy',
   UPDATE: 'bevy_update',
-  SET_NOTIFICATION_LEVEL: 'bevy_set_notification_level',
   LEAVE: 'bevy_leave',
   SWITCH: 'bevy_switch',
   INVITE: 'bevy_invite',
@@ -114,34 +114,27 @@ exports.BEVY = {
   SEARCH: 'bevy_search',
   SUBSCRIBE: 'bevy_subscribe',
   UNSUBSCRIBE: 'bevy_unsubscribe',
-  UPDATE_FRONT: 'bevy_updatefront',
-  UPDATE_TAGS: 'bevy_updatetags',
   REQUEST_JOIN: 'bevy_request_join',
-  ADD_TAG: 'bevy_add_tag',
-  REMOVE_TAG: 'bevy_remove_tag',
   ADD_ADMIN: 'bevy_add_admin',
   REMOVE_ADMIN: 'bevy_remove_admin',
-  ADD_RELATED: 'bevy_add_related',
-  REMOVE_RELATED: 'bevy_remove_related',
   JOIN: 'bevy_join',
-
   FETCH: 'bevy_fetch',
   FETCH_PUBLIC: 'bevy_fetch_public',
 
+  // events
   LOADING: 'bevy_loading',
   LOADED: 'bevy_loaded',
-
   SEARCHING: 'bevy_searching',
   SEARCH_COMPLETE: 'bevy_search_complete',
   SEARCH_ERROR: 'bevy_search_error',
   CHANGE_ALL: 'bevy_change_all',
   CHANGE_ONE: 'bevy_change_one',
   SWITCHED: 'bevy_switched',
-  CREATED: 'bevy_created',
-  NAV_POSTVIEW: 'bevy_nav_postview'
+  CREATED: 'bevy_created'
 };
 
 exports.BOARD = {
+  // actions
   SWITCH: 'board_switch',
   CLEAR: 'board_clear',
   DESTROY: 'board_destroy',
@@ -149,7 +142,10 @@ exports.BOARD = {
   JOIN: 'board_join',
   UPDATE: 'board_update',
   CREATE: 'board_create',
-  CREATED: 'board_created'
+
+  // events
+  CREATED: 'board_created',
+  CHANGE_ALL: 'board_change_all'
 };
 
 exports.CHAT = {
@@ -181,19 +177,19 @@ exports.CHAT = {
 };
 
 exports.USER = {
+  // actions
   LOAD_USER: 'user_load_user',
   UPDATE: 'user_update',
   LOGIN: 'user_login',
   LOGIN_GOOGLE: 'user_login_google',
   LOGOUT: 'user_logout',
   CHANGE_PROFILE_PICTURE: 'user_change_profile_picture',
-  SWITCH_USER: 'user_switch_user',
-  LINK_ACCOUNT: 'user_link_account',
-  UNLINK_ACCOUNT: 'user_unlink_account',
   REGISTER: 'user_register',
   RESET_PASSWORD: 'user_reset_password',
   VERIFY_USERNAME: 'user_verify_username',
+  SEARCH: 'user_search',
 
+  // events
   LOGIN_ERROR: 'user_login_error',
   LOGIN_SUCCESS: 'user_login_success',
   RESET_PASSWORD_SUCCESS: 'user_reset_password_success',
@@ -203,16 +199,16 @@ exports.USER = {
   CHANGE_ALL: 'user_change_all',
   LOADED: 'user_loaded',
   TOKENS_LOADED: 'user_tokens_loaded',
-
-  SEARCH: 'user_search',
   SEARCHING: 'user_searching',
   SEARCH_COMPLETE: 'user_search_complete',
   SEARCH_ERROR: 'user_search_error'
 };
 
 exports.FILE = {
+  // actions
   'UPLOAD': 'file_upload',
 
+  // events
   'UPLOAD_COMPLETE': 'file_upload_complete',
   'UPLOAD_ERROR': 'file_upload_error'
 }
@@ -231,6 +227,7 @@ exports.NOTIFICATION = {
 };
 
 exports.INVITE = {
+  // actions
   INVITE_USER: 'invite_invite_user',
   DESTROY: 'invite_destroy',
   ACCEPT_REQUEST: 'invite_accept_request',

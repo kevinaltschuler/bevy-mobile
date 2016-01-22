@@ -16,6 +16,7 @@ var {
 var InputView = require('./InputView.ios.js');
 var CreateEventView = require('./CreateEventView.ios.js');
 var DatePickerView = require('./DatePickerView.ios.js');
+var BoardPickerView = require('./BoardPickerView.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -24,6 +25,7 @@ var constants = require('./../../../constants');
 var NewPostView = React.createClass({
   propTypes: {
     activeBoard: React.PropTypes.object,
+    activeBevy: React.PropTypes.object,
     myBevies: React.PropTypes.array,
     user: React.PropTypes.object,
 
@@ -40,12 +42,22 @@ var NewPostView = React.createClass({
   },
 
   getInitialState() {
+    var board = (_.isEmpty(this.props.activeBoard))
+      ? this.props.activeBevy.boards[0]
+      : this.props.activeBoard;
     return {
+      postingToBoard: board,
       datePicker: false,
       date: new Date(),
       time: new Date(),
       location: '',
     };
+  },
+
+  onBoardSelected(board) {
+    this.setState({
+      postingToBoard: board
+    });
   },
 
   renderScene(route, navigator) {
@@ -80,12 +92,26 @@ var NewPostView = React.createClass({
           />
         );
         break;
+
+      case routes.NEWPOST.BOARDPICKER.name:
+        return (
+          <BoardPickerView
+            newPostRoute={ route }
+            newPostNavigator={ navigator }
+            postingToBoard={ this.state.postingToBoard }
+            onBoardSelected={ this.onBoardSelected }
+            { ...this.props }
+          />
+        );
+        break;
+
       case routes.NEWPOST.INPUT.name:
       default:
         return (
           <InputView
             newPostRoute={ route }
             newPostNavigator={ navigator }
+            postingToBoard={ this.state.postingToBoard }
             { ...this.props }
           />
         );

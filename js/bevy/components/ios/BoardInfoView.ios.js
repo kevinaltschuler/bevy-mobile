@@ -83,7 +83,6 @@ var BoardSettingsView = React.createClass({
       this.DescInput.blur();
     }
     this.props.bevyNavigator.pop();
-    this.setState(this.getInitialState());
   },
 
   showImagePicker() {
@@ -211,7 +210,8 @@ var BoardSettingsView = React.createClass({
   },
 
   _renderImageButton() {
-    var background = (_.isEmpty(this.state.image))
+    var background = (_.isEmpty(this.state.image)
+      || this.state.image.path == constants.siteurl + '/img/default_board_img.png')
     ? (
       <View style={ styles.greyRect } />
     ) : (
@@ -276,7 +276,7 @@ var BoardSettingsView = React.createClass({
           style={ styles.deleteButton }
         >
           <Text style={ styles.deleteButtonText }>
-            Save Changes
+            Delete Board
           </Text>
         </TouchableOpacity>
       </View>
@@ -532,7 +532,6 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
     paddingHorizontal: 15
   },
   deleteButtonText: {

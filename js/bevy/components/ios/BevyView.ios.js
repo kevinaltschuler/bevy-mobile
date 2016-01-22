@@ -130,7 +130,6 @@ var BevyView = React.createClass({
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
           user={ this.props.user }
-          showNewPostCard={ !_.isEmpty(this.props.activeBoard) }
           myBevies={ this.props.myBevies }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }

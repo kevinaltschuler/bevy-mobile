@@ -439,6 +439,8 @@ _.extend(BevyStore, {
           success: function(model, response, options) {
             BevyStore.addBoard(board);
             UserStore.addBoard(board);
+            
+            this.trigger(BOARD.CREATED, board.toJSON());
           }.bind(this)
         });
         break;
@@ -525,7 +527,6 @@ _.extend(BevyStore, {
 
   addBoard(board) {
     this.bevyBoards.add(board);
-    this.trigger(BOARD.CREATED, board.toJSON());
     this.trigger(BEVY.CHANGE_ALL);
   },
 

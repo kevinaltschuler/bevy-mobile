@@ -55,23 +55,22 @@ var BevyView = React.createClass({
   },
 
   componentDidMount() {
-    BevyStore.on(BOARD.CREATED, (board) => {
-      this.closeSideMenu();
-    });
+    BevyStore.on(BOARD.CREATED, this.onBoardCreated);
+  },
+  componentWillUnmount() {
+    BevyStore.off(BOARD.CREATED, this.onBoardCreated);
   },
 
-  componentWillUnmount() {
-    BevyStore.off(BOARD.CREATED);
+  onBoardCreated(board) {
+    this.closeSideMenu();
   },
 
   openSideMenu() {
     this.setState({ sideMenuOpen: true });
   },
-
   closeSideMenu() {
     this.setState({ sideMenuOpen: false });
   },
-
   toggleSideMenu() {
     this.setState({ sideMenuOpen: !this.state.sideMenuOpen });
   },
@@ -79,7 +78,6 @@ var BevyView = React.createClass({
   goBackMain() {
     this.props.mainNavigator.pop();
   },
-
   goBackBevy() {
     this.props.bevyNavigator.pop();
   },

@@ -62,6 +62,9 @@ var hintTexts = [
 
 var InputView = React.createClass({
   propTypes: {
+    newPostNavigator: React.PropTypes.object,
+    newPostRoute: React.PropTypes.object,
+    postingToBoard: React.PropTypes.object,
     user: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
 
@@ -163,6 +166,10 @@ var InputView = React.createClass({
     this.props.mainNavigator.pop();
   },
 
+  goToBoardPickerView() {
+    this.props.newPostNavigator.push(routes.NEWPOST.BOARDPICKER);
+  },
+
   submit() {
     // dont post if text and images are empty
     if(this.state.title.length <= 0 && this.state.images.length <= 0) return;
@@ -179,7 +186,7 @@ var InputView = React.createClass({
         this.state.title,
         (_.isEmpty(this.state.images)) ? [] : this.state.images,
         this.props.user,
-        this.props.activeBoard,
+        this.props.postingToBoard,
         null, // type
         null, // event
       );
@@ -242,23 +249,53 @@ var InputView = React.createClass({
   _renderBoardItem() {
     var board = (this.props.editing)
       ? this.props.post.board
-      : this.props.activeBoard;
+      : this.props.postingToBoard;
 
     var boardImageURL = (_.isEmpty(board.image))
       ? constants.siteurl + '/img/default_group_img.png'
       : resizeImage(board.image, 80, 80).url;
 
-    return (
-      <View style={ styles.boardItemDetails }>
-        <Image
-          source={{ uri: boardImageURL }}
-          style={ styles.boardImage }
-        />
-        <Text style={styles.boardName}>
-          { board.name }
-        </Text>
-      </View>
-    );
+    if(this.props.editing) {
+      return (
+        <View style={ styles.boardItemDetails }>
+          <Image
+            source={{ uri: boardImageURL }}
+            style={ styles.boardImage }
+          />
+          <Text style={styles.boardName}>
+            { board.name }
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          onPress={ this.goToBoardPickerView }
+          activeOpacity={ 0.5 }
+        >
+          <View style={ styles.boardItemDetails }>
+            <Image
+              source={{ uri: boardImageURL }}
+              style={ styles.boardImage }
+            />
+            <Text
+              style={ styles.boardName }
+              numberOfLines={ 2 }
+            >
+              { board.name }
+            </Text>
+            <Icon
+              name='chevron-right'
+              size={ 48 }
+              color='#888'
+              style={{
+                marginLeft: 10
+              }}
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    }
   },
 
   _renderImages() {
