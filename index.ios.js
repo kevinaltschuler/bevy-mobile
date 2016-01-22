@@ -224,17 +224,21 @@ var App = React.createClass({
       this.appOpenedByNotificationTap(launchNotification);
     }
 
-    PushNotificationIOS.addEventListener('notification', this._onNotification);
-
-    AppStateIOS.addEventListener('change', function (new_state) {
+    PushNotificationIOS.addEventListener('notification', function (notification) {
       AlertIOS.alert(
-        'Notification Received',
-        'app state changed',
+        'Notification Opened',
+        JSON.stringify(notification.getData()),
         [{
           text: 'Dismiss',
           onPress: null,
         }]
       );
+      if (AppStateIOS.currentState === 'background') {
+        this.backgroundNotification = notification;
+      }
+    }.bind(this));
+
+    AppStateIOS.addEventListener('change', function (new_state) {
       if (new_state === 'active' && this.backgroundNotification != null) {
         this.appOpenedByNotificationTap(this.backgroundNotification);
         this.backgroundNotification = null;
@@ -285,27 +289,8 @@ var App = React.createClass({
     //console.log(data);
   },
 
-  _onNotification(notification) {
-    console.log('got notification')
-    AlertIOS.alert(
-      'Notification Received',
-      'Alert message: ' + notification.getMessage(),
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
-  },
-
   appOpenedByNotificationTap(notification) {
-        AlertIOS.alert(
-      'Notification Opened',
-      'Alert message: ' + notification.getMessage(),
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
+
   },
 
   render() {
