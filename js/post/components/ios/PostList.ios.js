@@ -34,6 +34,7 @@ var POST = constants.POST;
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostActions = require('./../../../post/PostActions');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var SCROLLVIEW = 'ScrollView';
 var LISTVIEW = 'ListView';
