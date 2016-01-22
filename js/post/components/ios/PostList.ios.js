@@ -13,6 +13,7 @@ var {
   View,
   ListView,
   TouchableHighlight,
+  TouchableOpacity,
   ActivityIndicatorIOS,
   Image,
   RefreshControl
@@ -33,6 +34,7 @@ var POST = constants.POST;
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostActions = require('./../../../post/PostActions');
+var BevyActions = require('./../../../bevy/BevyActions');
 
 var SCROLLVIEW = 'ScrollView';
 var LISTVIEW = 'ListView';
@@ -182,7 +184,8 @@ var PostList = React.createClass({
         <Text style={ styles.privateText }>
           This Bevy is Private
         </Text>
-        <TouchableHighlight
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
           onPress={ this.requestJoin }
         >
           <View style={ styles.requestJoinButton }>
@@ -190,7 +193,7 @@ var PostList = React.createClass({
               Request to Join this Bevy
             </Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   },
@@ -286,14 +289,24 @@ var styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    marginTop: 20,
+    marginTop: 30,
     marginBottom: 15
   },
   privateText: {
     textAlign: 'center',
-    color: '#AAA',
+    color: '#666',
     fontSize: 22,
     marginBottom: 15
+  },
+  requestJoinButton: {
+    backgroundColor: '#2CB673',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 5
+  },
+  requestJoinButtonText: {
+    color: '#FFF',
+    fontSize: 17
   },
 
   noPostsContainer: {
@@ -308,6 +321,6 @@ var styles = StyleSheet.create({
     fontSize: 22,
     marginTop: 0
   }
-})
+});
 
 module.exports = PostList;

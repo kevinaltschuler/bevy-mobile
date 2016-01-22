@@ -72,6 +72,13 @@ var BevyView = React.createClass({
   },
 
   _renderMenuButton() {
+    if(!_.isEmpty(this.props.activeBevy)) {
+      if(this.props.activeBevy.settings.privacy == 'Private') {
+        if(!_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+          return <View />;
+        }
+      }
+    }
     return (
       <TouchableOpacity
         underlayColor={ 0.5 }
@@ -89,6 +96,13 @@ var BevyView = React.createClass({
 
   _renderBevyActions() {
     if(!_.isEmpty(this.props.activeBoard)) return <View />;
+    if(!_.isEmpty(this.props.activeBevy)) {
+      if(this.props.activeBevy.settings.privacy == 'Private') {
+        if(!_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
+          return <View />;
+        }
+      }
+    }
     return (
       <BevyActionButtons
         bevy={ this.props.activeBevy }
@@ -108,6 +122,7 @@ var BevyView = React.createClass({
           left={ this._renderBackButton() }
           center={ this.props.activeBevy.name }
           right={ this._renderMenuButton() }
+          user={ this.props.user }
         />
         { this._renderBevyActions() }
         <PostList
@@ -119,7 +134,7 @@ var BevyView = React.createClass({
           myBevies={ this.props.myBevies }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
-          bevyNavigator={this.props.bevyNavigator}
+          bevyNavigator={ this.props.bevyNavigator }
         />
       </View>
     );

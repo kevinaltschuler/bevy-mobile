@@ -95,31 +95,31 @@ var NotificationItem = React.createClass({
         var post_created = data.post_created;
 
         body = (
-          <View style={ styles.notificationBody }>
-            <TouchableOpacity
-              activeOpacity={ 0.5 }
-              style={ styles.left }
-              onPress={ this.goToPost }
-            >
-              <View style={ styles.row }>
-                <Image
-                  style={ styles.titleImage }
-                  source={{ uri: resizeImage(author_image, 64, 64).url }}
-                />
-                <View style={styles.rightRow}>
-                  <View style={styles.titleTextColumn}>
-                    <Text style={styles.titleText}>
-                      <Text style={{ fontWeight: 'bold' }}>{ author_name }</Text>
-                      {' posted to '}
-                      <Text style={{ fontWeight: 'bold' }}>{ board_name }</Text>
-                      {' - '}
-                      { timeAgo(Date.parse(post_created)) }
-                    </Text>
-                  </View>
-                </View>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={ styles.notificationBody }
+            onPress={ this.goToPost }
+          >
+            <View style={ styles.row }>
+              <Image
+                style={ styles.image }
+                source={{ uri: resizeImage(author_image, 64, 64).url }}
+              />
+              <View style={ styles.textContainer }>
+                <Text
+                  style={ styles.bodyText }
+                  numberOfLines={ 2 }
+                >
+                  <Text style={ styles.bold }>{ author_name }</Text>
+                  {' posted to '}
+                  <Text style={ styles.bold }>{ board_name }</Text>
+                </Text>
+                <Text style={ styles.timeAgoText }>
+                  { timeAgo(Date.parse(post_created)) }
+                </Text>
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         );
         break;
 
@@ -132,33 +132,35 @@ var NotificationItem = React.createClass({
         var comment_created = data.comment_created;
 
         body = (
-          <View style={ styles.notificationBody }>
-            <TouchableOpacity
-              activeOpacity={ 0.5 }
-              style={ styles.left }
-              onPress={ this.goToPost }
-            >
-              <View style={ styles.row }>
-                <Image
-                  style={ styles.titleImage }
-                  source={{ uri: resizeImage(author_image, 64, 64).url }}
-                />
-                <View style={styles.rightRow}>
-                  <View style={styles.titleTextColumn}>
-                    <Text style={styles.titleText}>
-                      <Text style={{ fontWeight: 'bold' }}>
-                        { author_name }
-                      </Text>
-                      {' replied to your post In '};
-                      <Text style={{ fontWeight: 'bold' }}>
-                        { board_name }
-                      </Text>
-                    </Text>
-                  </View>
-                </View>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={ styles.notificationBody }
+            onPress={ this.goToPost }
+          >
+            <View style={ styles.row }>
+              <Image
+                style={ styles.image }
+                source={{ uri: resizeImage(author_image, 64, 64).url }}
+              />
+              <View style={ styles.textContainer }>
+                <Text
+                  style={ styles.bodyText }
+                  numberOfLines={ 2 }
+                >
+                  <Text style={ styles.bold }>
+                    { author_name }
+                  </Text>
+                  {' replied to your post In '};
+                  <Text style={ styles.bold }>
+                    { board_name }
+                  </Text>
+                </Text>
+                <Text style={ styles.timeAgoText }>
+                  { timeAgo(Date.parse(comment_created)) }
+                </Text>
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         );
         break;
 
@@ -170,31 +172,35 @@ var NotificationItem = React.createClass({
         var comment_created = data.comment_created;
 
         body = (
-          <View style={ styles.notificationBody }>
-            <TouchableOpacity
-              activeOpacity={ 0.5 }
-              style={ styles.left }
-              onPress={ this.goToPost }
-            >
-              <View style={ styles.row }>
-                <Image
-                  style={ styles.titleImage }
-                  source={{ uri: resizeImage(author_image, 64, 64).url }}
-                />
-                <View style={styles.rightRow}>
-                  <View style={styles.titleTextColumn}>
-                    <Text style={styles.titleText}>
-                      { author_name }
-                      {' replied to your comment In '}
-                      <Text style={{ fontWeight: 'bold' }}>
-                        { board_name }
-                      </Text>
-                    </Text>
-                  </View>
-                </View>
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={ styles.notificationBody }
+            onPress={ this.goToPost }
+          >
+            <View style={ styles.row }>
+              <Image
+                style={ styles.image }
+                source={{ uri: resizeImage(author_image, 64, 64).url }}
+              />
+              <View style={ styles.textContainer }>
+                <Text
+                  style={ styles.bodyText }
+                  numberOfLines={ 2 }
+                >
+                  <Text style={ styles.bold }>
+                    { author_name }
+                  </Text>
+                  {' replied to your comment In '}
+                  <Text style={ styles.bold }>
+                    { board_name }
+                  </Text>
+                </Text>
+                <Text style={ styles.timeAgoText }>
+                  { timeAgo(Date.parse(comment_created)) }
+                </Text>
               </View>
-            </TouchableOpacity>
-          </View>
+            </View>
+          </TouchableOpacity>
         );
         break;
 
@@ -216,7 +222,7 @@ var NotificationItem = React.createClass({
 });
 
 var styles = StyleSheet.create({
-   notificationCard: {
+  notificationCard: {
 		flex: 1,
 		flexDirection: 'row',
 		backgroundColor: 'white',
@@ -234,58 +240,39 @@ var styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     flex: 1,
+    paddingHorizontal: 10
   },
-  titleImage: {
+  image: {
     width: 60,
     height: 60,
     backgroundColor: '#eee',
     borderRadius: 30,
     marginVertical: 10
   },
-  rightRow: {
-  	flex: 1,
-  	flexDirection: 'row',
-  	justifyContent: 'space-between',
-  },
-  titleTextColumn: {
+  textContainer: {
     flex: 1,
     flexWrap: 'wrap',
     flexDirection: 'column',
     justifyContent: 'center',
     height: 80,
+    paddingVertical: 8,
     marginLeft: 15,
     borderBottomColor: '#eee',
     borderBottomWidth: 1,
     borderStyle: 'solid',
   },
-  titleText: {
+  bodyText: {
     color: '#282929',
     flexWrap: 'wrap',
     fontSize: 17
   },
-  subTitleText: {
+  timeAgoText: {
     fontSize: 15,
-    fontStyle: 'italic',
-    color: '#282929'
+    color: '#666',
+    marginTop: 3
   },
-  left: {
-    flex: 1,
-    paddingLeft: 17
-  },
-  right: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1
-  },
-  dismiss: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 120
-  },
-  textWrapper: {
-    width: 60
+  bold: {
+    fontWeight: 'bold'
   }
 })
 
