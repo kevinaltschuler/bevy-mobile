@@ -458,6 +458,14 @@ _.extend(UserStore, {
     return this.userSearchResults.toJSON();
   },
 
+  addBoard(board) {
+    var boards = this.user.get('boards');
+    boards.push(board._id);
+    this.user.set('boards', boards);
+    //this.setUser(this.user);
+    this.trigger(USER.CHANGE_ALL);
+  },
+
   login(username, password) {
     fetch(constants.siteurl + '/login', {
       method: 'POST',

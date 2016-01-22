@@ -77,18 +77,12 @@ var BevyNavbar = React.createClass({
     ? ''
     : " > " + this.props.activeBoard.name;
 
-    if(boardName.length > 15) {
-      boardName = boardName.substring(0,15);
-    }
-
     if(typeof this.props.center === 'string') {
       return (
-        <Text style={{
-          textAlign: 'center',
-          fontSize: 17,
-          fontWeight: '500',
-          color: this.props.fontColor
-        }}>
+        <Text
+          style={ styles.titleText }
+          numberOfLines={ 1 }
+        >
           { this.props.center + boardName }
         </Text>
       );
@@ -213,7 +207,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
   center: {
-    flex: 2,
+    flex: 4,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
@@ -258,6 +252,13 @@ var styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#eee',
     marginTop: 0
+  },
+  titleText: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 17,
+    fontWeight: '500',
+    color: '#FFF'
   }
 });
 

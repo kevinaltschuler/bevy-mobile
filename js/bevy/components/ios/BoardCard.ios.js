@@ -83,16 +83,19 @@ var BoardCard = React.createClass({
       return <View/>;
     }
 
-    var image_url = (_.isEmpty(board.image))
-      ? constants.siteurl + '/img/default_board_img.png'
+    var imageURL = (_.isEmpty(board.image))
+      ? null
       : resizeImage(board.image, constants.width, 100).url;
+    if(imageURL == constants.siteurl + '/img/default_board_img.png') {
+      imageURL = null;
+    }
 
     var typeIcon = (board.type == 'announcement') ? 'flag' : 'forum';
 
     return (
       <View style={ styles.container }>
         <Image
-          source={{ uri: image_url }}
+          source={{ uri: imageURL }}
           style={ styles.boardImage }
         >
           <View style={ styles.imageWrapper }>

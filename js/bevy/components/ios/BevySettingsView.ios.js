@@ -22,7 +22,6 @@ var {
 var _ = require('underscore');
 
 var BevySettingsView = React.createClass({
-
   propTypes: {
     activeBevy: React.PropTypes.object,
     setting: React.PropTypes.string

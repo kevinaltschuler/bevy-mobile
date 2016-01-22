@@ -13,6 +13,7 @@ var {
   Text,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
   ScrollView,
   SegmentedControlIOS,
@@ -63,21 +64,16 @@ var NewBoardView = React.createClass({
   },
 
   onBoardCreate(board) {
+    this.setState({ creating: false });
+
     // switch bevies
     BoardActions.switchBoard(board._id);
-    console.log('made it here');
     // navigate back
     this.props.mainNavigator.pop();
-
-    this.setState({
-      creating: false
-    });
   },
 
   onFileUpload(file) {
-    this.setState({
-      boardImage: file
-    });
+    this.setState({ boardImage: file });
   },
 
   goBack() {
@@ -116,7 +112,7 @@ var NewBoardView = React.createClass({
       chooseFromLibraryButtonTitle: 'Choose from Library...',
       returnBase64Image: false,
       returnIsVertical: false
-    }, (response) => {
+    }, response => {
       if (!response.didCancel) {
         FileActions.upload(response.uri);
       } else {
@@ -203,7 +199,7 @@ var NewBoardView = React.createClass({
     ? (
       <Icon
         name='add-a-photo'
-        size={ 30 }
+        size={ 48 }
         color='#ccc'
       />
     ) : (
@@ -215,13 +211,13 @@ var NewBoardView = React.createClass({
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Board Image</Text>
-        <TouchableHighlight
+        <TouchableOpacity
           style={ styles.boardImageButton }
-          underlayColor='rgba(0,0,0,0)'
+          activeOpacity={ 0.5 }
           onPress={ this.showImagePicker }
         >
           { middle }
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   },
@@ -247,30 +243,17 @@ var NewBoardView = React.createClass({
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Board Type</Text>
         <SegmentedControlIOS
-          style={{
-            backgroundColor: '#fff',
-            marginBottom: 10,
-            marginHorizontal: 20
-          }}
-          tintColor='#aaa'
+          style={ styles.typePicker }
+          tintColor='#2CB673'
           values={['Announcement', 'Discussion']}
           selectedIndex={ typeIndex }
-          onValueChange={ev => {
-            this.setState({
-              type: ev.toLowerCase()
-            });
+          onValueChange={ ev => {
+            this.setState({ type: ev.toLowerCase() });
           }}
         />
-        <View
-          style={{
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            paddingHorizontal: 20,
-            marginBottom: 40
-          }}
-        >
-          <Text style={{color: '#888'}}>
-            {typeText}
+        <View style={ styles.typeTextContainer }>
+          <Text style={ styles.typeText }>
+            { typeText }
           </Text>
         </View>
       </View>
@@ -286,8 +269,8 @@ var NewBoardView = React.createClass({
             backgroundColor: '#2CB673'
           }} />
           <View style={ styles.topBar }>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               style={ styles.iconButton }
               onPress={ this.goBack }
             >
@@ -296,21 +279,24 @@ var NewBoardView = React.createClass({
                 size={ 30 }
                 color='#FFF'
               />
-            </TouchableHighlight>
+            </TouchableOpacity>
+            <View style={{
+              width: 27,
+              height: 48
+            }}/>
             <Text style={ styles.title }>
               New Board
             </Text>
-            <TouchableHighlight
-              underlayColor='rgba(0,0,0,0.1)'
-              style={ styles.iconButton }
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
               onPress={ this.createBoard }
             >
-              <Icon
-                name='done'
-                size={ 30 }
-                color='#FFF'
-              />
-            </TouchableHighlight>
+              <View style={ styles.createButton }>
+                <Text style={ styles.createButtonText }>
+                  Create
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <ScrollView>
@@ -357,6 +343,17 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  createButton: {
+    width: 75,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  createButtonText: {
+    fontSize: 17,
+    color: '#FFF'
   },
   loadingView: {
     marginTop: 20,
@@ -424,6 +421,21 @@ var styles = StyleSheet.create({
   },
   section: {
     marginTop: 20
+  },
+  typePicker: {
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    marginHorizontal: 10
+  },
+  typeTextContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    paddingHorizontal: 10,
+    marginBottom: 40
+  },
+  typeText: {
+    color: '#888',
+    fontSize: 17
   }
 });
 
