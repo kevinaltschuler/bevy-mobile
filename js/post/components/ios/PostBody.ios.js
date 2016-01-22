@@ -18,7 +18,7 @@ var {
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var MAX_HEIGHT = 164;
+var MAX_HEIGHT = 150;
 
 var PostBody = React.createClass({
   propTypes: {
@@ -81,17 +81,13 @@ var PostBody = React.createClass({
   },
 
   _renderText() {
-    var textStyle = {};
-    if(this.state.height != 0
-      && this.state.height > MAX_HEIGHT
-      && !this.props.expandText) {
-      textStyle.height = MAX_HEIGHT;
-    };
-
     return (
       <Text
         accessible
-        style={[ styles.bodyText, textStyle ]}
+        style={ styles.bodyText }
+        numberOfLines={(this.props.expandText)
+          ? 9999 // arbitrary huge number
+          : 8 }
       >
         { this.props.post.title }
       </Text>
