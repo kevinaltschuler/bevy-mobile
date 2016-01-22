@@ -58,7 +58,10 @@ var BoardItem = React.createClass({
             style={ styles.boardImage }
           />
           <View style={ styles.boardRight }>
-            <Text style={ styles.boardText }>
+            <Text
+              numberOfLines={ 2 }
+              style={ styles.boardText }
+            >
               { board.name }
             </Text>
             <View style={ styles.boardDetails }>
@@ -98,7 +101,8 @@ var styles = StyleSheet.create({
   boardText: {
     color: '#fff',
     fontSize: 17,
-    marginBottom: 3
+    marginBottom: 3,
+    marginRight: 10
   },
   boardRight: {
     flex: 1,
