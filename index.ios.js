@@ -14,6 +14,7 @@ var {
   AsyncStorage,
   PushNotificationIOS,
   AlertIOS,
+  AppStateIOS
 } = React;
 
 var MainView = require('./js/app/components/ios/MainView.ios.js');
@@ -213,9 +214,26 @@ var App = React.createClass({
       }
     }.bind(this));
 
-    PushNotificationIOS.addEventListener('notification', function(notification){
-     console.log('You have received a new notification!');
-    });
+    // make sure the users device is added to their user object, so they may receive notifications
+    PushNotificationIOS.requestPermissions();
+
+    // the notification user used to open bevy, if they opened with a notification
+    var launchNotification = PushNotificationIOS.popInitialNotification();
+
+    if (launchNotification) {
+      this.appOpenedByNotificationTap(launchNotification);
+    }
+
+    PushNotificationIOS.addEventListener('notification', this._onNotificationReceive);
+
+    AppStateIOS.addEventListener('change', function (new_state) {
+      console.log('changed');
+      console.log(PushNotificationIOS.popInitialNotification());
+      if (new_state === 'active' && this.backgroundNotification != null) {
+        this.appOpenedByNotificationTap(this.backgroundNotification);
+        this.backgroundNotification = null;
+      }
+    }.bind(this));
 
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(BOARD.CHANGE_ALL, this._onBevyChange);
@@ -261,12 +279,21 @@ var App = React.createClass({
     //console.log(data);
   },
 
+  _onNotificationReceive(notification) {
+    AlertIOS.alert('got notification');
+    if (AppStateIOS.currentState === 'background') {
+      this.backgroundNotification = notification;
+    }
+  },
+
+  appOpenedByNotificationTap(notification) {
+    console.log(notification);
+  },
+
   render() {
     var sceneConfig = Navigator.SceneConfigs.FloatFromBottom;
     // disable gestures
     sceneConfig.gestures = null;
-
-    PushNotificationIOS.requestPermissions();
 
     var initialRoute = routes.MAIN.LOADING;
 
