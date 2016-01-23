@@ -127,6 +127,12 @@ var SearchView = React.createClass({
     this.search();
   },
 
+  goToProfileView(user) {
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = user;
+    this.props.mainNavigator.push(route);
+  },
+
   switchTab(tab) {
     var data, index;
     switch(tab) {
@@ -191,6 +197,8 @@ var SearchView = React.createClass({
           <UserSearchItem
             key={ 'usersearchitem' + payload._id }
             user={ payload }
+            showIcon={ false }
+            onSelect={ this.goToProfileView }
           />
         );
         break;

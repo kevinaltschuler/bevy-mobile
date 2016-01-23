@@ -26,7 +26,6 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var POST = constants.POST;
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
-var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
 var routes = require('./../../../routes');
 
 var ProfileView = React.createClass({
@@ -53,11 +52,56 @@ var ProfileView = React.createClass({
     // reset posts
     PostActions.fetch(this.props.activeBevy._id, null);
   },
+
   goToNewThread() {
     var route = routes.MAIN.NEWTHREAD;
     route.defaultUser = this.props.profileUser;
     this.props.mainNavigator.push(route);
+  },
 
+  _renderMessageUserButton() {
+    if(this.props.profileUser._id == this.props.user._id) {
+      return (
+        <View style={{
+          width: 48,
+          height: 48
+        }}/>
+      );
+    }
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        onPress={ this.goToNewThread}
+      >
+        <Icon
+          name='create'
+          size={ 30 }
+          color='#FFF'
+          style={{ marginRight: 10 }}
+        />
+      </TouchableOpacity>
+    );
+  },
+
+  _renderSeparator() {
+    return (
+      <View style={{
+        width: constants.width,
+        height: 1,
+        flexDirection: 'row'
+      }}>
+        <View style={{
+          width: 30 + 36,
+          height: 1,
+          backgroundColor: '#FFF'
+        }}/>
+        <View style={{
+          flex: 1,
+          height: 1,
+          backgroundColor: '#EEE'
+        }}/>
+      </View>
+    );
   },
 
   render() {
@@ -87,23 +131,7 @@ var ProfileView = React.createClass({
             <Text style={ styles.title }>
               { this.props.profileUser.displayName }'s Profile
             </Text>
-            <View style={{
-              width: 48,
-              height: 48
-            }}/>
-
-          {/** message user **/}
-            <TouchableOpacity
-              activeOpacity={ 0.5 }
-              onPress={ this.goToNewThread}
-            >
-              <Icon
-                name='create'
-                size={ 30 }
-                color='#FFF'
-                style={{marginRight: 10}}
-              />
-            </TouchableOpacity>
+            { this._renderMessageUserButton() }
           </View>
         </View>
 
@@ -123,39 +151,57 @@ var ProfileView = React.createClass({
               </View>
             </View>
 
-            <Text style={styles.sectionTitle}>
+            <Text style={ styles.sectionTitle }>
               General
             </Text>
 
-            <View style={styles.generalItem}>
-              <View style={styles.itemInner}>
-                <Text style={styles.generalTitle}>
+            <View style={ styles.generalItem }>
+              <View style={ styles.itemInner }>
+                <Icon
+                  name='thumb-up'
+                  size={ 30 }
+                  color='#AAA'
+                  style={ styles.itemIcon }
+                />
+                <Text style={ styles.generalTitle }>
                   Points
                 </Text>
-                <Text style={styles.generalText}>
-                  {this.props.user.points}
+                <Text style={ styles.generalText }>
+                  { this.props.user.points }
                 </Text>
               </View>
             </View>
-
-            <View style={styles.generalItem}>
-              <View style={styles.itemInner}>
-                <Text style={styles.generalTitle}>
+            { this._renderSeparator() }
+            <View style={ styles.generalItem }>
+              <View style={ styles.itemInner }>
+                <Icon
+                  name='comment'
+                  size={ 30 }
+                  color='#AAA'
+                  style={ styles.itemIcon }
+                />
+                <Text style={ styles.generalTitle }>
                   Comments
                 </Text>
-                <Text style={styles.generalText}>
-                  {this.props.user.commentCount}
+                <Text style={ styles.generalText }>
+                  { this.props.user.commentCount }
                 </Text>
               </View>
             </View>
-
-            <View style={styles.generalItem}>
-              <View style={styles.itemInner}>
-                <Text style={styles.generalTitle}>
+            { this._renderSeparator() }
+            <View style={ styles.generalItem }>
+              <View style={ styles.itemInner }>
+                <Icon
+                  name='description'
+                  size={ 30 }
+                  color='#AAA'
+                  style={ styles.itemIcon }
+                />
+                <Text style={ styles.generalTitle }>
                   Posts
                 </Text>
-                <Text style={styles.generalText}>
-                  {this.props.user.postCount}
+                <Text style={ styles.generalText }>
+                  { this.props.user.postCount }
                 </Text>
               </View>
             </View>
@@ -246,42 +292,41 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 48,
+    height: 60,
     backgroundColor: '#fff',
-    paddingLeft: 20
+    paddingHorizontal: 20
   },
   generalTitle: {
-    color: '#aaa',
-    backgroundColor: '#fff',
+    flex: 1,
+    color: '#444',
+    textAlign: 'left',
     fontSize: 17
   },
   generalText: {
-    color: '#aaa',
+    color: '#666',
     backgroundColor: '#fff',
     fontSize: 17,
-
   },
   itemInner: {
-    height: 48,
+    height: 60,
     width: constants.width,
     backgroundColor: '#fff',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-between',
-    flexDirection: 'row',
-    paddingRight: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    borderStyle: 'solid'
+    flexDirection: 'row'
+  },
+  itemIcon: {
+    marginRight: 20
   },
   sectionTitle: {
-    color: '#666',
+    color: '#AAA',
     fontSize: 17,
     marginLeft: 15,
     marginVertical: 10,
   },
   postsTitle: {
-    color: '#666',
+    color: '#AAA',
     fontSize: 17,
     marginLeft: 15,
     marginTop: 15,
