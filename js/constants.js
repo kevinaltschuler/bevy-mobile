@@ -72,7 +72,6 @@ exports.APP = {
   // actions
   LOAD: 'app_load',
   UNLOAD: 'app_unload',
-  SWITCH_SEARCH_TYPE: 'app_switch_search_type',
 
   // events
   CHANGE_ALL: 'app_change_all'

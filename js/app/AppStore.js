@@ -20,19 +20,10 @@ var APP = constants.APP;
 
 var AppStore = _.extend({}, Backbone.Events);
 _.extend(AppStore, {
-  searchType: 'bevy',
 
   handleDispatch(payload) {
     switch(payload.actionType) {
-      case APP.SWITCH_SEARCH_TYPE:
-        this.searchType = payload.type;
-        this.trigger(APP.CHANGE_ALL);
-        break;
     }
-  },
-
-  getSearchType() {
-    return this.searchType;
   }
 });
 

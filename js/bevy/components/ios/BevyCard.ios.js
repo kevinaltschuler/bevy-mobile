@@ -27,7 +27,8 @@ var BevyActions = require('./../../../bevy/BevyActions');
 
 var BevyCard = React.createClass({
   propTypes: {
-    bevy: React.PropTypes.object
+    bevy: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object
   },
 
   goToBevy() {
