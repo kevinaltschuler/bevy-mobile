@@ -1,5 +1,11 @@
 /**
  * InputView.ios.js
+ *
+ * Entry view where the user creates new posts by entering text
+ * and uploading images
+ * Also doubles as the edit post view, for editing text and
+ * removing images
+ *
  * @author albert
  * @flow
  */
@@ -32,8 +38,6 @@ var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var FILE = constants.FILE;
 var POST = constants.POST;
 
@@ -354,6 +358,10 @@ var InputView = React.createClass({
                 color='#FFF'
               />
             </TouchableOpacity>
+            <View style={{
+              width: 27,
+              height: 48
+            }}/>
             <Text style={ styles.title }>
               {(this.props.editing)
                 ? 'Edit Post'
@@ -361,14 +369,13 @@ var InputView = React.createClass({
             </Text>
             <TouchableOpacity
               activeOpacity={ 0.5 }
-              style={ styles.iconButton }
               onPress={ this.submit }
             >
-              <Icon
-                name='done'
-                size={ 30 }
-                color='#FFF'
-              />
+              <View style={ styles.createButton }>
+                <Text style={ styles.createButtonText }>
+                  Create
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -474,6 +481,17 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  createButton: {
+    width: 75,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  createButtonText: {
+    color: '#FFF',
+    fontSize: 17
   },
   body: {
     flex: 1,
