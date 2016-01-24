@@ -15,7 +15,11 @@ var {
   View,
   StatusBarIOS,
   TabBarIOS,
+  AlertIOS
 } = React;
+
+var _ = require('underscore');
+
 var Icon = require('react-native-vector-icons/Ionicons');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
@@ -29,6 +33,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var NotificationStore = require('./../../../notification/NotificationStore');
 var BevyStore = require('./../../../bevy/BevyStore');
+var PostStore = require('./../../../post/PostStore');
 var BEVY = constants.BEVY;
 
 var tabs = {
@@ -52,6 +57,45 @@ var MainTabBar = React.createClass({
     });
   },
 
+  componentDidMount() {
+    var note = NotificationStore.getInitialNote();
+    if(!_.isEmpty(note)) {
+      // notification for new message
+      if(!_.isEmpty(note.thread)) {
+        this.switchTab('Chat');
+      }
+      // notification for post
+      if(!_.isEmpty(note.post_id)) {
+        var post_id = note.post_id;
+        var route = routes.MAIN.COMMENT;
+        var post = PostStore.getPost(post_id);
+        // if the post isnt already loaded, then load from the server
+        if(_.isEmpty(post)) {
+          fetch(constants.apiurl + '/posts/' + post_id)
+          .then(res => res.json())
+          .then(res => {
+            console.log(res);
+            if(!_.isObject(res) || _.isEmpty(res)) {
+              // probably just got an error fetching the post
+              AlertIOS.alert('Post not found');
+              return;
+            }
+            post = res;
+            console.log(post);
+            route.post = post;
+            this.props.mainNavigator.push(route);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        } else {
+          route.post = post;
+          this.props.mainNavigator.push(route);
+        }
+      }
+    }
+  },
+
   _renderContent() {
 
     var tabBarActions = {
@@ -73,6 +117,7 @@ var MainTabBar = React.createClass({
           <ChatNavigator
             { ...this.props }
             tabBarActions={ tabBarActions }
+            initialThread={this.props.initialThread}
           />
         );
         break;
@@ -103,6 +148,7 @@ var MainTabBar = React.createClass({
   },
 
   render() {
+
     return (
         <TabBarIOS
           tintColor='#2cb673'
