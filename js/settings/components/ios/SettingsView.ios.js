@@ -214,8 +214,10 @@ var SettingsView = React.createClass({
           </View>
         </View>
         <ScrollView
-          style={{ flex: 1 }}
+          ref={ ref => { this.ScrollView = ref; }}
+          style={ styles.body }
           automaticallyAdjustContentInsets={ false }
+          contentContainerStyle={ styles.bodyInner }
           refreshControl={
             <RefreshControl
               refreshing={ this.state.refreshing }
@@ -281,6 +283,13 @@ var styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
     color: '#FFF'
+  },
+  body: {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  bodyInner: {
+    paddingBottom: 60
   },
   settingItemContainer: {
     backgroundColor: '#fff',
