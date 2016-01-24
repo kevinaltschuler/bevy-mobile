@@ -63,7 +63,6 @@ var BevyStore = _.extend({}, Backbone.Events);
 // now add some custom functions
 _.extend(BevyStore, {
   myBevies: new Bevies,
-  publicBevies: new Bevies,
   searchQuery: '',
   searchList: new Bevies,
   active: new Bevy,
@@ -78,41 +77,22 @@ _.extend(BevyStore, {
 
       case APP.LOAD:
         var user = UserStore.getUser();
+        // explicitly set the collection url for the user
+        this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
 
-        if(!_.isEmpty(user._id)) {
-          // explicitly set the collection url for the user
-          this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
-
-          // trigger loading event
-          this.trigger(BEVY.LOADING);
-
-          this.myBevies.fetch({
-            reset: true,
-            success: function(bevies, response, options) {
-              this.myBevies.sort();
-
-              // trigger finished events
-              this.trigger(BEVY.CHANGE_ALL);
-              this.trigger(BEVY.LOADED);
-            }.bind(this)
-          });
-        } else {
-
-        }
-        // load public bevies
-        this.publicBevies.url = constants.apiurl + '/bevies';
         // trigger loading event
         this.trigger(BEVY.LOADING);
 
-        this.publicBevies.fetch({
+        this.myBevies.fetch({
           reset: true,
           success: function(bevies, response, options) {
+            this.myBevies.sort();
+
+            // trigger finished events
             this.trigger(BEVY.CHANGE_ALL);
             this.trigger(BEVY.LOADED);
           }.bind(this)
         });
-        // trigger immediately anyways
-        this.trigger(BEVY.CHANGE_ALL);
         break;
 
       case BEVY.FETCH:
@@ -343,15 +323,11 @@ _.extend(BevyStore, {
         this.searchList.reset();
         this.trigger(BEVY.SEARCHING);
 
-        if(_.isEmpty(query)) {
-          // if theres no query
-          // then just return public bevies
-          this.searchList.reset(this.publicBevies.models);
-          this.trigger(BEVY.SEARCH_COMPLETE);
-          break;
-        }
-
-        this.searchList.url = constants.apiurl + '/bevies/search/' + query;
+        if(_.isEmpty(query))
+          this.searchList.url = constants.apiurl + '/bevies';
+        else
+          this.searchList.url = constants.apiurl + '/bevies/search/' + query;
+        
         this.searchList.fetch({
           reset: true,
           success: function(collection, response, options) {
@@ -439,7 +415,7 @@ _.extend(BevyStore, {
           success: function(model, response, options) {
             BevyStore.addBoard(board);
             UserStore.addBoard(board);
-            
+
             this.trigger(BOARD.CREATED, board.toJSON());
           }.bind(this)
         });
@@ -544,15 +520,8 @@ _.extend(BevyStore, {
     return this.activeTags;
   },
 
-  getPublicBevies() {
-    if(this.publicBevies == undefined) return [];
-    return this.publicBevies.toJSON();
-  },
-
   getSearchList() {
-    return (_.isEmpty(this.searchQuery))
-      ? this.publicBevies.toJSON()
-      : this.searchList.toJSON();
+    return this.searchList.toJSON();
   },
 
   getSearchQuery() {

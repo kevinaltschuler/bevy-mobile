@@ -169,7 +169,6 @@ var App = React.createClass({
     return {
       myBevies: BevyStore.getMyBevies(),
       activeBevy: BevyStore.getActive(),
-      publicBevies: BevyStore.getPublicBevies(),
       bevyBoards: BevyStore.getBevyBoards(),
       activeBoard: BevyStore.getActiveBoard(),
       bevyInvites: BevyStore.getBevyInvites()

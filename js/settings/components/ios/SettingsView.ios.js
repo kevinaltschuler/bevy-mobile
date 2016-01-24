@@ -1,5 +1,10 @@
 /**
  * SettingsView.ios.js
+ *
+ * Settings view for the app
+ * Shows the logged in user and lets the user change their
+ * profile. Also has some other miscellaneous options
+ *
  * @author albert
  * @flow
  */
@@ -87,6 +92,10 @@ var SettingsView = React.createClass({
         console.log('Cancel');
       }
     });
+  },
+
+  submitFeedback() {
+    this.props.mainNavigator.push(routes.MAIN.FEEDBACK);
   },
 
   _renderSeparator() {
@@ -209,6 +218,17 @@ var SettingsView = React.createClass({
               />
             }
           />
+          <SettingsItem
+            title='Submit Feedback'
+            icon={
+              <Icon
+                name='feedback'
+                size={ 36 }
+                color='rgba(0,0,0,0.3)'
+              />
+            }
+            onPress={ this.submitFeedback }
+          />
         </ScrollView>
       </View>
     );
@@ -271,11 +291,11 @@ var styles = StyleSheet.create({
   },
   profileName: {
     color: '#000',
-    fontSize: 17
+    fontSize: 19
   },
   profileEmail: {
     color: '#888',
-    fontSize: 15
+    fontSize: 17
   },
   settingsTitle: {
     color: '#888',
