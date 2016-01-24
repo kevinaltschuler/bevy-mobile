@@ -52,7 +52,7 @@ var SearchView = React.createClass({
   },
 
   getInitialState() {
-    var bevies = BevyStore.getPublicBevies();
+    var bevies = BevyStore.getSearchList();
     var users = UserStore.getUserSearchResults();
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     return {
@@ -60,7 +60,7 @@ var SearchView = React.createClass({
       users: users,
       bevies: bevies,
       query: '',
-      fetching: false,
+      fetching: true,
       activeTab: 0,
       keyboardSpace: 0
     };
@@ -76,6 +76,8 @@ var SearchView = React.createClass({
 
     DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
     DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+
+    setTimeout(this.search, 500);
   },
 
   componentWillUnmount() {
