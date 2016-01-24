@@ -219,6 +219,8 @@ exports.NOTIFICATION = {
   DISMISS_ALL: 'notification_dismiss_all',
   REGISTER: 'notification_register',
   FETCH: 'notification_fetch',
+  SET_INITIAL: 'notification_set_initial',
+  CLEAR_INITIAL: 'notification_clear_initial',
 
   // events
   CHANGE_ALL: 'notification_change_all',

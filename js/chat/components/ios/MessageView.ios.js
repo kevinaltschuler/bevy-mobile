@@ -84,6 +84,10 @@ var MessageView = React.createClass({
       ds: this.state.ds.cloneWithRows(messages)
     });
     //setTimeout(this.onRefresh, 250);
+    if(!_.isEmpty(nextProps.initialThread)) {
+      //ChatActions.switchThread(nextProps.initialThread._id);
+      this.props.clearInitialThread();
+    }
   },
 
   keyboardWillShow(frames) {

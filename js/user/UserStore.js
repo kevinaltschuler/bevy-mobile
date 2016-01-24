@@ -543,10 +543,10 @@ _.extend(UserStore, {
     this.expires_in = expires_in;
 
     // and save
-    console.log('tokens set!');
     this.tokensLoaded = true;
     AsyncStorage.setItem('access_token', accessToken);
     AsyncStorage.setItem('refresh_token', refreshToken);
+    console.log('tokens set!');
     expires_in = Date.now() + expires_in;
     AsyncStorage.setItem('expires_in', expires_in.toString());
     this.trigger(USER.TOKENS_LOADED);

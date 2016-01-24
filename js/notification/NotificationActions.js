@@ -41,6 +41,17 @@ var NotificationActions = {
       token: (token == undefined) ? null : token,
       user_id: (user_id == undefined) ? null : user_id,
     });
+  },
+  setInitialNote(note) {
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.SET_INITIAL,
+      note: note
+    })
+  },
+  clearInitialNote() {
+    Dispatcher.dispatch({
+      actionType: NOTIFICATION.CLEAR_INITIAL
+    })
   }
 };
 

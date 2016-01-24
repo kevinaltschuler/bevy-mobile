@@ -37,11 +37,11 @@ var ChatNavigator = React.createClass({
   },
 
   render() {
+
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRoute={ routes.CHAT.THREADLIST }
-        initialRouteStack={[ routes.CHAT.THREADLIST ]}
+        initialRouteStack={[routes.CHAT.THREADLIST]}
         renderScene={(route, navigator) => {
           return (
             <ChatView
@@ -88,6 +88,7 @@ var ChatView = React.createClass({
   },
 
   render() {
+
     switch(this.props.chatRoute.name) {
       case routes.CHAT.THREADLIST.name:
         return (
@@ -101,6 +102,7 @@ var ChatView = React.createClass({
           <MessageView
             { ...this.props }
             threadID={ this.props.chatRoute.threadID }
+            chatRoute={this.props.chatRoute}
           />
         );
         break;

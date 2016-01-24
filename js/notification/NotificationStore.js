@@ -46,6 +46,7 @@ _.extend(NotificationStore, {
   notifications: new Notifications,
   unread: 0,
   ws: null,
+  initialNote: {},
 
   handleDispatch: function(payload) {
     switch(payload.actionType) {
@@ -195,6 +196,13 @@ _.extend(NotificationStore, {
           });
         }
         break;
+      case NOTIFICATION.SET_INITIAL:
+        var note = payload.note.getData();
+        this.initialNote = note;
+        break;
+      case NOTIFICATION.CLEAR_INITIAL:
+        this.initialNote = {};
+        break;
     }
   },
 
@@ -209,7 +217,11 @@ _.extend(NotificationStore, {
 
   getUnread() {
     return this.unread;
-  }
+  },
+
+  getInitialNote() {
+    return this.initialNote;
+  },
 });
 
 if(Platform.OS == 'android') {

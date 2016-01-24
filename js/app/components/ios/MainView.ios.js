@@ -53,7 +53,8 @@ var MainView = React.createClass({
 
   getInitialState() {
     return {
-      route: {}
+      route: {},
+      initialThread: {}
     };
   },
 
@@ -70,7 +71,7 @@ var MainView = React.createClass({
   },
 
   _onLogin() {
-    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
+    
   },
 
   _onLogout() {
@@ -79,6 +80,7 @@ var MainView = React.createClass({
 
   _onTokens() {
     console.log('got the tokens, loading app');
+    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
     AppActions.load();
   },
 
@@ -163,7 +165,15 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.TABBAR.name:
-        return <MainTabBar { ...this.props } />
+        return <MainTabBar 
+                  { ...this.props } 
+                  initialThread={this.state.initialThread} 
+                  clearInitialThread={() => {
+                    this.setState({
+                      initialThread: {}
+                    })
+                  }}
+                />
         break;
 
       case routes.MAIN.LOADING.name:

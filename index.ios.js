@@ -213,7 +213,6 @@ var App = React.createClass({
         })
       }
     }.bind(this));
-
     // make sure the users device is added to their user object, so they may receive notifications
     PushNotificationIOS.requestPermissions();
 
@@ -225,14 +224,6 @@ var App = React.createClass({
     }
 
     PushNotificationIOS.addEventListener('notification', function (notification) {
-      AlertIOS.alert(
-        'Notification Opened',
-        JSON.stringify(notification.getData()),
-        [{
-          text: 'Dismiss',
-          onPress: null,
-        }]
-      );
       if (AppStateIOS.currentState === 'background') {
         this.backgroundNotification = notification;
       }
@@ -290,7 +281,7 @@ var App = React.createClass({
   },
 
   appOpenedByNotificationTap(notification) {
-
+    NotificationActions.setInitialNote(notification);
   },
 
   render() {
@@ -298,13 +289,11 @@ var App = React.createClass({
     // disable gestures
     sceneConfig.gestures = null;
 
-    var initialRoute = routes.MAIN.LOADING;
-
     return (
       <View style={{ flex: 1 }}>
         <Navigator
           configureScene={() => sceneConfig }
-          initialRouteStack={[ initialRoute ]}
+          initialRouteStack={[routes.MAIN.LOADING]}
           renderScene={(route, navigator) => {
             switch(route.name) {
               default:
@@ -313,6 +302,12 @@ var App = React.createClass({
                     mainRoute={ route }
                     mainNavigator={ navigator }
                     { ...this.state }
+                    initialNotification={this.state.initialNotification}
+                    clearNoteData={() => {
+                      this.setState({
+                        initalNotification: {}
+                      })
+                    }}
                   />
                 )
                 break;

@@ -16,6 +16,7 @@ var Thread = require('./ThreadModel');
 
 var constants = require('./../constants');
 var UserStore = require('./../user/UserStore');
+var NotificationStore = require('./../notification/NotificationStore');
 var user = UserStore.getUser();
 var APP = constants.APP;
 var CHAT = constants.CHAT;
@@ -51,6 +52,23 @@ _.extend(ChatStore, {
             this.threads.sort();
             this.trigger(CHAT.THREADS_FETCHED);
             this.trigger(CHAT.CHANGE_ALL);
+
+            var note = NotificationStore.getInitialNote();
+            if(!_.isEmpty(note)) {
+              if(!_.isEmpty(note.thread)) {
+                this.active = note.thread._id;                
+                this.trigger(CHAT.CHANGE_ALL);
+                this.trigger(CHAT.SWITCH_TO_THREAD, note.thread._id);
+                var thread = this.threads.get(this.active);
+                thread.messages.fetch({
+                  remove: false,
+                  success: function(collection, response, options) {
+                    thread.messages.sort();
+                    this.trigger(CHAT.MESSAGES_FETCHED);
+                  }.bind(this)
+                });
+              }
+            }
           }.bind(this)
         });
         // check for launched intent of chat message
