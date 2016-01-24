@@ -12,6 +12,7 @@ var {
   View,
   Image,
   TouchableOpacity,
+  Animated,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -36,6 +37,34 @@ var BevyView = React.createClass({
     mainNavigator: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
     sideMenuActions: React.PropTypes.object
+  },
+
+  getInitialState() {
+    return {
+      menuButtonRotation: new Animated.Value(0)
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.sideMenuActions.isOpen()) {
+      // close side menu
+      Animated.timing(
+        this.state.menuButtonRotation,
+        {
+          toValue: 1,
+          duration: 500
+        }
+      ).start()
+    } else {
+      // open side menu
+      Animated.timing(
+        this.state.menuButtonRotation,
+        {
+          toValue: 0,
+          duration: 500
+        }
+      ).start()
+    }
   },
 
   goBack() {
@@ -80,17 +109,28 @@ var BevyView = React.createClass({
       }
     }
     return (
-      <TouchableOpacity
-        underlayColor={ 0.5 }
-        style={ styles.sideMenuButton }
-        onPress={ this.toggleSideMenu }
-      >
-        <Icon
-          name='menu'
-          size={ 30 }
-          color='#FFF'
-        />
-      </TouchableOpacity>
+      <Animated.View style={{
+        transform: [{
+          rotate: this.state.menuButtonRotation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [
+              '0deg', '90deg' // 'deg' or 'rad'
+            ]
+          })
+        }]
+      }}>
+        <TouchableOpacity
+          underlayColor={ 0.5 }
+          style={ styles.sideMenuButton }
+          onPress={ this.toggleSideMenu }
+        >
+          <Icon
+            name='menu'
+            size={ 30 }
+            color='#FFF'
+          />
+        </TouchableOpacity>
+      </Animated.View>
     );
   },
 

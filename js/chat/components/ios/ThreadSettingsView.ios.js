@@ -19,19 +19,24 @@ var {
   BackAndroid,
   TouchableOpacity,
   TouchableHighlight,
-  AlertIOS
+  AlertIOS,
+  NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var ThreadImage = require('./ThreadImage.ios.js');
 var PersonItem = require('./PersonItem.ios.js');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatActions = require('./../../../chat/ChatActions');
 var ChatStore = require('./../../../chat/ChatStore');
+var FileActions = require('./../../../file/FileActions');
+var FileStore = require('./../../../file/FileStore');
 var CHAT = constants.CHAT;
+var FILE = constants.FILE;
 
 var ThreadSettingsView = React.createClass({
   propTypes: {
@@ -54,9 +59,11 @@ var ThreadSettingsView = React.createClass({
 
   componentDidMount() {
     ChatStore.on(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
   },
   componentWillUnmount() {
     ChatStore.off(CHAT.SWITCH_TO_THREAD, this.onSwitchToThread);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
   },
 
   onSwitchToThread(thread_id) {
@@ -69,25 +76,51 @@ var ThreadSettingsView = React.createClass({
     ]);
   },
 
+  onUpload(image) {
+    ChatActions.editThread(this.props.activeThread._id, null, image);
+  },
+
   goBack() {
     this.props.chatNavigator.pop();
+  },
+
+  showImagePicker() {
+    UIImagePickerManager.showImagePicker({
+      title: 'Change Profile Picture',
+      cancelButtonTitle: 'Cancel',
+      takePhotoButtonTitle: 'Take Photo...',
+      chooseFromLibraryButtonTitle: 'Choose from Library...',
+      returnBase64Image: false,
+      returnIsVertical: true
+    }, (response) => {
+      if (!response.didCancel) {
+        FileActions.upload(response.uri);
+      } else {
+        console.log('Cancel');
+      }
+    });
   },
 
   editName() {
     AlertIOS.prompt(
       'Edit Thread Name',
-      this.state.threadName,
+      null,
       [{
         text: 'Save',
-        onPress: this.saveName
+        onPress: this.saveName,
+        style: 'default'
       }, {
         text: 'Cancel',
         style: 'cancel'
-      }]
+      }],
+      'plain-text',
+      this.state.threadName,
     );
   },
-  saveName(newName) {
 
+  saveName(newName) {
+    this.setState({ threadName: newName });
+    ChatActions.editThread(this.props.activeThread._id, newName, null);
   },
 
   leaveConversation() {
@@ -202,6 +235,24 @@ var ThreadSettingsView = React.createClass({
     );
   },
 
+  _renderEditPicture() {
+    if(this.props.activeThread.type != 'group')
+      return <View/>;
+    return (
+      <SettingsItem
+        icon={
+          <Icon
+            name='add-a-photo'
+            size={ 30 }
+            color='#AAA'
+          />
+        }
+        onPress={ this.showImagePicker }
+        title='Change Picture'
+      />
+    );
+  },
+
   _renderAddPeople() {
     if(this.props.activeThread.type == 'board') return <View />;
     return (
@@ -301,6 +352,7 @@ var ThreadSettingsView = React.createClass({
           { this._renderName() }
           { this._renderSettingsTitle() }
           { this._renderEditName() }
+          { this._renderEditPicture() }
           { this._renderLeave() }
           { this._renderDelete() }
           { this._renderPeopleTitle() }

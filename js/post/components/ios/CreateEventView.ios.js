@@ -31,8 +31,6 @@ var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var PostActions = require('./../../../post/PostActions');
 var FILE = constants.FILE;
 

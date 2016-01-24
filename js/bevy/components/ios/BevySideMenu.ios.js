@@ -125,10 +125,10 @@ var BevySideMenu = React.createClass({
       var board = boards[key];
       boardViews.push(
         <BoardItem
-          key={'boardItem:' + key}
-          board={board}
-          closeSideMenu={this.closeSideMenu}
-          bevyNavigator={this.props.bevyNavigator}
+          key={ 'boardItem:' + key }
+          board={ board }
+          closeSideMenu={ this.closeSideMenu }
+          bevyNavigator={ this.props.bevyNavigator }
         />
       );
     }
@@ -202,7 +202,6 @@ var styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     width: constants.width * (4/5),
-    fontWeight: 'bold',
     fontSize: 20
   },
   bevyCard: {

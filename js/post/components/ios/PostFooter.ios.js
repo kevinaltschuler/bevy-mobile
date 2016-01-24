@@ -178,7 +178,7 @@ var PostFooter = React.createClass({
           onPress={ this.vote }
         >
           <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-            <Text style={[ styles.pointCountText, {
+            <Text numberOfLines={ 1 } style={[ styles.pointCountText, {
               color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
             }]}>
               { this.state.votes }
@@ -189,7 +189,7 @@ var PostFooter = React.createClass({
               color={ (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)' }
               style={{ marginBottom: 2 }}
             />
-            <Text style={[ styles.buttonText, {
+            <Text numberOfLines={ 1 } style={[ styles.buttonText, {
               color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
             }]}>
               {(this.countVotes() == 1) ? 'Like' : 'Likes' }
@@ -202,7 +202,7 @@ var PostFooter = React.createClass({
           onPress={ this.goToCommentView }
         >
           <View style={[ styles.actionTouchable, { flex: 1 } ]}>
-            <Text style={ styles.commentCountText }>
+            <Text numberOfLines={ 1 } style={ styles.commentCountText }>
               { this.props.post.comments.length }
             </Text>
             <Icon
@@ -211,7 +211,7 @@ var PostFooter = React.createClass({
               color='rgba(0,0,0,.3)'
               style={{ marginTop: 3 }}
             />
-            <Text style={ styles.buttonText }>
+            <Text numberOfLines={ 1 } style={ styles.buttonText }>
               {(this.props.post.comments.length == 1) ? 'Comment' : 'Comments' }
             </Text>
           </View>
@@ -222,7 +222,7 @@ var PostFooter = React.createClass({
           onPress={ this.openActionSheet }
         >
           <Icon
-            name='more-horiz'
+            name='more-vert'
             size={ 24 }
             color='rgba(0,0,0,.3)'
             style={ styles.actionIcon }
@@ -244,12 +244,12 @@ var styles = StyleSheet.create({
   },
   pointCountText: {
     color: '#757d83',
-    fontSize: 17,
+    fontSize: 15,
     marginRight: 6
   },
   commentCountText: {
     color: '#757d83',
-    fontSize: 17,
+    fontSize: 15,
     marginRight: 6
   },
   buttonText: {

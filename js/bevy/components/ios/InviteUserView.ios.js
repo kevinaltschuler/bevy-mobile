@@ -15,14 +15,13 @@ var {
   TouchableOpacity,
   TouchableHighlight,
   StyleSheet,
+  DeviceEventEmitter,
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 var InviteItem = require('./InviteItem.ios.js');
 var Spinner = require('react-native-spinkit');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -59,40 +58,29 @@ var InviteUserView = React.createClass({
     UserStore.on(USER.SEARCHING, this.onSearching);
     UserStore.on(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onSearchComplete);
+
+    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+
     // populate list with random users for now
     UserActions.search('');
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
-
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 48
-      });
-    });
   },
 
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, (frames) => {
+  },
 
-      if (frames.end) {
-        this.setState({keyboardSpace: frames.end.height});
-      } else {
-        this.setState({keyboardSpace: frames.endCoordinates.height});
-      }
-    });
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, (frames) => {
-      this.setState({
-        keyboardSpace: 48
-      });
-    });
+  onKeyboardShow(frames) {
+    if (frames.end) {
+      this.setState({keyboardSpace: frames.end.height});
+    } else {
+      this.setState({keyboardSpace: frames.endCoordinates.height});
+    }
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 48 });
   },
 
   onSearching() {
