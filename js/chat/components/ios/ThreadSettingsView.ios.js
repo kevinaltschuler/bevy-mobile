@@ -266,6 +266,7 @@ var ThreadSettingsView = React.createClass({
         }
         onPress={ this.addPeople }
         title='Add People'
+        showChevron
       />
     );
   },

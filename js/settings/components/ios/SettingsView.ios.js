@@ -92,6 +92,12 @@ var SettingsView = React.createClass({
     UserActions.logOut();
   },
 
+  goToProfileView() {
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = this.props.user;
+    this.props.mainNavigator.push(route);
+  },
+
   showImagePicker() {
     UIImagePickerManager.showImagePicker({
       title: 'Change Profile Picture',
@@ -153,52 +159,6 @@ var SettingsView = React.createClass({
     );
   },
 
-  _renderAccountSettings() {
-    return (
-      <View style={{ flexDirection: 'column' }}>
-        <SettingsItem
-          title='Change Profile Picture'
-          icon={
-            <Icon
-              name='camera-alt'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          }
-          onPress={ this.showImagePicker }
-        />
-        { this._renderSeparator() }
-        <SettingsItem
-          title='View Profile'
-          icon={
-            <Icon
-              name='person'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          }
-          onPress={() => {
-            var route = routes.MAIN.PROFILE;
-            route.profileUser = this.props.user;
-            this.props.mainNavigator.push(route);
-          }}
-        />
-        { this._renderSeparator() }
-        <SettingsItem
-          title='Sign Out'
-          icon= {
-            <Icon
-              name='exit-to-app'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          }
-          onPress={ this.logOut }
-        />
-      </View>
-    );
-  },
-
   render() {
     return (
       <View style={ styles.container }>
@@ -230,7 +190,42 @@ var SettingsView = React.createClass({
           { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>
-          { this._renderAccountSettings() }
+          <SettingsItem
+            title='Change Profile Picture'
+            icon={
+              <Icon
+                name='camera-alt'
+                size={ 36 }
+                color='rgba(0,0,0,.3)'
+              />
+            }
+            onPress={ this.showImagePicker }
+          />
+          { this._renderSeparator() }
+          <SettingsItem
+            title='View Profile'
+            icon={
+              <Icon
+                name='person'
+                size={ 36 }
+                color='rgba(0,0,0,.3)'
+              />
+            }
+            onPress={ this.goToProfileView }
+            showChevron
+          />
+          { this._renderSeparator() }
+          <SettingsItem
+            title='Sign Out'
+            icon= {
+              <Icon
+                name='exit-to-app'
+                size={ 36 }
+                color='rgba(0,0,0,.3)'
+              />
+            }
+            onPress={ this.logOut }
+          />
 
           <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>About</Text>
           <SettingsItem
@@ -252,6 +247,7 @@ var SettingsView = React.createClass({
                 color='rgba(0,0,0,0.3)'
               />
             }
+            showChevron
             onPress={ this.submitFeedback }
           />
         </ScrollView>
