@@ -497,7 +497,26 @@ _.extend(ChatStore, {
   getAll() {
     return this.threads.toJSON();
   },
-
+  getThread(thread_id) {
+    var thread = this.threads.get(thread_id);
+    if(thread == undefined) return null;
+    return thread.toJSON();
+  },
+  getThreadFromUser(user_id) {
+    var user = UserStore.getUser();
+    var thread = this.threads.find($thread => {
+      if($thread.get('type') == 'pm' && $thread.get('users').length == 2) {
+        // is a pm with 2 people
+        var $thread_users = _.pluck($thread.get('users'), '_id');
+        if(_.contains($thread_users, user_id) && _.contains($thread_users, user._id)) {
+          return true;
+        }
+      }
+      return false;
+    });
+    if(thread == undefined) return null;
+    return thread.toJSON();
+  },
   getActive() {
     if(this.active == -1) return {};
     var thread = this.threads.get(this.active);

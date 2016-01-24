@@ -14,6 +14,7 @@ var {
   TextInput,
   TouchableOpacity,
   TouchableHighlight,
+  DeviceEventEmitter,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -21,8 +22,6 @@ var MessageInput = require('./MessageInput.ios.js');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
 var AddedUserItem = require('./../../../user/components/ios/AddedUserItem.ios.js');
 var Spinner = require('react-native-spinkit');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -70,16 +69,13 @@ var NewThreadView = React.createClass({
     // populate list with random users for now
     UserActions.search('');
 
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.onKeyboardShow);
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.onKeyboardHide);
+    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
-
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.onKeyboardShow);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.onKeyboardHide);
   },
 
   onKeyboardShow(frames) {

@@ -74,6 +74,9 @@ var BevyView = React.createClass({
   toggleSideMenu() {
     this.setState({ sideMenuOpen: !this.state.sideMenuOpen });
   },
+  isSideMenuOpen() {
+    return this.state.sideMenuOpen;
+  },
 
   goBackMain() {
     this.props.mainNavigator.pop();
@@ -108,43 +111,12 @@ var BevyView = React.createClass({
     })
   },
 
-  _renderSideMenuButton() {
-    return (
-      <TouchableHighlight
-        underlayColor={'rgba(0,0,0,0.1)'}
-        style={ styles.sideMenuButton }
-        onPress={ this.toggleSideMenu }
-      >
-          <Icon
-            name='menu'
-            size={ 30 }
-            color='#FFF'
-          />
-      </TouchableHighlight>
-    );
-  },
-
-  _renderBackButton(func) {
-    return (
-      <TouchableOpacity
-        activeOpacity={ 0.5 }
-        style={ styles.backButton }
-        onPress={ func }
-      >
-        <Icon
-          name='arrow-back'
-          size={ 30 }
-          color='#FFF'
-        />
-      </TouchableOpacity>
-    );
-  },
-
   render: function() {
     var sideMenuActions = {
       open: this.openSideMenu,
       close: this.closeSideMenu,
-      toggle: this.toggleSideMenu
+      toggle: this.toggleSideMenu,
+      isOpen: this.isSideMenuOpen
     };
 
     var view;

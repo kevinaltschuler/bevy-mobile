@@ -18,6 +18,7 @@ var {
   RefreshControl,
   Image,
   TouchableHighlight,
+  DeviceEventEmitter,
   TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -29,8 +30,6 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var ChatStore = require('./../../../chat/ChatStore');
 var ChatActions = require('./../../../chat/ChatActions');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 var CHAT = constants.CHAT;
 
 var MessageView = React.createClass({
@@ -61,8 +60,8 @@ var MessageView = React.createClass({
 
   componentDidMount() {
     ChatStore.on(CHAT.MESSAGES_FETCHED, this._onChatChange);
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
+    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     setTimeout(() => {
       //this.onRefresh();
@@ -72,8 +71,6 @@ var MessageView = React.createClass({
 
   componentWillUnmount() {
     ChatStore.off(CHAT.MESSAGES_FETCHED, this._onChatChange);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillShowEvent, this.keyboardWillShow);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.keyboardWillHide);
   },
 
   componentWillReceiveProps(nextProps) {

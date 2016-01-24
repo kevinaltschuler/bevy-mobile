@@ -26,6 +26,8 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var POST = constants.POST;
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var ChatStore = require('./../../../chat/ChatStore');
+var ChatActions = require('./../../../chat/ChatActions');
 var routes = require('./../../../routes');
 
 var ProfileView = React.createClass({
@@ -54,9 +56,18 @@ var ProfileView = React.createClass({
   },
 
   goToNewThread() {
-    var route = routes.MAIN.NEWTHREAD;
-    route.defaultUser = this.props.profileUser;
-    this.props.mainNavigator.push(route);
+    // see if a thread between this user and the next exists
+    var thread = ChatStore.getThreadFromUser(this.props.profileUser._id);
+    if(thread) {
+      // if it does
+      ChatActions.switchThread(thread._id);
+      
+    } else {
+      // if it doesn't go to new thread view
+      var route = routes.MAIN.NEWTHREAD;
+      route.defaultUser = this.props.profileUser;
+      this.props.mainNavigator.push(route);
+    }
   },
 
   _renderMessageUserButton() {
