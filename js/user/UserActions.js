@@ -18,6 +18,12 @@ var UserActions = {
     })
   },
 
+  fetch() {
+    Dispatcher.dispatch({
+      actionType: USER.FETCH
+    });
+  },
+
   update() {
     Dispatcher.dispatch({
       actionType: USER.UPDATE

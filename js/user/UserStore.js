@@ -51,7 +51,16 @@ _.extend(UserStore, {
   handleDispatch(payload) {
     switch(payload.actionType) {
       case APP.LOAD:
-        if(!this.loggedIn) break;
+        this.user.url = constants.apiurl + '/users/' + this.user.get('id');
+        this.user.fetch({
+          success: function(model, res, options) {
+            this.setUser(res);
+          }.bind(this)
+        });
+        break;
+
+      case USER.FETCH:
+        this.trigger(USER.LOADING);
         this.user.url = constants.apiurl + '/users/' + this.user.get('id');
         this.user.fetch({
           success: function(model, res, options) {
@@ -523,7 +532,7 @@ _.extend(UserStore, {
       GCM.register();
     }
 
-    this.trigger(USER.LOADED);
+    this.trigger(USER.LOADED, user);
   },
 
   getAccessToken() {

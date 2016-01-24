@@ -19,6 +19,7 @@ var {
   Image,
   TouchableHighlight,
   StyleSheet,
+  RefreshControl,
   NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -32,7 +33,8 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var UserActions = require('./../../../user/UserActions');
-
+var UserStore = require('./../../../user/UserStore');
+var USER = constants.USER;
 var FILE = constants.FILE;
 
 var SettingsView = React.createClass({
@@ -46,31 +48,44 @@ var SettingsView = React.createClass({
     return {
       profilePicture: (_.isEmpty(this.props.user.image))
         ? constants.siteurl + '/img/user-profile-icon.png'
-        : resizeImage(this.props.user.image, 64, 64).url
+        : resizeImage(this.props.user.image, 64, 64).url,
+      refreshing: false,
+      displayName: this.props.user.displayName,
+      email: this.props.user.email
     };
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      profilePicture: (_.isEmpty(nextProps.user.image))
-        ? constants.siteurl + '/img/user-profile-icon.png'
-        : resizeImage(nextProps.user.image, 64, 64).url
-    });
   },
 
   componentDidMount() {
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
+    UserStore.on(USER.LOADING, this.onLoading);
+    UserStore.on(USER.LOADED, this.onLoaded);
   },
 
   componentWillUnmount() {
     FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
+    UserStore.off(USER.LOADING, this.onLoading);
+    UserStore.off(USER.LOADED, this.onLoaded);
   },
 
   onUpload(file) {
-    this.setState({
-      profilePicture: file.path
-    });
+    this.setState({ profilePicture: file.path });
     UserActions.changeProfilePicture(file);
+  },
+
+  onLoading() {
+    this.setState({ refreshing: true });
+  },
+  onLoaded(newUser) {
+    this.setState({
+      refreshing: false,
+      profilePicture: newUser.image.path,
+      displayName: newUser.displayName,
+      email: newUser.email
+    });
+  },
+
+  onRefresh() {
+    UserActions.fetch();
   },
 
   logOut() {
@@ -128,10 +143,10 @@ var SettingsView = React.createClass({
         />
         <View style={ styles.profileDetails }>
           <Text style={ styles.profileName }>
-            { this.props.user.displayName }
+            { this.state.displayName }
           </Text>
           <Text style={ styles.profileEmail }>
-            { this.props.user.email || 'no email' }
+            { this.state.email || 'no email' }
           </Text>
         </View>
       </View>
@@ -201,6 +216,14 @@ var SettingsView = React.createClass({
         <ScrollView
           style={{ flex: 1 }}
           automaticallyAdjustContentInsets={ false }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.refreshing }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         >
           { this._renderUserHeader() }
 

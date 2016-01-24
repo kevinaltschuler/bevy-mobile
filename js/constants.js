@@ -187,6 +187,7 @@ exports.USER = {
   RESET_PASSWORD: 'user_reset_password',
   VERIFY_USERNAME: 'user_verify_username',
   SEARCH: 'user_search',
+  FETCH: 'user_fetch',
 
   // events
   LOGIN_ERROR: 'user_login_error',
@@ -196,6 +197,7 @@ exports.USER = {
   VERIFY_SUCCESS: 'user_verify_success',
   VERIFY_ERROR: 'user_verify_error',
   CHANGE_ALL: 'user_change_all',
+  LOADING: 'user_loading',
   LOADED: 'user_loaded',
   TOKENS_LOADED: 'user_tokens_loaded',
   SEARCHING: 'user_searching',
