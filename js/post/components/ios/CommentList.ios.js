@@ -42,7 +42,8 @@ var CommentItem = React.createClass({
       collapsed: true,
       isCompact: false,
       isAuthor: this.props.comment.author._id == this.props.user._id,
-      commentBody: this.props.comment.body
+      commentBody: this.props.comment.body,
+      deleted: false
     };
   },
 
@@ -110,6 +111,10 @@ var CommentItem = React.createClass({
   },
 
   deleteCommentForSure() {
+    this.setState({
+      deleted: true,
+      collapsed: true
+    });
     CommentActions.destroy(this.props.comment.postId, this.props.comment._id);
   },
 
@@ -133,6 +138,11 @@ var CommentItem = React.createClass({
   },
 
   _renderCommentBody() {
+
+    if(this.state.deleted) {
+      return <View/>;
+    }
+
     var commentStyle = {};
     commentStyle.borderLeftColor =
       (this.props.comment.depth == 0)
@@ -182,7 +192,7 @@ var CommentItem = React.createClass({
           //marginLeft: (this.props.comment.depth == 0)
           //  ? 0
           //  : (this.props.comment.depth - 1) * 3,
-          backgroundColor: (this.state.selected) ? '#eee' : '#fff',
+          backgroundColor: (this.state.collapsed) ? '#fff' : 'rgba(44,182,115,.05)',
           borderLeftColor: (this.props.comment.depth == 0)
             ? 'transparent'
             : colorMap[(this.props.comment.depth - 1) % colorMap.length],
@@ -219,9 +229,11 @@ var CommentItem = React.createClass({
             size={ 30 }
             color='#fff'
           />
-          <Text style={ styles.commentItemActionText }>
-            Edit Comment
-          </Text>
+          <View style={styles.actionRight}>
+            <Text style={ styles.commentItemActionText }>
+              Edit Comment
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -240,9 +252,11 @@ var CommentItem = React.createClass({
             size={ 30 }
             color='#fff'
           />
-          <Text style={ styles.commentItemActionText }>
-            Delete Comment
-          </Text>
+            <View style={styles.actionRight}>
+              <Text style={ styles.commentItemActionText }>
+                Delete Comment
+              </Text>
+            </View>
         </View>
       </TouchableOpacity>
     );
@@ -272,9 +286,11 @@ var CommentItem = React.createClass({
                     size={ 30 }
                     color='#fff'
                   />
-                  <Text style={ styles.commentItemActionText }>
-                    Reply To Comment
-                  </Text>
+                  <View style={styles.actionRight}>
+                    <Text style={ styles.commentItemActionText }>
+                      Reply To Comment
+                    </Text>
+                  </View>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -287,9 +303,11 @@ var CommentItem = React.createClass({
                     size={ 30 }
                     color='#fff'
                   />
-                  <Text style={ styles.commentItemActionText }>
-                    View { this.props.comment.author.displayName }'s Profile
-                  </Text>
+                  <View style={styles.actionRight}>
+                    <Text style={ styles.commentItemActionText }>
+                      View { this.props.comment.author.displayName }'s Profile
+                    </Text>
+                  </View>
                 </View>
               </TouchableOpacity>
               { this._renderEditButton() }
@@ -382,12 +400,22 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingLeft: 10,
   },
   commentItemActionText: {
     fontSize: 15,
     color: '#FFF',
-    marginLeft: 10
+    marginLeft: 0,
+    borderBottomWidth: 1,
+  },
+  actionRight: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,.3)',
+    flex: 1,
+    height: 48,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    marginLeft: 20
   },
   plusIcon: {
     marginRight: 8

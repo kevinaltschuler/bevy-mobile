@@ -67,7 +67,7 @@ var CommentView = React.createClass({
   _onKeyboardShow(ev) {
     var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
     this.setState({
-      keyboardSpace: height
+      keyboardSpace: 250
     });
   },
 
@@ -275,6 +275,8 @@ var CommentView = React.createClass({
   },
 
   render() {
+    console.log(this.props.user);
+    console.log(this.props.post);
     return (
       <View style={ styles.container }>
         <View style={ styles.topBarContainer }>

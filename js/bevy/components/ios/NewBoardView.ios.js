@@ -244,14 +244,26 @@ var NewBoardView = React.createClass({
         <Text style={ styles.sectionTitle }>Board Type</Text>
         <SegmentedControlIOS
           style={ styles.typePicker }
-          tintColor='#2CB673'
+          tintColor='#aaa'
           values={['Announcement', 'Discussion']}
           selectedIndex={ typeIndex }
           onValueChange={ ev => {
             this.setState({ type: ev.toLowerCase() });
           }}
         />
-        <View style={ styles.typeTextContainer }>
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingHorizontal: 20,
+          marginBottom: 40
+        }}>
+          <Icon
+            name={typeIcon}
+            size={30}
+            color='#888'
+            style={{flex: 1, paddingHorizontal: 5}}
+          />
           <Text style={ styles.typeText }>
             { typeText }
           </Text>
@@ -435,7 +447,8 @@ var styles = StyleSheet.create({
   },
   typeText: {
     color: '#888',
-    fontSize: 17
+    fontSize: 17,
+    flex: 6
   }
 });
 

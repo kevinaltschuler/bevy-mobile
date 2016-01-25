@@ -87,14 +87,14 @@ var MessageView = React.createClass({
     }
   },
 
-  keyboardWillShow(frames) {
+  onKeyboardShow(frames) {
     if(frames.end) {
       this.setState({ keyboardSpace: frames.end.height });
     } else {
       this.setState({ keyboardSpace: frames.endCoordinates.height });
     }
   },
-  keyboardWillHide(frames) {
+  onKeyboardHide(frames) {
     this.setState({ keyboardSpace: 48 });
   },
 

@@ -69,13 +69,13 @@ var BevyActionButtons = React.createClass({
   showActionSheet() {
     var bevy = this.props.bevy;
     if(this.state.joined) {
-      var joinOptions = ['Leave', 'Cancel'];
+      var joinOptions = ['Leave Bevy', 'Cancel'];
     } else {
       if(bevy.settings.privacy == 'private') {
        var joinOptions = ['Request To Join', 'Cancel'];
       }
       else {
-        var joinOptions = ['Join', 'Cancel'];
+        var joinOptions = ['Join Bevy', 'Cancel'];
       }
     }
 
@@ -196,10 +196,14 @@ var styles = StyleSheet.create({
     marginTop: -25
   },
   boardActions: {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    height: 51
   },
   slide: {
     flexDirection: 'row',
+    borderBottomWidth: 2,
+    borderBottomColor: '#eee',
+    height: 51
   },
   actionWrapper: {
     flex: 1,
