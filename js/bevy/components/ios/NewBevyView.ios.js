@@ -1,5 +1,8 @@
 /**
- * CreateBevyView.ios.js
+ * NewBevyView.ios.js
+ *
+ * View for creating a new bevy
+ *
  * @author kevin
  * @flow
  */
@@ -36,7 +39,7 @@ var FileActions = require('./../../../file/FileActions');
 var FileStore = require('./../../../file/FileStore');
 var getSlug = require('speakingurl');
 
-var CreateBevyView = React.createClass({
+var NewBevyView = React.createClass({
   propTypes: {
     activeBevy: React.PropTypes.object
   },
@@ -450,4 +453,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = CreateBevyView;
+module.exports = NewBevyView;

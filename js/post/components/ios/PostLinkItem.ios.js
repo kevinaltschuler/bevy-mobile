@@ -45,7 +45,10 @@ var PostLinkItem = React.createClass({
             size={ 36 }
             color='#AAA'
           />
-          <Text style={ styles.linkText }>
+          <Text
+            style={ styles.linkText }
+            numberOfLines={ 1 }
+          >
             { this.props.link }
           </Text>
         </View>
@@ -63,9 +66,10 @@ var styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   linkText: {
+    flex: 1,
     color: '#666',
     fontSize: 17,
-    marginLeft: 10
+    marginHorizontal: 10
   }
 });
 

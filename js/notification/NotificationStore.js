@@ -67,7 +67,8 @@ _.extend(NotificationStore, {
           success: function(collection, response, options) {
             // count all notifications that are unread
             this.unread = this.notifications.filter(
-              (notification) => notification.read == false).length;
+              notification => notification.get('read') == false
+            ).length;
 
             this.notifications.sort()
 
@@ -159,10 +160,10 @@ _.extend(NotificationStore, {
           console.log('note not found');
           break;
         }
-        notification.read = true;
         this.unread -= 1;
         notification.url = constants.apiurl + '/notifications/' + notification.get('_id');
         notification.save({ read: true }, { patch: true });
+        notification.set('read', true);
         this.trigger(NOTIFICATION.CHANGE_ALL);
         break;
 

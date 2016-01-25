@@ -60,7 +60,7 @@ var MessageView = React.createClass({
 
   componentDidMount() {
     ChatStore.on(CHAT.MESSAGES_FETCHED, this._onChatChange);
-    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     setTimeout(() => {

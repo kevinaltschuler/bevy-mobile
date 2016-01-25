@@ -34,13 +34,15 @@ var BevyActionButtons = React.createClass({
 
   getInitialState() {
     return {
-      joined: _.contains(this.props.user.bevies, this.props.bevy._id)
+      joined: _.contains(this.props.user.bevies, this.props.bevy._id),
+      isAdmin: _.findWhere(this.props.bevy.admins, { _id: this.props.user._id }) != undefined
     }
   },
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      joined: _.contains(nextProps.user.bevies, nextProps.bevy._id)
+      joined: _.contains(nextProps.user.bevies, nextProps.bevy._id),
+      isAdmin: _.findWhere(nextProps.bevy.admins, { _id: nextProps.user._id }) != undefined
     });
   },
 
@@ -174,12 +176,12 @@ var BevyActionButtons = React.createClass({
           >
             <View style={ styles.action }>
               <Icon
-                name='more-horiz'
+                name={(this.state.isAdmin) ? 'settings' : 'more-horiz' }
                 size={ 24 }
                 color='#aaa'
               />
               <Text style={ styles.actionText }>
-                Info
+                {(this.state.isAdmin) ? 'Settings' : 'Info' }
               </Text>
             </View>
           </TouchableOpacity>

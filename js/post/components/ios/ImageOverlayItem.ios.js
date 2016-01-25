@@ -98,16 +98,15 @@ var ImageOverlayItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgba(0,0,0,0)',
-    height: constants.height,
+    height: constants.height - 48 - 10 - 10, // top bar plus padding
     width: constants.width,
     flexDirection: 'column',
     shadowColor: '#000',
-    borderRadius: 20,
   },
   image: {
     flex: 1,
     width: constants.width,
-    height: constants.height - 48 - 10 - 10 - 20 // top bar plus padding
+    height: constants.height - 48 - 10 - 10 // top bar plus padding
   },
   loadingContainer: {
     width: constants.width,

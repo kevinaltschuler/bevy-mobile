@@ -52,7 +52,7 @@ var BevyView = React.createClass({
         this.state.menuButtonRotation,
         {
           toValue: 1,
-          duration: 500
+          duration: 300
         }
       ).start()
     } else {
@@ -61,7 +61,7 @@ var BevyView = React.createClass({
         this.state.menuButtonRotation,
         {
           toValue: 0,
-          duration: 500
+          duration: 300
         }
       ).start()
     }

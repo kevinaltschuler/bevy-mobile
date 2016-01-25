@@ -18,7 +18,7 @@ var {
 } = React;
 var BevyNavbar = require('./BevyNavbar.ios.js');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
-var InfoView = require('./InfoView.ios.js');
+var BevyInfoView = require('./BevyInfoView.ios.js');
 var SettingsView = require('./BevySettingsView.ios.js');
 var MyBevies = require('./MyBevies.ios.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -123,7 +123,7 @@ var BevyView = React.createClass({
     switch(this.props.bevyRoute.name) {
       case routes.BEVY.INFO.name:
         view = (
-          <InfoView
+          <BevyInfoView
             { ...this.props }
           />
         );

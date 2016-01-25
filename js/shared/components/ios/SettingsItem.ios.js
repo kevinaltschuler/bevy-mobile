@@ -27,14 +27,21 @@ var SettingsItem = React.createClass({
     checked: React.PropTypes.bool,
     onPress: React.PropTypes.func,
     title: React.PropTypes.string,
-    icon: React.PropTypes.element
+    icon: React.PropTypes.element,
+    showChevron: React.PropTypes.bool,
+    bgColor: React.PropTypes.string,
+    textColor: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
       checked: false,
       onPress: null,
-      title: 'Default Settings Title'
+      title: 'Default Settings Title',
+      icon: null,
+      showChevron: false,
+      bgColor: '#FFF',
+      textColor: '#282828'
     };
   },
 
@@ -62,14 +69,34 @@ var SettingsItem = React.createClass({
     );
   },
 
+  _renderChevron() {
+    if(!this.props.showChevron) return <View />;
+    return (
+      <Icon
+        name='chevron-right'
+        color='#AAA'
+        size={ 35 }
+        style={{ width: 35, height: 35 }}
+      />
+    );
+  },
+
   _renderBody() {
     return (
-      <View style={ styles.settingItem }>
+      <View style={[ styles.settingItem, {
+        backgroundColor: this.props.bgColor
+      }]}>
         { this._renderIcon() }
-        <Text style={ styles.settingTitle }>
+        <Text
+          style={[ styles.settingTitle, {
+            color: this.props.textColor
+          }]}
+          numberOfLines={ 2 }
+        >
           { this.props.title }
         </Text>
         { this._renderCheck() }
+        { this._renderChevron() }
       </View>
     )
   },
@@ -81,7 +108,7 @@ var SettingsItem = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        style={[ styles.settingItemContainer ]}
+        style={ styles.settingItemContainer }
         onPress={ this.onPress }
       >
         { this._renderBody() }
@@ -108,7 +135,6 @@ var styles = StyleSheet.create({
   settingTitle: {
     flex: 1,
     fontSize: 17,
-    color: '#222',
     marginLeft: 15
   },
   settingValue: {

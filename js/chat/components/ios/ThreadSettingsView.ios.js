@@ -1,5 +1,9 @@
 /**
  * ThreadSettingsView.ios.js
+ *
+ * View to edit/view the settings and members of
+ * a chat thread
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -266,6 +270,7 @@ var ThreadSettingsView = React.createClass({
         }
         onPress={ this.addPeople }
         title='Add People'
+        showChevron
       />
     );
   },
@@ -340,7 +345,9 @@ var ThreadSettingsView = React.createClass({
               />
             </TouchableOpacity>
             <Text style={ styles.title }>
-              Chat Settings
+              { (this.props.activeThread.type == 'group')
+                ? 'Group Chat Settings'
+                : 'Chat Settings' }
             </Text>
             <View style={{
               width: 48,
@@ -348,7 +355,10 @@ var ThreadSettingsView = React.createClass({
             }}/>
           </View>
         </View>
-        <ScrollView style={ styles.contentContainer }>
+        <ScrollView
+          style={ styles.body }
+          contentContainerStyle={ styles.bodyInner }
+        >
           { this._renderName() }
           { this._renderSettingsTitle() }
           { this._renderEditName() }
@@ -394,9 +404,11 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  contentContainer: {
-    flex: 1,
-    marginBottom: 48
+  body: {
+    flex: 1
+  },
+  bodyInner: {
+    paddingBottom: 60
   },
   header: {
     height: 80,

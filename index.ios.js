@@ -14,6 +14,7 @@ var {
   AsyncStorage,
   PushNotificationIOS,
   AlertIOS,
+  StyleSheet,
   AppStateIOS
 } = React;
 
@@ -190,7 +191,8 @@ var App = React.createClass({
 
   getNotificationState() {
     return {
-      allNotifications: NotificationStore.getAll()
+      allNotifications: NotificationStore.getAll(),
+      unreadNotes: NotificationStore.getUnread()
     };
   },
 
@@ -289,28 +291,19 @@ var App = React.createClass({
     sceneConfig.gestures = null;
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={ styles.container }>
         <Navigator
           configureScene={() => sceneConfig }
           initialRouteStack={[routes.MAIN.LOADING]}
           renderScene={(route, navigator) => {
-            switch(route.name) {
-              default:
-                return (
-                  <MainView
-                    mainRoute={ route }
-                    mainNavigator={ navigator }
-                    { ...this.state }
-                    initialNotification={this.state.initialNotification}
-                    clearNoteData={() => {
-                      this.setState({
-                        initalNotification: {}
-                      })
-                    }}
-                  />
-                )
-                break;
-            }
+            return (
+              <MainView
+                mainRoute={ route }
+                mainNavigator={ navigator }
+                clearNoteData={() => this.setState({ initalNotification: {} })}
+                { ...this.state }
+              />
+            );
           }}
         />
       </View>
@@ -318,5 +311,10 @@ var App = React.createClass({
   }
 });
 
+var styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
 
 AppRegistry.registerComponent('bevyios', () => App);

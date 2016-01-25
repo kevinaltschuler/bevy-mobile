@@ -133,7 +133,9 @@ var PostList = React.createClass({
   _renderHeader() {
     var bevy = this.props.activeBevy;
     var user = this.props.user;
-    if(_.isEmpty(bevy) || !this.props.showNewPostCard || this.state.loading ) {
+    if(_.isEmpty(bevy)
+      || !this.props.showNewPostCard
+      || this.state.loadingInitial) {
       return <View/>;
     }
     return (

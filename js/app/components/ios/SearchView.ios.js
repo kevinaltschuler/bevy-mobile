@@ -1,5 +1,9 @@
 /**
  * SearchView.ios.js
+ *
+ * View for searching bevies and users
+ * TODO: search for other stuff
+ *
  * @author albert
  * @author kevin
  * @author ben
@@ -29,6 +33,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var BevyCard = require('./../../../bevy/components/ios/BevyCard.ios.js');
 var BevySearchItem = require('./../../../bevy/components/ios/BevySearchItem.ios.js');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
+var Spinner = require('react-native-spinkit');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -60,7 +65,8 @@ var SearchView = React.createClass({
       users: users,
       bevies: bevies,
       query: '',
-      fetching: true,
+      fetching: false,
+      loadingInitial: true,
       activeTab: 0,
       keyboardSpace: 0
     };
@@ -112,6 +118,7 @@ var SearchView = React.createClass({
     var bevies = BevyStore.getSearchList();
     this.setState({
       fetching: false,
+      loadingInitial: false,
       ds: this.state.ds.cloneWithRows(bevies),
       bevies: bevies
     });
@@ -207,7 +214,19 @@ var SearchView = React.createClass({
     }
   },
 
+  renderHeader() {
+    return (
+      <View>
+        { this.renderNoneFound() }
+        { this.renderLoading() }
+      </View>
+    );
+  },
+
   renderNoneFound() {
+    if(this.state.loadingInitial || this.state.fetching) {
+      return <View />;
+    }
     var itemLabel;
     switch(this.state.activeTab) {
       case 0:
@@ -231,6 +250,20 @@ var SearchView = React.createClass({
     return <View />;
   },
 
+  renderLoading() {
+    if(!this.state.loadingInitial) return <View />;
+    return (
+      <View style={ styles.loadingContainer }>
+        <Spinner
+          isVisible={ true }
+          size={ 60 }
+          type={ '9CubeGrid' }
+          color={ '#2cb673' }
+        />
+      </View>
+    );
+  },
+
   render() {
     return (
       <View style={[ styles.container, {
@@ -246,7 +279,7 @@ var SearchView = React.createClass({
         <View style={ styles.searchBox }>
           <Icon
             name='search'
-            size={ 30 }
+            size={ 24 }
             color='#FFF'
             style={ styles.searchIcon }
           />
@@ -287,7 +320,7 @@ var SearchView = React.createClass({
               title='Loading...'
             />
           }
-          renderHeader={ this.renderNoneFound }
+          renderHeader={ this.renderHeader }
           renderRow={ this.renderRow }
         />
       </View>
@@ -312,9 +345,8 @@ var styles = StyleSheet.create({
   searchBox: {
     backgroundColor: 'rgba(255,255,255,.3)',
     flexDirection: 'row',
-    height: 48,
+    height: 36,
     alignItems: 'center',
-    paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 4,
     marginHorizontal: 10,
@@ -365,6 +397,10 @@ var styles = StyleSheet.create({
   noneFoundText: {
     color: '#AAA',
     fontSize: 22,
+    marginVertical: 50
+  },
+  loadingContainer: {
+    flex: 1,
     marginVertical: 50
   }
 });

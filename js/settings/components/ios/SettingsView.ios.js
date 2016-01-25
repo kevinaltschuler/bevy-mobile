@@ -19,6 +19,7 @@ var {
   Image,
   TouchableHighlight,
   StyleSheet,
+  RefreshControl,
   NativeModules
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -32,7 +33,8 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var UserActions = require('./../../../user/UserActions');
-
+var UserStore = require('./../../../user/UserStore');
+var USER = constants.USER;
 var FILE = constants.FILE;
 
 var SettingsView = React.createClass({
@@ -46,35 +48,54 @@ var SettingsView = React.createClass({
     return {
       profilePicture: (_.isEmpty(this.props.user.image))
         ? constants.siteurl + '/img/user-profile-icon.png'
-        : resizeImage(this.props.user.image, 64, 64).url
+        : resizeImage(this.props.user.image, 64, 64).url,
+      refreshing: false,
+      displayName: this.props.user.displayName,
+      email: this.props.user.email
     };
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      profilePicture: (_.isEmpty(nextProps.user.image))
-        ? constants.siteurl + '/img/user-profile-icon.png'
-        : resizeImage(nextProps.user.image, 64, 64).url
-    });
   },
 
   componentDidMount() {
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
+    UserStore.on(USER.LOADING, this.onLoading);
+    UserStore.on(USER.LOADED, this.onLoaded);
   },
 
   componentWillUnmount() {
     FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
+    UserStore.off(USER.LOADING, this.onLoading);
+    UserStore.off(USER.LOADED, this.onLoaded);
   },
 
   onUpload(file) {
-    this.setState({
-      profilePicture: file.path
-    });
+    this.setState({ profilePicture: file.path });
     UserActions.changeProfilePicture(file);
+  },
+
+  onLoading() {
+    this.setState({ refreshing: true });
+  },
+  onLoaded(newUser) {
+    this.setState({
+      refreshing: false,
+      profilePicture: newUser.image.path,
+      displayName: newUser.displayName,
+      email: newUser.email
+    });
+  },
+
+  onRefresh() {
+    UserActions.fetch();
   },
 
   logOut() {
     UserActions.logOut();
+  },
+
+  goToProfileView() {
+    var route = routes.MAIN.PROFILE;
+    route.profileUser = this.props.user;
+    this.props.mainNavigator.push(route);
   },
 
   showImagePicker() {
@@ -128,58 +149,12 @@ var SettingsView = React.createClass({
         />
         <View style={ styles.profileDetails }>
           <Text style={ styles.profileName }>
-            { this.props.user.displayName }
+            { this.state.displayName }
           </Text>
           <Text style={ styles.profileEmail }>
-            { this.props.user.email || 'no email' }
+            { this.state.email || 'no email' }
           </Text>
         </View>
-      </View>
-    );
-  },
-
-  _renderAccountSettings() {
-    return (
-      <View style={{ flexDirection: 'column' }}>
-        <SettingsItem
-          title='Change Profile Picture'
-          icon={
-            <Icon
-              name='camera-alt'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          }
-          onPress={ this.showImagePicker }
-        />
-        { this._renderSeparator() }
-        <SettingsItem
-          title='View Profile'
-          icon={
-            <Icon
-              name='person'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          }
-          onPress={() => {
-            var route = routes.MAIN.PROFILE;
-            route.profileUser = this.props.user;
-            this.props.mainNavigator.push(route);
-          }}
-        />
-        { this._renderSeparator() }
-        <SettingsItem
-          title='Sign Out'
-          icon= {
-            <Icon
-              name='exit-to-app'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          }
-          onPress={ this.logOut }
-        />
       </View>
     );
   },
@@ -199,13 +174,58 @@ var SettingsView = React.createClass({
           </View>
         </View>
         <ScrollView
-          style={{ flex: 1 }}
+          ref={ ref => { this.ScrollView = ref; }}
+          style={ styles.body }
           automaticallyAdjustContentInsets={ false }
+          contentContainerStyle={ styles.bodyInner }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.refreshing }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         >
           { this._renderUserHeader() }
 
           <Text style={ styles.settingsTitle }>Account</Text>
-          { this._renderAccountSettings() }
+          <SettingsItem
+            title='Change Profile Picture'
+            icon={
+              <Icon
+                name='camera-alt'
+                size={ 36 }
+                color='rgba(0,0,0,.3)'
+              />
+            }
+            onPress={ this.showImagePicker }
+          />
+          { this._renderSeparator() }
+          <SettingsItem
+            title='View Profile'
+            icon={
+              <Icon
+                name='person'
+                size={ 36 }
+                color='rgba(0,0,0,.3)'
+              />
+            }
+            onPress={ this.goToProfileView }
+            showChevron
+          />
+          { this._renderSeparator() }
+          <SettingsItem
+            title='Sign Out'
+            icon= {
+              <Icon
+                name='exit-to-app'
+                size={ 36 }
+                color='rgba(0,0,0,.3)'
+              />
+            }
+            onPress={ this.logOut }
+          />
 
           <Text style={[ styles.settingsTitle, { marginTop: 15 } ]}>About</Text>
           <SettingsItem
@@ -227,6 +247,7 @@ var SettingsView = React.createClass({
                 color='rgba(0,0,0,0.3)'
               />
             }
+            showChevron
             onPress={ this.submitFeedback }
           />
         </ScrollView>
@@ -258,6 +279,13 @@ var styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center',
     color: '#FFF'
+  },
+  body: {
+    flex: 1,
+    flexDirection: 'column'
+  },
+  bodyInner: {
+    paddingBottom: 60
   },
   settingItemContainer: {
     backgroundColor: '#fff',

@@ -18,6 +18,13 @@ var UserActions = {
     })
   },
 
+  fetch(user_id) {
+    Dispatcher.dispatch({
+      actionType: USER.FETCH,
+      user_id: (user_id == undefined) ? null : user_id
+    });
+  },
+
   update() {
     Dispatcher.dispatch({
       actionType: USER.UPDATE
