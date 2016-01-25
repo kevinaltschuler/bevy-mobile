@@ -116,6 +116,10 @@ var InviteUserView = React.createClass({
 
   onSearchUserSelect(user) {
     BevyActions.inviteUser(user);
+    var filteredUsers = _.reject(this.state.searchUsers, function($user){ return $user._id == user._id});
+    this.setState({
+      searchUsers: filteredUsers
+    })
   },
 
   onChangeToText(text) {

@@ -125,7 +125,8 @@ var CommentView = React.createClass({
       text, // body
       this.props.user._id, // author id
       this.state.post._id, // post id
-      (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id // parent id
+      (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id, // parent id
+      this.props.post //post object
     );
 
     // optimistic update

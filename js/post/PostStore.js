@@ -358,8 +358,9 @@ _.extend(PostStore, {
         var author_id = payload.author_id;
         var post_id = payload.post_id;
         var parent_id = payload.parent_id;
+        var post_object = payload.post_object;
 
-        var post = this.posts.get(post_id);
+        var post = this.posts.get(post_id) || post_object;
         if(post == undefined) break;
 
         var comment = new Backbone.Model({
