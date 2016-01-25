@@ -38,6 +38,8 @@ var CommentItem = React.createClass({
   },
 
   getInitialState() {
+    console.log(this.props.comment);
+    console.log(this.props.user);
     return {
       collapsed: true,
       isCompact: false,
