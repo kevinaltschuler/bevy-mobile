@@ -1,6 +1,10 @@
 /**
  * InviteUserView.ios.js
+ *
+ * View to invite users to a bevy/board (only bevy for now)
+ *
  * @author kevin
+ * @author albert
  * @flow
  */
 
@@ -16,6 +20,7 @@ var {
   TouchableHighlight,
   StyleSheet,
   DeviceEventEmitter,
+  RefreshControl,
   ScrollView
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -45,11 +50,12 @@ var InviteUserView = React.createClass({
   getInitialState() {
     var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => true });
     return {
-      toInput: '',
+      query: '',
       searching: false,
+      searchingInitial: true,
       searchUsers: [],
       ds: ds.cloneWithRows([]),
-      keyboardSpace: 48
+      keyboardSpace: 0
     };
   },
 
@@ -74,20 +80,17 @@ var InviteUserView = React.createClass({
 
   onKeyboardShow(frames) {
     if (frames.end) {
-      this.setState({keyboardSpace: frames.end.height});
+      this.setState({ keyboardSpace: frames.end.height });
     } else {
-      this.setState({keyboardSpace: frames.endCoordinates.height});
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
     }
   },
   onKeyboardHide(frames) {
-    this.setState({ keyboardSpace: 48 });
+    this.setState({ keyboardSpace: 0 });
   },
 
   onSearching() {
-    console.log('searching');
-    this.setState({
-      searching: true
-    });
+    this.setState({ searching: true });
   },
 
   onSearchError() {
@@ -101,6 +104,7 @@ var InviteUserView = React.createClass({
     var searchUsers = UserStore.getUserSearchResults();
     this.setState({
       searching: false,
+      searchingInitial: false,
       searchUsers: searchUsers,
       ds: this.state.ds.cloneWithRows(searchUsers)
     });
@@ -116,9 +120,7 @@ var InviteUserView = React.createClass({
 
   onChangeToText(text) {
     // update state
-    this.setState({
-      toInput: text
-    });
+    this.setState({ query: text });
     // set search delay
     if(this.searchTimeout != undefined) {
       clearTimeout(this.searchTimeout);
@@ -128,7 +130,7 @@ var InviteUserView = React.createClass({
   },
 
   search() {
-    UserActions.search(this.state.toInput);
+    UserActions.search(this.state.query);
     this.setState({
       searching: true
     });
@@ -151,8 +153,8 @@ var InviteUserView = React.createClass({
       return <View/>;
     }
     return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
+      <View style={ styles.section }>
+        <Text style={ styles.sectionTitle }>
           Pending Invitations
         </Text>
         { users }
@@ -187,14 +189,14 @@ var InviteUserView = React.createClass({
   },
 
   _renderSearchUsers() {
-    if(this.state.searching) {
+    if(this.state.searchingInitial) {
       return (
         <View style={ styles.progressContainer }>
           <Spinner
-            isVisible={true}
-            size={40}
-            type={'Arc'}
-            color={'#2cb673'}
+            isVisible={ true }
+            size={ 40 }
+            type={ '9CubeGrid' }
+            color={ '#2cb673' }
           />
         </View>
       );
@@ -208,6 +210,7 @@ var InviteUserView = React.createClass({
       );
     } else return (
       <ListView
+        ref={ ref => { this.UserList = ref; }}
         style={ styles.userList }
         dataSource={ this.state.ds }
         scrollRenderAheadDistance={ 300 }
@@ -242,43 +245,55 @@ var InviteUserView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
-          <TouchableOpacity
-            activeOpacity={ 0.5 }
-            style={ styles.iconButton }
-            onPress={ this.goBack }
-          >
-            <Icon
-              name='arrow-back'
-              size={ 30 }
-              color='#FFF'
-            />
-          </TouchableOpacity>
-            <Text style={ styles.title }>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableOpacity>
+            <Text
+              style={ styles.title }
+              numberOfLines={ 1 }
+            >
               Invite a user to { bevy.name }
             </Text>
-            <View style={{height: 30, width: 30}}/>
+            <View style={{ height: 48, width: 48 }}/>
           </View>
         </View>
         <ScrollView
-          style={{
-            flex: 1,
-            paddingTop: 15
-          }}
+          style={[ styles.body, {
+            marginBottom: this.state.keyboardSpace
+          }]}
+          automaticallyAdjustContentInsets={ false }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.searching }
+              onRefresh={ this.search }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         >
           { this._renderPendingRequests() }
           { this._renderPendingInvites() }
-          <Text style={styles.sectionTitle}>
-            Search For Users
-          </Text>
-          <View style={ styles.toBar }>
+          <View style={ styles.searchBar }>
+            <Icon
+              name='search'
+              size={ 24 }
+              color='#AAA'
+            />
             <TextInput
-              ref='ToInput'
-              style={ styles.toInput }
-              value={ this.state.toInput }
+              ref={ ref => { this.SearchBar = ref; }}
+              style={ styles.searchInput }
+              value={ this.state.query }
               onChangeText={ this.onChangeToText }
-              placeholder=''
+              placeholder='Search for users'
               placeholderTextColor='#AAA'
-              underlineColorAndroid='#FFF'
             />
           </View>
           { this._renderSearchUsers() }
@@ -309,7 +324,8 @@ var styles = StyleSheet.create({
     flex: 1,
     fontSize: 17,
     textAlign: 'center',
-    color: '#FFF'
+    color: '#FFF',
+    marginHorizontal: 10
   },
   iconButton: {
     width: 48,
@@ -318,25 +334,25 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  toBar: {
+  body: {
+    flex: 1
+  },
+  searchBar: {
     width: constants.width,
+    height: 48,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#DDD',
     flexWrap: 'wrap',
-    paddingTop: 6,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    marginTop: 8
   },
-  toText: {
-    color: '#AAA',
-    marginRight: 10,
-    marginBottom: 6
-  },
-  toInput: {
+  searchInput: {
     flex: 1,
-    height: 36
+    height: 48,
+    marginLeft: 10
   },
   progressContainer: {
     flex: 1,
@@ -356,7 +372,7 @@ var styles = StyleSheet.create({
     paddingVertical: 10,
   },
   sectionTitle: {
-    color: '#888',
+    color: '#AAA',
     fontSize: 15,
     marginLeft: 10,
     marginBottom: 5

@@ -49,7 +49,7 @@ var InviteItem = React.createClass({
           onPress={ this.acceptRequest }
         >
           <View style={ styles.removeButton }>
-            <Text style={{color: '#999'}}> 
+            <Text style={{color: '#999'}}>
               Accept
             </Text>
           </View>
@@ -60,7 +60,7 @@ var InviteItem = React.createClass({
         onPress={ this.cancelInvite }
       >
         <View style={ styles.removeButton }>
-          <Text style={{color: '#999'}}> 
+          <Text style={{color: '#999'}}>
             Cancel
           </Text>
         </View>
@@ -82,15 +82,13 @@ var InviteItem = React.createClass({
 
 var styles = StyleSheet.create({
   addedUser: {
+    flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 8,
     height: 48,
     borderRadius: 0,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 6,
-    marginBottom: 6,
-    flex: 1
+    alignItems: 'center'
   },
   image: {
     width: 40,
