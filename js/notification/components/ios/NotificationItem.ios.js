@@ -47,7 +47,9 @@ var NotificationItem = React.createClass({
     var post = PostStore.getPost(post_id);
     // if the post isnt already loaded, then load from the server
     if(_.isEmpty(post)) {
-      fetch(constants.apiurl + '/posts/' + post_id)
+      fetch(constants.apiurl + '/posts/' + post_id, {
+        method: 'GET'
+      })
       .then(res => res.json())
       .then(res => {
         if(!_.isObject(res)) {

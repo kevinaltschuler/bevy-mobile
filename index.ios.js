@@ -55,17 +55,22 @@ window.fetch = function(input, init) {
   StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
   var startTime = Date.now();
-  //console.log('START', options.method, url);
+  console.log('START', options.method, url);
 
-  return $fetch(url, options).then(res => {
-    var endTime = Date.now();
-    var delta = endTime - startTime;
-    //console.log('END', options.method, url, delta + ' MS');
+  return $fetch(url, options)
+    .then(res => {
+      var endTime = Date.now();
+      var delta = endTime - startTime;
+      console.log('END', options.method, url, delta + ' MS');
 
-    // clear the network activity indicator
-    StatusBarIOS.setNetworkActivityIndicatorVisible(false);
-    return res;
-  });
+      // clear the network activity indicator
+      StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+      return res;
+    })
+    .catch(err => {
+      console.log('fetch shim err', err.toString());
+      StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+    });
 };
 
 var constants = require('./js/constants');
@@ -145,7 +150,7 @@ Backbone.sync = function(method, model, options) {
   })
   .catch(error => {
     console.log(error.toString());
-    //options.error(error.toString())
+    options.error(error.toString());
   });
 };
 
