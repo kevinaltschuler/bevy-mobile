@@ -4,6 +4,7 @@
  * Modal for displaying images in a slideshow
  *
  * @author albert
+ * @author kevin
  * @flow
  */
 
@@ -16,7 +17,6 @@ var {
   Text,
   StyleSheet,
   TouchableHighlight,
-  PanResponder,
   Modal,
   TouchableWithoutFeedback,
   TouchableOpacity
@@ -102,7 +102,7 @@ var ImageOverlay = React.createClass({
             <View style={ styles.topBar }>
               <TouchableOpacity
                 activeOpacity={ 0.5 }
-                style={ styles.closeButton }
+                style={ styles.iconButton }
                 onPress={ this.hide }
               >
                 <Icon
@@ -167,7 +167,7 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     marginHorizontal: 10
   },
-  closeButton: {
+  iconButton: {
     width: 48,
     height: 48,
     flexDirection: 'row',
