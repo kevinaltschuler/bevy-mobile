@@ -17,9 +17,6 @@ var {
   TabBarIOS,
   AlertIOS
 } = React;
-
-var _ = require('underscore');
-
 var Icon = require('react-native-vector-icons/Ionicons');
 var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
 var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
@@ -29,6 +26,7 @@ var NotificationView =
 var SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
 var SearchView = require('./SearchView.ios.js');
 
+var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var NotificationStore = require('./../../../notification/NotificationStore');
@@ -45,6 +43,13 @@ var tabs = {
 };
 
 var MainTabBar = React.createClass({
+  propTypes: {
+    mainNavigator: React.PropTypes.object,
+    bevyNavigator: React.PropTypes.object,
+    initialThread: React.PropTypes.object,
+    unreadNotes: React.PropTypes.number
+  },
+
   getInitialState() {
     return {
       selectedTab: tabs.Bevies,
@@ -117,7 +122,7 @@ var MainTabBar = React.createClass({
           <ChatNavigator
             { ...this.props }
             tabBarActions={ tabBarActions }
-            initialThread={this.props.initialThread}
+            initialThread={ this.props.initialThread }
           />
         );
         break;
@@ -147,11 +152,47 @@ var MainTabBar = React.createClass({
     }
   },
 
-  render() {
+  renderNotificationIcon() {
+    if(this.props.unreadNotes > 0) {
+      return (
+        <Icon.TabBarItem
+          title='Notifications'
+          iconName='android-notifications'
+          selectedIconName='android-notifications'
+          color='rgba(0,0,0,.2)'
+          badge={ this.props.unreadNotes }
+          selected={ this.state.selectedTab === tabs.Notifications }
+          style={ styles.tabIcon }
+          onPress={() => {
+            this.setState({ selectedTab: tabs.Notifications });
+          }}
+        >
+          { this._renderContent() }
+        </Icon.TabBarItem>
+      );
+    } else {
+      return (
+        <Icon.TabBarItem
+          title='Notifications'
+          iconName='android-notifications'
+          selectedIconName='android-notifications'
+          color='rgba(0,0,0,.2)'
+          selected={ this.state.selectedTab === tabs.Notifications }
+          style={ styles.tabIcon }
+          onPress={() => {
+            this.setState({ selectedTab: tabs.Notifications });
+          }}
+        >
+          { this._renderContent() }
+        </Icon.TabBarItem>
+      );
+    }
+  },
 
+  render() {
     return (
         <TabBarIOS
-          tintColor='#2cb673'
+          tintColor='#2CB673'
           barTintColor='#FFF'
           translucent={ false }
         >
@@ -163,9 +204,7 @@ var MainTabBar = React.createClass({
             selected={ this.state.selectedTab === tabs.Bevies }
             style={ styles.tabIcon }
             onPress={() => {
-              this.setState({
-                selectedTab: tabs.Bevies,
-              });
+              this.setState({ selectedTab: tabs.Bevies });
             }}
           >
             { this._renderContent() }
@@ -178,9 +217,7 @@ var MainTabBar = React.createClass({
             selected={ this.state.selectedTab === tabs.Search }
             style={ styles.tabIcon }
             onPress={() => {
-              this.setState({
-                selectedTab: tabs.Search,
-              });
+              this.setState({ selectedTab: tabs.Search });
             }}
           >
             { this._renderContent() }
@@ -193,28 +230,12 @@ var MainTabBar = React.createClass({
             selected={ this.state.selectedTab === tabs.Chat }
             style={ styles.tabIcon }
             onPress={() => {
-              this.setState({
-                selectedTab: tabs.Chat,
-              });
+              this.setState({ selectedTab: tabs.Chat });
             }}
           >
             { this._renderContent() }
           </Icon.TabBarItem>
-          <Icon.TabBarItem
-            title='Notifications'
-            iconName='android-notifications'
-            selectedIconName='android-notifications'
-            color='rgba(0,0,0,.2)'
-            selected={ this.state.selectedTab === tabs.Notifications }
-            style={ styles.tabIcon }
-            onPress={() => {
-              this.setState({
-                selectedTab: tabs.Notifications,
-              });
-            }}
-          >
-            { this._renderContent() }
-          </Icon.TabBarItem>
+          { this.renderNotificationIcon() }
           <Icon.TabBarItem
             title='More'
             iconName='android-more-horizontal'
@@ -223,9 +244,7 @@ var MainTabBar = React.createClass({
             color='rgba(0,0,0,.3)'
             selected={ this.state.selectedTab === tabs.More }
             onPress={() => {
-              this.setState({
-                selectedTab: tabs.More,
-              });
+              this.setState({ selectedTab: tabs.More });
             }}
           >
             { this._renderContent() }
