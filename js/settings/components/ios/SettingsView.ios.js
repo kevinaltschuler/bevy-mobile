@@ -98,6 +98,10 @@ var SettingsView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  goToPatchNotes() {
+    this.props.mainNavigator.push(routes.MAIN.PATCHNOTES);
+  },
+
   showImagePicker() {
     UIImagePickerManager.showImagePicker({
       title: 'Change Profile Picture',
@@ -237,6 +241,8 @@ var SettingsView = React.createClass({
                 color='rgba(0,0,0,.3)'
               />
             }
+            showChevron
+            onPress={ this.goToPatchNotes }
           />
           <SettingsItem
             title='Submit Feedback'

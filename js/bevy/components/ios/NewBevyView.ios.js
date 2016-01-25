@@ -265,46 +265,46 @@ var NewBevyView = React.createClass({
             height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
-            <View style={ styles.topBar }>
-              <TouchableOpacity
-                activeOpacity={ 0.5 }
-                style={ styles.iconButton }
-                onPress={ this.goBack }
-              >
-                <Icon
-                  name='arrow-back'
-                  size={ 30 }
-                  color='#FFF'
-                />
-              </TouchableOpacity>
-              <View style={{
-                width: 27,
-                height: 48
-              }}/>
-              <Text style={ styles.title }>
-                New Bevy
-              </Text>
-              <TouchableOpacity
-                activeOpacity={ 0.5 }
-                onPress={ this.createBevy }
-              >
-                <View style={ styles.createButton }>
-                  <Text style={ styles.createButtonText }>
-                    Create
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+          <View style={ styles.topBar }>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableOpacity>
+            <View style={{
+              width: 27,
+              height: 48
+            }}/>
+            <Text style={ styles.title }>
+              New Bevy
+            </Text>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              onPress={ this.createBevy }
+            >
+              <View style={ styles.createButton }>
+                <Text style={ styles.createButtonText }>
+                  Create
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <ScrollView>
-            <View style={ styles.body }>
-              { this._renderLoadingView() }
-              { this._renderTitleDescription() }
-              { this._renderSlug() }
-              { this._renderImageInput() }
-              { this._renderPrivatePublic() }
-            </View>
-          </ScrollView>
+        </View>
+        <ScrollView>
+          <View style={ styles.body }>
+            { this._renderLoadingView() }
+            { this._renderTitleDescription() }
+            { this._renderSlug() }
+            { this._renderImageInput() }
+            { this._renderPrivatePublic() }
+          </View>
+        </ScrollView>
       </View>
     );
   }
