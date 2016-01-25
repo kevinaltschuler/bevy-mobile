@@ -1,5 +1,9 @@
- /**
+/**
  * ProfileView.ios.js
+ *
+ * View to see someone's profile info and their posts
+ * also has a nifty link to message them
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -15,6 +19,7 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
   ScrollView
 } = React;
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
@@ -22,13 +27,16 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
-var POST = constants.POST;
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
 var ChatStore = require('./../../../chat/ChatStore');
 var ChatActions = require('./../../../chat/ChatActions');
-var routes = require('./../../../routes');
+var UserStore = require('./../../../user/UserStore');
+var UserActions = require('./../../../user/UserActions');
+var POST = constants.POST;
+var USER = constants.USER;
 
 var ProfileView = React.createClass({
   propTypes: {
@@ -38,15 +46,51 @@ var ProfileView = React.createClass({
     activeBevy: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      refreshing: false,
+      image: this.props.profileUser.image,
+      displayName: this.props.profileUser.displayName,
+      email: (_.isEmpty(this.props.profileUser.email))
+        ? 'No Email' : this.props.profileUser.email,
+      points: this.props.profileUser.points,
+      postCount: this.props.profileUser.postCount,
+      commentCount: this.props.profileUser.commentCount
+    };
+  },
+
   componentDidMount() {
+    UserStore.on(USER.LOADING, this.onLoading);
+    UserStore.on(USER.LOADED, this.onLoaded);
     // get user posts
     setTimeout(() => {
       PostActions.fetch(null, this.props.profileUser._id);
     }, 100);
   },
   componentWillUnmount() {
+    UserStore.off(USER.LOADING, this.onLoading);
+    UserStore.off(USER.LOADED, this.onLoaded);
     // reset posts
     PostActions.fetch(this.props.activeBevy._id, null);
+  },
+
+  onLoading() {
+    this.setState({ refreshing: true });
+  },
+  onLoaded(newUser) {
+    this.setState({
+      refreshing: false,
+      image: newUser.image,
+      displayName: newUser.displayName,
+      email: (_.isEmpty(newUser.email))
+        ? 'No Email' : newUser.email,
+      points: newUser.points,
+      postCount: newUser.postCount,
+      commentCount: newUser.commentCount
+    });
+  },
+  onRefresh() {
+    UserActions.fetch(this.props.profileUser._id);
   },
 
   goBack() {
@@ -61,7 +105,7 @@ var ProfileView = React.createClass({
     if(thread) {
       // if it does
       ChatActions.switchThread(thread._id);
-      
+
     } else {
       // if it doesn't go to new thread view
       var route = routes.MAIN.NEWTHREAD;
@@ -82,7 +126,7 @@ var ProfileView = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        onPress={ this.goToNewThread}
+        onPress={ this.goToNewThread }
       >
         <Icon
           name='create'
@@ -116,9 +160,9 @@ var ProfileView = React.createClass({
   },
 
   render() {
-    var userImageURL = (_.isEmpty(this.props.profileUser.image))
+    var userImageURL = (_.isEmpty(this.state.image))
       ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.profileUser.image, 64, 64).url;
+      : resizeImage(this.state.image, 64, 64).url;
 
     return (
       <View style={ styles.container }>
@@ -140,7 +184,7 @@ var ProfileView = React.createClass({
               />
             </TouchableOpacity>
             <Text style={ styles.title }>
-              { this.props.profileUser.displayName }'s Profile
+              { this.state.displayName }'s Profile
             </Text>
             { this._renderMessageUserButton() }
           </View>
@@ -149,6 +193,14 @@ var ProfileView = React.createClass({
         <ScrollView
           style={ styles.scrollView }
           automaticallyAdjustContentInsets={ false }
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.refreshing }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
         >
           <View style={ styles.body }>
             <View style={ styles.profileCard }>
@@ -157,8 +209,12 @@ var ProfileView = React.createClass({
                 style={ styles.profileImage }
               />
               <View style={ styles.profileDetails }>
-                <Text style={ styles.profileName }>{ this.props.profileUser.displayName }</Text>
-                <Text style={ styles.profileEmail }>{ this.props.profileUser.email }</Text>
+                <Text style={ styles.profileName }>
+                  { this.state.displayName }
+                </Text>
+                <Text style={ styles.profileEmail }>
+                  { this.state.email }
+                </Text>
               </View>
             </View>
 
@@ -178,7 +234,7 @@ var ProfileView = React.createClass({
                   Points
                 </Text>
                 <Text style={ styles.generalText }>
-                  { this.props.user.points }
+                  { this.state.points }
                 </Text>
               </View>
             </View>
@@ -195,7 +251,7 @@ var ProfileView = React.createClass({
                   Comments
                 </Text>
                 <Text style={ styles.generalText }>
-                  { this.props.user.commentCount }
+                  { this.state.commentCount }
                 </Text>
               </View>
             </View>
@@ -212,12 +268,12 @@ var ProfileView = React.createClass({
                   Posts
                 </Text>
                 <Text style={ styles.generalText }>
-                  { this.props.user.postCount }
+                  { this.state.postCount }
                 </Text>
               </View>
             </View>
 
-            <Text style={styles.postsTitle}>
+            <Text style={ styles.postsTitle }>
               Posts
             </Text>
             <PostList

@@ -60,13 +60,24 @@ _.extend(UserStore, {
         break;
 
       case USER.FETCH:
+        var user_id = payload.user_id;
         this.trigger(USER.LOADING);
-        this.user.url = constants.apiurl + '/users/' + this.user.get('id');
-        this.user.fetch({
-          success: function(model, res, options) {
-            this.setUser(res);
-          }.bind(this)
-        });
+        if(user_id) {
+          // fetching another user
+          fetch(constants.apiurl + '/users/' + user_id)
+          .then(res => res.json())
+          .then(res => {
+            this.trigger(USER.LOADED, res);
+          });
+        } else {
+          // fetching self
+          this.user.url = constants.apiurl + '/users/' + this.user.get('id');
+          this.user.fetch({
+            success: function(model, res, options) {
+              this.setUser(res);
+            }.bind(this)
+          });
+        }
         break;
 
       case USER.LOAD_USER:

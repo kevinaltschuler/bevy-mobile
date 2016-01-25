@@ -18,9 +18,10 @@ var UserActions = {
     })
   },
 
-  fetch() {
+  fetch(user_id) {
     Dispatcher.dispatch({
-      actionType: USER.FETCH
+      actionType: USER.FETCH,
+      user_id: (user_id == undefined) ? null : user_id
     });
   },
 
