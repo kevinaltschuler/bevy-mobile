@@ -28,7 +28,9 @@ var SettingsItem = React.createClass({
     onPress: React.PropTypes.func,
     title: React.PropTypes.string,
     icon: React.PropTypes.element,
-    showChevron: React.PropTypes.bool
+    showChevron: React.PropTypes.bool,
+    bgColor: React.PropTypes.string,
+    textColor: React.PropTypes.string
   },
 
   getDefaultProps() {
@@ -37,7 +39,9 @@ var SettingsItem = React.createClass({
       onPress: null,
       title: 'Default Settings Title',
       icon: null,
-      showChevron: false
+      showChevron: false,
+      bgColor: '#FFF',
+      textColor: '#282828'
     };
   },
 
@@ -79,9 +83,16 @@ var SettingsItem = React.createClass({
 
   _renderBody() {
     return (
-      <View style={ styles.settingItem }>
+      <View style={[ styles.settingItem, {
+        backgroundColor: this.props.bgColor
+      }]}>
         { this._renderIcon() }
-        <Text style={ styles.settingTitle }>
+        <Text
+          style={[ styles.settingTitle, {
+            color: this.props.textColor
+          }]}
+          numberOfLines={ 2 }
+        >
           { this.props.title }
         </Text>
         { this._renderCheck() }
@@ -124,7 +135,6 @@ var styles = StyleSheet.create({
   settingTitle: {
     flex: 1,
     fontSize: 17,
-    color: '#222',
     marginLeft: 15
   },
   settingValue: {

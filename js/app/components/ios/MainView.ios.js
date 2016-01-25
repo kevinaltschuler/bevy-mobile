@@ -17,7 +17,7 @@ var {
 var MainTabBar = require('./MainTabBar.ios.js');
 var LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
 var NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
-var CreateBevyView = require('./../../../bevy/components/ios/CreateBevyView.ios.js');
+var NewBevyView = require('./../../../bevy/components/ios/NewBevyView.ios.js');
 var NewBoardView = require('./../../../bevy/components/ios/NewBoardView.ios.js');
 var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
 var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
@@ -72,7 +72,7 @@ var MainView = React.createClass({
   },
 
   _onLogin() {
-    
+
   },
 
   _onLogout() {
@@ -102,7 +102,7 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.NEWBEVY.name:
-        return <CreateBevyView { ...this.props } />;
+        return <NewBevyView { ...this.props } />;
         break;
 
       case routes.MAIN.NEWBOARD.name:
@@ -170,9 +170,9 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.TABBAR.name:
-        return <MainTabBar 
-                  { ...this.props } 
-                  initialThread={this.state.initialThread} 
+        return <MainTabBar
+                  { ...this.props }
+                  initialThread={this.state.initialThread}
                   clearInitialThread={() => {
                     this.setState({
                       initialThread: {}

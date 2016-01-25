@@ -51,8 +51,8 @@ var CommentView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardWillShow', this._onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this._onKeyboardHide);
+    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
   },
@@ -64,23 +64,17 @@ var CommentView = React.createClass({
     });
   },
 
-  _onKeyboardShow(ev) {
+  onKeyboardShow(ev) {
     var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
-    this.setState({
-      keyboardSpace: height
-    });
+    this.setState({ keyboardSpace: height });
   },
 
-  _onKeyboardHide(ev) {
-    this.setState({
-      keyboardSpace: 0
-    });
+  onKeyboardHide(ev) {
+    this.setState({ keyboardSpace: 0 });
   },
 
   onRefresh() {
-    this.setState({
-      loading: true
-    });
+    this.setState({ loading: true });
     fetch(constants.apiurl + '/posts/' + this.props.post._id)
     .then(res => res.json())
     .then(res => {
@@ -91,9 +85,7 @@ var CommentView = React.createClass({
       });
     })
     .catch(err => {
-      this.setState({
-        loading: false
-      });
+      this.setState({ loading: false });
     })
   },
 
@@ -247,7 +239,10 @@ var CommentView = React.createClass({
     }
     return (
       <ScrollView
-        style={ styles.scrollView }
+        ref={ ref => { this.ScrollView = ref; }}
+        style={[ styles.scrollView, {
+          marginBottom: this.state.keyboardSpace + 48
+        }]}
         refreshControl={
           <RefreshControl
             refreshing={ this.state.loading }

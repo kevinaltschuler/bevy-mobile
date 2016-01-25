@@ -1,5 +1,10 @@
 /**
- * InfoView.ios.js
+ * BevyInfoView.ios.js
+ *
+ * View the info of a bevy if subscribed
+ * also doubles as the settings view if this
+ * is being viewed by an admin
+ *
  * @author kevin
  * @author albert
  * @flow
@@ -24,6 +29,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var BevyNavbar = require('./BevyNavbar.ios.js');
 var AdminItem = require('./AdminItem.ios.js');
+var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants.js');
@@ -35,7 +41,7 @@ var FileActions = require('./../../../file/FileActions');
 var FileStore = require('./../../../file/FileStore');
 var FILE = constants.FILE;
 
-var InfoView = React.createClass({
+var BevyInfoView = React.createClass({
   propTypes: {
     activeBevy: React.PropTypes.object,
     activeBoard: React.PropTypes.object,
@@ -110,6 +116,32 @@ var InfoView = React.createClass({
     BevyActions.destroy(this.props.activeBevy._id);
   },
 
+  changeName() {
+    AlertIOS.prompt(
+      'Change Bevy Name',
+      null,
+      [{
+        text: 'Cancel',
+        style: 'cancel'
+      }, {
+        text: 'Save',
+        style: 'default',
+        onPress: (name) => {
+          BevyActions.update(
+            this.props.activeBevy._id,
+            name
+          );
+        }
+      }],
+      'plain-text',
+      this.props.activeBevy.name
+    );
+  },
+
+  updateBevy() {
+
+  },
+
   showImagePicker() {
     UIImagePickerManager.showImagePicker({
       title: 'Choose Bevy Picture',
@@ -171,30 +203,59 @@ var InfoView = React.createClass({
     if(!this.state.isAdmin) return <View />;
     return (
       <View style={[ styles.actionRow ]}>
-        <Text style={ styles.settingsTitle }>Bevy Settings</Text>
-        <TouchableOpacity
-          activeOpacity={ 0.5 }
+        <Text style={ styles.settingsTitle }>
+          Bevy Settings
+        </Text>
+        <SettingsItem
+          icon={
+            <Icon
+              name='edit'
+              size={ 30 }
+              color='#AAA'
+            />
+          }
+          title='Change Bevy Name'
+          onPress={ this.changeName }
+        />
+        {/*<SettingsItem
+          icon={
+            <Icon
+              name='link'
+              size={ 30 }
+              color='#AAA'
+            />
+          }
+          title='Change Bevy URL'
+          onPress={ this.changeSlug }
+        />*/}
+        <SettingsItem
+          icon={
+            <Icon
+              name='add-a-photo'
+              size={ 30 }
+              color='#AAA'
+            />
+          }
+          title='Change Bevy Picture'
           onPress={ this.showImagePicker }
-        >
-          <View style={ styles.settingContainer }>
-            <Icon name='camera-alt' size={30} color='#666' style={{marginLeft: 10, marginRight: 10}}/>
-            <Text style={ styles.settingDescription }>
-              Change Bevy Picture
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={ 0.7 }
-          style={ styles.deleteButton }
+        />
+
+        <Text style={ styles.settingsTitle }>
+          Danger Zone
+        </Text>
+        <SettingsItem
+          icon={
+            <Icon
+              name='delete'
+              size={ 30 }
+              color='#FFF'
+            />
+          }
+          title='Delete Bevy'
           onPress={ this.deleteBevy }
-        >
-          <View style={ styles.deleteButton }>
-            <Icon name='delete' size={30} color='#fff' style={{marginLeft: 10}}/>
-            <Text style={ styles.deleteButtonText }>
-              Delete Bevy
-            </Text>
-          </View>
-        </TouchableOpacity>
+          textColor='#FFF'
+          bgColor='#D9534F'
+        />
       </View>
     );
   },
@@ -216,7 +277,9 @@ var InfoView = React.createClass({
     }
     return (
       <View style={[ styles.actionRow ]}>
-        <Text style={ styles.settingsTitle }>Admins</Text>
+        <Text style={ styles.settingsTitle }>
+          Admins
+        </Text>
         { adminList }
       </View>
     );
@@ -232,11 +295,22 @@ var InfoView = React.createClass({
           activeBoard={ this.props.activeBoard }
         />
         <ScrollView
-          style={ styles.scrollView }
-          contentContainerStyle={{
-            paddingTop: 15
-          }}
+          style={ styles.body }
+          contentContainerStyle={ styles.bodyInner }
         >
+          <Text style={ styles.settingsTitle }>
+            General
+          </Text>
+          <SettingsItem
+            icon={
+              <Icon
+                name='link'
+                size={ 30 }
+                color='#AAA'
+              />
+            }
+            title={ constants.siteurl + '/b/' + this.props.activeBevy.slug }
+          />
           { this._renderSubSwitch() }
           { this._renderAdmins() }
           { this._renderAdminSettings() }
@@ -261,8 +335,11 @@ var styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 8
   },
-  scrollView: {
-    //paddingTop: 15
+  body: {
+
+  },
+  bodyInner: {
+    paddingTop: 15
   },
   cameraTouchable: {
     backgroundColor: 'rgba(0,0,0,0)'
@@ -272,7 +349,7 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     flexDirection: 'column',
-    marginBottom: 24
+    marginBottom: 10
   },
   settingContainer: {
     flex: 1,
@@ -287,7 +364,8 @@ var styles = StyleSheet.create({
     color: '#888',
     fontSize: 17,
     marginLeft: 10,
-    marginBottom: 5
+    marginBottom: 5,
+    marginTop: 10
   },
   settingDescription: {
     flex: 1,
@@ -324,6 +402,6 @@ var styles = StyleSheet.create({
     fontSize: 17,
     marginLeft: 10
   }
-})
+});
 
-module.exports = InfoView;
+module.exports = BevyInfoView;
