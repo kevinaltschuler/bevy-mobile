@@ -1,5 +1,8 @@
 /**
  * ImageOverlay.ios.js
+ *
+ * Modal for displaying images in a slideshow
+ *
  * @author albert
  * @flow
  */

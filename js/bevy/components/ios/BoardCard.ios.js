@@ -1,5 +1,9 @@
 /**
  * BoardCard.ios.js
+ *
+ * Displays active board information under the bevy navbar
+ * also provides a link to the board info/settings view
+ *
  * @author kevin
  * @author albert
  * @flow
@@ -152,6 +156,7 @@ var styles = StyleSheet.create({
     overflow: 'hidden'
   },
   boardTitle: {
+    width: constants.width - 36,
     color: '#fff',
     fontSize: 18,
     marginBottom: 5,
