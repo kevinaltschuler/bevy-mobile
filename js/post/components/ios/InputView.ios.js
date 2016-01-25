@@ -62,6 +62,9 @@ var hintTexts = [
   "How was last night?",
   "What's gucci?",
   "Anything worth sharing?",
+  "What's poppin?",
+  "What are you doing right now?",
+  "What's cooking good looking?"
 ];
 
 var InputView = React.createClass({
@@ -332,6 +335,53 @@ var InputView = React.createClass({
     );
   },
 
+  _renderContentBar() {
+    if(this.state.keyboardSpace == 0) {
+      return (
+        <View style={styles.contentBar}>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0)'
+            onPress={ this.addImage }
+            style={ styles.contentBarItem }
+          >
+            <Icon
+              name='photo'
+              size={ 36 }
+              color='rgba(0,0,0,.3)'
+            />
+          </TouchableHighlight>
+          <TouchableHighlight
+            underlayColor='rgba(0,0,0,0)'
+            onPress={ this.launchCamera }
+            style={ styles.contentBarItem }
+          >
+            <Icon
+              name='add-a-photo'
+              size={ 36 }
+              color='rgba(0,0,0,.3)'
+            />
+          </TouchableHighlight>
+          {/*<TouchableHighlight
+            underlayColor='rgba(0,0,0,0)'
+            onPress={() => {
+              this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
+            }}
+            style={ styles.contentBarItem }
+          >
+            <Icon
+              name='calendar'
+              size={30}
+              color='rgba(0,0,0,.3)'
+              style={ styles.contentBarIcon }
+            />
+          </TouchableHighlight>*/}
+        </View>
+      )
+    } else {
+      return <View/>;
+    }
+  },
+
   render() {
     var authorImageURL = (_.isEmpty(this.props.user.image))
       ? constants.siteurl + '/img/user-profile-icon.png'
@@ -339,7 +389,7 @@ var InputView = React.createClass({
 
     return (
       <View style={[ styles.container, {
-        marginBottom: (this.state.keyboardSpace == 0) ? 0 : this.state.keyboardSpace
+        marginBottom: (this.state.keyboardSpace == 0) ? 0 : (this.state.keyboardSpace - 48)
       }]}>
         <View style={ styles.topBarContainer }>
           <View style={{
@@ -382,7 +432,6 @@ var InputView = React.createClass({
         <ScrollView
           style={ styles.body }
           contentContainerStyle={{
-            flex: 1,
             paddingBottom: 20
           }}
         >
@@ -408,44 +457,7 @@ var InputView = React.createClass({
           </View>
           { this._renderImages() }
         </ScrollView>
-        <View style={ styles.contentBar }>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0)'
-            onPress={ this.addImage }
-            style={ styles.contentBarItem }
-          >
-            <Icon
-              name='photo'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor='rgba(0,0,0,0)'
-            onPress={ this.launchCamera }
-            style={ styles.contentBarItem }
-          >
-            <Icon
-              name='add-a-photo'
-              size={ 36 }
-              color='rgba(0,0,0,.3)'
-            />
-          </TouchableHighlight>
-          {/*<TouchableHighlight
-            underlayColor='rgba(0,0,0,0)'
-            onPress={() => {
-              this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
-            }}
-            style={ styles.contentBarItem }
-          >
-            <Icon
-              name='calendar'
-              size={30}
-              color='rgba(0,0,0,.3)'
-              style={ styles.contentBarIcon }
-            />
-          </TouchableHighlight>*/}
-          </View>
+        {this._renderContentBar()}
       </View>
     );
   }
@@ -496,7 +508,7 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    paddingBottom: 40
+    marginBottom: 48
   },
   boardItem: {
     flexDirection: 'column',
@@ -529,9 +541,10 @@ var styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    marginBottom: 20,
+    marginBottom: 0,
     marginTop: 0,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    minHeight: 300
   },
   inputProfileImage: {
     width: 60,
@@ -542,6 +555,7 @@ var styles = StyleSheet.create({
   textInput: {
     flex: 2,
     fontSize: 17,
+    minHeight: 48
   },
 
   imageBar: {
@@ -561,11 +575,11 @@ var styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     left: 0,
+    height: 60,
     width: constants.width,
     flexDirection: 'row',
     paddingLeft: 10,
     paddingRight: 10,
-    height: 60,
     alignItems: 'center',
     borderTopWidth: 1,
     borderTopColor: '#eee'

@@ -201,7 +201,7 @@ var NewBevyView = React.createClass({
     ? (
       <Icon
         name='add-a-photo'
-        size={ 30 }
+        size={ 35 }
         color='#ccc'
       />
     )
@@ -227,7 +227,7 @@ var NewBevyView = React.createClass({
 
   _renderPrivatePublic() {
     var privacyIndex = (this.state.privacy == 'Public') ? 1 : 0;
-    var privacyIcon = (this.state.privacy == 'Public') ? 'android-globe' : 'android-lock';
+    var privacyIcon = (this.state.privacy == 'Public') ? 'public' : 'lock';
     var privacyText = (this.state.privacy == 'Public')
     ? 'Anybody can view and post content to a Public Bevy'
     : 'Only approved members may view and post content to a Private Bevy'
@@ -251,13 +251,20 @@ var NewBevyView = React.createClass({
         />
         <View
           style={{
-            flexDirection: 'column',
-            alignItems: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
             paddingHorizontal: 20,
             marginBottom: 40
           }}
         >
-          <Text style={{color: '#888'}}>
+          <Icon
+            name={privacyIcon}
+            size={30}
+            color='#888'
+            style={{flex: 1, paddingHorizontal: 5}}
+          />
+          <Text style={{color: '#888', flex: 6}}>
             {privacyText}
           </Text>
         </View>

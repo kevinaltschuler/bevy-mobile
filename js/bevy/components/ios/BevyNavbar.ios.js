@@ -156,7 +156,7 @@ var BevyNavbar = React.createClass({
     }
 
     return (
-      <View style={ this.props.styleParent }>
+      <View style={this.props.styleParent}>
         <Image
           source={{ uri: bevyImageURL }}
           style={[ styles.imageBottom, {
@@ -231,7 +231,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     height: 30,
     width: constants.width,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   detailItem: {
     flexDirection: 'row',
