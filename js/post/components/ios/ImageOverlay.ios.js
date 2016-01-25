@@ -22,7 +22,7 @@ var {
   TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var { BlurView, VibrancyView } = require('react-native-blur');
+var { BlurView } = require('react-native-blur');
 var Swiper = require('react-native-swiper-fork');
 var ImageOverlayItem = require('./ImageOverlayItem.ios.js');
 
@@ -85,63 +85,56 @@ var ImageOverlay = React.createClass({
 
     return (
       <Modal
-        animated={true}
-        transparent={true}
-        Visible={ this.props.isVisible }
+        animated={ true }
+        transparent={ true }
+        visible={ this.props.isVisible }
       >
-        <View>
-          <BlurView blurType='dark' style={ styles.container }>
-            <View>
-              <View style={ styles.topBar }>
-                <Text style={ styles.title }>
-                  { title }
-                </Text>
-              </View>
-              <Swiper
-                contentContainerStyle={ styles.container }
-                showsButtons={ false }
-                dot={
-                  <View style={{
-                    backgroundColor:'rgba(255,255,255,.3)',
-                    width: 13,
-                    height: 13,
-                    borderRadius: 7,
-                    marginLeft: 7,
-                    marginRight: 7
-                  }} />
-                }
-                activeDot={
-                  <View style={{
-                    backgroundColor: '#fff',
-                    width: 13,
-                    height: 13,
-                    borderRadius: 7,
-                    marginLeft: 7,
-                    marginRight: 7
-                  }} />
-                }
-                paginationStyle={{
-                  bottom: 70,
-                }}
-                loop={ true }
+        <BlurView
+          blurType='dark'
+          style={ styles.container }
+        >
+          <View style={ styles.topBarContainer }>
+            <View style={{
+              width: constants.width,
+              height: constants.getStatusBarHeight(),
+              backgroundColor: '#333'
+            }}/>
+            <View style={ styles.topBar }>
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
+                style={ styles.closeButton }
+                onPress={ this.hide }
               >
-                { imageCards }
-              </Swiper>
+                <Icon
+                  name='close'
+                  size={ 30 }
+                  color='#fff'
+                />
+              </TouchableOpacity>
+              <Text
+                style={ styles.title }
+                numberOfLines={ 1 }
+              >
+                { title }
+              </Text>
+              <View style={{
+                width: 48,
+                height: 48
+              }}/>
             </View>
-          </BlurView>
-          <TouchableOpacity
-            activeOpacity={.6}
-            style={ styles.closeButton }
-            onPress={ this.hide }
-          >
-            <Icon
-              name='close'
-              size={ 40 }
-              style={{ width: 40, height: 40, fontWeight: 'bold' }}
-              color='#fff'
-            />
-          </TouchableOpacity>
-        </View>
+          </View>
+          <View style={ styles.swiperContainer }>
+            <Swiper
+              showsButtons={ false }
+              dot={ <View style={ styles.dot } /> }
+              activeDot={ <View style={ styles.activeDot } /> }
+              paginationStyle={ styles.paginationStyle }
+              loop={ true }
+            >
+              { imageCards }
+            </Swiper>
+          </View>
+        </BlurView>
       </Modal>
     );
   }
@@ -149,40 +142,36 @@ var ImageOverlay = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
+    flex: 1,
+    flexDirection: 'column'
+  },
+  topBarContainer: {
     width: constants.width,
-    height: constants.height,
-    justifyContent: 'center',
+    flexDirection: 'column',
+    paddingTop: 0,
+    overflow: 'visible',
+    backgroundColor: '#333',
+  },
+  topBar: {
+    width: constants.width,
+    height: 48,
+    marginTop: 0,
+    backgroundColor: '#333',
+    flexDirection: 'row',
     alignItems: 'center'
   },
-
-  blur: {
-    flex: 1
-  },
-  backdrop: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: constants.width,
-    height: constants.height,
-    opacity: 0.5
-  },
-  modal: {
-    marginTop: 48,
-    flexDirection: 'row',
+  title: {
+    flex: 1,
+    color: '#fff',
+    fontSize: 17,
+    textAlign: 'center',
+    marginHorizontal: 10
   },
   closeButton: {
-    height: 68,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingVertical: 10,
+    width: 48,
+    height: 48,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 10,
-    marginTop: 20,
-    position: 'absolute'
+    alignItems: 'center'
   },
   imageCountText: {
     flex: 1,
@@ -190,22 +179,27 @@ var styles = StyleSheet.create({
     fontSize: 17,
     textAlign: 'center'
   },
-
-  topBar: {
-    position: 'absolute',
-    top: 0,
-    height: 96,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#333',
-    width: constants.width,
+  dot: {
+    backgroundColor: 'rgba(255,255,255,.3)',
+    width: 13,
+    height: 13,
+    borderRadius: 7,
+    marginLeft: 7,
+    marginRight: 7
   },
-  title: {
-    color: '#fff',
-    fontSize: 20,
-    marginTop: 8,
-    width: constants.width * .65
+  activeDot: {
+    backgroundColor: '#fff',
+    width: 13,
+    height: 13,
+    borderRadius: 7,
+    marginLeft: 7,
+    marginRight: 7
+  },
+  paginationStyle: {
+  },
+  swiperContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
   }
 });
 
