@@ -30,7 +30,7 @@ module.exports = {
     }, {
       header: 'Bug Fixes',
       bodyItems: [
-        'Fix Notification read/unread logic',
+        'Fix notification read/unread logic',
         'Fix performance and refresh issues in the notifications tab',
         'Fix issues in New Board View',
         'UI fixes and better performance for viewing private bevies',

@@ -136,16 +136,23 @@ var BoardSettingsView = React.createClass({
   _renderBoardName() {
     if(this.props.editing) {
       return (
-        <TextInput
-          ref={ ref => { this.NameInput = ref; }}
-          autoCorrect={ false }
-          autoCapitalize='none'
-          style={ styles.textInput }
-          value={ this.state.name }
-          onChangeText={ text => this.setState({ name: text }) }
-          placeholder='Board Name'
-          placeholderTextColor='#AAA'
-        />
+        <View style={ styles.textInputContainer }>
+          <Icon
+            name='edit'
+            size={ 30 }
+            color='#AAA'
+          />
+          <TextInput
+            ref={ ref => { this.NameInput = ref; }}
+            autoCorrect={ false }
+            autoCapitalize='none'
+            style={ styles.textInput }
+            value={ this.state.name }
+            onChangeText={ text => this.setState({ name: text }) }
+            placeholder='Board Name'
+            placeholderTextColor='#AAA'
+          />
+        </View>
       );
     } else {
       return (
@@ -161,16 +168,23 @@ var BoardSettingsView = React.createClass({
   _renderBoardDescription() {
     if(this.props.editing) {
       return (
-        <TextInput
-          ref={ ref => { this.DescInput = ref; }}
-          autoCorrect={ false }
-          autoCapitalize='none'
-          style={ styles.textInput }
-          value={ this.state.description }
-          onChangeText={ text => this.setState({ description: text }) }
-          placeholder='Board Description'
-          placeholderTextColor='#AAA'
-        />
+        <View style={ styles.textInputContainer }>
+          <Icon
+            name='edit'
+            size={ 30 }
+            color='#AAA'
+          />
+          <TextInput
+            ref={ ref => { this.DescInput = ref; }}
+            autoCorrect={ false }
+            autoCapitalize='none'
+            style={ styles.textInput }
+            value={ this.state.description }
+            onChangeText={ text => this.setState({ description: text }) }
+            placeholder='Board Description'
+            placeholderTextColor='#AAA'
+          />
+        </View>
       );
     } else {
       return (
@@ -331,9 +345,6 @@ var BoardSettingsView = React.createClass({
         </View>
         <ScrollView
           style={ styles.container }
-          contentContainerStyle={{
-            paddingBottom: 20
-          }}
         >
           <Text style={ styles.sectionTitle }>
             Board Name
@@ -423,13 +434,21 @@ var styles = StyleSheet.create({
     marginBottom: 5,
     marginLeft: 15
   },
-  textInput: {
+  textInputContainer: {
     backgroundColor: '#FFF',
     width: constants.width,
     height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15
+  },
+  textInput: {
+    backgroundColor: '#FFF',
+    flex: 1,
+    height: 60,
     fontSize: 17,
     color: '#666',
-    paddingHorizontal: 15
+    marginLeft: 10
   },
   textContainer: {
     backgroundColor: '#FFF',
