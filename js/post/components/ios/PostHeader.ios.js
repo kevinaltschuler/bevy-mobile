@@ -46,7 +46,10 @@ var PostHeader = React.createClass({
   },
 
   goToPostBoard() {
-    //console.log(this.props.mainNavigator.getCurrentRoutes());
+    // switch bevies
+    BevyActions.switchBevy(this.props.post.board.parent);
+    // switch boards
+    BoardActions.switchBoard(this.props.post.board._id);
 
     if(this.props.mainRoute.name == routes.MAIN.BEVYNAV.name) {
       // already in bevy view, do nothing
@@ -59,11 +62,6 @@ var PostHeader = React.createClass({
       // the route isn't in the history, so push to it
       this.props.mainNavigator.push(routes.MAIN.BEVYNAV);
     }
-
-    // switch bevies
-    BevyActions.switchBevy(this.props.post.board.parent);
-    // switch boards
-    BoardActions.switchBoard(this.props.post.board._id);
   },
 
   showProfileActionSheet() {

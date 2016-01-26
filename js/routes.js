@@ -20,7 +20,8 @@ var routes = {
     ADDUSER: { name: 'AddUser' }, // FOR ANDROID
     INVITEUSERS: { name: 'InviteUsers'},
     WEBVIEW: { name: 'WebView' },
-    FEEDBACK: { name: 'FeedbackView' }
+    FEEDBACK: { name: 'FeedbackView' },
+    PATCHNOTES: { name: 'PatchNotes' }
   },
 
   NEWPOST: {

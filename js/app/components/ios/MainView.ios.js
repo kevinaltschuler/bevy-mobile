@@ -28,6 +28,7 @@ var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js
 var InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
 var Browser = require('./Browser.ios.js');
 var FeedbackView = require('./../../../settings/components/ios/FeedbackView.ios.js');
+var PatchNotesView = require('./../../../settings/components/ios/PatchNotesView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -167,6 +168,10 @@ var MainView = React.createClass({
 
       case routes.MAIN.FEEDBACK.name:
         return <FeedbackView { ...this.props } />;
+        break;
+
+      case routes.MAIN.PATCHNOTES.name:
+        return <PatchNotesView { ...this.props } />;
         break;
 
       case routes.MAIN.TABBAR.name:

@@ -145,7 +145,6 @@ var NewBevyView = React.createClass({
     return (
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>General</Text>
-
         <View style={ styles.generalCard} >
           <TextInput
             style={ styles.bevyNameInput }
@@ -235,37 +234,23 @@ var NewBevyView = React.createClass({
       <View style={ styles.section }>
         <Text style={ styles.sectionTitle }>Privacy</Text>
         <SegmentedControlIOS
-          style={{
-            backgroundColor: '#fff',
-            marginBottom: 10,
-            marginHorizontal: 20
-          }}
-          tintColor='#aaa'
+          style={ styles.privacySegmentedControl }
+          tintColor='#AAA'
           values={['Private', 'Public']}
-          selectedIndex={privacyIndex}
-          onValueChange={(ev) => {
-            this.setState({
-              privacy: ev
-            });
+          selectedIndex={ privacyIndex }
+          onValueChange={ ev => {
+            this.setState({ privacy: ev });
           }}
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-            paddingHorizontal: 20,
-            marginBottom: 40
-          }}
-        >
+        <View style={ styles.privacyContainer }>
           <Icon
-            name={privacyIcon}
-            size={30}
+            name={ privacyIcon }
+            size={ 30 }
             color='#888'
-            style={{flex: 1, paddingHorizontal: 5}}
+            style={ styles.privacyIcon }
           />
-          <Text style={{color: '#888', flex: 6}}>
-            {privacyText}
+          <Text style={ styles.privacyText }>
+            { privacyText }
           </Text>
         </View>
       </View>
@@ -280,43 +265,46 @@ var NewBevyView = React.createClass({
             height: constants.getStatusBarHeight(),
             backgroundColor: '#2CB673'
           }}/>
-            <View style={ styles.topBar }>
-              <TouchableOpacity
-                activeOpacity={ 0.5 }
-                style={ styles.iconButton }
-                onPress={ this.goBack }
-              >
-                <Icon
-                  name='arrow-back'
-                  size={ 30 }
-                  color='#FFF'
-                />
-              </TouchableOpacity>
-              <Text style={ styles.title }>
-                New Bevy
-              </Text>
-              <TouchableOpacity
-                activeOpacity={ 0.5 }
-                style={ styles.iconButton }
-                onPress={ this.createBevy }
-              >
-                <Icon
-                  name='done'
-                  size={ 30 }
-                  color='#FFF'
-                />
-              </TouchableOpacity>
-            </View>
+          <View style={ styles.topBar }>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableOpacity>
+            <View style={{
+              width: 27,
+              height: 48
+            }}/>
+            <Text style={ styles.title }>
+              New Bevy
+            </Text>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              onPress={ this.createBevy }
+            >
+              <View style={ styles.createButton }>
+                <Text style={ styles.createButtonText }>
+                  Create
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <ScrollView>
-            <View style={ styles.body }>
-              { this._renderLoadingView() }
-              { this._renderTitleDescription() }
-              { this._renderSlug() }
-              { this._renderImageInput() }
-              { this._renderPrivatePublic() }
-            </View>
-          </ScrollView>
+        </View>
+        <ScrollView>
+          <View style={ styles.body }>
+            { this._renderLoadingView() }
+            { this._renderTitleDescription() }
+            { this._renderSlug() }
+            { this._renderImageInput() }
+            { this._renderPrivatePublic() }
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -353,61 +341,23 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  createButton: {
+    width: 75,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  createButtonText: {
+    color: '#FFF',
+    fontSize: 17
+  },
   loadingView: {
     marginTop: 20,
     height: 48,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-
-  subBevyHeader: {
-    backgroundColor: '#eee',
-    height: 48,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 15,
-    paddingRight: 15
-  },
-  subBevyFor: {
-    marginRight: 10,
-    fontSize: 17,
-    textAlign: 'left'
-  },
-  subBevyName: {
-    flex: 1,
-    textAlign: 'left',
-    color: '#2CB673',
-    fontWeight: 'bold',
-    fontSize: 17
-  },
-
-  navButtonLeft: {
-    flex: 1,
-    marginLeft: 10
-  },
-  navButtonRight: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    marginRight: 10
-  },
-  navButtonTextLeft: {
-    color: '#fff',
-    fontSize: 17
-  },
-  navButtonTextRight: {
-    color: '#fff',
-    fontSize: 17,
-    textAlign: 'right'
-  },
-  navTitle: {
-    flex: 2
-  },
-  navTitleText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: 'bold',
-    textAlign: 'center'
   },
   body: {
     flex: 1,
@@ -450,6 +400,27 @@ var styles = StyleSheet.create({
   },
   section: {
     marginTop: 20
+  },
+  privacySegmentedControl: {
+    backgroundColor: '#fff',
+    marginBottom: 10,
+    marginHorizontal: 20
+  },
+  privacyContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 20,
+    marginBottom: 40
+  },
+  privacyIcon: {
+    flex: 1,
+    paddingHorizontal: 5
+  },
+  privacyText: {
+    fontSize: 15,
+    color: '#888',
+    flex: 6
   }
 });
 

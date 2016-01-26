@@ -171,24 +171,23 @@ var CommentItem = React.createClass({
     if(this.state.isCompact) {
       return (
         <View style={[ styles.commentItem, commentStyle ]}>
-            <View style={ styles.header }>
-              <Icon
-                name='add'
-                size={ 20 }
-                color='#AAA'
-                style={ styles.plusIcon }
-              />
-              <Text style={ styles.author }>
-                { this.props.comment.author.displayName }
-              </Text>
-              <Text style={ styles.timeAgo }>
-                { timeAgo(Date.parse(this.props.comment.created)) }
-              </Text>
-            </View>
+          <View style={ styles.header }>
+            <Icon
+              name='add'
+              size={ 20 }
+              color='#AAA'
+              style={ styles.plusIcon }
+            />
+            <Text style={ styles.author }>
+              { this.props.comment.author.displayName }
+            </Text>
+            <Text style={ styles.timeAgo }>
+              { timeAgo(Date.parse(this.props.comment.created)) }
+            </Text>
           </View>
-        );
-      }
-    else {
+        </View>
+      );
+    } else {
       return (
         <View style={[ styles.commentItem, {
           //marginLeft: (this.props.comment.depth == 0)
