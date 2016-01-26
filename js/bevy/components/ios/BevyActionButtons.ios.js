@@ -15,7 +15,8 @@ var {
   Image,
   Text,
   StyleSheet,
-  ActionSheetIOS
+  ActionSheetIOS,
+  AlertIOS
 } = React;
 var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -91,7 +92,13 @@ var BevyActionButtons = React.createClass({
   },
 
   inviteUsers() {
-    this.props.mainNavigator.push(routes.MAIN.INVITEUSERS);
+    if(this.state.isAdmin)
+      this.props.mainNavigator.push(routes.MAIN.INVITEUSERS);
+    else {
+      AlertIOS.alert(
+       'Only admins may invite users'
+      );
+    }
   },
 
   goToInfoView() {

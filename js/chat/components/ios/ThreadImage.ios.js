@@ -143,6 +143,8 @@ var ThreadImage = React.createClass({
             />
           );
         }
+      default: 
+        return <View/>;
 
         return (
           <View style={{

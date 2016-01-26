@@ -90,6 +90,9 @@ _.extend(UserStore, {
           var access = response[0][1];
           var refresh = response[1][1];
           var expires = response[2][1];
+          if(_.isEmpty(access) && _.isEmpty(refresh) && _.isEmpty(expires)) {
+            this.trigger(USER.LOGOUT);
+          }
           if(!_.isEmpty(access) && !_.isEmpty(refresh)) {
             // check if access token has expired
             if(new Date(expires).getTime() <= Date.now()) {
@@ -143,11 +146,11 @@ _.extend(UserStore, {
             idToken (IOS ONLY)
             accessTokenExpirationDate (IOS ONLY)
           }*/
-          console.log('google sign in success', user);
+          //console.log('google sign in success', user);
           var idToken = user.idToken;
           var jot_guts = idToken.split('.');
           var payload = JSON.parse(base64.decode(jot_guts[1]).toString());
-          console.log('google sign in payload', payload)
+          //console.log('google sign in payload', payload)
           fetch(constants.siteurl + '/login/google', {
             method: 'POST',
             headers: {
@@ -163,7 +166,7 @@ _.extend(UserStore, {
           })
           .then(res => res.json())
           .then(res => {
-            console.log('got response from our server', res);
+            //console.log('got response from our server', res);
             if(typeof res === 'string') {
               console.log('our server error', res);
               this.trigger(USER.LOGIN_ERROR, res);
