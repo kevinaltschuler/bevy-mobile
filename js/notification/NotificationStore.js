@@ -66,9 +66,7 @@ _.extend(NotificationStore, {
           reset: true,
           success: function(collection, response, options) {
             // count all notifications that are unread
-            this.unread = this.notifications.filter(
-              notification => notification.get('read') == false
-            ).length;
+            this.updateUnread();
 
             this.notifications.sort()
 
@@ -132,8 +130,7 @@ _.extend(NotificationStore, {
         this.notifications.fetch({
           success: function(collection, response, options) {
             // count all notifications that are unread
-            this.unread = this.notifications.filter(
-              (notification) => notification.read == false).length;
+            this.updateUnread();
 
             this.notifications.sort();
             this.trigger(NOTIFICATION.FETCHED);
@@ -184,7 +181,7 @@ _.extend(NotificationStore, {
         }
         if(Platform.OS == 'ios') {
           console.log('good stuff');
-          fetch(constants.apiurl + '/users/'+ user_id +'/devices', {
+          fetch(constants.apiurl + '/users/'+ user_id + '/devices', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -197,14 +194,22 @@ _.extend(NotificationStore, {
           });
         }
         break;
+        
       case NOTIFICATION.SET_INITIAL:
         var note = payload.note.getData();
         this.initialNote = note;
         break;
+
       case NOTIFICATION.CLEAR_INITIAL:
         this.initialNote = {};
         break;
     }
+  },
+
+  updateUnread() {
+    this.unread = this.notifications.filter(
+      notification => notification.get('read') == false
+    ).length;
   },
 
   sortByNew(note) {
