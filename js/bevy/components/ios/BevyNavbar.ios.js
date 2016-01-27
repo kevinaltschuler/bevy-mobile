@@ -73,17 +73,13 @@ var BevyNavbar = React.createClass({
   },
 
   _renderCenter() {
-    var boardName = _.isEmpty(this.props.activeBoard)
-    ? ''
-    : " > " + this.props.activeBoard.name;
-
     if(typeof this.props.center === 'string') {
       return (
         <Text
           style={ styles.titleText }
           numberOfLines={ 1 }
         >
-          { this.props.center + boardName }
+          { this.props.center }
         </Text>
       );
     } else {
