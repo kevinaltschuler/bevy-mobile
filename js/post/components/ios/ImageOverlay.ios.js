@@ -23,7 +23,7 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var { BlurView } = require('react-native-blur');
-var Swiper = require('react-native-swiper-fork');
+var Swiper = require('react-native-swiper');
 var ImageOverlayItem = require('./ImageOverlayItem.ios.js');
 
 var _ = require('underscore');

@@ -22,7 +22,7 @@ var protocol = 'http:';
 exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
-exports.ios_version = '1.3.1';
+exports.ios_version = '1.3.73';
 
 //exports.siteurl = protocol + slashes + hostname;
 //exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
@@ -86,12 +86,16 @@ exports.POST = {
   UPDATE: 'post_update',
   FETCH: 'post_fetch',
   FETCH_BOARD: 'post_fetch_board',
+  SEARCH: 'post_search',
 
   POST_CREATED: 'post_created',
   LOADING: 'post_loading',
   LOADED: 'post_loaded',
   CHANGE_ALL: 'post_change_all',
-  CHANGE_ONE: 'post_change_one:'
+  CHANGE_ONE: 'post_change_one:',
+  SEARCHING: 'post_searching',
+  SEARCH_COMPLETE: 'post_search_complete',
+  SEARCH_ERROR: 'post_search_error'
 };
 
 exports.COMMENT = {
@@ -143,6 +147,8 @@ exports.BOARD = {
   CREATE: 'board_create',
 
   // events
+  SWITCHING: 'board_switching',
+  SWITCHED: 'board_switched',
   CREATED: 'board_created',
   CHANGE_ALL: 'board_change_all'
 };

@@ -30,13 +30,15 @@ var Post = React.createClass({
     mainRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
     inCommentView: React.PropTypes.bool,
-    post: React.PropTypes.object
+    post: React.PropTypes.object,
+    searchQuery: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
       inCommentView: false,
-      post: {}
+      post: {},
+      searchQuery: ''
     };
   },
 
@@ -79,6 +81,7 @@ var Post = React.createClass({
           expandText={ this.props.inCommentView }
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
+          searchQuery={ this.props.searchQuery }
         />
         <PostLinks
           post={ this.state.post }

@@ -14,29 +14,45 @@ var {
   TouchableOpacity,
   Image,
   Text,
+  TextInput,
   StyleSheet,
-  ActionSheetIOS,
   AlertIOS
+  ScrollView,
+  ActionSheetIOS
 } = React;
-var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BevyActions = require('./../../../bevy/BevyActions');
+var PostActions = require('./../../../post/PostActions');
+var PostStore = require('./../../../post/PostStore');
 
 var BevyActionButtons = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
     bevy: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
+    activeBoard: React.PropTypes.object,
+    mainNavigator: React.PropTypes.object,
+    // used so the parent bevy view knows whether to render the search posts
+    // or just the posts for the bevy/board
+    onSearchStart: React.PropTypes.func,
+    onSearchStop: React.PropTypes.func
+  },
+
+  getDefaultProps() {
+    return {
+      onSearchStart: _.noop,
+      onSearchStop: _.noop
+    };
   },
 
   getInitialState() {
     return {
       joined: _.contains(this.props.user.bevies, this.props.bevy._id),
-      isAdmin: _.findWhere(this.props.bevy.admins, { _id: this.props.user._id }) != undefined
+      isAdmin: _.findWhere(this.props.bevy.admins, { _id: this.props.user._id }) != undefined,
+      query: ''
     }
   },
 
@@ -52,21 +68,66 @@ var BevyActionButtons = React.createClass({
     if(index == 0) {
       if(this.state.joined) {
         BevyActions.leave(bevy._id);
-        this.setState({
-          joined: false
-        })
+        this.setState({ joined: false });
       } else {
         if(bevy.settings.privacy == 'private') {
           //BoardActions.requestBoard(board._id)
         }
         else {
           BevyActions.join(bevy._id)
-          this.setState({
-            joined: true
-          })
+          this.setState({ joined: true });
         }
       }
     }
+  },
+
+  onSearchBlur() {
+    //if(_.isEmpty(this.state.query)) {
+    //  this.Swiper.scrollTo(0);
+    //}
+  },
+
+  onSearchChange(text) {
+    this.setState({ query: text });
+
+    if(this.searchTimeout != undefined) {
+      clearTimeout(this.searchTimeout);
+      delete this.searchTimeout;
+    }
+
+    this.searchTimeout = setTimeout(this.search, 250);
+  },
+
+  search() {
+    var board_id = (_.isEmpty(this.props.activeBoard)) ? null : this.props.activeBoard._id
+    PostActions.search(this.state.query, this.props.bevy._id, board_id);
+  },
+
+  cancelSearch() {
+    // let the post list know that we're not using search posts anymore
+    this.props.onSearchStop();
+    // clear the seaerch query
+    this.setState({ query: '' });
+    // blur the text field if its still focused. it probably isnt though
+    this.SearchInput.blur();
+    // scroll back to the main buttons
+    this.Swiper.scrollTo(0, 0);
+  },
+
+  openSearch() {
+    // check first if any posts exist
+    // dont allow searching if no posts exist
+    if(PostStore.getAll().length <= 0) {
+      return;
+    }
+    // let the post list know that we're looking at search posts now
+    this.props.onSearchStart();
+    // scroll so the search textinput is visible
+    this.Swiper.scrollTo(0, constants.width);
+    // send out the initial search call to get a generic list of posts
+    this.search();
+    // once the animation finishes, focus the search textinput
+    setTimeout(() => { this.SearchInput.focus() }, 500);
   },
 
   showActionSheet() {
@@ -122,11 +183,15 @@ var BevyActionButtons = React.createClass({
     }
 
     return (
-      <Swiper
-        style={ styles.boardActions }
-        height={ 50 }
-        showsButtons={ false }
-        loop={ false }
+      <ScrollView
+        ref={ ref => { this.Swiper = ref; }}
+        style={ styles.container }
+        contentContainerStyle={ styles.containerInner }
+        pagingEnabled={ true }
+        horizontal={ true }
+        showsHorizontalScrollIndicator={ false }
+        showsVerticalScrollIndicator={ false }
+        canCancelContentTouches={ false }
       >
         <View style={ styles.slide }>
           <TouchableOpacity
@@ -164,6 +229,7 @@ var BevyActionButtons = React.createClass({
           <TouchableOpacity
             style={ styles.actionWrapper }
             activeOpacity={ 0.5 }
+            onPress={ this.openSearch }
           >
             <View style={ styles.action }>
               <Icon
@@ -193,26 +259,79 @@ var BevyActionButtons = React.createClass({
             </View>
           </TouchableOpacity>
         </View>
-      </Swiper>
+        <View style={ styles.slide }>
+          <Icon
+            name='search'
+            size={ 30 }
+            color='#AAA'
+            style={ styles.searchIcon }
+          />
+          <TextInput
+            ref={ ref => { this.SearchInput = ref; }}
+            style={ styles.searchInput }
+            value={ this.state.query }
+            onChangeText={ this.onSearchChange }
+            onSubmitEditing={ this.search }
+            onBlur={ this.onSearchBlur }
+            autoCorrect={ false }
+            autoCapitalize={ 'none' }
+            returnKeyType='search'
+            placeholder='Search Posts'
+            placeholderTextColor='#AAA'
+          />
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={ styles.searchCancelButton }
+            onPress={ this.cancelSearch }
+          >
+            <Icon
+              name='close'
+              size={ 20 }
+              color='#FFF'
+            />
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     )
   }
 });
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1,
-    flexDirection: 'column',
-    marginTop: -25
-  },
-  boardActions: {
     backgroundColor: '#fff',
-    height: 51
+    height: 50,
+    maxHeight: 50
+  },
+  containerInner: {
+    height: 50,
+    maxHeight: 50
   },
   slide: {
+    width: constants.width,
     flexDirection: 'row',
+    alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: '#eee',
-    height: 51
+    height: 50
+  },
+  searchIcon: {
+    marginHorizontal: 10
+  },
+  searchInput: {
+    flex: 1,
+    height: 50,
+    fontSize: 17,
+    marginRight: 10
+  },
+  searchCancelButton: {
+    width: 30,
+    height: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#AAA',
+    borderRadius: 15,
+    marginRight: 10
   },
   actionWrapper: {
     flex: 1,

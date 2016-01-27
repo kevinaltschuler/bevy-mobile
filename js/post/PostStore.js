@@ -41,6 +41,8 @@ var PostStore = _.extend({}, Backbone.Events);
 _.extend(PostStore, {
 
   posts: new Posts,
+  searchPosts: new Posts,
+  searchQuery: '',
   sortType: 'new',
 
   // handle calls from the dispatcher
@@ -96,6 +98,42 @@ _.extend(PostStore, {
             this.posts.sort();
             this.trigger(POST.LOADED);
             this.trigger(POST.CHANGE_ALL);
+          }.bind(this)
+        });
+        break;
+
+      case POST.SEARCH:
+        var query = payload.query;
+        var bevy_id = payload.bevy_id;
+        var board_id = payload.board_id;
+
+        // set the search query before POST.SEARCHING is triggered
+        // so the front-end can catch it
+        this.searchQuery = query;
+
+        // uri encode the search query to make it URL friendly
+        query = (query) ? encodeURIComponent(query) : '';
+
+        // trigger the searching event
+        this.trigger(POST.SEARCHING);
+
+        // construct the search query
+        this.searchPosts.url = constants.apiurl + '/posts/search/' + query;
+        if(bevy_id)
+          this.searchPosts.url += '?bevy_id=' + bevy_id;
+        else if(board_id)
+          this.searchPosts.url += '?board_id=' + board_id;
+
+        // send the request to the server
+        this.searchPosts.fetch({
+          reset: true,
+          success: function(collection, response, options) {
+            // got the posts successfully
+            this.trigger(POST.SEARCH_COMPLETE);
+          }.bind(this),
+          error: function(error) {
+            // something went wrong
+            this.trigger(POST.SEARCH_ERROR, error.toString());
           }.bind(this)
         });
         break;
@@ -488,6 +526,13 @@ _.extend(PostStore, {
     var post = this.posts.get(post_id);
     if(post == undefined) return {};
     else return post.toJSON();
+  },
+
+  getSearchPosts() {
+    return this.searchPosts.toJSON();
+  },
+  getSearchQuery() {
+    return this.searchQuery;
   },
 
   getPostVoteCount(post_id) {

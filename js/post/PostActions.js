@@ -19,6 +19,7 @@ var POST = constants.POST;
 
 
 var PostActions = {
+
 	fetch(bevy_id, user_id) {
 		Dispatcher.dispatch({
 			actionType: POST.FETCH,
@@ -31,6 +32,15 @@ var PostActions = {
 		Dispatcher.dispatch({
 			actionType: POST.FETCH_BOARD,
 			board_id: board_id
+		});
+	},
+
+	search(query, bevy_id, board_id) {
+		Dispatcher.dispatch({
+			actionType: POST.SEARCH,
+			query: (query == undefined) ? null : query,
+			bevy_id: (bevy_id == undefined) ? null : bevy_id,
+			board_id: (board_id == undefined) ? null : board_id
 		});
 	},
 

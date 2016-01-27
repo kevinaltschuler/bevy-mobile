@@ -1,5 +1,11 @@
 /**
  * NotificationItem.ios.js
+ *
+ * View for notification item
+ * checks notification type and decides what to display
+ * also handles the navigation when a notification is clicked
+ * (only going to post is supported for now)
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -34,8 +40,9 @@ var NotificationItem = React.createClass({
 
   getInitialState() {
     return {
-      fetching: false
-    }
+      fetching: false,
+      read: this.props.notification.read
+    };
   },
 
   dismiss() {
@@ -44,6 +51,7 @@ var NotificationItem = React.createClass({
 
   markRead() {
     NotificationActions.read(this.props.notification._id);
+    this.setState({ read: true });
   },
 
   goToPost() {
@@ -92,9 +100,7 @@ var NotificationItem = React.createClass({
     var notification = this.props.notification;
     var event = notification.event;
     var data = notification.data;
-    var unreadStyle = (!notification.read)
-      ? { backgroundColor: '#EDFAF4' }
-      : {}
+    var unreadStyle = (!this.state.read) ? { backgroundColor: '#EDFAF4' } : {}
 
     if(_.isEmpty(data.author_image)) {
       data.author_image = {

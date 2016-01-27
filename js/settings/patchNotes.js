@@ -12,10 +12,11 @@
 
 module.exports = {
   ios: [{
-    version: '1.3.1',
+    version: '1.3.73',
     sections: [{
       header: 'New Features',
       bodyItems: [
+        "Add post search functionality",
         'Added support for refreshing access tokens after access tokens expired',
         "Added 'Delete Board' Button to Board Settings View",
         "Integrated in-app browser to view posted links",
@@ -30,7 +31,7 @@ module.exports = {
     }, {
       header: 'Bug Fixes',
       bodyItems: [
-        'Fix Notification read/unread logic',
+        'Fix notification read/unread logic',
         'Fix performance and refresh issues in the notifications tab',
         'Fix issues in New Board View',
         'UI fixes and better performance for viewing private bevies',

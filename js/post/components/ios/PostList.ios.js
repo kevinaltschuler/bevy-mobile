@@ -24,21 +24,18 @@ var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
-var Swiper = require('react-native-swiper-fork');
-
 var BoardCard = require('./../../../bevy/components/ios/BoardCard.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var POST = constants.POST;
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostActions = require('./../../../post/PostActions');
 var BevyActions = require('./../../../bevy/BevyActions');
 
-var SCROLLVIEW = 'ScrollView';
-var LISTVIEW = 'ListView';
+var POST = constants.POST;
+var BOARD = constants.BOARD;
 
 var PostList = React.createClass({
   propTypes: {
@@ -51,7 +48,8 @@ var PostList = React.createClass({
     myBevies: React.PropTypes.array,
     onScroll: React.PropTypes.func,
     mainNavigator: React.PropTypes.object,
-    mainRoute: React.PropTypes.object
+    mainRoute: React.PropTypes.object,
+    useSearchPosts: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -60,47 +58,97 @@ var PostList = React.createClass({
       allPosts: [],
       showNewPostCard: true,
       profileUser: null,
-      onScroll: _.noop
+      onScroll: _.noop,
+      useSearchPosts: false
     };
   },
 
   getInitialState() {
     return {
-      dataSource: new ListView.DataSource({
+      ds: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
       loading: false,
       loadingInitial: true,
-      joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
+      joined: _.contains(this.props.user.bevies, this.props.activeBevy._id),
+      searchPosts: [],
+      searchQuery: '',
+      searching: false,
+      searchError: ''
     };
   },
 
   componentDidMount() {
-    PostStore.on(POST.LOADED, this._onPostsLoaded);
-    PostStore.on(POST.LOADING, this._onPostsLoading);
+    PostStore.on(POST.LOADED, this.onPostsLoaded);
+    PostStore.on(POST.LOADING, this.onPostsLoading);
+
+    PostStore.on(POST.SEARCHING, this.onPostSearching);
+    PostStore.on(POST.SEARCH_ERROR, this.onPostSearchError);
+    PostStore.on(POST.SEARCH_COMPLETE, this.onPostSearchComplete);
+
+    BevyStore.on(BOARD.SWITCHED, this.onBoardSwitched);
   },
   componentWillUnmount() {
-    PostStore.off(POST.LOADED, this._onPostsLoaded);
-    PostStore.off(POST.LOADING, this._onPostsLoading);
+    PostStore.off(POST.LOADED, this.onPostsLoaded);
+    PostStore.off(POST.LOADING, this.onPostsLoading);
+
+    PostStore.off(POST.SEARCHING, this.onPostSearching);
+    PostStore.off(POST.SEARCH_ERROR, this.onPostSearchError);
+    PostStore.off(POST.SEARCH_COMPLETE, this.onPostSearchComplete);
+
+    BevyStore.off(BOARD.SWITCHED, this.onBoardSwitched);
   },
 
-  _onPostsLoading() {
-    this.setState({
-      loading: true,
-      //dataSource: this.state.dataSource.cloneWithRows([]),
-    });
+  onPostsLoading() {
+    this.setState({ loading: true });
   },
-
-  _onPostsLoaded() {
+  onPostsLoaded() {
     this.setState({
       loading: false,
       loadingInitial: false,
-      dataSource: this.state.dataSource.cloneWithRows(PostStore.getAll()),
+      ds: this.state.ds.cloneWithRows(PostStore.getAll()),
     });
     this.forceUpdate();
   },
 
-  onRefresh(stopRefresh) {
+  onPostSearching() {
+    this.setState({
+      searching: true,
+      loading: true
+    });
+  },
+  onPostSearchError(error) {
+    this.setState({
+      searching: false,
+      loading: false,
+      searchError: error
+    })
+  },
+  onPostSearchComplete() {
+    var posts = PostStore.getSearchPosts()
+    this.setState({
+      searching: false,
+      loading: false,
+      searchPosts: posts,
+      searchQuery: PostStore.getSearchQuery(),
+      ds: this.state.ds.cloneWithRows(posts)
+    });
+  },
+
+  onBoardSwitched() {
+    // once the board is switched, scroll back to the top of the ListView
+
+    // dont do it if theres no rows being rendered
+    if(this.state.ds.getRowCount() <= 0) return;
+
+    this.ListView.scrollTo(0, 0);
+  },
+
+  onRefresh() {
+    if(this.props.useSearchPosts) {
+      PostActions.search(this.state.searchQuery, this.props.activeBevy._id);
+      return;
+    }
     if(_.isEmpty(this.props.activeBoard)) {
       PostActions.fetch(
         this.props.activeBevy._id,
@@ -109,6 +157,14 @@ var PostList = React.createClass({
     } else {
        PostActions.fetchBoard(this.props.activeBoard._id);
     }
+  },
+
+  switchBackFromSearch() {
+    this.setState({
+      loadingInitial: true,
+      ds: this.state.ds.cloneWithRows([])
+    });
+    PostActions.fetch(this.props.activeBevy._id, null);
   },
 
   handleScroll(y) {
@@ -137,7 +193,8 @@ var PostList = React.createClass({
     var user = this.props.user;
     if(_.isEmpty(bevy)
       || !this.props.showNewPostCard
-      || this.state.loadingInitial) {
+      || this.state.loadingInitial
+      || this.props.useSearchPosts) {
       return <View/>;
     }
     return (
@@ -152,7 +209,10 @@ var PostList = React.createClass({
   },
 
   _renderNoPosts() {
-    if(!this.state.loading && !this.state.loadingInitial && _.isEmpty(this.props.allPosts)) {
+    if(!this.state.loading
+      && !this.state.loadingInitial
+      && this.state.ds.getRowCount() <= 0
+    ) {
       return (
         <View style={ styles.noPostsContainer }>
           <Text style={ styles.noPostsText }>
@@ -216,7 +276,7 @@ var PostList = React.createClass({
     return (
       <ListView
         ref={ ref => { this.ListView = ref; }}
-        dataSource={ this.state.dataSource }
+        dataSource={ this.state.ds }
         style={ styles.postContainer }
         onScroll={ ev => {
           this.props.onScroll(ev.nativeEvent.contentOffset.y);
@@ -226,11 +286,7 @@ var PostList = React.createClass({
           return this._renderHeader();
         }}
         renderFooter={() => {
-          return (
-            <View>
-              { this._renderNoPosts() }
-            </View>
-          );
+          return this._renderNoPosts();
         }}
         refreshControl={
           <RefreshControl
@@ -248,6 +304,7 @@ var PostList = React.createClass({
               mainRoute={ this.props.mainRoute }
               mainNavigator={ this.props.mainNavigator }
               user={ this.props.user }
+              searchQuery={ this.state.searchQuery }
             />
           );
         }}
