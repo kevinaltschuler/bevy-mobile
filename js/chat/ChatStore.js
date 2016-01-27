@@ -56,7 +56,7 @@ _.extend(ChatStore, {
             var note = NotificationStore.getInitialNote();
             if(!_.isEmpty(note)) {
               if(!_.isEmpty(note.thread)) {
-                this.active = note.thread._id;                
+                this.active = note.thread._id;
                 this.trigger(CHAT.CHANGE_ALL);
                 this.trigger(CHAT.SWITCH_TO_THREAD, note.thread._id);
                 var thread = this.threads.get(this.active);
@@ -592,14 +592,6 @@ _.extend(ChatStore, {
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
     this.trigger(CHAT.MESSAGES_FETCHED);
-
-    if(this.active == thread_id) {
-
-    } else {
-      PushNotificationIOS.presentLocalNotification({
-        alertBody: message.author.displayName + ': ' + message.body
-      });
-    }
   }
 });
 

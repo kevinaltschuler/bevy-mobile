@@ -28,14 +28,13 @@ var BoardCard = require('./../../../bevy/components/ios/BoardCard.ios.js');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-var POST = constants.POST;
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostActions = require('./../../../post/PostActions');
 var BevyActions = require('./../../../bevy/BevyActions');
 
-var SCROLLVIEW = 'ScrollView';
-var LISTVIEW = 'ListView';
+var POST = constants.POST;
+var BOARD = constants.BOARD;
 
 var PostList = React.createClass({
   propTypes: {
@@ -85,6 +84,8 @@ var PostList = React.createClass({
     PostStore.on(POST.SEARCHING, this.onPostSearching);
     PostStore.on(POST.SEARCH_ERROR, this.onPostSearchError);
     PostStore.on(POST.SEARCH_COMPLETE, this.onPostSearchComplete);
+
+    BevyStore.on(BOARD.SWITCHED, this.onBoardSwitched);
   },
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this.onPostsLoaded);
@@ -93,6 +94,8 @@ var PostList = React.createClass({
     PostStore.off(POST.SEARCHING, this.onPostSearching);
     PostStore.off(POST.SEARCH_ERROR, this.onPostSearchError);
     PostStore.off(POST.SEARCH_COMPLETE, this.onPostSearchComplete);
+
+    BevyStore.off(BOARD.SWITCHED, this.onBoardSwitched);
   },
 
   onPostsLoading() {
@@ -129,6 +132,15 @@ var PostList = React.createClass({
       searchQuery: PostStore.getSearchQuery(),
       ds: this.state.ds.cloneWithRows(posts)
     });
+  },
+
+  onBoardSwitched() {
+    // once the board is switched, scroll back to the top of the ListView
+
+    // dont do it if theres no rows being rendered
+    if(this.state.ds.getRowCount() <= 0) return;
+
+    this.ListView.scrollTo(0, 0);
   },
 
   onRefresh() {

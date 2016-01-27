@@ -327,7 +327,7 @@ _.extend(BevyStore, {
           this.searchList.url = constants.apiurl + '/bevies';
         else
           this.searchList.url = constants.apiurl + '/bevies/search/' + query;
-        
+
         this.searchList.fetch({
           reset: true,
           success: function(collection, response, options) {
@@ -381,9 +381,12 @@ _.extend(BevyStore, {
 
       case BOARD.SWITCH:
         var board_id = payload.board_id;
+        this.trigger(BOARD.SWITCHING);
+
         this.activeBoard.url = constants.apiurl + '/boards/' + board_id;
         this.activeBoard.fetch({
           success: function(model, response, options) {
+            this.trigger(BOARD.SWITCHED);
             this.trigger(BOARD.CHANGE_ALL);
           }.bind(this)
         });
@@ -391,6 +394,7 @@ _.extend(BevyStore, {
 
       case BOARD.CLEAR:
         this.activeBoard = new Board;
+        this.trigger(BOARD.SWITCHED);
         this.trigger(BOARD.CHANGE_ALL);
         break;
 

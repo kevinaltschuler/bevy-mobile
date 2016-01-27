@@ -107,7 +107,8 @@ _.extend(NotificationStore, {
             VibrationIOS.vibrate();
           }
 
-          ChatStore.addMessage(message);
+          if(ChatStore.addMessage != undefined)
+            ChatStore.addMessage(message);
         }.bind(this));
 
         this.ws.on('notification.' + user._id, function(notification) {
@@ -194,7 +195,7 @@ _.extend(NotificationStore, {
           });
         }
         break;
-        
+
       case NOTIFICATION.SET_INITIAL:
         var note = payload.note.getData();
         this.initialNote = note;

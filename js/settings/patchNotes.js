@@ -16,6 +16,7 @@ module.exports = {
     sections: [{
       header: 'New Features',
       bodyItems: [
+        "Add post search functionality",
         'Added support for refreshing access tokens after access tokens expired',
         "Added 'Delete Board' Button to Board Settings View",
         "Integrated in-app browser to view posted links",

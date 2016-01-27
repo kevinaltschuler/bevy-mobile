@@ -147,6 +147,8 @@ exports.BOARD = {
   CREATE: 'board_create',
 
   // events
+  SWITCHING: 'board_switching',
+  SWITCHED: 'board_switched',
   CREATED: 'board_created',
   CHANGE_ALL: 'board_change_all'
 };
