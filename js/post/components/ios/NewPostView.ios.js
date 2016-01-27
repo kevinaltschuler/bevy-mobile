@@ -62,7 +62,7 @@ var NewPostView = React.createClass({
 
   renderScene(route, navigator) {
     switch(route.name) {
-      case routes.NEWPOST.DATEPICKER.name:
+      case routes.NEWPOST.DATEPICKER:
         return (
           <DatePickerView
             newPostRoute={ route }
@@ -79,7 +79,7 @@ var NewPostView = React.createClass({
           />
         );
         break;
-      case routes.NEWPOST.CREATEEVENT.name:
+      case routes.NEWPOST.CREATEEVENT:
         return (
           <CreateEventView
             newPostRoute={ route }
@@ -93,7 +93,7 @@ var NewPostView = React.createClass({
         );
         break;
 
-      case routes.NEWPOST.BOARDPICKER.name:
+      case routes.NEWPOST.BOARDPICKER:
         return (
           <BoardPickerView
             newPostRoute={ route }
@@ -105,7 +105,7 @@ var NewPostView = React.createClass({
         );
         break;
 
-      case routes.NEWPOST.INPUT.name:
+      case routes.NEWPOST.INPUT:
       default:
         return (
           <InputView
@@ -123,8 +123,9 @@ var NewPostView = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRouteStack={[ routes.NEWPOST.INPUT ]}
-        initialRoute={ routes.NEWPOST.INPUT }
+        initialRouteStack={[{
+          name: routes.NEWPOST.INPUT
+        }]}
         renderScene={ this.renderScene }
       />
     );

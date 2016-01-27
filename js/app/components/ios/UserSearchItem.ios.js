@@ -51,8 +51,10 @@ var UserSearchItem = React.createClass({
   },
 
   onSelect() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.searchUser;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.searchUser
+    };
     this.props.mainNavigator.push(route);
   },
 

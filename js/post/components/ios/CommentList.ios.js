@@ -68,8 +68,10 @@ var CommentItem = React.createClass({
   },
 
   goToAuthorProfile() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.comment.author;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.comment.author
+    };
     this.props.mainNavigator.push(route);
   },
 

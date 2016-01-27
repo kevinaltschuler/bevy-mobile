@@ -33,7 +33,10 @@ var BevyCard = React.createClass({
 
   goToBevy() {
     BevyActions.switchBevy(this.props.bevy._id);
-    this.props.mainNavigator.push(routes.MAIN.BEVYNAV);
+    var route = {
+      name: routes.MAIN.BEVYNAV
+    };
+    this.props.mainNavigator.push(route);
   },
 
   render() {

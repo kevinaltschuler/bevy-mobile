@@ -41,7 +41,9 @@ var ChatNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.mainNavigator }
-        initialRouteStack={[routes.CHAT.THREADLIST]}
+        initialRouteStack={[{
+          name: routes.CHAT.THREADLIST
+        }]}
         renderScene={(route, navigator) => {
           return (
             <ChatView
@@ -73,14 +75,16 @@ var ChatView = React.createClass({
 
   onThreadChange(thread_id) {
     console.log('thread change', thread_id);
-    var route = routes.CHAT.MESSAGEVIEW;
-    route.threadID = thread_id;
+    var route = {
+      name: routes.CHAT.MESSAGEVIEW,
+      threadID: thread_id
+    };
     this.props.chatNavigator.push(route);
 
     var $routes = this.props.mainNavigator.getCurrentRoutes();
     var currentRoute = $routes[$routes.length - 1];
-    console.log('current route:', currentRoute.name);
-    if(currentRoute.name == routes.MAIN.NEWTHREAD.name) {
+    console.log('current route:', currentRoute);
+    if(currentRoute.name == routes.MAIN.NEWTHREAD) {
       setTimeout(() => {
         this.props.mainNavigator.pop();
       }, 500);
@@ -90,30 +94,30 @@ var ChatView = React.createClass({
   render() {
 
     switch(this.props.chatRoute.name) {
-      case routes.CHAT.THREADLIST.name:
+      case routes.CHAT.THREADLIST:
         return (
           <ThreadList
             { ...this.props }
           />
         );
         break;
-      case routes.CHAT.MESSAGEVIEW.name:
+      case routes.CHAT.MESSAGEVIEW:
         return (
           <MessageView
             { ...this.props }
             threadID={ this.props.chatRoute.threadID }
-            chatRoute={this.props.chatRoute}
+            chatRoute={ this.props.chatRoute }
           />
         );
         break;
-      case routes.CHAT.THREADSETTINGS.name:
+      case routes.CHAT.THREADSETTINGS:
         return (
           <ThreadSettingsView
             { ...this.props }
           />
         );
         break;
-      case routes.CHAT.ADDPEOPLE.name:
+      case routes.CHAT.ADDPEOPLE:
         return (
           <AddPeopleView
             { ...this.props }

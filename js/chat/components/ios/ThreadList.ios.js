@@ -123,7 +123,10 @@ var ThreadList = React.createClass({
   },
 
   goToNewThread() {
-    this.props.mainNavigator.push(routes.MAIN.NEWTHREAD);
+    var route = {
+      name: routes.MAIN.NEWTHREAD
+    };
+    this.props.mainNavigator.push(route);
   },
 
   renderThreadRow(thread) {

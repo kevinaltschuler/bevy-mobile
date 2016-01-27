@@ -29,11 +29,11 @@ var BoardInfoView = require('./BoardInfoView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
-var BOARD = constants.BOARD;
 var routes = require('./../../../routes');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
 var BevyStore = require('./../../../bevy/BevyStore');
+var BOARD = constants.BOARD;
 
 var BevyView = React.createClass({
   propTypes: {
@@ -121,14 +121,14 @@ var BevyView = React.createClass({
 
     var view;
     switch(this.props.bevyRoute.name) {
-      case routes.BEVY.INFO.name:
+      case routes.BEVY.INFO:
         view = (
           <BevyInfoView
             { ...this.props }
           />
         );
         break;
-      case routes.BEVY.SETTINGS.name:
+      case routes.BEVY.SETTINGS:
         view = (
           <SettingsView
             setting={ this.props.bevyRoute.setting }
@@ -136,7 +136,7 @@ var BevyView = React.createClass({
           />
         );
         break;
-      case routes.BEVY.BEVYVIEW.name:
+      case routes.BEVY.BEVYVIEW:
         view = (
           <$BevyView
             { ...this.props }
@@ -144,7 +144,7 @@ var BevyView = React.createClass({
           />
         );
         break;
-      case routes.BEVY.BOARDINFO.name:
+      case routes.BEVY.BOARDINFO:
         view = (
           <BoardInfoView
             { ...this.props }
@@ -152,7 +152,7 @@ var BevyView = React.createClass({
           />
         );
         break;
-      case routes.BEVY.BOARDSETTINGS.name:
+      case routes.BEVY.BOARDSETTINGS:
         view = (
           <BoardInfoView
             { ...this.props }
@@ -193,7 +193,9 @@ var BevyNavigator = React.createClass({
     return (
       <Navigator
         navigator={ this.props.searchNavigator }
-        initialRouteStack={[ routes.BEVY.BEVYVIEW ]}
+        initialRouteStack={[{
+          name: routes.BEVY.BEVYVIEW
+        }]}
         renderScene={(route, navigator) =>
           <BevyView
             bevyRoute={ route }

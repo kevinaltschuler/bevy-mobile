@@ -93,13 +93,18 @@ var SettingsView = React.createClass({
   },
 
   goToProfileView() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.user;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.user
+    };
     this.props.mainNavigator.push(route);
   },
 
   goToPatchNotes() {
-    this.props.mainNavigator.push(routes.MAIN.PATCHNOTES);
+    var route = {
+      name: routes.MAIN.PATCHNOTES
+    };
+    this.props.mainNavigator.push(route);
   },
 
   showImagePicker() {
@@ -120,7 +125,10 @@ var SettingsView = React.createClass({
   },
 
   submitFeedback() {
-    this.props.mainNavigator.push(routes.MAIN.FEEDBACK);
+    var route = {
+      name: routes.MAIN.FEEDBACK
+    };
+    this.props.mainNavigator.push(route);
   },
 
   _renderSeparator() {

@@ -51,7 +51,10 @@ var BevySideMenu = React.createClass({
   },
 
   goToNewBoard() {
-    this.props.mainNavigator.push(routes.MAIN.NEWBOARD);
+    var route = {
+      name: routes.MAIN.NEWBOARD
+    };
+    this.props.mainNavigator.push(route);
   },
 
   _renderBevyItem() {

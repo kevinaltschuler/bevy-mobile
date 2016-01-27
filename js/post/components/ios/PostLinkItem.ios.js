@@ -28,8 +28,10 @@ var PostLinkItem = React.createClass({
   },
 
   onPress() {
-    var route = routes.MAIN.WEBVIEW;
-    route.initialURL = this.props.link;
+    var route = {
+      name: routes.MAIN.WEBVIEW,
+      initialURL: this.props.link
+    };
     this.props.mainNavigator.push(route);
   },
 

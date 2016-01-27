@@ -72,7 +72,10 @@ var MyBevies = React.createClass({
   },
 
   goToNewBevy() {
-    this.props.mainNavigator.push(routes.MAIN.NEWBEVY);
+    var route = {
+      name: routes.MAIN.NEWBEVY
+    };
+    this.props.mainNavigator.push(route);
   },
 
   _renderBevyList() {

@@ -57,7 +57,10 @@ var NewPostCard = React.createClass({
   },
 
   goToNewPost() {
-    this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+    var route = {
+      name: routes.MAIN.NEWPOST
+    };
+    this.props.mainNavigator.push(route);
   },
 
   render() {

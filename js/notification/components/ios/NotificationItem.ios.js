@@ -55,7 +55,9 @@ var NotificationItem = React.createClass({
 
   goToPost() {
     this.markRead();
-    var route = routes.MAIN.COMMENT;
+    var route = {
+      name: routes.MAIN.COMMENT
+    };
     var post_id = this.props.notification.data.post_id;
     var post = PostStore.getPost(post_id);
     // if the post isnt already loaded, then load from the server

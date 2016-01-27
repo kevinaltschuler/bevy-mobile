@@ -152,11 +152,17 @@ var BevyActionButtons = React.createClass({
   },
 
   inviteUsers() {
-    this.props.mainNavigator.push(routes.MAIN.INVITEUSERS);
+    var route = {
+      name: routes.MAIN.INVITEUSERS
+    };
+    this.props.mainNavigator.push(route);
   },
 
   goToInfoView() {
-    this.props.bevyNavigator.push(routes.BEVY.INFO);
+    var route = {
+      name: routes.BEVY.INFO
+    };
+    this.props.bevyNavigator.push(route);
   },
 
   render() {

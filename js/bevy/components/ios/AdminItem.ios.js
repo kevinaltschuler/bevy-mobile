@@ -45,8 +45,10 @@ var AdminItem = React.createClass({
   },
 
   goToProfile() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.admin;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.admin
+    };
     this.props.mainNavigator.push(route);
   },
 

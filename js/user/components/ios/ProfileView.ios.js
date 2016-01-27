@@ -108,8 +108,10 @@ var ProfileView = React.createClass({
 
     } else {
       // if it doesn't go to new thread view
-      var route = routes.MAIN.NEWTHREAD;
-      route.defaultUser = this.props.profileUser;
+      var route = {
+        name: routes.MAIN.NEWTHREAD,
+        defaultUser: this.props.profileUser
+      };
       this.props.mainNavigator.push(route);
     }
   },

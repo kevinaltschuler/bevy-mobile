@@ -105,8 +105,10 @@ var PostFooter = React.createClass({
   },
 
   goToEditPost() {
-    var route = routes.MAIN.EDITPOST;
-    route.post = this.props.post;
+    var route = {
+      name: routes.MAIN.EDITPOST,
+      post: this.props.post
+    };
     this.props.mainNavigator.push(route);
   },
 
@@ -117,24 +119,24 @@ var PostFooter = React.createClass({
       return;
     }
 
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.post.author;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.post.author
+    };
     this.props.mainNavigator.push(route);
   },
 
   goToPostBoard() {
     //console.log(this.props.mainNavigator.getCurrentRoutes());
 
-    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV.name) {
+    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV) {
       // already in bevy view, do nothing
-    } else if (_.findWhere(this.props.mainNavigator.getCurrentRoutes(),
-      { name: routes.MAIN.BEVYNAV.name }) != undefined) {
-      // the bevy nav route is somewhere back in the route stack
-      // so lets pop to it
-      this.props.mainNavigator.popToRoute(routes.MAIN.BEVYNAV);
     } else {
       // the route isn't in the history, so push to it
-      this.props.mainNavigator.push(routes.MAIN.BEVYNAV);
+      var route = {
+        name: routes.MAIN.BEVYNAV
+      };
+      this.props.mainNavigator.push(route);
     }
 
     // switch bevies
@@ -148,9 +150,11 @@ var PostFooter = React.createClass({
     // return if we're already in comment view
     if(this.props.inCommentView) return;
 
-    var commentRoute = routes.MAIN.COMMENT;
-    commentRoute.post = this.props.post;
-    this.props.mainNavigator.push(commentRoute);
+    var route = {
+      name: routes.MAIN.COMMENT,
+      post: this.props.post
+    };
+    this.props.mainNavigator.push(route);
   },
 
   vote() {

@@ -193,7 +193,10 @@ var MessageView = React.createClass({
   },
 
   goToSettings() {
-    this.props.chatNavigator.push(routes.CHAT.THREADSETTINGS);
+    var route = {
+      name: routes.CHAT.THREADSETTINGS
+    };
+    this.props.chatNavigator.push(route);
   },
 
   _renderInfoButton() {

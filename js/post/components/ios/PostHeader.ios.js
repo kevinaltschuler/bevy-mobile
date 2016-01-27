@@ -40,8 +40,10 @@ var PostHeader = React.createClass({
       return;
     }
 
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.post.author;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.post.author
+    };
     this.props.mainNavigator.push(route);
   },
 
@@ -51,16 +53,14 @@ var PostHeader = React.createClass({
     // switch boards
     BoardActions.switchBoard(this.props.post.board._id);
 
-    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV.name) {
+    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV) {
       // already in bevy view, do nothing
-    } else if (_.findWhere(this.props.mainNavigator.getCurrentRoutes(),
-      { name: routes.MAIN.BEVYNAV.name }) != undefined) {
-      // the bevy nav route is somewhere back in the route stack
-      // so lets pop to it
-      this.props.mainNavigator.popToRoute(routes.MAIN.BEVYNAV);
     } else {
       // the route isn't in the history, so push to it
-      this.props.mainNavigator.push(routes.MAIN.BEVYNAV);
+      var route = {
+        name: routes.MAIN.BEVYNAV
+      };
+      this.props.mainNavigator.push(route);
     }
   },
 

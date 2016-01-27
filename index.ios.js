@@ -299,7 +299,9 @@ var App = React.createClass({
       <View style={ styles.container }>
         <Navigator
           configureScene={() => sceneConfig }
-          initialRouteStack={[routes.MAIN.LOADING]}
+          initialRouteStack={[{
+            name: routes.MAIN.LOADING
+          }]}
           renderScene={(route, navigator) => {
             return (
               <MainView

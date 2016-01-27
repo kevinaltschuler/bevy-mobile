@@ -118,8 +118,10 @@ var MessageItem = React.createClass({
   },
 
   goToAuthorProfile() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.message.author;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.message.author
+    };
     this.props.mainNavigator.push(route);
   },
 
@@ -242,7 +244,7 @@ var MessageItem = React.createClass({
               }}>
                 { (this.state.isMe) ? 'Me' : this.props.message.author.displayName }
               </Text>
-              
+
               <Text style={{
                 textAlign: (this.state.isMe) ? 'right' : 'left',
                 color: (this.state.isMe) ? '#333' : '#333',

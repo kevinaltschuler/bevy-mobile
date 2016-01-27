@@ -35,7 +35,9 @@ var Loading = React.createClass({
 	        UserActions.loadUser(JSON.parse(user));
 	      } else {
 	        console.log('going to login screen...');
-	        this.props.mainNavigator.replace(routes.MAIN.LOGIN);
+	        this.props.mainNavigator.replace({
+						name: routes.MAIN.LOGIN
+					});
 	      }
 	    });
 	},

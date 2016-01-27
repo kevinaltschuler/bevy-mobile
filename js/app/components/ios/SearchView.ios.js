@@ -137,8 +137,10 @@ var SearchView = React.createClass({
   },
 
   goToProfileView(user) {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = user;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: user
+    };
     this.props.mainNavigator.push(route);
   },
 

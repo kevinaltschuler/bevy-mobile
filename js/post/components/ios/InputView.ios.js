@@ -174,7 +174,10 @@ var InputView = React.createClass({
   },
 
   goToBoardPickerView() {
-    this.props.newPostNavigator.push(routes.NEWPOST.BOARDPICKER);
+    var route = {
+      name: routes.NEWPOST.BOARDPICKER
+    };
+    this.props.newPostNavigator.push(route);
   },
 
   submit() {
@@ -225,8 +228,10 @@ var InputView = React.createClass({
   },
 
   goToCommentView(post) {
-    var route = routes.MAIN.COMMENT;
-    route.post = post;
+    var route = {
+      name: routes.MAIN.COMMENT,
+      post: post
+    };
 
     var currentRoutes = this.props.mainNavigator.getCurrentRoutes();
     // if the comment route is already in the route stack,
@@ -234,7 +239,7 @@ var InputView = React.createClass({
     //
     // remove that previous comment route and push it to
     // the front of the stack
-    if(_.findWhere(currentRoutes, { name: routes.MAIN.COMMENT.name }) != undefined) {
+    if(_.findWhere(currentRoutes, { name: routes.MAIN.COMMENT }) != undefined) {
       var commentViewIndex = currentRoutes.length - 2;
       // rerender the comment view with our fresh post
       this.props.mainNavigator.replaceAtIndex(route, commentViewIndex);

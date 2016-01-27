@@ -192,7 +192,10 @@ var ThreadSettingsView = React.createClass({
   },
 
   addPeople() {
-    this.props.chatNavigator.push(routes.CHAT.ADDPEOPLE);
+    var route = {
+      name: routes.CHAT.ADDPEOPLE
+    };
+    this.props.chatNavigator.push(route);
   },
 
   _renderName() {

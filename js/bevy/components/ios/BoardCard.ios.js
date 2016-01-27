@@ -48,11 +48,17 @@ var BoardCard = React.createClass({
   },
 
   goToBoardSettings() {
-    this.props.bevyNavigator.push(routes.BEVY.BOARDSETTINGS);
+    var route = {
+      name: routes.BEVY.BOARDSETTINGS
+    };
+    this.props.bevyNavigator.push(route);
   },
 
   goToBoardInfo() {
-    this.props.bevyNavigator.push(routes.BEVY.BOARDINFO);
+    var route = {
+      name: routes.BEVY.BOARDINFO
+    };
+    this.props.bevyNavigator.push(route);
   },
 
   goToSettingsOrInfo() {
