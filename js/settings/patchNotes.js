@@ -12,7 +12,7 @@
 
 module.exports = {
   ios: [{
-    version: '1.3.1',
+    version: '1.3.73',
     sections: [{
       header: 'New Features',
       bodyItems: [

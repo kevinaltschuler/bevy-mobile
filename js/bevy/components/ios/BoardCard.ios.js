@@ -20,7 +20,6 @@ var {
   Text,
   StyleSheet
 } = React;
-var Swiper = require('react-native-swiper-fork');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');

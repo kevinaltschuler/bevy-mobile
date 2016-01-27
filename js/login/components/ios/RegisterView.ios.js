@@ -108,7 +108,9 @@ var RegisterView = React.createClass({
       });
       return;
     }
-    fetch(constants.apiurl + '/users/' + this.state.username + '/verify')
+    fetch(constants.apiurl + '/users/' + this.state.username + '/verify', {
+      method: 'GET'
+    })
     .then(res => res.json())
     .then(res => {
       this.setState({

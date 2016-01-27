@@ -13,6 +13,7 @@ var {
   Image,
   TouchableOpacity,
   Animated,
+  DeviceEventEmitter,
   StyleSheet
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
@@ -26,6 +27,8 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var BoardActions = require('./../../../bevy/BoardActions');
 var PostActions = require('./../../../post/PostActions');
+var PostStore = require('./../../../post/PostStore');
+var POST = constants.POST;
 
 var BevyView = React.createClass({
   propTypes: {
@@ -41,7 +44,9 @@ var BevyView = React.createClass({
 
   getInitialState() {
     return {
-      menuButtonRotation: new Animated.Value(0)
+      menuButtonRotation: new Animated.Value(0),
+      useSearchPosts: false,
+      keyboardSpace: 0
     };
   },
 
@@ -49,8 +54,7 @@ var BevyView = React.createClass({
     if(nextProps.sideMenuActions.isOpen()) {
       // close side menu
       Animated.timing(
-        this.state.menuButtonRotation,
-        {
+        this.state.menuButtonRotation, {
           toValue: 1,
           duration: 300
         }
@@ -58,13 +62,39 @@ var BevyView = React.createClass({
     } else {
       // open side menu
       Animated.timing(
-        this.state.menuButtonRotation,
-        {
+        this.state.menuButtonRotation, {
           toValue: 0,
           duration: 300
         }
       ).start()
     }
+  },
+
+  componentDidMount() {
+    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+  },
+  componentWillUnmount() {
+
+  },
+
+  onKeyboardShow(frames) {
+    if(frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 0 });
+  },
+
+  onSearchStart() {
+    this.setState({ useSearchPosts: true });
+  },
+  onSearchStop() {
+    this.setState({ useSearchPosts: false });
+    this.PostList.switchBackFromSearch();
   },
 
   goBack() {
@@ -113,9 +143,7 @@ var BevyView = React.createClass({
         transform: [{
           rotate: this.state.menuButtonRotation.interpolate({
             inputRange: [0, 1],
-            outputRange: [
-              '0deg', '90deg' // 'deg' or 'rad'
-            ]
+            outputRange: [ '0deg', '90deg' ]
           })
         }]
       }}>
@@ -146,16 +174,22 @@ var BevyView = React.createClass({
     return (
       <BevyActionButtons
         bevy={ this.props.activeBevy }
+        activeBoard={ this.props.activeBoard }
         user={ this.props.user }
         mainNavigator={ this.props.mainNavigator }
         bevyNavigator={ this.props.bevyNavigator }
+        onSearchStart={ this.onSearchStart }
+        onSearchStop={ this.onSearchStop }
       />
     );
   },
 
   render() {
+
     return (
-      <View style={ styles.container }>
+      <View style={[ styles.container, {
+        marginBottom: this.state.keyboardSpace
+      }]}>
         <BevyNavbar
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
@@ -166,7 +200,8 @@ var BevyView = React.createClass({
         />
         { this._renderBevyActions() }
         <PostList
-          allPosts={ this.props.allPosts }
+          ref={ ref => { this.PostList = ref; }}
+          allPosts={ this.props.posts }
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
           user={ this.props.user }
@@ -174,6 +209,7 @@ var BevyView = React.createClass({
           mainNavigator={ this.props.mainNavigator }
           mainRoute={ this.props.mainRoute }
           bevyNavigator={ this.props.bevyNavigator }
+          useSearchPosts={ this.state.useSearchPosts }
         />
       </View>
     );

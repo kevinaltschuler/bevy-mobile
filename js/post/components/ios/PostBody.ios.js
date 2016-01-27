@@ -25,12 +25,14 @@ var PostBody = React.createClass({
     post: React.PropTypes.object,
     mainRoute: React.PropTypes.object,
     mainNavigator: React.PropTypes.object,
-    expandText: React.PropTypes.bool
+    expandText: React.PropTypes.bool,
+    searchQuery: React.PropTypes.string
   },
 
   getDefaultProps() {
     return {
-      expandText: false
+      expandText: false,
+      searchQuery: ''
     };
   },
 
@@ -81,6 +83,37 @@ var PostBody = React.createClass({
   },
 
   _renderText() {
+    var title;
+    if(_.isEmpty(this.props.searchQuery)) {
+      title = this.props.post.title;
+    } else {
+      var regex = new RegExp('' + this.props.searchQuery + '', 'gi' );
+      var body = this.props.post.title;
+      var segments = body.split(regex);
+      var replacements = body.match(regex);
+      title = [];
+      for(var key in segments) {
+        var segment = segments[key];
+        title.push(
+          <Text
+            key={ 'post:' + this.props.post._id + ':segment:' + key }
+          >
+            { segment }
+          </Text>
+        );
+        // If last segment then don't add the highlight part
+        if(segments.length === key + 1) return;
+
+        title.push(
+          <Text
+            key={ 'post:' + this.props.post._id + ':replacement:' + key }
+            style={ styles.highlightedText }
+          >
+            { replacements[key] }
+          </Text>
+        );
+      }
+    }
     return (
       <Text
         accessible
@@ -89,7 +122,7 @@ var PostBody = React.createClass({
           ? 9999 // arbitrary huge number
           : 8 }
       >
-        { this.props.post.title }
+        { title }
       </Text>
     );
   },
@@ -118,6 +151,10 @@ var styles = StyleSheet.create({
   bodyText: {
     fontSize: 17,
     color: '#666'
+  },
+  highlightedText: {
+    backgroundColor: '#F0FF0F',
+    paddingHorizontal: 4
   },
   showMoreRow: {
     flexDirection: 'row',
