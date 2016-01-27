@@ -55,6 +55,10 @@ var MyBevies = React.createClass({
     BevyStore.off(BEVY.LOADED, this.onLoaded);
   },
 
+  componentWillReceiveProps(nextProps) {
+    this.onLoaded();
+  },
+
   onLoading() {
     this.setState({ loading: true });
   },

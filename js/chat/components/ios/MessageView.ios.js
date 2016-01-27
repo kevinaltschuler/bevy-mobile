@@ -50,7 +50,7 @@ var MessageView = React.createClass({
 
     return {
       isRefreshing: false,
-      keyboardSpace: 48,
+      keyboardSpace: 0,
       messageValue: '',
       messages: messages,
       ds: ds.cloneWithRows(messages),
@@ -95,7 +95,7 @@ var MessageView = React.createClass({
     }
   },
   onKeyboardHide(frames) {
-    this.setState({ keyboardSpace: 48 });
+    this.setState({ keyboardSpace: 0 });
   },
 
   _onChatChange() {
@@ -189,11 +189,11 @@ var MessageView = React.createClass({
   },
 
   goBack() {
-    this.props.chatNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   goToSettings() {
-    this.props.chatNavigator.push(routes.CHAT.THREADSETTINGS);
+    this.props.mainNavigator.push(routes.CHAT.THREADSETTINGS);
   },
 
   _renderInfoButton() {
@@ -284,7 +284,7 @@ var MessageView = React.createClass({
           }
         />
         <View style={[styles.inputContainer, {
-          marginBottom: this.state.keyboardSpace - 48
+          marginBottom: this.state.keyboardSpace
         }]}>
           <TextInput
             ref={ ref => { this.MessageInput = ref; }}
@@ -322,7 +322,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-end',
     backgroundColor: '#EEE',
-    paddingBottom: 48
+    paddingBottom: 0
   },
   topBarContainer: {
     flexDirection: 'column',

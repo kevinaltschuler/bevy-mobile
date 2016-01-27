@@ -52,23 +52,6 @@ _.extend(ChatStore, {
             this.threads.sort();
             this.trigger(CHAT.THREADS_FETCHED);
             this.trigger(CHAT.CHANGE_ALL);
-
-            var note = NotificationStore.getInitialNote();
-            if(!_.isEmpty(note)) {
-              if(!_.isEmpty(note.thread)) {
-                this.active = note.thread._id;                
-                this.trigger(CHAT.CHANGE_ALL);
-                this.trigger(CHAT.SWITCH_TO_THREAD, note.thread._id);
-                var thread = this.threads.get(this.active);
-                thread.messages.fetch({
-                  remove: false,
-                  success: function(collection, response, options) {
-                    thread.messages.sort();
-                    this.trigger(CHAT.MESSAGES_FETCHED);
-                  }.bind(this)
-                });
-              }
-            }
           }.bind(this)
         });
         // check for launched intent of chat message
@@ -244,6 +227,8 @@ _.extend(ChatStore, {
 
             // self populate message
             newMessage.set('author', user);
+
+            this.threads.sort();
 
             // open thread
             this.active = thread.get('_id');
@@ -596,9 +581,7 @@ _.extend(ChatStore, {
     if(this.active == thread_id) {
 
     } else {
-      PushNotificationIOS.presentLocalNotification({
-        alertBody: message.author.displayName + ': ' + message.body
-      });
+
     }
   }
 });

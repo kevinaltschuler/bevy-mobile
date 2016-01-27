@@ -55,7 +55,8 @@ var InviteUserView = React.createClass({
       searchingInitial: true,
       searchUsers: [],
       ds: ds.cloneWithRows([]),
-      keyboardSpace: 0
+      keyboardSpace: 0,
+      invites: this.props.bevyInvites
     };
   },
 
@@ -116,10 +117,7 @@ var InviteUserView = React.createClass({
 
   onSearchUserSelect(user) {
     BevyActions.inviteUser(user);
-    var filteredUsers = _.reject(this.state.searchUsers, function($user){ return $user._id == user._id});
-    this.setState({
-      searchUsers: filteredUsers
-    })
+    UserActions.search(this.state.query);
   },
 
   onChangeToText(text) {

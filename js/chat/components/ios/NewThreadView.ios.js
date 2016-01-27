@@ -184,7 +184,6 @@ var NewThreadView = React.createClass({
   },
 
   _renderAddedUsers() {
-    console.log(this.state.addedUsers);
     var users = [];
     for(var key in this.state.addedUsers) {
       var addedUser = this.state.addedUsers[key];

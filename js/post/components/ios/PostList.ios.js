@@ -16,7 +16,8 @@ var {
   TouchableOpacity,
   ActivityIndicatorIOS,
   Image,
-  RefreshControl
+  RefreshControl,
+  AlertIOS
 } = React;
 var Spinner = require('react-native-spinkit');
 var Post = require('./Post.ios.js');
@@ -116,6 +117,7 @@ var PostList = React.createClass({
 
   requestJoin() {
     // send action
+    AlertIOS.alert('Request Sent!');
     BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },
 
@@ -201,6 +203,16 @@ var PostList = React.createClass({
   },
 
   _renderPosts() {
+    if(_.isEmpty(this.props.activeBevy.boards)) {
+      return (
+        <View style={ styles.noPostsContainer }>
+          <Text style={[ styles.noPostsText, {marginTop: -20} ]}>
+            This Bevy needs Boards
+          </Text>
+        </View>
+      );
+    }
+
     return (
       <ListView
         ref={ ref => { this.ListView = ref; }}

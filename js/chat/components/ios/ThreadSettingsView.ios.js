@@ -85,7 +85,7 @@ var ThreadSettingsView = React.createClass({
   },
 
   goBack() {
-    this.props.chatNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   showImagePicker() {
@@ -144,7 +144,7 @@ var ThreadSettingsView = React.createClass({
   leaveConversationForSure() {
     ChatActions.removeUser(this.props.activeThread._id, this.props.user._id);
     // go back to tab bar
-    this.props.chatNavigator.popToTop();
+    this.props.mainNavigator.popToTop();
   },
 
   deleteConversation() {
@@ -164,7 +164,7 @@ var ThreadSettingsView = React.createClass({
   deleteConversationForSure() {
     ChatActions.deleteThread(this.props.activeThread._id);
     // go back to tab bar
-    this.props.chatNavigator.popToTop();
+    this.props.mainNavigator.popToTop();
   },
 
   _renderPeople() {
@@ -192,7 +192,7 @@ var ThreadSettingsView = React.createClass({
   },
 
   addPeople() {
-    this.props.chatNavigator.push(routes.CHAT.ADDPEOPLE);
+    this.props.mainNavigator.push(routes.CHAT.ADDPEOPLE);
   },
 
   _renderName() {

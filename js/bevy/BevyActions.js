@@ -35,7 +35,8 @@ var BevyActions = {
   },
 
   destroy(bevy_id) {
-    dispatch(BEVY.DESTROY, {
+    Dispatcher.dispatch({
+      actionType: BEVY.DESTROY,
       bevy_id: bevy_id
     });
   },

@@ -21,7 +21,8 @@ var routes = {
     INVITEUSERS: { name: 'InviteUsers'},
     WEBVIEW: { name: 'WebView' },
     FEEDBACK: { name: 'FeedbackView' },
-    PATCHNOTES: { name: 'PatchNotes' }
+    PATCHNOTES: { name: 'PatchNotes' },
+    ADDPEOPLE: { name: 'AddPeople' }
   },
 
   NEWPOST: {
