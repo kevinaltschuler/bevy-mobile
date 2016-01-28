@@ -19,6 +19,7 @@ var routes = require('./../../../routes.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var UserStore = require('./../../../user/UserStore');
 
 var UserSearchItem = React.createClass({
   propTypes: {
@@ -51,8 +52,10 @@ var UserSearchItem = React.createClass({
   },
 
   onSelect() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.searchUser;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.searchUser
+    };
     this.props.mainNavigator.push(route);
   },
 
@@ -68,12 +71,8 @@ var UserSearchItem = React.createClass({
   },
 
   render() {
-    var image = this.props.searchUser.image;
-    if(_.isEmpty(image)) {
-      var image_url = constants.siteurl + '/img/user-profile-icon.png';
-    } else {
-      var image_url = image.path;
-    }
+    var imageSource = UserStore.getUserImage(this.props.searchUser.image, 64, 64);
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'
@@ -82,7 +81,7 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: image_url }}
+            source={ imageSource }
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>

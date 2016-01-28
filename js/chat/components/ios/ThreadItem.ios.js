@@ -44,7 +44,10 @@ var ThreadItem = React.createClass({
   goToMessageView() {
     var thread_id = this.props.thread._id;
     ChatActions.switchThread(thread_id);
-    this.props.mainNavigator.push(routes.MAIN.MESSAGEVIEW);
+    var route = {
+      name: routes.MAIN.MESSAGEVIEW
+    };
+    this.props.mainNavigator.push(route);
   },
 
   _renderTimeAgo() {

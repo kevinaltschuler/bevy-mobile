@@ -105,7 +105,7 @@ var ForgotView = React.createClass({
       <View style={ styles.container }>
         <Image
           style={ styles.logo }
-          source={{ uri: constants.siteurl + '/img/logo_100_reversed.png' }}
+          source={ require('./../../../images/logo_100_reversed.png') }
         />
         <View style={ styles.title }>
           <Text style={ styles.titleText }>
@@ -159,7 +159,7 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 3,
+    paddingTop: constants.width / 6,
     paddingHorizontal: constants.width / 12
   },
   logo: {

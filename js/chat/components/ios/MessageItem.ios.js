@@ -1,11 +1,12 @@
 /**
  * MessageItem.ios.js
- * @author albert
- * @author kevin
  *
- * using inline styles here because they rely so much on
+ * Component for each message in the message view list
+ * Using inline styles here because they rely so much on
  * its props and state
  *
+ * @author albert
+ * @author kevin
  * @flow
  */
 
@@ -29,6 +30,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var ChatActions = require('./../../../chat/ChatActions');
+var UserStore = require('./../../../user/UserStore');
 
 var MessageItem = React.createClass({
   propTypes: {
@@ -118,8 +120,10 @@ var MessageItem = React.createClass({
   },
 
   goToAuthorProfile() {
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.message.author;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.message.author
+    };
     this.props.mainNavigator.push(route);
   },
 
@@ -156,15 +160,15 @@ var MessageItem = React.createClass({
   },
 
   _renderImage() {
-    if(this.props.hidePic) return <View style={{height: 5, width: 50}}/>;
+    if(this.props.hidePic) return (
+      <View style={{ height: 5, width: 50 }}/>
+    );
 
-    var authorImageURL = (_.isEmpty(this.props.message.author.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.message.author.image, 64, 64).url;
+    var authorImageSource = UserStore.getUserImage(this.props.message.author.image, 64, 64);
 
     return (
       <Image
-        source={{ uri: authorImageURL }}
+        source={ authorImageSource }
         style={{
           width: 40,
           height: 40,
@@ -242,7 +246,7 @@ var MessageItem = React.createClass({
               }}>
                 { (this.state.isMe) ? 'Me' : this.props.message.author.displayName }
               </Text>
-              
+
               <Text style={{
                 textAlign: (this.state.isMe) ? 'right' : 'left',
                 color: (this.state.isMe) ? '#333' : '#333',

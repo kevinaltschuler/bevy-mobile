@@ -32,7 +32,7 @@ var ThreadImage = React.createClass({
   },
 
   _renderSingleImage() {
-    var image_url = ChatStore.getThreadImageURL(this.props.thread._id, 64, 64);
+    var imageSource = ChatStore.getThreadImageSource(this.props.thread._id, 64, 64);
     var imageStyle = {
       width: this.props.width,
       height: this.props.height,
@@ -41,7 +41,10 @@ var ThreadImage = React.createClass({
       backgroundColor: '#eee'
     };
     return (
-      <Image style={ imageStyle } source={{uri: image_url}}/>
+      <Image
+        style={ imageStyle }
+        source={ imageSource }
+      />
     );
   },
 
@@ -63,9 +66,7 @@ var ThreadImage = React.createClass({
         for(var key in threadUsers) {
           if(key > 3) continue; // limit these icons to 4
           var user = threadUsers[key];
-          var image_url = _.isEmpty(user.image)
-            ? constants.siteurl + '/img/user-profile-icon.png'
-            : resizeImage(user.image, 64, 64).url;
+          var imageSource = UserStore.getUserImage(user.image, 64, 64);
           var iconStyle = {
             flex: 1,
             padding: 0,
@@ -139,7 +140,7 @@ var ThreadImage = React.createClass({
             <Image
               key={ 'threadimage:user:' + user._id + Math.random() }
               style={ iconStyle }
-              source={{ uri: image_url }}
+              source={ imageSource }
             />
           );
         }

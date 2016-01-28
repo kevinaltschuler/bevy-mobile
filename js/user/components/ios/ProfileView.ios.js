@@ -29,6 +29,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var timeAgo = require('./../../../shared/helpers/timeAgo');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
 var ChatStore = require('./../../../chat/ChatStore');
@@ -108,8 +109,10 @@ var ProfileView = React.createClass({
 
     } else {
       // if it doesn't go to new thread view
-      var route = routes.MAIN.NEWTHREAD;
-      route.defaultUser = this.props.profileUser;
+      var route = {
+        name: routes.MAIN.NEWTHREAD,
+        defaultUser: this.props.profileUser
+      };
       this.props.mainNavigator.push(route);
     }
   },
@@ -160,9 +163,9 @@ var ProfileView = React.createClass({
   },
 
   render() {
-    var userImageURL = (_.isEmpty(this.state.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.state.image, 64, 64).url;
+    var userImageSource = (_.isEmpty(this.state.image))
+      ? require('./../../../images/user-profile-icon.png')
+      : { uri: resizeImage(this.state.image, 64, 64).url };
 
     return (
       <View style={ styles.container }>
@@ -205,7 +208,7 @@ var ProfileView = React.createClass({
           <View style={ styles.body }>
             <View style={ styles.profileCard }>
               <Image
-                source={{ uri: userImageURL }}
+                source={ userImageSource }
                 style={ styles.profileImage }
               />
               <View style={ styles.profileDetails }>
@@ -222,6 +225,23 @@ var ProfileView = React.createClass({
               General
             </Text>
 
+            <View style={ styles.generalItem }>
+              <View style={ styles.itemInner }>
+                <Icon
+                  name='access-time'
+                  size={ 30 }
+                  color='#AAA'
+                  style={ styles.itemIcon }
+                />
+                <Text style={ styles.generalTitle }>
+                  Joined
+                </Text>
+                <Text style={ styles.generalText }>
+                  { timeAgo(Date.parse(this.props.profileUser.created)) }
+                </Text>
+              </View>
+            </View>
+            { this._renderSeparator() }
             <View style={ styles.generalItem }>
               <View style={ styles.itemInner }>
                 <Icon

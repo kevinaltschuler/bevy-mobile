@@ -59,10 +59,12 @@ var NotificationItem = React.createClass({
       return;
     }
     this.markRead();
+    var route = {
+      name: routes.MAIN.COMMENT
+    };
     this.setState({
       fetching: true
     });
-    var route = routes.MAIN.COMMENT;
     var post_id = this.props.notification.data.post_id;
     var post = PostStore.getPost(post_id);
     // if the post isnt already loaded, then load from the server

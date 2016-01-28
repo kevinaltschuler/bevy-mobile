@@ -25,7 +25,7 @@ var ThreadCollection = Backbone.Collection.extend({
     var latest = thread.get('latest');
     return -(new Date(latest.created));
   },
-  url: function() {
+  url() {
     var user = UserStore.getUser();
     return constants.apiurl + '/users/' + user._id + '/threads';
   }

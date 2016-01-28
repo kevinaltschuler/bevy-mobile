@@ -80,19 +80,23 @@ var MainView = React.createClass({
   },
 
   _onLogout() {
-    this.props.mainNavigator.replace(routes.MAIN.LOGIN);
+    console.log('no user found. going to login view...');
+    this.props.mainNavigator.replace({
+      name: routes.MAIN.LOGIN
+    });
   },
 
   _onTokens() {
     console.log('got the tokens, loading app');
-    this.props.mainNavigator.replace(routes.MAIN.TABBAR);
+    this.props.mainNavigator.replace({
+      name: routes.MAIN.TABBAR
+    });
     AppActions.load();
   },
 
   render() {
-
     switch(this.props.mainRoute.name) {
-      case routes.MAIN.EDITPOST.name:
+      case routes.MAIN.EDITPOST:
         return (
           <NewPostView
             { ...this.props }
@@ -101,19 +105,19 @@ var MainView = React.createClass({
           />
         );
         break;
-      case routes.MAIN.NEWPOST.name:
+      case routes.MAIN.NEWPOST:
         return <NewPostView { ...this.props } />;
         break;
 
-      case routes.MAIN.NEWBEVY.name:
+      case routes.MAIN.NEWBEVY:
         return <NewBevyView { ...this.props } />;
         break;
 
-      case routes.MAIN.NEWBOARD.name:
+      case routes.MAIN.NEWBOARD:
         return <NewBoardView {...this.props}/>;
         break;
 
-      case routes.MAIN.COMMENT.name:
+      case routes.MAIN.COMMENT:
         return (
           <CommentView
             post={ this.props.mainRoute.post }
@@ -122,7 +126,7 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.PROFILE.name:
+      case routes.MAIN.PROFILE:
         return (
           <ProfileView
             profileUser={ this.props.mainRoute.profileUser }
@@ -131,7 +135,7 @@ var MainView = React.createClass({
         )
         break;
 
-      case routes.MAIN.MAP.name:
+      case routes.MAIN.MAP:
         return (
           <LocationView
             location={this.props.mainRoute.location || 'no location'}
@@ -140,14 +144,14 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.BEVYNAV.name:
+      case routes.MAIN.BEVYNAV:
         return (
           <BevyNavigator
             { ...this.props }
           />
         );
         break;
-      case routes.MAIN.NEWTHREAD.name:
+      case routes.MAIN.NEWTHREAD:
         return (
           <NewThreadView
             defaultUser={this.props.mainRoute.defaultUser}
@@ -156,11 +160,11 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.INVITEUSERS.name:
+      case routes.MAIN.INVITEUSERS:
         return <InviteUserView { ...this.props }/>
         break;
 
-      case routes.MAIN.WEBVIEW.name:
+      case routes.MAIN.WEBVIEW:
         return (
           <Browser
             initialURL={ this.props.mainRoute.initialURL }
@@ -169,19 +173,32 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.FEEDBACK.name:
+      case routes.MAIN.FEEDBACK:
         return <FeedbackView { ...this.props } />;
         break;
 
-      case routes.MAIN.PATCHNOTES.name:
+      case routes.MAIN.PATCHNOTES:
         return <PatchNotesView { ...this.props } />;
         break;
 
-      case routes.MAIN.MESSAGEVIEW.name:
+      case routes.MAIN.TABBAR:
+        return (
+          <MainTabBar
+            { ...this.props }
+            initialThread={this.state.initialThread}
+            clearInitialThread={() => {
+              this.setState({
+                initialThread: {}
+              })
+            }}
+          />
+        );
+
+      case routes.MAIN.MESSAGEVIEW:
         return <MessageView {...this.props }/>
         break;
 
-      case routes.MAIN.THREADSETTINGS.name:
+      case routes.MAIN.THREADSETTINGS:
         return (
           <ThreadSettingsView
             { ...this.props }
@@ -189,7 +206,7 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.ADDPEOPLE.name:
+      case routes.MAIN.ADDPEOPLE:
         return (
           <AddPeopleView
             { ...this.props }
@@ -197,23 +214,11 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.TABBAR.name:
-        return <MainTabBar
-                  { ...this.props }
-                  initialThread={this.state.initialThread}
-                  clearInitialThread={() => {
-                    this.setState({
-                      initialThread: {}
-                    })
-                  }}
-                />
-        break;
-
-      case routes.MAIN.LOADING.name:
+      case routes.MAIN.LOADING:
         return <Loading {...this.props} />
         break;
 
-      case routes.MAIN.LOGIN.name:
+      case routes.MAIN.LOGIN:
       default:
         return <LoginNavigator { ...this.props } />;
         break;

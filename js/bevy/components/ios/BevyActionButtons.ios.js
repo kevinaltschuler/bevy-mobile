@@ -153,9 +153,12 @@ var BevyActionButtons = React.createClass({
   },
 
   inviteUsers() {
-    if(this.state.isAdmin)
-      this.props.mainNavigator.push(routes.MAIN.INVITEUSERS);
-    else {
+    if(this.state.isAdmin) {
+      var route = {
+        name: routes.MAIN.INVITEUSERS
+      };
+      this.props.mainNavigator.push(route);
+    } else {
       AlertIOS.alert(
        'Only admins may invite users'
       );
@@ -163,7 +166,10 @@ var BevyActionButtons = React.createClass({
   },
 
   goToInfoView() {
-    this.props.bevyNavigator.push(routes.BEVY.INFO);
+    var route = {
+      name: routes.BEVY.INFO
+    };
+    this.props.bevyNavigator.push(route);
   },
 
   render() {

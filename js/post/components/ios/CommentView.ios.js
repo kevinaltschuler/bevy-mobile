@@ -39,10 +39,8 @@ var CommentView = React.createClass({
 
   getInitialState() {
     var post = this.props.post;
-    var comments = this.nestComments(post.comments);
     return {
       post: post,
-      comments: comments,
       replyToComment: {},
       replyText: '',
       keyboardSpace: 0,
@@ -59,8 +57,7 @@ var CommentView = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      post: nextProps.post,
-      comments: this.nestComments(nextProps.post.comments)
+      post: nextProps.post
     });
   },
 
@@ -80,7 +77,6 @@ var CommentView = React.createClass({
     .then(res => {
       this.setState({
         post: res,
-        comments: this.nestComments(res.comments),
         loading: false
       });
     })
@@ -113,7 +109,7 @@ var CommentView = React.createClass({
   },
 
   postReply() {
-    var text = this.state.replyText;
+    /*var text = this.state.replyText;
     // dont post empty reply
     if(_.isEmpty(text)) {
       this.setState({ replyText: '' });
@@ -139,43 +135,17 @@ var CommentView = React.createClass({
       created: (new Date()).toString(),
       comments: []
     };
-    var comments = this.state.post.comments;
-    comments.push(comment);
-    comments = this.nestComments(comments);
     this.setState({
       replyText: '', // clear comment field
-      comments: comments
     });
 
-    setTimeout(this.ReplyInput.blur, 500);
-  },
-
-  nestComments(comments, parentId, depth) {
-    // increment depth (used for indenting later)
-    if(typeof depth === 'number') depth++;
-    else depth = 0;
-    if(_.isEmpty(comments)) return;
-    if(comments.length < 0) return []; // return if it's the end of the line
-
-    var $comments = [];
-    comments.forEach(function(comment, index) {
-      // look for comments under this one
-      if(comment.parentId == parentId) {
-        comment.depth = depth;
-        // and keep going
-        comment.comments = this.nestComments(comments, comment._id, depth);
-        $comments.push(comment);
-        // TODO: splice the matched comment out of the list so we can go faster
-      }
-    }.bind(this));
-
-    return $comments;
+    setTimeout(this.ReplyInput.blur, 500);*/
   },
 
   _renderPost() {
     if(this.state.post.type == 'event') {
       return (
-        <View style={{marginTop: 0}}>
+        <View style={{ marginTop: 0 }}>
           <Event
             inCommentView={ true }
             post={ this.state.post }
@@ -187,7 +157,7 @@ var CommentView = React.createClass({
       )
     }
     return (
-      <View style={{marginTop: 5}}>
+      <View style={{ marginTop: 5 }}>
         <Post
           inCommentView={ true }
           post={ this.state.post }
@@ -200,11 +170,17 @@ var CommentView = React.createClass({
   },
 
   _renderNoCommentsText() {
-    var text = <Text style={ styles.noCommentsText }> No Comments Yet! </Text>;
+    var text = (
+      <Text style={ styles.noCommentsText }>
+        No Comments Yet!
+      </Text>
+    );
+
     if(_.isEmpty(this.state.comments))
       return text;
     if(this.state.comments.length <= 0)
       return text;
+
     return null;
   },
 
@@ -259,7 +235,7 @@ var CommentView = React.createClass({
         </Text>
         <View style={ styles.commentsCard }>
           <CommentList
-            comments={ this.state.comments }
+            comments={ this.state.post.nestedComments }
             onReply={ this.onReply }
             mainNavigator={ this.props.mainNavigator }
             user={ this.props.user }

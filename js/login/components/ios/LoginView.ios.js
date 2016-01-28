@@ -97,7 +97,9 @@ var LoginView = React.createClass({
     this.UsernameInput.blur();
     this.PasswordInput.blur();
 
-    this.props.loginNavigator.push(routes.LOGIN.REGISTER);
+    this.props.loginNavigator.push({
+      name: routes.LOGIN.REGISTER
+    });
   },
 
   goToForgot() {
@@ -105,7 +107,9 @@ var LoginView = React.createClass({
     this.UsernameInput.blur();
     this.PasswordInput.blur();
 
-    this.props.loginNavigator.push(routes.LOGIN.FORGOT);
+    this.props.loginNavigator.push({
+      name: routes.LOGIN.FORGOT
+    });
   },
 
   _renderError() {
@@ -120,10 +124,12 @@ var LoginView = React.createClass({
   },
 
   render() {
-    var logoUrl = constants.apiurl + '/img/logo_100_reversed.png';
     return (
       <View style={ styles.container }>
-        <Image style={styles.logo} source={{uri: logoUrl}}/>
+        <Image
+          style={ styles.logo }
+          source={ require('./../../../images/logo_100_reversed.png') }
+        />
         <View style={styles.title}>
           <Text style={styles.titleText}>
             Bevy

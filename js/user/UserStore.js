@@ -10,6 +10,7 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var base64 = require('base-64');
+var resizeImage = require('./../shared/helpers/resizeImage');
 var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var USER = constants.USER;
@@ -615,11 +616,11 @@ _.extend(UserStore, {
     AsyncStorage.removeItem('expires_in');
   },
 
-  getUserImage(user, width, height) {
+  getUserImage(image, width, height) {
     var img_default = require('./../images/user-profile-icon.png');
-    var source = { uri: ((_.isEmpty(user.image))
+    var source = { uri: ((_.isEmpty(image))
       ? ''
-      : user.image.path) };
+      : image.path) };
     if(source.uri == (constants.siteurl + '/img/user-profile-icon.png')) {
       source = img_default;
       return source;
@@ -630,23 +631,11 @@ _.extend(UserStore, {
       source = img_default;
       return source;
     }
-    if(source.uri.slice(7, 23) == 'api.joinbevy.com'
-      && width != undefined
-      && height != undefined
-      && this.gup('w', user.image.path) == null
-      && this.gup('h', user.image.path) == null) {
-      source.uri += '?w=' + width + '&h=' + height;
+    // if we're hosting the image, then its safe to pass resize url params
+    if(!image.foreign) {
+      source.uri = resizeImage(image, width, height).url;
     }
     return source;
-  },
-
-  gup(name, url) {
-    if(!url) url = location.href;
-    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    var regexS = "[\\?&]"+name+"=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(url);
-    return results == null ? null : results[1];
   }
 });
 

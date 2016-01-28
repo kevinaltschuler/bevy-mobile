@@ -31,6 +31,7 @@ module.exports = {
     }, {
       header: 'Bug Fixes',
       bodyItems: [
+        'Improve image loading performance',
         'Fix notification read/unread logic',
         'Fix performance and refresh issues in the notifications tab',
         'Fix issues in New Board View',

@@ -38,6 +38,8 @@ var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var UserStore = require('./../../../user/UserStore');
+var BevyStore = require('./../../../bevy/BevyStore');
 var FILE = constants.FILE;
 var POST = constants.POST;
 
@@ -174,7 +176,10 @@ var InputView = React.createClass({
   },
 
   goToBoardPickerView() {
-    this.props.newPostNavigator.push(routes.NEWPOST.BOARDPICKER);
+    var route = {
+      name: routes.NEWPOST.BOARDPICKER
+    };
+    this.props.newPostNavigator.push(route);
   },
 
   submit() {
@@ -225,8 +230,10 @@ var InputView = React.createClass({
   },
 
   goToCommentView(post) {
-    var route = routes.MAIN.COMMENT;
-    route.post = post;
+    var route = {
+      name: routes.MAIN.COMMENT,
+      post: post
+    };
 
     var currentRoutes = this.props.mainNavigator.getCurrentRoutes();
     // if the comment route is already in the route stack,
@@ -234,7 +241,7 @@ var InputView = React.createClass({
     //
     // remove that previous comment route and push it to
     // the front of the stack
-    if(_.findWhere(currentRoutes, { name: routes.MAIN.COMMENT.name }) != undefined) {
+    if(_.findWhere(currentRoutes, { name: routes.MAIN.COMMENT }) != undefined) {
       var commentViewIndex = currentRoutes.length - 2;
       // rerender the comment view with our fresh post
       this.props.mainNavigator.replaceAtIndex(route, commentViewIndex);
@@ -258,15 +265,13 @@ var InputView = React.createClass({
       ? this.props.post.board
       : this.props.postingToBoard;
 
-    var boardImageURL = (_.isEmpty(board.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(board.image, 80, 80).url;
+    var boardImageSource = BevyStore.getBoardImage(board.image, 64, 64);
 
     if(this.props.editing) {
       return (
         <View style={ styles.boardItemDetails }>
           <Image
-            source={{ uri: boardImageURL }}
+            source={ boardImageSource }
             style={ styles.boardImage }
           />
           <Text style={styles.boardName}>
@@ -282,7 +287,7 @@ var InputView = React.createClass({
         >
           <View style={ styles.boardItemDetails }>
             <Image
-              source={{ uri: boardImageURL }}
+              source={ boardImageSource }
               style={ styles.boardImage }
             />
             <Text
@@ -383,9 +388,7 @@ var InputView = React.createClass({
   },
 
   render() {
-    var authorImageURL = (_.isEmpty(this.props.user.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.user.image, 64, 64).url;
+    var authorImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
 
     return (
       <View style={[ styles.container, {
@@ -442,8 +445,8 @@ var InputView = React.createClass({
           <Text style={ styles.sectionTitle }>Post</Text>
           <View style={ styles.input }>
             <Image
-              style={styles.inputProfileImage}
-              source={{ uri: authorImageURL }}
+              style={ styles.inputProfileImage }
+              source={ authorImageSource }
             />
             <TextInput
               ref={ ref => { this.TitleInput = ref; }}

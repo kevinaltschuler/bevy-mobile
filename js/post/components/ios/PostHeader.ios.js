@@ -24,6 +24,7 @@ var timeAgo = require('./../../../shared/helpers/timeAgo')
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BoardActions = require('./../../../bevy/BoardActions');
 var BevyActions = require('./../../../bevy/BevyActions');
+var UserStore = require('./../../../user/UserStore');
 
 var PostHeader = React.createClass({
   propTypes: {
@@ -40,8 +41,10 @@ var PostHeader = React.createClass({
       return;
     }
 
-    var route = routes.MAIN.PROFILE;
-    route.profileUser = this.props.post.author;
+    var route = {
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.post.author
+    };
     this.props.mainNavigator.push(route);
   },
 
@@ -51,16 +54,14 @@ var PostHeader = React.createClass({
     // switch boards
     BoardActions.switchBoard(this.props.post.board._id);
 
-    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV.name) {
+    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV) {
       // already in bevy view, do nothing
-    } else if (_.findWhere(this.props.mainNavigator.getCurrentRoutes(),
-      { name: routes.MAIN.BEVYNAV.name }) != undefined) {
-      // the bevy nav route is somewhere back in the route stack
-      // so lets pop to it
-      this.props.mainNavigator.popToRoute(routes.MAIN.BEVYNAV);
     } else {
       // the route isn't in the history, so push to it
-      this.props.mainNavigator.push(routes.MAIN.BEVYNAV);
+      var route = {
+        name: routes.MAIN.BEVYNAV
+      };
+      this.props.mainNavigator.push(route);
     }
   },
 
@@ -93,9 +94,7 @@ var PostHeader = React.createClass({
   },
 
   render() {
-    var authorImageURL = _.isEmpty(this.props.post.author.image)
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.post.author.image, 64, 64).url;
+    var authorImageSource = UserStore.getUserImage(this.props.post.author.image, 64, 64);
 
     return (
       <View style={ styles.container }>
@@ -105,7 +104,7 @@ var PostHeader = React.createClass({
         >
           <Image
             style={ styles.authorImage }
-            source={{ uri: authorImageURL }}
+            source={ authorImageSource }
           />
         </TouchableOpacity>
         <View style={ styles.detailsRow }>

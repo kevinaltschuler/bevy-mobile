@@ -42,12 +42,12 @@ var LoginNavigator = React.createClass({
       <Navigator
         navigator={ this.props.mainNavigator }
         configureScene={() => sceneConfig }
-        initialRouteStack={[
-          routes.LOGIN.LOGIN
-        ]}
+        initialRouteStack={[{
+          name: routes.LOGIN.LOGIN
+        }]}
         renderScene={(route, navigator) => {
           switch(route.name) {
-            case routes.LOGIN.LOGIN.name:
+            case routes.LOGIN.LOGIN:
               return (
                 <LoginView
                   { ...this.props }
@@ -57,7 +57,7 @@ var LoginNavigator = React.createClass({
               );
               break;
 
-            case routes.LOGIN.REGISTER.name:
+            case routes.LOGIN.REGISTER:
               return (
                 <RegisterView
                   { ...this.props }
@@ -67,7 +67,7 @@ var LoginNavigator = React.createClass({
               );
               break;
 
-            case routes.LOGIN.FORGOT.name:
+            case routes.LOGIN.FORGOT:
               return (
                 <ForgotView
                   { ...this.props }

@@ -218,7 +218,7 @@ var RegisterView = React.createClass({
       <View style={ styles.container }>
         <Image
           style={ styles.logo }
-          source={{ uri: constants.siteurl + '/img/logo_100_reversed.png' }}
+          source={ require('./../../../images/logo_100_reversed.png') }
         />
         <View style={ styles.title }>
           <Text style={ styles.titleText }>

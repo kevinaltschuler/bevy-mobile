@@ -20,6 +20,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var UserStore = require('./../../../user/UserStore');
 
 var UserSearchItem = React.createClass({
   propTypes: {
@@ -68,9 +69,7 @@ var UserSearchItem = React.createClass({
   },
 
   render() {
-    var userImageURL = (_.isEmpty(this.props.user.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.user.image, 64, 64).url;
+    var userImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
 
     if(this.props.selected) {
       return <View/>;
@@ -84,7 +83,7 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: userImageURL }}
+            source={ userImageSource }
           />
           <View style={ styles.details }>
             <Text style={ styles.name }>

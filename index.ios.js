@@ -25,6 +25,13 @@ var NotificationActions = require('./js/notification/NotificationActions');
 var Backbone = require('backbone');
 var _ = require('underscore');
 
+var UserStore = require('./js/user/UserStore');
+var PostStore = require('./js/post/PostStore');
+var ChatStore = require('./js/chat/ChatStore');
+var FileStore = require('./js/file/FileStore');
+var NotificationStore = require('./js/notification/NotificationStore');
+var BevyStore = require('./js/bevy/BevyStore');
+
 var $fetch = window.fetch;
 window.fetch = function(input, init) {
   var url = input;
@@ -90,13 +97,6 @@ var change_all_events = [
   BOARD.CHANGE_ALL,
   USER.CHANGE_ALL
 ].join(' ');
-
-var BevyStore = require('./js/bevy/BevyStore');
-var PostStore = require('./js/post/PostStore');
-var ChatStore = require('./js/chat/ChatStore');
-var FileStore = require('./js/file/FileStore');
-var NotificationStore = require('./js/notification/NotificationStore');
-var UserStore = require('./js/user/UserStore');
 
 var Dispatcher = require('./js/shared/dispatcher');
 
@@ -298,7 +298,9 @@ var App = React.createClass({
       <View style={ styles.container }>
         <Navigator
           configureScene={() => sceneConfig }
-          initialRouteStack={[routes.MAIN.LOADING]}
+          initialRouteStack={[{
+            name: routes.MAIN.LOADING
+          }]}
           renderScene={(route, navigator) => {
             return (
               <MainView

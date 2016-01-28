@@ -20,6 +20,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var UserStore = require('./../../../user/UserStore');
 
 var hintTexts = [
   "What's on your mind?",
@@ -57,13 +58,14 @@ var NewPostCard = React.createClass({
   },
 
   goToNewPost() {
-    this.props.mainNavigator.push(routes.MAIN.NEWPOST);
+    var route = {
+      name: routes.MAIN.NEWPOST
+    };
+    this.props.mainNavigator.push(route);
   },
 
   render() {
-    var userImageURL = (!_.isEmpty(this.props.user.image))
-      ? resizeImage(this.props.user.image, 64, 64).url
-      : constants.siteurl + '/img/user-profile-icon.png';
+    var userImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
 
     return (
       <TouchableOpacity
@@ -73,7 +75,7 @@ var NewPostCard = React.createClass({
       >
         <View style={ styles.container }>
           <Image
-            source={{ uri: userImageURL }}
+            source={ userImageSource }
             style={ styles.image }
           />
           <View style={ styles.textContainer }>

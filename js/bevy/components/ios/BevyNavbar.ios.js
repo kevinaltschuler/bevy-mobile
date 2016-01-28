@@ -23,6 +23,7 @@ var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var BevyNavbar = React.createClass({
   propTypes: {
@@ -73,17 +74,13 @@ var BevyNavbar = React.createClass({
   },
 
   _renderCenter() {
-    var boardName = _.isEmpty(this.props.activeBoard)
-    ? ''
-    : " > " + this.props.activeBoard.name;
-
     if(typeof this.props.center === 'string') {
       return (
         <Text
           style={ styles.titleText }
           numberOfLines={ 1 }
         >
-          { this.props.center + boardName }
+          { this.props.center }
         </Text>
       );
     } else {

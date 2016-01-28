@@ -74,7 +74,9 @@ var MainTabBar = React.createClass({
       // notification for post
       if(!_.isEmpty(note.post_id)) {
         var post_id = note.post_id;
-        var route = routes.MAIN.COMMENT;
+        var route = {
+          name: routes.MAIN.COMMENT
+        };
         var post = PostStore.getPost(post_id);
         // if the post isnt already loaded, then load from the server
         if(_.isEmpty(post)) {

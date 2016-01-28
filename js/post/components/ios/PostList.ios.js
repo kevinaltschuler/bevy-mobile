@@ -137,10 +137,9 @@ var PostList = React.createClass({
 
   onBoardSwitched() {
     // once the board is switched, scroll back to the top of the ListView
-
     // dont do it if theres no rows being rendered
     if(this.state.ds.getRowCount() <= 0) return;
-
+    // scroll to top
     this.ListView.scrollTo(0, 0);
   },
 
@@ -243,7 +242,7 @@ var PostList = React.createClass({
       <View style={ styles.privateContainer }>
         <Image
           style={ styles.privateImage }
-          source={{ uri: constants.siteurl + '/img/private.png' }}
+          source={ require('./../../../images/private.png') }
         />
         <Text style={ styles.privateText }>
           This Bevy is Private

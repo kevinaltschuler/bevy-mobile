@@ -55,7 +55,8 @@ var BevyInfoView = React.createClass({
       subscribed: _.contains(this.props.user.bevies, this.props.activeBevy._id),
       isAdmin: _.findWhere(this.props.activeBevy.admins,
         { _id: this.props.user._id }) != undefined,
-      public: true
+      public: true,
+      image: this.props.activeBevy.image
     };
   },
 
@@ -64,23 +65,26 @@ var BevyInfoView = React.createClass({
       subscribed: _.contains(nextProps.user.bevies, nextProps.activeBevy._id),
       isAdmin: _.findWhere(nextProps.activeBevy.admins,
         { _id: nextProps.user._id }) != undefined,
+      image: nextProps.activeBevy.image
     });
   },
 
   componentDidMount() {
-    FileStore.on(FILE.UPLOAD_COMPLETE, image => {
-      BevyActions.update(
-        this.props.activeBevy._id, // bevy id
-        null, // name
-        null, // description
-        image, // image
-        null // settings
-      );
-    });
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onFileUpload);
   },
-
   componentWillUnmount() {
     FileStore.off(FILE.UPLOAD_COMPLETE);
+  },
+
+  onFileUpload(image) {
+    this.setState({ image: image });
+    BevyActions.update(
+      this.props.activeBevy._id, // bevy id
+      null, // name
+      null, // description
+      image, // image
+      null // settings
+    );
   },
 
   goBack() {

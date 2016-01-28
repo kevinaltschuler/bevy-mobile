@@ -1,67 +1,70 @@
+/**
+ * routes.js
+ *
+ * list of route constants used for navigation
+ *
+ * @author albert
+ * @flow
+ */
+
 'use strict';
 
 var routes = {
   MAIN: {
-    LOADING: { name: 'loading'},
-    TABBAR: { name: 'MainTabBar' },
-    NEWPOST: { name: 'NewPost' },
-    EDITPOST: { name: 'EditPost' },
-    NEWBEVY: { name: 'NewBevy' },
-    NEWBOARD: { name: 'NewBoard' },
-    COMMENT: { name: 'Comment' },
-    PROFILE: { name: 'Profile' },
-    BEVYNAV: { name: 'BevyNav' },
-    MAP: { name: 'Map' },
-    LOGIN: { name: 'Login' },
-    MESSAGEVIEW: { name: 'Messages' },
-    SWITCHACCOUNT: { name: 'SwitchAccount' },
-    NEWTHREAD: { name: 'NewThread' },
-    THREADSETTINGS: { name: 'ThreadSettings' },
-    ADDUSER: { name: 'AddUser' }, // FOR ANDROID
-    INVITEUSERS: { name: 'InviteUsers'},
-    WEBVIEW: { name: 'WebView' },
-    FEEDBACK: { name: 'FeedbackView' },
-    PATCHNOTES: { name: 'PatchNotes' },
-    ADDPEOPLE: { name: 'AddPeople' }
+    LOADING: 'MAIN_LOADING',
+    TABBAR: 'MAIN_TABBAR',
+    NEWPOST: 'MAIN_NEWPOST',
+    EDITPOST: 'MAIN_EDITPOST',
+    NEWBEVY: 'MAIN_NEWBEVY',
+    NEWBOARD: 'MAIN_NEWBOARD',
+    COMMENT: 'MAIN_COMMENT',
+    PROFILE: 'MAIN_PROFILE',
+    BEVYNAV: 'MAIN_BEVYNAV',
+    MAP: 'MAIN_MAP',
+    LOGIN: 'MAIN_LOGIN',
+    MESSAGEVIEW: 'MAIN_MESSAGEVIEW',
+    NEWTHREAD: 'MAIN_NEWTHREAD',
+    THREADSETTINGS: 'MAIN_THREADSETTINGS',
+    ADDUSER: 'MAIN_ADDUSER',
+    INVITEUSERS: 'MAIN_INVITEUSERS',
+    WEBVIEW: 'MAIN_WEBVIEW',
+    FEEDBACK: 'MAIN_FEEDBACK',
+    PATCHNOTES: 'MAIN_PATCHNOTES',
+    ADDPEOPLE: 'MAIN_ADDPEOPLE'
   },
 
   NEWPOST: {
-    INPUT: { name: 'input' },
-    BOARDPICKER: { name: 'boardpicker' },
-    CREATEEVENT: { name: 'createevent' },
-    DATEPICKER: { name: 'datepicker' },
-    TAGPICKER: { name: 'tagpicker' }
-  },
-
-  SEARCH: {
-    IN: { name: 'in' }, // searching
-    OUT: { name: 'out' } // not searching
+    INPUT: 'NEWPOST_INPUT',
+    BOARDPICKER: 'NEWPOST_BOARDPICKER',
+    CREATEEVENT: 'NEWPOST_CREATEEVENT',
+    DATEPICKER: 'NEWPOST_DATEPICKER',
+    TAGPICKER: 'NEWPOST_TAGPICKER'
   },
 
   LOGIN: {
-    LOGIN: { name: 'LoginView' },
-    FORGOT: { name: 'ForgotView' },
-    REGISTER: { name: 'RegisterView' }
+    LOGIN: 'LOGIN_LOGIN',
+    FORGOT: 'LOGIN_FORGOT',
+    REGISTER: 'LOGIN_REGISTER'
   },
 
   BEVY: {
-    BEVYVIEW: { name: 'BevyView' },
-    INFO: { name: 'InfoView' },
-    SETTINGS: { name: 'BevySettings' },
-    MYBEVIES: { name: 'MyBevies' },
-    BOARDSETTINGS: { name: 'BoardSettings' },
-    BOARDINFO: { name: 'BoardInfo' }
+    BEVYVIEW: 'BEVY_BEVYVIEW',
+    INFO: 'BEVY_INFO',
+    SETTINGS: 'BEVY_SETTINGS',
+    MYBEVIES: 'BEVY_MYBEVIES',
+    BOARDSETTINGS: 'BEVY_BOARDSETTINGS',
+    BOARDINFO: 'BEVY_BOARDINFO'
   },
 
   CHAT: {
-    THREADLIST: { name: 'ThreadList' },
-    ADDPEOPLE: { name: 'AddPeople' },
-    THREADSETTINGS: { name: 'ThreadSettings' },
-    MESSAGEVIEW: { name: 'MessageView' }
+    THREADLIST: 'CHAT_THREADLIST',
+    ADDPEOPLE: 'CHAT_ADDPEOPLE',
+    THREADSETTINGS: 'CHAT_THREADSETTINGS',
+    MESSAGEVIEW: 'CHAT_MESSAGEVIEW'
   },
 
   PROFILE: {
-    USER: { name: 'UserView' }
+    USER: 'PROFILE_USER'
   }
 };
 

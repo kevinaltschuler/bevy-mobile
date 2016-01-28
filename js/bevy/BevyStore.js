@@ -11,6 +11,7 @@
 
 var Backbone = require('backbone');
 var _ = require('underscore');
+var resizeImage = require('./../shared/helpers/resizeImage');
 var Dispatcher = require('./../shared/dispatcher');
 var getSlug = require('speakingurl');
 var React = require('react-native');
@@ -74,8 +75,8 @@ _.extend(BevyStore, {
   // these are created from BevyActions.js
   handleDispatch(payload) {
     switch(payload.actionType) {
-
       case APP.LOAD:
+        var UserStore = require('./../user/UserStore');
         var user = UserStore.getUser();
         // explicitly set the collection url for the user
         this.myBevies.url = constants.apiurl + '/users/' + user._id + '/bevies';
@@ -114,6 +115,7 @@ _.extend(BevyStore, {
 
       case BEVY.SWITCH:
         var bevy_id_or_slug = payload.bevy_id;
+        var UserStore = require('./../user/UserStore');
         var user = UserStore.getUser();
         this.active.url = constants.apiurl + '/bevies/' + bevy_id_or_slug;
         this.bevyInvites.url = constants.apiurl + '/bevies/' + bevy_id_or_slug + '/invites';
@@ -577,23 +579,47 @@ _.extend(BevyStore, {
     }
   },
 
-  getBevyImage(bevy_id, width, height) {
+  getBevyImage(image, width, height) {
     var default_img = require('./../images/logo_200.png');
-    if(bevy_id == -1) return default_img;
-    var bevy = this.myBevies.get(bevy_id) || this.publicBevies.get(bevy_id);
-    if(bevy == undefined) return default_img;
-    var source = { uri: (_.isEmpty(bevy.get('image')))
-      ? ''
-      : bevy.get('image').path };
+    if(_.isEmpty(image)) return default_img;
+    var source;
 
-    if(source.uri.slice(7, 23) == 'api.joinbevy.com'
-      && width != undefined
-      && height != undefined) {
-      source.uri += '?w=' + width + '&h=' + height;
-    }
-    if(_.isEmpty(source.uri)) {
+    if(image.path == (constants.siteurl + '/img/logo_200.png')) {
       source = default_img;
+      return source;
+    } else if(image.path == '/img/logo_200.png') {
+      source = default_img;
+      return source;
+    } else {
+      source = { uri: image.path };
     }
+
+    if(!image.foreign) {
+      source = { uri: resizeImage(image, width, height).url };
+    }
+
+    return source;
+  },
+
+  getBoardImage(image, width, height) {
+    var default_img = require('./../images/default_board_img.png');
+    if(_.isEmpty(image)) return default_img;
+    var source;
+
+    if(image.path == (constants.siteurl + '/img/default_board_img.png')) {
+      source = default_img;
+      return source;
+    } else if(image.path == '/img/default_board_img.png') {
+      source = default_img;
+      return source;
+    } else {
+      source = { uri: image.path };
+    }
+
+    if(!image.foreign) {
+      source = { uri: resizeImage(image, width, height).url };
+    }
+
     return source;
   },
 
