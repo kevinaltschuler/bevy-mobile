@@ -29,6 +29,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var timeAgo = require('./../../../shared/helpers/timeAgo');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
 var ChatStore = require('./../../../chat/ChatStore');
@@ -224,6 +225,23 @@ var ProfileView = React.createClass({
               General
             </Text>
 
+            <View style={ styles.generalItem }>
+              <View style={ styles.itemInner }>
+                <Icon
+                  name='access-time'
+                  size={ 30 }
+                  color='#AAA'
+                  style={ styles.itemIcon }
+                />
+                <Text style={ styles.generalTitle }>
+                  Joined
+                </Text>
+                <Text style={ styles.generalText }>
+                  { timeAgo(Date.parse(this.props.profileUser.created)) }
+                </Text>
+              </View>
+            </View>
+            { this._renderSeparator() }
             <View style={ styles.generalItem }>
               <View style={ styles.itemInner }>
                 <Icon
