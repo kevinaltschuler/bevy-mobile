@@ -546,10 +546,10 @@ _.extend(ChatStore, {
     if(thread == undefined) return 'thread not found';
     return thread.getName();
   },
-  getThreadImageURL(thread_id, width, height) {
+  getThreadImageSource(thread_id, width, height) {
     var thread = this.threads.get(thread_id);
-    if(thread == undefined) return '/img/logo_100.png';
-    return thread.getImageURL(width, height);
+    if(thread == undefined) return require('./../images/logo_100.png');
+    return thread.getImageSource(width, height);
   },
   getMessages(thread_id: String) {
     var thread = this.threads.get(thread_id);

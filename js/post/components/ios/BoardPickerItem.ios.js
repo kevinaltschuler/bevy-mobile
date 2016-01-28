@@ -22,6 +22,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var BoardPickerItem = React.createClass({
   propTypes: {
@@ -53,9 +54,7 @@ var BoardPickerItem = React.createClass({
   },
 
   render() {
-    var boardImageURL = (_.isEmpty(this.props.board.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(this.props.board.image, 80, 80).url;
+    var boardImageSource = BevyStore.getBoardImage(this.props.board.image, 64, 64);
 
     return (
       <TouchableOpacity
@@ -64,7 +63,7 @@ var BoardPickerItem = React.createClass({
       >
         <View style={ styles.container }>
           <Image
-            source={{ uri: boardImageURL }}
+            source={ boardImageSource }
             style={ styles.boardImage }
           />
           <Text

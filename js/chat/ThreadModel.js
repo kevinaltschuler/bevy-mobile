@@ -60,18 +60,18 @@ var ThreadModel = Backbone.Model.extend({
     return '';
   },
 
-   getImageURL(width, height) {
-    var default_bevy_img = constants.siteurl + '/img/default_board_img.png';
-    var default_user_img = constants.siteurl + '/img/user-profile-icon.png';
+   getImageSource(width, height) {
+    var default_bevy_img = require('./../images/default_board_img.png');
+    var default_user_img = require('./../images/user-profile-icon.png');
 
     if(!_.isEmpty(this.get('image'))) {
-      return resizeImage(this.get('image'), width, height).url;
+      return { uri: resizeImage(this.get('image'), width, height).url };
     }
     switch(this.get('type')) {
       case 'board':
         var board = this.get('board');
         if(_.isEmpty(board.image)) return default_bevy_img;
-        return resizeImage(board.image, width, height).url;
+        return { uri: resizeImage(board.image, width, height).url };
         break;
       case 'group':
         // TODO: @kevin do some magic here
@@ -87,7 +87,7 @@ var ThreadModel = Backbone.Model.extend({
         });
         if(otherUser == undefined) return default_user_img;
         if(_.isEmpty(otherUser.image)) return default_user_img;
-        return resizeImage(otherUser.image, width, height).url;
+        return { uri: resizeImage(otherUser.image, width, height).url };
         break;
     }
     // something went wrong

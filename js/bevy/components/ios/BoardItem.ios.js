@@ -22,7 +22,8 @@ var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
-var BevyActions = require('./../../BevyActions');
+var BevyActions = require('./../../../bevy/BevyActions');
+var BevyStore = require('./../../../bevy/BevyStore');
 var BoardActions = require('./../../../bevy/BoardActions');
 
 var BoardItem = React.createClass({
@@ -41,9 +42,7 @@ var BoardItem = React.createClass({
     if(_.isEmpty(board)) {
       return <View/>;
     }
-    var boardImageURL = (_.isEmpty(board.image))
-      ? constants.siteurl + '/img/default_board_img.png'
-      : resizeImage(board.image, 64, 64).url;
+    var boardImageSource = BevyStore.getBoardImage(this.props.board.image, 64, 64);
 
     var typeIcon = (board.type == 'announcement') ? 'flag' : 'forum';
 
@@ -54,7 +53,7 @@ var BoardItem = React.createClass({
       >
         <View style={ styles.boardItem }>
           <Image
-            source={{ uri: boardImageURL }}
+            source={ boardImageSource }
             style={ styles.boardImage }
           />
           <View style={ styles.boardRight }>

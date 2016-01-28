@@ -38,6 +38,8 @@ var FileStore = require('./../../../file/FileStore');
 var FileActions = require('./../../../file/FileActions');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
+var UserStore = require('./../../../user/UserStore');
+var BevyStore = require('./../../../bevy/BevyStore');
 var FILE = constants.FILE;
 var POST = constants.POST;
 
@@ -263,15 +265,13 @@ var InputView = React.createClass({
       ? this.props.post.board
       : this.props.postingToBoard;
 
-    var boardImageURL = (_.isEmpty(board.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(board.image, 80, 80).url;
+    var boardImageSource = BevyStore.getBoardImage(board.image, 64, 64);
 
     if(this.props.editing) {
       return (
         <View style={ styles.boardItemDetails }>
           <Image
-            source={{ uri: boardImageURL }}
+            source={ boardImageSource }
             style={ styles.boardImage }
           />
           <Text style={styles.boardName}>
@@ -287,7 +287,7 @@ var InputView = React.createClass({
         >
           <View style={ styles.boardItemDetails }>
             <Image
-              source={{ uri: boardImageURL }}
+              source={ boardImageSource }
               style={ styles.boardImage }
             />
             <Text
@@ -388,9 +388,7 @@ var InputView = React.createClass({
   },
 
   render() {
-    var authorImageURL = (_.isEmpty(this.props.user.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.user.image, 64, 64).url;
+    var authorImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
 
     return (
       <View style={[ styles.container, {
@@ -447,8 +445,8 @@ var InputView = React.createClass({
           <Text style={ styles.sectionTitle }>Post</Text>
           <View style={ styles.input }>
             <Image
-              style={styles.inputProfileImage}
-              source={{ uri: authorImageURL }}
+              style={ styles.inputProfileImage }
+              source={ authorImageSource }
             />
             <TextInput
               ref={ ref => { this.TitleInput = ref; }}

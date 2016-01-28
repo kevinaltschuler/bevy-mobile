@@ -24,6 +24,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../../bevy/BevyActions');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var BevyCard = React.createClass({
   propTypes: {
@@ -40,20 +41,11 @@ var BevyCard = React.createClass({
   },
 
   render() {
-    var bevy = this.props.bevy;
-    var bevyImageURL = (_.isEmpty(this.props.bevy.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(this.props.bevy.image, 256, 256).url;
+    var bevyImageSource = BevyStore.getBevyImage(this.props.bevy.image, 256, 256);
 
     var publicPrivateIcon = (this.props.bevy.settings.privacy == 'Private')
       ? 'lock'
       : 'public';
-
-    var bevyName = bevy.name;
-
-    if(bevyName.length > 30) {
-      bevyName = bevyName.substring(0,30);
-    }
 
     return (
       <TouchableOpacity
@@ -61,17 +53,23 @@ var BevyCard = React.createClass({
         style={ styles.container }
         onPress={ this.goToBevy }
       >
-        <View style={styles.bevyCard}>
-          <Image style={ styles.bevyImage } source={{ uri: bevyImageURL }}/>
+        <View style={ styles.bevyCard }>
+          <Image
+            style={ styles.bevyImage }
+            source={ bevyImageSource }
+          />
           <View style={ styles.bevyInfo }>
-            <View style={styles.bevyName}>
-              <Text style={ styles.bevyNameText }>
-                { bevyName }
+            <View style={ styles.bevyName }>
+              <Text
+                style={ styles.bevyNameText }
+                numberOfLines={ 1 }
+              >
+                { this.props.bevy.name }
               </Text>
             </View>
             <View style={ styles.details}>
-              <View style={styles.infoItem}>
-                <Text style={styles.infoText}>
+              <View style={ styles.infoItem }>
+                <Text style={ styles.infoText }>
                   { this.props.bevy.subCount }
                 </Text>
                 <Icon
@@ -128,6 +126,7 @@ var styles = StyleSheet.create({
     overflow: 'hidden',
     flex: 1,
     height: 40,
+    marginRight: 10,
     justifyContent: 'center',
     flexDirection: 'column',
     flexWrap: 'nowrap'

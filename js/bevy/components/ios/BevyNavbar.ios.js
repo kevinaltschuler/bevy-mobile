@@ -23,6 +23,7 @@ var _ = require('underscore');
 var routes = require('./../../../routes');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var BevyNavbar = React.createClass({
   propTypes: {

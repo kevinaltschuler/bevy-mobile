@@ -12,10 +12,6 @@ var Backbone = require('backbone');
 
 var Invite = require('./InviteModel');
 var constants = require('./../constants');
-var BevyStore = require('./../bevy/BevyStore');
-var UserStore = require('./../user/UserStore');
-
-var user = UserStore.getUser();
 
 var InviteCollection = Backbone.Collection.extend({
   model: Invite,

@@ -21,6 +21,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
+var UserStore = require('./../../../user/UserStore');
 
 var AdminItem = React.createClass({
   propTypes: {
@@ -53,9 +54,7 @@ var AdminItem = React.createClass({
   },
 
   render() {
-    var adminImageURL = (_.isEmpty(this.props.admin.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.admin.image, 64, 64).url;
+    var adminImageSource = UserStore.getUserImage(this.props.admin.image, 64, 64);
 
     return (
       <TouchableOpacity
@@ -66,7 +65,7 @@ var AdminItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: adminImageURL }}
+            source={ adminImageSource }
           />
           <Text style={ styles.name }>
             { this.props.admin.displayName }

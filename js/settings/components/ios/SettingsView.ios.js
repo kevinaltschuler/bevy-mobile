@@ -46,8 +46,8 @@ var SettingsView = React.createClass({
 
   getInitialState() {
     return {
-      profilePicture: (_.isEmpty(this.props.user.image))
-        ? constants.siteurl + '/img/user-profile-icon.png'
+      profilePictureURL: (_.isEmpty(this.props.user.image))
+        ? null
         : resizeImage(this.props.user.image, 64, 64).url,
       refreshing: false,
       displayName: this.props.user.displayName,
@@ -67,9 +67,9 @@ var SettingsView = React.createClass({
     UserStore.off(USER.LOADED, this.onLoaded);
   },
 
-  onUpload(file) {
-    this.setState({ profilePicture: file.path });
-    UserActions.changeProfilePicture(file);
+  onUpload(image) {
+    this.setState({ profilePictureURL: resizeImage(image, 64, 64).url });
+    UserActions.changeProfilePicture(image);
   },
 
   onLoading() {
@@ -78,7 +78,7 @@ var SettingsView = React.createClass({
   onLoaded(newUser) {
     this.setState({
       refreshing: false,
-      profilePicture: newUser.image.path,
+      profilePictureURL: resizeImage(newUser.image, 64, 64).url,
       displayName: newUser.displayName,
       email: newUser.email
     });
@@ -153,10 +153,16 @@ var SettingsView = React.createClass({
   },
 
   _renderUserHeader() {
+    var imageSource;
+    if(this.state.profilePictureURL) {
+      imageSource = { uri: this.state.profilePictureURL };
+    } else {
+      imageSource = require('./../../../images/user-profile-icon.png');
+    }
     return (
       <View style={ styles.profileHeader }>
         <Image
-          source={{ uri: this.state.profilePicture }}
+          source={{ uri: this.state.profilePictureURL }}
           style={ styles.profileImage }
         />
         <View style={ styles.profileDetails }>

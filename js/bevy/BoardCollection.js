@@ -12,9 +12,6 @@ var Backbone = require('backbone');
 var Board = require('./BoardModel');
 var constants = require('./../constants');
 var BevyStore = require('./../bevy/BevyStore');
-var UserStore = require('./../user/UserStore');
-
-var user = UserStore.getUser();
 
 // backbone collection
 var BoardCollection = Backbone.Collection.extend({

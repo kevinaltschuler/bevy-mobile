@@ -21,6 +21,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var ChatActions = require('./../../../chat/ChatActions');
+var UserStore = require('./../../../user/UserStore');
 
 var PersonItem = React.createClass({
   propTypes: {
@@ -56,9 +57,7 @@ var PersonItem = React.createClass({
   },
 
   render() {
-    var userImageURL = (_.isEmpty(this.props.user.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.user.image, 64, 64).url;
+    var userImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
 
     return (
       <TouchableOpacity
@@ -68,7 +67,7 @@ var PersonItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={{ uri: userImageURL }}
+            source={ userImageSource }
           />
           <Text style={ styles.name }>
             { this.props.user.displayName }

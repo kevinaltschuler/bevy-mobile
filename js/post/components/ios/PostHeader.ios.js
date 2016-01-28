@@ -24,6 +24,7 @@ var timeAgo = require('./../../../shared/helpers/timeAgo')
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BoardActions = require('./../../../bevy/BoardActions');
 var BevyActions = require('./../../../bevy/BevyActions');
+var UserStore = require('./../../../user/UserStore');
 
 var PostHeader = React.createClass({
   propTypes: {
@@ -93,9 +94,7 @@ var PostHeader = React.createClass({
   },
 
   render() {
-    var authorImageURL = _.isEmpty(this.props.post.author.image)
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.props.post.author.image, 64, 64).url;
+    var authorImageSource = UserStore.getUserImage(this.props.post.author.image, 64, 64);
 
     return (
       <View style={ styles.container }>
@@ -105,7 +104,7 @@ var PostHeader = React.createClass({
         >
           <Image
             style={ styles.authorImage }
-            source={{ uri: authorImageURL }}
+            source={ authorImageSource }
           />
         </TouchableOpacity>
         <View style={ styles.detailsRow }>

@@ -20,6 +20,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../BevyActions');
+var UserStore = require('./../../../user/UserStore');
 
 var InviteItem = React.createClass({
   propTypes: {
@@ -40,9 +41,7 @@ var InviteItem = React.createClass({
   render() {
     var invite = this.props.invite;
     var user = invite.user;
-    var userImageURL = (_.isEmpty(user.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(user.image, 64, 64).url;
+    var userImageSource = UserStore.getUserImage(this.props.invite.user.image, 64, 64);
     var action = (invite.requestType == 'request_join')
     ? ( <TouchableOpacity
           activeOpacity={ 0.5 }
@@ -69,12 +68,12 @@ var InviteItem = React.createClass({
       <View style={ styles.addedUser }>
         <Image
           style={ styles.image }
-          source={{ uri: userImageURL }}
+          source={ userImageSource }
         />
         <Text style={ styles.addedUserText }>
           { user.displayName }
         </Text>
-        {action}
+        { action }
       </View>
     );
   }

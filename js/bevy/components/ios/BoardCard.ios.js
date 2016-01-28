@@ -27,6 +27,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BoardActions = require('./../../../bevy/BoardActions');
+var BevyStore = require('./../../../bevy/BevyStore');
 
 var BoardCard = React.createClass({
   propTypes: {
@@ -95,7 +96,7 @@ var BoardCard = React.createClass({
     var imageURL = (_.isEmpty(board.image))
       ? null
       : resizeImage(board.image, constants.width, 100).url;
-    if(imageURL == constants.siteurl + '/img/default_board_img.png') {
+    if(!imageURL || imageURL == constants.siteurl + '/img/default_board_img.png') {
       imageURL = null;
     }
 

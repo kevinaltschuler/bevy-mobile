@@ -25,6 +25,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
 var BevyActions = require('./../../BevyActions');
+var BevyStore = require('./../../../bevy/BevyStore');
 var BoardActions = require('./../../../bevy/BoardActions');
 
 var BevySideMenu = React.createClass({
@@ -58,9 +59,7 @@ var BevySideMenu = React.createClass({
   },
 
   _renderBevyItem() {
-    var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
-      ? constants.siteurl + '/img/default_group_img.png'
-      : resizeImage(this.props.activeBevy.image, 64, 64).url;
+    var bevyImageSource = BevyStore.getBevyImage(this.props.activeBevy.image, 64, 64);
 
     var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
       ? 'lock'
@@ -69,12 +68,12 @@ var BevySideMenu = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        style={styles.bevyCard}
+        style={ styles.bevyCard }
         onPress={ this.clearBoard }
       >
         <View style={ styles.top }>
           <Image
-            source={{ uri: bevyImageURL }}
+            source={ bevyImageSource }
             style={ styles.bevyImage }
           />
           <View style={ styles.bottom }>

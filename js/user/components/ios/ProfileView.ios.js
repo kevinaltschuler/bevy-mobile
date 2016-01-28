@@ -162,9 +162,9 @@ var ProfileView = React.createClass({
   },
 
   render() {
-    var userImageURL = (_.isEmpty(this.state.image))
-      ? constants.siteurl + '/img/user-profile-icon.png'
-      : resizeImage(this.state.image, 64, 64).url;
+    var userImageSource = (_.isEmpty(this.state.image))
+      ? require('./../../../images/user-profile-icon.png')
+      : { uri: resizeImage(this.state.image, 64, 64).url };
 
     return (
       <View style={ styles.container }>
@@ -207,7 +207,7 @@ var ProfileView = React.createClass({
           <View style={ styles.body }>
             <View style={ styles.profileCard }>
               <Image
-                source={{ uri: userImageURL }}
+                source={ userImageSource }
                 style={ styles.profileImage }
               />
               <View style={ styles.profileDetails }>
