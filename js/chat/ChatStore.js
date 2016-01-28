@@ -52,8 +52,6 @@ _.extend(ChatStore, {
             this.threads.sort();
             this.trigger(CHAT.THREADS_FETCHED);
             this.trigger(CHAT.CHANGE_ALL);
-<<<<<<< HEAD
-=======
 
             var note = NotificationStore.getInitialNote();
             if(!_.isEmpty(note)) {
@@ -71,7 +69,6 @@ _.extend(ChatStore, {
                 });
               }
             }
->>>>>>> 40f6250a64105cb82ca1b17728eeeb5e9e828938
           }.bind(this)
         });
         // check for launched intent of chat message

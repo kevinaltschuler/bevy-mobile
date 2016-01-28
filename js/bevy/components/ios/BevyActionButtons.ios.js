@@ -16,7 +16,7 @@ var {
   Text,
   TextInput,
   StyleSheet,
-  AlertIOS
+  AlertIOS,
   ScrollView,
   ActionSheetIOS
 } = React;
