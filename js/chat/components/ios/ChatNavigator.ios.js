@@ -75,11 +75,12 @@ var ChatView = React.createClass({
 
   onThreadChange(thread_id) {
     console.log('thread change', thread_id);
+
     var route = {
-      name: routes.CHAT.MESSAGEVIEW,
+      name: routes.MAIN.MESSAGEVIEW,
       threadID: thread_id
     };
-    this.props.chatNavigator.push(route);
+    this.props.mainNavigator.replace(route);
 
     var $routes = this.props.mainNavigator.getCurrentRoutes();
     var currentRoute = $routes[$routes.length - 1];
@@ -97,29 +98,6 @@ var ChatView = React.createClass({
       case routes.CHAT.THREADLIST:
         return (
           <ThreadList
-            { ...this.props }
-          />
-        );
-        break;
-      case routes.CHAT.MESSAGEVIEW:
-        return (
-          <MessageView
-            { ...this.props }
-            threadID={ this.props.chatRoute.threadID }
-            chatRoute={ this.props.chatRoute }
-          />
-        );
-        break;
-      case routes.CHAT.THREADSETTINGS:
-        return (
-          <ThreadSettingsView
-            { ...this.props }
-          />
-        );
-        break;
-      case routes.CHAT.ADDPEOPLE:
-        return (
-          <AddPeopleView
             { ...this.props }
           />
         );

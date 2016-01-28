@@ -106,7 +106,7 @@ var AddPeopleView = React.createClass({
   },
 
   goBack() {
-    this.props.chatNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   onSearchUserSelect(user) {
@@ -174,7 +174,7 @@ var AddPeopleView = React.createClass({
     // call action
     ChatActions.addUsers(this.props.activeThread._id, this.state.addedUsers);
     // go back to settings view
-    this.props.chatNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   _renderAddedUsers() {

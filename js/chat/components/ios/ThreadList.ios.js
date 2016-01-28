@@ -39,20 +39,18 @@ var ThreadList = React.createClass({
   },
 
   getInitialState() {
-    var threads = this.props.allThreads;
-    threads = this.pruneEmptyThreads(threads);
-    threads = _.filter(threads, function(thread) { return !_.isEmpty(thread.board) });
     return {
-      threads: threads,
+      threads: [],
       ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
-        .cloneWithRows(threads),
+        .cloneWithRows([]),
       tab: 'Board Chats',
-      loading: false
+      loading: true,
+      allThreads: ChatStore.getAll()
     };
   },
 
-  /*componentWillReceiveProps(nextProps) {
-    var threads = nextProps.allThreads;
+  componentWillReceiveProps(nextProps) {
+    /*var threads = nextProps.allThreads;
     threads = this.pruneEmptyThreads(threads);
     if(this.state.tab == 'Board Chats') {
       threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
@@ -64,16 +62,19 @@ var ThreadList = React.createClass({
       threads: threads,
       ds: this.state.ds.cloneWithRows(threads),
       loading: false
-    })
-  },*/
+    })*/
+  },
 
   componentDidMount() {
     ChatStore.on(CHAT.FETCHING_THREADS, this.onLoading);
     ChatStore.on(CHAT.THREADS_FETCHED, this.onLoaded);
+    ChatStore.on(CHAT.CHANGE_ALL, this.onLoaded);
+    this.onRefresh();
   },
   componentWillUnmount() {
     ChatStore.off(CHAT.FETCHING_THREADS, this.onLoading);
     ChatStore.off(CHAT.THREADS_FETCHED, this.onLoaded);
+    ChatStore.off(CHAT.CHANGE_ALL, this.onLoaded);
   },
 
   onLoading() {
@@ -85,6 +86,7 @@ var ThreadList = React.createClass({
   onLoaded() {
     var threads = ChatStore.getAll();
     threads = this.pruneEmptyThreads(threads);
+    var allThreads = threads;
     if(this.state.tab == 'Board Chats') {
       threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
     }
@@ -94,7 +96,8 @@ var ThreadList = React.createClass({
     this.setState({
       loading: false,
       threads: threads,
-      ds: this.state.ds.cloneWithRows(threads)
+      ds: this.state.ds.cloneWithRows(threads),
+      allThreads: allThreads
     });
   },
   onRefresh() {
@@ -102,7 +105,7 @@ var ThreadList = React.createClass({
   },
 
   changeTab(tab) {
-    var threads = this.pruneEmptyThreads(this.props.allThreads);
+    var threads = this.pruneEmptyThreads(this.state.allThreads);
     if(tab == 'Board Chats') {
       threads = _.filter(threads, function(thread) {return !_.isEmpty(thread.board)});
     }
@@ -113,6 +116,7 @@ var ThreadList = React.createClass({
       tab: tab,
       ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
         .cloneWithRows(threads),
+      threads: threads
     })
   },
 
@@ -137,6 +141,7 @@ var ThreadList = React.createClass({
         user={ this.props.user }
         chatNavigator={ this.props.chatNavigator }
         chatRoute={ this.props.chatRoute }
+        mainNavigator={this.props.mainNavigator}
       />
     );
   },

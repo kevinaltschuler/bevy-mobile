@@ -286,7 +286,8 @@ var styles = StyleSheet.create({
   textButtons: {
     flexDirection: 'row',
     marginTop: 10,
-    width: constants.width
+    width: constants.width,
+    justifyContent: 'center'
   },
   textButton: {
     flexDirection: 'column',

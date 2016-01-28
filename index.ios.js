@@ -189,7 +189,6 @@ var App = React.createClass({
 
   getChatState() {
     return {
-      allThreads: ChatStore.getAll(),
       activeThread: ChatStore.getActive()
     };
   },

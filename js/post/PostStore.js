@@ -28,7 +28,6 @@ var APP = constants.APP;
 var COMMENT = constants.COMMENT;
 var USER = constants.USER;
 
-var PostActions = require('./PostActions');
 var BevyStore = require('./../bevy/BevyStore');
 var UserStore = require('./../user/UserStore');
 
@@ -42,6 +41,7 @@ _.extend(PostStore, {
 
   posts: new Posts,
   searchPosts: new Posts,
+  tempPost: new Post,
   searchQuery: '',
   sortType: 'new',
 

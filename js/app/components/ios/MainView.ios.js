@@ -29,6 +29,9 @@ var InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.
 var Browser = require('./Browser.ios.js');
 var FeedbackView = require('./../../../settings/components/ios/FeedbackView.ios.js');
 var PatchNotesView = require('./../../../settings/components/ios/PatchNotesView.ios.js');
+var MessageView = require('./../../../chat/components/ios/MessageView.ios.js');
+var ThreadSettingsView = require('./../../../chat/components/ios/ThreadSettingsView.ios.js');
+var AddPeopleView = require('./../../../chat/components/ios/AddPeopleView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -188,6 +191,25 @@ var MainView = React.createClass({
                 initialThread: {}
               })
             }}
+          />
+        );
+
+      case routes.MAIN.MESSAGEVIEW:
+        return <MessageView {...this.props }/>
+        break;
+
+      case routes.MAIN.THREADSETTINGS:
+        return (
+          <ThreadSettingsView
+            { ...this.props }
+          />
+        );
+        break;
+
+      case routes.MAIN.ADDPEOPLE:
+        return (
+          <AddPeopleView
+            { ...this.props }
           />
         );
         break;

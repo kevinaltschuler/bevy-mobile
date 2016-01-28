@@ -69,6 +69,7 @@ _.extend(ChatStore, {
                 });
               }
             }
+            
           }.bind(this)
         });
         // check for launched intent of chat message
@@ -244,6 +245,8 @@ _.extend(ChatStore, {
 
             // self populate message
             newMessage.set('author', user);
+
+            this.threads.sort();
 
             // open thread
             this.active = thread.get('_id');
@@ -592,6 +595,7 @@ _.extend(ChatStore, {
     // trigger UI changes
     this.trigger(CHAT.CHANGE_ALL);
     this.trigger(CHAT.MESSAGES_FETCHED);
+
   }
 });
 

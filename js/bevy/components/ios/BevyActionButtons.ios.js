@@ -16,6 +16,7 @@ var {
   Text,
   TextInput,
   StyleSheet,
+  AlertIOS,
   ScrollView,
   ActionSheetIOS
 } = React;
@@ -152,10 +153,16 @@ var BevyActionButtons = React.createClass({
   },
 
   inviteUsers() {
-    var route = {
-      name: routes.MAIN.INVITEUSERS
-    };
-    this.props.mainNavigator.push(route);
+    if(this.state.isAdmin) {
+      var route = {
+        name: routes.MAIN.INVITEUSERS
+      };
+      this.props.mainNavigator.push(route);
+    } else {
+      AlertIOS.alert(
+       'Only admins may invite users'
+      );
+    }
   },
 
   goToInfoView() {

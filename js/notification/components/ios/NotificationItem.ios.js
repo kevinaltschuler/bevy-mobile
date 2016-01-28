@@ -40,6 +40,7 @@ var NotificationItem = React.createClass({
 
   getInitialState() {
     return {
+      fetching: false,
       read: this.props.notification.read
     };
   },
@@ -54,10 +55,16 @@ var NotificationItem = React.createClass({
   },
 
   goToPost() {
+    if(this.state.fetching) {
+      return;
+    }
     this.markRead();
     var route = {
       name: routes.MAIN.COMMENT
     };
+    this.setState({
+      fetching: true
+    });
     var post_id = this.props.notification.data.post_id;
     var post = PostStore.getPost(post_id);
     // if the post isnt already loaded, then load from the server
@@ -68,6 +75,9 @@ var NotificationItem = React.createClass({
       .then(res => res.json())
       .then(res => {
         if(!_.isObject(res)) {
+          this.setState({
+            fetching: false
+          });
           // probably just got an error fetching the post
           AlertIOS.alert('Post not found');
           return;
@@ -80,6 +90,9 @@ var NotificationItem = React.createClass({
         console.log(err);
       });
     } else {
+      this.setState({
+        fetching: false
+      });
       route.post = post;
       this.props.mainNavigator.push(route);
     }

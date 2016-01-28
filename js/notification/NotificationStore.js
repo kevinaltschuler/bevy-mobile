@@ -29,7 +29,6 @@ var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var NOTIFICATION = constants.NOTIFICATION;
 var APP = constants.APP;
-var ChatStore = require('./../chat/ChatStore');
 var UserStore = require('./../user/UserStore');
 var Notifications = require('./NotificationCollection');
 
@@ -39,6 +38,8 @@ window.navigator.__defineGetter__('userAgent', function(){
 });
 
 var io = require('socket.io-client/socket.io');
+
+var ChatStore = require('./../chat/ChatStore');
 
 var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
@@ -109,6 +110,10 @@ _.extend(NotificationStore, {
 
           if(ChatStore.addMessage != undefined)
             ChatStore.addMessage(message);
+          else {
+            ChatStore = require('./../chat/ChatStore');
+            ChatStore.addMessage(message);
+          }
         }.bind(this));
 
         this.ws.on('notification.' + user._id, function(notification) {

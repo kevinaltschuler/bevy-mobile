@@ -29,7 +29,7 @@ var Loading = React.createClass({
 		// first things first try to load the user
 	    console.log('loading...');
 	    AsyncStorage.getItem('user')
-	    .then( user => {
+	    .then(user => {
 	      if(user) {
 			console.log('found user. loading user...');
 	        UserActions.loadUser(JSON.parse(user));

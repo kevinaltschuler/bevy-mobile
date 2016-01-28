@@ -216,7 +216,7 @@ var PostFooter = React.createClass({
               style={{ marginTop: 3 }}
             />
             <Text numberOfLines={ 1 } style={ styles.buttonText }>
-              {(this.props.post.comments.length == 1) ? 'Comment' : 'Comments' }
+              {(this.props.post.commentCount == 1) ? 'Comment' : 'Comments' }
             </Text>
           </View>
         </TouchableOpacity>
@@ -258,7 +258,7 @@ var styles = StyleSheet.create({
   },
   buttonText: {
     color: '#757d83',
-    fontSize: 17,
+    fontSize: 15,
     marginLeft: 6
   },
   actionTouchable: {

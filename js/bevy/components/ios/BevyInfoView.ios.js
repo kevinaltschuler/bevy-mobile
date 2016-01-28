@@ -35,7 +35,7 @@ var _ = require('underscore');
 var constants = require('./../../../constants.js');
 var routes = require('./../../../routes.js');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
-var BevyActions = require('./../../../bevy/BevyActions');
+var BevyActions = require('./../../BevyActions');
 var BevyStore = require('./../../../bevy/BevyStore');
 var FileActions = require('./../../../file/FileActions');
 var FileStore = require('./../../../file/FileStore');
@@ -117,6 +117,7 @@ var BevyInfoView = React.createClass({
   },
 
   deleteBevyForSure() {
+    this.props.mainNavigator.popToTop();
     BevyActions.destroy(this.props.activeBevy._id);
   },
 

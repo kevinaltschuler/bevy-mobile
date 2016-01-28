@@ -68,6 +68,8 @@ var MainTabBar = React.createClass({
       // notification for new message
       if(!_.isEmpty(note.thread)) {
         this.switchTab('Chat');
+        ChatActions.switchThread(note.thread._id);
+        this.props.mainNavigator.push(routes.MAIN.MESSAGEVIEW);
       }
       // notification for post
       if(!_.isEmpty(note.post_id)) {

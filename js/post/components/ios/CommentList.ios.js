@@ -1,5 +1,12 @@
 /**
  * CommentList.ios.js
+ *
+ * Displays the comments in CommentView
+ *
+ * Contains both CommentItem and CommentList because React
+ * doesn't handle recursion of elements that come from different files
+ * very well.
+ *
  * @author albert
  * @flow
  */
@@ -24,6 +31,7 @@ var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
 var CommentActions = require('./../../../post/CommentActions');
+
 // bleached rainbow for adobe color
 var colorMap = [
   '#97FF80', '#52C0FF', '#9A5DE8', '#FF5757', '#E8A341'
@@ -38,8 +46,6 @@ var CommentItem = React.createClass({
   },
 
   getInitialState() {
-    console.log(this.props.comment);
-    console.log(this.props.user);
     return {
       collapsed: true,
       isCompact: false,
