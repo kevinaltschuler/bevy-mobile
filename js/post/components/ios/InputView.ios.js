@@ -558,7 +558,7 @@ var styles = StyleSheet.create({
   textInput: {
     flex: 2,
     fontSize: 17,
-    minHeight: 48
+    height: 280
   },
 
   imageBar: {

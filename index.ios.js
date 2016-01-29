@@ -62,13 +62,13 @@ window.fetch = function(input, init) {
   StatusBarIOS.setNetworkActivityIndicatorVisible(true);
 
   var startTime = Date.now();
-  console.log('START', options.method, url);
+  //console.log('START', options.method, url);
 
   return $fetch(url, options)
     .then(res => {
       var endTime = Date.now();
       var delta = endTime - startTime;
-      console.log('END', options.method, url, delta + ' MS', res);
+      //console.log('END', options.method, url, delta + ' MS', res);
 
       // clear the network activity indicator
       StatusBarIOS.setNetworkActivityIndicatorVisible(false);
