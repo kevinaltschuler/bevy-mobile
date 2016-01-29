@@ -58,11 +58,14 @@ var CommentView = React.createClass({
 
     PostStore.on(POST.FETCHING_SINGLE, this.onFetchingSingle);
     PostStore.on(POST.FETCHED_SINGLE, this.onFetchedSingle);
+    PostStore.on(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
+
     this.onRefresh();
   },
   componentWillUnmount() {
     PostStore.off(POST.FETCHING_SINGLE, this.onFetchingSingle);
     PostStore.off(POST.FETCHED_SINGLE, this.onFetchedSingle);
+    PostStore.off(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
 
     PostActions.clearTempPost();
   },
@@ -88,6 +91,14 @@ var CommentView = React.createClass({
   onFetchedSingle(post) {
     this.setState({
       loading: false,
+      post: post
+    });
+  },
+
+  onPostChange() {
+    var post = PostStore.getPost(this.props.post._id);
+    console.log('post change', post);
+    this.setState({
       post: post
     });
   },
@@ -120,37 +131,27 @@ var CommentView = React.createClass({
   },
 
   postReply() {
-    /*var text = this.state.replyText;
+    var text = this.state.replyText;
     // dont post empty reply
     if(_.isEmpty(text)) {
-      this.setState({ replyText: '' });
       return;
     };
+    this.setState({ replyText: '' });
+    // clear the reply text input text
+    this.ReplyInput.clear();
+    // blur the input and close the keyboard
+    this.ReplyInput.blur();
 
     // call action
     CommentActions.create(
       text, // body
-      this.props.user._id, // author id
-      this.state.post._id, // post id
-      (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id, // parent id
-      this.props.post //post object
+      this.props.user, // author object
+      this.props.post._id, // post id
+      // parent id
+      (_.isEmpty(this.state.replyToComment))
+        ? null
+        : this.state.replyToComment._id,
     );
-
-    // optimistic update
-    var comment = {
-      _id: Date.now(), // temp id
-      author: this.props.user,
-      body: text,
-      postId: this.state.post,
-      parentId: (_.isEmpty(this.state.replyToComment)) ? null : this.state.replyToComment._id,
-      created: (new Date()).toString(),
-      comments: []
-    };
-    this.setState({
-      replyText: '', // clear comment field
-    });
-
-    setTimeout(this.ReplyInput.blur, 500);*/
   },
 
   _renderPost() {

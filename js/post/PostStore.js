@@ -421,41 +421,54 @@ _.extend(PostStore, {
 
       case COMMENT.CREATE:
         var body = payload.body;
-        var author_id = payload.author_id;
+        var author = payload.author;
         var post_id = payload.post_id;
         var parent_id = payload.parent_id;
-        var post_object = payload.post_object;
 
-        var post = this.posts.get(post_id) || post_object;
+        var post = this.posts.get(post_id);
         if(post == undefined) break;
 
-        var comment = new Backbone.Model({
+        var comment = {
           body: body,
-          author: author_id,
+          author: author._id,
           postId: post_id,
           parentId: parent_id,
           comments: []
+        };
+
+        fetch(constants.apiurl + '/comments', {
+          method: 'POST',
+          body: JSON.stringify(comment)
+        })
+        .then(res => res.json())
+        .then(res => {
+          if(!_.isObject(res)) {
+            console.log('comment create error', res);
+            return;
+          }
+          console.log('comment create success', res);
+
+          var comments = post.get('comments') || [];
+          comment = res;
+          // populate author
+          comment.author = author;
+          comments.push(comment);
+          post.set('comments', comments);
+          post.updateComments();
+
+          this.trigger(POST.CHANGE_ONE + post_id);
+        })
+        .catch(err => {
+          console.log('comment create error', error.toString());
         });
-        comment.url = constants.apiurl + '/comments';
-        comment.save(null, {
-          success: function(model, response, options) {
-            // add to post
-            var comments = post.get('comments') || [];
-            comments.push(model);
-            post.set('comments', comments);
-            // trigger updates
-            //this.trigger(POST.CHANGE_ALL);
-            //this.trigger(POST.CHANGE_ONE + post_id);
-          }.bind(this)
-        });
+
         break;
 
       case COMMENT.EDIT:
         var comment_id = payload.comment_id;
         var body = payload.body;
 
-        var url = constants.apiurl + '/comments/' + comment_id;
-        fetch(url, {
+        fetch(constants.apiurl + '/comments/' + comment_id, {
           method: 'PATCH',
           headers: {
             'Accept': 'application/json',
@@ -467,45 +480,37 @@ _.extend(PostStore, {
         })
         .then(res => res.json())
         .then(res => {
-          this.trigger(POST.CHANGE_ONE + post_id);
-          this.trigger(POST.CHANGE_ALL);
+          //this.trigger(POST.CHANGE_ONE + post_id);
         });
         break;
 
       case COMMENT.DESTROY:
         var post_id = payload.post_id;
         var comment_id = payload.comment_id;
-        var url = constants.apiurl + '/comments/' + comment_id;
 
-        fetch(url, {
+        var post = this.posts.get(post_id);
+        if(post == undefined) return;
+
+        // send request to delete on the server
+        fetch(constants.apiurl + '/comments/' + comment_id, {
           method: 'DELETE'
         })
         .then(res => res.json())
         .then(res => {
-          //this.trigger(POST.CHANGE_ALL);
-          //this.trigger(POST.CHANGE_ONE + post_id);
         });
 
-        var post = this.posts.get(post_id);
+        // remove optimistically on the front-end
         var comments = post.get('comments');
+        // find and remove specified comment
+        comments = _.reject(comments, comment => {
+          return comment._id == comment_id;
+        });
+        post.set('comments', comments);
+        // update nested comment structure and update comment count
+        post.updateComments();
 
-        if(_.findWhere(comments, { _id: comment_id })) {
-          // delete from post
-          comments = _.reject(comments, comment => {
-            return comment._id == comment_id;
-          });
-          post.set('comments', comments);
-        } else {
-          // delete from comment
-          this.removeComment(comments, comment_id);
-        }
-
-        var commentCount = post.get('commentCount');
-        post.set('commentCount', --commentCount);
-        //this.postsNestComment(post);
-
-        this.trigger(POST.CHANGE_ALL);
-        //this.trigger(POST.CHANGE_ONE + post_id);
+        // trigger ui updates
+        this.trigger(POST.CHANGE_ONE + post_id);
         break;
     }
   },

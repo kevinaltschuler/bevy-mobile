@@ -68,7 +68,7 @@ window.fetch = function(input, init) {
     .then(res => {
       var endTime = Date.now();
       var delta = endTime - startTime;
-      console.log('END', options.method, url, delta + ' MS');
+      console.log('END', options.method, url, delta + ' MS', res);
 
       // clear the network activity indicator
       StatusBarIOS.setNetworkActivityIndicatorVisible(false);
@@ -77,6 +77,7 @@ window.fetch = function(input, init) {
     .catch(err => {
       console.log('fetch shim err', err.toString());
       StatusBarIOS.setNetworkActivityIndicatorVisible(false);
+      return err;
     });
 };
 

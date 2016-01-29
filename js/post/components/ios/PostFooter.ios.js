@@ -37,7 +37,6 @@ var PostFooter = React.createClass({
   getInitialState() {
     return {
       voted: this.props.post.voted,
-      votes: this.countVotes(this.props.post),
       isAuthor: this.props.user._id == this.props.post.author._id,
       isAdmin: _.contains(this.props.post.board.admins, this.props.user._id)
     };
@@ -46,7 +45,6 @@ var PostFooter = React.createClass({
   componentWillReceiveProps(nextProps) {
     this.setState({
       voted: nextProps.post.voted,
-      votes: this.countVotes(nextProps.post),
       isAuthor: nextProps.user._id == nextProps.post.author._id,
       isAdmin: _.contains(nextProps.post.board.admins, nextProps.user._id)
     });
@@ -164,15 +162,6 @@ var PostFooter = React.createClass({
     });
   },
 
-  countVotes(post) {
-    if(!post) return 0;
-    var sum = 0;
-    post.votes.forEach(vote => {
-      sum += vote.score;
-    });
-    return sum;
-  },
-
   render() {
     return (
       <View style={ styles.postActionsRow }>
@@ -185,7 +174,7 @@ var PostFooter = React.createClass({
             <Text numberOfLines={ 1 } style={[ styles.pointCountText, {
               color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
             }]}>
-              { this.state.votes }
+              { this.props.post.voteCount }
             </Text>
             <Icon
               name={ 'thumb-up' }
@@ -196,7 +185,7 @@ var PostFooter = React.createClass({
             <Text numberOfLines={ 1 } style={[ styles.buttonText, {
               color: (this.state.voted) ? '#2CB673' : 'rgba(0,0,0,.35)'
             }]}>
-              {(this.countVotes() == 1) ? 'Like' : 'Likes' }
+              {(this.props.post.voteCount == 1) ? 'Like' : 'Likes' }
             </Text>
           </View>
         </TouchableOpacity>
@@ -207,7 +196,7 @@ var PostFooter = React.createClass({
         >
           <View style={[ styles.actionTouchable, { flex: 1 } ]}>
             <Text numberOfLines={ 1 } style={ styles.commentCountText }>
-              { this.props.post.comments.length }
+              { this.props.post.commentCount }
             </Text>
             <Icon
               name='chat-bubble'
