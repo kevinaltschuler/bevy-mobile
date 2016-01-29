@@ -262,7 +262,7 @@ var PostList = React.createClass({
   },
 
   _renderPosts() {
-    if(_.isEmpty(this.props.activeBevy.boards)) {
+    if(_.isEmpty(this.props.activeBevy.boards) && _.isEmpty(this.props.profileUser)) {
       return (
         <View style={ styles.noPostsContainer }>
           <Text style={[ styles.noPostsText, {marginTop: -20} ]}>

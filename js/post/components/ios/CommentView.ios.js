@@ -27,7 +27,9 @@ var CommentList = require('./CommentList.ios.js');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var PostStore = require('./../../../post/PostStore');
+var PostActions = require('./../../../post/PostActions');
 var CommentActions = require('./../../../post/CommentActions');
+var POST = constants.POST;
 
 var CommentView = React.createClass({
   propTypes: {
@@ -39,6 +41,8 @@ var CommentView = React.createClass({
 
   getInitialState() {
     var post = this.props.post;
+    PostActions.clearTempPost();
+    PostActions.setTempPost(post);
     return {
       post: post,
       replyToComment: {},
@@ -51,13 +55,22 @@ var CommentView = React.createClass({
   componentDidMount() {
     DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+
+    PostStore.on(POST.FETCHING_SINGLE, this.onFetchingSingle);
+    PostStore.on(POST.FETCHED_SINGLE, this.onFetchedSingle);
+    this.onRefresh();
   },
   componentWillUnmount() {
+    PostStore.off(POST.FETCHING_SINGLE, this.onFetchingSingle);
+    PostStore.off(POST.FETCHED_SINGLE, this.onFetchedSingle);
+
+    PostActions.clearTempPost();
   },
 
   componentWillReceiveProps(nextProps) {
+    var post = nextProps.post;
     this.setState({
-      post: nextProps.post
+      post: post
     });
   },
 
@@ -65,24 +78,22 @@ var CommentView = React.createClass({
     var height = (ev.end) ? ev.end.height : ev.endCoordinates.height;
     this.setState({ keyboardSpace: height });
   },
-
   onKeyboardHide(ev) {
     this.setState({ keyboardSpace: 0 });
   },
 
-  onRefresh() {
+  onFetchingSingle() {
     this.setState({ loading: true });
-    fetch(constants.apiurl + '/posts/' + this.props.post._id)
-    .then(res => res.json())
-    .then(res => {
-      this.setState({
-        post: res,
-        loading: false
-      });
-    })
-    .catch(err => {
-      this.setState({ loading: false });
-    })
+  },
+  onFetchedSingle(post) {
+    this.setState({
+      loading: false,
+      post: post
+    });
+  },
+
+  onRefresh() {
+    PostActions.fetchSingle(this.state.post._id);
   },
 
   goBack() {
@@ -176,9 +187,9 @@ var CommentView = React.createClass({
       </Text>
     );
 
-    if(_.isEmpty(this.state.comments))
+    if(_.isEmpty(this.state.post.nestedComments))
       return text;
-    if(this.state.comments.length <= 0)
+    if(this.state.post.commentCount <= 0)
       return text;
 
     return null;

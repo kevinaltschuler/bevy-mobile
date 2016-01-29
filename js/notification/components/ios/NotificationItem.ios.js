@@ -62,22 +62,19 @@ var NotificationItem = React.createClass({
     var route = {
       name: routes.MAIN.COMMENT
     };
-    this.setState({
-      fetching: true
-    });
+
     var post_id = this.props.notification.data.post_id;
     var post = PostStore.getPost(post_id);
     // if the post isnt already loaded, then load from the server
     if(_.isEmpty(post)) {
+      this.setState({ fetching: true });
       fetch(constants.apiurl + '/posts/' + post_id, {
         method: 'GET'
       })
       .then(res => res.json())
       .then(res => {
+        this.setState({ fetching: false });
         if(!_.isObject(res)) {
-          this.setState({
-            fetching: false
-          });
           // probably just got an error fetching the post
           AlertIOS.alert('Post not found');
           return;
@@ -88,11 +85,11 @@ var NotificationItem = React.createClass({
       })
       .catch(err => {
         console.log(err);
+        this.setState({ fetching: false });
+        // error fetching the post
+        AlertIOS.alert('Post not found');
       });
     } else {
-      this.setState({
-        fetching: false
-      });
       route.post = post;
       this.props.mainNavigator.push(route);
     }

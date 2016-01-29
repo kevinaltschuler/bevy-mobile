@@ -56,10 +56,10 @@ var PostBody = React.createClass({
 
   goToCommentView() {
     // dont navigate if already in comment view
-    if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+    if(this.props.mainRoute.name == routes.MAIN.COMMENT) return;
     // navigate to comments
     var route = {
-      name: routes.MAIN.COMMENT.name,
+      name: routes.MAIN.COMMENT,
       post: this.props.post
     };
     this.props.mainNavigator.push(route);
@@ -93,27 +93,32 @@ var PostBody = React.createClass({
       var body = this.props.post.title;
       var segments = body.split(regex);
       var replacements = body.match(regex);
-      title = [];
-      for(var key in segments) {
-        var segment = segments[key];
-        title.push(
-          <Text
-            key={ 'post:' + this.props.post._id + ':segment:' + key }
-          >
-            { segment }
-          </Text>
-        );
-        // If last segment then don't add the highlight part
-        if(segments.length === key + 1) return;
 
-        title.push(
-          <Text
-            key={ 'post:' + this.props.post._id + ':replacement:' + key }
-            style={ styles.highlightedText }
-          >
-            { replacements[key] }
-          </Text>
-        );
+      if(!replacements || !segments) {
+        title = this.props.post.title
+      } else {
+        title = [];
+        for(var key in segments) {
+          var segment = segments[key];
+          title.push(
+            <Text
+              key={ 'post:' + this.props.post._id + ':segment:' + key }
+            >
+              { segment }
+            </Text>
+          );
+          // If last segment then don't add the highlight part
+          if(segments.length === key + 1) return;
+
+          title.push(
+            <Text
+              key={ 'post:' + this.props.post._id + ':replacement:' + key }
+              style={ styles.highlightedText }
+            >
+              { replacements[key] }
+            </Text>
+          );
+        }
       }
     }
     return (

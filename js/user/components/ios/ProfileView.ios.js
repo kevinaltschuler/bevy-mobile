@@ -66,6 +66,7 @@ var ProfileView = React.createClass({
     // get user posts
     setTimeout(() => {
       PostActions.fetch(null, this.props.profileUser._id);
+      this.onRefresh();
     }, 100);
   },
   componentWillUnmount() {

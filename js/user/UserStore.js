@@ -65,7 +65,9 @@ _.extend(UserStore, {
         this.trigger(USER.LOADING);
         if(user_id) {
           // fetching another user
-          fetch(constants.apiurl + '/users/' + user_id)
+          fetch(constants.apiurl + '/users/' + user_id, {
+            method: 'GET'
+          })
           .then(res => res.json())
           .then(res => {
             this.trigger(USER.LOADED, res);

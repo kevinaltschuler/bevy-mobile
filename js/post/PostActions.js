@@ -11,6 +11,7 @@
 'use strict';
 
 var Dispatcher = require('./../shared/dispatcher');
+var _ = require('underscore');
 var constants = require('./../constants');
 var POST = constants.POST;
 
@@ -42,6 +43,20 @@ var PostActions = {
 		Dispatcher.dispatch({
 			actionType: POST.FETCH_BOARD,
 			board_id: board_id
+		});
+	},
+
+	/**
+	 * fetch and sync a single post with the server
+	 * @param {string} post_id - id of the post to sync
+	 */
+	fetchSingle(post_id: String) {
+		// must identify post to fetch
+		if(_.isEmpty(post_id)) return;
+
+		Dispatcher.dispatch({
+			actionType: POST.FETCH_SINGLE,
+			post_id: post_id
 		});
 	},
 
@@ -160,6 +175,22 @@ var PostActions = {
 		Dispatcher.dispatch({
 			actionType: POST.PIN,
 			post_id: post_id
+		});
+	},
+
+	setTempPost(post: Object) {
+		// dont allow an empty temp post. use clearTempPost instead
+		if(_.isEmpty(post)) return;
+
+		Dispatcher.dispatch({
+			actionType: POST.SET_TEMP_POST,
+			post: post
+		});
+	},
+
+	clearTempPost() {
+		Dispatcher.dispatch({
+			actionType: POST.CLEAR_TEMP_POST
 		});
 	}
 };

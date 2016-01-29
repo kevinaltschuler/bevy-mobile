@@ -41,7 +41,7 @@ _.extend(PostStore, {
 
   posts: new Posts,
   searchPosts: new Posts,
-  tempPost: new Post,
+  tempPostId: '',
   searchQuery: '',
   sortType: 'new',
 
@@ -100,6 +100,34 @@ _.extend(PostStore, {
             this.trigger(POST.CHANGE_ALL);
           }.bind(this)
         });
+        break;
+
+      case POST.FETCH_SINGLE:
+        var post_id = payload.post_id;
+        var post = this.posts.get(post_id);
+        if(post == undefined) return;
+
+        this.trigger(POST.FETCHING_SINGLE);
+        post.url = constants.apiurl + '/posts/' + post.get('_id');
+        post.fetch({
+          success: function(model, response, options) {
+            this.trigger(POST.FETCHED_SINGLE, post.toJSON());
+          }.bind(this)
+        });
+        break;
+
+      case POST.SET_TEMP_POST:
+        var post = payload.post;
+        post = new Post(post);
+        this.posts.add(post);
+        this.tempPostId = post.get('_id');
+        break;
+
+      case POST.CLEAR_TEMP_POST:
+        if(_.isEmpty(this.tempPostId)) return;
+        var post = this.posts.remove(this.tempPostId);
+        if(post == undefined) return;
+        this.tempPostId = '';
         break;
 
       case POST.SEARCH:
