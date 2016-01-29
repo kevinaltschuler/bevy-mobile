@@ -22,7 +22,7 @@ var protocol = 'http:';
 exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
-exports.ios_version = '1.3.73';
+exports.ios_version = '1.3.75';
 
 //exports.siteurl = protocol + slashes + hostname;
 //exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
