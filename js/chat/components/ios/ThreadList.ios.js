@@ -44,7 +44,8 @@ var ThreadList = React.createClass({
       ds: new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
         .cloneWithRows([]),
       tab: 'Board Chats',
-      loading: true,
+      loading: false,
+      loadingInitial: true,
       allThreads: ChatStore.getAll()
     };
   },
@@ -95,6 +96,7 @@ var ThreadList = React.createClass({
     }
     this.setState({
       loading: false,
+      loadingInitial: false,
       threads: threads,
       ds: this.state.ds.cloneWithRows(threads),
       allThreads: allThreads
@@ -171,7 +173,7 @@ var ThreadList = React.createClass({
   },
 
   _renderNoThreads() {
-    if(_.isEmpty(this.state.threads)) {
+    if(_.isEmpty(this.state.threads) && !this.state.loading && !this.state.loadingInitial) {
       return (
         <View style={ styles.noThreadsContainer }>
           <Text style={ styles.noThreadsText }>
@@ -183,7 +185,7 @@ var ThreadList = React.createClass({
   },
 
   _renderLoading() {
-    if(this.state.loading) {
+    if(this.state.loadingInitial) {
       return (
         <View style={ styles.spinnerContainer }>
           <Spinner
@@ -198,7 +200,7 @@ var ThreadList = React.createClass({
   },
 
   _renderThreads() {
-    //if(this.state.loading) return <View />;
+    if(this.state.loadingInitial) return <View />;
     return (
       <ListView
         ref={ ref => { this.ThreadList = ref; }}
@@ -260,7 +262,7 @@ var ThreadList = React.createClass({
           </View>
         </View>
         { this._renderNoThreads() }
-        {/* this._renderLoading() */}
+        { this._renderLoading() }
         { this._renderThreads() }
       </View>
     );
@@ -318,8 +320,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     paddingTop: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    height: constants.height - 300
+    justifyContent: 'center'
   },
   tabs: {
     flexDirection: 'row',

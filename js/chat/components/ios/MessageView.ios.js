@@ -200,7 +200,14 @@ var MessageView = React.createClass({
   },
 
   _renderInfoButton() {
-    if(this.props.activeThread.type == 'board') return <View />;
+    if(this.props.activeThread.type == 'board') {
+      return (
+        <View style={{
+          width: 48,
+          height: 48
+        }}/>
+      );
+    }
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
