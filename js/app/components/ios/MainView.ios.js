@@ -33,6 +33,9 @@ var MessageView = require('./../../../chat/components/ios/MessageView.ios.js');
 var ThreadSettingsView = require('./../../../chat/components/ios/ThreadSettingsView.ios.js');
 var AddPeopleView = require('./../../../chat/components/ios/AddPeopleView.ios.js');
 
+var NotificationStore = require('./../../../notification/NotificationStore');
+var ChatActions = require('./../../../chat/ChatActions');
+
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');

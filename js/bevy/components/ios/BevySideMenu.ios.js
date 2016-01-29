@@ -35,7 +35,8 @@ var BevySideMenu = React.createClass({
     activeBevy: React.PropTypes.object,
     allPosts: React.PropTypes.array,
     user: React.PropTypes.object,
-    bevyBoards: React.PropTypes.array
+    bevyBoards: React.PropTypes.array,
+    activeBoard: React.PropTypes.object
   },
 
   _renderAdminActions() {
@@ -131,6 +132,7 @@ var BevySideMenu = React.createClass({
           board={ board }
           closeSideMenu={ this.closeSideMenu }
           bevyNavigator={ this.props.bevyNavigator }
+          activeBoard={ this.props.activeBoard }
         />
       );
     }
@@ -141,7 +143,7 @@ var BevySideMenu = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        style={ styles.newBoardItem }
+        style={styles.newBoardItem }
         onPress={ this.goToNewBoard }
       >
         <View style={ styles.newBoardItem }>

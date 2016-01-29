@@ -144,19 +144,18 @@ var ThreadImage = React.createClass({
             />
           );
         }
-      default: 
-        return <View/>;
-
         return (
           <View style={{
             position: 'relative',
             width: this.props.width,
             height: this.props.height,
-            borderRadius: Math.floor(this.props.width / 2)
+            borderRadius: Math.floor(this.props.width / 2),
           }}>
             { users }
           </View>
         );
+      default: 
+        return <View/>;
     }
   }
 });

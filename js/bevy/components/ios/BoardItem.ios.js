@@ -46,12 +46,20 @@ var BoardItem = React.createClass({
 
     var typeIcon = (board.type == 'announcement') ? 'flag' : 'forum';
 
+    var activeStyles = {};
+
+    if(!_.isEmpty(this.props.activeBoard)) {
+      if(this.props.activeBoard._id == board._id) {
+        activeStyles = { backgroundColor: 'rgba(255,255,255,.1)' };
+      }
+    }
+
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
         onPress={ this.switchBoard }
       >
-        <View style={ styles.boardItem }>
+        <View style={[ styles.boardItem, activeStyles ]}>
           <Image
             source={ boardImageSource }
             style={ styles.boardImage }

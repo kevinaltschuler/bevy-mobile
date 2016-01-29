@@ -58,8 +58,6 @@ var Post = Backbone.Model.extend({
    * this is also triggered every time this post object syncs with the server
    */
   updateComments() {
-    //console.log('post sync', this.get('_id'));
-
     // reset comment counter var
     this.commentCount = 0;
 

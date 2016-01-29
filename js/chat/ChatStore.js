@@ -69,7 +69,6 @@ _.extend(ChatStore, {
                 });
               }
             }
-            
           }.bind(this)
         });
         // check for launched intent of chat message

@@ -28,7 +28,7 @@
     "react-native-side-menu": "^0.18.0",
     "react-native-spinkit": "0.0.5",
     "react-native-swiper-fork": "^2.0.1",
-    "react-native-vector-icons": "^1.0.4",
+    "react-native-vector-icons": "^1.1.0",
     "react-native-vibration": "^0.1.1",
     "socket.io-client": "^1.4.4",
     "speakingurl": "^8.0.2",

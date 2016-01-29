@@ -32,6 +32,7 @@ var routes = require('./../../../routes');
 var NotificationStore = require('./../../../notification/NotificationStore');
 var BevyStore = require('./../../../bevy/BevyStore');
 var PostStore = require('./../../../post/PostStore');
+var ChatActions = require('./../../../chat/ChatActions');
 var BEVY = constants.BEVY;
 
 var tabs = {
@@ -69,7 +70,6 @@ var MainTabBar = React.createClass({
       if(!_.isEmpty(note.thread)) {
         this.switchTab('Chat');
         ChatActions.switchThread(note.thread._id);
-        this.props.mainNavigator.push(routes.MAIN.MESSAGEVIEW);
       }
       // notification for post
       if(!_.isEmpty(note.post_id)) {
