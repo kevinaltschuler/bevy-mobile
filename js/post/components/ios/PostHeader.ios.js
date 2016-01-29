@@ -129,10 +129,15 @@ var PostHeader = React.createClass({
             <TouchableOpacity
               activeOpacity={ 0.5 }
               onPress={ this.showBoardActionSheet }
+              style={{
+                flex: 1
+              }}
             >
               <Text
                 numberOfLines={ 1 }
-                style={ styles.titleText }
+                style={[ styles.titleText, {
+                  flex: 1
+                }]}
               >
                 { this.props.post.board.name }
               </Text>
