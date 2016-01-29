@@ -56,10 +56,10 @@ var PostBody = React.createClass({
 
   goToCommentView() {
     // dont navigate if already in comment view
-    if(this.props.mainRoute.name == routes.MAIN.COMMENT.name) return;
+    if(this.props.mainRoute.name == routes.MAIN.COMMENT) return;
     // navigate to comments
     var route = {
-      name: routes.MAIN.COMMENT.name,
+      name: routes.MAIN.COMMENT,
       post: this.props.post
     };
     this.props.mainNavigator.push(route);

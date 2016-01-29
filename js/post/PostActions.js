@@ -14,6 +14,8 @@ var Dispatcher = require('./../shared/dispatcher');
 var constants = require('./../constants');
 var POST = constants.POST;
 
+var _ = require('underscore');
+
 var PostActions = {
 	/**
 	 * fetch posts from either a bevy or the posts that a certain user has posted

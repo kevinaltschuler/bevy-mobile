@@ -24,7 +24,7 @@ var Post = Backbone.Model.extend({
   idAttribute: '_id',
 
   initialize() {
-    console.log('init post');
+    //console.log('init post');
     var user = UserStore.getUser();
     var vote = _.findWhere(this.get('votes'), { voter: user._id });
     if(vote == undefined) this.set('voted', false);
@@ -38,7 +38,7 @@ var Post = Backbone.Model.extend({
   },
 
   updateComments() {
-    console.log('post sync', this.get('_id'));
+    //console.log('post sync', this.get('_id'));
     var comments = this.get('comments');
     var nestedComments, commentCount;
     if(comments == undefined || comments.length <= 0) {

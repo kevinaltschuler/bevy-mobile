@@ -80,7 +80,7 @@ var ChatView = React.createClass({
       name: routes.MAIN.MESSAGEVIEW,
       threadID: thread_id
     };
-    this.props.mainNavigator.replace(route);
+    this.props.mainNavigator.push(route);
 
     var $routes = this.props.mainNavigator.getCurrentRoutes();
     var currentRoute = $routes[$routes.length - 1];
