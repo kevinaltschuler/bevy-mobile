@@ -86,11 +86,17 @@ exports.POST = {
   UPDATE: 'post_update',
   FETCH: 'post_fetch',
   FETCH_BOARD: 'post_fetch_board',
+  FETCH_SINGLE: 'post_fetch_single',
   SEARCH: 'post_search',
+  SET_TEMP_POST: 'post_set_temp_post',
+  CLEAR_TEMP_POST: 'post_clear_temp_post',
 
+  // events
   POST_CREATED: 'post_created',
   LOADING: 'post_loading',
   LOADED: 'post_loaded',
+  FETCHING_SINGLE: 'post_fetching_single',
+  FETCHED_SINGLE: 'post_fetched_single',
   CHANGE_ALL: 'post_change_all',
   CHANGE_ONE: 'post_change_one:',
   SEARCHING: 'post_searching',
