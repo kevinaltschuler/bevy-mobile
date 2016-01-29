@@ -128,6 +128,39 @@ var CommentView = React.createClass({
         replyText: this.state.replyText // set again because of set state lag
       });
     }
+    //this.scrollToBottom();
+  },
+
+  onReplyFocus() {
+    // if we're not replying to a comment, then scroll
+    // to the bottom of the comment list
+    if(_.isEmpty(this.state.replyToComment)) {
+      //this.scrollToBottom();
+    }
+  },
+
+  scrollToBottom() {
+    // dont even try if the scroll view hasn't mounted yet
+    if(this.ScrollView == undefined) return;
+
+    var innerScrollView = this.ScrollView.refs.InnerScrollView;
+    var scrollView = this.ScrollView.refs.ScrollView;
+
+    requestAnimationFrame(() => {
+      innerScrollView.measure((innerScrollViewX, innerScrollViewY,
+        innerScrollViewWidth, innerScrollViewHeight) => {
+
+        scrollView.measure((scrollViewX, scrollViewY, scrollViewWidth, scrollViewHeight) => {
+          var scrollTo = innerScrollViewHeight - scrollViewHeight + innerScrollViewY;
+
+          if(innerScrollViewHeight < scrollViewHeight) {
+            return;
+          }
+
+          this.ScrollView.scrollTo(scrollTo, 0);
+        });
+      });
+    });
   },
 
   postReply() {
@@ -216,48 +249,6 @@ var CommentView = React.createClass({
     );
   },
 
-  _renderContent() {
-    if(_.isEmpty(this.state.post)) {
-      return (
-        <View style={ styles.notFoundContainer }>
-          <Text style={ styles.notFoundText }>
-            Post Not Found
-          </Text>
-        </View>
-      );
-    }
-    return (
-      <ScrollView
-        ref={ ref => { this.ScrollView = ref; }}
-        style={[ styles.scrollView, {
-          marginBottom: this.state.keyboardSpace + 48
-        }]}
-        refreshControl={
-          <RefreshControl
-            refreshing={ this.state.loading }
-            onRefresh={ this.onRefresh }
-            tintColor='#AAA'
-            title='Loading...'
-          />
-        }
-      >
-        { this._renderPost() }
-        <Text style={ styles.commentsTitle }>
-          Comments
-        </Text>
-        <View style={ styles.commentsCard }>
-          <CommentList
-            comments={ this.state.post.nestedComments }
-            onReply={ this.onReply }
-            mainNavigator={ this.props.mainNavigator }
-            user={ this.props.user }
-          />
-          { this._renderNoCommentsText() }
-        </View>
-      </ScrollView>
-    );
-  },
-
   render() {
     return (
       <View style={ styles.container }>
@@ -287,7 +278,34 @@ var CommentView = React.createClass({
             }}/>
           </View>
         </View>
-        { this._renderContent() }
+        <ScrollView
+          ref={ ref => { this.ScrollView = ref; }}
+          style={[ styles.scrollView, {
+            marginBottom: this.state.keyboardSpace + 48
+          }]}
+          refreshControl={
+            <RefreshControl
+              refreshing={ this.state.loading }
+              onRefresh={ this.onRefresh }
+              tintColor='#AAA'
+              title='Loading...'
+            />
+          }
+        >
+          { this._renderPost() }
+          <Text style={ styles.commentsTitle }>
+            Comments
+          </Text>
+          <View style={ styles.commentsCard }>
+            <CommentList
+              comments={ this.state.post.nestedComments }
+              onReply={ this.onReply }
+              mainNavigator={ this.props.mainNavigator }
+              user={ this.props.user }
+            />
+            { this._renderNoCommentsText() }
+          </View>
+        </ScrollView>
         <View
           style={{
             position: 'absolute',
@@ -300,7 +318,7 @@ var CommentView = React.createClass({
             <TextInput
               ref={ ref => { this.ReplyInput = ref; }}
               style={ styles.replyInput }
-              placeholder='Reply'
+              placeholder='Write a Comment...'
               placeholderTextColor='#AAA'
               returnKeyType='send'
               clearButtonMode='while-editing'
@@ -308,17 +326,18 @@ var CommentView = React.createClass({
               onChangeText={ text => this.setState({ replyText: text }) }
               onSubmitEditing={ this.postReply }
               onBlur={ this.onReplyBlur }
+              onFocus={ this.onReplyFocus }
             />
             <TouchableOpacity
               activeOpacity={ 0.5 }
               onPress={ this.postReply }
               style={ styles.replyButton }
             >
-              <Icon
-                name='send'
-                size={ 30 }
-                color='#2CB673'
-              />
+              <Text style={[ styles.replyButtonText, {
+                color: (_.isEmpty(this.state.replyText)) ? '#CCC' : '#2CB673'
+              }]}>
+                Post
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -422,29 +441,26 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 10,
     borderTopWidth: 1,
-    borderTopColor: '#DDD'
+    borderTopColor: '#AAA'
   },
   replyInput: {
     flex: 1,
     color: '#333',
-    height: 48,
+    height: 36,
     fontSize: 17,
-    paddingHorizontal: 10
+    marginTop: 6,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#CCC'
   },
   replyButton: {
     paddingTop: 0,
     paddingBottom: 0,
-    paddingHorizontal: 8
+    paddingHorizontal: 12
   },
   replyButtonText: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 0,
-    fontSize: 17,
-    color: '#2CB673',
-    fontWeight: 'bold',
-    marginBottom: 0,
-    marginLeft: 5
+    fontSize: 17
   },
   notFoundContainer: {
     flex: 1,
