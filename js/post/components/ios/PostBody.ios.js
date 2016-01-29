@@ -92,7 +92,7 @@ var PostBody = React.createClass({
       var regex = new RegExp('' + this.props.searchQuery + '', 'gi' );
       var body = this.props.post.title;
       var segments = body.split(regex);
-      var replacements = body.match(regex);
+      var replacements = body.match(regex) || [''];
       title = [];
       for(var key in segments) {
         var segment = segments[key];
