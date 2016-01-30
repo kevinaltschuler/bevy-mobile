@@ -171,7 +171,8 @@ var styles = StyleSheet.create({
     width: 48,
     height: 48,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 10
   },
   imageCountText: {
     flex: 1,

@@ -73,6 +73,8 @@ var UserSearchItem = React.createClass({
   render() {
     var imageSource = UserStore.getUserImage(this.props.searchUser.image, 64, 64);
 
+    console.log(imageSource);
+
     return (
       <TouchableHighlight
         underlayColor='rgba(0,0,0,.1)'

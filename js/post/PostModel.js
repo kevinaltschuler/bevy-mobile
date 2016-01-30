@@ -120,9 +120,12 @@ var Post = Backbone.Model.extend({
    */
   countVotes() {
     var sum = 0;
-    this.get('votes').forEach(function(vote) {
-      sum += vote.score;
-    });
+    var votes = this.get('votes');
+    if(!_.isEmpty(votes)) {
+      votes.forEach(function(vote) {
+        sum += vote.score;
+      });
+    }
     return sum;
   }
 });
