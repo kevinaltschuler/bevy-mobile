@@ -11,7 +11,39 @@
 'use strict';
 
 module.exports = {
-  ios: [{
+  ios: [
+  {
+    version: '1.3.75',
+    sections: [{
+      header: 'New Features',
+      bodyItems: [
+
+      ]
+    }, {
+      header: 'Bug Fixes',
+      bodyItems: [
+        "Misc UI Fixes"
+      ]
+    }]
+  },
+  {
+    version: '1.3.74',
+    sections: [{
+      header: 'New Features',
+      bodyItems: [
+        "Highlight the active board in the bevy side menu"
+      ]
+    }, {
+      header: 'Bug Fixes',
+      bodyItems: [
+        "Fix crashes with post search",
+        "Fixes with the comment count, adding, and deleting comments",
+        "Fixes with an empty thread image",
+        "Redo routing structure for more robust app routing"
+      ]
+    }]
+  },
+  {
     version: '1.3.73',
     sections: [{
       header: 'New Features',

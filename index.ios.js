@@ -46,7 +46,7 @@ window.fetch = function(input, init) {
     }
   }
   // if this is an api call
-  if(url.includes(constants.apiurl)) {
+  if(url.indexOf(constants.apiurl) > -1) {
     // if we have an authorization token
     if(!_.isEmpty(UserStore.getAccessToken())) {
       //console.log(localStorage.getItem('access_token'));
