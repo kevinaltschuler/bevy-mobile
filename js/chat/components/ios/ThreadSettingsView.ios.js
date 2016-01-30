@@ -203,8 +203,8 @@ var ThreadSettingsView = React.createClass({
       <View style={ styles.header }>
         <ThreadImage
           thread={ this.props.activeThread }
-          width={ 60 }
-          height={ 60 }
+          width={ 80 }
+          height={ 80 }
         />
         <View style={ styles.headerDetails }>
           <Text style={ styles.threadName }>
@@ -414,22 +414,20 @@ var styles = StyleSheet.create({
     paddingBottom: 60
   },
   header: {
-    height: 80,
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
+    marginTop: 30,
+    flexDirection: 'column',
     alignItems: 'center',
     paddingHorizontal: 10
   },
 
   headerDetails: {
-    height: 48,
     flexDirection: 'column',
     justifyContent: 'center',
-    marginLeft: 10
+    marginTop: 16
   },
   threadName: {
     color: '#000',
-    fontSize: 17
+    fontSize: 24,
   },
   sectionTitle: {
     color: '#AAA',

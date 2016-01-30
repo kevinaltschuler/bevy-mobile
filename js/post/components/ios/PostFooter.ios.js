@@ -100,6 +100,7 @@ var PostFooter = React.createClass({
 
   destroyPostForSure() {
     PostActions.destroy(this.props.post._id);
+    this.props.mainNavigator.pop();
   },
 
   goToEditPost() {

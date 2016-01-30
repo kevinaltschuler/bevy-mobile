@@ -98,6 +98,7 @@ var InputView = React.createClass({
   componentDidMount() {
     DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
     DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.titleValue = '';
 
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
@@ -184,18 +185,18 @@ var InputView = React.createClass({
 
   submit() {
     // dont post if text and images are empty
-    if(this.state.title.length <= 0 && this.state.images.length <= 0) return;
+    if(this.titleValue.length <= 0 && this.state.images.length <= 0) return;
 
     if(this.props.editing) {
       PostActions.update(
         this.props.post._id,
-        this.state.title,
+        this.titleValue,
         this.state.images,
         null //event
       );
     } else {
       PostActions.create(
-        this.state.title,
+        this.titleValue,
         (_.isEmpty(this.state.images)) ? [] : this.state.images,
         this.props.user,
         this.props.postingToBoard,
@@ -206,6 +207,7 @@ var InputView = React.createClass({
 
     // unfocus text field
     this.TitleInput.blur();
+    this.titleValue = '';
 
     // if we're editing the post, then go directly to the comment view
     // because we already have the post that the comment view needs
@@ -258,6 +260,10 @@ var InputView = React.createClass({
     this.setState({
       images: images
     });
+  },
+
+  onChangeText(text) {
+    this.titleValue = text;
   },
 
   _renderBoardItem() {
@@ -451,8 +457,7 @@ var InputView = React.createClass({
             <TextInput
               ref={ ref => { this.TitleInput = ref; }}
               multiline={ true }
-              value={ this.state.title }
-              onChangeText={ text => this.setState({ title: text }) }
+              onChangeText={ this.onChangeText }
               placeholder={ this.state.placeholderText }
               placeholderTextColor='#AAA'
               style={ styles.textInput }

@@ -112,6 +112,8 @@ var BevyActionButtons = React.createClass({
     this.SearchInput.blur();
     // scroll back to the main buttons
     this.Swiper.scrollTo(0, 0);
+    // clear the query in PostActions
+    PostActions.search('');
   },
 
   openSearch() {
