@@ -63,6 +63,8 @@ var RegisterView = React.createClass({
     DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
+    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
   },
 
   onKeyboardShow(frames) {

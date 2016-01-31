@@ -52,6 +52,9 @@ var ForgotView = React.createClass({
   componentWillUnmount() {
     UserStore.off(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
     UserStore.off(USER.RESET_PASSWORD_ERROR, this.onError);
+
+    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
   },
 
   onSuccess() {

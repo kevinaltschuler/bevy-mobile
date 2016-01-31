@@ -55,11 +55,15 @@ var LoginView = React.createClass({
 
   componentDidMount() {
     UserStore.on(USER.LOGIN_ERROR, this.onError);
+    
     DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_ERROR, this.onError);
+
+    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
+    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
   },
 
   onError(error) {
