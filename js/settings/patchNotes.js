@@ -17,11 +17,16 @@ module.exports = {
     sections: [{
       header: 'New Features',
       bodyItems: [
-
+        "Added Gallery View to the Image Overlay"
       ]
     }, {
       header: 'Bug Fixes',
       bodyItems: [
+        "Improve performance when creating new posts",
+        "Remove swiper components",
+        "Fix post deletion",
+        "Fix height of TextInput in the NewPostView",
+        "Smoother post search transitions",
         "Misc UI Fixes"
       ]
     }]
