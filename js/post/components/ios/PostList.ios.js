@@ -1,5 +1,10 @@
 /**
  * PostList.ios.js
+ *
+ * Displays a list of posts
+ * Used in ProfileView, BevyView, and BevyView post search
+ * Also displays the board card and new post card when appropriate
+ *
  * @author kevin
  * @flow
  */
@@ -129,6 +134,7 @@ var PostList = React.createClass({
     this.setState({
       searching: false,
       loading: false,
+      loadingInitial: false,
       searchPosts: posts,
       searchQuery: PostStore.getSearchQuery(),
       ds: this.state.ds.cloneWithRows(posts)
@@ -158,10 +164,15 @@ var PostList = React.createClass({
     }
   },
 
+  switchToSearch() {
+    this.setState({
+      loadingInitial: true
+    });
+  },
+
   switchBackFromSearch() {
     this.setState({
-      loadingInitial: true,
-      ds: this.state.ds.cloneWithRows([])
+      loadingInitial: true
     });
     PostActions.fetch(this.props.activeBevy._id, null);
   },
@@ -262,6 +273,8 @@ var PostList = React.createClass({
   },
 
   _renderPosts() {
+    // Render this if there are no boards to post to
+    // will probably only render when the user just created a new bevy
     if(_.isEmpty(this.props.activeBevy.boards) && _.isEmpty(this.props.profileUser)) {
       return (
         <View style={ styles.noPostsContainer }>
@@ -271,6 +284,9 @@ var PostList = React.createClass({
         </View>
       );
     }
+
+    // dont render anything if in the initial loading state
+    if(this.state.loadingInitial) return <View />;
 
     return (
       <ListView

@@ -60,9 +60,12 @@ var ImageOverlayGallery = React.createClass({
         var image = this.props.images[j];
         if(image == undefined) {
           images.push(
-            <View style={{
-              flex: 1
-            }}/>
+            <View
+              key={ 'galleryitem:' + j }
+              style={{
+                flex: 1
+              }}
+            />
           );
           continue;
         }

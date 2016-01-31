@@ -91,6 +91,7 @@ var BevyView = React.createClass({
 
   onSearchStart() {
     this.setState({ useSearchPosts: true });
+    this.PostList.switchToSearch();
   },
   onSearchStop() {
     this.setState({ useSearchPosts: false });
