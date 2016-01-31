@@ -53,7 +53,7 @@ var ImageOverlayItem = React.createClass({
     });
   },
   onLoadProgress(ev) {
-    console.log('load progress', ev.nativeEvent);
+    console.log('load progress', ev);
   },
 
   _renderLoading() {
