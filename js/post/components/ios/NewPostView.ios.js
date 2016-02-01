@@ -107,9 +107,9 @@ var NewPostView = React.createClass({
         break;
 
       case routes.NEWPOST.INPUT:
-        let InputView = require('./InputView.ios.js');
+        let NewPostInputView = require('./NewPostInputView.ios.js');
         return (
-          <InputView
+          <NewPostInputView
             newPostRoute={ route }
             newPostNavigator={ navigator }
             postingToBoard={ this.state.postingToBoard }

@@ -1,5 +1,5 @@
 /**
- * InputView.ios.js
+ * NewPostInputView.ios.js
  *
  * Entry view where the user creates new posts by entering text
  * and uploading images
@@ -69,7 +69,7 @@ var hintTexts = [
   "What's cooking good looking?"
 ];
 
-var InputView = React.createClass({
+var NewPostInputView = React.createClass({
   propTypes: {
     newPostNavigator: React.PropTypes.object,
     newPostRoute: React.PropTypes.object,
@@ -607,4 +607,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = InputView;
+module.exports = NewPostInputView;
