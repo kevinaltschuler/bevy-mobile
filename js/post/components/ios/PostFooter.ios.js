@@ -158,9 +158,9 @@ var PostFooter = React.createClass({
 
   vote() {
     PostActions.vote(this.props.post._id);
-    this.setState({
-      voted: !this.state.voted
-    });
+    //this.setState({
+    //  voted: !this.state.voted
+    //});
   },
 
   render() {

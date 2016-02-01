@@ -249,14 +249,14 @@ _.extend(PostStore, {
         }, {
           patch: true,
           success: function(model, response, options) {
-            // sort posts
-            //this.posts.sort();
-            this.trigger(POST.CHANGE_ONE + post_id);
           }.bind(this),
           error: function(error) {
-            console.log('post save error', error);
-          }
+          }.bind(this)
         });
+
+        post.set('votes', votes);
+        post.updateVotes();
+        this.trigger(POST.CHANGE_ONE + post_id);
         break;
 
       case POST.DESTROY:
