@@ -307,7 +307,8 @@ var NewPostInputView = React.createClass({
               size={ 48 }
               color='#888'
               style={{
-                marginLeft: 10
+                marginLeft: 10,
+                marginRight: -10
               }}
             />
           </View>
@@ -540,8 +541,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 80,
     alignItems: 'center',
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingHorizontal: 10
   },
   input: {
     flex: 1,

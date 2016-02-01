@@ -303,7 +303,7 @@ _.extend(UserStore, {
         }, {
           patch: true,
           success: function(model, response, options) {
-            console.log('join success');
+            this.trigger(USER.CHANGE_ALL);
           }.bind(this)
         });
         break;
@@ -323,7 +323,7 @@ _.extend(UserStore, {
         }, {
           patch: true,
           success: function(model, response, options) {
-            console.log('leave success')
+            this.trigger(USER.CHANGE_ALL);
           }.bind(this)
         });
         break;

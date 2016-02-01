@@ -61,12 +61,6 @@ var BevyInfoView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      subscribed: _.contains(nextProps.user.bevies, nextProps.activeBevy._id),
-      isAdmin: _.findWhere(nextProps.activeBevy.admins,
-        { _id: nextProps.user._id }) != undefined,
-      image: nextProps.activeBevy.image
-    });
   },
 
   componentDidMount() {
@@ -91,14 +85,12 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.pop();
   },
 
-  changeSubscribed(value) {
-    this.setState({
-      subscribed: value
-    });
-    if(value) {
-      BevyActions.subscribe(this.props.activeBevy._id);
+  changeSubscribed(subscribed) {
+    this.setState({ subscribed: subscribed });
+    if(subscribed) {
+      BevyActions.join(this.props.activeBevy._id);
     } else {
-      BevyActions.unsubscribe(this.props.activeBevy._id);
+      BevyActions.leave(this.props.activeBevy._id);
     }
   },
 
@@ -187,17 +179,11 @@ var BevyInfoView = React.createClass({
     return (
       <View style={ styles.actionRow }>
         <Text style={ styles.settingsTitle }>Subscribe</Text>
-        <View style={[ styles.switchContainer, {
-          marginTop: 0,
-          borderTopWidth: 1,
-          borderTopColor: '#ddd',
-          paddingHorizontal: 16
-        }]}>
+        <View style={ styles.switchContainer }>
           <Text style={ styles.switchDescription }>Subscribed</Text>
           <Switch
             value={ this.state.subscribed }
             onValueChange={ this.changeSubscribed }
-
           />
         </View>
       </View>
@@ -306,16 +292,22 @@ var BevyInfoView = React.createClass({
           <Text style={ styles.settingsTitle }>
             General
           </Text>
-          <SettingsItem
-            icon={
-              <Icon
-                name='link'
-                size={ 30 }
-                color='#AAA'
-              />
-            }
-            title={ constants.siteurl + '/b/' + this.props.activeBevy.slug }
-          />
+          <View style={ styles.urlItem }>
+            <Icon
+              name='link'
+              size={ 30 }
+              color='#AAA'
+            />
+            <Text style={ styles.urlTitle }>
+              URL
+            </Text>
+            <Text
+              style={ styles.urlValue }
+              numberOfLines={ 2 }
+            >
+              { constants.siteurl + '/b/' + this.props.activeBevy.slug }
+            </Text>
+          </View>
           { this._renderSubSwitch() }
           { this._renderAdmins() }
           { this._renderAdminSettings() }
@@ -381,14 +373,32 @@ var styles = StyleSheet.create({
     fontSize: 17,
     color: '#888'
   },
+  urlItem: {
+    backgroundColor: '#FFF',
+    height: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15
+  },
+  urlTitle: {
+    marginHorizontal: 15,
+    fontSize: 17,
+    color: '#222'
+  },
+  urlValue: {
+    flex: 1,
+    textAlign: 'left',
+    fontSize: 17,
+    color: '#888',
+    marginRight: 15
+  },
   switchContainer: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
     height: 60,
     paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
+    marginTop: 0
   },
   switchDescription: {
     flex: 1,
