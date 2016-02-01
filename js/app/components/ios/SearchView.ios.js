@@ -191,6 +191,7 @@ var SearchView = React.createClass({
   },
 
   renderRow(payload) {
+    if(this.state.loadingInitial) return <View />;
     switch(this.state.activeTab) {
       case 0:
         // render bevy card
@@ -289,6 +290,7 @@ var SearchView = React.createClass({
             ref={ ref => { this.SearchInput = ref; }}
             style={ styles.searchInput }
             placeholderTextColor='rgba(255,255,255,.6)'
+            clearButtonMode='always'
             onChangeText={ this.onChangeText }
             onSubmitEditing={ this.search }
             value={ this.state.query }
@@ -314,6 +316,8 @@ var SearchView = React.createClass({
           contentContainerStyle={ styles.searchListInnerContainer }
           dataSource={ this.state.ds }
           automaticallyAdjustContentInsets={ false }
+          keyboardShouldPersistTaps={ true }
+          keyboardDismissMode='on-drag'
           refreshControl={
             <RefreshControl
               refreshing={ this.state.fetching }

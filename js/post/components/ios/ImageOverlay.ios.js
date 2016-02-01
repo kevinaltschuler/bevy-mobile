@@ -37,12 +37,15 @@ var ImageOverlay = React.createClass({
     isVisible: React.PropTypes.bool,
     images: React.PropTypes.array,
     post: React.PropTypes.object,
+    title: React.PropTypes.string,
     onHide: React.PropTypes.func
   },
 
   getDefaultProps() {
     return {
-      onHide: _.noop
+      onHide: _.noop,
+      post: {},
+      title: null
     };
   },
 
@@ -54,6 +57,7 @@ var ImageOverlay = React.createClass({
   },
 
   hide() {
+    this.setState(this.getInitialState());
     this.props.onHide();
   },
 
@@ -91,6 +95,25 @@ var ImageOverlay = React.createClass({
     this.ScrollView.scrollTo(0, this.props.images.length * constants.width, false);
   },
 
+  renderGalleryButton() {
+    // dont render this if there's only one image being displayed
+    if(this.props.images.length <= 1) return <View />;
+
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        style={ styles.iconButton }
+        onPress={ this.goToGallery }
+      >
+        <Icon
+          name='view-module'
+          size={ 30 }
+          color='#fff'
+        />
+      </TouchableOpacity>
+    );
+  },
+
   renderIndexBar() {
     // dont render this if there's only one image being displayed
     if(this.props.images.length <= 1) return <View />;
@@ -110,8 +133,14 @@ var ImageOverlay = React.createClass({
   render() {
     if(!this.props.isVisible) return null;
     var post = this.props.post;
-    var title = post.title || '';
-    if(this.state.imageIndex == this.props.images.length) {
+    var title;
+    if(this.props.title) {
+      title = this.props.title;
+    } else {
+      title = post.title || '';
+    }
+
+    if(this.props.images.length > 1 && this.state.imageIndex == this.props.images.length) {
       // in gallery view
       title = 'Gallery';
     }
@@ -176,17 +205,7 @@ var ImageOverlay = React.createClass({
                   { this.props.images.length } Images
                 </Text>
               </View>
-              <TouchableOpacity
-                activeOpacity={ 0.5 }
-                style={ styles.iconButton }
-                onPress={ this.goToGallery }
-              >
-                <Icon
-                  name='view-module'
-                  size={ 30 }
-                  color='#fff'
-                />
-              </TouchableOpacity>
+              { this.renderGalleryButton() }
             </View>
           </View>
           { this.renderIndexBar() }

@@ -22,6 +22,7 @@ var {
   TouchableOpacity,
   StyleSheet
 } = React;
+var Spinner = require('react-native-spinkit');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -111,8 +112,44 @@ var GalleryItem = React.createClass({
     index: React.PropTypes.number
   },
 
+  getInitialState() {
+    return {
+      loaded: false,
+      error: ''
+    };
+  },
+
+  onLoadStart() {
+    this.setState({ loaded: false });
+  },
+  onLoad() {
+    this.setState({ loaded: true });
+  },
+  onLoadError(ev) {
+    this.setState({
+      loaded: true,
+      error: ev.nativeEvent.error
+    });
+  },
+  onLoadProgress(ev) {
+  },
+
   onSelect() {
     this.props.onSelect(this.props.image, this.props.index);
+  },
+
+  renderLoading() {
+    if(this.state.loaded) return <View />;
+    return (
+      <View style={ styles.loadingContainer }>
+        <Spinner
+          isVisible={ true }
+          size={ 40 }
+          type={ 'Arc' }
+          color={ '#2CB673' }
+        />
+      </View>
+    );
   },
 
   render() {
@@ -130,7 +167,14 @@ var GalleryItem = React.createClass({
           <Image
             source={{ uri: imageURL }}
             style={ styles.image }
-          />
+            resizeMode='contain'
+            onLoadStart={ this.onLoadStart }
+            onLoad={ this.onLoad }
+            onError={ this.onLoadError }
+            onProgress={ this.onLoadProgress }
+          >
+            { this.renderLoading() }
+          </Image>
         </TouchableOpacity>
       </View>
     );
@@ -169,9 +213,16 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   image: {
+    //backgroundColor: '#0008',
     width: itemWidth - 10,
     height: itemWidth - 10
-  }
+  },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
 });
 
 module.exports = ImageOverlayGallery;

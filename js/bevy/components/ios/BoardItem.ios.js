@@ -96,7 +96,7 @@ var styles = StyleSheet.create({
     height: 70,
     paddingLeft: 10,
     borderTopWidth: 1,
-    borderTopColor: '#666',
+    borderTopColor: '#444',
     alignItems: 'center'
   },
   boardImage: {

@@ -106,7 +106,6 @@ var MainTabBar = React.createClass({
   },
 
   _renderContent() {
-
     var tabBarActions = {
       switchTab: this.switchTab
     };

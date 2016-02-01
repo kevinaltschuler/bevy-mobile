@@ -297,6 +297,7 @@ var PostList = React.createClass({
           this.props.onScroll(ev.nativeEvent.contentOffset.y);
         }}
         scrollRenderAheadDistance={ 100 }
+        keyboardShouldPersistTaps={ !_.isEmpty(this.state.searchQuery) }
         renderHeader={() => {
           return this._renderHeader();
         }}

@@ -123,8 +123,10 @@ var PostBody = React.createClass({
     }
     return (
       <Text
-        accessible
+        accessible={ true }
+        focusable={ true }
         style={ styles.bodyText }
+        suppressHighlighting={ false }
         numberOfLines={(this.props.expandText)
           ? 9999 // arbitrary huge number
           : 8 }
@@ -138,7 +140,8 @@ var PostBody = React.createClass({
     return (
       <View
         style={ styles.body }
-        accessible
+        accessible={ true }
+        focusable={ true }
         onLayout={ this.onLayout }
       >
         { this._renderText() }

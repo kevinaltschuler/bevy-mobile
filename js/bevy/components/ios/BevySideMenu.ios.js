@@ -213,7 +213,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     paddingLeft: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#666',
+    borderBottomColor: '#444',
   },
   top: {
     height: 69,
@@ -252,9 +252,9 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: '#666',
+    borderBottomColor: '#444',
     borderTopWidth: 1,
-    borderTopColor: '#666'
+    borderTopColor: '#444'
   },
   newBoardText: {
     fontSize: 17,
