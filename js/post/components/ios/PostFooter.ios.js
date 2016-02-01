@@ -233,8 +233,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#eee'
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#EEE'
   },
   pointCountText: {
     color: '#757d83',

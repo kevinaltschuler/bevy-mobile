@@ -595,8 +595,8 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#eee'
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#EEE'
   },
   contentBarItem: {
     height: 60,

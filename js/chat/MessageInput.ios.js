@@ -83,7 +83,7 @@ var styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingLeft: 8,
     borderTopColor: '#EEE',
-    borderTopWidth: 1
+    borderTopWidth: StyleSheet.hairlineWidth
   },
   messageInput: {
     flex: 1

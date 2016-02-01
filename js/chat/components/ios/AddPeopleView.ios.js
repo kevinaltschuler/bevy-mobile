@@ -343,7 +343,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#DDD',
     flexWrap: 'wrap',
     paddingTop: 6,

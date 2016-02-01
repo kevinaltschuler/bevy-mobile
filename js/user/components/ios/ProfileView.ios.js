@@ -147,17 +147,17 @@ var ProfileView = React.createClass({
     return (
       <View style={{
         width: constants.width,
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         flexDirection: 'row'
       }}>
         <View style={{
           width: 30 + 36,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#FFF'
         }}/>
         <View style={{
           flex: 1,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#EEE'
         }}/>
       </View>

@@ -257,7 +257,7 @@ var styles = StyleSheet.create({
     height: 50,
     paddingLeft: 16,
     borderColor: '#fff',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
     borderRadius: 25,
     width: constants.width / 1.2,

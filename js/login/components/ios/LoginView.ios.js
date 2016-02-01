@@ -83,6 +83,10 @@ var LoginView = React.createClass({
     setTimeout(this.scrollToTop, 300);
   },
 
+  onUsernameSubmit(text) {
+    this.PasswordInput.focus();
+  },
+
   scrollToTop() {
     if(this.ScrollView == undefined) return;
     this.ScrollView.scrollTo(0, 0);
@@ -189,6 +193,7 @@ var LoginView = React.createClass({
           marginBottom: this.state.keyboardSpace
         }]}
         contentContainerStyle={ styles.containerInner }
+        keyboardShouldPersistTaps={ true }
         scrollEnabled={ false }
       >
         <Image
@@ -207,7 +212,8 @@ var LoginView = React.createClass({
           autoCapitalize='none'
           placeholder='Username'
           style={ styles.loginInput }
-          onChangeText={text => this.setState({ username: text }) }
+          onChangeText={ text => this.setState({ username: text }) }
+          onSubmitEditing={ this.onUsernameSubmit }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TextInput
@@ -217,7 +223,7 @@ var LoginView = React.createClass({
           secureTextEntry={ true }
           placeholder='Password'
           style={ styles.loginInput }
-          onChangeText={text => this.setState({ pass: text }) }
+          onChangeText={ text => this.setState({ pass: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TouchableOpacity
@@ -241,7 +247,7 @@ var LoginView = React.createClass({
           <TouchableOpacity
             activeOpacity={ 0.5 }
             style={[ styles.textButton, {
-              borderRightWidth: 1,
+              borderRightWidth: StyleSheet.hairlineWidth,
               borderRightColor: '#fff'
             }]}
             onPress={ this.goToRegister }
@@ -310,7 +316,7 @@ var styles = StyleSheet.create({
     height: 50,
     paddingLeft: 16,
     borderColor: '#fff',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
     borderRadius: 25,
     width: constants.width / 1.2,

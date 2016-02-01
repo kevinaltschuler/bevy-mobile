@@ -95,7 +95,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 70,
     paddingLeft: 10,
-    borderTopWidth: 1,
+    borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: '#444',
     alignItems: 'center'
   },

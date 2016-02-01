@@ -204,6 +204,8 @@ _.extend(UserStore, {
         this.user = new User;
         this.loggedIn = false;
 
+        GoogleSignIn.signOut();
+
         this.trigger(USER.LOGOUT);
         break;
 

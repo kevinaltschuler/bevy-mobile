@@ -377,8 +377,8 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#EEE',
-    backgroundColor: '#2cb673',
-    borderBottomWidth: 1
+    backgroundColor: '#2CB673',
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   segmentedControl: {
     backgroundColor: '#2CB673',

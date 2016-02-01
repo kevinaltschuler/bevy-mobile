@@ -212,7 +212,7 @@ var styles = StyleSheet.create({
     height: 70,
     flexDirection: 'column',
     paddingLeft: 10,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#444',
   },
   top: {
@@ -251,9 +251,9 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#444',
-    borderTopWidth: 1,
+    borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: '#444'
   },
   newBoardText: {

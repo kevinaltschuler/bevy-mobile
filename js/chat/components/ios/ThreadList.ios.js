@@ -154,18 +154,18 @@ var ThreadList = React.createClass({
         key={ 'separator:' + rowID }
         style={{
         width: constants.width,
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         flexDirection: 'row',
         alignItems: 'center'
       }}>
         <View style={{
           width: 90,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#FFF'
         }}/>
         <View style={{
           flex: 1,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#EEE'
         }}/>
       </View>

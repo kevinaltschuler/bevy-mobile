@@ -174,7 +174,7 @@ var NewBoardView = React.createClass({
           />
           <View style={{
             width: constants.width,
-            height: 1,
+            height: StyleSheet.hairlineWidth,
             backgroundColor: '#EEE'
           }}/>
           <TextInput

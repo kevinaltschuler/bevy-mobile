@@ -208,6 +208,7 @@ var BevyInfoView = React.createClass({
           title='Change Bevy Name'
           onPress={ this.changeName }
         />
+        { this._renderSeparator() }
         {/*<SettingsItem
           icon={
             <Icon
@@ -276,6 +277,27 @@ var BevyInfoView = React.createClass({
     );
   },
 
+  _renderSeparator() {
+    return (
+      <View style={{
+        width: constants.width,
+        height: StyleSheet.hairlineWidth,
+        flexDirection: 'row'
+      }}>
+        <View style={{
+          width: 30 + 30,
+          height: StyleSheet.hairlineWidth,
+          backgroundColor: '#FFF'
+        }}/>
+        <View style={{
+          flex: 1,
+          height: StyleSheet.hairlineWidth,
+          backgroundColor: '#EEE'
+        }}/>
+      </View>
+    );
+  },
+
   render() {
     return (
       <View style={ styles.container }>
@@ -336,7 +358,6 @@ var styles = StyleSheet.create({
 
   },
   bodyInner: {
-    paddingTop: 15
   },
   cameraTouchable: {
     backgroundColor: 'rgba(0,0,0,0)'
