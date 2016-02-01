@@ -62,14 +62,17 @@ var AddPeopleView = React.createClass({
     // populate list with random users for now
     UserActions.search('');
 
-    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
 
   componentWillUnmount() {
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onKeyboardShow(frames) {

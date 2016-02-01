@@ -96,18 +96,24 @@ var NewPostInputView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
     this.titleValue = '';
 
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
+
     PostStore.on(POST.POST_CREATED, this.onPostCreated);
+
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+
     PostStore.off(POST.POST_CREATED, this.onPostCreated);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onKeyboardShow(ev) {

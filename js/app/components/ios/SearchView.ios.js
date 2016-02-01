@@ -80,8 +80,8 @@ var SearchView = React.createClass({
     UserStore.on(USER.SEARCH_ERROR, this.onUserSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onUserSearchComplete);
 
-    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     setTimeout(this.search, 500);
   },
@@ -93,6 +93,9 @@ var SearchView = React.createClass({
     UserStore.off(USER.SEARCHING, this.onUserSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onUserSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onUserSearchComplete);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onUserSearching() {

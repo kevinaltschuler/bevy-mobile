@@ -60,17 +60,18 @@ var MessageView = React.createClass({
 
   componentDidMount() {
     ChatStore.on(CHAT.MESSAGES_FETCHED, this._onChatChange);
-    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
-    setTimeout(() => {
-      //this.onRefresh();
-      this.scrollToBottom();
-    }, 1000);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+
+    setTimeout(this.scrollToBottom, 1000);
   },
 
   componentWillUnmount() {
     ChatStore.off(CHAT.MESSAGES_FETCHED, this._onChatChange);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   componentWillReceiveProps(nextProps) {

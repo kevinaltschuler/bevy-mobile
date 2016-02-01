@@ -46,15 +46,15 @@ var ForgotView = React.createClass({
     UserStore.on(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
     UserStore.on(USER.RESET_PASSWORD_ERROR, this.onError);
 
-    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     UserStore.off(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
     UserStore.off(USER.RESET_PASSWORD_ERROR, this.onError);
 
-    DeviceEventEmitter.removeAllListeners('keyboardWillShow');
-    DeviceEventEmitter.removeAllListeners('keyboardWillHide');
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onSuccess() {

@@ -53,12 +53,12 @@ var CommentView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
-
     PostStore.on(POST.FETCHING_SINGLE, this.onFetchingSingle);
     PostStore.on(POST.FETCHED_SINGLE, this.onFetchedSingle);
     PostStore.on(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
+
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     this.onRefresh();
   },
@@ -66,6 +66,9 @@ var CommentView = React.createClass({
     PostStore.off(POST.FETCHING_SINGLE, this.onFetchingSingle);
     PostStore.off(POST.FETCHED_SINGLE, this.onFetchedSingle);
     PostStore.off(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
 
     PostActions.clearTempPost();
   },
