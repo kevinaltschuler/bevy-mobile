@@ -1,5 +1,5 @@
 /**
- * InputView.ios.js
+ * NewPostInputView.ios.js
  *
  * Entry view where the user creates new posts by entering text
  * and uploading images
@@ -69,7 +69,7 @@ var hintTexts = [
   "What's cooking good looking?"
 ];
 
-var InputView = React.createClass({
+var NewPostInputView = React.createClass({
   propTypes: {
     newPostNavigator: React.PropTypes.object,
     newPostRoute: React.PropTypes.object,
@@ -96,18 +96,24 @@ var InputView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
     this.titleValue = '';
 
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
+
     PostStore.on(POST.POST_CREATED, this.onPostCreated);
+
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
     FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
+
     PostStore.off(POST.POST_CREATED, this.onPostCreated);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onKeyboardShow(ev) {
@@ -307,7 +313,8 @@ var InputView = React.createClass({
               size={ 48 }
               color='#888'
               style={{
-                marginLeft: 10
+                marginLeft: 10,
+                marginRight: -10
               }}
             />
           </View>
@@ -540,8 +547,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     height: 80,
     alignItems: 'center',
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingHorizontal: 10
   },
   input: {
     flex: 1,
@@ -589,8 +595,8 @@ var styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#eee'
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#EEE'
   },
   contentBarItem: {
     height: 60,
@@ -607,4 +613,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = InputView;
+module.exports = NewPostInputView;

@@ -14,9 +14,6 @@ var {
   Navigator,
   TouchableHighlight
 } = React;
-var LoginView = require('./LoginView.ios.js');
-var RegisterView = require('./RegisterView.ios.js');
-var ForgotView = require('./ForgotView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -48,6 +45,7 @@ var LoginNavigator = React.createClass({
         renderScene={(route, navigator) => {
           switch(route.name) {
             case routes.LOGIN.LOGIN:
+              let LoginView = require('./LoginView.ios.js');
               return (
                 <LoginView
                   { ...this.props }
@@ -58,6 +56,7 @@ var LoginNavigator = React.createClass({
               break;
 
             case routes.LOGIN.REGISTER:
+              let RegisterView = require('./RegisterView.ios.js');
               return (
                 <RegisterView
                   { ...this.props }
@@ -68,6 +67,7 @@ var LoginNavigator = React.createClass({
               break;
 
             case routes.LOGIN.FORGOT:
+              let ForgotView = require('./ForgotView.ios.js');
               return (
                 <ForgotView
                   { ...this.props }

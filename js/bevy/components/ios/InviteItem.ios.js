@@ -106,7 +106,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 3,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#999',
     paddingHorizontal: 10,
     paddingVertical: 0

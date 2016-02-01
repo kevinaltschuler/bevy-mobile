@@ -52,20 +52,6 @@ var BevyActions = {
     });
   },
 
-  subscribe(bevy_id) {
-    Dispatcher.dispatch({
-      actionType: BEVY.SUBSCRIBE,
-      bevy_id: bevy_id
-    })
-  },
-
-  unsubscribe(bevy_id) {
-    Dispatcher.dispatch({
-      actionType: BEVY.UNSUBSCRIBE,
-      bevy_id: bevy_id
-    });
-  },
-
   search(query) {
     Dispatcher.dispatch({
       actionType: BEVY.SEARCH,

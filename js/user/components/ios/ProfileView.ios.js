@@ -23,6 +23,7 @@ var {
   ScrollView
 } = React;
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
+var ImageOverlay = require('./../../../post/components/ios/ImageOverlay.ios.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var _ = require('underscore');
@@ -56,7 +57,8 @@ var ProfileView = React.createClass({
         ? 'No Email' : this.props.profileUser.email,
       points: this.props.profileUser.points,
       postCount: this.props.profileUser.postCount,
-      commentCount: this.props.profileUser.commentCount
+      commentCount: this.props.profileUser.commentCount,
+      showImageOverlay: false
     };
   },
 
@@ -101,21 +103,20 @@ var ProfileView = React.createClass({
     PostActions.fetch(this.props.activeBevy._id, null);
   },
 
-  goToNewThread() {
-    // see if a thread between this user and the next exists
-    var thread = ChatStore.getThreadFromUser(this.props.profileUser._id);
-    if(thread) {
-      // if it does
-      ChatActions.switchThread(thread._id);
+  showOverlay() {
+    this.setState({ showImageOverlay: true });
+  },
+  hideOverlay() {
+    this.setState({ showImageOverlay: false });
+  },
 
-    } else {
-      // if it doesn't go to new thread view
-      var route = {
-        name: routes.MAIN.NEWTHREAD,
-        defaultUser: this.props.profileUser
-      };
-      this.props.mainNavigator.push(route);
-    }
+  goToNewThread() {
+    // go to new thread view
+    var route = {
+      name: routes.MAIN.NEWTHREAD,
+      defaultUser: this.props.profileUser
+    };
+    this.props.mainNavigator.push(route);
   },
 
   _renderMessageUserButton() {
@@ -146,17 +147,17 @@ var ProfileView = React.createClass({
     return (
       <View style={{
         width: constants.width,
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         flexDirection: 'row'
       }}>
         <View style={{
           width: 30 + 36,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#FFF'
         }}/>
         <View style={{
           flex: 1,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#EEE'
         }}/>
       </View>
@@ -208,10 +209,15 @@ var ProfileView = React.createClass({
         >
           <View style={ styles.body }>
             <View style={ styles.profileCard }>
-              <Image
-                source={ userImageSource }
-                style={ styles.profileImage }
-              />
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
+                onPress={ this.showOverlay }
+              >
+                <Image
+                  source={ userImageSource }
+                  style={ styles.profileImage }
+                />
+              </TouchableOpacity>
               <View style={ styles.profileDetails }>
                 <Text style={ styles.profileName }>
                   { this.state.displayName }
@@ -220,6 +226,13 @@ var ProfileView = React.createClass({
                   { this.state.email }
                 </Text>
               </View>
+
+              <ImageOverlay
+                images={[ this.state.image ]}
+                isVisible={ this.state.showImageOverlay }
+                title={ this.state.displayName }
+                onHide={ this.hideOverlay }
+              />
             </View>
 
             <Text style={ styles.sectionTitle }>

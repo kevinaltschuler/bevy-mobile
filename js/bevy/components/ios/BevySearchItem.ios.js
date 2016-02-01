@@ -73,7 +73,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomColor: '#EEE',
-    borderBottomWidth: 1
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   name: {
     flex: 1,

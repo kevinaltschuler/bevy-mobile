@@ -372,7 +372,7 @@ var styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     paddingHorizontal: 15,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#EEE'
   },
   commentItemTop: {
@@ -415,10 +415,10 @@ var styles = StyleSheet.create({
     fontSize: 15,
     color: '#FFF',
     marginLeft: 0,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
   actionRight: {
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: 'rgba(255,255,255,.3)',
     flex: 1,
     height: 48,

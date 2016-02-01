@@ -212,8 +212,8 @@ var styles = StyleSheet.create({
     height: 70,
     flexDirection: 'column',
     paddingLeft: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#666',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#444',
   },
   top: {
     height: 69,
@@ -251,10 +251,10 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#666',
-    borderTopWidth: 1,
-    borderTopColor: '#666'
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#444',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#444'
   },
   newBoardText: {
     fontSize: 17,

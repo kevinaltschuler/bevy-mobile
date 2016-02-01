@@ -352,7 +352,7 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   actionText: {
-    color: '#aaa',
+    color: '#888',
     fontSize: 15
   }
 });

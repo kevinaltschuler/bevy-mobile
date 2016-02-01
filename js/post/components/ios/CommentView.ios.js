@@ -53,12 +53,12 @@ var CommentView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
-
     PostStore.on(POST.FETCHING_SINGLE, this.onFetchingSingle);
     PostStore.on(POST.FETCHED_SINGLE, this.onFetchedSingle);
     PostStore.on(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
+
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     this.onRefresh();
   },
@@ -66,6 +66,9 @@ var CommentView = React.createClass({
     PostStore.off(POST.FETCHING_SINGLE, this.onFetchingSingle);
     PostStore.off(POST.FETCHED_SINGLE, this.onFetchedSingle);
     PostStore.off(POST.CHANGE_ONE + this.props.post._id, this.onPostChange);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
 
     PostActions.clearTempPost();
   },
@@ -405,8 +408,8 @@ var styles = StyleSheet.create({
 
   reply: {
     flexDirection: 'column',
-    borderTopColor: "#ccc",
-    borderTopWidth: 1
+    borderTopColor: "#CCC",
+    borderTopWidth: StyleSheet.hairlineWidth
   },
   replyInfo: {
     height: 48,
@@ -440,7 +443,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 10,
-    borderTopWidth: 1,
+    borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: '#AAA'
   },
   replyInput: {
@@ -451,7 +454,7 @@ var styles = StyleSheet.create({
     marginTop: 6,
     paddingHorizontal: 10,
     borderRadius: 5,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#CCC'
   },
   replyButton: {

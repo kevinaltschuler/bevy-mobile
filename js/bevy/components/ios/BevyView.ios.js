@@ -71,11 +71,12 @@ var BevyView = React.createClass({
   },
 
   componentDidMount() {
-    DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
-
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onKeyboardShow(frames) {

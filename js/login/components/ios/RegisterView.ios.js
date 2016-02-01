@@ -1,5 +1,9 @@
 /**
  * RegisterView.ios.js
+ *
+ * View in the login stack that allows a user to create an account
+ * After creation, immediately logs the user into the app
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -10,11 +14,13 @@
 var React = require('react-native');
 var {
   View,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
   Text,
+  DeviceEventEmitter,
   Image
 } = React;
 var Spinner = require('react-native-spinkit');
@@ -36,54 +42,87 @@ var RegisterView = React.createClass({
 
   getInitialState() {
     return {
+      // textinput values that we track
       username: '',
       pass: '',
       email: '',
+      // any error with validation or verificatoin is put here
       error: '',
+      // vars to track the state of validation and verification
+      // used by UI to display errors or loading indicators
       verified: false,
-      verifying: false
+      valid: false,
+      verifying: false,
+      // used to move view around the keyboard
+      keyboardSpace: 0
     };
+  },
+
+  componentDidMount() {
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+  },
+  componentWillUnmount() {
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
+  },
+
+  onKeyboardShow(frames) {
+    if(frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+    setTimeout(this.scrollToBottom, 300);
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 0 });
+    setTimeout(this.scrollToTop, 300);
+  },
+
+  onInputFocus() {
+  },
+  onInputBlur() {
+  },
+
+  scrollToTop() {
+    if(this.ScrollView == undefined) return;
+    this.ScrollView.scrollTo(0, 0);
+  },
+
+  scrollToBottom() {
+    // dont even try if the scroll view hasn't mounted yet
+    if(this.ScrollView == undefined) return;
+
+    var innerScrollView = this.ScrollView.refs.InnerScrollView;
+    var scrollView = this.ScrollView.refs.ScrollView;
+
+    requestAnimationFrame(() => {
+      innerScrollView.measure((innerScrollViewX, innerScrollViewY,
+        innerScrollViewWidth, innerScrollViewHeight) => {
+
+        scrollView.measure((scrollViewX, scrollViewY, scrollViewWidth, scrollViewHeight) => {
+          var scrollTo = innerScrollViewHeight - scrollViewHeight + innerScrollViewY;
+
+          if(innerScrollViewHeight < scrollViewHeight) {
+            return;
+          }
+
+          this.ScrollView.scrollTo(scrollTo, 0);
+        });
+      });
+    });
   },
 
   register() {
     if(this.state.verifying) return;
-    if(_.isEmpty(this.state.username)) {
-      this.setState({
-        error: 'Please enter a username'
-      });
+
+    if(!this.isUsernameValid() || !this.isPasswordValid() || !this.isEmailValid())
       return;
-    } else if (this.state.username.length < 3) {
-      this.setState({
-        error: 'Username must be at least 3 characters in length'
-      });
-      return;
-    } else if (this.state.username.length > 16) {
-      this.setState({
-        error: 'Username cannot be more than 16 characters in length'
-      });
-      return;
-    } else if(!usernameRegex.test(this.state.username)) {
-      this.setState({
-        error: 'Only characters a-z, numbers, underscores, and dashes are allowed'
-      });
-      return;
-    } else if (!this.state.verified) {
+
+    if (!this.state.verified) {
       this.setState({
         error: 'Username already taken'
-      });
-      return;
-    }
-
-    if(_.isEmpty(this.state.pass)) {
-      this.setState({
-        error: 'Please enter a password'
-      });
-      return;
-    }
-
-    if(!_.isEmpty(this.state.email) && !emailRegex.test(this.state.email)) {
-      this.setState({
-        error: 'Invalid Email'
       });
       return;
     }
@@ -101,13 +140,30 @@ var RegisterView = React.createClass({
   },
 
   verifyUsername() {
-    if(_.isEmpty(this.state.username)) {
+    // check validity before checking for duplicate username on server
+    if(!this.isUsernameValid()) {
       this.setState({
-        verified: false,
-        verifying: false
+        verifying: false,
+        valid: false
       });
       return;
     }
+
+    // username seems fine here. check the server for duplicates
+    this.setState({ valid: true });
+
+    // dont send the request if there's no username here
+    // this should get caught earlier but keep this here just in case
+    if(_.isEmpty(this.state.username)) {
+      this.setState({
+        verified: false,
+        verifying: false,
+        valid: false
+      });
+      return;
+    }
+
+    // send network request
     fetch(constants.apiurl + '/users/' + this.state.username + '/verify', {
       method: 'GET'
     })
@@ -127,11 +183,66 @@ var RegisterView = React.createClass({
     });
   },
 
+  isUsernameValid() {
+    if(_.isEmpty(this.state.username)) {
+      this.setState({
+        error: 'Please enter a username'
+      });
+      return false;
+    } else if (this.state.username.length < 3) {
+      this.setState({
+        error: 'Username must be at least 3 characters in length'
+      });
+      return false;
+    } else if (this.state.username.length > 16) {
+      this.setState({
+        error: 'Username cannot be more than 16 characters in length'
+      });
+      return false;
+    } else if(!usernameRegex.test(this.state.username)) {
+      this.setState({
+        error: 'Only characters a-z, numbers, underscores, and dashes are allowed'
+      });
+      return false;
+    }
+    return true;
+  },
+
+  isPasswordValid() {
+    if(_.isEmpty(this.state.pass)) {
+      this.setState({
+        error: 'Please enter a password'
+      });
+      return false;
+    }
+    return true;
+  },
+
+  isEmailValid() {
+    if(!_.isEmpty(this.state.email) && !emailRegex.test(this.state.email)) {
+      this.setState({
+        error: 'Invalid Email'
+      });
+      return false;
+    }
+    return true;
+  },
+
   onUsernameChange(text) {
+    if(_.isEmpty(text)) {
+      // nothing was entered.
+      // clear the error and dont check for validity
+      this.setState({
+        username: text,
+        error: ''
+      });
+      return;
+    }
     this.setState({
       username: text,
       verifying: true
     });
+
     if(this.usernameTimeout != undefined) {
       clearTimeout(this.usernameTimeout);
       delete this.usernameTimeout;
@@ -163,6 +274,7 @@ var RegisterView = React.createClass({
 
   _renderVerified() {
     if(_.isEmpty(this.state.username)) return <View />;
+    if(!this.state.valid) return <View />;
     if(this.state.verifying) {
       // render spinner
       return (
@@ -215,7 +327,15 @@ var RegisterView = React.createClass({
 
   render: function() {
     return (
-      <View style={ styles.container }>
+      <ScrollView
+        ref={ ref => { this.ScrollView = ref; }}
+        style={[ styles.container, {
+          marginBottom: this.state.keyboardSpace
+        }]}
+        contentContainerStyle={ styles.containerInner }
+        keyboardShouldPersistTaps={ true }
+        scrollEnabled={ false }
+      >
         <Image
           style={ styles.logo }
           source={ require('./../../../images/logo_100_reversed.png') }
@@ -238,6 +358,8 @@ var RegisterView = React.createClass({
             style={ styles.textInput }
             value={ this.state.username }
             onChangeText={ this.onUsernameChange }
+            onFocus={ this.onInputFocus }
+            onBlur={ this.onInputBlur }
           />
         </View>
         <View style={ styles.inputContainer }>
@@ -251,6 +373,8 @@ var RegisterView = React.createClass({
             style={ styles.textInput }
             value={ this.state.pass }
             onChangeText={text => this.setState({ pass: text })}
+            onFocus={ this.onInputFocus }
+            onBlur={ this.onInputBlur }
           />
         </View>
         <View style={ styles.inputContainer }>
@@ -264,6 +388,8 @@ var RegisterView = React.createClass({
             style={ styles.textInput }
             value={ this.state.email }
             onChangeText={text => this.setState({ email: text })}
+            onFocus={ this.onInputFocus }
+            onBlur={ this.onInputBlur }
           />
         </View>
         <TouchableOpacity
@@ -280,7 +406,7 @@ var RegisterView = React.createClass({
         >
           <Text style={ styles.textButtonText }>Back To Login</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 
@@ -290,10 +416,12 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     width: constants.width,
-    backgroundColor: '#2cb673',
-    flexDirection: 'column',
-    paddingBottom: 5,
+    backgroundColor: '#2CB673',
+  },
+  containerInner: {
     paddingTop: 75,
+    paddingBottom: 5,
+    flexDirection: 'column',
     alignItems: 'center'
   },
   logo: {
@@ -339,7 +467,7 @@ var styles = StyleSheet.create({
     height: 50,
     paddingLeft: 16,
     borderColor: '#fff',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
     borderRadius: 25,
     color: '#fff'
@@ -387,8 +515,8 @@ var styles = StyleSheet.create({
   },
   textButtonText: {
     textAlign: 'center',
-    fontSize: 17,
-    color: '#eee'
+    fontSize: 15,
+    color: '#FFFC'
   }
 });
 

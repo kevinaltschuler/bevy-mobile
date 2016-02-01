@@ -452,7 +452,7 @@ var styles = StyleSheet.create({
   editInput: {
     borderRadius: 4,
     flex: 2,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: '#eee',
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -461,7 +461,7 @@ var styles = StyleSheet.create({
   },
   button: {
     borderRadius: 4,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     margin: 5,
     paddingHorizontal: 5,
     paddingVertical: 5

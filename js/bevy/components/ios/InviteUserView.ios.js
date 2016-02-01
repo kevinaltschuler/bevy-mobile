@@ -66,8 +66,8 @@ var InviteUserView = React.createClass({
     UserStore.on(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onSearchComplete);
 
-    DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
-    DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     // populate list with random users for now
     UserActions.search('');
@@ -77,6 +77,9 @@ var InviteUserView = React.createClass({
     UserStore.off(USER.SEARCHING, this.onSearching);
     UserStore.off(USER.SEARCH_ERROR, this.onSearchError);
     UserStore.off(USER.SEARCH_COMPLETE, this.onSearchComplete);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onKeyboardShow(frames) {
@@ -345,7 +348,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#DDD',
     flexWrap: 'wrap',
     paddingHorizontal: 10,

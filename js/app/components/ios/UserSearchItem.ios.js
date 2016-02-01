@@ -115,7 +115,7 @@ var styles = StyleSheet.create({
     height: 80,
     flex: 1,
     flexDirection: 'row',
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     alignItems: 'center',
     borderBottomColor: '#eee'
 

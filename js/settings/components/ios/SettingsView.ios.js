@@ -135,17 +135,17 @@ var SettingsView = React.createClass({
     return (
       <View style={{
         width: constants.width,
-        height: 1,
+        height: StyleSheet.hairlineWidth,
         flexDirection: 'row'
       }}>
         <View style={{
           width: 30 + 36,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#FFF'
         }}/>
         <View style={{
           flex: 1,
-          height: 1,
+          height: StyleSheet.hairlineWidth,
           backgroundColor: '#EEE'
         }}/>
       </View>
@@ -258,6 +258,7 @@ var SettingsView = React.createClass({
             showChevron
             onPress={ this.goToPatchNotes }
           />
+          { this._renderSeparator() }
           <SettingsItem
             title='Submit Feedback'
             icon={
@@ -315,7 +316,7 @@ var styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingLeft: 10,
     paddingRight: 16,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#ddd',
     marginBottom: 10
   },

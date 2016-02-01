@@ -30,7 +30,6 @@ var Post = Backbone.Model.extend({
     this.commentCount = 0;
 
     var user = UserStore.getUser();
-
     // determine whether the current user has voted on this or not
     var vote = _.findWhere(this.get('votes'), { voter: user._id });
     if(vote == undefined) this.set('voted', false);
@@ -40,13 +39,30 @@ var Post = Backbone.Model.extend({
     }
 
     // set the vote count for this post
-    this.set('voteCount', this.countVotes());
+    this.updateVotes();
 
     // update the comments under this post
     this.updateComments();
 
     // update comments every time this post is synced with the server
-    this.on('sync', this.updateComments);
+    this.on('sync', this.onSync);
+  },
+
+  /**
+   * called every time the post syncs with the server
+   * (aka after a fetch or a save)
+   */
+  onSync() {
+    this.updateComments();
+    this.updateVotes();
+  },
+
+  /**
+   * update the vote data for this post
+   */
+  updateVotes() {
+    // set the vote count
+    this.set('voteCount', this.countVotes());
   },
 
   /**

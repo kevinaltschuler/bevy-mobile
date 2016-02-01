@@ -16,16 +16,10 @@ var {
   TouchableHighlight,
   TouchableOpacity
 } = React;
-var BevyNavbar = require('./BevyNavbar.ios.js');
-var PostList = require('./../../../post/components/ios/PostList.ios.js');
-var BevyInfoView = require('./BevyInfoView.ios.js');
-var SettingsView = require('./BevySettingsView.ios.js');
-var MyBevies = require('./MyBevies.ios.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
 var BevySideMenu = require('./BevySideMenu.ios.js');
-var $BevyView = require('./BevyView.ios.js');
-var BoardInfoView = require('./BoardInfoView.ios.js');
+
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -122,6 +116,7 @@ var BevyView = React.createClass({
     var view;
     switch(this.props.bevyRoute.name) {
       case routes.BEVY.INFO:
+        let BevyInfoView = require('./BevyInfoView.ios.js');
         view = (
           <BevyInfoView
             { ...this.props }
@@ -129,14 +124,16 @@ var BevyView = React.createClass({
         );
         break;
       case routes.BEVY.SETTINGS:
+        let BevySettingsView = require('./BevySettingsView.ios.js');
         view = (
-          <SettingsView
+          <BevySettingsView
             setting={ this.props.bevyRoute.setting }
             { ...this.props }
           />
         );
         break;
       case routes.BEVY.BEVYVIEW:
+        let $BevyView = require('./BevyView.ios.js');
         view = (
           <$BevyView
             { ...this.props }
@@ -145,6 +142,7 @@ var BevyView = React.createClass({
         );
         break;
       case routes.BEVY.BOARDINFO:
+        let BoardInfoView = require('./BoardInfoView.ios.js');
         view = (
           <BoardInfoView
             { ...this.props }
@@ -153,12 +151,20 @@ var BevyView = React.createClass({
         );
         break;
       case routes.BEVY.BOARDSETTINGS:
+        let BoardSettingsView = require('./BoardInfoView.ios.js');
         view = (
-          <BoardInfoView
+          <BoardSettingsView
             { ...this.props }
             editing={ true }
             sideMenuActions={ sideMenuActions }
           />
+        );
+        break;
+      default:
+        view = (
+          <View>
+            <Text>UNKNOWN BEVY ROUTE SUPPLIED</Text>
+          </View>
         );
         break;
     }

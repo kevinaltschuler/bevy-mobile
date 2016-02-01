@@ -121,8 +121,6 @@ exports.BEVY = {
   INVITE: 'bevy_invite',
   ADD_USER: 'bevy_add_user',
   SEARCH: 'bevy_search',
-  SUBSCRIBE: 'bevy_subscribe',
-  UNSUBSCRIBE: 'bevy_unsubscribe',
   REQUEST_JOIN: 'bevy_request_join',
   ADD_ADMIN: 'bevy_add_admin',
   REMOVE_ADMIN: 'bevy_remove_admin',

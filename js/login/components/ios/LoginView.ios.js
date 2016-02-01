@@ -1,5 +1,10 @@
 /**
  * LoginView.ios.js
+ *
+ * Entry point for the app if a user isn't logged in or found
+ * Once logged in, MainView will catch the login success event
+ * and navigate to the MainTabBar
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -11,12 +16,13 @@ var React = require('react-native');
 var {
   Text,
   View,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
   Image,
-  NativeAppEventEmitter
+  DeviceEventEmitter
 } = React;
 
 var _ = require('underscore');
@@ -35,23 +41,79 @@ var LoginView = React.createClass({
 
   getInitialState() {
     return {
+      // textinput values that we track
       username: '',
       pass: '',
+      // any errors with logging in or verification
       error: '',
-      loading: false
+      // used by UI to display loading indicator or not
+      loading: false,
+      // used to move view around keyboard
+      keyboardSpace: 0
     }
   },
 
   componentDidMount() {
     UserStore.on(USER.LOGIN_ERROR, this.onError);
-  },
 
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+  },
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_ERROR, this.onError);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onError(error) {
     this.setState({ error: error });
+  },
+
+  onKeyboardShow(frames) {
+    if(frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+    setTimeout(this.scrollToBottom, 300);
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 0 });
+    setTimeout(this.scrollToTop, 300);
+  },
+
+  onUsernameSubmit(text) {
+    this.PasswordInput.focus();
+  },
+
+  scrollToTop() {
+    if(this.ScrollView == undefined) return;
+    this.ScrollView.scrollTo(0, 0);
+  },
+
+  scrollToBottom() {
+    // dont even try if the scroll view hasn't mounted yet
+    if(this.ScrollView == undefined) return;
+
+    var innerScrollView = this.ScrollView.refs.InnerScrollView;
+    var scrollView = this.ScrollView.refs.ScrollView;
+
+    requestAnimationFrame(() => {
+      innerScrollView.measure((innerScrollViewX, innerScrollViewY,
+        innerScrollViewWidth, innerScrollViewHeight) => {
+
+        scrollView.measure((scrollViewX, scrollViewY, scrollViewWidth, scrollViewHeight) => {
+          var scrollTo = innerScrollViewHeight - scrollViewHeight + innerScrollViewY;
+
+          if(innerScrollViewHeight < scrollViewHeight) {
+            return;
+          }
+
+          this.ScrollView.scrollTo(scrollTo, 0);
+        });
+      });
+    });
   },
 
   loginEmail() {
@@ -125,7 +187,15 @@ var LoginView = React.createClass({
 
   render() {
     return (
-      <View style={ styles.container }>
+      <ScrollView
+        ref={ ref => { this.ScrollView = ref; }}
+        style={[ styles.container, {
+          marginBottom: this.state.keyboardSpace
+        }]}
+        contentContainerStyle={ styles.containerInner }
+        keyboardShouldPersistTaps={ true }
+        scrollEnabled={ false }
+      >
         <Image
           style={ styles.logo }
           source={ require('./../../../images/logo_100_reversed.png') }
@@ -142,7 +212,8 @@ var LoginView = React.createClass({
           autoCapitalize='none'
           placeholder='Username'
           style={ styles.loginInput }
-          onChangeText={text => this.setState({ username: text }) }
+          onChangeText={ text => this.setState({ username: text }) }
+          onSubmitEditing={ this.onUsernameSubmit }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TextInput
@@ -152,7 +223,7 @@ var LoginView = React.createClass({
           secureTextEntry={ true }
           placeholder='Password'
           style={ styles.loginInput }
-          onChangeText={text => this.setState({ pass: text }) }
+          onChangeText={ text => this.setState({ pass: text }) }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TouchableOpacity
@@ -176,7 +247,7 @@ var LoginView = React.createClass({
           <TouchableOpacity
             activeOpacity={ 0.5 }
             style={[ styles.textButton, {
-              borderRightWidth: 1,
+              borderRightWidth: StyleSheet.hairlineWidth,
               borderRightColor: '#fff'
             }]}
             onPress={ this.goToRegister }
@@ -191,7 +262,7 @@ var LoginView = React.createClass({
             <Text style={ styles.textButtonText }>Forgot Password?</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 });
@@ -200,7 +271,9 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     width: constants.width,
-    backgroundColor: '#2cb673',
+    backgroundColor: '#2CB673',
+  },
+  containerInner: {
     flexDirection: 'column',
     paddingBottom: 5,
     alignItems: 'center',
@@ -243,7 +316,7 @@ var styles = StyleSheet.create({
     height: 50,
     paddingLeft: 16,
     borderColor: '#fff',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
     borderRadius: 25,
     width: constants.width / 1.2,

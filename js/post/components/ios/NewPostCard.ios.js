@@ -112,8 +112,8 @@ var styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     marginLeft: 15,
-    //borderBottomWidth: 1,
-    //borderBottomColor: '#ccc'
+    //borderBottomWidth: StyleSheet.hairlineWidth,
+    //borderBottomColor: '#CCC'
   },
   text: {
     color: '#888',

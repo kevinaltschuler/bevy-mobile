@@ -1,6 +1,8 @@
 /**
  * ForgotView.ios.js
- * description: the forgotten password page on IOS
+ *
+ * the forgotten password page on IOS
+ *
  * @author Ben
  */
 
@@ -9,13 +11,15 @@
 var React = require('react-native');
 var {
   View,
+  ScrollView,
   StyleSheet,
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
   Text,
   Image,
-  AlertIOS
+  AlertIOS,
+  DeviceEventEmitter
 } = React;
 
 var _ = require('underscore');
@@ -33,17 +37,24 @@ var ForgotView = React.createClass({
   getInitialState() {
     return {
       error: '',
-      email: ''
+      email: '',
+      keyboardSpace: 0
     };
   },
 
   componentDidMount() {
     UserStore.on(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
     UserStore.on(USER.RESET_PASSWORD_ERROR, this.onError);
+
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
   },
   componentWillUnmount() {
     UserStore.off(USER.RESET_PASSWORD_SUCCESS, this.onSuccess);
     UserStore.off(USER.RESET_PASSWORD_ERROR, this.onError);
+
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onSuccess() {
@@ -61,6 +72,48 @@ var ForgotView = React.createClass({
     // error
     this.setState({
       error: error
+    });
+  },
+
+  onKeyboardShow(frames) {
+    if(frames.end) {
+      this.setState({ keyboardSpace: frames.end.height });
+    } else {
+      this.setState({ keyboardSpace: frames.endCoordinates.height });
+    }
+    setTimeout(this.scrollToBottom, 300);
+  },
+  onKeyboardHide(frames) {
+    this.setState({ keyboardSpace: 0 });
+    setTimeout(this.scrollToTop, 300);
+  },
+
+  scrollToTop() {
+    if(this.ScrollView == undefined) return;
+    this.ScrollView.scrollTo(0, 0);
+  },
+
+  scrollToBottom() {
+    // dont even try if the scroll view hasn't mounted yet
+    if(this.ScrollView == undefined) return;
+
+    var innerScrollView = this.ScrollView.refs.InnerScrollView;
+    var scrollView = this.ScrollView.refs.ScrollView;
+
+    requestAnimationFrame(() => {
+      innerScrollView.measure((innerScrollViewX, innerScrollViewY,
+        innerScrollViewWidth, innerScrollViewHeight) => {
+
+        scrollView.measure((scrollViewX, scrollViewY, scrollViewWidth, scrollViewHeight) => {
+          var scrollTo = innerScrollViewHeight - scrollViewHeight + innerScrollViewY;
+
+          if(innerScrollViewHeight < scrollViewHeight) {
+            return;
+          }
+
+          this.ScrollView.scrollTo(scrollTo, 0);
+        });
+      });
     });
   },
 
@@ -102,7 +155,14 @@ var ForgotView = React.createClass({
 
   render() {
     return (
-      <View style={ styles.container }>
+      <ScrollView
+        ref={ ref => { this.ScrollView = ref; }}
+        style={[ styles.container, {
+          marginBottom: this.state.keyboardSpace
+        }]}
+        contentContainerStyle={ styles.containerInner }
+        scrollEnabled={ false }
+      >
         <Image
           style={ styles.logo }
           source={ require('./../../../images/logo_100_reversed.png') }
@@ -120,7 +180,6 @@ var ForgotView = React.createClass({
           ref={ref => { this.EmailInput = ref; }}
           autoCorrect={ false }
           autoCapitalize='none'
-          autoFocus={ true }
           placeholder='Email Address'
           keyboardType='email-address'
           placeholderTextColor='rgba(255,255,255,.5)'
@@ -145,7 +204,7 @@ var ForgotView = React.createClass({
             Back To Login
           </Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
   }
 });
@@ -154,7 +213,9 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     width: constants.width,
-    backgroundColor: '#2cb673',
+    backgroundColor: '#2CB673'
+  },
+  containerInner: {
     flexDirection: 'column',
     paddingBottom: 5,
     alignItems: 'center',
@@ -196,7 +257,7 @@ var styles = StyleSheet.create({
     height: 50,
     paddingLeft: 16,
     borderColor: '#fff',
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     marginBottom: 10,
     borderRadius: 25,
     width: constants.width / 1.2,
@@ -229,8 +290,8 @@ var styles = StyleSheet.create({
   },
   textButtonText: {
     textAlign: 'center',
-    fontSize: 17,
-    color: '#eee'
+    fontSize: 15,
+    color: '#FFFC'
   }
 });
 

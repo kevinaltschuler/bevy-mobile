@@ -282,8 +282,8 @@ var styles = StyleSheet.create({
     height: 80,
     paddingVertical: 8,
     marginLeft: 15,
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderStyle: 'solid',
   },
   bodyText: {
