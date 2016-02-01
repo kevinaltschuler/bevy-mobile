@@ -1,5 +1,9 @@
 /**
  * NewPostView.ios.js
+ *
+ * Navigator object for creating a new post
+ * Eventually need more for more post types
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -13,10 +17,6 @@ var {
   StyleSheet,
   Navigator,
 } = React;
-var InputView = require('./InputView.ios.js');
-var CreateEventView = require('./CreateEventView.ios.js');
-var DatePickerView = require('./DatePickerView.ios.js');
-var BoardPickerView = require('./BoardPickerView.ios.js');
 
 var _ = require('underscore');
 var routes = require('./../../../routes');
@@ -55,14 +55,13 @@ var NewPostView = React.createClass({
   },
 
   onBoardSelected(board) {
-    this.setState({
-      postingToBoard: board
-    });
+    this.setState({ postingToBoard: board });
   },
 
   renderScene(route, navigator) {
     switch(route.name) {
       case routes.NEWPOST.DATEPICKER:
+        let DatePickerView = require('./DatePickerView.ios.js');
         return (
           <DatePickerView
             newPostRoute={ route }
@@ -80,6 +79,7 @@ var NewPostView = React.createClass({
         );
         break;
       case routes.NEWPOST.CREATEEVENT:
+        let CreateEventView = require('./CreateEventView.ios.js');
         return (
           <CreateEventView
             newPostRoute={ route }
@@ -94,6 +94,7 @@ var NewPostView = React.createClass({
         break;
 
       case routes.NEWPOST.BOARDPICKER:
+        let BoardPickerView = require('./BoardPickerView.ios.js');
         return (
           <BoardPickerView
             newPostRoute={ route }
@@ -106,7 +107,7 @@ var NewPostView = React.createClass({
         break;
 
       case routes.NEWPOST.INPUT:
-      default:
+        let InputView = require('./InputView.ios.js');
         return (
           <InputView
             newPostRoute={ route }
