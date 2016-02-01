@@ -1,5 +1,10 @@
 /**
  * MainTabBar.ios.js
+ *
+ * Main entry point for logged-in users
+ * Usually never unmounted, and is the parent for
+ * most child navs
+ *
  * @author albert
  * @author kevin
  * @flow
@@ -18,13 +23,6 @@ var {
   AlertIOS
 } = React;
 var Icon = require('react-native-vector-icons/Ionicons');
-var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
-var ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
-var MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
-var NotificationView =
-  require('./../../../notification/components/ios/NotificationView.ios.js');
-var SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
-var SearchView = require('./SearchView.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -112,6 +110,7 @@ var MainTabBar = React.createClass({
 
     switch(this.state.selectedTab) {
       case tabs.Bevies:
+        let MyBevies = require('./../../../bevy/components/ios/MyBevies.ios.js');
         return (
           <MyBevies
             { ...this.props }
@@ -120,7 +119,17 @@ var MainTabBar = React.createClass({
           />
         );
         break;
+      case tabs.Search:
+        let SearchView = require('./SearchView.ios.js');
+        return (
+          <SearchView
+            {...this.props}
+            tabBarActions={ tabBarActions }
+          />
+        )
+        break;
       case tabs.Chat:
+        let ChatNavigator = require('./../../../chat/components/ios/ChatNavigator.ios.js');
         return (
           <ChatNavigator
             { ...this.props }
@@ -130,6 +139,8 @@ var MainTabBar = React.createClass({
         );
         break;
       case tabs.Notifications:
+        let NotificationView =
+          require('./../../../notification/components/ios/NotificationView.ios.js');
         return (
           <NotificationView
             { ...this.props }
@@ -138,19 +149,19 @@ var MainTabBar = React.createClass({
         );
         break;
       case tabs.More:
+        let SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
         return (
           <SettingsView
             { ...this.props }
             tabBarActions={ tabBarActions }
           />
         );
-      case tabs.Search:
+      default:
         return (
-          <SearchView
-            {...this.props}
-            tabBarActions={ tabBarActions }
-          />
-        )
+          <View>
+            <Text>UNKNOWN TAB</Text>
+          </View>
+        );
         break;
     }
   },
