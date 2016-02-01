@@ -14,25 +14,6 @@ var {
   View
 } = React;
 
-var MainTabBar = require('./MainTabBar.ios.js');
-var LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
-var NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
-var NewBevyView = require('./../../../bevy/components/ios/NewBevyView.ios.js');
-var NewBoardView = require('./../../../bevy/components/ios/NewBoardView.ios.js');
-var CommentView = require('./../../../post/components/ios/CommentView.ios.js');
-var ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
-var BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
-var LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
-var Loading = require('./Loading.ios.js');
-var NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
-var InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
-var Browser = require('./Browser.ios.js');
-var FeedbackView = require('./../../../settings/components/ios/FeedbackView.ios.js');
-var PatchNotesView = require('./../../../settings/components/ios/PatchNotesView.ios.js');
-var MessageView = require('./../../../chat/components/ios/MessageView.ios.js');
-var ThreadSettingsView = require('./../../../chat/components/ios/ThreadSettingsView.ios.js');
-var AddPeopleView = require('./../../../chat/components/ios/AddPeopleView.ios.js');
-
 var NotificationStore = require('./../../../notification/NotificationStore');
 var ChatActions = require('./../../../chat/ChatActions');
 
@@ -100,8 +81,9 @@ var MainView = React.createClass({
   render() {
     switch(this.props.mainRoute.name) {
       case routes.MAIN.EDITPOST:
+        let EditPostView = require('./../../../post/components/ios/NewPostView.ios.js');
         return (
-          <NewPostView
+          <EditPostView
             { ...this.props }
             editing={ true }
             post={ this.props.mainRoute.post }
@@ -109,18 +91,34 @@ var MainView = React.createClass({
         );
         break;
       case routes.MAIN.NEWPOST:
-        return <NewPostView { ...this.props } />;
+        let NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
+        return (
+          <NewPostView
+            { ...this.props }
+          />
+        )
         break;
 
       case routes.MAIN.NEWBEVY:
-        return <NewBevyView { ...this.props } />;
+        let NewBevyView = require('./../../../bevy/components/ios/NewBevyView.ios.js');
+        return (
+          <NewBevyView
+            { ...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.NEWBOARD:
-        return <NewBoardView {...this.props}/>;
+        let NewBoardView = require('./../../../bevy/components/ios/NewBoardView.ios.js');
+        return (
+          <NewBoardView
+            {...this.props}
+          />
+        );
         break;
 
       case routes.MAIN.COMMENT:
+        let CommentView = require('./../../../post/components/ios/CommentView.ios.js');
         return (
           <CommentView
             post={ this.props.mainRoute.post }
@@ -130,6 +128,7 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.PROFILE:
+        let ProfileView = require('./../../../user/components/ios/ProfileView.ios.js');
         return (
           <ProfileView
             profileUser={ this.props.mainRoute.profileUser }
@@ -139,6 +138,7 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.MAP:
+        let LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
         return (
           <LocationView
             location={this.props.mainRoute.location || 'no location'}
@@ -148,6 +148,7 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.BEVYNAV:
+        let BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
         return (
           <BevyNavigator
             { ...this.props }
@@ -155,6 +156,7 @@ var MainView = React.createClass({
         );
         break;
       case routes.MAIN.NEWTHREAD:
+        let NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
         return (
           <NewThreadView
             defaultUser={this.props.mainRoute.defaultUser}
@@ -164,10 +166,16 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.INVITEUSERS:
-        return <InviteUserView { ...this.props }/>
+        let InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
+        return (
+          <InviteUserView
+            { ...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.WEBVIEW:
+        let Browser = require('./Browser.ios.js');
         return (
           <Browser
             initialURL={ this.props.mainRoute.initialURL }
@@ -177,14 +185,25 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.FEEDBACK:
-        return <FeedbackView { ...this.props } />;
+        let FeedbackView = require('./../../../settings/components/ios/FeedbackView.ios.js');
+        return (
+          <FeedbackView
+            { ...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.PATCHNOTES:
-        return <PatchNotesView { ...this.props } />;
+        let PatchNotesView = require('./../../../settings/components/ios/PatchNotesView.ios.js');
+        return (
+          <PatchNotesView
+            { ...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.TABBAR:
+        let MainTabBar = require('./MainTabBar.ios.js');
         return (
           <MainTabBar
             { ...this.props }
@@ -196,12 +215,19 @@ var MainView = React.createClass({
             }}
           />
         );
+        break;
 
       case routes.MAIN.MESSAGEVIEW:
-        return <MessageView {...this.props }/>
+        let MessageView = require('./../../../chat/components/ios/MessageView.ios.js');
+        return (
+          <MessageView
+            {...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.THREADSETTINGS:
+        let ThreadSettingsView = require('./../../../chat/components/ios/ThreadSettingsView.ios.js');
         return (
           <ThreadSettingsView
             { ...this.props }
@@ -210,6 +236,7 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.ADDPEOPLE:
+        let AddPeopleView = require('./../../../chat/components/ios/AddPeopleView.ios.js');
         return (
           <AddPeopleView
             { ...this.props }
@@ -218,12 +245,29 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.LOADING:
-        return <Loading {...this.props} />
+        let Loading = require('./Loading.ios.js');
+        return (
+          <Loading
+            {...this.props}
+          />
+        );
         break;
 
       case routes.MAIN.LOGIN:
+        let LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
+        return (
+          <LoginNavigator
+            { ...this.props }
+          />
+        );
+        break;
+
       default:
-        return <LoginNavigator { ...this.props } />;
+        return (
+          <View>
+            <Text>UNKNOWN ROUTE SUPPLIED</Text>
+          </View>
+        );
         break;
     }
   }
