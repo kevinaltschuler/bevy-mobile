@@ -82,6 +82,10 @@ var MyBevies = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  goToSearch() {
+    this.props.tabBarActions.switchTab('Search');
+  },
+
   _renderBevyList() {
     if(this.state.loadingInitial) return [];
     var bevyList = [];
@@ -125,6 +129,38 @@ var MyBevies = React.createClass({
             }}
           >
             Create a New Bevy
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+
+  _renderDiscoverCard() {
+    if(this.state.loadingInitial) return <View />;
+    if(this.props.myBevies.length > 0) return <View />;
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        onPress={ this.goToSearch }
+        style={ styles.discoverCard }
+      >
+        <View
+          style={{
+            alignItems: 'center'
+          }}
+        >
+          <Icon
+            name='explore'
+            size={ 60 }
+            color='#aaa'
+          />
+          <Text
+            style={{
+              color: '#999',
+              fontSize: 17
+            }}
+          >
+            Discover Bevies
           </Text>
         </View>
       </TouchableOpacity>
@@ -183,6 +219,7 @@ var MyBevies = React.createClass({
         >
           { this._renderLoading() }
           { this._renderBevyList() }
+          { this._renderDiscoverCard() }
           { this._renderNewBevyCard() }
         </ScrollView>
       </View>
@@ -241,6 +278,18 @@ var styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 10,
     marginBottom: 70
+  },
+  discoverCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: constants.width * .88,
+    height: 160,
+    borderColor: '#aaa',
+    borderWidth: 3,
+    borderRadius: 5,
+    overflow: 'hidden',
+    marginTop: 10,
+    marginBottom: 10
   },
   spinnerContainer: {
     flexDirection: 'column',

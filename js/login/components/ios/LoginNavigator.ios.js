@@ -44,6 +44,14 @@ var LoginNavigator = React.createClass({
         }]}
         renderScene={(route, navigator) => {
           switch(route.name) {
+            case routes.LOGIN.LOADINGLOGIN: 
+              let LoadingLogin = require('./LoadingLogin.ios.js');
+              <LoadingLogin
+                { ...this.props }
+                loginNavigator={ navigator }
+                loginRoute={ route }
+              />
+              break;
             case routes.LOGIN.LOGIN:
               let LoginView = require('./LoginView.ios.js');
               return (

@@ -128,8 +128,17 @@ var NewThreadView = React.createClass({
         toInput: ''
       });
     }
+    var searchUsers = this.state.searchUsers;
+
+    // remove added user from search
+    searchUsers = _.reject(searchUsers, function(user) {
+      return _.findWhere(this.state.addedUsers, {_id: user._id })
+    }.bind(this))
+
     this.setState({
-      addedUsers: addedUsers
+      addedUsers: addedUsers,
+      searchUsers: searchUsers,
+      ds: this.state.ds.cloneWithRows(searchUsers)
     });
   },
 
