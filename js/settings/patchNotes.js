@@ -13,6 +13,32 @@
 module.exports = {
   ios: [
   {
+    version: '1.3.76',
+    sections: [{
+      header: 'New Features',
+      bodyItems: [
+        "Add Discover Card to a new user's Bevy list",
+      ]
+    }, {
+      header: 'Bug Fixes',
+      bodyItems: [
+        'Fix static image loading',
+        "Fix border widths across different device resolutions",
+        "Fix loading and state errors in the Image Overlay Gallery View",
+        "UX improvements in the search tab",
+        "Fix errors with voting on posts",
+        "Fix messaging user from their profile",
+        "Add more alert errors across app",
+        "Cleared up errors and warnings relating to the keyboard opening and closing",
+        "Fix errors when signing out of an acccount logged in with Google",
+        'UX improvements in login stack views',
+        'Improve memory usage of views across app',
+        'Fix crashes with joining/leaving a bevy',
+        "General UI improvements"
+      ]
+    }]
+  },
+  {
     version: '1.3.75',
     sections: [{
       header: 'New Features',
