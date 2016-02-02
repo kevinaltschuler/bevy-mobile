@@ -290,7 +290,6 @@ var MessageView = React.createClass({
               refreshing={ this.state.isRefreshing }
               onRefresh={ this.onRefresh }
               tintColor='#AAA'
-              title='Loading More Messages...'
             />
           }
         />

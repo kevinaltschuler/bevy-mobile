@@ -187,7 +187,6 @@ var BevyView = React.createClass({
   },
 
   render() {
-
     return (
       <View style={[ styles.container, {
         marginBottom: this.state.keyboardSpace

@@ -304,3 +304,29 @@ exports.setSearchBarActions = function(actions) {
 exports.getSearchBarActions = function() {
   return searchBarActions;
 };
+
+exports.hintTexts = [
+  "What's on your mind?",
+  "What's up?",
+  "How's it going?",
+  "What's new?",
+  "How are you doing today?",
+  "Share your thoughts",
+  "Drop some knowledge buddy",
+  "Drop a line",
+  "What's good?",
+  "What do you have to say?",
+  "Spit a verse",
+  "What would your mother think?",
+  "Tell me about yourself",
+  "What are you thinking about?",
+  "Gimme a bar",
+  "Lets talk about our feelings",
+  "Tell me how you really feel",
+  "How was last night?",
+  "What's gucci?",
+  "Anything worth sharing?",
+  "What's poppin?",
+  "What are you doing right now?",
+  "What's cooking good looking?"
+];

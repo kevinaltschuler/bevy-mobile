@@ -109,7 +109,6 @@ var NotificationView = React.createClass({
             refreshing={ this.state.loading }
             onRefresh={ this.onRefresh }
             tintColor='#AAA'
-            title='Loading...'
           />
         }
         renderFooter={ this._renderFooter }

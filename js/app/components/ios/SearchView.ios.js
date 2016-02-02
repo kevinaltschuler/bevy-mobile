@@ -326,7 +326,6 @@ var SearchView = React.createClass({
               refreshing={ this.state.fetching }
               onRefresh={ this.onRefresh }
               tintColor='#AAA'
-              title='Loading...'
             />
           }
           renderHeader={ this.renderHeader }

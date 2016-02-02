@@ -14,6 +14,7 @@ var {
   StyleSheet,
   ScrollView,
   Image,
+  AlertIOS,
   TouchableHighlight,
   TouchableOpacity
 } = React;
@@ -39,6 +40,18 @@ var BevySideMenu = React.createClass({
     activeBoard: React.PropTypes.object
   },
 
+  getInitialState() {
+    return {
+      joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
+    };
+  },
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      joined: _.contains(nextProps.user.bevies, nextProps.activeBevy._id)
+    });
+  },
+
   _renderAdminActions() {
 
   },
@@ -53,6 +66,12 @@ var BevySideMenu = React.createClass({
   },
 
   goToNewBoard() {
+    if(!this.state.joined) {
+      // don't let a user who isn't a part of this bevy create a board
+      AlertIOS.alert('You must join this bevy to create a board');
+      return;
+    }
+
     var route = {
       name: routes.MAIN.NEWBOARD
     };

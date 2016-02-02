@@ -201,7 +201,6 @@ var SettingsView = React.createClass({
               refreshing={ this.state.refreshing }
               onRefresh={ this.onRefresh }
               tintColor='#AAA'
-              title='Loading...'
             />
           }
         >

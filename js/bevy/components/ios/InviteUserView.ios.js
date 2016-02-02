@@ -280,7 +280,6 @@ var InviteUserView = React.createClass({
               refreshing={ this.state.searching }
               onRefresh={ this.search }
               tintColor='#AAA'
-              title='Loading...'
             />
           }
         >

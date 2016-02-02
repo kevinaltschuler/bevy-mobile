@@ -20,6 +20,7 @@ var {
   TouchableHighlight,
   Modal,
   ScrollView,
+  ActionSheetIOS,
   TouchableWithoutFeedback,
   TouchableOpacity
 } = React;
@@ -93,6 +94,18 @@ var ImageOverlay = React.createClass({
 
   goToGallery() {
     this.ScrollView.scrollTo(0, this.props.images.length * constants.width, false);
+  },
+
+  showShareActionSheet() {
+    ActionSheetIOS.showShareActionSheetWithOptions({
+      url: this.props.images[this.state.imageIndex].path,
+      message: 'message - nuts',
+      subject: 'subject - nuts'
+    }, error => {
+      console.log(error);
+    }, (success, method) => {
+      console.log(success, method);
+    });
   },
 
   renderGalleryButton() {
@@ -205,6 +218,17 @@ var ImageOverlay = React.createClass({
                   { this.props.images.length } Images
                 </Text>
               </View>
+              {/*<TouchableOpacity
+                activeOpacity={ 0.5 }
+                style={ styles.iconButton }
+                onPress={ this.showShareActionSheet }
+              >
+                <Icon
+                  name='open-in-new'
+                  size={ 30 }
+                  color='#fff'
+                />
+              </TouchableOpacity>*/}
               { this.renderGalleryButton() }
             </View>
           </View>

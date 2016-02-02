@@ -283,7 +283,7 @@ var CommentItem = React.createClass({
           >
             { this._renderCommentBody() }
           </TouchableHighlight>
-          <Collapsible collapsed={this.state.collapsed} >
+          <Collapsible collapsed={ this.state.collapsed } >
             <View style={ styles.commentItemActions }>
               <TouchableOpacity
                 activeOpacity={ 0.5 }

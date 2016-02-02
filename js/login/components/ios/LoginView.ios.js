@@ -194,7 +194,7 @@ var LoginView = React.createClass({
         }]}
         contentContainerStyle={ styles.containerInner }
         keyboardShouldPersistTaps={ true }
-        scrollEnabled={ false }
+        //scrollEnabled={ false }
       >
         <Image
           style={ styles.logo }

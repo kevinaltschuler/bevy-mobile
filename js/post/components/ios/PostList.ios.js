@@ -6,6 +6,7 @@
  * Also displays the board card and new post card when appropriate
  *
  * @author kevin
+ * @author albert
  * @flow
  */
 
@@ -145,8 +146,15 @@ var PostList = React.createClass({
     // once the board is switched, scroll back to the top of the ListView
     // dont do it if theres no rows being rendered
     if(this.state.ds.getRowCount() <= 0) return;
+
     // scroll to top
-    this.ListView.scrollTo(0, 0);
+    // and delay it by a bit
+    setTimeout(() => {
+      // dont try to scroll if its not mounted anymore
+      if(this.ListView == undefined) return;
+
+      this.ListView.scrollTo(0, 0);
+    }, 250);
   },
 
   onRefresh() {
@@ -165,15 +173,11 @@ var PostList = React.createClass({
   },
 
   switchToSearch() {
-    this.setState({
-      loadingInitial: true
-    });
+    this.setState({ loadingInitial: true });
   },
 
   switchBackFromSearch() {
-    this.setState({
-      loadingInitial: true
-    });
+    this.setState({ loadingInitial: true });
     PostActions.fetch(this.props.activeBevy._id, null);
   },
 
@@ -188,7 +192,6 @@ var PostList = React.createClass({
   },
 
   _renderBoardCard() {
-    if(_.isEmpty(this.props.activeBoard)) return <View />;
     return (
       <BoardCard
         user={ this.props.user }
@@ -212,6 +215,7 @@ var PostList = React.createClass({
         { this._renderBoardCard() }
         <NewPostCard
           user={ this.props.user }
+          activeBevy={ this.props.activeBevy }
           mainNavigator={ this.props.mainNavigator }
         />
       </View>
@@ -278,7 +282,7 @@ var PostList = React.createClass({
     if(_.isEmpty(this.props.activeBevy.boards) && _.isEmpty(this.props.profileUser)) {
       return (
         <View style={ styles.noPostsContainer }>
-          <Text style={[ styles.noPostsText, {marginTop: -20} ]}>
+          <Text style={ styles.noPostsText }>
             This Bevy needs Boards
           </Text>
         </View>
@@ -309,7 +313,6 @@ var PostList = React.createClass({
             refreshing={ this.state.loading }
             onRefresh={ this.onRefresh }
             tintColor='#AAA'
-            title='Loading...'
           />
         }
         renderRow={ post => {
@@ -400,13 +403,11 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 100
+    justifyContent: 'center'
   },
   noPostsText: {
     color: '#AAA',
-    fontSize: 22,
-    marginTop: 0
+    fontSize: 22
   }
 });
 
