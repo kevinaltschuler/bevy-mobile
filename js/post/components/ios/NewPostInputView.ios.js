@@ -23,7 +23,8 @@ var {
   TouchableHighlight,
   TouchableOpacity,
   DeviceEventEmitter,
-  NativeModules
+  NativeModules,
+  AlertIOS
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
@@ -165,7 +166,10 @@ var NewPostInputView = React.createClass({
 
   submit() {
     // dont post if text and images are empty
-    if(this.titleValue.length <= 0 && this.state.images.length <= 0) return;
+    if(this.titleValue.length <= 0 && this.state.images.length <= 0) {
+      AlertIOS.alert('Post must contain either text or images');
+      return;
+    }
 
     if(this.props.editing) {
       PostActions.update(
@@ -328,7 +332,6 @@ var NewPostInputView = React.createClass({
   },
 
   _renderContentBar() {
-    if(this.state.keyboardSpace == 0) {
       return (
         <View style={styles.contentBar}>
           <TouchableHighlight
@@ -368,10 +371,7 @@ var NewPostInputView = React.createClass({
             />
           </TouchableHighlight>*/}
         </View>
-      )
-    } else {
-      return <View/>;
-    }
+      );
   },
 
   render() {
@@ -446,7 +446,7 @@ var NewPostInputView = React.createClass({
           </View>
           { this._renderImages() }
         </ScrollView>
-        {this._renderContentBar()}
+        { this._renderContentBar() }
       </View>
     );
   }
