@@ -40,7 +40,7 @@ var LoginNavigator = React.createClass({
         navigator={ this.props.mainNavigator }
         configureScene={() => sceneConfig }
         initialRouteStack={[{
-          name: routes.LOGIN.LOGIN
+          name: routes.LOGIN.SLUG
         }]}
         renderScene={(route, navigator) => {
           switch(route.name) {
@@ -52,13 +52,24 @@ var LoginNavigator = React.createClass({
                 loginRoute={ route }
               />
               break;
-            case routes.LOGIN.LOGIN:
-              let LoginView = require('./LoginView.ios.js');
+            case routes.LOGIN.SLUG:
+              let EnterSlug = require('./EnterSlug.ios.js');
               return (
-                <LoginView
+                <EnterSlug
                   { ...this.props }
                   loginNavigator={ navigator }
                   loginRoute={ route }
+                />
+              );
+              break;
+            case routes.LOGIN.LOGIN:
+              let UserPass = require('./UserPass.ios.js');
+              return (
+                <UserPass
+                  { ...this.props }
+                  loginNavigator={ navigator }
+                  loginRoute={ route }
+                  slug={route.slug || 'error'}
                 />
               );
               break;

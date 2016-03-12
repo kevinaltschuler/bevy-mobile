@@ -21,6 +21,7 @@ var Boards = require('./BoardCollection');
 var Board = require('./BoardModel');
 var Invites = require('./InviteCollection');
 var Invite = require('./InviteModel');
+var UserStore = require('./../user/UserStore');
 var {
   Platform,
   ToastAndroid
@@ -84,14 +85,28 @@ _.extend(BevyStore, {
         // trigger loading event
         this.trigger(BEVY.LOADING);
 
-        this.myBevies.fetch({
-          reset: true,
-          success: function(bevies, response, options) {
-            this.myBevies.sort();
-
-            // trigger finished events
-            this.trigger(BEVY.CHANGE_ALL);
-            this.trigger(BEVY.LOADED);
+        this.active.url = constants.apiurl + '/bevies/' + user.bevy;
+        this.active.fetch({
+          success: function(collection, response, options) {
+            this.active = new Bevy(response);
+            this.bevyBoards.url = constants.apiurl + '/bevies/' + response._id + '/boards';
+            this.bevyInvites.url = constants.apiurl + '/bevies/' + response._id + '/invites';
+            async.series([
+              this.bevyBoards.fetch({
+                success: function(collection, response, options) {
+                  this.bevyBoards = new Boards(response);
+                  this.trigger(BEVY.CHANGE_ALL);
+                }.bind(this)
+              }),
+              this.bevyInvites.fetch({
+                success: function(collection, response, options) {
+                  this.bevyInvites = new Invites(response);
+                  this.trigger(BEVY.SWITCHED);
+                  this.trigger(BEVY.LOADED);
+                  this.trigger(BEVY.CHANGE_ALL);
+                }.bind(this)
+              })
+            ]);
           }.bind(this)
         });
         break;
@@ -127,6 +142,7 @@ _.extend(BevyStore, {
               this.bevyBoards.fetch({
                 success: function(collection, response, options) {
                   this.bevyBoards = new Boards(response);
+                  this.trigger(BEVY.SWITCHED);
                   this.trigger(BEVY.LOADED);
                   this.trigger(BEVY.CHANGE_ALL);
                 }.bind(this)
@@ -143,6 +159,7 @@ _.extend(BevyStore, {
         break;
 
       case BEVY.CREATE:
+        var UserStore = require('./../user/UserStore');
         var name = payload.name;
         var image = payload.image;
         var slug = payload.slug;

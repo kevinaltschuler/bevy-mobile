@@ -23,8 +23,11 @@ var routes = require('./../../../routes');
 var AppActions = require('./../../../app/AppActions');
 var PostStore = require('./../../../post/PostStore');
 var UserStore = require('./../../../user/UserStore');
+var BevyStore = require('./../../../bevy/BevyStore');
+var BevyActions = require('./../../../bevy/BevyActions');
 var POST = constants.POST;
 var USER = constants.USER;
+var BEVY = constants.BEVY;
 
 var styles = StyleSheet.create({
   container: {
@@ -48,19 +51,15 @@ var MainView = React.createClass({
   },
 
   componentDidMount() {
-    UserStore.on(USER.LOADED, this._onLogin);
     UserStore.on(USER.LOGOUT, this._onLogout);
+    BevyStore.on(BEVY.SWITCHED, this._onSwitched);
     UserStore.on(USER.TOKENS_LOADED, this._onTokens);
   },
 
   componentWillUnmount() {
-    UserStore.off(USER.LOADED, this._onLogin);
     UserStore.off(USER.LOGOUT, this._onLogout);
+    BevyStore.off(BEVY.SWITCHED, this._onSwitched);
     UserStore.off(USER.TOKENS_LOADED, this._onTokens);
-  },
-
-  _onLogin() {
-
   },
 
   _onLogout() {
@@ -70,11 +69,15 @@ var MainView = React.createClass({
     });
   },
 
+  _onSwitched() {
+    console.log('got to here');
+    setTimeout(
+      () => this.props.mainNavigator.replace({
+        name: routes.MAIN.BEVYVIEW
+      }), 150);
+  },
+
   _onTokens() {
-    console.log('got the tokens, loading app');
-    this.props.mainNavigator.replace({
-      name: routes.MAIN.TABBAR
-    });
     AppActions.load();
   },
 
@@ -147,14 +150,6 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.BEVYNAV:
-        let BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
-        return (
-          <BevyNavigator
-            { ...this.props }
-          />
-        );
-        break;
       case routes.MAIN.NEWTHREAD:
         let NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
         return (
@@ -202,17 +197,11 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.TABBAR:
-        let MainTabBar = require('./MainTabBar.ios.js');
+      case routes.MAIN.BEVYVIEW:
+        let BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
         return (
-          <MainTabBar
+          <BevyNavigator
             { ...this.props }
-            initialThread={this.state.initialThread}
-            clearInitialThread={() => {
-              this.setState({
-                initialThread: {}
-              })
-            }}
           />
         );
         break;

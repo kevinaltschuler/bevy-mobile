@@ -22,12 +22,13 @@ var protocol = 'http:';
 exports.android_version = '1.0.6';
 exports.android_phase = 'ALPHA';
 
-exports.ios_version = '1.3.76';
+exports.ios_version = '1.4';
 
 //exports.siteurl = protocol + slashes + hostname;
 //exports.apiurl = protocol + slashes + api_subdomain + '.' + api_version + hostname;
+exports.domain = 'joinbevy.com';
 exports.siteurl = 'http://joinbevy.com';
-exports.apiurl = 'http://api.joinbevy.com';
+exports.apiurl = 'http://joinbevy.com/api';
 //exports.siteurl = 'http://bevy.dev';
 //exports.apiurl = 'http://api.bevy.dev';
 
@@ -198,6 +199,7 @@ exports.USER = {
   VERIFY_USERNAME: 'user_verify_username',
   SEARCH: 'user_search',
   FETCH: 'user_fetch',
+  ALL_LOADED: 'user_all_loaded',
 
   // events
   LOGIN_ERROR: 'user_login_error',

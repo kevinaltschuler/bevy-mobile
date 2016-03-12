@@ -20,6 +20,7 @@ var APP = constants.APP;
 var CHAT = constants.CHAT;
 var AppActions = require('./../app/AppActions');
 var FileStore = require('./../file/FileStore');
+var BevyActions = require('./../bevy/BevyActions');
 var BevyStore = require('./../bevy/BevyStore');
 var GCM = require('./../shared/apis/GCM.android.js');
 
@@ -105,14 +106,15 @@ _.extend(UserStore, {
             }
           }
         });
-        this.trigger(USER.LOADED);
+        this.trigger(USER.LOADED, user);
         break;
 
       case USER.LOGIN:
         var username = payload.username;
         var password = payload.password;
+        var bevySlug = payload.bevySlug;
         console.log('logging in');
-        this.login(username, password);
+        this.login(username, password, bevySlug);
         GoogleSignIn.signOut();
         break;
 
@@ -494,8 +496,9 @@ _.extend(UserStore, {
     this.trigger(USER.CHANGE_ALL);
   },
 
-  login(username, password) {
-    fetch(constants.siteurl + '/login', {
+  login(username, password, bevySlug) {
+    var login_url = 'http://' + bevySlug + '.' + constants.domain;
+    fetch(login_url, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -527,7 +530,7 @@ _.extend(UserStore, {
         res.expires_in
       );
       // trigger success
-      this.trigger(USER.LOGIN_SUCCESS);
+      BevyActions.switchBevy(bevySlug);
     })
     .catch(err => {
       console.log('login error', err);

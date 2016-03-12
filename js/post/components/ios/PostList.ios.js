@@ -93,6 +93,9 @@ var PostList = React.createClass({
     PostStore.on(POST.SEARCH_COMPLETE, this.onPostSearchComplete);
 
     BevyStore.on(BOARD.SWITCHED, this.onBoardSwitched);
+
+    if(_.isEmpty(this.props.allPosts))
+      this.onRefresh();
   },
   componentWillUnmount() {
     PostStore.off(POST.LOADED, this.onPostsLoaded);
@@ -332,14 +335,9 @@ var PostList = React.createClass({
   },
 
   render() {
+
     if(_.isEmpty(this.props.activeBevy) && _.isEmpty(this.props.profileUser)) {
       return <View/>;
-    }
-    if(!_.isEmpty(this.props.activeBevy) && this.props.activeBevy.settings.privacy == 'Private'
-      && !_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
-      // if this is a private bevy that the user is not a part of
-      // dont show any posts. only show a request join view
-      return this._renderPrivate();
     }
 
     return (

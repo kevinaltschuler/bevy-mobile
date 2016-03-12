@@ -51,7 +51,7 @@ var BevyView = React.createClass({
   },
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.sideMenuActions.isOpen()) {
+    /*if(nextProps.sideMenuActions.isOpen()) {
       // close side menu
       Animated.timing(
         this.state.menuButtonRotation, {
@@ -67,12 +67,15 @@ var BevyView = React.createClass({
           duration: 300
         }
       ).start()
-    }
+    }*/
   },
 
   componentDidMount() {
     this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    console.log(this.props.activeBevy);
+    if(_.isEmpty(this.props.activeBevy))
+      this.props.mainNavigator.push({name: routes.MAIN.LOGIN});
   },
   componentWillUnmount() {
     this.keyboardWillShowSub.remove();
@@ -112,19 +115,23 @@ var BevyView = React.createClass({
     PostActions.fetch(this.props.activeBevy._id, null);
   },
 
-  toggleSideMenu() {
-    this.props.sideMenuActions.toggle();
+  toggleRightMenu() {
+    this.props.rightMenuActions.toggle();
   },
 
-  _renderBackButton() {
+  toggleLeftMenu() {
+    this.props.leftMenuActions.toggle();
+  },
+
+  _renderLeftButton() {
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
         style={ styles.backButton }
-        onPress={ this.goBack }
+        onPress={ this.toggleLeftMenu }
       >
         <Icon
-          name='arrow-back'
+          name='menu'
           size={ 30 }
           color='#FFF'
         />
@@ -133,13 +140,6 @@ var BevyView = React.createClass({
   },
 
   _renderMenuButton() {
-    if(!_.isEmpty(this.props.activeBevy)) {
-      if(this.props.activeBevy.settings.privacy == 'Private') {
-        if(!_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
-          return <View />;
-        }
-      }
-    }
     return (
       <Animated.View style={{
         transform: [{
@@ -152,7 +152,7 @@ var BevyView = React.createClass({
         <TouchableOpacity
           underlayColor={ 0.5 }
           style={ styles.sideMenuButton }
-          onPress={ this.toggleSideMenu }
+          onPress={ this.toggleRightMenu }
         >
           <Icon
             name='menu'
@@ -166,13 +166,6 @@ var BevyView = React.createClass({
 
   _renderBevyActions() {
     if(!_.isEmpty(this.props.activeBoard)) return <View />;
-    if(!_.isEmpty(this.props.activeBevy)) {
-      if(this.props.activeBevy.settings.privacy == 'Private') {
-        if(!_.contains(this.props.user.bevies, this.props.activeBevy._id)) {
-          return <View />;
-        }
-      }
-    }
     return (
       <BevyActionButtons
         bevy={ this.props.activeBevy }
@@ -194,12 +187,12 @@ var BevyView = React.createClass({
         <BevyNavbar
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
-          left={ this._renderBackButton() }
+          left={ this._renderLeftButton() }
           center={ this.props.activeBevy.name }
           right={ this._renderMenuButton() }
           user={ this.props.user }
         />
-        { this._renderBevyActions() }
+        {/* this._renderBevyActions() */}
         <PostList
           ref={ ref => { this.PostList = ref; }}
           allPosts={ this.props.posts }

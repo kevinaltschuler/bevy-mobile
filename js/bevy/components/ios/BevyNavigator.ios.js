@@ -18,7 +18,8 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SideMenu = require('react-native-side-menu');
-var BevySideMenu = require('./BevySideMenu.ios.js');
+var LeftSideMenu = require('./LeftSideMenu.ios.js');
+var RightSideMenu = require('./RightSideMenu.ios.js');
 
 
 var _ = require('underscore');
@@ -44,7 +45,8 @@ var BevyView = React.createClass({
       showSort: false,
       scrollY: null,
       navHeight: 0,
-      sideMenuOpen: false,
+      leftOpen: false,
+      rightOpen: false
     }
   },
 
@@ -59,17 +61,30 @@ var BevyView = React.createClass({
     this.closeSideMenu();
   },
 
-  openSideMenu() {
-    this.setState({ sideMenuOpen: true });
+  openLeftMenu() {
+    this.setState({ leftOpen: true });
   },
-  closeSideMenu() {
-    this.setState({ sideMenuOpen: false });
+  closeLeftMenu() {
+    this.setState({ leftOpen: false });
   },
-  toggleSideMenu() {
-    this.setState({ sideMenuOpen: !this.state.sideMenuOpen });
+  toggleLeftMenu() {
+    this.setState({ leftOpen: !this.state.leftOpen });
   },
-  isSideMenuOpen() {
-    return this.state.sideMenuOpen;
+  isLeftMenuOpen() {
+    return this.state.leftOpen;
+  },
+
+  openRightMenu() {
+    this.setState({ rightOpen: true });
+  },
+  closeRightMenu() {
+    this.setState({ rightOpen: false });
+  },
+  toggleRightMenu() {
+    this.setState({ rightOpen: !this.state.rightOpen });
+  },
+  isRightMenuOpen() {
+    return this.state.rightOpen;
   },
 
   goBackMain() {
@@ -106,11 +121,18 @@ var BevyView = React.createClass({
   },
 
   render: function() {
-    var sideMenuActions = {
-      open: this.openSideMenu,
-      close: this.closeSideMenu,
-      toggle: this.toggleSideMenu,
-      isOpen: this.isSideMenuOpen
+    var rightMenuActions = {
+      open: this.openRightMenu,
+      close: this.closeRightMenu,
+      toggle: this.toggleRightMenu,
+      isOpen: this.isRightMenuOpen
+    };
+
+    var leftMenuActions = {
+      open: this.openLeftMenu,
+      close: this.closeLeftMenu,
+      toggle: this.toggleLeftMenu,
+      isOpen: this.isLeftMenuOpen
     };
 
     var view;
@@ -137,7 +159,8 @@ var BevyView = React.createClass({
         view = (
           <$BevyView
             { ...this.props }
-            sideMenuActions={ sideMenuActions }
+            rightMenuActions={ rightMenuActions }
+            leftMenuActions={ leftMenuActions }
           />
         );
         break;
@@ -172,17 +195,30 @@ var BevyView = React.createClass({
     return (
       <SideMenu
         menu={
-          <BevySideMenu
-            closeSideMenu={ this.closeSideMenu }
+          <LeftSideMenu
+            closeSideMenu={ this.closeLeftMenu }
             { ...this.props }
           />
         }
-        menuPosition='right'
+        menuPosition='left'
         openMenuOffset={ constants.width * (4/5) }
-        onChange={ isOpen => this.setState({ sideMenuOpen: isOpen })}
-        isOpen={ this.state.sideMenuOpen }
+        onChange={ isOpen => this.setState({ leftOpen: isOpen })}
+        isOpen={ this.state.leftOpen }
       >
-        { view }
+        <SideMenu
+          menu={
+            <RightSideMenu
+              closeSideMenu={ this.closeRightMenu }
+              { ...this.props }
+            />
+          }
+          menuPosition='right'
+          openMenuOffset={ constants.width * (4/5) }
+          onChange={ isOpen => this.setState({ rightOpen: isOpen })}
+          isOpen={ this.state.rightOpen }
+        >
+          { view }
+        </SideMenu>
       </SideMenu>
     );
   }

@@ -150,7 +150,7 @@ Backbone.sync = function(method, model, options) {
     options.success(res, options);
   })
   .catch(error => {
-    console.log(error.toString());
+    console.log('error: ', error.toString());
     options.error(error.toString());
   });
 };

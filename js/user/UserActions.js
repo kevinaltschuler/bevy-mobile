@@ -38,11 +38,12 @@ var UserActions = {
     });
   },
 
-  logIn(username, password) {
+  logIn(username, password, bevySlug) {
     Dispatcher.dispatch({
       actionType: USER.LOGIN,
       username: username,
-      password: password
+      password: password,
+      bevySlug: bevySlug
     });
   },
 

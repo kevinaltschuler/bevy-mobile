@@ -29,7 +29,7 @@ var BevyActions = require('./../../BevyActions');
 var BevyStore = require('./../../../bevy/BevyStore');
 var BoardActions = require('./../../../bevy/BoardActions');
 
-var BevySideMenu = React.createClass({
+var LeftSideMenu = React.createClass({
   propsTypes: {
     bevyRoute: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
@@ -190,11 +190,6 @@ var BevySideMenu = React.createClass({
           height: constants.getStatusBarHeight()
         }}/>
         <ScrollView style={ styles.menuContainer }>
-          <View>
-            <Text style={ styles.title }>
-              Boards
-            </Text>
-          </View>
           <View style={ styles.boardList }>
             { this._renderBoards() }
             { this._renderNewBoardItem() }
@@ -210,7 +205,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#282828',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     width: constants.width,
     height: constants.height,
     paddingTop: 5
@@ -281,4 +276,4 @@ var styles = StyleSheet.create({
   }
 })
 
-module.exports = BevySideMenu;
+module.exports = LeftSideMenu;
