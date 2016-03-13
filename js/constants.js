@@ -158,34 +158,6 @@ exports.BOARD = {
   CHANGE_ALL: 'board_change_all'
 };
 
-exports.CHAT = {
-  // actions
-  SWITCH: 'chat_switch',
-  THREAD_OPEN: 'chat_thread_open',
-  FETCH_MORE: 'chat_fetch_more',
-  POST_MESSAGE: 'chat_post_message',
-  CREATE_THREAD_AND_MESSAGE: 'chat_create_thread_and_message',
-  ADD_USERS: 'chat_add_users',
-  REMOVE_USER: 'chat_remove_user',
-  DELETE_THREAD: 'chat_delete_thread',
-  EDIT_THREAD: 'chat_edit_thread',
-  START_PM: 'chat_start_pm',
-  FETCH_THREADS: 'chat_fetch_threads',
-  DELETE_MESSAGE: 'chat_delete_message',
-
-  // events
-  FETCHING_THREADS: 'chat_fetching_threads',
-  THREADS_FETCHED: 'chat_threads_fetched',
-  CHANGE_ALL: 'chat_change_all',
-  CHANGE_ONE: 'chat_change_one:',
-  FETCHING_MESSAGES: 'chat_fetching_messages',
-  MESSAGES_FETCHED: 'chat_messages_fetched',
-  THREAD_CREATED: 'chat_thread_created',
-  SWITCH_TO_THREAD: 'chat_switch_to_thread',
-  SWITCH_TO_THREAD_INTENT: 'chat_switch_to_thread_intent',
-  STARTED_PM: 'chat_started_pm'
-};
-
 exports.USER = {
   // actions
   LOAD_USER: 'user_load_user',

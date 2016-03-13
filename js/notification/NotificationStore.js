@@ -39,8 +39,6 @@ window.navigator.__defineGetter__('userAgent', function(){
 
 var io = require('socket.io-client/socket.io');
 
-var ChatStore = require('./../chat/ChatStore');
-
 var NotificationStore = _.extend({}, Backbone.Events);
 _.extend(NotificationStore, {
 
@@ -89,31 +87,6 @@ _.extend(NotificationStore, {
           console.log('websocket client connected');
           console.log('setting user id', user._id);
           this.ws.emit('set_user_id', user._id);
-        }.bind(this));
-
-        this.ws.on('chat.' + user._id, function(message) {
-          message = JSON.parse(message);
-
-          // TODO: play audio
-          if(Platform.OS == 'android') {
-            //AudioPlayer.play('notification.mp3');
-          } else if (Platform.OS == 'ios') {
-
-          }
-
-          // vibrate
-          if(Platform.OS == 'android') {
-            //VibrationAndroid.vibrate(500);
-          } else if (Platform.OS == 'ios') {
-            VibrationIOS.vibrate();
-          }
-
-          if(ChatStore.addMessage != undefined)
-            ChatStore.addMessage(message);
-          else {
-            ChatStore = require('./../chat/ChatStore');
-            ChatStore.addMessage(message);
-          }
         }.bind(this));
 
         this.ws.on('notification.' + user._id, function(notification) {

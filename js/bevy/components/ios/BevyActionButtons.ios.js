@@ -307,12 +307,10 @@ var BevyActionButtons = React.createClass({
 var styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    height: 50,
-    maxHeight: 50
+    height: 50
   },
   containerInner: {
-    height: 50,
-    maxHeight: 50
+    height: 50
   },
   slide: {
     width: constants.width,

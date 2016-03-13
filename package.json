@@ -13,7 +13,7 @@
     "fbjs": "^0.6.1",
     "flux": "2.0.1",
     "jquery": "^2.2.0",
-    "react-native": "^0.19.0",
+    "react-native": "^0.21.0",
     "react-native-audioplayer": "^0.2.0",
     "react-native-blur": "^0.7.9",
     "react-native-calendar": "^0.6.2",

@@ -64,10 +64,6 @@ var PublicProfileView = React.createClass({
     this.props.mainNavigator.push(routes.MAIN.MESSAGEVIEW);
   },
 
-  messageUser() {
-    ChatActions.startPM(this.props.routeUser._id);
-  },
-
   _renderTopBar() {
     var userName = (this.props.user._id == this.props.routeUser._id)
       ? 'Your'

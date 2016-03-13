@@ -15,7 +15,6 @@ var {
 } = React;
 
 var NotificationStore = require('./../../../notification/NotificationStore');
-var ChatActions = require('./../../../chat/ChatActions');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -150,16 +149,6 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.NEWTHREAD:
-        let NewThreadView = require('./../../../chat/components/ios/NewThreadView.ios.js');
-        return (
-          <NewThreadView
-            defaultUser={this.props.mainRoute.defaultUser}
-            { ...this.props }
-          />
-        );
-        break;
-
       case routes.MAIN.INVITEUSERS:
         let InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
         return (
@@ -201,33 +190,6 @@ var MainView = React.createClass({
         let BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
         return (
           <BevyNavigator
-            { ...this.props }
-          />
-        );
-        break;
-
-      case routes.MAIN.MESSAGEVIEW:
-        let MessageView = require('./../../../chat/components/ios/MessageView.ios.js');
-        return (
-          <MessageView
-            {...this.props }
-          />
-        );
-        break;
-
-      case routes.MAIN.THREADSETTINGS:
-        let ThreadSettingsView = require('./../../../chat/components/ios/ThreadSettingsView.ios.js');
-        return (
-          <ThreadSettingsView
-            { ...this.props }
-          />
-        );
-        break;
-
-      case routes.MAIN.ADDPEOPLE:
-        let AddPeopleView = require('./../../../chat/components/ios/AddPeopleView.ios.js');
-        return (
-          <AddPeopleView
             { ...this.props }
           />
         );

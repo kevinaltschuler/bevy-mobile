@@ -421,7 +421,6 @@ _.extend(UserStore, {
           patch: true,
           success: function(model, response, options) {
             //console.log(model);
-            this.trigger(CHAT.CHANGE_ALL);
             this.trigger(USER.CHANGE_ALL);
           }.bind(this)
         });
