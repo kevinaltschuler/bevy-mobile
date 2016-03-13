@@ -356,8 +356,7 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee',
-    minHeight: constants.height
+    backgroundColor: '#eee'
   },
 
   profileCard: {

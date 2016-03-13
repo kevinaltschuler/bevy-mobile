@@ -221,7 +221,6 @@ var styles = StyleSheet.create({
   },
   bodyInput: {
     width: constants.width,
-    minHeight: 200,
     flex: 1,
     backgroundColor: '#FFF',
     paddingHorizontal: 15,

@@ -6,55 +6,37 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
   View,
   Image,
   StyleSheet,
   Text,
   TouchableHighlight,
   AlertIOS,
-  TouchableOpacity
-} = React;
+  TouchableOpacity,
+  Component,
+  PropTypes
+} from 'react-native';
 
-var _ = require('underscore');
-var constants = require('./../../../constants');
-var routes = require('./../../../routes');
-var resizeImage = require('./../../../shared/helpers/resizeImage');
-var UserStore = require('./../../../user/UserStore');
+let _ = require('underscore');
+let constants = require('./../../../constants');
+let routes = require('./../../../routes');
+let resizeImage = require('./../../../shared/helpers/resizeImage');
 
-var NewPostCard = React.createClass({
-  propTypes: {
-    user: React.PropTypes.object,
-    activeBevy: React.PropTypes.object,
-    mainNavigator: React.PropTypes.object
-  },
+let UserStore = require('./../../../user/UserStore');
 
-  getInitialState() {
-    return {
-      hintText: constants.hintTexts[Math.floor(Math.random() * constants.hintTexts.length)],
-      joined: _.contains(this.props.user.bevies, this.props.activeBevy._id)
+class NewPostCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hintText: constants.hintTexts[Math.floor(Math.random() * constants.hintTexts.length)]
     }
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      joined: _.contains(nextProps.user.bevies, nextProps.activeBevy._id)
-    })
-  },
+  }
 
   goToNewPost() {
-    if(!this.state.joined) {
-      // don't let a user that isnt a part of this bevy post
-      AlertIOS.alert('You must join this bevy to post');
-      return;
-    }
-
-    var route = {
-      name: routes.MAIN.NEWPOST
-    };
+    var route = { name: routes.MAIN.NEWPOST };
     this.props.mainNavigator.push(route);
-  },
+  }
 
   render() {
     var userImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
@@ -62,7 +44,7 @@ var NewPostCard = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        onPress={ this.goToNewPost }
+        onPress={ this.goToNewPost.bind(this) }
         style={ styles.touchContainer }
       >
         <View style={ styles.container }>
@@ -79,9 +61,9 @@ var NewPostCard = React.createClass({
       </TouchableOpacity>
     );
   }
-});
+};
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
@@ -99,7 +81,7 @@ var styles = StyleSheet.create({
   image: {
     width: 40,
     height: 40,
-    borderRadius: 20
+    borderRadius: 6
   },
   textContainer: {
     flex: 1,
@@ -112,5 +94,11 @@ var styles = StyleSheet.create({
     fontSize: 17
   }
 });
+
+NewPostCard.propTypes = {
+  user: PropTypes.object,
+  activeBevy: PropTypes.object,
+  mainNavigator: PropTypes.object
+},
 
 module.exports = NewPostCard;
