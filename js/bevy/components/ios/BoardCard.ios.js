@@ -116,30 +116,6 @@ var BoardCard = React.createClass({
               >
                 { board.name }
               </Text>
-              <View style={ styles.boardDetails }>
-                <View style={ styles.detailItem }>
-                  <Icon
-                    name={ typeIcon }
-                    size={ 12 }
-                    color='#fff'
-                    style={ styles.icon }
-                  />
-                  <Text style={ styles.itemText }>
-                    { board.type.charAt(0).toUpperCase() + board.type.slice(1) }
-                  </Text>
-                </View>
-                <View style={ styles.detailItem }>
-                  <Icon
-                    name='person'
-                    size={ 12 }
-                    color='#fff'
-                    style={ styles.icon }
-                  />
-                  <Text style={ styles.itemText }>
-                    { board.admins.length } Admins
-                  </Text>
-                </View>
-              </View>
             </View>
             <View style={ styles.boardRight }>
               { this._renderSettingsOrInfo() }
@@ -154,11 +130,11 @@ var BoardCard = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    height: 60
+    height: 40
   },
   boardImage: {
     flex: 1,
-    height: 60,
+    height: 40,
     overflow: 'hidden'
   },
   boardTitle: {
@@ -170,7 +146,7 @@ var styles = StyleSheet.create({
   imageWrapper: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,.6)',
-    height: 60,
+    height: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -182,7 +158,9 @@ var styles = StyleSheet.create({
   },
   boardRight: {
     width: 36,
-    alignItems: 'flex-end'
+    height: 40,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   boardDetails: {
     flexDirection: 'row'
@@ -197,7 +175,6 @@ var styles = StyleSheet.create({
     fontSize: 15
   },
   settingButton: {
-    marginTop: 10
   },
   icon: {
     marginRight: 6
