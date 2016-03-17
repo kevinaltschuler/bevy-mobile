@@ -88,7 +88,8 @@ var BevyNavbar = React.createClass({
       bevyImageURL = resizeImage(this.props.activeBoard.image, constants.width, 100).url;
     }
 
-    if(bevyImageURL == constants.siteurl + '/img/default_group_img.png') {
+    if(bevyImageURL == constants.siteurl + '/img/default_group_img.png'
+    || bevyImageURL == constants.siteurl + '/img/default_board_img.png') {
       bevyImageURL = null;
     }
 

@@ -21,7 +21,6 @@ var SideMenu = require('react-native-side-menu');
 var LeftSideMenu = require('./LeftSideMenu.ios.js');
 var RightSideMenu = require('./RightSideMenu.ios.js');
 
-
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
@@ -141,6 +140,8 @@ var BevyView = React.createClass({
         let BevyInfoView = require('./BevyInfoView.ios.js');
         view = (
           <BevyInfoView
+            rightMenuActions={ rightMenuActions }
+            leftMenuActions={ leftMenuActions }
             { ...this.props }
           />
         );
@@ -150,6 +151,8 @@ var BevyView = React.createClass({
         view = (
           <BevySettingsView
             setting={ this.props.bevyRoute.setting }
+            rightMenuActions={ rightMenuActions }
+            leftMenuActions={ leftMenuActions }
             { ...this.props }
           />
         );
@@ -158,9 +161,9 @@ var BevyView = React.createClass({
         let $BevyView = require('./BevyView.ios.js');
         view = (
           <$BevyView
-            { ...this.props }
             rightMenuActions={ rightMenuActions }
             leftMenuActions={ leftMenuActions }
+            { ...this.props }
           />
         );
         break;
@@ -168,8 +171,9 @@ var BevyView = React.createClass({
         let BoardInfoView = require('./BoardInfoView.ios.js');
         view = (
           <BoardInfoView
+            rightMenuActions={ rightMenuActions }
+            leftMenuActions={ leftMenuActions }
             { ...this.props }
-            sideMenuActions={ sideMenuActions }
           />
         );
         break;
@@ -177,9 +181,10 @@ var BevyView = React.createClass({
         let BoardSettingsView = require('./BoardInfoView.ios.js');
         view = (
           <BoardSettingsView
-            { ...this.props }
+            rightMenuActions={ rightMenuActions }
+            leftMenuActions={ leftMenuActions }
             editing={ true }
-            sideMenuActions={ sideMenuActions }
+            { ...this.props }
           />
         );
         break;
@@ -226,6 +231,7 @@ var BevyView = React.createClass({
 
 var BevyNavigator = React.createClass({
   propTypes: {
+    searchNavigator: React.PropTypes.object,
     myBevies: React.PropTypes.array,
     activeBevy: React.PropTypes.object,
     allPosts: React.PropTypes.array
