@@ -48,25 +48,9 @@ var BevyNavbar = React.createClass({
       center: 'Default',
       left: <View />,
       right: <View />,
-      bottomHeight: 78,
+      bottomHeight: 48,
       fontColor: '#FFF'
     };
-  },
-
-  getInitialState() {
-    return {
-      bottomHeight: (_.isEmpty(this.props.activeBoard))
-        ? this.props.bottomHeight
-        : this.props.bottomHeight - 30
-    }
-  },
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      bottomHeight: (_.isEmpty(nextProps.activeBoard))
-        ? nextProps.bottomHeight
-        : nextProps.bottomHeight - 30
-    });
   },
 
   _renderLeft() {
@@ -92,76 +76,32 @@ var BevyNavbar = React.createClass({
     return this.props.right;
   },
 
-  _renderInfo() {
-    if(!_.isEmpty(this.props.activeBoard)) return <View />;
-
-    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
-      ? 'lock'
-      : 'public';
-
-    return (
-      <View style={ styles.bevyBottom }>
-        <View style={ styles.detailItem }>
-          <Icon
-            name={ publicPrivateIcon }
-            size={ 18 }
-            color='#fff'
-          />
-          <Text style={ styles.itemText }>
-            { this.props.activeBevy.settings.privacy }
-          </Text>
-        </View>
-        <View style={ styles.detailItem }>
-          <Icon
-            name='group'
-            size={ 18 }
-            color='#fff'
-          />
-          <Text style={ styles.itemText }>
-            { this.props.activeBevy.subCount + ' '
-              + ((this.props.activeBevy.subCount == 1)
-              ? 'Subscriber' : 'Subscribers') }
-          </Text>
-        </View>
-        <View style={ styles.detailItem }>
-          <Icon
-            name='person'
-            size={ 18 }
-            color='#fff'
-          />
-          <Text style={ styles.itemText }>
-            { this.props.activeBevy.admins.length + ' '
-              + ((this.props.activeBevy.admins.length == 1)
-              ? 'Admin' : 'Admins') }
-          </Text>
-        </View>
-      </View>
-    );
-  },
-
   render() {
     if(_.isEmpty(this.props.activeBevy)) {
       return <View/>;
     }
 
     var bevyImageURL = (_.isEmpty(this.props.activeBevy.image))
-      ? null
-      : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
+      ? null : resizeImage(this.props.activeBevy.image, constants.width, 100).url;
+
+    if(this.props.activeBoard._id != undefined) {
+      bevyImageURL = resizeImage(this.props.activeBoard.image, constants.width, 100).url;
+    }
 
     if(bevyImageURL == constants.siteurl + '/img/default_group_img.png') {
       bevyImageURL = null;
     }
 
     return (
-      <View style={this.props.styleParent}>
+      <View style={ this.props.styleParent }>
         <Image
           source={{ uri: bevyImageURL }}
           style={[ styles.imageBottom, {
-            height: this.state.bottomHeight + constants.getStatusBarHeight()
+            height: this.props.bottomHeight + constants.getStatusBarHeight()
           }]}
         >
           <View style={[ styles.imageWrapper, {
-            height: this.state.bottomHeight + constants.getStatusBarHeight()
+            height: this.props.bottomHeight + constants.getStatusBarHeight()
           }]}>
             <View style={[ styles.bevyTop, {
               paddingTop: constants.getStatusBarHeight()
@@ -176,7 +116,6 @@ var BevyNavbar = React.createClass({
                 { this._renderRight() }
               </View>
             </View>
-            { this._renderInfo() }
           </View>
         </Image>
       </View>

@@ -102,7 +102,7 @@ var styles = StyleSheet.create({
   boardImage: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 6,
     marginRight: 15
   },
   boardText: {
