@@ -43,14 +43,27 @@ var LoginNavigator = React.createClass({
           name: routes.LOGIN.SLUG
         }]}
         renderScene={(route, navigator) => {
+          console.log(route.name);
           switch(route.name) {
             case routes.LOGIN.LOADINGLOGIN: 
               let LoadingLogin = require('./LoadingLogin.ios.js');
-              <LoadingLogin
-                { ...this.props }
-                loginNavigator={ navigator }
-                loginRoute={ route }
-              />
+              return (
+                <LoadingLogin
+                  { ...this.props }
+                  loginNavigator={ navigator }
+                  loginRoute={ route }
+                />
+              );
+              break;
+            case routes.LOGIN.INTRO:
+              let Intro = require('./Intro.ios.js');
+              return (
+                <Intro
+                  { ...this.props }
+                  loginNavigator={ navigator }
+                  loginRoute={ route }
+                />
+              );
               break;
             case routes.LOGIN.SLUG:
               let EnterSlug = require('./EnterSlug.ios.js');

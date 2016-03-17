@@ -65,7 +65,7 @@ var RightSideMenu = React.createClass({
       <View style={{flexDirection: 'column'}}>
         <TouchableHighlight
           underlayColor={ 'rgba(255,255,255,.5)'}
-          onPress={() => {}}
+          onPress={() => this.props.mainNavigator.push({name: routes.MAIN.SETTINGSVIEW})}
         >
           <View style={ styles.actionItem }>
             <Icon

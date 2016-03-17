@@ -140,6 +140,15 @@ var MainView = React.createClass({
         )
         break;
 
+      case routes.MAIN.SETTINGSVIEW:
+        let SettingsView = require('./../../../settings/components/ios/SettingsView');
+          return (
+            <SettingsView
+              {...this.props}
+            />
+          )
+        break;
+
       case routes.MAIN.MAP:
         let LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
         return (

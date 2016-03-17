@@ -1,11 +1,8 @@
 /**
- * LoginView.ios.js
+ * UserPass.ios.js
  *
- * Entry point for the app if a user isn't logged in or found
- * Once logged in, MainView will catch the login success event
- * and navigate to the MainTabBar
+ * enter ur username and password here
  *
- * @author albert
  * @author kevin
  * @flow
  */
@@ -28,6 +25,7 @@ var {
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var USER = constants.USER;
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var routes = require('./../../../routes');
 var AppActions = require('./../../../app/AppActions');
 var UserActions = require('./../../../user/UserActions');
@@ -58,6 +56,8 @@ var LoginView = React.createClass({
 
     this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+
+    this.EmailInput.focus();
   },
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_ERROR, this.onError);
@@ -180,13 +180,35 @@ var LoginView = React.createClass({
         keyboardShouldPersistTaps={ true }
         //scrollEnabled={ false }
       >
-        <Image
-          style={ styles.logo }
-          source={ require('./../../../images/logo_100_reversed.png') }
-        />
+        <View style={styles.navbar}>
+          <TouchableOpacity
+            activeOpacity={.4}
+            onPress={() => {
+              this.props.loginNavigator.pop();
+            }}
+          >
+            <Icon
+              name='arrow-back'
+              size={ 30 }
+              color='#FFF'
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={.4}
+            onPress={() => {
+              this.loginEmail();
+            }}
+          >
+            <Text style={[styles.nextButton, {
+              opacity: (this.state.email.length > 0 && this.state.pass.length > 0) ? 1 : .75
+            }]}>
+              Next
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.title}>
           <Text style={styles.titleText}>
-            {this.props.slug}
+            {this.props.slug + ".joinbevy.com"}
           </Text>
         </View>
         { this._renderError() }
@@ -212,21 +234,11 @@ var LoginView = React.createClass({
         />
         <TouchableOpacity
           activeOpacity={ 0.5 }
-          style={ styles.loginButton }
-          onPress={ this.loginEmail }>
-          <Text style={ styles.loginButtonText }>
-            Login
-          </Text>
+          style={ styles.textButton }
+          onPress={ this.goToForgot }
+        >
+          <Text style={ styles.textButtonText }>Forgot Password?</Text>
         </TouchableOpacity>
-        <View style={ styles.textButtons }>
-          <TouchableOpacity
-            activeOpacity={ 0.5 }
-            style={ styles.textButton }
-            onPress={ this.goToForgot }
-          >
-            <Text style={ styles.textButtonText }>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
     );
   }
@@ -241,10 +253,9 @@ var styles = StyleSheet.create({
   containerInner: {
     flexDirection: 'column',
     paddingBottom: 5,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 4,
-    paddingHorizontal: constants.width / 12
+    paddingHorizontal: 20
   },
   logo: {
     width: 60,
@@ -278,14 +289,12 @@ var styles = StyleSheet.create({
     fontSize: 17
   },
   loginInput: {
-    height: 50,
-    paddingLeft: 16,
-    borderColor: '#fff',
-    borderWidth: StyleSheet.hairlineWidth,
-    marginBottom: 10,
-    borderRadius: 25,
-    width: constants.width / 1.2,
-    color: '#fff'
+    height: 30,
+    color: '#fff',
+    flex: 1,
+    fontSize: 25,
+    width: 500,
+    marginVertical: 10
   },
   loginButton: {
     padding: 10,
@@ -333,12 +342,27 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20
+    marginTop: 10
   },
   textButtonText: {
     textAlign: 'center',
     fontSize: 14,
     color: '#eee'
+  },
+  navbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: constants.width / 3,
+    paddingTop: 30,
+    paddingRight: 40,
+    flex: 1,
+    width: constants.width
+  },
+  nextButton: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   }
 });
 
