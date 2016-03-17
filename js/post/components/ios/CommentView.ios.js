@@ -21,7 +21,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var Post = require('./Post.ios.js');
-var Event = require('./Event.ios.js');
 var CommentList = require('./CommentList.ios.js');
 
 var _ = require('underscore');
@@ -191,19 +190,6 @@ var CommentView = React.createClass({
   },
 
   _renderPost() {
-    if(this.state.post.type == 'event') {
-      return (
-        <View style={{ marginTop: 0 }}>
-          <Event
-            inCommentView={ true }
-            post={ this.state.post }
-            mainNavigator={ this.props.mainNavigator }
-            mainRoute={ this.props.mainRoute }
-            user={ this.props.user }
-          />
-        </View>
-      )
-    }
     return (
       <View style={{ marginTop: 5 }}>
         <Post

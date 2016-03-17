@@ -27,7 +27,6 @@ var {
 } = React;
 var Spinner = require('react-native-spinkit');
 var Post = require('./Post.ios.js');
-var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
 

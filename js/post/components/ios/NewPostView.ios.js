@@ -47,10 +47,6 @@ var NewPostView = React.createClass({
       : this.props.activeBoard;
     return {
       postingToBoard: board,
-      datePicker: false,
-      date: new Date(),
-      time: new Date(),
-      location: '',
     };
   },
 
@@ -60,39 +56,6 @@ var NewPostView = React.createClass({
 
   renderScene(route, navigator) {
     switch(route.name) {
-      case routes.NEWPOST.DATEPICKER:
-        let DatePickerView = require('./DatePickerView.ios.js');
-        return (
-          <DatePickerView
-            newPostRoute={ route }
-            newPostNavigator={ navigator }
-            date={ this.state.date }
-            time={ this.state.time }
-            onSetDate={(date) => {
-              this.setState({ date: date });
-            }}
-            onSetTime={(time) => {
-              this.setState({ time: time });
-            }}
-            { ...this.props }
-          />
-        );
-        break;
-      case routes.NEWPOST.CREATEEVENT:
-        let CreateEventView = require('./CreateEventView.ios.js');
-        return (
-          <CreateEventView
-            newPostRoute={ route }
-            newPostNavigator={ navigator }
-            selected={ this.state.selected }
-            tag={ this.state.tag }
-            date={ this.state.date }
-            time={ this.state.time }
-            { ...this.props }
-          />
-        );
-        break;
-
       case routes.NEWPOST.BOARDPICKER:
         let BoardPickerView = require('./BoardPickerView.ios.js');
         return (

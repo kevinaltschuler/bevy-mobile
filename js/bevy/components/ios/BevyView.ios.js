@@ -92,8 +92,8 @@ var BevyView = React.createClass({
     this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
-    if(_.isEmpty(this.props.activeBevy))
-      this.props.mainNavigator.push({name: routes.MAIN.LOGIN});
+    //if(_.isEmpty(this.props.activeBevy))
+    //  this.props.mainNavigator.push({name: routes.MAIN.LOGIN});
   },
   componentWillUnmount() {
     this.keyboardWillShowSub.remove();

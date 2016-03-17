@@ -128,12 +128,12 @@ var PostFooter = React.createClass({
   goToPostBoard() {
     //console.log(this.props.mainNavigator.getCurrentRoutes());
 
-    if(this.props.mainRoute.name == routes.MAIN.BEVYNAV) {
+    if(this.props.mainRoute.name == routes.MAIN.BEVY) {
       // already in bevy view, do nothing
     } else {
       // the route isn't in the history, so push to it
       var route = {
-        name: routes.MAIN.BEVYNAV
+        name: routes.MAIN.BEVY
       };
       this.props.mainNavigator.push(route);
     }
