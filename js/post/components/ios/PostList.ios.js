@@ -155,7 +155,7 @@ var PostList = React.createClass({
       // dont try to scroll if its not mounted anymore
       if(this.ListView == undefined) return;
 
-      this.ListView.scrollTo(0, 0);
+      this.ListView.scrollTo({ x: 0, y: 0 });
     }, 250);
   },
 
