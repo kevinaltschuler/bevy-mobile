@@ -27,7 +27,6 @@ var {
 } = React;
 var Spinner = require('react-native-spinkit');
 var Post = require('./Post.ios.js');
-var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
 
@@ -243,30 +242,6 @@ var PostList = React.createClass({
     } else return <View />
   },
 
-  _renderPrivate() {
-    return (
-      <View style={ styles.privateContainer }>
-        <Image
-          style={ styles.privateImage }
-          source={ require('./../../../images/private.png') }
-        />
-        <Text style={ styles.privateText }>
-          This Bevy is Private
-        </Text>
-        <TouchableOpacity
-          activeOpacity={ 0.5 }
-          onPress={ this.requestJoin }
-        >
-          <View style={ styles.requestJoinButton }>
-            <Text style={ styles.requestJoinButtonText }>
-              Request to Join this Bevy
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  },
-
   _renderPosts() {
     // Render this if there are no boards to post to
     // will probably only render when the user just created a new bevy
@@ -356,40 +331,13 @@ var styles = StyleSheet.create({
     backgroundColor: '#eee',
     marginBottom: -10
   },
-  privateContainer: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#eee'
-  },
-  privateImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginTop: 30,
-    marginBottom: 15
-  },
-  privateText: {
-    textAlign: 'center',
-    color: '#666',
-    fontSize: 22,
-    marginBottom: 15
-  },
-  requestJoinButton: {
-    backgroundColor: '#2CB673',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 5
-  },
-  requestJoinButtonText: {
-    color: '#FFF',
-    fontSize: 17
-  },
 
   noPostsContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    paddingTop: 15
   },
   noPostsText: {
     color: '#AAA',

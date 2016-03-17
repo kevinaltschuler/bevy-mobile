@@ -38,7 +38,6 @@ var PostStore = _.extend({}, Backbone.Events);
 
 // now add some custom functions
 _.extend(PostStore, {
-
   posts: new Posts,
   searchPosts: new Posts,
   tempPostId: '',

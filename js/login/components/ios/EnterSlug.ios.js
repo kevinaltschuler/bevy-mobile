@@ -53,16 +53,16 @@ var EnterSlugView = React.createClass({
   componentDidMount() {
     UserStore.on(USER.LOGIN_ERROR, this.onError);
 
-    //this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
-    //this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+    this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
+    this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
     this.SlugInput.focus();
   },
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_ERROR, this.onError);
 
-    //this.keyboardWillShowSub.remove();
-    //this.keyboardWillHideSub.remove();
+    this.keyboardWillShowSub.remove();
+    this.keyboardWillHideSub.remove();
   },
 
   onError(error) {

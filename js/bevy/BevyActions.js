@@ -59,33 +59,6 @@ var BevyActions = {
     });
   },
 
-  /**
-   * switch bevies and update posts accordingly
-   * @param  {int} id  id of bevy being switched to
-   */
-  switchBevy(bevy_id) {
-    Dispatcher.dispatch({
-      actionType: BEVY.SWITCH,
-      bevy_id: (bevy_id == undefined) ? null : bevy_id
-    });
-  },
-
-  requestJoin(bevy, user) {
-    Dispatcher.dispatch({
-      actionType: BEVY.REQUEST_JOIN,
-      bevy: bevy,
-      user: user
-    });
-  },
-
-  addUser(bevy_id, user_id) {
-    Dispatcher.dispatch({
-      actionType: BEVY.ADD_USER,
-      bevy_id: bevy_id,
-      user_id: user_id
-    });
-  },
-
   addAdmin(bevy_id, admin) {
     Dispatcher.dispatch({
       actionType: BEVY.ADD_ADMIN,
@@ -99,20 +72,6 @@ var BevyActions = {
       actionType: BEVY.REMOVE_ADMIN,
       bevy_id: bevy_id,
       admin_id: admin_id
-    });
-  },
-
-  join(bevy_id) {
-    Dispatcher.dispatch({
-      actionType: BEVY.JOIN,
-      bevy_id: bevy_id
-    });
-  },
-
-  leave(bevy_id) {
-    Dispatcher.dispatch({
-      actionType: BEVY.LEAVE,
-      bevy_id: bevy_id
     });
   },
 
@@ -137,28 +96,7 @@ var BevyActions = {
       parent_id: parent_id,
       type: type
     });
-  },
-
-  inviteUser(user) {
-    Dispatcher.dispatch({
-      actionType: INVITE.INVITE_USER,
-      user: (user == undefined) ? null : user
-    });
-  },
-
-  destroyInvite(invite_id) {
-    Dispatcher.dispatch({
-      actionType: INVITE.DESTROY,
-      invite_id: (invite_id == undefined) ? null : invite_id
-    });
-  },
-
-  acceptRequest(invite_id) {
-    Dispatcher.dispatch({
-      actionType: INVITE.ACCEPT_REQUEST,
-      invite_id: (invite_id == undefined) ? null : invite_id
-    });
-  },
+  }
 };
 
 module.exports = BevyActions;

@@ -86,34 +86,6 @@ var BevyInfoView = React.createClass({
     this.props.bevyNavigator.pop();
   },
 
-  changeSubscribed(subscribed) {
-    this.setState({ subscribed: subscribed });
-    if(subscribed) {
-      BevyActions.join(this.props.activeBevy._id);
-    } else {
-      BevyActions.leave(this.props.activeBevy._id);
-    }
-  },
-
-  deleteBevy() {
-    AlertIOS.alert(
-      'Are you sure you want to delete this bevy?',
-      "Deleting a bevy will also delete all of it's associated boards and posts",
-      [{
-        text: 'Confirm',
-        onPress: this.deleteBevyForSure
-      }, {
-        text: 'Cancel',
-        style: 'cancel'
-      }]
-    );
-  },
-
-  deleteBevyForSure() {
-    this.props.mainNavigator.popToTop();
-    BevyActions.destroy(this.props.activeBevy._id);
-  },
-
   changeName() {
     AlertIOS.prompt(
       'Change Bevy Name',

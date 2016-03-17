@@ -117,28 +117,17 @@ exports.BEVY = {
   CREATE: 'bevy_create',
   DESTROY: 'bevy_destroy',
   UPDATE: 'bevy_update',
-  LEAVE: 'bevy_leave',
-  SWITCH: 'bevy_switch',
-  INVITE: 'bevy_invite',
-  ADD_USER: 'bevy_add_user',
-  SEARCH: 'bevy_search',
   REQUEST_JOIN: 'bevy_request_join',
   ADD_ADMIN: 'bevy_add_admin',
   REMOVE_ADMIN: 'bevy_remove_admin',
   JOIN: 'bevy_join',
   FETCH: 'bevy_fetch',
-  FETCH_PUBLIC: 'bevy_fetch_public',
 
   // events
   LOADING: 'bevy_loading',
   LOADED: 'bevy_loaded',
-  SEARCHING: 'bevy_searching',
-  SEARCH_COMPLETE: 'bevy_search_complete',
-  SEARCH_ERROR: 'bevy_search_error',
   CHANGE_ALL: 'bevy_change_all',
-  CHANGE_ONE: 'bevy_change_one',
-  SWITCHED: 'bevy_switched',
-  CREATED: 'bevy_created'
+  CHANGE_ONE: 'bevy_change_one'
 };
 
 exports.BOARD = {
@@ -211,14 +200,6 @@ exports.NOTIFICATION = {
   CHANGE_ALL: 'notification_change_all',
   FETCHING: 'notification_fetching',
   FETCHED: 'notification_fetched'
-};
-
-exports.INVITE = {
-  // actions
-  INVITE_USER: 'invite_invite_user',
-  DESTROY: 'invite_destroy',
-  ACCEPT_REQUEST: 'invite_accept_request',
-  REJECT_INVITE: 'invite_reject_invite'
 };
 
 exports.setSearchNavigator = function(navigator) {
