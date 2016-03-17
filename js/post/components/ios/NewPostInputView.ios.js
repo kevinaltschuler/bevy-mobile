@@ -12,8 +12,7 @@
 
 'use strict';
 
-var React = require('react-native');
-var {
+import React, {
   View,
   ScrollView,
   Text,
@@ -24,8 +23,10 @@ var {
   TouchableOpacity,
   DeviceEventEmitter,
   NativeModules,
-  AlertIOS
-} = React;
+  AlertIOS,
+  Component,
+  PropTypes
+} from 'react-native';
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
 var UIImagePickerManager = NativeModules.UIImagePickerManager;
@@ -61,12 +62,10 @@ var NewPostInputView = React.createClass({
     return {
       keyboardSpace: 0,
       title: (this.props.editing)
-        ? this.props.post.title
-        : '',
+        ? this.props.post.title : '',
       placeholderText: constants.hintTexts[Math.floor(Math.random() * constants.hintTexts.length)],
       images: (this.props.editing)
-        ? this.props.post.images
-        : [],
+        ? this.props.post.images : [],
     };
   },
 
@@ -74,7 +73,6 @@ var NewPostInputView = React.createClass({
     this.titleValue = '';
 
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
-    FileStore.on(FILE.UPLOAD_ERROR, this.onUploadError);
 
     PostStore.on(POST.POST_CREATED, this.onPostCreated);
 
@@ -83,7 +81,6 @@ var NewPostInputView = React.createClass({
   },
   componentWillUnmount() {
     FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
-    FileStore.off(FILE.UPLOAD_ERROR, this.onUploadError);
 
     PostStore.off(POST.POST_CREATED, this.onPostCreated);
 
@@ -104,9 +101,6 @@ var NewPostInputView = React.createClass({
     images.push(image);
     this.setState({ images: images });
   },
-  onUploadError(error) {
-    console.log(error);
-  },
 
   uploadImage() {
     UIImagePickerManager.showImagePicker({
@@ -117,12 +111,7 @@ var NewPostInputView = React.createClass({
       returnBase64Image: false,
       returnIsVertical: false
     }, (type, response) => {
-      if (type !== 'cancel') {
-        //console.log(response);
-        FileActions.upload(response.uri);
-      } else {
-        //console.log('Cancel');
-      }
+      if(type !== 'cancel') FileActions.upload(response.uri);
     });
   },
 
@@ -130,12 +119,8 @@ var NewPostInputView = React.createClass({
     UIImagePickerManager.launchImageLibrary({
       returnBase64Image: false,
       returnIsVertical: true
-    }, (response) => {
-      if (!response.didCancel) {
-        FileActions.upload(response.uri);
-      } else {
-        console.log('Cancel');
-      }
+    }, response => {
+      if(!response.didCancel) FileActions.upload(response.uri);
     });
   },
 
@@ -143,12 +128,8 @@ var NewPostInputView = React.createClass({
     UIImagePickerManager.launchCamera({
       returnBase64Image: false,
       returnIsVertical: true
-    }, (response) => {
-      if (!response.didCancel) {
-        FileActions.upload(response.uri);
-      } else {
-        console.log('Cancel');
-      }
+    }, response => {
+      if(!response.didCancel) FileActions.upload(response.uri);
     });
   },
 
@@ -356,20 +337,6 @@ var NewPostInputView = React.createClass({
               color='rgba(0,0,0,.3)'
             />
           </TouchableHighlight>
-          {/*<TouchableHighlight
-            underlayColor='rgba(0,0,0,0)'
-            onPress={() => {
-              this.props.newPostNavigator.push(routes.NEWPOST.CREATEEVENT);
-            }}
-            style={ styles.contentBarItem }
-          >
-            <Icon
-              name='calendar'
-              size={30}
-              color='rgba(0,0,0,.3)'
-              style={ styles.contentBarIcon }
-            />
-          </TouchableHighlight>*/}
         </View>
       );
   },
@@ -426,7 +393,7 @@ var NewPostInputView = React.createClass({
           }}
         >
           <View style={ styles.boardItem }>
-            <Text style={ styles.sectionTitle }>Board</Text>
+            <Text style={ styles.sectionTitle }>Posting To...</Text>
             { this._renderBoardItem() }
           </View>
           <Text style={ styles.sectionTitle }>Post</Text>
@@ -512,14 +479,14 @@ var styles = StyleSheet.create({
     marginLeft: 15,
   },
   boardImage: {
-    borderRadius: 30,
-    width: 60,
-    height: 60
+    borderRadius: 6,
+    width: 48,
+    height: 48
   },
   boardItemDetails: {
     backgroundColor: '#fff',
     flexDirection: 'row',
-    height: 80,
+    height: 60,
     alignItems: 'center',
     paddingHorizontal: 10
   },
@@ -531,13 +498,12 @@ var styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 0,
     marginTop: 0,
-    backgroundColor: '#fff',
-    minHeight: 300
+    backgroundColor: '#fff'
   },
   inputProfileImage: {
     width: 60,
     height: 60,
-    borderRadius: 30,
+    borderRadius: 6,
     marginRight: 15
   },
   textInput: {
@@ -550,8 +516,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     paddingHorizontal: 10,
     marginBottom: 6,
-    flex: 1,
-    minHeight: 100,
+    flex: 1
   },
   imageScrollBar: {
     flexDirection: 'row',

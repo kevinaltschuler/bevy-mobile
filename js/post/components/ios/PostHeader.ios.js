@@ -167,7 +167,7 @@ var styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: '#eee',
-    borderRadius: 20,
+    borderRadius: 6,
     marginLeft: 0
   },
   detailsRow: {

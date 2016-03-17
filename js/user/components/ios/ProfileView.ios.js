@@ -33,8 +33,6 @@ var resizeImage = require('./../../../shared/helpers/resizeImage');
 var timeAgo = require('./../../../shared/helpers/timeAgo');
 var PostActions = require('./../../../post/PostActions');
 var PostStore = require('./../../../post/PostStore');
-var ChatStore = require('./../../../chat/ChatStore');
-var ChatActions = require('./../../../chat/ChatActions');
 var UserStore = require('./../../../user/UserStore');
 var UserActions = require('./../../../user/UserActions');
 var POST = constants.POST;
@@ -358,8 +356,7 @@ var styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#eee',
-    minHeight: constants.height
+    backgroundColor: '#eee'
   },
 
   profileCard: {

@@ -87,7 +87,7 @@ var RegisterView = React.createClass({
 
   scrollToTop() {
     if(this.ScrollView == undefined) return;
-    this.ScrollView.scrollTo(0, 0);
+    this.ScrollView.scrollTo({ x: 0, y: 0 });
   },
 
   scrollToBottom() {
@@ -108,7 +108,7 @@ var RegisterView = React.createClass({
             return;
           }
 
-          this.ScrollView.scrollTo(scrollTo, 0);
+          this.ScrollView.scrollTo({ x: 0, y: scrollTo });
         });
       });
     });

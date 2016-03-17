@@ -27,7 +27,6 @@ var _ = require('underscore');
 
 var UserStore = require('./js/user/UserStore');
 var PostStore = require('./js/post/PostStore');
-var ChatStore = require('./js/chat/ChatStore');
 var FileStore = require('./js/file/FileStore');
 var NotificationStore = require('./js/notification/NotificationStore');
 var BevyStore = require('./js/bevy/BevyStore');
@@ -85,7 +84,6 @@ var constants = require('./js/constants');
 var routes = require('./js/routes');
 var BEVY = constants.BEVY;
 var POST = constants.POST;
-var CHAT = constants.CHAT;
 var NOTIFICATION = constants.NOTIFICATION;
 var USER = constants.USER;
 var BOARD = constants.BOARD;
@@ -94,7 +92,6 @@ var change_all_events = [
   POST.CHANGE_ALL,
   BEVY.CHANGE_ALL,
   NOTIFICATION.CHANGE_ALL,
-  CHAT.CHANGE_ALL,
   BOARD.CHANGE_ALL,
   USER.CHANGE_ALL
 ].join(' ');
@@ -166,7 +163,6 @@ var App = React.createClass({
     },
       this.getBevyState(),
       this.getPostState(),
-      this.getChatState(),
       this.getNotificationState(),
       this.getUserState()
     );
@@ -185,12 +181,6 @@ var App = React.createClass({
   getPostState() {
     return {
       allPosts: PostStore.getAll()
-    };
-  },
-
-  getChatState() {
-    return {
-      activeThread: ChatStore.getActive()
     };
   },
 
@@ -245,22 +235,14 @@ var App = React.createClass({
     BevyStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(BOARD.CHANGE_ALL, this._onBevyChange);
     BevyStore.on(POST.CHANGE_ALL, this._onPostChange);
-    BevyStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     BevyStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
 
     PostStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     PostStore.on(POST.CHANGE_ALL, this._onPostChange);
-    PostStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     PostStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
-
-    ChatStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
-    ChatStore.on(POST.CHANGE_ALL, this._onPostChange);
-    ChatStore.on(CHAT.CHANGE_ALL, this._onChatChange);
-    ChatStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
 
     NotificationStore.on(BEVY.CHANGE_ALL, this._onBevyChange);
     NotificationStore.on(POST.CHANGE_ALL, this._onPostChange);
-    NotificationStore.on(CHAT.CHANGE_ALL, this._onChatChange);
     NotificationStore.on(NOTIFICATION.CHANGE_ALL, this._onNotificationChange);
 
     UserStore.on(USER.LOADED, this._onUserChange);
@@ -271,9 +253,6 @@ var App = React.createClass({
   },
   _onPostChange() {
     this.setState(_.extend(this.state, this.getPostState()));
-  },
-  _onChatChange() {
-    this.setState(_.extend(this.state, this.getChatState()));
   },
   _onNotificationChange() {
     this.setState(_.extend(this.state, this.getNotificationState()));

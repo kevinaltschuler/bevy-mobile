@@ -19,8 +19,6 @@ var {
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var PostList = require('./../../../post/components/ios/PostList.ios.js');
 var BevyNavbar = require('./BevyNavbar.ios.js');
-var BoardCard = require('./BoardCard.ios.js');
-var BevyActionButtons = require('./BevyActionButtons');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -164,22 +162,12 @@ var BevyView = React.createClass({
     );
   },
 
-  _renderBevyActions() {
-    if(!_.isEmpty(this.props.activeBoard)) return <View />;
-    return (
-      <BevyActionButtons
-        bevy={ this.props.activeBevy }
-        activeBoard={ this.props.activeBoard }
-        user={ this.props.user }
-        mainNavigator={ this.props.mainNavigator }
-        bevyNavigator={ this.props.bevyNavigator }
-        onSearchStart={ this.onSearchStart }
-        onSearchStop={ this.onSearchStop }
-      />
-    );
-  },
-
   render() {
+    var center = this.props.activeBevy.name;
+    if(this.props.activeBoard._id != undefined) {
+      center = this.props.activeBoard.name;
+    }
+
     return (
       <View style={[ styles.container, {
         marginBottom: this.state.keyboardSpace
@@ -188,11 +176,10 @@ var BevyView = React.createClass({
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
           left={ this._renderLeftButton() }
-          center={ this.props.activeBevy.name }
+          center={ center }
           right={ this._renderMenuButton() }
           user={ this.props.user }
         />
-        {/* this._renderBevyActions() */}
         <PostList
           ref={ ref => { this.PostList = ref; }}
           allPosts={ this.props.posts }

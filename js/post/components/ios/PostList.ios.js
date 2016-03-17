@@ -30,7 +30,6 @@ var Post = require('./Post.ios.js');
 var Event = require('./Event.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
-var BoardCard = require('./../../../bevy/components/ios/BoardCard.ios.js');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -156,7 +155,7 @@ var PostList = React.createClass({
       // dont try to scroll if its not mounted anymore
       if(this.ListView == undefined) return;
 
-      this.ListView.scrollTo(0, 0);
+      this.ListView.scrollTo({ x: 0, y: 0 });
     }, 250);
   },
 
@@ -194,16 +193,6 @@ var PostList = React.createClass({
     BevyActions.requestJoin(this.props.activeBevy, this.props.user);
   },
 
-  _renderBoardCard() {
-    return (
-      <BoardCard
-        user={ this.props.user }
-        board={ this.props.activeBoard }
-        bevyNavigator={ this.props.bevyNavigator }
-      />
-    );
-  },
-
   _renderHeader() {
     var bevy = this.props.activeBevy;
     var user = this.props.user;
@@ -215,7 +204,6 @@ var PostList = React.createClass({
     }
     return (
       <View style={ styles.cardContainer }>
-        { this._renderBoardCard() }
         <NewPostCard
           user={ this.props.user }
           activeBevy={ this.props.activeBevy }

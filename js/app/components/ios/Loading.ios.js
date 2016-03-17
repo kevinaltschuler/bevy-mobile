@@ -31,7 +31,7 @@ var Loading = React.createClass({
 	    AsyncStorage.getItem('user')
 	    .then(user => {
 	      if(user) {
-			console.log('found user. loading user...');
+					console.log('found user. loading user...', user);
 	        UserActions.loadUser(JSON.parse(user));
 	      } else {
 	        console.log('going to login screen...');

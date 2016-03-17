@@ -67,7 +67,7 @@ var ImageOverlay = React.createClass({
    */
   onImageSelect(image, index) {
     // scroll to the image
-    this.ScrollView.scrollTo(0, index * constants.width, false);
+    this.ScrollView.scrollTo({ y: 0, x: index * constants.width, animated: false });
   },
 
   onScroll(ev) {
@@ -93,7 +93,7 @@ var ImageOverlay = React.createClass({
   },
 
   goToGallery() {
-    this.ScrollView.scrollTo(0, this.props.images.length * constants.width, false);
+    this.ScrollView.scrollTo({ y: 0, x: this.props.images.length * constants.width, animated: false });
   },
 
   showShareActionSheet() {

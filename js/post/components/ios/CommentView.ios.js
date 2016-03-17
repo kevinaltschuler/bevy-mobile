@@ -160,7 +160,7 @@ var CommentView = React.createClass({
             return;
           }
 
-          this.ScrollView.scrollTo(scrollTo, 0);
+          this.ScrollView.scrollTo({ x: 0, y: scrollTo });
         });
       });
     });
