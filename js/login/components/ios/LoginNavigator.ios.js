@@ -40,7 +40,7 @@ var LoginNavigator = React.createClass({
         navigator={ this.props.mainNavigator }
         configureScene={() => sceneConfig }
         initialRouteStack={[{
-          name: routes.LOGIN.SLUG
+          name: routes.LOGIN.INTRO
         }]}
         renderScene={(route, navigator) => {
           console.log(route.name);
