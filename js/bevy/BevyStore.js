@@ -79,6 +79,7 @@ _.extend(BevyStore, {
         this.active.fetch({
           success: function(collection, response, options) {
             this.active = new Bevy(response);
+            this.trigger(BEVY.SWITCHED);
             this.bevyBoards.url = constants.apiurl + '/bevies/' + response._id + '/boards';
             this.bevyBoards.fetch({
               success: function(collection, response, options) {

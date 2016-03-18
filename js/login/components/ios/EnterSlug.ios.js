@@ -1,11 +1,8 @@
 /**
- * LoginView.ios.js
+ * EnterSlug.ios.js
  *
- * Entry point for the app if a user isn't logged in or found
- * Once logged in, MainView will catch the login success event
- * and navigate to the MainTabBar
+ * Step 1 of login
  *
- * @author albert
  * @author kevin
  * @flow
  */
@@ -27,6 +24,7 @@ var {
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 var USER = constants.USER;
 var routes = require('./../../../routes');
 var AppActions = require('./../../../app/AppActions');
@@ -57,6 +55,8 @@ var EnterSlugView = React.createClass({
 
     this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardWillShow', this.onKeyboardShow);
     this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
+
+    this.SlugInput.focus();
   },
   componentWillUnmount() {
     UserStore.off(USER.LOGIN_ERROR, this.onError);
@@ -70,6 +70,12 @@ var EnterSlugView = React.createClass({
   },
 
   submit() {
+    // TODO: remove this, its just for testing
+    this.props.loginNavigator.push({
+      name: routes.LOGIN.LOGIN,
+      slug: this.state.slug
+    });
+    return;
     if(this.state.loading) return;
     if(_.isEmpty(this.state.slug)) {
       return this.setState({ error: 'Please enter your group\'s Bevy domain' });
@@ -179,38 +185,61 @@ var EnterSlugView = React.createClass({
         keyboardShouldPersistTaps={ true }
         //scrollEnabled={ false }
       >
-        <Image
-          style={ styles.logo }
-          source={ require('./../../../images/logo_100_reversed.png') }
-        />
-        <View style={styles.title}>
-          <Text style={styles.titleText}>
-            Bevy
+        <View style={styles.column}>
+          <View style={styles.navbar}>
+            <TouchableOpacity
+              activeOpacity={.4}
+              onPress={() => {
+                this.props.loginNavigator.pop();
+              }}
+            >
+              <Icon
+                name='close'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={.4}
+              onPress={() => {
+                this.submit();
+              }}
+            >
+              <Text style={[styles.nextButton, {opacity: (this.state.slug.length > 0) ? 1 : .75}]}>
+                Next
+              </Text>
+            </TouchableOpacity>
+          </View>
+          { this._renderError() }
+          <Text style={styles.detailText}>
+            Bevy Slug
           </Text>
+          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+            <TextInput
+              ref={ref => { this.SlugInput = ref; }}
+              autoCorrect={ false }
+              autoCapitalize='none'
+              placeholder='MyBevy'
+              style={[ styles.loginInput, {width: (this.state.slug.length == 0) ? 94 : this.state.slug.length*14.5}]}
+              onChangeText={ slug => this.setState({ slug: slug }) }
+              placeholderTextColor='rgba(255,255,255,.5)'
+            />
+            <Text style={{color: '#fff', fontSize: 25, opacity: .75}}>
+              .joinbevy.com
+            </Text>
+          </View>
+          <Text style={styles.detailText}>
+            This is the URL you use to sign in to your bevy
+          </Text>
+          {/*<TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={ styles.loginButton }
+            onPress={ this.submit }>
+            <Text style={ styles.loginButtonText }>
+              Login
+            </Text>
+          </TouchableOpacity>*/}
         </View>
-        { this._renderError() }
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <TextInput
-            ref={ref => { this.SlugInput = ref; }}
-            autoCorrect={ false }
-            autoCapitalize='none'
-            placeholder=''
-            style={ styles.loginInput }
-            onChangeText={ slug => this.setState({ slug: slug }) }
-            placeholderTextColor='rgba(255,255,255,.5)'
-          />
-          <Text style={{color: '#fff', fontSize: 20}}>
-            .joinbevy.com
-          </Text>
-        </View>
-        <TouchableOpacity
-          activeOpacity={ 0.5 }
-          style={ styles.loginButton }
-          onPress={ this.submit }>
-          <Text style={ styles.loginButtonText }>
-            Login
-          </Text>
-        </TouchableOpacity>
       </ScrollView>
     );
   }
@@ -227,8 +256,14 @@ var styles = StyleSheet.create({
     paddingBottom: 5,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 4,
     paddingHorizontal: constants.width / 12
+  },
+  column: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    flex: 1,
+    width: constants.width,
+    paddingLeft: 20
   },
   logo: {
     width: 60,
@@ -262,32 +297,31 @@ var styles = StyleSheet.create({
     fontSize: 17
   },
   loginInput: {
-    height: 50,
-    paddingLeft: 16,
-    borderColor: '#fff',
-    borderWidth: StyleSheet.hairlineWidth,
-    marginBottom: 10,
-    borderRadius: 25,
-    width: constants.width / 2,
-    color: '#fff'
+    height: 30,
+    color: '#fff',
+    flex: 1,
+    fontSize: 25,
   },
-  loginButton: {
-    padding: 10,
-    backgroundColor: '#fff',
-    height: 50,
-    flexDirection: 'column',
+  detailText: {
+    color: '#fff',
+    fontSize: 16,
+    marginVertical: 10
+  },
+  navbar: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 25,
-    marginBottom: 10,
-    marginHorizontal: 20,
-    width: constants.width / 1.2
+    justifyContent: 'space-between',
+    marginBottom: constants.width / 3,
+    paddingTop: 30,
+    paddingRight: 40,
+    flex: 1,
+    width: constants.width
   },
-  loginButtonText: {
-    fontSize: 17,
-    textAlign: 'center',
-    color: '#666'
-  },
+  nextButton: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  }
 });
 
 module.exports = EnterSlugView;

@@ -142,29 +142,59 @@ var BevyView = React.createClass({
   },
 
   _renderLeftButton() {
+    var activeName = this.props.activeBevy.name;
+    if(this.props.activeBoard._id != undefined) {
+      activeName = this.props.activeBoard.name;
+    }
     return (
-      <Animated.View
-        style={{
-          transform: [{
-            rotate: this.state.menuButtonRotation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [ '0deg', '90deg' ]
-            })
-          }]
-        }}
-      >
-        <TouchableOpacity
-          activeOpacity={ 0.5 }
-          style={ styles.backButton }
-          onPress={ this.toggleLeftMenu }
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <Animated.View
+          style={{
+            transform: [{
+              rotate: this.state.menuButtonRotation.interpolate({
+                inputRange: [0, 1],
+                outputRange: [ '0deg', '90deg' ]
+              })
+            }]
+          }}
         >
-          <Icon
-            name='menu'
-            size={ 30 }
-            color='#FFF'
-          />
+          <TouchableOpacity
+            activeOpacity={ 0.5 }
+            style={ styles.backButton }
+            onPress={ this.toggleLeftMenu }
+          >
+            <Icon
+              name='menu'
+              size={ 30 }
+              color='#FFF'
+            />
+          </TouchableOpacity>
+        </Animated.View>
+        <TouchableOpacity
+          activeOpacity={.5}
+          onPress={() => {
+            if(this.props.activeBoard._id != undefined) 
+              this.props.mainNavigator.push({name: routes.MAIN.BOARDSETTINGS})
+            else
+              this.props.mainNavigator.push({name: routes.MAIN.BEVYSETTINGS})
+          }}
+        >
+          <View
+            style={{flexDirection: 'row', alignItems: 'center'}}
+          >
+            <Text
+              style={{color: '#fff', fontWeight: 'bold', fontSize: 24, marginLeft: 10}}
+            >
+              {activeName}
+            </Text>
+            <Icon
+              name='arrow-drop-down'
+              size={ 30 }
+              color='#FFF'
+            />
+          </View>
         </TouchableOpacity>
-      </Animated.View>
+      </View>
     );
   },
 
@@ -196,10 +226,6 @@ var BevyView = React.createClass({
   },
 
   render() {
-    var center = this.props.activeBevy.name;
-    if(this.props.activeBoard._id != undefined) {
-      center = this.props.activeBoard.name;
-    }
 
     return (
       <View style={[ styles.container, {
@@ -209,7 +235,7 @@ var BevyView = React.createClass({
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
           left={ this._renderLeftButton() }
-          center={ center }
+          center={<View/>}
           right={ this._renderMenuButton() }
           user={ this.props.user }
         />

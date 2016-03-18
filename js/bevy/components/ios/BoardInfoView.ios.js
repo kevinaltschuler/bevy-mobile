@@ -83,7 +83,7 @@ var BoardSettingsView = React.createClass({
       this.NameInput.blur();
       this.DescInput.blur();
     }
-    this.props.bevyNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   showImagePicker() {
@@ -381,10 +381,10 @@ var BoardSettingsView = React.createClass({
           <Text style={ styles.sectionTitle }>
             Board Settings
           </Text>
-          <SettingsItem
+          {/*<SettingsItem
             title='Show Group Chat'
             checked={ this.props.activeBoard.settings.group_chat }
-          />
+          />*/}
           <Text style={ styles.sectionTitle }>
             Board Admins
           </Text>
