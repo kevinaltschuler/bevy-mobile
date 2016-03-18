@@ -77,8 +77,6 @@ var NewBevyView = React.createClass({
   },
 
   onCreated(bevy) {
-    // switch bevies
-    BevyActions.switchBevy(bevy._id);
     // navigate back
     this.props.mainNavigator.pop();
 

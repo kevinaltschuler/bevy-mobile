@@ -137,9 +137,7 @@ var PostFooter = React.createClass({
       };
       this.props.mainNavigator.push(route);
     }
-
-    // switch bevies
-    BevyActions.switchBevy(this.props.post.board.parent);
+    
     // switch boards
     BoardActions.switchBoard(this.props.post.board._id);
   },

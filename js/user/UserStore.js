@@ -528,8 +528,6 @@ _.extend(UserStore, {
         res.refreshToken,
         res.expires_in
       );
-      // trigger success
-      BevyActions.switchBevy(bevySlug);
     })
     .catch(err => {
       console.log('login error', err);

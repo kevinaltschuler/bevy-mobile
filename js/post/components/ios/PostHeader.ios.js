@@ -49,8 +49,6 @@ var PostHeader = React.createClass({
   },
 
   goToPostBoard() {
-    // switch bevies
-    BevyActions.switchBevy(this.props.post.board.parent);
     // switch boards
     BoardActions.switchBoard(this.props.post.board._id);
 
