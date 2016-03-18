@@ -19,14 +19,11 @@ var NotificationStore = require('./../../../notification/NotificationStore');
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
-
 var AppActions = require('./../../../app/AppActions');
-var BevyActions = require('./../../../bevy/BevyActions');
-
 var PostStore = require('./../../../post/PostStore');
 var UserStore = require('./../../../user/UserStore');
 var BevyStore = require('./../../../bevy/BevyStore');
-
+var BevyActions = require('./../../../bevy/BevyActions');
 var POST = constants.POST;
 var USER = constants.USER;
 var BEVY = constants.BEVY;
@@ -54,13 +51,14 @@ var MainView = React.createClass({
 
   componentDidMount() {
     UserStore.on(USER.LOGOUT, this._onLogout);
+    BevyStore.on(BEVY.SWITCHED, this._onSwitched);
     UserStore.on(USER.TOKENS_LOADED, this._onTokens);
-    BevyStore.on(BEVY.LOADED, this.onBevyLoaded);
   },
+
   componentWillUnmount() {
     UserStore.off(USER.LOGOUT, this._onLogout);
+    BevyStore.off(BEVY.SWITCHED, this._onSwitched);
     UserStore.off(USER.TOKENS_LOADED, this._onTokens);
-    BevyStore.off(BEVY.LOADED, this.onBevyLoaded);
   },
 
   _onLogout() {
@@ -70,12 +68,16 @@ var MainView = React.createClass({
     });
   },
 
-  _onTokens() {
-    AppActions.load();
+  _onSwitched() {
+    console.log('got to here');
+    setTimeout(
+      () => this.props.mainNavigator.replace({
+        name: routes.MAIN.BEVYVIEW
+      }), 150);
   },
 
-  onBevyLoaded() {
-    this.props.mainNavigator.push({name: routes.MAIN.BEVY });
+  _onTokens() {
+    AppActions.load();
   },
 
   render() {
@@ -97,6 +99,15 @@ var MainView = React.createClass({
             { ...this.props }
           />
         )
+        break;
+
+      case routes.MAIN.NEWBEVY:
+        let NewBevyView = require('./../../../bevy/components/ios/NewBevyView.ios.js');
+        return (
+          <NewBevyView
+            { ...this.props }
+          />
+        );
         break;
 
       case routes.MAIN.NEWBOARD:
@@ -128,9 +139,8 @@ var MainView = React.createClass({
         )
         break;
 
-<<<<<<< HEAD
       case routes.MAIN.SETTINGSVIEW:
-        let SettingsView = require('./../../../settings/components/ios/SettingsView');
+        let SettingsView = require('./../../../settings/components/ios/SettingsView.ios.js');
           return (
             <SettingsView
               {...this.props}
@@ -138,23 +148,22 @@ var MainView = React.createClass({
           )
         break;
 
-      case routes.MAIN.MAP:
-        let LocationView = require('./../../../shared/components/ios/LocationView.ios.js');
-        return (
-          <LocationView
-            location={this.props.mainRoute.location || 'no location'}
-            { ...this.props }
-          />
-        );
+      case routes.MAIN.BEVYSETTINGS:
+        let BevyInfoView = require('./../../../bevy/components/ios/BevyInfoView.ios.js');
+          return (
+            <BevyInfoView
+              {...this.props}
+            />
+          )
         break;
 
-      case routes.MAIN.INVITEUSERS:
-        let InviteUserView = require('./../../../bevy/components/ios/InviteUserView.ios.js');
-        return (
-          <InviteUserView
-            { ...this.props }
-          />
-        );
+      case routes.MAIN.BOARDSETTINGS:
+        let BoardInfoView = require('./../../../bevy/components/ios/BoardInfoView.ios.js');
+          return (
+            <BoardInfoView
+              {...this.props}
+            />
+          )
         break;
 
       case routes.MAIN.WEBVIEW:
@@ -185,7 +194,7 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.BEVY:
+      case routes.MAIN.BEVYVIEW:
         let BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
         return (
           <BevyNavigator
@@ -204,6 +213,7 @@ var MainView = React.createClass({
         break;
 
       case routes.MAIN.LOGIN:
+        console.log('yo');
         let LoginNavigator = require('./../../../login/components/ios/LoginNavigator.ios.js');
         return (
           <LoginNavigator

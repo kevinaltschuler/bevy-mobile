@@ -83,7 +83,7 @@ var BevyInfoView = React.createClass({
   },
 
   goBack() {
-    this.props.bevyNavigator.pop();
+    this.props.mainNavigator.pop();
   },
 
   changeName() {
@@ -303,7 +303,7 @@ var BevyInfoView = React.createClass({
               { constants.siteurl + '/b/' + this.props.activeBevy.slug }
             </Text>
           </View>
-          { this._renderSubSwitch() }
+          {/* this._renderSubSwitch() */}
           { this._renderAdmins() }
           { this._renderAdminSettings() }
         </ScrollView>

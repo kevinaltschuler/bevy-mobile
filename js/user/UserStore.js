@@ -529,7 +529,8 @@ _.extend(UserStore, {
         res.expires_in
       );
       // trigger success
-      BevyActions.switchBevy(bevySlug);
+      
+      //BevyActions.switchBevy(bevySlug);
     })
     .catch(err => {
       console.log('login error', err);

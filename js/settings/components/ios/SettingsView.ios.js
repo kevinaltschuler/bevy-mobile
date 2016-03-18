@@ -20,7 +20,8 @@ var {
   TouchableHighlight,
   StyleSheet,
   RefreshControl,
-  NativeModules
+  NativeModules,
+  TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
@@ -152,6 +153,10 @@ var SettingsView = React.createClass({
     );
   },
 
+  goBack() {
+    this.props.mainNavigator.pop();
+  },
+
   _renderUserHeader() {
     var imageSource;
     if(this.state.profilePictureURL) {
@@ -186,6 +191,17 @@ var SettingsView = React.createClass({
             backgroundColor: '#2CB673'
           }}/>
           <View style={ styles.topBar }>
+            <TouchableOpacity
+              activeOpacity={ 0.5 }
+              style={ styles.iconButton }
+              onPress={ this.goBack }
+            >
+              <Icon
+                name='arrow-back'
+                size={ 30 }
+                color='#FFF'
+              />
+            </TouchableOpacity>
             <Text style={ styles.title }>
               Settings
             </Text>
@@ -351,6 +367,9 @@ var styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 5
   },
+  iconButton: {
+    marginLeft: 10
+  }
 });
 
 module.exports = SettingsView;

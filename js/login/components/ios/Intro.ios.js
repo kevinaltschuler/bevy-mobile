@@ -116,8 +116,7 @@ var styles = StyleSheet.create({
   	marginTop: 30,
     fontSize: 18,
     color: '#fff',
-    textAlign: 'center',
-    maxWidth: 200
+    textAlign: 'center'
   },
   loginButton: {
   	backgroundColor: '#fff',
@@ -127,7 +126,7 @@ var styles = StyleSheet.create({
   	borderRadius: 5,
   	justifyContent: 'center',
   	alignItems: 'center',
-  	marginTop: 300
+  	marginTop: 200
   }
 });
 
