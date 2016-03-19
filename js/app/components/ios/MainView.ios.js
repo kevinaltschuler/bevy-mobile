@@ -166,6 +166,15 @@ var MainView = React.createClass({
           )
         break;
 
+      case routes.MAIN.DIRECTORY:
+        let DirectoryView = require('./../../../bevy/components/ios/DirectoryView.ios.js');
+          return (
+            <DirectoryView
+              { ...this.props }
+            />
+          )
+        break;
+
       case routes.MAIN.WEBVIEW:
         let Browser = require('./Browser.ios.js');
         return (

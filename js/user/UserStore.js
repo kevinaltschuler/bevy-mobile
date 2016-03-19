@@ -352,13 +352,25 @@ _.extend(UserStore, {
 
       case USER.SEARCH:
         this.trigger(USER.SEARCHING);
-        var query = payload.query;
-        // make the query url friendly
+
+        let query = payload.query;
+        let bevy_id = payload.bevy_id;
+        let role = payload.role;
+
         query = encodeURIComponent(query);
 
-        var url = (_.isEmpty(query))
-          ? constants.apiurl + '/users'
-          : constants.apiurl + '/users/search/' + query;
+        let url = (_.isEmpty(query))
+          ? constants.apiurl + '/users/search' + '?bevy_id=' + bevy_id + '&role=' + role
+          : constants.apiurl + '/users/search/' + query + '?bevy_id=' + bevy_id + '&role=' + role;
+
+        // if we're searching through admins, go through a totally different route
+        if(role == 'admin') {
+          let activeBevy = BevyStore.getActive();
+          let admin_ids = activeBevy.admins;
+          for(var key in admin_ids) {
+            url += '&admin_ids[' + key + ']=' + admin_ids[key];
+          }
+        }
 
         fetch(url,
         {

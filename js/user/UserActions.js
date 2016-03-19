@@ -75,10 +75,12 @@ var UserActions = {
     });
   },
 
-  search(query) {
+  search(query, bevy_id, role) {
     Dispatcher.dispatch({
       actionType: USER.SEARCH,
-      query: (query == undefined) ? null : query
+      query: (query == undefined) ? null : query,
+      bevy_id: (bevy_id == undefined) ? null : bevy_id,
+      role: (role == undefined) ? null : role
     });
   },
 

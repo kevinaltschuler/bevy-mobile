@@ -81,10 +81,6 @@ var LeftSideMenu = React.createClass({
   _renderBevyItem() {
     var bevyImageSource = BevyStore.getBevyImage(this.props.activeBevy.image, 64, 64);
 
-    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
-      ? 'lock'
-      : 'public';
-
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
@@ -101,18 +97,6 @@ var LeftSideMenu = React.createClass({
               { this.props.activeBevy.name }
             </Text>
             <View style={{ flexDirection: 'row'}}>
-              <View style={ styles.detailItem }>
-                <Icon
-                  name={ publicPrivateIcon }
-                  size={ 18 }
-                  color='#fff'
-                />
-                <Text style={ styles.itemText }>
-                  {(this.props.activeBevy.settings.privacy == 'Private')
-                    ? 'Private'
-                    : 'Public' }
-                </Text>
-              </View>
               <View style={ styles.detailItem }>
                 <Icon
                   name='people'
@@ -191,6 +175,7 @@ var LeftSideMenu = React.createClass({
         }}/>
         <ScrollView style={ styles.menuContainer }>
           <View style={ styles.boardList }>
+            { this._renderBevyItem() }
             { this._renderBoards() }
             { this._renderNewBoardItem() }
           </View>
