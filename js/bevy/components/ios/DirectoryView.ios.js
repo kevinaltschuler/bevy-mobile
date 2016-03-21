@@ -31,7 +31,6 @@ var {
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
 var UserSearchItem = require('./../../../user/components/ios/UserSearchItem.ios.js');
-var Spinner = require('react-native-spinkit');
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
@@ -181,7 +180,6 @@ var DirectoryView = React.createClass({
     return (
       <View>
         { this.renderNoneFound() }
-        { this.renderLoading() }
       </View>
     );
   },
@@ -202,20 +200,6 @@ var DirectoryView = React.createClass({
       );
     }
     return <View />;
-  },
-
-  renderLoading() {
-    if(!this.state.loadingInitial) return <View />;
-    return (
-      <View style={ styles.loadingContainer }>
-        <Spinner
-          isVisible={ true }
-          size={ 60 }
-          type={ '9CubeGrid' }
-          color={ '#2cb673' }
-        />
-      </View>
-    );
   },
 
   render() {

@@ -378,10 +378,10 @@ var BoardSettingsView = React.createClass({
               { this.props.activeBevy.name }
             </Text>
           </View>
-          <Text style={ styles.sectionTitle }>
+          {/*<Text style={ styles.sectionTitle }>
             Board Settings
           </Text>
-          {/*<SettingsItem
+          <SettingsItem
             title='Show Group Chat'
             checked={ this.props.activeBoard.settings.group_chat }
           />*/}
@@ -516,15 +516,15 @@ var styles = StyleSheet.create({
   bevyItem: {
     backgroundColor: '#FFF',
     width: constants.width,
-    height: 80,
+    height: 60,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 15
   },
   bevyImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 40,
+    height: 40,
+    borderRadius: 6,
     marginRight: 15
   },
   bevyName: {

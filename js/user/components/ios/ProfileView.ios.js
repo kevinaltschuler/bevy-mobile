@@ -345,7 +345,7 @@ var styles = StyleSheet.create({
   profileImage: {
     width: 60,
     height: 60,
-    borderRadius: 30,
+    borderRadius: 6,
     marginRight: 10
   },
   profileDetails: {

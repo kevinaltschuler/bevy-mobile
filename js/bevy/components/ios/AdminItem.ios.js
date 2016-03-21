@@ -86,7 +86,7 @@ var styles = StyleSheet.create({
   image: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 6,
     marginRight: 15,
     marginLeft: 15,
     flexDirection: 'column',
