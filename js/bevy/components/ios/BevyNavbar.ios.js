@@ -147,7 +147,7 @@ var styles = StyleSheet.create({
     flex: 4,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   right: {
     flex: 1,
@@ -192,7 +192,7 @@ var styles = StyleSheet.create({
   },
   titleText: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: 17,
     fontWeight: '500',
     color: '#FFF'

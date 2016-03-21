@@ -173,7 +173,7 @@ var BevyView = React.createClass({
         <TouchableOpacity
           activeOpacity={.5}
           onPress={() => {
-            if(this.props.activeBoard._id != undefined) 
+            if(this.props.activeBoard._id != undefined)
               this.props.mainNavigator.push({name: routes.MAIN.BOARDSETTINGS})
             else
               this.props.mainNavigator.push({name: routes.MAIN.BEVYSETTINGS})
@@ -183,14 +183,17 @@ var BevyView = React.createClass({
             style={{flexDirection: 'row', alignItems: 'center'}}
           >
             <Text
-              style={{color: '#fff', fontWeight: 'bold', fontSize: 24, marginLeft: 10}}
+              style={{color: '#fff', fontWeight: 'bold', fontSize: 18, marginLeft: 10}}
             >
-              {activeName}
+              { activeName }
             </Text>
             <Icon
               name='arrow-drop-down'
               size={ 30 }
               color='#FFF'
+              style={{
+                marginTop: 5
+              }}
             />
           </View>
         </TouchableOpacity>

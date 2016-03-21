@@ -109,8 +109,7 @@ var LeftSideMenu = React.createClass({
                 />
                 <Text style={ styles.itemText }>
                   {(this.props.activeBevy.settings.privacy == 'Private')
-                    ? 'Private'
-                    : 'Public' }
+                    ? 'Private' : 'Public' }
                 </Text>
               </View>
               <View style={ styles.detailItem }>
