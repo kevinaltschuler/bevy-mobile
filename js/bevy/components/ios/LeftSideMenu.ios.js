@@ -81,15 +81,11 @@ var LeftSideMenu = React.createClass({
   _renderBevyItem() {
     var bevyImageSource = BevyStore.getBevyImage(this.props.activeBevy.image, 64, 64);
 
-    var publicPrivateIcon = (this.props.activeBevy.settings.privacy == 'Private')
-      ? 'lock'
-      : 'public';
-
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
         style={ styles.bevyCard }
-        onPress={ this.clearBoard }
+        //onPress={ this.clearBoard }
       >
         <View style={ styles.top }>
           <Image
@@ -101,17 +97,6 @@ var LeftSideMenu = React.createClass({
               { this.props.activeBevy.name }
             </Text>
             <View style={{ flexDirection: 'row'}}>
-              <View style={ styles.detailItem }>
-                <Icon
-                  name={ publicPrivateIcon }
-                  size={ 18 }
-                  color='#fff'
-                />
-                <Text style={ styles.itemText }>
-                  {(this.props.activeBevy.settings.privacy == 'Private')
-                    ? 'Private' : 'Public' }
-                </Text>
-              </View>
               <View style={ styles.detailItem }>
                 <Icon
                   name='people'
@@ -139,6 +124,27 @@ var LeftSideMenu = React.createClass({
     );
   },
 
+  _renderHomeFeedItem() {
+    return (
+      <TouchableOpacity
+        activeOpacity={ 0.5 }
+        style={ styles.homeFeedItem }
+        onPress={ this.clearBoard }
+      >
+        <View style={ styles.homeFeedItem }>
+          <Icon
+            name='home'
+            color='#eee'
+            size={ 36 }
+          />
+          <Text style={ styles.homeFeedText }>
+            Home Feed
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+
   _renderBoards() {
     var boards = this.props.bevyBoards;
     var boardViews = [];
@@ -161,7 +167,7 @@ var LeftSideMenu = React.createClass({
     return (
       <TouchableOpacity
         activeOpacity={ 0.5 }
-        style={styles.newBoardItem }
+        style={ styles.newBoardItem }
         onPress={ this.goToNewBoard }
       >
         <View style={ styles.newBoardItem }>
@@ -190,6 +196,8 @@ var LeftSideMenu = React.createClass({
         }}/>
         <ScrollView style={ styles.menuContainer }>
           <View style={ styles.boardList }>
+            { this._renderBevyItem() }
+            { this._renderHomeFeedItem() }
             { this._renderBoards() }
             { this._renderNewBoardItem() }
           </View>
@@ -258,6 +266,23 @@ var styles = StyleSheet.create({
     color: '#fff',
     marginLeft: 5,
     fontSize: 17
+  },
+  homeFeedItem: {
+    height: 68,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: '#444',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#444',
+    paddingHorizontal: 10
+  },
+  homeFeedText: {
+    fontSize: 17,
+    color: '#FFF',
+    textAlign: 'left',
+    marginLeft: 20
   },
   newBoardItem: {
     height: 68,

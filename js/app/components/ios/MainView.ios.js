@@ -72,7 +72,7 @@ var MainView = React.createClass({
     console.log('got to here');
     setTimeout(
       () => this.props.mainNavigator.replace({
-        name: routes.MAIN.BEVYVIEW
+        name: routes.MAIN.BEVY
       }), 150);
   },
 
@@ -92,6 +92,7 @@ var MainView = React.createClass({
           />
         );
         break;
+
       case routes.MAIN.NEWPOST:
         let NewPostView = require('./../../../post/components/ios/NewPostView.ios.js');
         return (
@@ -99,15 +100,6 @@ var MainView = React.createClass({
             { ...this.props }
           />
         )
-        break;
-
-      case routes.MAIN.NEWBEVY:
-        let NewBevyView = require('./../../../bevy/components/ios/NewBevyView.ios.js');
-        return (
-          <NewBevyView
-            { ...this.props }
-          />
-        );
         break;
 
       case routes.MAIN.NEWBOARD:
@@ -166,6 +158,15 @@ var MainView = React.createClass({
           )
         break;
 
+      case routes.MAIN.DIRECTORY:
+        let DirectoryView = require('./../../../bevy/components/ios/DirectoryView.ios.js');
+          return (
+            <DirectoryView
+              { ...this.props }
+            />
+          )
+        break;
+
       case routes.MAIN.WEBVIEW:
         let Browser = require('./Browser.ios.js');
         return (
@@ -194,7 +195,7 @@ var MainView = React.createClass({
         );
         break;
 
-      case routes.MAIN.BEVYVIEW:
+      case routes.MAIN.BEVY:
         let BevyNavigator = require('./../../../bevy/components/ios/BevyNavigator.ios.js');
         return (
           <BevyNavigator

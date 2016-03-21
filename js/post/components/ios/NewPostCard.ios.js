@@ -53,7 +53,10 @@ class NewPostCard extends Component {
             style={ styles.image }
           />
           <View style={ styles.textContainer }>
-            <Text style={ styles.text }>
+            <Text
+              style={ styles.text }
+              numberOfLines={ 2 }
+            >
               { this.state.hintText }
             </Text>
           </View>
