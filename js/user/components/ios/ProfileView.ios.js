@@ -98,7 +98,7 @@ var ProfileView = React.createClass({
   goBack() {
     this.props.mainNavigator.pop();
     // reset posts
-    PostActions.fetch(this.props.activeBevy._id, null);
+    //PostActions.fetch(this.props.activeBevy._id, null);
   },
 
   showOverlay() {
@@ -115,30 +115,6 @@ var ProfileView = React.createClass({
       defaultUser: this.props.profileUser
     };
     this.props.mainNavigator.push(route);
-  },
-
-  _renderMessageUserButton() {
-    if(this.props.profileUser._id == this.props.user._id) {
-      return (
-        <View style={{
-          width: 48,
-          height: 48
-        }}/>
-      );
-    }
-    return (
-      <TouchableOpacity
-        activeOpacity={ 0.5 }
-        onPress={ this.goToNewThread }
-      >
-        <Icon
-          name='create'
-          size={ 30 }
-          color='#FFF'
-          style={{ marginRight: 10 }}
-        />
-      </TouchableOpacity>
-    );
   },
 
   _renderSeparator() {
@@ -189,7 +165,6 @@ var ProfileView = React.createClass({
             <Text style={ styles.title }>
               { this.state.displayName }'s Profile
             </Text>
-            { this._renderMessageUserButton() }
           </View>
         </View>
 

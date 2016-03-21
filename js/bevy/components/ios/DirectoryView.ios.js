@@ -96,7 +96,6 @@ var DirectoryView = React.createClass({
 
   onUserSearchComplete() {
     var users = UserStore.getUserSearchResults();
-    console.log(users);
     this.setState({
       fetching: false,
       loadingInitial: false,
@@ -112,12 +111,12 @@ var DirectoryView = React.createClass({
       // switch to admin search
       case 'Admins':
         data = this.state.users;
-        index = 0;
+        index = 1;
         break;
       // switch to user search
       case 'Users':
         data = this.state.users;
-        index = 1;
+        index = 0;
         break;
       default:
         data = [];
@@ -155,7 +154,6 @@ var DirectoryView = React.createClass({
     this.setState({ fetching: true });
     var role = (this.state.activeTab == 0) ? 'user' : 'admin';
     UserActions.search(this.state.query, this.props.activeBevy._id, role);
-    
   },
 
   onChangeText(query) {
