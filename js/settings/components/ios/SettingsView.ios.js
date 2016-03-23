@@ -77,12 +77,14 @@ var SettingsView = React.createClass({
     this.setState({ refreshing: true });
   },
   onLoaded(newUser) {
-    this.setState({
-      refreshing: false,
-      profilePictureURL: resizeImage(newUser.image, 64, 64).url,
-      displayName: newUser.displayName,
-      email: newUser.email
-    });
+    setTimeout(() => {
+      this.setState({
+        refreshing: false,
+        profilePictureURL: resizeImage(newUser.image, 64, 64).url,
+        displayName: newUser.displayName,
+        email: newUser.email
+      });
+    }, 250);
   },
 
   onRefresh() {
@@ -347,7 +349,7 @@ var styles = StyleSheet.create({
   profileImage: {
     width: 60,
     height: 60,
-    borderRadius: 30,
+    borderRadius: 6,
     marginRight: 10,
   },
   profileDetails: {

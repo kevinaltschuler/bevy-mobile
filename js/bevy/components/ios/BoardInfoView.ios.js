@@ -189,8 +189,8 @@ var BoardSettingsView = React.createClass({
       );
     } else {
       return (
-        <View style={ styles.textContainer }>
-          <Text style={ styles.boardText }>
+        <View style={ styles.descriptionContainer }>
+          <Text style={ styles.boardDescription }>
             { this.state.description }
           </Text>
         </View>
@@ -345,7 +345,7 @@ var BoardSettingsView = React.createClass({
           </View>
         </View>
         <ScrollView
-          style={ styles.container }
+          style={ styles.scrollContainer }
         >
           <Text style={ styles.sectionTitle }>
             Board Name
@@ -363,28 +363,6 @@ var BoardSettingsView = React.createClass({
             Board Image
           </Text>
           { this._renderImageButton() }
-          <Text style={ styles.sectionTitle }>
-            Parent Bevy
-          </Text>
-          <View style={ styles.bevyItem }>
-            <Image
-              style={ styles.bevyImage }
-              source={{ uri: (_.isEmpty(this.props.activeBevy.image))
-                ? constants.siteurl + '/img/default_board_img.png'
-                : resizeImage(this.props.activeBevy.image, 128, 128).url
-              }}
-            />
-            <Text style={ styles.bevyName }>
-              { this.props.activeBevy.name }
-            </Text>
-          </View>
-          {/*<Text style={ styles.sectionTitle }>
-            Board Settings
-          </Text>
-          <SettingsItem
-            title='Show Group Chat'
-            checked={ this.props.activeBoard.settings.group_chat }
-          />*/}
           <Text style={ styles.sectionTitle }>
             Board Admins
           </Text>
@@ -428,6 +406,12 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  scrollContainer: {
+    flex: 1,
+    backgroundColor: '#EEE',
+    flexDirection: 'column',
+    paddingBottom: 15
+  },
   sectionTitle: {
     color: '#999',
     fontSize: 17,
@@ -459,7 +443,21 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15
   },
+  descriptionContainer: {
+    backgroundColor: '#FFF',
+    width: constants.width,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 10
+  },
   boardText: {
+    color: '#666',
+    fontSize: 17
+  },
+  boardDescription: {
+    flex: 1,
+    flexWrap: 'wrap',
     color: '#666',
     fontSize: 17
   },

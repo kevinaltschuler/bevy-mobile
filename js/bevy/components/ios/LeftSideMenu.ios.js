@@ -219,7 +219,7 @@ var styles = StyleSheet.create({
   bevyImage: {
     width: 50,
     height: 50,
-    borderRadius: 25
+    borderRadius: 6
   },
   bevyName: {
     color: '#fff',
