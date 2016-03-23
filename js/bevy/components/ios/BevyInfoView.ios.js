@@ -21,7 +21,6 @@ var {
   ScrollView,
   View,
   Image,
-  Switch,
   TouchableOpacity,
   AlertIOS,
   NativeModules
@@ -97,10 +96,7 @@ var BevyInfoView = React.createClass({
         text: 'Save',
         style: 'default',
         onPress: (name) => {
-          BevyActions.update(
-            this.props.activeBevy._id,
-            name
-          );
+          BevyActions.update(this.props.activeBevy._id, name);
         }
       }],
       'plain-text',
@@ -143,23 +139,6 @@ var BevyInfoView = React.createClass({
           color='#FFF'
         />
       </TouchableOpacity>
-    );
-  },
-
-  _renderSubSwitch() {
-    // dont render this if you're an admin
-    if(this.state.isAdmin) return <View />;
-    return (
-      <View style={ styles.actionRow }>
-        <Text style={ styles.settingsTitle }>Subscribe</Text>
-        <View style={ styles.switchContainer }>
-          <Text style={ styles.switchDescription }>Subscribed</Text>
-          <Switch
-            value={ this.state.subscribed }
-            onValueChange={ this.changeSubscribed }
-          />
-        </View>
-      </View>
     );
   },
 
@@ -300,10 +279,9 @@ var BevyInfoView = React.createClass({
               style={ styles.urlValue }
               numberOfLines={ 2 }
             >
-              { constants.siteurl + '/b/' + this.props.activeBevy.slug }
+              { `${this.props.activeBevy.slug}.${constants.domain}` }
             </Text>
           </View>
-          {/* this._renderSubSwitch() */}
           { this._renderAdmins() }
           { this._renderAdminSettings() }
         </ScrollView>

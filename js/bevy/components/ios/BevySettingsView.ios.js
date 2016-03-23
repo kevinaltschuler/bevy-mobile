@@ -107,7 +107,6 @@ var BevySettingsView = React.createClass({
   },
 
   render() {
-    console.log('rendering', this.props.activeBevy);
     return (
       <View style={ styles.container }>
         { this._renderSettings() }

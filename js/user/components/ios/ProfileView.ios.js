@@ -16,7 +16,6 @@ var {
   View,
   Image,
   Text,
-  TouchableHighlight,
   TouchableOpacity,
   StyleSheet,
   RefreshControl,
@@ -53,6 +52,8 @@ var ProfileView = React.createClass({
       displayName: this.props.profileUser.displayName,
       email: (_.isEmpty(this.props.profileUser.email))
         ? 'No Email' : this.props.profileUser.email,
+      title: this.props.profileUser.title,
+      phoneNumber: this.props.profileUser.phoneNumber,
       points: this.props.profileUser.points,
       postCount: this.props.profileUser.postCount,
       commentCount: this.props.profileUser.commentCount,
@@ -86,6 +87,8 @@ var ProfileView = React.createClass({
       displayName: newUser.displayName,
       email: (_.isEmpty(newUser.email))
         ? 'No Email' : newUser.email,
+      title: newUser.title,
+      phoneNumber: newUser.phoneNumber,
       points: newUser.points,
       postCount: newUser.postCount,
       commentCount: newUser.commentCount
@@ -97,8 +100,10 @@ var ProfileView = React.createClass({
 
   goBack() {
     this.props.mainNavigator.pop();
-    // reset posts
-    //PostActions.fetch(this.props.activeBevy._id, null);
+  },
+
+  goToSettings() {
+    this.props.mainNavigator.push({ name: routes.MAIN.SETTINGSVIEW });
   },
 
   showOverlay() {
@@ -115,6 +120,28 @@ var ProfileView = React.createClass({
       defaultUser: this.props.profileUser
     };
     this.props.mainNavigator.push(route);
+  },
+
+  renderEditButton() {
+    if(this.props.user._id == this.props.profileUser._id) {
+      return (
+        <TouchableOpacity
+          activeOpacity={ 0.5 }
+          style={ styles.iconButton }
+          onPress={ this.goToSettings }
+        >
+          <Icon
+            name='edit'
+            size={ 30 }
+            color='#FFF'
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={{ width: 48, height: 48 }} />
+      );
+    }
   },
 
   _renderSeparator() {
@@ -163,8 +190,10 @@ var ProfileView = React.createClass({
               />
             </TouchableOpacity>
             <Text style={ styles.title }>
-              { this.state.displayName }'s Profile
+              {(this.props.profileUser._id == this.props.user._id)
+                ? 'My Profile' : `${this.props.profileUser.displayName}'s Profile`}
             </Text>
+            { this.renderEditButton() }
           </View>
         </View>
 
@@ -197,6 +226,9 @@ var ProfileView = React.createClass({
                 <Text style={ styles.profileEmail }>
                   { this.state.email }
                 </Text>
+                <Text style={ styles.profileTitle }>
+                  { this.state.title }
+                </Text>
               </View>
 
               <ImageOverlay
@@ -211,6 +243,23 @@ var ProfileView = React.createClass({
               General
             </Text>
 
+            <View style={ styles.generalItem }>
+              <View style={ styles.itemInner }>
+                <Icon
+                  name='contact-phone'
+                  size={ 30 }
+                  color='#AAA'
+                  style={ styles.itemIcon }
+                />
+                <Text style={ styles.generalTitle }>
+                  Phone Number
+                </Text>
+                <Text style={ styles.generalText }>
+                  { this.state.phoneNumber }
+                </Text>
+              </View>
+            </View>
+            { this._renderSeparator() }
             <View style={ styles.generalItem }>
               <View style={ styles.itemInner }>
                 <Icon
@@ -357,6 +406,10 @@ var styles = StyleSheet.create({
     fontSize: 17
   },
   profileEmail: {
+    color: '#666',
+    fontSize: 15
+  },
+  profileTitle: {
     color: '#666',
     fontSize: 15
   },

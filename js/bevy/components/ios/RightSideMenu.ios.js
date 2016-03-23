@@ -31,15 +31,22 @@ var RightSideMenu = React.createClass({
     activeBoard: React.PropTypes.object
   },
 
-  goToProfile() {
+  goToSettings() {
     this.props.mainNavigator.push({ name: routes.MAIN.SETTINGSVIEW });
+  },
+
+  goToProfile() {
+    this.props.mainNavigator.push({
+      name: routes.MAIN.PROFILE,
+      profileUser: this.props.user
+    });
   },
 
   goToDirectory() {
     this.props.mainNavigator.push({ name: routes.MAIN.DIRECTORY });
   },
 
-  goToSettings() {
+  goToBevySettings() {
     this.props.mainNavigator.push({ name: routes.MAIN.BEVYSETTINGS });
   },
 
@@ -63,6 +70,11 @@ var RightSideMenu = React.createClass({
         }}/>
         <ScrollView style={ styles.menuContainer }>
           <MenuItem
+            iconName='account-circle'
+            text='Account Settings'
+            onPress={ this.goToSettings }
+          />
+          <MenuItem
             iconName='person'
             text='My Profile'
             onPress={ this.goToProfile }
@@ -75,7 +87,7 @@ var RightSideMenu = React.createClass({
           <MenuItem
             iconName='settings'
             text='Bevy Settings'
-            onPress={ this.goToSettings }
+            onPress={ this.goToBevySettings }
           />
           <MenuItem
             iconName='shuffle'

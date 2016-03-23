@@ -205,6 +205,7 @@ var SettingsView = React.createClass({
             <Text style={ styles.title }>
               Settings
             </Text>
+            <View style={{ width: 40 }} />
           </View>
         </View>
         <ScrollView
