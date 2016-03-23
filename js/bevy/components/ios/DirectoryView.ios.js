@@ -1,8 +1,7 @@
 /**
- * SearchView.ios.js
+ * DirectoryView.ios.js
  *
- * View for searching bevies and users
- * TODO: search for other stuff
+ * View for searching through the users of a bevy
  *
  * @author albert
  * @author kevin
@@ -54,15 +53,13 @@ var DirectoryView = React.createClass({
       ds: ds.cloneWithRows(users),
       users: users,
       query: '',
-      fetching: false,
-      loadingInitial: true,
+      fetching: true,
       keyboardSpace: 0,
       activeTab: 0
     };
   },
 
   componentDidMount() {
-
     UserStore.on(USER.SEARCHING, this.onUserSearching);
     UserStore.on(USER.SEARCH_ERROR, this.onUserSearchError);
     UserStore.on(USER.SEARCH_COMPLETE, this.onUserSearchComplete);
@@ -70,7 +67,7 @@ var DirectoryView = React.createClass({
     this.keyboardWillShowSub = DeviceEventEmitter.addListener('keyboardDidShow', this.onKeyboardShow);
     this.keyboardWillHideSub = DeviceEventEmitter.addListener('keyboardWillHide', this.onKeyboardHide);
 
-    setTimeout(this.search, 500);
+    setTimeout(this.search, 250);
   },
 
   componentWillUnmount() {
@@ -85,24 +82,23 @@ var DirectoryView = React.createClass({
   onUserSearching() {
     this.setState({ fetching: true });
   },
-  onBevySearching() {
-    this.setState({ fetching: true });
-  },
-
   onUserSearchError() {
     this.setState({ fetching: false });
   },
-
   onUserSearchComplete() {
     var users = UserStore.getUserSearchResults();
-    this.setState({
-      fetching: false,
-      loadingInitial: false,
-      ds: this.state.ds.cloneWithRows(users),
-      users: users
-    });
+    setTimeout(() => {
+      this.setState({
+        fetching: false,
+        ds: this.state.ds.cloneWithRows(users),
+        users: users
+      });
+    }, 250);
   },
 
+  goBack() {
+    this.props.mainNavigator.pop();
+  },
 
   switchTab(tab) {
     var data, index;
@@ -126,7 +122,7 @@ var DirectoryView = React.createClass({
       ds: this.state.ds.cloneWithRows(data),
       activeTab: index
     });
-    this.search();
+    setTimeout(this.search, 250);
   },
 
   onKeyboardShow(ev) {
@@ -150,7 +146,6 @@ var DirectoryView = React.createClass({
   },
 
   search() {
-    this.setState({ fetching: true });
     var role = (this.state.activeTab == 0) ? 'user' : 'admin';
     UserActions.search(this.state.query, this.props.activeBevy._id, role);
   },
@@ -214,21 +209,22 @@ var DirectoryView = React.createClass({
           }}/>
         </View>
 
-        <View style={ styles.tabBar }>
+        <View style={ styles.topBar }>
           <TouchableOpacity
-            activeOpacity={.5}
-            onPress={() => this.props.mainNavigator.pop()}
+            activeOpacity={ 0.5 }
+            onPress={ this.goBack }
+            style={ styles.iconButton }
           >
             <Icon
               name='arrow-back'
-              size={ 28 }
+              size={ 30 }
               color='#FFF'
-              style={{ marginHorizontal: 10 }}
             />
           </TouchableOpacity>
-          <Text style={{ color: '#fff', fontSize: 22 }}>
+          <Text style={ styles.title }>
             Bevy Directory
           </Text>
+          <View style={{ width: 48, height: 48 }} />
         </View>
 
         <View style={ styles.tabBar }>
@@ -286,7 +282,7 @@ var DirectoryView = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     flexDirection: 'column',
     paddingTop: 0,
     backgroundColor: '#2CB673',
@@ -297,30 +293,30 @@ var styles = StyleSheet.create({
     overflow: 'visible',
     backgroundColor: '#2CB673',
   },
-
-  searchBox: {
-    backgroundColor: 'rgba(255,255,255,.3)',
+  topBar: {
+    width: constants.width,
+    height: 48,
     flexDirection: 'row',
-    height: 36,
     alignItems: 'center',
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    marginHorizontal: 10,
-    marginVertical: 6
+    backgroundColor: '#2CB673',
   },
-  searchIcon: {
-
-  },
-  searchInput: {
+  title: {
     flex: 1,
-    height: 36,
-    paddingHorizontal: 10,
-    color: '#fff'
+    fontSize: 17,
+    color: '#FFF',
+    textAlign: 'center'
+  },
+  iconButton: {
+    width: 48,
+    height: 48,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 
   tabBar: {
     width: constants.width,
-    height: 40,
+    height: 36,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#2CB673',
@@ -330,6 +326,26 @@ var styles = StyleSheet.create({
     marginBottom: 7,
     marginHorizontal: 10,
     flex: 1
+  },
+
+  searchBox: {
+    backgroundColor: 'rgba(255,255,255,.3)',
+    flexDirection: 'row',
+    height: 36,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    borderRadius: 4,
+    marginHorizontal: 10,
+    marginBottom: 6
+  },
+  searchIcon: {
+
+  },
+  searchInput: {
+    flex: 1,
+    height: 36,
+    paddingHorizontal: 10,
+    color: '#fff'
   },
 
   searchList: {

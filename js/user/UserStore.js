@@ -118,85 +118,6 @@ _.extend(UserStore, {
         GoogleSignIn.signOut();
         break;
 
-      case USER.LOGIN_GOOGLE:
-        console.log('google login start...');
-        // configure API keys and access right
-        GoogleSignIn.configure(
-          // CLIENT_ID - from .plist file
-          '540892787949-0e61br4320fg4l2its3gr9csssrn07aj.apps.googleusercontent.com',
-          // SCOPES - array of authorization names:
-          // eg ['https://www.googleapis.com/auth/calendar']
-          // for requesting access to user calendar
-          ['profile email openid']
-          /*[
-            'https://www.googleapis.com/auth/plus.login',
-            'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email',
-            'https://www.googleapis.com/auth/plus.me',
-            'openid'
-          ]*/
-        );
-        // called on signin error
-        NativeAppEventEmitter.addListener('googleSignInError', error => {
-          console.log('google sign in error', error);
-          //AlertIOS.alert(error.error);
-        });
-
-        // called on signin success, you get user data (email), access token and idToken
-        NativeAppEventEmitter.addListener('googleSignIn', user => {
-          /*User: {
-            name
-            email
-            accessToken
-            idToken (IOS ONLY)
-            accessTokenExpirationDate (IOS ONLY)
-          }*/
-          //console.log('google sign in success', user);
-          var idToken = user.idToken;
-          var jot_guts = idToken.split('.');
-          var payload = JSON.parse(base64.decode(jot_guts[1]).toString());
-          //console.log('google sign in payload', payload)
-          fetch(constants.siteurl + '/login/google', {
-            method: 'POST',
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              google_id: payload.sub,
-              email: payload.email,
-              picture: payload.picture,
-              name: user.name
-            })
-          })
-          .then(res => res.json())
-          .then(res => {
-            //console.log('got response from our server', res);
-            if(typeof res === 'string') {
-              console.log('our server error', res);
-              this.trigger(USER.LOGIN_ERROR, res);
-              return;
-            }
-
-            var user = res.user;
-            var access_token = res.access_token;
-            var refresh_token = res.refresh_token;
-            var expires_in = res.expires_in;
-
-            this.setUser(user);
-            this.setTokens(access_token, refresh_token, expires_in);
-
-            this.trigger(USER.LOGIN_SUCCESS);
-          })
-          .catch(err => {
-            console.log('our server error', err);
-            this.trigger(USER.LOGIN_ERROR, err.toString());
-          });
-        });
-        // call this method when user clicks the 'Signin with google' button
-        GoogleSignIn.signIn();
-        break;
-
       case USER.LOGOUT:
         // remove google token
         AsyncStorage.removeItem('google_id');
@@ -292,46 +213,6 @@ _.extend(UserStore, {
         this.trigger(USER.CHANGE_ALL);
         break;
 
-      case BEVY.JOIN:
-        // add to users bevies array
-        var bevy_id = payload.bevy_id;
-
-        var bevies = this.user.get('bevies');
-        if(_.contains(bevies, bevy_id)) break; // already joined
-        bevies.push(bevy_id);
-        _.uniq(bevies); // ensure that theres no dupes
-
-        this.user.save({
-          bevies: bevies,
-          boards: boards
-        }, {
-          patch: true,
-          success: function(model, response, options) {
-            this.trigger(USER.CHANGE_ALL);
-          }.bind(this)
-        });
-        break;
-      case BEVY.DESTROY:
-      case BEVY.LEAVE:
-        // remove from users bevies array
-        var bevy_id = payload.bevy_id;
-
-        var bevies = this.user.get('bevies');
-        bevies = _.reject(bevies, function($bevy_id) {
-          return $bevy_id == bevy_id;
-        });
-        _.uniq(bevies); // ensure that theres no dupes
-
-        this.user.save({
-          bevies: bevies
-        }, {
-          patch: true,
-          success: function(model, response, options) {
-            this.trigger(USER.CHANGE_ALL);
-          }.bind(this)
-        });
-        break;
-
       case USER.VERIFY_USERNAME:
         var username = payload.username;
         var url = constants.apiurl + '/users/' +
@@ -367,13 +248,13 @@ _.extend(UserStore, {
         if(role == 'admin') {
           let activeBevy = BevyStore.getActive();
           let admin_ids = activeBevy.admins;
+          admin_ids = _.pluck(admin_ids, '_id');
           for(var key in admin_ids) {
-            url += '&admin_ids[' + key + ']=' + admin_ids[key];
+            url += `&admin_ids[${key}]=${admin_ids[key]}`
           }
         }
 
-        fetch(url,
-        {
+        fetch(url, {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -383,7 +264,6 @@ _.extend(UserStore, {
         .then(res => {
           this.userSearchQuery = query;
           this.userSearchResults.reset(res);
-          this.userSearchResults.remove(this.user.get('_id')); // remove self from search results
           this.trigger(USER.SEARCH_COMPLETE);
         })
         .catch(err => {

@@ -81,18 +81,20 @@ var ProfileView = React.createClass({
     this.setState({ refreshing: true });
   },
   onLoaded(newUser) {
-    this.setState({
-      refreshing: false,
-      image: newUser.image,
-      displayName: newUser.displayName,
-      email: (_.isEmpty(newUser.email))
-        ? 'No Email' : newUser.email,
-      title: newUser.title,
-      phoneNumber: newUser.phoneNumber,
-      points: newUser.points,
-      postCount: newUser.postCount,
-      commentCount: newUser.commentCount
-    });
+    setTimeout(() => {
+      this.setState({
+        refreshing: false,
+        image: newUser.image,
+        displayName: newUser.displayName,
+        email: (_.isEmpty(newUser.email))
+          ? 'No Email' : newUser.email,
+        title: newUser.title,
+        phoneNumber: newUser.phoneNumber,
+        points: newUser.points,
+        postCount: newUser.postCount,
+        commentCount: newUser.commentCount
+      });
+    }, 250);
   },
   onRefresh() {
     UserActions.fetch(this.props.profileUser._id);

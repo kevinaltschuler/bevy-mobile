@@ -132,15 +132,17 @@ var PostList = React.createClass({
     })
   },
   onPostSearchComplete() {
-    var posts = PostStore.getSearchPosts()
-    this.setState({
-      searching: false,
-      loading: false,
-      loadingInitial: false,
-      searchPosts: posts,
-      searchQuery: PostStore.getSearchQuery(),
-      ds: this.state.ds.cloneWithRows(posts)
-    });
+    var posts = PostStore.getSearchPosts();
+    setTimeout(() => {
+      this.setState({
+        searching: false,
+        loading: false,
+        loadingInitial: false,
+        searchPosts: posts,
+        searchQuery: PostStore.getSearchQuery(),
+        ds: this.state.ds.cloneWithRows(posts)
+      });
+    }, 250);
   },
 
   onBoardSwitched() {
