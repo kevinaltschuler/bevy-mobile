@@ -1,5 +1,8 @@
 /**
- * UserSearchItem.android.js
+ * UserSearchItem.ios.js
+ *
+ * Item for users in the directory view
+ *
  * @author albert
  * @flow
  */
@@ -26,14 +29,12 @@ var UserSearchItem = React.createClass({
   propTypes: {
     user: React.PropTypes.object,
     onSelect: React.PropTypes.func,
-    selected: React.PropTypes.bool,
     showIcon: React.PropTypes.bool
   },
 
   getDefaultProps() {
     return {
       onSelect: _.noop,
-      selected: false,
       showIcon: true
     };
   },
@@ -57,7 +58,7 @@ var UserSearchItem = React.createClass({
     });
   },
 
-  _renderIcon() {
+  renderIcon() {
     if(!this.props.showIcon) return <View />;
     return (
       <Icon
@@ -68,12 +69,49 @@ var UserSearchItem = React.createClass({
     );
   },
 
-  render() {
-    var userImageSource = UserStore.getUserImage(this.props.user.image, 64, 64);
-
-    if(this.props.selected) {
-      return <View/>;
+  renderBigName() {
+    var text;
+    if(_.isEmpty(this.props.user.fullName)) {
+      text = this.props.user.username;
+    } else {
+      text = this.props.user.fullName;
     }
+    return (
+      <Text
+        style={ styles.bigName }
+        numberOfLines={ 1 }
+      >
+        { text }
+      </Text>
+    );
+  },
+
+  renderSmallName() {
+    if(_.isEmpty(this.props.user.fullName)) return <View />;
+    return (
+      <Text
+        style={ styles.smallName }
+        numberOfLines={ 1 }
+      >
+        { this.props.user.username }
+      </Text>
+    );
+  },
+
+  renderTitle() {
+    if(_.isEmpty(this.props.user.title)) return <View />;
+    return (
+      <Text
+        style={ styles.title }
+        numberOfLines={ 1 }
+      >
+        { this.props.user.title }
+      </Text>
+    );
+  },
+
+  render() {
+    var userImageURL = resizeImage(this.props.user.image, 64, 64).url;
 
     return (
       <TouchableOpacity
@@ -83,13 +121,12 @@ var UserSearchItem = React.createClass({
         <View style={ styles.container }>
           <Image
             style={ styles.image }
-            source={ userImageSource }
+            source={{ uri: userImageURL }}
           />
           <View style={ styles.details }>
-            <Text style={ styles.name }>
-              { this.props.user.displayName }
-            </Text>
-            { this._renderIcon() }
+            { this.renderBigName() }
+            { this.renderSmallName() }
+            { this.renderTitle() }
           </View>
         </View>
       </TouchableOpacity>
@@ -100,30 +137,37 @@ var UserSearchItem = React.createClass({
 var styles = StyleSheet.create({
   container: {
     width: constants.width,
-    height: 60,
+    height: 80,
     backgroundColor: '#FFF',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    borderBottomColor: '#EEE',
+    borderBottomWidth: StyleSheet.hairlineWidth
   },
   image: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 50,
+    height: 50,
+    borderRadius: 6,
     marginRight: 10
   },
   details: {
     height: 60,
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomColor: '#EEE',
-    borderBottomWidth: StyleSheet.hairlineWidth
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
-  name: {
-    flex: 1,
-    color: '#282828',
+  bigName: {
+    color: '#333',
     fontSize: 17
+  },
+  smallName: {
+    color: '#666',
+    fontSize: 15
+  },
+  title: {
+    color: '#888',
+    fontSize: 14
   }
 });
 
