@@ -91,10 +91,12 @@ var CommentView = React.createClass({
     this.setState({ loading: true });
   },
   onFetchedSingle(post) {
-    this.setState({
-      loading: false,
-      post: post
-    });
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+        post: post
+      });
+    }, 250);
   },
 
   onPostChange() {
