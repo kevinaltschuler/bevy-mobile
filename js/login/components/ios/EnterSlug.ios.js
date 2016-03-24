@@ -70,12 +70,6 @@ var EnterSlugView = React.createClass({
   },
 
   submit() {
-    // TODO: remove this, its just for testing
-    this.props.loginNavigator.push({
-      name: routes.LOGIN.LOGIN,
-      slug: this.state.slug
-    });
-    return;
     if(this.state.loading) return;
     if(_.isEmpty(this.state.slug)) {
       return this.setState({ error: 'Please enter your group\'s Bevy domain' });
@@ -107,7 +101,8 @@ var EnterSlugView = React.createClass({
         } else {
           this.setState({
             error: 'Group domain not found',
-            verifying: false
+            verifying: false,
+            loading: false
           });
         }
       }, 250);
