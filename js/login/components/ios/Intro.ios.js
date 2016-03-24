@@ -1,8 +1,11 @@
 /**
  * Intro.ios.js
- * an intro to the app, 
+ *
+ * an intro to the app,
  * goes to login
+ *
  * @author  kevin
+ * @flow
  */
 
 'use strict';
@@ -11,23 +14,14 @@ var React = require('react-native');
 var {
   Text,
   View,
-  ScrollView,
   StyleSheet,
-  TextInput,
-  TouchableHighlight,
   TouchableOpacity,
   Image,
-  DeviceEventEmitter,
 } = React;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
-var Icon = require('react-native-vector-icons/MaterialIcons');
-var USER = constants.USER;
 var routes = require('./../../../routes');
-var AppActions = require('./../../../app/AppActions');
-var UserActions = require('./../../../user/UserActions');
-var UserStore = require('./../../../user/UserStore');
 
 var Intro = React.createClass({
   propTypes: {
@@ -36,48 +30,34 @@ var Intro = React.createClass({
   },
 
   navToLogin() {
-  	this.props.loginNavigator.push({
-  		name: routes.LOGIN.SLUG
-  	});
+  	this.props.loginNavigator.push({ name: routes.LOGIN.SLUG });
   },
-
 
   render() {
     return (
-      <ScrollView
-        ref={ ref => { this.ScrollView = ref; }}
-        style={styles.container}
-        contentContainerStyle={ styles.containerInner }
-        keyboardShouldPersistTaps={ true }
-        //scrollEnabled={ false }
-      >
-      	<View style={{
-      		flexDirection: 'column',
-      		alignItems: 'center'
-      	}}>
-	      	<Image
-	          style={ styles.logo }
-	          source={ require('./../../../images/logo_100_reversed.png') }
-	        />
-	        <View style={ styles.title }>
-	          <Text style={ styles.titleText }>
-	            Bevy
-	          </Text>
-	          <Text style={ styles.detailText }>
-	            The Community App
-	          </Text>
-	        </View>
-	        <TouchableHighlight
-	        	underlayColor={'rgba(255,255,255,.8)'}
-	        	style={styles.loginButton}
-	        	onPress={this.navToLogin}
-	        >
-        		<Text style={{color: '#2cb673', fontWeight: 'bold', fontSize: 20}}>
-        			Login to Your Team
-        		</Text>
-	        </TouchableHighlight>
+    	<View style={ styles.container }>
+      	<Image
+          style={ styles.logo }
+          source={ require('./../../../images/logo_100_reversed.png') }
+        />
+        <View style={ styles.title }>
+          <Text style={ styles.titleText }>
+            Bevy
+          </Text>
+          <Text style={ styles.detailText }>
+            The Community App
+          </Text>
+        </View>
+        <TouchableOpacity
+        	activeOpacity={ 0.5 }
+        	style={ styles.loginButton }
+        	onPress={ this.navToLogin }
+        >
+      		<Text style={ styles.loginButtonText }>
+      			Login to Your Team
+      		</Text>
+        </TouchableOpacity>
 	    </View>
-      </ScrollView>
     );
   }
 });
@@ -86,14 +66,11 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     width: constants.width,
-    backgroundColor: '#2cb673'
-  },
-  containerInner: {
-    flexDirection: 'column',
-    paddingBottom: 5,
-    alignItems: 'center',
+    backgroundColor: '#2cb673',
     justifyContent: 'flex-start',
-    paddingTop: constants.width / 5
+    alignItems: 'center',
+    paddingTop: constants.width / 5,
+    paddingBottom: 5,
   },
   logo: {
     width: 60,
@@ -127,6 +104,11 @@ var styles = StyleSheet.create({
   	justifyContent: 'center',
   	alignItems: 'center',
   	marginTop: 200
+  },
+  loginButtonText: {
+    color: '#2cb673',
+    fontWeight: 'bold',
+    fontSize: 20
   }
 });
 

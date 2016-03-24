@@ -211,16 +211,18 @@ var EnterSlugView = React.createClass({
             </TouchableOpacity>
           </View>
           { this._renderError() }
-          <Text style={styles.detailText}>
-            Bevy Slug
+          <Text style={ styles.detailText }>
+            Bevy Subdomain
           </Text>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
             <TextInput
               ref={ref => { this.SlugInput = ref; }}
               autoCorrect={ false }
               autoCapitalize='none'
-              placeholder='MyBevy'
-              style={[ styles.loginInput, {width: (this.state.slug.length == 0) ? 94 : this.state.slug.length*14.5}]}
+              placeholder='mybevy'
+              style={[ styles.loginInput, {
+                width: (this.state.slug.length == 0) ? 94 : this.state.slug.length * 14.5
+              }]}
               onChangeText={ slug => this.setState({ slug: slug }) }
               placeholderTextColor='rgba(255,255,255,.5)'
             />
@@ -228,7 +230,7 @@ var EnterSlugView = React.createClass({
               .joinbevy.com
             </Text>
           </View>
-          <Text style={styles.detailText}>
+          <Text style={ styles.detailText }>
             This is the URL you use to sign in to your bevy
           </Text>
           {/*<TouchableOpacity
@@ -305,7 +307,8 @@ var styles = StyleSheet.create({
   detailText: {
     color: '#fff',
     fontSize: 16,
-    marginVertical: 10
+    marginVertical: 10,
+    marginRight: 10
   },
   navbar: {
     flexDirection: 'row',
