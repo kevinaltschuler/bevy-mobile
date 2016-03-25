@@ -176,8 +176,33 @@ var EnterSlugView = React.createClass({
       case 'I':
       case 'l':
         return 6.5;
+      case 'r':
+      case 't':
+      case 'f':
+        return 10;
       case 'm':
-        return 17.5;
+      case 'M':
+      case 'w':
+      case 'W':
+      case 'N':
+      case 'H':
+        return 22;
+      case 'V':
+      case 'K':
+      case 'D':
+      case 'H':
+      case 'Q':
+      case 'O':
+      case 'U':
+      case 'T':
+      case 'A':
+      case 'G':
+      case 'Z':
+      case 'X':
+      case 'C':
+      case 'B':
+      case 'S':
+        return 18;
       default:
         return 14.5;
     }
@@ -231,13 +256,13 @@ var EnterSlugView = React.createClass({
           </View>
           { this._renderError() }
           <Text style={ styles.detailText }>
-            Bevy Subdomain
+            Bevy URL
           </Text>
           <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
             <TextInput
               ref={ref => { this.SlugInput = ref; }}
               autoCorrect={ false }
-              placeholder='mybevy'
+              placeholder='MyBevy'
               style={[ styles.loginInput, {
                 width: (this.state.slug.length == 0) ? 94 : this.calcSlugWidth()
               }]}
