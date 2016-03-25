@@ -70,12 +70,6 @@ var EnterSlugView = React.createClass({
   },
 
   submit() {
-    // TODO: remove this, its just for testing
-    this.props.loginNavigator.push({
-      name: routes.LOGIN.LOGIN,
-      slug: this.state.slug
-    });
-    return;
     if(this.state.loading) return;
     if(_.isEmpty(this.state.slug)) {
       return this.setState({ error: 'Please enter your group\'s Bevy domain' });
@@ -107,7 +101,8 @@ var EnterSlugView = React.createClass({
         } else {
           this.setState({
             error: 'Group domain not found',
-            verifying: false
+            verifying: false,
+            loading: false
           });
         }
       }, 250);
@@ -174,6 +169,30 @@ var EnterSlugView = React.createClass({
     );
   },
 
+  calcCharWidth(char) {
+    switch(char) {
+      case 'i':
+      case 'j':
+      case 'I':
+      case 'l':
+        return 6.5;
+      case 'm':
+        return 17.5;
+      default:
+        return 14.5;
+    }
+  },
+
+  calcSlugWidth() {
+    var result = 0;
+    var str = this.state.slug;
+    var i = str.length;
+    while (i--) {
+      result += this.calcCharWidth(str[i]);
+    }
+    return result;
+  },
+
   render() {
     return (
       <ScrollView
@@ -218,10 +237,9 @@ var EnterSlugView = React.createClass({
             <TextInput
               ref={ref => { this.SlugInput = ref; }}
               autoCorrect={ false }
-              autoCapitalize='none'
               placeholder='mybevy'
               style={[ styles.loginInput, {
-                width: (this.state.slug.length == 0) ? 94 : this.state.slug.length * 14.5
+                width: (this.state.slug.length == 0) ? 94 : this.calcSlugWidth()
               }]}
               onChangeText={ slug => this.setState({ slug: slug }) }
               placeholderTextColor='rgba(255,255,255,.5)'
