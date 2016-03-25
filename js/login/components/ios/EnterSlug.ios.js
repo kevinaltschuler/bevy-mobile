@@ -169,6 +169,30 @@ var EnterSlugView = React.createClass({
     );
   },
 
+  calcCharWidth(char) {
+    switch(char) {
+      case 'i':
+      case 'j':
+      case 'I':
+      case 'l':
+        return 6.5;
+      case 'm':
+        return 17.5;
+      default: 
+        return 14.5;
+    }
+  },
+
+  calcSlugWidth() {
+    var result = 0;
+    var str = this.state.slug;
+    var i = str.length;
+    while (i--) {
+      result += this.calcCharWidth(str[i]);
+    }
+    return result;
+  },
+
   render() {
     return (
       <ScrollView
@@ -215,7 +239,7 @@ var EnterSlugView = React.createClass({
               autoCorrect={ false }
               autoCapitalize='none'
               placeholder='MyBevy'
-              style={[ styles.loginInput, {width: (this.state.slug.length == 0) ? 94 : this.state.slug.length*14.5}]}
+              style={[ styles.loginInput, {width: (this.state.slug.length == 0) ? 94 : this.calcSlugWidth() }]}
               onChangeText={ slug => this.setState({ slug: slug }) }
               placeholderTextColor='rgba(255,255,255,.5)'
             />

@@ -33,13 +33,19 @@ var Loading = React.createClass({
     AsyncStorage.getItem('user')
     .then(user => {
       if(user) {
-				console.log('found user. loading user...', user);
+		console.log('found user. loading user...', user);
+		if(user == "User not found") {
+			this.props.mainNavigator.replace({
+				name: routes.MAIN.LOGIN
+			});
+			return;
+		}
         UserActions.loadUser(JSON.parse(user));
       } else {
         console.log('going to login screen...');
         this.props.mainNavigator.replace({
-					name: routes.MAIN.LOGIN
-				});
+			name: routes.MAIN.LOGIN
+		});
       }
     });
 	},
