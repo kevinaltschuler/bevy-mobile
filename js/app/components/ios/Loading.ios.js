@@ -34,7 +34,7 @@ var Loading = React.createClass({
     .then(user => {
       if(user) {
 		console.log('found user. loading user...', user);
-		if(user == "User not found") {
+		if(user == '\"User not found\"') {
 			this.props.mainNavigator.replace({
 				name: routes.MAIN.LOGIN
 			});
