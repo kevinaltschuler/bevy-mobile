@@ -89,11 +89,11 @@ var RightSideMenu = React.createClass({
             text='Bevy Settings'
             onPress={ this.goToBevySettings }
           />
-          <MenuItem
+          {/*<MenuItem
             iconName='shuffle'
             text='Switch Bevy'
             onPress={ this.switchBevy }
-          />
+          />*/}
         </ScrollView>
       </View>
     );

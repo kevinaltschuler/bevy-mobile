@@ -141,8 +141,12 @@ _.extend(BevyStore, {
       case BEVY.UPDATE:
         var bevy_id = payload.bevy_id;
 
-        var bevy = this.myBevies.get(bevy_id);
-        if(bevy == undefined) break;
+        var bevy = this.active;
+
+        if(!bevy_id == bevy._id)
+          break;
+
+        bevy.url = constants.apiurl + '/bevies/' + bevy._id;
 
         var name = payload.name || bevy.get('name');
         var description = payload.description || bevy.get('description');
@@ -228,6 +232,7 @@ _.extend(BevyStore, {
         break;
 
       case BOARD.CREATE:
+        var UserStore = require('./../user/UserStore');
         var name = payload.name;
         var description = payload.description;
         var image = payload.image;

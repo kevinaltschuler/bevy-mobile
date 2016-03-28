@@ -57,7 +57,8 @@ var BevyView = React.createClass({
   },
 
   onBoardCreated(board) {
-    this.closeSideMenu();
+    this.closeLeftMenu();
+    this.closeRightMenu();
   },
 
   openLeftMenu() {
