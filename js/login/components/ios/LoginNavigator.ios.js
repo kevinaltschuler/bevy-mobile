@@ -45,7 +45,7 @@ var LoginNavigator = React.createClass({
         renderScene={(route, navigator) => {
           console.log(route.name);
           switch(route.name) {
-            case routes.LOGIN.LOADINGLOGIN: 
+            case routes.LOGIN.LOADINGLOGIN:
               let LoadingLogin = require('./LoadingLogin.ios.js');
               return (
                 <LoadingLogin
@@ -83,17 +83,6 @@ var LoginNavigator = React.createClass({
                   loginNavigator={ navigator }
                   loginRoute={ route }
                   slug={route.slug || 'error'}
-                />
-              );
-              break;
-
-            case routes.LOGIN.REGISTER:
-              let RegisterView = require('./RegisterView.ios.js');
-              return (
-                <RegisterView
-                  { ...this.props }
-                  loginNavigator={ navigator }
-                  loginRoute={ route }
                 />
               );
               break;
