@@ -86,6 +86,10 @@ var LoginView = React.createClass({
   onEmailSubmit(text) {
     this.PasswordInput.focus();
   },
+  onPasswordSubmit() {
+    this.PasswordInput.blur();
+    this.loginEmail();
+  },
 
   scrollToTop() {
     if(this.ScrollView == undefined) return;
@@ -230,6 +234,7 @@ var LoginView = React.createClass({
           placeholder='Password'
           style={ styles.loginInput }
           onChangeText={ text => this.setState({ pass: text }) }
+          onSubmitEditing={ this.onPasswordSubmit }
           placeholderTextColor='rgba(255,255,255,.5)'
         />
         <TouchableOpacity
@@ -353,7 +358,7 @@ var styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: constants.width / 3,
+    marginBottom: 20,
     paddingTop: 30,
     paddingRight: 40,
     flex: 1,

@@ -19,18 +19,18 @@ var {
   TouchableOpacity
 } = React;
 var Icon = require('react-native-vector-icons/MaterialIcons');
-var UIImagePickerManager = NativeModules.UIImagePickerManager;
 var AdminItem = require('./AdminItem.ios.js');
 var SettingsItem = require('./../../../shared/components/ios/SettingsItem.ios.js');
+var UIImagePickerManager = NativeModules.UIImagePickerManager;
 
 var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 var resizeImage = require('./../../../shared/helpers/resizeImage');
-var FileActions = require('./../../../file/FileActions');
-var FileStore = require('./../../../file/FileStore');
 var BoardActions = require('./../../../bevy/BoardActions');
 var BevyStore = require('./../../../bevy/BevyStore');
+var FileStore = require('./../../../file/FileStore');
+var FileActions = require('./../../../file/FileActions');
 var FILE = constants.FILE;
 
 var BoardSettingsView = React.createClass({
@@ -39,51 +39,77 @@ var BoardSettingsView = React.createClass({
     activeBevy: React.PropTypes.object,
     activeBoard: React.PropTypes.object,
     bevyNavigator: React.PropTypes.object,
-    editing: React.PropTypes.bool
-  },
-
-  getDefaultProps() {
-    return {
-      editing: false
-    };
+    user: React.PropTypes.object
   },
 
   getInitialState() {
     return {
+      isAdmin: _.findWhere(this.props.activeBoard.admins, { _id: this.props.user._id }) != undefined,
       name: this.props.activeBoard.name,
       description: this.props.activeBoard.description,
-      image: this.props.activeBoard.image,
-      settings: this.props.activeBoard.settings
+      image: this.props.activeBoard.image
     }
   },
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      name: nextProps.activeBoard.name,
-      description: nextProps.activeBoard.description,
-      image: nextProps.activeBoard.image,
-      settings: nextProps.activeBoard.settings
-    });
   },
 
   componentDidMount() {
-    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUpload);
+    FileStore.on(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
   },
   componentWillUnmount() {
-    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUpload);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onUploadComplete);
   },
 
-  onUpload(image) {
+  onUploadComplete(image) {
     this.setState({ image: image });
+    BoardActions.update(this.props.activeBoard._id, this.state.name, this.state.description, image);
   },
 
   goBack() {
-    // blur inputs if they exist
-    if(this.props.editing) {
-      this.NameInput.blur();
-      this.DescInput.blur();
-    }
     this.props.mainNavigator.pop();
+  },
+
+  changeName() {
+    AlertIOS.prompt(
+      'Change Board Name',
+      null,
+      [{
+        text: 'Cancel',
+        style: 'cancel'
+      }, {
+        text: 'Save',
+        style: 'default',
+        onPress: (name) => {
+          BoardActions.update(this.props.activeBoard._id, name);
+          this.setState({ name: name });
+        }
+      }],
+      'plain-text',
+      this.state.name
+    );
+  },
+  changeDescription() {
+    AlertIOS.prompt(
+      'Change Board Description',
+      null,
+      [{
+        text: 'Cancel',
+        style: 'cancel'
+      }, {
+        text: 'Save',
+        style: 'default',
+        onPress: (desc) => {
+          BoardActions.update(this.props.activeBoard._id, this.state.name, desc);
+          this.setState({ description: desc });
+        }
+      }],
+      'plain-text',
+      this.state.description
+    );
+  },
+  changeImage() {
+    this.showImagePicker();
   },
 
   showImagePicker() {
@@ -94,108 +120,14 @@ var BoardSettingsView = React.createClass({
       chooseFromLibraryButtonTitle: 'Choose from Library...',
       returnBase64Image: false,
       returnIsVertical: false
-    }, response => {
-      if (!response.didCancel) {
-        FileActions.upload(response.uri);
+    }, (type, response) => {
+      if(response) {
+        //console.log(response);
+        FileActions.upload(response);
       } else {
-        console.log('Cancel');
+        //console.log('Cancel');
       }
     });
-  },
-
-  deleteBoard() {
-    AlertIOS.alert(
-      'Are you sure?',
-      'Deleting a board will also delete all posts under it',
-      [{
-        text: 'Cancel',
-        style: 'cancel'
-      }, {
-        text: 'Confirm',
-        onPress: this.deleteBoardForSure
-      }]
-    );
-  },
-
-  deleteBoardForSure() {
-    BoardActions.destroy(this.props.activeBoard._id);
-    BoardActions.clearBoard();
-    this.goBack();
-  },
-
-  submit() {
-    BoardActions.update(
-      this.props.activeBoard._id, // board id
-      this.state.name, // name
-      this.state.description, // description
-      this.state.image, // image
-      this.state.settings // settings
-    );
-    this.goBack();
-  },
-
-  _renderBoardName() {
-    if(this.props.editing) {
-      return (
-        <View style={ styles.textInputContainer }>
-          <Icon
-            name='edit'
-            size={ 30 }
-            color='#AAA'
-          />
-          <TextInput
-            ref={ ref => { this.NameInput = ref; }}
-            autoCorrect={ false }
-            autoCapitalize='none'
-            style={ styles.textInput }
-            value={ this.state.name }
-            onChangeText={ text => this.setState({ name: text }) }
-            placeholder='Board Name'
-            placeholderTextColor='#AAA'
-          />
-        </View>
-      );
-    } else {
-      return (
-        <View style={ styles.textContainer }>
-          <Text style={ styles.boardText }>
-            { this.state.name }
-          </Text>
-        </View>
-      );
-    }
-  },
-
-  _renderBoardDescription() {
-    if(this.props.editing) {
-      return (
-        <View style={ styles.textInputContainer }>
-          <Icon
-            name='edit'
-            size={ 30 }
-            color='#AAA'
-          />
-          <TextInput
-            ref={ ref => { this.DescInput = ref; }}
-            autoCorrect={ false }
-            autoCapitalize='none'
-            style={ styles.textInput }
-            value={ this.state.description }
-            onChangeText={ text => this.setState({ description: text }) }
-            placeholder='Board Description'
-            placeholderTextColor='#AAA'
-          />
-        </View>
-      );
-    } else {
-      return (
-        <View style={ styles.descriptionContainer }>
-          <Text style={ styles.boardDescription }>
-            { this.state.description }
-          </Text>
-        </View>
-      );
-    }
   },
 
   _renderBoardType() {
@@ -227,40 +159,18 @@ var BoardSettingsView = React.createClass({
   _renderImageButton() {
     var background = (_.isEmpty(this.state.image)
       || this.state.image.path == constants.siteurl + '/img/default_board_img.png')
-    ? (
-      <View style={ styles.greyRect } />
-    ) : (
+    ? <View style={ styles.greyRect } />
+    : (
       <Image
         style={ styles.boardImage }
         source={{ uri: resizeImage(this.state.image, constants.width, 300).url }}
       />
     );
-    if(this.props.editing) {
-      return (
-        <TouchableOpacity
-          activeOpacity={ 0.5 }
-          style={ styles.imageButton }
-          onPress={ this.showImagePicker }
-        >
-          <View style={ styles.imageButton }>
-            { background }
-            <View style={ styles.darkener } />
-            <Icon
-              name='add-a-photo'
-              size={ 48 }
-              color='#FFF'
-              style={ styles.addIcon }
-            />
-          </View>
-        </TouchableOpacity>
-      );
-    } else {
-      return (
-        <View style={ styles.imageButton }>
-          { background }
-        </View>
-      );
-    }
+    return (
+      <View style={ styles.imageButton }>
+        { background }
+      </View>
+    );
   },
 
   _renderAdmins() {
@@ -278,38 +188,47 @@ var BoardSettingsView = React.createClass({
     return admins;
   },
 
-  _renderDangerZone() {
-    if(!this.props.editing) return <View />;
+  renderSettings() {
+    if(!this.state.isAdmin) return <View />;
     return (
-      <View>
+      <View style={{ marginBottom: 15 }}>
         <Text style={ styles.sectionTitle }>
-          Danger Zone
+          Board Settings
         </Text>
-        <TouchableOpacity
-          activeOpacity={ 0.5 }
-          onPress={ this.deleteBoard }
-          style={ styles.deleteButton }
-        >
-          <Text style={ styles.deleteButtonText }>
-            Delete Board
-          </Text>
-        </TouchableOpacity>
+        <SettingsItem
+          title='Change Board Name'
+          icon={
+            <Icon
+              name='edit'
+              color='#AAA'
+              size={ 30 }
+            />
+          }
+          onPress={ this.changeName }
+        />
+        <SettingsItem
+          title='Change Board Description'
+          icon={
+            <Icon
+              name='edit'
+              color='#AAA'
+              size={ 30 }
+            />
+          }
+          onPress={ this.changeDescription }
+        />
+        <SettingsItem
+          title='Change Board Image'
+          icon={
+            <Icon
+              name='add-a-photo'
+              color='#AAA'
+              size={ 30 }
+            />
+          }
+          onPress={ this.changeImage }
+        />
       </View>
-    );
-  },
-
-  _renderSaveButton() {
-    if(!this.props.editing) return <View />;
-    return (
-      <TouchableOpacity
-        activeOpacity={ 0.5 }
-        onPress={ this.submit }
-        style={ styles.saveButton }
-      >
-        <Text style={ styles.saveButtonText }>
-          Save Changes
-        </Text>
-      </TouchableOpacity>
     );
   },
 
@@ -350,11 +269,19 @@ var BoardSettingsView = React.createClass({
           <Text style={ styles.sectionTitle }>
             Board Name
           </Text>
-          { this._renderBoardName() }
+          <View style={ styles.textContainer }>
+            <Text style={ styles.boardText }>
+              { this.props.activeBoard.name }
+            </Text>
+          </View>
           <Text style={ styles.sectionTitle }>
             Board Description
           </Text>
-          { this._renderBoardDescription() }
+          <View style={ styles.descriptionContainer }>
+            <Text style={ styles.boardDescription }>
+              { this.props.activeBoard.description }
+            </Text>
+          </View>
           <Text style={ styles.sectionTitle }>
             Board Type
           </Text>
@@ -367,8 +294,7 @@ var BoardSettingsView = React.createClass({
             Board Admins
           </Text>
           { this._renderAdmins() }
-          { this._renderDangerZone() }
-          { this._renderSaveButton() }
+          { this.renderSettings() }
         </ScrollView>
       </View>
     );
@@ -418,22 +344,6 @@ var styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
     marginLeft: 15
-  },
-  textInputContainer: {
-    backgroundColor: '#FFF',
-    width: constants.width,
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15
-  },
-  textInput: {
-    backgroundColor: '#FFF',
-    flex: 1,
-    height: 60,
-    fontSize: 17,
-    color: '#666',
-    marginLeft: 10
   },
   textContainer: {
     backgroundColor: '#FFF',
@@ -491,9 +401,6 @@ var styles = StyleSheet.create({
     height: 150,
     backgroundColor: 'rgba(0,0,0,0.6)'
   },
-  addIcon: {
-    backgroundColor: 'transparent'
-  },
   boardType: {
     backgroundColor: '#FFF',
     width: constants.width,
@@ -510,51 +417,6 @@ var styles = StyleSheet.create({
     color: '#888',
     fontSize: 17,
     textAlign: 'left'
-  },
-  bevyItem: {
-    backgroundColor: '#FFF',
-    width: constants.width,
-    height: 60,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15
-  },
-  bevyImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 6,
-    marginRight: 15
-  },
-  bevyName: {
-    color: '#666',
-    fontSize: 17
-  },
-  saveButton: {
-    width: constants.width,
-    height: 60,
-    backgroundColor: '#2CB673',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 20,
-    paddingHorizontal: 15
-  },
-  saveButtonText: {
-    color: '#FFF',
-    fontSize: 17
-  },
-  deleteButton: {
-    width: constants.width,
-    height: 60,
-    backgroundColor: '#DF4A32',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 15
-  },
-  deleteButtonText: {
-    color: '#FFF',
-    fontSize: 17
   }
 });
 
