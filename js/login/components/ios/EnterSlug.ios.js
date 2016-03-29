@@ -266,6 +266,7 @@ var EnterSlugView = React.createClass({
               style={[ styles.loginInput, {
                 width: (this.state.slug.length == 0) ? 94 : this.calcSlugWidth()
               }]}
+              autoCapitalize={false}
               onChangeText={ slug => this.setState({ slug: slug }) }
               placeholderTextColor='rgba(255,255,255,.5)'
             />

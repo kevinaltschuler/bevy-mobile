@@ -66,8 +66,6 @@
   
   jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   
-  NSLog(jsCodeLocation.absoluteString);
-  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"bevyios"
                                                initialProperties:nil
