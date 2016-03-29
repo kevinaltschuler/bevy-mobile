@@ -64,6 +64,7 @@ var NewBoardView = React.createClass({
   },
 
   onBoardCreate(board) {
+    console.log('board made');
     this.setState({ creating: false });
 
     // switch bevies
