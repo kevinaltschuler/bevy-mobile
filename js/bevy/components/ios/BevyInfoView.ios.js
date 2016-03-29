@@ -67,7 +67,7 @@ var BevyInfoView = React.createClass({
     FileStore.on(FILE.UPLOAD_COMPLETE, this.onFileUpload);
   },
   componentWillUnmount() {
-    FileStore.off(FILE.UPLOAD_COMPLETE);
+    FileStore.off(FILE.UPLOAD_COMPLETE, this.onFileUpload);
   },
 
   onFileUpload(image) {
