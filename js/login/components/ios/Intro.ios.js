@@ -71,6 +71,7 @@ var styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: constants.width / 5,
     paddingBottom: 5,
+    height: constants.height
   },
   logo: {
     width: 60,
@@ -81,7 +82,8 @@ var styles = StyleSheet.create({
   title: {
     alignItems: 'center',
     marginBottom: 10,
-    marginVertical: 30
+    marginVertical: 30,
+    flex: 2
   },
   titleText: {
     fontSize: 32,
@@ -103,7 +105,6 @@ var styles = StyleSheet.create({
   	borderRadius: 5,
   	justifyContent: 'center',
   	alignItems: 'center',
-  	marginTop: 200
   },
   loginButtonText: {
     color: '#2cb673',

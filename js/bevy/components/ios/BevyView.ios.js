@@ -148,28 +148,17 @@ var BevyView = React.createClass({
     }
     return (
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <Animated.View
-          style={{
-            transform: [{
-              rotate: this.state.menuButtonRotation.interpolate({
-                inputRange: [0, 1],
-                outputRange: [ '0deg', '90deg' ]
-              })
-            }]
-          }}
-        >
+
           <TouchableOpacity
             activeOpacity={ 0.5 }
             style={ styles.backButton }
             onPress={ this.toggleLeftMenu }
           >
-            <Icon
-              name='menu'
-              size={ 30 }
-              color='#FFF'
+            <Image
+              style={{width: 30, height: 30, marginLeft: 5}}
+              source={ require('./../../../images/logo_100_reversed.png') }
             />
           </TouchableOpacity>
-        </Animated.View>
         <TouchableOpacity
           activeOpacity={.5}
           onPress={() => {
