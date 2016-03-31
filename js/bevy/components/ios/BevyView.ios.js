@@ -120,19 +120,13 @@ var BevyView = React.createClass({
     this.PostList.switchBackFromSearch();
   },
 
-  goBack() {
-    if(!_.isEmpty(this.props.activeBoard)) {
-      this.clearBoard();
-      return;
-    }
-    this.props.mainNavigator.pop();
+  goToSettings() {
+    if(this.props.activeBoard._id != undefined)
+      this.props.mainNavigator.push({name: routes.MAIN.BOARDSETTINGS})
+    else
+      this.props.mainNavigator.push({name: routes.MAIN.BEVYSETTINGS})
   },
-
-  clearBoard() {
-    BoardActions.clearBoard();
-    PostActions.fetch(this.props.activeBevy._id, null);
-  },
-
+  
   toggleRightMenu() {
     this.props.rightMenuActions.toggle();
   },
@@ -147,42 +141,30 @@ var BevyView = React.createClass({
       activeName = this.props.activeBoard.name;
     }
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-
-          <TouchableOpacity
-            activeOpacity={ 0.5 }
-            style={ styles.backButton }
-            onPress={ this.toggleLeftMenu }
-          >
-            <Image
-              style={{width: 30, height: 30, marginLeft: 5}}
-              source={ require('./../../../images/logo_100_reversed.png') }
-            />
-          </TouchableOpacity>
+      <View style={ styles.leftContainer }>
         <TouchableOpacity
-          activeOpacity={.5}
-          onPress={() => {
-            if(this.props.activeBoard._id != undefined)
-              this.props.mainNavigator.push({name: routes.MAIN.BOARDSETTINGS})
-            else
-              this.props.mainNavigator.push({name: routes.MAIN.BEVYSETTINGS})
-          }}
+          activeOpacity={ 0.5 }
+          style={ styles.backButton }
+          onPress={ this.toggleLeftMenu }
         >
-          <View
-            style={{flexDirection: 'row', alignItems: 'center'}}
-          >
-            <Text
-              style={{color: '#fff', fontWeight: 'bold', fontSize: 18, marginLeft: 10}}
-            >
+          <Image
+            style={ styles.bevyButtonImage }
+            source={ require('./../../../images/logo_100_reversed.png') }
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={ .5 }
+          onPress={ this.goToSettings }
+        >
+          <View style={ styles.textButton }>
+            <Text style={ styles.textButtonText }>
               { activeName }
             </Text>
             <Icon
               name='arrow-drop-down'
               size={ 30 }
               color='#FFF'
-              style={{
-                marginTop: 5
-              }}
+              style={ styles.textButtonArrow }
             />
           </View>
         </TouchableOpacity>
@@ -227,7 +209,7 @@ var BevyView = React.createClass({
           activeBevy={ this.props.activeBevy }
           activeBoard={ this.props.activeBoard }
           left={ this._renderLeftButton() }
-          center={<View/>}
+          center={ <View/> }
           right={ this._renderMenuButton() }
           user={ this.props.user }
         />
@@ -266,6 +248,28 @@ var styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0)',
     height: 40,
     paddingHorizontal: 8
+  },
+  leftContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  bevyButtonImage: {
+    width: 30,
+    height: 30,
+    marginLeft: 5
+  },
+  textButton: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  textButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginLeft: 10
+  },
+  textButtonArrow: {
+    marginTop: 5
   }
 });
 
