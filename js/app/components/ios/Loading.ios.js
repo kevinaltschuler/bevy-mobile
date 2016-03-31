@@ -12,7 +12,8 @@ var React = require('react-native');
 var {
 	Image,
 	View,
-	AsyncStorage
+	AsyncStorage,
+	StyleSheet
 } = React;
 
 var _ = require('underscore');
@@ -33,42 +34,42 @@ var Loading = React.createClass({
     AsyncStorage.getItem('user')
     .then(user => {
       if(user) {
-		console.log('found user. loading user...', user);
-		if(user == '\"User not found\"') {
-			this.props.mainNavigator.replace({
-				name: routes.MAIN.LOGIN
-			});
-			return;
-		}
+				console.log('found user. loading user...', user);
+				if(user == '\"User not found\"') {
+					this.props.mainNavigator.replace({ name: routes.MAIN.LOGIN });
+					return;
+				}
         UserActions.loadUser(JSON.parse(user));
       } else {
         console.log('going to login screen...');
-        this.props.mainNavigator.replace({
-			name: routes.MAIN.LOGIN
-		});
+        this.props.mainNavigator.replace({ name: routes.MAIN.LOGIN });
       }
     });
 	},
 
 	render() {
-		var logoUrl = constants.siteurl + '/img/logo_300_white.png';
 		return (
-			<View style={{
-				height: constants.height,
-				width: constants.width,
-				backgroundColor: '#2cb673',
-				alignItems: 'center',
-				justifyContent: 'center'
-			}}>
+			<View style={ styles.container }>
 				<Image
-					style={{
-						width: 60,
-						height: 60
-					}}
-					source={{ uri: logoUrl }}
+					style={ styles.logo }
+					source={ require('./../../../images/logo_300_white.png') }
 				/>
 			</View>
 		);
+	}
+});
+
+var styles = StyleSheet.create({
+	container: {
+		height: constants.height,
+		width: constants.width,
+		backgroundColor: '#2cb673',
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	logo: {
+		width: 60,
+		height: 60
 	}
 });
 
