@@ -110,12 +110,13 @@ var PostList = React.createClass({
     this.setState({ loading: true });
   },
   onPostsLoaded() {
-    this.setState({
-      loading: false,
-      loadingInitial: false,
-      ds: this.state.ds.cloneWithRows(PostStore.getAll()),
-    });
-    this.forceUpdate();
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+        loadingInitial: false,
+        ds: this.state.ds.cloneWithRows(PostStore.getAll()),
+      });
+    }, 250);
   },
 
   onPostSearching() {
