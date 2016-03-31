@@ -147,7 +147,7 @@ var NewPostInputView = React.createClass({
 
   submit() {
     // dont post if text and images are empty
-    if(this.titleValue.length <= 0 && this.state.images.length <= 0) {
+    if(this.state.title.length <= 0 && this.state.images.length <= 0) {
       AlertIOS.alert('Post must contain either text or images');
       return;
     }
@@ -201,22 +201,7 @@ var NewPostInputView = React.createClass({
       name: routes.MAIN.COMMENT,
       post: post
     };
-
-    var currentRoutes = this.props.mainNavigator.getCurrentRoutes();
-    // if the comment route is already in the route stack,
-    // then pushing another copy of it will crash the app.
-    //
-    // remove that previous comment route and push it to
-    // the front of the stack
-    if(_.findWhere(currentRoutes, { name: routes.MAIN.COMMENT }) != undefined) {
-      var commentViewIndex = currentRoutes.length - 2;
-      // rerender the comment view with our fresh post
-      this.props.mainNavigator.replaceAtIndex(route, commentViewIndex);
-      // go back
-      this.props.mainNavigator.pop();
-    } else {
-      this.props.mainNavigator.replace(route);
-    }
+    this.props.mainNavigator.replace(route);
   },
 
   onImageItemRemove(image) {
@@ -381,7 +366,7 @@ var NewPostInputView = React.createClass({
             >
               <View style={ styles.createButton }>
                 <Text style={ styles.createButtonText }>
-                  Create
+                  {(this.props.editing) ? 'Save' : 'Create' }
                 </Text>
               </View>
             </TouchableOpacity>
