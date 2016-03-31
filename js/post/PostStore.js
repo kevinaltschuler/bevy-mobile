@@ -172,6 +172,7 @@ _.extend(PostStore, {
         var board = payload.board;
         var type = payload.type;
         var event = payload.event;
+        var bevy = BevyStore.getActive();
 
         // create new backbone model
         var newPost = this.posts.add({
@@ -183,7 +184,10 @@ _.extend(PostStore, {
           created: Date.now(),
           type: type,
           event: event,
+          bevy: bevy._id
         });
+
+        console.log(newPost);
 
         // explicitly set url for safety
         newPost.url = constants.apiurl + '/posts';
