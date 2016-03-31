@@ -193,7 +193,9 @@ var NewPostInputView = React.createClass({
 
   onPostCreated(newPost) {
     // go to comment view
-    this.goToCommentView(newPost);
+    setTimeout(() => {
+      this.goToCommentView(newPost);
+    }, 250);
   },
 
   goToCommentView(post) {
