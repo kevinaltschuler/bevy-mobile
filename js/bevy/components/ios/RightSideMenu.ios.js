@@ -21,6 +21,8 @@ var _ = require('underscore');
 var constants = require('./../../../constants');
 var routes = require('./../../../routes');
 
+var UserActions = require('./../../../user/UserActions');
+
 var RightSideMenu = React.createClass({
   propsTypes: {
     mainNavigator: React.PropTypes.object,
@@ -50,8 +52,8 @@ var RightSideMenu = React.createClass({
     this.props.mainNavigator.push({ name: routes.MAIN.BEVYSETTINGS });
   },
 
-  switchBevy() {
-
+  logOut() {
+    UserActions.logOut();
   },
 
   closeSideMenu() {
@@ -94,6 +96,11 @@ var RightSideMenu = React.createClass({
             text='Switch Bevy'
             onPress={ this.switchBevy }
           />*/}
+          <MenuItem
+            iconName='exit-to-app'
+            text='Sign Out'
+            onPress={ this.logOut }
+          />
         </ScrollView>
       </View>
     );
