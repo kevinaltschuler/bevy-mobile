@@ -194,6 +194,7 @@ var styles = StyleSheet.create({
     flexDirection: 'column'
   },
   bodyInner: {
+    flex: 1,
     paddingTop: 10
   },
   errorContainer: {
@@ -226,7 +227,7 @@ var styles = StyleSheet.create({
     paddingHorizontal: 15,
     color: '#282828',
     fontSize: 17,
-    paddingVertical: 8,
+    paddingVertical: 10,
     marginBottom: 10
   }
 });
