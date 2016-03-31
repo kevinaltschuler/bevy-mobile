@@ -229,6 +229,7 @@ var NewPostInputView = React.createClass({
 
   onChangeText(text) {
     this.titleValue = text;
+    this.setState({ title: text });
   },
 
   _renderBoardItem() {
@@ -409,6 +410,7 @@ var NewPostInputView = React.createClass({
               placeholder={ this.state.placeholderText }
               placeholderTextColor='#AAA'
               style={ styles.textInput }
+              value={ this.state.title }
             />
           </View>
           { this._renderImages() }
