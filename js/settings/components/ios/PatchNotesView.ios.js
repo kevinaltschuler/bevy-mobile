@@ -180,6 +180,9 @@ var PatchNoteItem = React.createClass({
         </TouchableOpacity>
         <Collapsible collapsed={ !this.state.expanded }>
           { this.renderSections() }
+          <View style={{
+            height: 10
+          }} />
         </Collapsible>
       </View>
     );

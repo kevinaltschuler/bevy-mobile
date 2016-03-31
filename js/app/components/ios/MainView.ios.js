@@ -77,7 +77,9 @@ var MainView = React.createClass({
   },
 
   _onTokens() {
-    AppActions.load();
+    setTimeout(() => {
+      AppActions.load();
+    }, 150);
   },
 
   render() {

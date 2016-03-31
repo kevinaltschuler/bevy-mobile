@@ -57,11 +57,7 @@ var LeftSideMenu = React.createClass({
     var bevyImageSource = BevyStore.getBevyImage(this.props.activeBevy.image, 64, 64);
 
     return (
-      <TouchableOpacity
-        activeOpacity={ 0.5 }
-        style={ styles.bevyCard }
-        //onPress={ this.clearBoard }
-      >
+      <View style={ styles.bevyCard }>
         <View style={ styles.top }>
           <Image
             source={ bevyImageSource }
@@ -95,7 +91,7 @@ var LeftSideMenu = React.createClass({
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
     );
   },
 

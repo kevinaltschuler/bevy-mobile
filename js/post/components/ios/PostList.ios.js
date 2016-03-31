@@ -25,7 +25,6 @@ var {
   RefreshControl,
   AlertIOS
 } = React;
-var Spinner = require('react-native-spinkit');
 var Post = require('./Post.ios.js');
 var RefreshingIndicator = require('./../../../shared/components/ios/RefreshingIndicator.ios.js');
 var NewPostCard = require('./NewPostCard.ios.js');
@@ -72,8 +71,7 @@ var PostList = React.createClass({
       ds: new ListView.DataSource({
         rowHasChanged: (r1, r2) => r1 !== r2
       }).cloneWithRows(this.props.allPosts),
-      loading: false,
-      loadingInitial: true,
+      loading: true,
       joined: _.contains(this.props.user.bevies, this.props.activeBevy._id),
       searchPosts: [],
       searchQuery: '',
@@ -110,12 +108,12 @@ var PostList = React.createClass({
     this.setState({ loading: true });
   },
   onPostsLoaded() {
-    this.setState({
-      loading: false,
-      loadingInitial: false,
-      ds: this.state.ds.cloneWithRows(PostStore.getAll()),
-    });
-    this.forceUpdate();
+    setTimeout(() => {
+      this.setState({
+        loading: false,
+        ds: this.state.ds.cloneWithRows(PostStore.getAll()),
+      });
+    }, 250);
   },
 
   onPostSearching() {
@@ -137,7 +135,6 @@ var PostList = React.createClass({
       this.setState({
         searching: false,
         loading: false,
-        loadingInitial: false,
         searchPosts: posts,
         searchQuery: PostStore.getSearchQuery(),
         ds: this.state.ds.cloneWithRows(posts)
@@ -199,7 +196,7 @@ var PostList = React.createClass({
     var user = this.props.user;
     if(_.isEmpty(bevy)
       || !this.props.showNewPostCard
-      || this.state.loadingInitial
+      || this.state.loading
       || this.props.useSearchPosts) {
       return <View/>;
     }
@@ -215,10 +212,7 @@ var PostList = React.createClass({
   },
 
   _renderNoPosts() {
-    if(!this.state.loading
-      && !this.state.loadingInitial
-      && this.state.ds.getRowCount() <= 0
-    ) {
+    if(!this.state.loading && this.state.ds.getRowCount() <= 0) {
       return (
         <View style={ styles.noPostsContainer }>
           <Text style={ styles.noPostsText }>
@@ -227,21 +221,6 @@ var PostList = React.createClass({
         </View>
       );
     } else return <View />;
-  },
-
-  _renderLoading() {
-    if(this.state.loadingInitial) {
-      return (
-        <View style={ styles.spinnerContainer }>
-          <Spinner
-            isVisible={ true }
-            size={ 60 }
-            type={ '9CubeGrid' }
-            color={ '#2cb673' }
-          />
-        </View>
-      );
-    } else return <View />
   },
 
   _renderPosts() {
@@ -258,7 +237,7 @@ var PostList = React.createClass({
     }
 
     // dont render anything if in the initial loading state
-    if(this.state.loadingInitial) return <View />;
+    //if(this.state.loadingInitial) return <View />;
 
     return (
       <ListView
@@ -307,7 +286,6 @@ var PostList = React.createClass({
 
     return (
       <View style={ styles.postContainer }>
-        { this._renderLoading() }
         { this._renderPosts() }
       </View>
     );

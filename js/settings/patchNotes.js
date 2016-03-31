@@ -13,6 +13,16 @@
 module.exports = {
   ios: [
   {
+    version: '2.0.0',
+    sections: [{
+      header: 'New Features',
+      bodyItems: [
+        "Brand new layout",
+        "Sign in to your bevy's subdomain"
+      ]
+    }]
+  },
+  {
     version: '1.3.76',
     sections: [{
       header: 'New Features',
