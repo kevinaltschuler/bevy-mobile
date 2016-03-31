@@ -369,11 +369,11 @@ var styles = StyleSheet.create({
   },
   commentItem: {
     flexDirection: 'column',
-    height: 60,
     justifyContent: 'center',
     paddingHorizontal: 15,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#EEE'
+    borderBottomColor: '#EEE',
+    paddingVertical: 10
   },
   commentItemTop: {
     flex: 1,

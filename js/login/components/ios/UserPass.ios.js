@@ -298,7 +298,7 @@ var styles = StyleSheet.create({
     color: '#fff',
     flex: 1,
     fontSize: 25,
-    width: 500,
+    width: constants.width / 1.2,
     marginVertical: 10
   },
   loginButton: {
