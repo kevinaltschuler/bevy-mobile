@@ -30,23 +30,30 @@ var Loading = React.createClass({
 
 	componentDidMount() {
 		// first things first try to load the user
-    console.log('loading...');
+    console.log('attempting to load user from async storage...');
     AsyncStorage.getItem('user')
     .then(user => {
       if(user) {
 				user = JSON.parse(user);
 				if(typeof user === 'string') {
-					console.log('weird');
+					console.log('weird. tried to fetch user from async storage but got \"' + user + '\" instead');
+					console.log('going to login screen...');
 					this.props.mainNavigator.replace({ name: routes.MAIN.LOGIN });
 					return;
 				}
-				console.log('found user. loading user...', user);
+				console.log('found user. loading user and going to app...', user);
         UserActions.loadUser(user);
       } else {
+				console.log('tried to fetch user from async storage but fetched nothing.');
         console.log('going to login screen...');
         this.props.mainNavigator.replace({ name: routes.MAIN.LOGIN });
       }
-    });
+    })
+		.catch(err => {
+			console.log('caught some async storage error when trying to load the user', err.toString());
+			console.log('going to login screen...');
+			this.props.mainNavigator.replace({ name: routes.MAIN.LOGIN });
+		});
 	},
 
 	render() {
