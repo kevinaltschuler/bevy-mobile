@@ -172,6 +172,10 @@ var PostList = React.createClass({
     }
   },
 
+  onScroll(ev) {
+    this.props.onScroll(ev.nativeEvent.contentOffset.y);
+  },
+
   switchToSearch() {
     this.setState({ loadingInitial: true });
   },
@@ -179,10 +183,6 @@ var PostList = React.createClass({
   switchBackFromSearch() {
     this.setState({ loadingInitial: true });
     PostActions.fetch(this.props.activeBevy._id, null);
-  },
-
-  handleScroll(y) {
-    this.setState({ scrollY: y });
   },
 
   requestJoin() {
@@ -196,7 +196,7 @@ var PostList = React.createClass({
     var user = this.props.user;
     if(_.isEmpty(bevy)
       || !this.props.showNewPostCard
-      || this.state.loading
+      || (this.state.loading && this.state.ds.getRowCount() <= 0)
       || this.props.useSearchPosts) {
       return <View/>;
     }
@@ -236,17 +236,12 @@ var PostList = React.createClass({
       );
     }
 
-    // dont render anything if in the initial loading state
-    //if(this.state.loadingInitial) return <View />;
-
     return (
       <ListView
         ref={ ref => { this.ListView = ref; }}
         dataSource={ this.state.ds }
         style={ styles.postContainer }
-        onScroll={ ev => {
-          this.props.onScroll(ev.nativeEvent.contentOffset.y);
-        }}
+        onScroll={ this.onScroll }
         scrollRenderAheadDistance={ 100 }
         keyboardShouldPersistTaps={ !_.isEmpty(this.state.searchQuery) }
         renderHeader={() => {
