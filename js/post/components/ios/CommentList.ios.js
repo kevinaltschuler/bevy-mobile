@@ -128,6 +128,13 @@ var CommentItem = React.createClass({
     CommentActions.destroy(this.props.comment.postId, this.props.comment._id);
   },
 
+  reportComment() {
+    AlertIOS.alert(
+      'Comment content reported',
+      'For any other questions or concerns, email us at contact@joinbevy.com'
+    );
+  },
+
   onReply() {
     // bubble this comment up
     this.props.onReply(this.props.comment);
@@ -321,6 +328,23 @@ var CommentItem = React.createClass({
               </TouchableOpacity>
               { this._renderEditButton() }
               { this._renderDeleteButton() }
+              <TouchableOpacity
+                activeOpacity={ 0.5 }
+                onPress={ this.reportComment }
+              >
+                <View style={ styles.commentItemAction }>
+                  <Icon
+                    name='report'
+                    size={ 30 }
+                    color='#fff'
+                  />
+                  <View style={styles.actionRight}>
+                    <Text style={ styles.commentItemActionText }>
+                      Report Content
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
           </Collapsible>
         </View>
