@@ -70,7 +70,7 @@ var EnterSlugView = React.createClass({
   },
 
   submit() {
-    if(this.state.loading) return;
+    if(this.state.loading)  return;
     if(_.isEmpty(this.state.slug)) {
       return this.setState({ error: 'Please enter your group\'s Bevy domain' });
     } else {
@@ -84,11 +84,13 @@ var EnterSlugView = React.createClass({
     })
     .then(res => res.json())
     .then(res => {
+      this.setState({
+        loading: false
+      });
       setTimeout(() => {
         if(!_.isObject(res)) {
           this.setState({
             error: res,
-            loading: false
           });
           return;
         }
