@@ -54,7 +54,8 @@ var PostFooter = React.createClass({
     var options = [
       'Cancel',
       'View ' + this.props.post.author.displayName + "'s Profile",
-      'Go To Board "' + this.props.post.board.name + '"'
+      'Go To Board "' + this.props.post.board.name + '"',
+      'Report Content'
     ];
     if(this.state.isAdmin || this.state.isAuthor) {
       options.push('Edit Post');
@@ -74,9 +75,12 @@ var PostFooter = React.createClass({
           this.goToPostBoard();
           break;
         case 3:
-          this.goToEditPost();
+          this.reportPost();
           break;
         case 4:
+          this.goToEditPost();
+          break;
+        case 5:
           this.destroyPost();
           break;
       }
@@ -137,7 +141,7 @@ var PostFooter = React.createClass({
       };
       this.props.mainNavigator.push(route);
     }
-    
+
     // switch boards
     BoardActions.switchBoard(this.props.post.board._id);
   },
@@ -159,6 +163,13 @@ var PostFooter = React.createClass({
     //this.setState({
     //  voted: !this.state.voted
     //});
+  },
+
+  reportPost() {
+    AlertIOS.alert(
+      'Post content reported',
+      'For any other questions or concerns, email us at contact@joinbevy.com'
+    );
   },
 
   render() {

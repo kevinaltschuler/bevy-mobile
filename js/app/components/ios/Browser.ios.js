@@ -140,7 +140,7 @@ var Browser = React.createClass({
         </View>
         <WebView
           ref={ ref => { this.WebView = ref; }}
-          url={ this.props.initialURL }
+          source={{ uri: this.props.initialURL }}
           renderLoading={ this._renderLoading }
           startInLoadingState={ true }
           allowsInlineMediaPlayback={ true }
