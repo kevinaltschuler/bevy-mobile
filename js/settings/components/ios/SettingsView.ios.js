@@ -110,6 +110,14 @@ var SettingsView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  goToPrivacyPolicy() {
+    var route = {
+      name: routes.MAIN.WEBVIEW,
+      initialURL: constants.siteurl + '/privacy'
+    };
+    this.props.mainNavigator.push(route);
+  },
+
   showImagePicker() {
     UIImagePickerManager.showImagePicker({
       title: 'Change Profile Picture',
@@ -288,6 +296,18 @@ var SettingsView = React.createClass({
             }
             showChevron
             onPress={ this.submitFeedback }
+          />
+          <SettingsItem
+            title='Privacy Policy'
+            icon={
+              <Icon
+                name='https'
+                size={ 36 }
+                color='rgba(0,0,0,0.3)'
+              />
+            }
+            showChevron
+            onPress={ this.goToPrivacyPolicy }
           />
         </ScrollView>
       </View>

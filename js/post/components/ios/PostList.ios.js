@@ -185,12 +185,6 @@ var PostList = React.createClass({
     PostActions.fetch(this.props.activeBevy._id, null);
   },
 
-  requestJoin() {
-    // send action
-    AlertIOS.alert('Request Sent!');
-    BevyActions.requestJoin(this.props.activeBevy, this.props.user);
-  },
-
   _renderHeader() {
     var bevy = this.props.activeBevy;
     var user = this.props.user;
