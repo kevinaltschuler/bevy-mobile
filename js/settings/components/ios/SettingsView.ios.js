@@ -118,6 +118,14 @@ var SettingsView = React.createClass({
     this.props.mainNavigator.push(route);
   },
 
+  goToTOS() {
+    var route = {
+      name: routes.MAIN.WEBVIEW,
+      initialURL: constants.siteurl + '/TOS'
+    };
+    this.props.mainNavigator.push(route);
+  },
+
   showImagePicker() {
     UIImagePickerManager.showImagePicker({
       title: 'Change Profile Picture',
@@ -308,6 +316,18 @@ var SettingsView = React.createClass({
             }
             showChevron
             onPress={ this.goToPrivacyPolicy }
+          />
+          <SettingsItem
+            title='Terms of Service'
+            icon={
+              <Icon
+                name='gavel'
+                size={ 36 }
+                color='rgba(0,0,0,0.3)'
+              />
+            }
+            showChevron
+            onPress={ this.goToTOS }
           />
         </ScrollView>
       </View>
